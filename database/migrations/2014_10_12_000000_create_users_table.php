@@ -15,12 +15,17 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->uuid('uuid');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->integer('role')->comment('1:admin, 2:advisory, 3:agency, 4:creative');
+            $table->integer('status')->comment('1:active, 2:inactive');
+            $table->boolean('is_visible')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
