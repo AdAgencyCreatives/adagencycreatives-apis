@@ -15,7 +15,12 @@ return new class extends Migration
     {
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
+            $table->unsignedBigInteger('user_id');
+            $table->string('resource_type');
+            $table->unsignedBigInteger('resource_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

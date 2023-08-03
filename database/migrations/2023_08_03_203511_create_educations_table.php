@@ -15,7 +15,13 @@ return new class extends Migration
     {
         Schema::create('educations', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
+            $table->unsignedBigInteger('resume_id');
+            $table->string('degree');
+            $table->string('college');
+            $table->timestamp('completed_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

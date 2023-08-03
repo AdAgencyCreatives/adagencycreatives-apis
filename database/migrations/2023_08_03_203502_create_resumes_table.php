@@ -17,7 +17,12 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
+            $table->string('years_of_experience');
+            $table->text('about');
+            $table->string('industry_specialty');
+            $table->string('media_experience');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
