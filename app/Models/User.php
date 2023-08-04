@@ -19,36 +19,41 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
-        'is_visible'
+        'is_visible',
     ];
 
     protected $hidden = [
-        'password'
+        'password',
     ];
 
-    public function agency(){
-        return $this->hasMany(Agency::class);
-    }
-    
-    public function creative(){
-        return $this->hasMany(Creative::class);
+    public function agency()
+    {
+        return $this->hasOne(Agency::class);
     }
 
-    public function phones(){
+    public function creative()
+    {
+        return $this->hasOne(Creative::class);
+    }
+
+    public function phones()
+    {
         return $this->hasMany(Phone::class);
     }
 
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(Address::class);
     }
 
-    public function links(){
+    public function links()
+    {
         return $this->hasMany(Link::class);
     }
 
-    public function jobs(){
+    public function jobs()
+    {
         return $this->hasMany(Job::class);
     }
-
 
 }

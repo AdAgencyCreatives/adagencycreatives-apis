@@ -9,15 +9,19 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AgencyFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition()
     {
         return [
-            //
+            'uuid' => fake()->uuid(),
+            'user_id' => fake()->randomElement([1, 2, 3, 4, 5]),
+            'name' => fake()->name(),
+            'attachment_id' => null,
+            'about' => fake()->paragraph(),
+            'size' => fake()->randomElement([10, 50, 100, 500]),
+            'type_of_work' => fake()->randomElement(['Freelance', 'Full-time', 'Part-time', 'Internship']),
+            'industry_specialty' => '1,2,3,4',
+            'created_at' => now(),
+            'updated_at' => now()
         ];
     }
 }
