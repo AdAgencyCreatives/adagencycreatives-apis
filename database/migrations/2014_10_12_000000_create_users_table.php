@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('role')->comment('1:admin, 2:advisory, 3:agency, 4:creative');
-            $table->integer('status')->comment('1:active, 2:inactive');
+            $table->integer('status')->default(0)->comment('0:pending, 1:active, 2:inactive');
             $table->boolean('is_visible')->default(true);
             $table->timestamps();
             $table->softDeletes();

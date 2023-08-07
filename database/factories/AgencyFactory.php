@@ -21,7 +21,7 @@ class AgencyFactory extends Factory
             'type_of_work' => fake()->randomElement(['Freelance', 'Full-time', 'Part-time', 'Internship']),
             'industry_specialty' => '1,2,3,4',
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ];
     }
 }

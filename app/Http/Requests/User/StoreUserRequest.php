@@ -8,7 +8,7 @@ class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     public function rules()
@@ -20,8 +20,7 @@ class StoreUserRequest extends FormRequest
             'last_name' => 'required|max:255',
             'email' => 'required|unique:users',
             'password' => 'required',
-            'role' => 'required|in:' . implode(',', $allowedRoles),
+            'role' => 'sometimes|in:' . implode(',', $allowedRoles),
         ];
-
     }
 }

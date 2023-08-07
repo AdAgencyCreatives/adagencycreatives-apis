@@ -26,6 +26,14 @@ class User extends Authenticatable
         'password',
     ];
 
+    const ROLE_ADMIN = 1;
+
+    const ROLE_ADVISOR = 2;
+
+    const ROLE_AGENCY = 3;
+
+    const ROLE_CREATIVE = 4;
+
     public function agency()
     {
         return $this->hasOne(Agency::class);
@@ -56,4 +64,37 @@ class User extends Authenticatable
         return $this->hasMany(Job::class);
     }
 
+    public function getRoleAttribute($value)
+    {
+        switch ($value) {
+            case self::ROLE_ADMIN:
+                return 'admin';
+            case self::ROLE_ADVISOR:
+                return 'advisor';
+            case self::ROLE_AGENCY:
+                return 'agency';
+            case self::ROLE_CREATIVE:
+                return 'creative';
+            default:
+                return null;
+        }
+    }
+
+    public function setRoleAttribute($value)
+    {
+        switch ($value) {
+            case 'admin':
+                $this->attributes['role'] = self::ROLE_ADMIN;
+                break;
+            case 'advisor':
+                $this->attributes['role'] = self::ROLE_ADVISOR;
+                break;
+            case 'agency':
+                $this->attributes['role'] = self::ROLE_AGENCY;
+                break;
+            default:
+                $this->attributes['role'] = self::ROLE_CREATIVE;
+                break;
+        }
+    }
 }
