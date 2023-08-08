@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
+        'uuid',
         'first_name',
         'last_name',
         'username',
@@ -26,13 +28,18 @@ class User extends Authenticatable
         'password',
     ];
 
-    const ROLE_ADMIN = 1;
+    const ROLES = [
+        'ADMIN' => 1,
+        'ADVISOR' => 2,
+        'AGENCY' => 3,
+        'CREATIVE' => 4,
+    ];
 
-    const ROLE_ADVISOR = 2;
-
-    const ROLE_AGENCY = 3;
-
-    const ROLE_CREATIVE = 4;
+    const STATUSES = [
+        'PENDING' => 0,
+        'ACTIVE' => 1,
+        'INACTIVE' => 2,
+    ];
 
     public function agency()
     {
@@ -67,13 +74,13 @@ class User extends Authenticatable
     public function getRoleAttribute($value)
     {
         switch ($value) {
-            case self::ROLE_ADMIN:
+            case User::ROLES['ADMIN']:
                 return 'admin';
-            case self::ROLE_ADVISOR:
+            case User::ROLES['ADVISOR']:
                 return 'advisor';
-            case self::ROLE_AGENCY:
+            case User::ROLES['AGENCY']:
                 return 'agency';
-            case self::ROLE_CREATIVE:
+            case User::ROLES['CREATIVE']:
                 return 'creative';
             default:
                 return null;
@@ -84,16 +91,46 @@ class User extends Authenticatable
     {
         switch ($value) {
             case 'admin':
-                $this->attributes['role'] = self::ROLE_ADMIN;
+                $this->attributes['role'] = User::ROLES['ADMIN'];
                 break;
             case 'advisor':
-                $this->attributes['role'] = self::ROLE_ADVISOR;
+                $this->attributes['role'] = User::ROLES['ADVISOR'];
                 break;
             case 'agency':
-                $this->attributes['role'] = self::ROLE_AGENCY;
+                $this->attributes['role'] = User::ROLES['AGENCY'];
                 break;
             default:
-                $this->attributes['role'] = self::ROLE_CREATIVE;
+                $this->attributes['role'] = User::ROLES['CREATIVE'];
+                break;
+        }
+    }
+
+    public function getStatusAttribute($value)
+    {
+        switch ($value) {
+            case User::STATUSES['PENDING']:
+                return 'pending';
+            case User::STATUSES['ACTIVE']:
+                return 'active';
+            case User::STATUSES['INACTIVE']:
+                return 'inactive';
+
+            default:
+                return null;
+        }
+    }
+
+    public function setStatusAttribute($value)
+    {
+        switch ($value) {
+            case 'active':
+                $this->attributes['status'] = User::STATUSES['ACTIVE'];
+                break;
+            case 'inactive':
+                $this->attributes['status'] = User::STATUSES['INACTIVE'];
+                break;
+            default:
+                $this->attributes['status'] = User::STATUSES['PENDING'];
                 break;
         }
     }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('about');
             $table->integer('size');
             $table->string('type_of_work');
-            $table->string('industry_specialty');
+            $table->string('industry_specialty')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

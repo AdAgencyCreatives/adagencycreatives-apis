@@ -13,14 +13,12 @@ class StoreUserRequest extends FormRequest
 
     public function rules()
     {
-        $allowedRoles = ['advisory', 'agency', 'creative'];
-
         return [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|unique:users',
             'password' => 'required',
-            'role' => 'sometimes|in:' . implode(',', $allowedRoles),
+            'role' => 'sometimes|in:advisor,agency,creative',
         ];
     }
 }

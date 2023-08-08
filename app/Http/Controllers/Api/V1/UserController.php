@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,7 +32,7 @@ class UserController extends Controller
         $user->username = $this->get_username_from_email($email);
         $user->email = $email;
         $user->password = bcrypt($request->password);
-        $user->role = $request->role;
+        $user->user_role = $request->role;
         $user_created = $user->save();
 
         if ($user_created) {
@@ -50,6 +50,11 @@ class UserController extends Controller
     public function show($uuid)
     {
         $user = User::where('uuid', $uuid)->first();
+        if (! $user) {
+            return response()->json([
+                'message' => 'No record found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
 
         return new UserResource($user);
     }
@@ -64,6 +69,8 @@ class UserController extends Controller
         }
         $data = $request->all();
         foreach ($data as $key => $value) {
+            // if($key == 'role') $key = 'user_role';
+            // if($key == 'status') $key = 'user_status';
             $user->$key = $value;
         }
         $user_updated = $user->save();
