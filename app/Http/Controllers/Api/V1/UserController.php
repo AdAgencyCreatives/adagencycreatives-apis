@@ -50,7 +50,7 @@ class UserController extends Controller
     public function show($uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -77,6 +77,7 @@ class UserController extends Controller
 
         if ($user_updated) {
             $user->fresh();
+
             return response()->json([
                 'message' => 'User updated successfully.',
                 'data' => new UserResource($user),

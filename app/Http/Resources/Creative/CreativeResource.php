@@ -17,6 +17,5 @@ class CreativeResource extends JsonResource
             'type_of_work' => $this->type_of_work,
             'created_at' => $this->created_at->format(config('ad-agency-settings.datetime_format')),
         ];
-
     }
 }

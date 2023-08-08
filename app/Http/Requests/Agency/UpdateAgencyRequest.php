@@ -19,6 +19,5 @@ class UpdateAgencyRequest extends FormRequest
             'size' => 'sometimes',
             'type_of_work' => 'sometimes',
         ];
-
     }
 }

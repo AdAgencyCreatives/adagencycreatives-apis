@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCreativeRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -18,6 +17,5 @@ class UpdateCreativeRequest extends FormRequest
             'years_of_experience' => 'sometimes',
             'type_of_work' => 'sometimes',
         ];
-
     }
 }

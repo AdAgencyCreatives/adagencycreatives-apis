@@ -52,13 +52,12 @@ class AgencyController extends Controller
                 'message' => 'Something went wrong',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     public function show($uuid)
     {
         $agency = Agency::where('uuid', $uuid)->first();
-        if (!$agency) {
+        if (! $agency) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -77,7 +76,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (!$agency) {
+        if (! $agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);
@@ -90,12 +89,12 @@ class AgencyController extends Controller
         $agency_updated = $agency->save();
         if ($agency_updated) {
             $agency->fresh();
+
             return response()->json([
                 'message' => 'Agency updated successfully.',
                 'data' => new AgencyResource($agency),
             ], Response::HTTP_OK);
         }
-
     }
 
     public function destroy($uuid)
@@ -110,6 +109,5 @@ class AgencyController extends Controller
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
-
     }
 }

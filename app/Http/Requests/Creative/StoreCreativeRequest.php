@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCreativeRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -19,6 +18,5 @@ class StoreCreativeRequest extends FormRequest
             'years_of_experience' => 'required',
             'type_of_work' => 'required',
         ];
-
     }
 }

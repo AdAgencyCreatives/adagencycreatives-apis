@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
-
     public function index()
     {
         $creatives = Creative::paginate(10);
+
         return new CreativeCollection($creatives);
     }
 
@@ -31,7 +31,6 @@ class CreativeController extends Controller
                 'message' => 'Creative already exists.',
                 'data' => new CreativeResource($creative),
             ], Response::HTTP_CONFLICT);
-
         }
         $creative = new Creative();
         $creative->uuid = Str::uuid();
@@ -52,21 +51,19 @@ class CreativeController extends Controller
         }
 
         dd($request->all());
-
     }
 
     public function show($uuid)
     {
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (!$creative) {
+        if (! $creative) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
 
         return new CreativeResource($creative);
-
     }
 
     public function update(UpdateCreativeRequest $request, $uuid)
@@ -79,7 +76,7 @@ class CreativeController extends Controller
 
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (!$creative) {
+        if (! $creative) {
             return response()->json([
                 'message' => 'No creative found.',
             ], Response::HTTP_NOT_FOUND);
@@ -92,12 +89,12 @@ class CreativeController extends Controller
         $creative_updated = $creative->save();
         if ($creative_updated) {
             $creative->fresh();
+
             return response()->json([
                 'message' => 'Creative updated successfully.',
                 'data' => new CreativeResource($creative),
             ], Response::HTTP_OK);
         }
-
     }
 
     public function destroy($uuid)
@@ -112,6 +109,5 @@ class CreativeController extends Controller
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
-
     }
 }

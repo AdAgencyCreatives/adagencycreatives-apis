@@ -44,9 +44,7 @@ class UserResource extends JsonResource
                         'related' => route('agencies.show', $this->agency->uuid),
                     ],
                 ];
-
             }
-
         } elseif ($this->role == 'creative') {
             if ($this->creative) {
                 $data['relationships']['creatives'] = [
@@ -54,10 +52,9 @@ class UserResource extends JsonResource
                         'related' => route('creatives.show', $this->creative->uuid),
                     ],
                 ];
-
             }
-
         }
+
         return $data;
     }
 }
