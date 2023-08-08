@@ -105,7 +105,7 @@ class User extends Authenticatable
         }
     }
 
-    public function getUserStatusAttribute($value)
+    public function getStatusAttribute($value)
     {
         switch ($value) {
             case User::STATUSES['PENDING']:
@@ -120,17 +120,17 @@ class User extends Authenticatable
         }
     }
 
-    public function setUserStatusAttribute($value)
+    public function setStatusAttribute($value)
     {
         switch ($value) {
             case 'active':
-                $this->attributes['user_status'] = User::STATUSES['ACTIVE'];
+                $this->attributes['status'] = User::STATUSES['ACTIVE'];
                 break;
             case 'inactive':
-                $this->attributes['user_status'] = User::STATUSES['INACTIVE'];
+                $this->attributes['status'] = User::STATUSES['INACTIVE'];
                 break;
             default:
-                $this->attributes['user_status'] = User::STATUSES['PENDING'];
+                $this->attributes['status'] = User::STATUSES['PENDING'];
                 break;
         }
     }
