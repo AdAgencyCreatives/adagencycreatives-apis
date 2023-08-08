@@ -1,59 +1,117 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Creative\StoreCreativeRequest;
+use App\Http\Requests\Creative\UpdateCreativeRequest;
+use App\Http\Resources\Creative\CreativeCollection;
+use App\Http\Resources\Creative\CreativeResource;
 use App\Models\Creative;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $creatives = Creative::paginate(10);
+        return new CreativeCollection($creatives);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreCreativeRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->first();
+
+        $creative = Creative::where('user_id', $user->id)->first();
+        if ($creative) {
+            return response()->json([
+                'message' => 'Creative already exists.',
+                'data' => new CreativeResource($creative),
+            ], Response::HTTP_CONFLICT);
+
+        }
+        $creative = new Creative();
+        $creative->uuid = Str::uuid();
+        $creative->user_id = $user->id;
+        $creative->years_of_experience = $request->years_of_experience;
+        $creative->type_of_work = $request->type_of_work;
+        $creative_created = $creative->save();
+
+        if ($creative_created) {
+            return response()->json([
+                'message' => 'Creative created successfully.',
+                'data' => new CreativeResource($creative),
+            ], Response::HTTP_CREATED);
+        } else {
+            return response()->json([
+                'message' => 'Something went wrong',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        dd($request->all());
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Creative $creative)
+    public function show($uuid)
     {
-        //
+        $creative = Creative::where('uuid', $uuid)->first();
+
+        if (!$creative) {
+            return response()->json([
+                'message' => 'No record found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return new CreativeResource($creative);
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Creative $creative)
+    public function update(UpdateCreativeRequest $request, $uuid)
     {
-        //
+        if (empty($request->all())) {
+            return response()->json([
+                'message' => 'You must provide data to update',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $creative = Creative::where('uuid', $uuid)->first();
+
+        if (!$creative) {
+            return response()->json([
+                'message' => 'No creative found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $data = $request->all();
+        foreach ($data as $key => $value) {
+            $creative->$key = $value;
+        }
+        $creative_updated = $creative->save();
+        if ($creative_updated) {
+            $creative->fresh();
+            return response()->json([
+                'message' => 'Creative updated successfully.',
+                'data' => new CreativeResource($creative),
+            ], Response::HTTP_OK);
+        }
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Creative $creative)
+    public function destroy($uuid)
     {
-        //
+        $deleted = Creative::where('uuid', $uuid)->delete();
+        if ($deleted) {
+            return response()->json([
+                'message' => 'Creative deleted successfully.',
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json([
+                'message' => 'No record found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
     }
 }
