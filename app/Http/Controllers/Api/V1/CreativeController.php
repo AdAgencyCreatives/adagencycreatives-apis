@@ -57,7 +57,7 @@ class CreativeController extends Controller
     {
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (! $creative) {
+        if (!$creative) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -76,7 +76,7 @@ class CreativeController extends Controller
 
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (! $creative) {
+        if (!$creative) {
             return response()->json([
                 'message' => 'No creative found.',
             ], Response::HTTP_NOT_FOUND);
