@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Agency\StoreAgencyRequest;
 use App\Http\Requests\Agency\UpdateAgencyRequest;
@@ -57,10 +58,8 @@ class AgencyController extends Controller
     public function show($uuid)
     {
         $agency = Agency::where('uuid', $uuid)->first();
-        if (! $agency) {
-            return response()->json([
-                'message' => 'No record found.',
-            ], Response::HTTP_NOT_FOUND);
+        if (!$agency) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
 
         return new AgencyResource($agency);
@@ -76,7 +75,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (! $agency) {
+        if (!$agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);

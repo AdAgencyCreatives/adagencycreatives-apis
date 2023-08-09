@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AgencyController;
+use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\CreativeController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +22,6 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('users', UserController::class);
 Route::apiResource('agencies', AgencyController::class);
 Route::apiResource('creatives', CreativeController::class);
+Route::apiResource('jobs', JobController::class);
+Route::apiResource('applications', ApplicationController::class);
+Route::apiResource('links', LinkController::class);

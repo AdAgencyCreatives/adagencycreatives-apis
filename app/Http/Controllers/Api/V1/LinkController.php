@@ -1,59 +1,85 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Link\StoreLinkRequest;
+use App\Http\Requests\Link\UpdateLinkRequest;
+use App\Http\Resources\Link\LinkCollection;
+use App\Http\Resources\Link\LinkResource;
 use App\Models\Link;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 class LinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $links = Link::paginate(config('ad-agency-creatives.request.pagination_limit'));
+
+        return new LinkCollection($links);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreLinkRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->first();
+
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+        ]);
+        try {
+            $application = Link::create($request->all());
+            return ApiResponse::success(new LinkResource($application), 200);
+
+        } catch (\Exception $e) {
+            return ApiResponse::error('LS-01 ' . $e->getMessage(), 400);
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Link $link)
+    public function show($uuid)
     {
-        //
+        try {
+            $link = Link::where('uuid', $uuid)->firstOrFail();
+
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new LinkResource($link);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Link $link)
+    public function update(UpdateLinkRequest $request, $uuid)
     {
-        //
+        try {
+            $link = Link::where('uuid', $uuid)->first();
+            $link->update($request->only('url'));
+            return new LinkResource($link);
+
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Link $link)
+    public function destroy($uuid)
     {
-        //
+        try {
+
+            $link = Link::where('uuid', $uuid)->firstOrFail();
+            $link->delete();
+
+            return ApiResponse::success($link, 200);
+
+        } catch (\Exception $exception) {
+
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
     }
 }

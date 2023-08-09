@@ -19,7 +19,7 @@ class UserResource extends JsonResource
                 'email' => $this->email,
                 'role' => $this->role,
                 'status' => $this->status,
-                'created_at' => $this->created_at->format(config('ad-agency-settings.datetime_format')),
+                'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
             ],
             'relationships' => [
                 'phones' => [
