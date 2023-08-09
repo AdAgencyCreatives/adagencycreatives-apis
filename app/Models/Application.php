@@ -64,5 +64,4 @@ class Application extends Model
                 break;
         }
     }
-
 }

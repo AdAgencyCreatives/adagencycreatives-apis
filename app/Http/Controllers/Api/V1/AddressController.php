@@ -1,59 +1,76 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Address\StoreAddressRequest;
+use App\Http\Requests\Address\UpdateAddressRequest;
+use App\Http\Resources\Address\AddressCollection;
+use App\Http\Resources\Address\AddressResource;
 use App\Models\Address;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 class AddressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $addresses = Address::paginate(config('ad-agency-creatives.request.pagination_limit'));
+
+        return new AddressCollection($addresses);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreAddressRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->first();
+
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+        ]);
+        try {
+            $address = Address::create($request->all());
+
+            return ApiResponse::success(new AddressResource($address), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error('LS-01 '.$e->getMessage(), 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Address $address)
+    public function show($uuid)
     {
-        //
+        try {
+            $address = Address::where('uuid', $uuid)->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new AddressResource($address);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Address $address)
+    public function update(UpdateAddressRequest $request, $uuid)
     {
-        //
+        try {
+            $address = Address::where('uuid', $uuid)->first();
+            $address->update($request->only(['street_1', 'street_2', 'city', 'state', 'country']));
+
+            return new AddressResource($address);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Address $address)
+    public function destroy($uuid)
     {
-        //
+        try {
+            $address = Address::where('uuid', $uuid)->firstOrFail();
+            $address->delete();
+
+            return ApiResponse::success($address, 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 }

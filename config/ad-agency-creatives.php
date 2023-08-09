@@ -18,7 +18,7 @@ return [
         ],
         'codes' => [
             '200' => '',
-            '404' => 'Resource not found'
+            '404' => 'Resource not found',
         ],
     ],
 ];

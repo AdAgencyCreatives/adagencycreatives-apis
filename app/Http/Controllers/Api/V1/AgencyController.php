@@ -58,7 +58,7 @@ class AgencyController extends Controller
     public function show($uuid)
     {
         $agency = Agency::where('uuid', $uuid)->first();
-        if (!$agency) {
+        if (! $agency) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -75,7 +75,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (!$agency) {
+        if (! $agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);

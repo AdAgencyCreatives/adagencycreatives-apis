@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
-
     public function index()
     {
         $applications = Application::paginate(config('ad-agency-creatives.request.pagination_limit'));
@@ -38,10 +37,10 @@ class ApplicationController extends Controller
         ]);
         try {
             $application = Application::create($request->all());
-            return ApiResponse::success(new ApplicationResource($application), 200);
 
+            return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('AS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('AS-01'.$e->getMessage(), 400);
         }
     }
 
@@ -49,7 +48,6 @@ class ApplicationController extends Controller
     {
         try {
             $application = Application::where('uuid', $uuid)->firstOrFail();
-
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
@@ -62,12 +60,11 @@ class ApplicationController extends Controller
         try {
             $application = Application::where('uuid', $uuid)->firstOrFail();
             $application->update($request->only(['status', 'message']));
-            return new ApplicationResource($application);
 
+            return new ApplicationResource($application);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
-
     }
 
     public function destroy($uuid)
@@ -77,11 +74,8 @@ class ApplicationController extends Controller
             $application->delete();
 
             return ApiResponse::success(new ApplicationResource($application), 200);
-
         } catch (\Exception $exception) {
-
             return ApiResponse::error(trans('response.not_found'), 404);
-
         }
     }
 }

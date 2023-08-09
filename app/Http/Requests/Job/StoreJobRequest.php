@@ -32,6 +32,5 @@ class StoreJobRequest extends FormRequest
             'is_urgent' => 'required|boolean',
             'expired_at' => 'required|date',
         ];
-
     }
 }

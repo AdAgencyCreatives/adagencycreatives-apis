@@ -53,7 +53,6 @@ class UserController extends Controller
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
-
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
@@ -64,7 +63,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-        if (!$user) {
+        if (! $user) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -72,30 +71,24 @@ class UserController extends Controller
         if ($user_updated) {
             return ApiResponse::success($user, 200);
         }
-
     }
 
     public function destroy($uuid)
     {
         try {
-
             $user = User::where('uuid', $uuid)->firstOrFail();
             $user->delete();
 
             return ApiResponse::success($user, 200);
-
         } catch (\Exception $exception) {
-
             return ApiResponse::error(trans('response.not_found'), 404);
         }
-
     }
 
     public function get_username_from_email($email)
     {
-        $username = explode('@', $email)[0];
-        $username = str_replace(['.', '-', '+'], '_', $username);
-        $username = trim($username, '_');
+        $username = Str::before($email, '@');
+        $username = Str::slug($username);
 
         return $username;
     }

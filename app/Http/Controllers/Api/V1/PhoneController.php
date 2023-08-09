@@ -1,59 +1,76 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Phone\StorePhoneRequest;
+use App\Http\Requests\Phone\UpdatePhoneRequest;
+use App\Http\Resources\Phone\PhoneCollection;
+use App\Http\Resources\Phone\PhoneResource;
 use App\Models\Phone;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 class PhoneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $phones = Phone::paginate(config('ad-agency-creatives.request.pagination_limit'));
+
+        return new PhoneCollection($phones);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StorePhoneRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->first();
+
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+        ]);
+        try {
+            $phone = Phone::create($request->all());
+
+            return ApiResponse::success(new PhoneResource($phone), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error('LS-01 '.$e->getMessage(), 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Phone $phone)
+    public function show($uuid)
     {
-        //
+        try {
+            $phone = Phone::where('uuid', $uuid)->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new PhoneResource($phone);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Phone $phone)
+    public function update(UpdatePhoneRequest $request, $uuid)
     {
-        //
+        try {
+            $phone = Phone::where('uuid', $uuid)->first();
+            $phone->update($request->only('country_code', 'phone_number'));
+
+            return new PhoneResource($phone);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Phone $phone)
+    public function destroy($uuid)
     {
-        //
+        try {
+            $phone = Phone::where('uuid', $uuid)->firstOrFail();
+            $phone->delete();
+
+            return ApiResponse::success($phone, 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 }

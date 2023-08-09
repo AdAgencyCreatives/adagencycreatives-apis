@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Application;
+namespace App\Http\Requests\Phone;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreApplicationRequest extends FormRequest
+class StorePhoneRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,8 +15,9 @@ class StoreApplicationRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,uuid',
-            'job_id' => 'required|exists:jobs,uuid',
-            'resume' => 'required',
+            'label' => 'required',
+            'country_code' => 'required',
+            'phone_number' => 'required',
         ];
     }
 }
