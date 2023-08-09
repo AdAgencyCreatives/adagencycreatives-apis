@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +18,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::paginate(10);
+        $users = User::paginate(config('ad-agency-creatives.request.pagination_limit'));
 
         return new UserCollection($users);
     }
@@ -49,11 +51,10 @@ class UserController extends Controller
 
     public function show($uuid)
     {
-        $user = User::where('uuid', $uuid)->first();
-        if (! $user) {
-            return response()->json([
-                'message' => 'No record found.',
-            ], Response::HTTP_NOT_FOUND);
+        try {
+            $user = User::where('uuid', $uuid)->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
 
         return new UserResource($user);
@@ -63,47 +64,31 @@ class UserController extends Controller
     {
         $user = User::where('uuid', $uuid)->first();
         if (! $user) {
-            return response()->json([
-                'message' => 'No record found.',
-            ], Response::HTTP_NOT_FOUND);
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
-        $data = $request->all();
-        foreach ($data as $key => $value) {
-            // if($key == 'role') $key = 'user_role';
-            // if($key == 'status') $key = 'user_status';
-            $user->$key = $value;
-        }
-        $user_updated = $user->save();
 
+        $user_updated = $user->update($request->all());
         if ($user_updated) {
-            $user->fresh();
-
-            return response()->json([
-                'message' => 'User updated successfully.',
-                'data' => new UserResource($user),
-            ], Response::HTTP_OK);
+            return ApiResponse::success($user, 200);
         }
     }
 
     public function destroy($uuid)
     {
-        $deleted = User::where('uuid', $uuid)->delete();
-        if ($deleted) {
-            return response()->json([
-                'message' => 'User deleted successfully.',
-            ], Response::HTTP_OK);
-        } else {
-            return response()->json([
-                'message' => 'No record found.',
-            ], Response::HTTP_NOT_FOUND);
+        try {
+            $user = User::where('uuid', $uuid)->firstOrFail();
+            $user->delete();
+
+            return ApiResponse::success($user, 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
 
     public function get_username_from_email($email)
     {
-        $username = explode('@', $email)[0];
-        $username = str_replace(['.', '-', '+'], '_', $username);
-        $username = trim($username, '_');
+        $username = Str::before($email, '@');
+        $username = Str::slug($username);
 
         return $username;
     }

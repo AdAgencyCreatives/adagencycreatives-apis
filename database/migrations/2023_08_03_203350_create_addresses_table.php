@@ -18,12 +18,12 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->string('label');
-            $table->string('street_1');
-            $table->string('street_2');
+            $table->string('street_1')->nullable();
+            $table->string('street_2')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('country');
-            $table->string('postal_code');
+            $table->string('postal_code')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

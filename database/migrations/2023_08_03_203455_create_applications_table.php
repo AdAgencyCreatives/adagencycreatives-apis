@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('attachment_id');
             $table->text('message');
+            $table->integer('status')->default(0)->comment('0:pending, 1:accepted, 2:rejected');
             $table->timestamps();
             $table->softDeletes();
         });
