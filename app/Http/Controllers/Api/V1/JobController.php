@@ -17,6 +17,7 @@ class JobController extends Controller
 {
     public function index()
     {
+
         $jobs = Job::paginate(config('ad-agency-creatives.request.pagination_limit'));
 
         return new JobCollection($jobs);
@@ -36,7 +37,7 @@ class JobController extends Controller
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('JS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('JS-01' . $e->getMessage(), 400);
         }
     }
 

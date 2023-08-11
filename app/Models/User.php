@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    // protected $primaryKey = 'uuid';
 
     protected $fillable = [
         'uuid',
@@ -23,6 +26,11 @@ class User extends Authenticatable
         'status',
         'is_visible',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     protected $hidden = [
         'password',
@@ -133,5 +141,20 @@ class User extends Authenticatable
                 $this->attributes['status'] = User::STATUSES['PENDING'];
                 break;
         }
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            Cache::forget('users');
+        });
+
+        static::updated(function ($user) {
+            Cache::forget("user:$user->id");
+        });
+
+        static::deleted(function ($user) {
+            Cache::forget("user:$user->id");
+        });
     }
 }

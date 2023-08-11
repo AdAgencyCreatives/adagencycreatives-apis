@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Exceptions\ApiException;
+use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
@@ -11,14 +13,19 @@ use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    public $cache_expiration_time = 60;
+
     public function index(Request $request)
     {
-        $users = User::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $users = Cache::remember('users', $this->cache_expiration_time, function () {
+            return User::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        });
 
         return new UserCollection($users);
     }
@@ -34,7 +41,7 @@ class UserController extends Controller
         $user->username = $this->get_username_from_email($email);
         $user->email = $email;
         $user->password = bcrypt($request->password);
-        $user->user_role = $request->role;
+        $user->role = $request->role;
         $user_created = $user->save();
 
         if ($user_created) {
@@ -51,19 +58,23 @@ class UserController extends Controller
 
     public function show($uuid)
     {
-        try {
+        try { 
             $user = User::where('uuid', $uuid)->firstOrFail();
-        } catch (ModelNotFoundException $exception) {
-            return ApiResponse::error(trans('response.not_found'), 404);
+            return new UserResource($user);
+        } 
+        catch(ModelNotFoundException $e){
+            throw new ModelNotFound($e);
+        }
+        catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
         }
 
-        return new UserResource($user);
     }
 
     public function update(UpdateUserRequest $request, $uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-        if (! $user) {
+        if (!$user) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -78,12 +89,15 @@ class UserController extends Controller
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
             $user->delete();
-
             return ApiResponse::success($user, 200);
-        } catch (\Exception $exception) {
-            return ApiResponse::error(trans('response.not_found'), 404);
+        } catch(ModelNotFoundException $e){
+            throw new ModelNotFound($e);
+        }
+        catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
         }
     }
+    
 
     public function get_username_from_email($email)
     {

@@ -6,9 +6,11 @@ use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LinkController;
+use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\AttachmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +33,5 @@ Route::apiResource('links', LinkController::class);
 Route::apiResource('phone-numbers', PhoneController::class);
 Route::apiResource('addresses', AddressController::class);
 Route::apiResource('resumes', ResumeController::class);
+Route::apiResource('notes', NoteController::class);
+Route::apiResource('attachments', AttachmentController::class);

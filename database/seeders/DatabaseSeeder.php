@@ -33,5 +33,9 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user,
             ]);
         }
+
+        $this->call(CategorySeeder::class);
+        $this->call(IndustrySeeder::class);
+
     }
 }
