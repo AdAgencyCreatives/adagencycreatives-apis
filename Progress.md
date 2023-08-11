@@ -83,3 +83,13 @@ Following endpoints were created
 -   Delete address: `DELETE /api/v1/addresses/{id}`
 
 ---
+
+## 10/8/2023 - Attachment | Notes | CRUD
+
+-   Seeders for
+    -- Categories
+    -- Industries
+-   Global Exception handling
+-   Cache Implementattion
+-   Notes CRUD Endpoints
+-   Attachments CRUD Endpoints

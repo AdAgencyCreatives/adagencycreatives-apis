@@ -4,57 +4,55 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Address\StoreAddressRequest;
 use App\Http\Requests\Address\UpdateAddressRequest;
-use App\Http\Resources\Address\AddressCollection;
+use App\Http\Requests\Note\StoreNoteRequest;
 use App\Http\Resources\Address\AddressResource;
+use App\Http\Resources\Note\NoteCollection;
+use App\Http\Resources\Note\NoteResource;
 use App\Models\Address;
+use App\Models\Application;
+use App\Models\Note;
 use App\Models\User;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 
-class AddressController extends Controller
+class NoteController extends Controller
 {
     public function index()
     {
-        $addresses = QueryBuilder::for(Address::class)
-                ->allowedFilters('state', 'country')
-                ->allowedSorts('id')
-                ->get();
-        
+        $notes = Note::paginate(config('ad-agency-creatives.request.pagination_limit'));
 
-        // $addresses = Address::paginate(config('ad-agency-creatives.request.pagination_limit'));
-
-        return new AddressCollection($addresses);
+        return new NoteCollection($notes);
     }
 
-    public function store(StoreAddressRequest $request)
+    public function store(StoreNoteRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
+        $application = Application::where('uuid', $request->application_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
+            'application_id' => $application->id,
         ]);
-        try {
-            $address = Address::create($request->all());
 
-            return ApiResponse::success(new AddressResource($address), 200);
+        try {
+            $note = Note::create($request->all());
+            return ApiResponse::success(new NoteResource($note), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('LS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('NS-01 ' . $e->getMessage(), 400);
         }
     }
 
     public function show($uuid)
     {
         try {
-            $address = Address::where('uuid', $uuid)->firstOrFail();
+            $note = Note::where('uuid', $uuid)->firstOrFail();
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
-        return new AddressResource($address);
+        return new NoteResource($note);
     }
 
     public function update(UpdateAddressRequest $request, $uuid)
@@ -72,10 +70,10 @@ class AddressController extends Controller
     public function destroy($uuid)
     {
         try {
-            $address = Address::where('uuid', $uuid)->firstOrFail();
-            $address->delete();
+            $note = Note::where('uuid', $uuid)->firstOrFail();
+            $note->delete();
 
-            return ApiResponse::success($address, 200);
+            return ApiResponse::success($note, 200);
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
