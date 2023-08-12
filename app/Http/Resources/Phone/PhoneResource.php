@@ -15,8 +15,8 @@ class PhoneResource extends JsonResource
             'label' => $this->label,
             'country_code' => $this->country_code,
             'phone_number' => $this->phone_number,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 }

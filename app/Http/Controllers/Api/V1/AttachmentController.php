@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Http\Controllers;
-
 namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
@@ -13,7 +11,6 @@ use App\Http\Resources\Attachment\AttachmentResource;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -22,7 +19,7 @@ class AttachmentController extends Controller
 
     public function index()
     {
-        $attachments = Attachment::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $attachments = Attachment::paginate(config('global.request.pagination_limit'));
 
         return new AttachmentCollection($attachments);
     }
@@ -68,35 +65,11 @@ class AttachmentController extends Controller
         }
     }
 
-    public function update(Request $request, $uuid)
-    {
-        dd($request->all());
-        try {
-            $resource_type = $request->resource_type;
-
-            $attachment = Attachment::where('uuid', $uuid)->where('resource_type', $resource_type)->firstOrFail();
-            $file = $request->file;
-            $extension = $file->getClientOriginalExtension();
-            $filename = $uuid . '.' . $extension;
-            $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
-
-            $request->merge([
-                'path' => $file_path,
-                'extension' => $extension,
-            ]);
-
-            $attachment->update($request->only('path', 'extension'));
-            return new AttachmentResource($attachment);
-
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFound($e);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'US-01');
-        }
-    }
-
     public function destroy($uuid)
     {
+        /**
+         * To DO: Delete file from storage
+         */
         try {
             $attachment = Attachment::where('uuid', $uuid)->firstOrFail();
             $attachment->delete();

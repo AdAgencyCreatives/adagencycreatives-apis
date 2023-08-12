@@ -93,3 +93,11 @@ Following endpoints were created
 -   Cache Implementattion
 -   Notes CRUD Endpoints
 -   Attachments CRUD Endpoints
+
+## 11/8/2023 - Bookmarks | Educations | Experiences | Categories | Industries CRUD
+
+-   Bookmarks API Endpoints
+-   Educations API Endpoints
+-   Experiences API Endpoints
+-   Categories API Endpoints
+-   Industries API Endpoints

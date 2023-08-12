@@ -19,7 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('resume_id');
             $table->string('degree');
             $table->string('college');
-            $table->timestamp('completed_at');
+            $table->timestamp('started_at');
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

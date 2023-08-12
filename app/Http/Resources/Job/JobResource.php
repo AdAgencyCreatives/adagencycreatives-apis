@@ -26,8 +26,8 @@ class JobResource extends JsonResource
             'is_hybrid' => $this->is_hybrid,
             'is_hybrid' => $this->is_hybrid,
             'is_hybrid' => $this->is_hybrid,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 }

@@ -24,7 +24,7 @@ class AddressController extends Controller
                 ->get();
         
 
-        // $addresses = Address::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        // $addresses = Address::paginate(config('global.request.pagination_limit'));
 
         return new AddressCollection($addresses);
     }

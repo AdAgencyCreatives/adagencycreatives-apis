@@ -17,7 +17,7 @@ class ResumeController extends Controller
 {
     public function index()
     {
-        $resumes = Resume::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $resumes = Resume::paginate(config('global.request.pagination_limit'));
 
         return new ResumeCollection($resumes);
     }

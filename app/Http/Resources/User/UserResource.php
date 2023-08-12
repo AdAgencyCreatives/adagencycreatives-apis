@@ -19,17 +19,17 @@ class UserResource extends JsonResource
                 'email' => $this->email,
                 'role' => $this->role,
                 'status' => $this->status,
-                'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+                'created_at' => $this->created_at->format(config('global.datetime_format')),
             ],
             'relationships' => [
                 'phones' => [
                     'links' => [
-                        'related' => '',
+                        'related' => route('phone-numbers.show', $this->uuid),
                     ],
                 ],
                 'addresses' => [],
                 'links' => [],
-                'jobs' => [],
+
             ],
             'links' => [
                 'self' => route('users.show', $this->uuid),
@@ -42,6 +42,12 @@ class UserResource extends JsonResource
                 $data['relationships']['agencies'] = [
                     'links' => [
                         'related' => route('agencies.show', $this->agency->uuid),
+                    ],
+                ];
+
+                $data['relationships']['jobs'] = [
+                    'links' => [
+                        'related' => $this->jobs,
                     ],
                 ];
             }

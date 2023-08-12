@@ -1,86 +1,67 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Exceptions\ApiException;
+use App\Exceptions\ModelNotFound;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $categories = Category::paginate(config('global.request.pagination_limit'));
+
+        return new CategoryCollection($categories);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        try {
+            $request->merge([
+                'uuid' => Str::uuid(),
+            ]);
+
+            $category = Category::create($request->all());
+            return new CategoryResource($category);
+
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'CS-01');
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
+    public function show($uuid)
     {
-        //
+        try {
+            $category = Category::where('uuid', $uuid)->firstOrFail();
+            return new CategoryResource($category);
+
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFound($e);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
+    public function destroy($uuid)
     {
-        //
+        try {
+            $category = Category::where('uuid', $uuid)->firstOrFail();
+            $category->delete();
+            return new CategoryResource($category);
+
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFound($e);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateCategoryRequest  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateCategoryRequest $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
-    {
-        //
-    }
 }

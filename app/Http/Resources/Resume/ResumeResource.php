@@ -16,8 +16,8 @@ class ResumeResource extends JsonResource
             'about' => $this->about,
             'industry_specialty' => $this->industry_specialty,
             'media_experience' => $this->media_experience,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 }
