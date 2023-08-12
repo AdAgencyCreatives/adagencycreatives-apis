@@ -14,8 +14,8 @@ class NoteResource extends JsonResource
             'user_id' => $this->user->uuid,
             'application_id' => $this->application->uuid,
             'body' => $this->body,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
         ];
 

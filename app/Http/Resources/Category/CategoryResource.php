@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Http\Resources\Attachment;
+namespace App\Http\Resources\Category;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AttachmentResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     public function toArray($request)
     {
         return [
             'id' => $this->uuid,
-            'resource_type' => $this->resource_type,
-            'path' => $this->path,
-            'url' => asset( 'storage/' . $this->path),
-            'extension' => $this->extension,
+            'name' => $this->name,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
         ];

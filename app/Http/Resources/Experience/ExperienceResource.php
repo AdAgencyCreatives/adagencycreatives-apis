@@ -6,14 +6,21 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExperienceResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'type' => 'experiences',
+            'id' => $this->uuid,
+            'resume_id' => $this->resume->uuid,
+            'title' => $this->title,
+            'company' => $this->company,
+            'description' => $this->description,
+            'started_at' => $this->started_at->format(config('global.datetime_format')),
+            'completed_at' => $this->completed_at->format(config('global.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
+        ];
+
     }
 }

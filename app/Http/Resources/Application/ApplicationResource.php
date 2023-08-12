@@ -16,8 +16,8 @@ class ApplicationResource extends JsonResource
             'resume_url' => $this->attachment_id,
             'message' => $this->message,
             'status' => $this->status,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 }

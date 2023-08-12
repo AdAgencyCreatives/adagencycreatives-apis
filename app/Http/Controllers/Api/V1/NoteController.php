@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Address\UpdateAddressRequest;
 use App\Http\Requests\Note\StoreNoteRequest;
-use App\Http\Resources\Address\AddressResource;
+use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\Note\NoteCollection;
 use App\Http\Resources\Note\NoteResource;
-use App\Models\Address;
 use App\Models\Application;
 use App\Models\Note;
 use App\Models\User;
@@ -20,7 +18,7 @@ class NoteController extends Controller
 {
     public function index()
     {
-        $notes = Note::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $notes = Note::paginate(config('global.request.pagination_limit'));
 
         return new NoteCollection($notes);
     }
@@ -55,13 +53,13 @@ class NoteController extends Controller
         return new NoteResource($note);
     }
 
-    public function update(UpdateAddressRequest $request, $uuid)
+    public function update(UpdateNoteRequest $request, $uuid)
     {
         try {
-            $address = Address::where('uuid', $uuid)->first();
-            $address->update($request->only(['street_1', 'street_2', 'city', 'state', 'country']));
+            $note = Note::where('uuid', $uuid)->first();
+            $note->update($request->only('body'));
 
-            return new AddressResource($address);
+            return new NoteResource($note);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }

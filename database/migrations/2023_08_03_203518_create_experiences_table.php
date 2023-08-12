@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('company');
             $table->text('description');
-            $table->timestamp('start_date');
-            $table->timestamp('end_date')->nullable();
+            $table->timestamp('started_at');
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

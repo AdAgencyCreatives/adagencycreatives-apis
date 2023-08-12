@@ -18,7 +18,7 @@ class ApplicationController extends Controller
 {
     public function index()
     {
-        $applications = Application::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $applications = Application::paginate(config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
     }

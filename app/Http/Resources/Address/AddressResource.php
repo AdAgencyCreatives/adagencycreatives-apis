@@ -19,8 +19,8 @@ class AddressResource extends JsonResource
             'state' => $this->state,
             'country' => $this->country,
             'postal_code' => $this->postal_code,
-            'created_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
-            'updated_at' => $this->created_at->format(config('ad-agency-creatives.datetime_format')),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
         ];
     }

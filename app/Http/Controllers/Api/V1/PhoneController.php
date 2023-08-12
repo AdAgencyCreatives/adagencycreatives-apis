@@ -17,7 +17,7 @@ class PhoneController extends Controller
 {
     public function index()
     {
-        $phones = Phone::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $phones = Phone::paginate(config('global.request.pagination_limit'));
 
         return new PhoneCollection($phones);
     }

@@ -18,7 +18,7 @@ class JobController extends Controller
     public function index()
     {
 
-        $jobs = Job::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $jobs = Job::paginate(config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }

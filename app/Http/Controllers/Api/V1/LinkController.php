@@ -17,7 +17,7 @@ class LinkController extends Controller
 {
     public function index()
     {
-        $links = Link::paginate(config('ad-agency-creatives.request.pagination_limit'));
+        $links = Link::paginate(config('global.request.pagination_limit'));
 
         return new LinkCollection($links);
     }
