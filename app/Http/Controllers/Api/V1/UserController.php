@@ -12,8 +12,8 @@ use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -22,9 +22,22 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = Cache::remember('users', $this->cache_expiration_time, function () {
-            return User::paginate(config('global.request.pagination_limit'));
-        });
+        // $users = Cache::remember('users', $this->cache_expiration_time, function () {
+        //     return User::paginate(config('global.request.pagination_limit'));
+        // });
+
+        $query = QueryBuilder::for(User::class)
+                ->allowedFilters([
+                    'first_name', 
+                    'last_name', 
+                    'username', 
+                    'email',
+                    'role',
+                    'status',
+                    'is_visible',
+                ]);
+    
+        $users = $query->paginate(config('global.request.pagination_limit'));
 
         return new UserCollection($users);
     }

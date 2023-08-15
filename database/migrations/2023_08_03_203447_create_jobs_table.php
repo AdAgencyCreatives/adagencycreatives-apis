@@ -18,11 +18,11 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('title');
-            $table->string('description');
-            $table->string('category');
+            $table->text('description');
             $table->string('employement_type');
-            $table->string('industry_experience');
+            $table->text('industry_experience');
             $table->string('media_experience');
             $table->string('salary_range');
             $table->string('experience');

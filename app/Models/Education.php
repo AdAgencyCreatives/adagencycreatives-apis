@@ -20,6 +20,11 @@ class Education extends Model
         'completed_at',
     ];
 
+    protected $casts = [
+        'started_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
+
     public function resume()
     {
         return $this->belongsTo(Resume::class);

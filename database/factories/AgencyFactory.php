@@ -13,7 +13,6 @@ class AgencyFactory extends Factory
     {
         return [
             'uuid' => fake()->uuid(),
-            'user_id' => fake()->randomElement([1, 2, 3, 4, 5]),
             'name' => fake()->name(),
             'attachment_id' => null,
             'about' => fake()->paragraph(),

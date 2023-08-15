@@ -18,6 +18,16 @@ class ApplicationResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+
+            'relationships' => [
+                'notes' => [
+                    'links' => [
+                        'related' => route('notes.index') . '?filter[application_id]=' . $this->uuid,
+                    ],
+                ],
+            ],
+
         ];
+
     }
 }

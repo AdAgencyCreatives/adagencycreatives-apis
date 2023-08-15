@@ -17,8 +17,9 @@ class AgencyResource extends JsonResource
             'about' => $this->about,
             'size' => $this->size,
             'type_of_work' => $this->type_of_work,
-            'industry_specialty' => $this->industry_specialty,
-            'created_at' => $this->created_at->format(config('ad-agency-settings.datetime_format')),
+            'industry_specialty' => getIndustryNames($this->industry_specialty),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 }

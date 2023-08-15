@@ -13,13 +13,22 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AttachmentController extends Controller
 {
 
     public function index()
     {
-        $attachments = Attachment::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Attachment::class) 
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    // AllowedFilter::scope('resource_type'),
+                    // 'resource_type'  
+                ]);
+        
+        $attachments = $query->paginate(config('global.request.pagination_limit'));
 
         return new AttachmentCollection($attachments);
     }

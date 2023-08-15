@@ -15,12 +15,15 @@ class StoreJobRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,uuid',
+            'category_id' => 'required|exists:categories,uuid',
+            'address_id' => 'required|exists:addresses,uuid',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required',
             'employement_type' => 'required|string|max:255',
-            'industry_experience' => 'required|string|max:255',
-            'media_experience' => 'required|string|max:255',
+            'industry_experience' => 'required|array',
+            'industry_experience.*' => 'exists:industries,id',
+            'media_experience' => 'required|array',
+            'media_experience.*' => 'exists:industries,id',
             'salary_range' => 'required|string|max:255',
             'experience' => 'required|string|max:255',
             'apply_type' => 'required|string|max:255',

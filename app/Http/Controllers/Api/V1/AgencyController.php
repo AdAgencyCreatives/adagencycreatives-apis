@@ -11,13 +11,22 @@ use App\Http\Resources\Agency\AgencyResource;
 use App\Models\Agency;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class AgencyController extends Controller
 {
     public function index()
     {
-        $agencies = Agency::paginate(10);
+        $query = QueryBuilder::for(Agency::class)
+        ->allowedFilters([
+            AllowedFilter::scope('user_id'),
+            'size', 
+            'type_of_work'
+        ]);
+
+        $agencies = $query->paginate(config('global.request.pagination_limit'));
 
         return new AgencyCollection($agencies);
     }
