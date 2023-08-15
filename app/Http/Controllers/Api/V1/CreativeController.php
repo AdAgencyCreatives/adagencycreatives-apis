@@ -10,13 +10,22 @@ use App\Http\Resources\Creative\CreativeResource;
 use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
     public function index()
     {
-        $creatives = Creative::paginate(10);
+        $query = QueryBuilder::for(Creative::class)
+        ->allowedFilters([
+            AllowedFilter::scope('user_id'),
+            'years_of_experience', 
+            'type_of_work'
+        ]);
+
+        $creatives = $query->paginate(config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
     }

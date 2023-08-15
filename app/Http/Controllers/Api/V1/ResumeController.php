@@ -12,13 +12,19 @@ use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ResumeController extends Controller
 {
     public function index()
     {
-        $resumes = Resume::paginate(config('global.request.pagination_limit'));
-
+        $query = QueryBuilder::for(Resume::class) 
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                ]);
+        
+        $resumes = $query->paginate(config('global.request.pagination_limit'));
         return new ResumeCollection($resumes);
     }
 

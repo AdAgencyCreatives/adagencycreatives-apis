@@ -10,25 +10,43 @@ class UserResource extends JsonResource
     {
         $data = [
             'type' => 'users',
-            'id' => $this->uuid,
-            'attributes' => [
-                'id' => $this->id,
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'username' => $this->username,
-                'email' => $this->email,
-                'role' => $this->role,
-                'status' => $this->status,
-                'created_at' => $this->created_at->format(config('global.datetime_format')),
-            ],
+            'uuid' => $this->uuid,
+            'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'username' => $this->username,
+            'email' => $this->email,
+            'role' => $this->role,
+            'status' => $this->status,
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
+
             'relationships' => [
                 'phones' => [
                     'links' => [
-                        'related' => route('phone-numbers.show', $this->uuid),
+                        'related' => route('phone-numbers.index') . '?filter[user_id]=' . $this->uuid,
                     ],
                 ],
-                'addresses' => [],
-                'links' => [],
+                'addresses' => [
+                    'links' => [
+                        'related' => route('addresses.index') . '?filter[user_id]=' . $this->uuid,
+                    ],
+                ],
+                'attachments' => [
+                    'links' => [
+                        'related' => route('attachments.index') . '?filter[user_id]=' . $this->uuid,
+                    ],
+                ],
+                'links' => [
+                    'links' => [
+                        'related' => route('links.index') . '?filter[user_id]=' . $this->uuid,
+                    ],
+                ],
+                'bookmarks' => [
+                    'links' => [
+                        'related' => route('bookmarks.index') . '?filter[user_id]=' . $this->uuid,
+                    ],
+                ],
 
             ],
             'links' => [
@@ -47,7 +65,7 @@ class UserResource extends JsonResource
 
                 $data['relationships']['jobs'] = [
                     'links' => [
-                        'related' => $this->jobs,
+                        'related' => route('jobs.index') . '?filter[user_id]=' . $this->uuid,
                     ],
                 ];
             }
@@ -56,6 +74,18 @@ class UserResource extends JsonResource
                 $data['relationships']['creatives'] = [
                     'links' => [
                         'related' => route('creatives.show', $this->creative->uuid),
+                    ],
+                ];
+
+                $data['relationships']['applications'] = [
+                    'links' => [
+                        'related' => route('applications.index') . '?filter[user_id]=' . $this->uuid,
+                    ],
+                ];
+
+                $data['relationships']['resumes'] = [
+                    'links' => [
+                        'related' => route('resumes.index') . '?filter[user_id]=' . $this->uuid,
                     ],
                 ];
             }

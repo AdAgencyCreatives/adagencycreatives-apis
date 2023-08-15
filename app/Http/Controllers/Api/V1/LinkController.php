@@ -12,12 +12,21 @@ use App\Models\Link;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LinkController extends Controller
 {
     public function index()
     {
-        $links = Link::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Link::class) 
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    'label', 
+                ]);
+               
+
+        $links = $query->paginate(config('global.request.pagination_limit'));
 
         return new LinkCollection($links);
     }
@@ -35,7 +44,7 @@ class LinkController extends Controller
 
             return ApiResponse::success(new LinkResource($application), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('LS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('LS-01 ' . $e->getMessage(), 400);
         }
     }
 

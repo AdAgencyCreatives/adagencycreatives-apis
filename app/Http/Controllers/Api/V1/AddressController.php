@@ -13,18 +13,28 @@ use App\Models\User;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class AddressController extends Controller
 {
     public function index()
     {
-        $addresses = QueryBuilder::for(Address::class)
-                ->allowedFilters('state', 'country')
-                ->allowedSorts('id')
-                ->get();
+        $query = QueryBuilder::for(Address::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    'label', 
+                    'street_1', 
+                    'street_2', 
+                    'city', 
+                    'state', 
+                    'country',
+                    'postal_code',
+                ]
+                   
+                );
+               
         
-
-        // $addresses = Address::paginate(config('global.request.pagination_limit'));
+        $addresses = $query->paginate(config('global.request.pagination_limit'));
 
         return new AddressCollection($addresses);
     }

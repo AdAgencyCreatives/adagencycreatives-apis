@@ -10,6 +10,7 @@ class AttachmentResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
+            'user_id' => $this->user->uuid,
             'resource_type' => $this->resource_type,
             'path' => $this->path,
             'url' => asset( 'storage/' . $this->path),

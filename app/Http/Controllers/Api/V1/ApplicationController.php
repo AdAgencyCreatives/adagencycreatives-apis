@@ -13,12 +13,22 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ApplicationController extends Controller
 {
     public function index()
     {
-        $applications = Application::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Application::class) 
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('job_id'),                   
+                    'status'
+                ]);
+        
+
+        $applications = $query->paginate(config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
     }

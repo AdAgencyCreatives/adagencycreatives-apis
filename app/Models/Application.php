@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Mockery\Matcher\Not;
 
 class Application extends Model
 {
@@ -35,6 +37,11 @@ class Application extends Model
         return $this->belongsTo(Job::class);
     }
 
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
     public function getStatusAttribute($value)
     {
         switch ($value) {
@@ -63,5 +70,17 @@ class Application extends Model
                 $this->attributes['status'] = Application::STATUSES['PENDING'];
                 break;
         }
+    }
+
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        $user = User::where('uuid', $user_id)->first();
+        if($user) return $query->where('user_id', $user->id);
+    }
+    
+    public function scopeJobId(Builder $query, $job_id)
+    {
+        $job = Job::where('uuid', $job_id)->first();
+        if($job) return $query->where('job_id', $job->id);
     }
 }
