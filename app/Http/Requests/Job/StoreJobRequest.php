@@ -2,12 +2,18 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Exceptions\UnauthorizedException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobRequest extends FormRequest
 {
     public function authorize()
     {
+        // $access = auth()->user()->can('jobs.create');
+        // if (!$access) {
+        //     throw new UnauthorizedException();
+        // }
+
         return true;
     }
 

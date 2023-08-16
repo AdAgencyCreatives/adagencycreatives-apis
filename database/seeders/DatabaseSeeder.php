@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,42 +18,39 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+        Artisan::call('adagencycreatives:permission');
 
-        User::where('id', '<', 5)->update(['role' => 3]);
+        \App\Models\User::factory(15)->create();
+
+        User::where('id', '<', 5)->update(['role' => 3]); // 3:Agency
+        User::where('id', '>', 10)->update(['role' => 2]); // 2:Advisor
 
         // ********************************************************
         // ******************** AGENCY USERS **********************
         // ********************************************************
 
-        $agency_users = User::where('role', 3)->pluck('id');
+        $agency_users = User::where('role', 3)->get();
 
         $jobIds = [];
-
+        $agency = Role::findByName('agency');
         foreach ($agency_users as $user) {
-            \App\Models\Agency::factory()->create([
-                'user_id' => $user,
-            ]);
+            $user->assignRole($agency);
 
-            $addresses = \App\Models\Address::factory(1)->create(
-                ['user_id' => $user]
-            );
+            $data_user_id = ['user_id' => $user->id];
 
-            \App\Models\Phone::factory(3)->create(
-                ['user_id' => $user]
-            );
+            \App\Models\Agency::factory()->create($data_user_id);
 
-            \App\Models\Link::factory(3)->create(
-                ['user_id' => $user]
-            );
+            $addresses = \App\Models\Address::factory(1)->create($data_user_id);
 
-            \App\Models\Attachment::factory(3)->create(
-                ['user_id' => $user]
-            );
+            \App\Models\Phone::factory(3)->create($data_user_id);
+
+            \App\Models\Link::factory(3)->create($data_user_id);
+
+            \App\Models\Attachment::factory(3)->create($data_user_id);
 
             foreach ($addresses as $address) {
                 $jobs = \App\Models\Job::factory(2)->create([
-                    'user_id' => $user,
+                    'user_id' => $user->id,
                     'address_id' => $address->id,
                 ]
                 );
@@ -65,10 +64,12 @@ class DatabaseSeeder extends Seeder
         // ********************************************************
         // ******************** CREATIVE USERS ********************
         // ********************************************************
-
-        $creative_users = User::where('role', 4)->pluck('id');
+        $creative = Role::findByName('creative');
+        $creative_users = User::where('role', 4)->get();
         foreach ($creative_users as $user) {
-            $data_user_id = ['user_id' => $user];
+            $user->assignRole($creative);
+
+            $data_user_id = ['user_id' => $user->id];
 
             \App\Models\Creative::factory()->create($data_user_id);
 
@@ -88,24 +89,33 @@ class DatabaseSeeder extends Seeder
 
             for ($i = 0; $i < 3; $i++) {
                 $application = \App\Models\Application::factory()->create([
-                    'user_id' => $user,
+                    'user_id' => $user->id,
                     'job_id' => $jobIds[array_rand($jobIds)],
                     'attachment_id' => $attachments->random()->id,
                 ]
                 );
 
                 \App\Models\Note::factory(1)->create([
-                    'user_id' => $user,
+                    'user_id' => $user->id,
                     'application_id' => $application->id,
                 ]
                 );
 
                 \App\Models\Bookmark::factory(1)->create([
-                    'user_id' => $user,
+                    'user_id' => $user->id,
                     'resource_id' => $jobIds[array_rand($jobIds)],
                 ]
                 );
             }
+        }
+
+        // *******************************************************
+        // ******************** ADVISOR USERS ********************
+        // *******************************************************
+        $advisor = Role::findByName('advisor');
+        $advisor_users = User::where('role', 2)->get();
+        foreach ($advisor_users as $user) {
+            $user->assignRole($advisor);
         }
 
         // ********************************************************

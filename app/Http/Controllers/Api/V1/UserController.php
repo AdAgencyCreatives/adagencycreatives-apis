@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -45,27 +45,25 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $email = fake()->unique()->safeEmail();
+        try {
+            $email = fake()->unique()->safeEmail();
 
-        $user = new User();
-        $user->uuid = Str::uuid();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->username = $this->get_username_from_email($email);
-        $user->email = $email;
-        $user->password = bcrypt($request->password);
-        $user->role = $request->role;
-        $user_created = $user->save();
+            $user = new User();
+            $user->uuid = Str::uuid();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->username = $this->get_username_from_email($email);
+            $user->email = $email;
+            $user->password = bcrypt($request->password);
+            $user->role = $request->role;
+            $user->save();
 
-        if ($user_created) {
-            return response()->json([
-                'message' => 'User created successfully.',
-                'data' => new UserResource($user),
-            ], Response::HTTP_CREATED);
-        } else {
-            return response()->json([
-                'message' => 'Something went wrong',
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $role = Role::findByName($request->role);
+            $user->assignRole($role);
+
+            return new UserResource($user);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
         }
     }
 
@@ -73,8 +71,9 @@ class UserController extends Controller
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
+            $user_resource = new UserResource($user);
 
-            return new UserResource($user);
+            return 'html';
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -131,9 +130,18 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $agency = Role::findByName('agency');
+        // $user->assignRole($agency);
+        // $user->givePermissionTo('job.create');
 
-        return response()->json(['token' => $token], 200);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $role_name = $user->getRoleNames();
+
+        return response()->json([
+            'token' => $token,
+            'role' => $role_name,
+            'permissions' => $user->getAllPermissions(),
+        ], 200);
     }
 
     public function logout(Request $request)
