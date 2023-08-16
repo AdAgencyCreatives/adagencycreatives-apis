@@ -46,20 +46,9 @@ class CreativeController extends Controller
         $creative->user_id = $user->id;
         $creative->years_of_experience = $request->years_of_experience;
         $creative->type_of_work = $request->type_of_work;
-        $creative_created = $creative->save();
+        $creative->save();
 
-        if ($creative_created) {
-            return response()->json([
-                'message' => 'Creative created successfully.',
-                'data' => new CreativeResource($creative),
-            ], Response::HTTP_CREATED);
-        } else {
-            return response()->json([
-                'message' => 'Something went wrong',
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        dd($request->all());
+        return new CreativeResource($creative);
     }
 
     public function show($uuid)

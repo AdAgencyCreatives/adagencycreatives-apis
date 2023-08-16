@@ -29,20 +29,25 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/login', [UserController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
+Route::post('/users', [UserController::class, 'store']);
 
-Route::apiResource('users', UserController::class);
-Route::apiResource('agencies', AgencyController::class);
-Route::apiResource('creatives', CreativeController::class);
-Route::apiResource('jobs', JobController::class);
-Route::apiResource('applications', ApplicationController::class);
-Route::apiResource('links', LinkController::class);
-Route::apiResource('phone-numbers', PhoneController::class);
-Route::apiResource('addresses', AddressController::class);
-Route::apiResource('resumes', ResumeController::class);
-Route::apiResource('educations', EducationController::class);
-Route::apiResource('experiences', ExperienceController::class);
-Route::apiResource('notes', NoteController::class);
-Route::apiResource('attachments', AttachmentController::class);
-Route::apiResource('bookmarks', BookmarkController::class);
-Route::apiResource('categories', CategoryController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
+    Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
+    Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
+    Route::apiResource('applications', ApplicationController::class)->middleware('check.permissions:application');
+    Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
+    Route::apiResource('educations', EducationController::class)->middleware('check.permissions:education');
+    Route::apiResource('experiences', ExperienceController::class)->middleware('check.permissions:experience');
+
+    Route::apiResource('phone-numbers', PhoneController::class);
+    Route::apiResource('addresses', AddressController::class);
+    Route::apiResource('links', LinkController::class);
+    Route::apiResource('notes', NoteController::class);
+    Route::apiResource('attachments', AttachmentController::class);
+    Route::apiResource('bookmarks', BookmarkController::class);
+    Route::apiResource('categories', CategoryController::class);
+
+    Route::apiResource('users', UserController::class)->except(['store']);
+    Route::post('logout', [UserController::class, 'logout']);
+});
