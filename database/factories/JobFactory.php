@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class JobFactory extends Factory
 {
-
     public function definition()
     {
         $employementTypes = ['Full-time', 'Part-time', 'Contract', 'Freelance'];
@@ -39,6 +38,5 @@ class JobFactory extends Factory
             'updated_at' => now(),
             'deleted_at' => null,
         ];
-
     }
 }

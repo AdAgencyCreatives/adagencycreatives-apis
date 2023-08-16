@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 
 class ExperienceController extends Controller
 {
-
     public function index()
     {
         $experiences = Experience::paginate(config('global.request.pagination_limit'));
@@ -45,11 +44,9 @@ class ExperienceController extends Controller
             }
 
             return new ExperienceCollection($createdExperiences);
-
         } catch (\Exception $e) {
-            return ApiResponse::error('ExpS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('ExpS-01 '.$e->getMessage(), 400);
         }
-
     }
 
     public function update(UpdateEducationRequest $request, $uuid)
@@ -64,7 +61,6 @@ class ExperienceController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
-
     }
 
     public function destroy($uuid)

@@ -29,20 +29,19 @@ class CategoryController extends Controller
             ]);
 
             $category = Category::create($request->all());
-            return new CategoryResource($category);
 
+            return new CategoryResource($category);
         } catch (\Exception $e) {
             throw new ApiException($e, 'CS-01');
         }
-
     }
 
     public function show($uuid)
     {
         try {
             $category = Category::where('uuid', $uuid)->firstOrFail();
-            return new CategoryResource($category);
 
+            return new CategoryResource($category);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -55,13 +54,12 @@ class CategoryController extends Controller
         try {
             $category = Category::where('uuid', $uuid)->firstOrFail();
             $category->delete();
-            return new CategoryResource($category);
 
+            return new CategoryResource($category);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
     }
-
 }

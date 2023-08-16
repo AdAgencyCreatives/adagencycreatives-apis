@@ -9,12 +9,10 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IndustryFactory extends Factory
 {
-
     public function definition()
     {
         return [
             'uuid' => $this->faker->uuid,
         ];
-
     }
 }

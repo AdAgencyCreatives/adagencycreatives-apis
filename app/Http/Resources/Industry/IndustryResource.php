@@ -14,6 +14,5 @@ class IndustryResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
         ];
-
     }
 }

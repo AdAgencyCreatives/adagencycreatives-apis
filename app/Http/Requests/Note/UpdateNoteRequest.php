@@ -16,6 +16,5 @@ class UpdateNoteRequest extends FormRequest
         return [
             'body' => 'required|string|max:255',
         ];
-
     }
 }

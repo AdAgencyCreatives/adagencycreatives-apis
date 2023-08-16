@@ -32,8 +32,8 @@ class BookmarkController extends Controller
             $resource_id = $request->resource_id;
 
             $resource = DB::table($resource_type)->where('uuid', $resource_id)->first();
-            if (!$resource) {
-                throw new ModelNotFound("Not found", 404);
+            if (! $resource) {
+                throw new ModelNotFound('Not found', 404);
             }
 
             $request->merge([
@@ -44,8 +44,8 @@ class BookmarkController extends Controller
             ]);
 
             $bookmark = Bookmark::create($request->all());
-            return new BookmarkResource($bookmark);
 
+            return new BookmarkResource($bookmark);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -58,8 +58,8 @@ class BookmarkController extends Controller
         try {
             $bookmark = Bookmark::where('uuid', $uuid)->firstOrFail();
             $bookmark->delete();
-            return new BookmarkResource($bookmark);
 
+            return new BookmarkResource($bookmark);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {

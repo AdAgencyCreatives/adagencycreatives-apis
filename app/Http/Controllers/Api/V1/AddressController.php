@@ -10,10 +10,10 @@ use App\Http\Resources\Address\AddressCollection;
 use App\Http\Resources\Address\AddressResource;
 use App\Models\Address;
 use App\Models\User;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AddressController extends Controller
 {
@@ -22,18 +22,17 @@ class AddressController extends Controller
         $query = QueryBuilder::for(Address::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
-                    'label', 
-                    'street_1', 
-                    'street_2', 
-                    'city', 
-                    'state', 
+                    'label',
+                    'street_1',
+                    'street_2',
+                    'city',
+                    'state',
                     'country',
                     'postal_code',
                 ]
-                   
+
                 );
-               
-        
+
         $addresses = $query->paginate(config('global.request.pagination_limit'));
 
         return new AddressCollection($addresses);
@@ -52,7 +51,7 @@ class AddressController extends Controller
 
             return ApiResponse::success(new AddressResource($address), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('LS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('LS-01 '.$e->getMessage(), 400);
         }
     }
 

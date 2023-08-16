@@ -19,14 +19,13 @@ class PhoneController extends Controller
 {
     public function index()
     {
-        $query = QueryBuilder::for(Phone::class) 
+        $query = QueryBuilder::for(Phone::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     // AllowedFilter::exact('label'),
                     'label',
                     // 'phone_number'
                 ]);
-
 
         $phones = $query->paginate(config('global.request.pagination_limit'));
 

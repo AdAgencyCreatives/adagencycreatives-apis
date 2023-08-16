@@ -36,9 +36,10 @@ class NoteController extends Controller
 
         try {
             $note = Note::create($request->all());
+
             return ApiResponse::success(new NoteResource($note), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('NS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('NS-01 '.$e->getMessage(), 400);
         }
     }
 

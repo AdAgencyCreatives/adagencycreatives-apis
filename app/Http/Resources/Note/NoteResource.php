@@ -18,6 +18,5 @@ class NoteResource extends JsonResource
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
         ];
-
     }
 }

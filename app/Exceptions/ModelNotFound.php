@@ -10,6 +10,6 @@ class ModelNotFound extends Exception
 {
     public function render(Request $request): Response
     {
-        return response(["message" => trans('response.not_found')], 404);
+        return response(['message' => trans('response.not_found')], 404);
     }
 }

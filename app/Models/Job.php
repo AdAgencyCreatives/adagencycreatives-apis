@@ -56,7 +56,7 @@ class Job extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     public function address()
     {
         return $this->belongsTo(Address::class);
@@ -65,24 +65,28 @@ class Job extends Model
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopeCategory(Builder $query, $category_name): Builder
     {
         $category = Category::where('name', $category_name)->firstOrFail();
+
         return $query->where('category_id', $category->id);
     }
 
     public function scopeCountry(Builder $query, $country): Builder
     {
         $country_ids = Address::where('country', $country)->pluck('id');
+
         return $query->whereIn('address_id', $country_ids);
     }
-    
+
     public function scopeState(Builder $query, $state): Builder
     {
         $state_ids = Address::where('state', $state)->pluck('id');
+
         return $query->whereIn('address_id', $state_ids);
     }
 }
