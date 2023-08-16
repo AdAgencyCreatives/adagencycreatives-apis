@@ -3,14 +3,12 @@
 namespace App\Http\Resources\Job;
 
 use App\Http\Resources\Address\AddressResource;
-use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
 {
     public function toArray($request)
     {
-    
         return [
             'type' => 'jobs',
             'id' => $this->uuid,
@@ -30,7 +28,7 @@ class JobResource extends JsonResource
             'is_onsite' => $this->is_onsite,
             'is_featured' => $this->is_featured,
             'is_urgent' => $this->is_urgent,
-            'address' => new AddressResource( $this->address ),
+            'address' => new AddressResource($this->address),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];

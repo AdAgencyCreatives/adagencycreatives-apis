@@ -22,6 +22,5 @@ class StoreExperienceRequest extends FormRequest
             'experiences.*.started_at' => 'required|date',
             'experiences.*.completed_at' => 'nullable|date|after:experiences.*.started_at',
         ];
-
     }
 }

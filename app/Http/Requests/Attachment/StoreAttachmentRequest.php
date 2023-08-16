@@ -18,17 +18,17 @@ class StoreAttachmentRequest extends FormRequest
             'resource_type' => 'required',
             'file' => [
                 'required',
-                'file', 
-                'max:10240', 
+                'file',
+                'max:10240',
                 function ($attribute, $value, $fail) {
                     $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
                     $fileExtension = strtolower($value->getClientOriginalExtension());
-                    if (!in_array($fileExtension, $allowedTypes)) {
+                    if (! in_array($fileExtension, $allowedTypes)) {
                         $fail('Invalid file type. Allowed types: jpg, jpeg, png, pdf, doc, docx');
                     }
                 },
-            ]
-          
+            ],
+
         ];
     }
 }

@@ -24,27 +24,27 @@ class UserResource extends JsonResource
             'relationships' => [
                 'phones' => [
                     'links' => [
-                        'related' => route('phone-numbers.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('phone-numbers.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ],
                 'addresses' => [
                     'links' => [
-                        'related' => route('addresses.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('addresses.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ],
                 'attachments' => [
                     'links' => [
-                        'related' => route('attachments.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('attachments.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ],
                 'links' => [
                     'links' => [
-                        'related' => route('links.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('links.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ],
                 'bookmarks' => [
                     'links' => [
-                        'related' => route('bookmarks.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('bookmarks.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ],
 
@@ -65,7 +65,7 @@ class UserResource extends JsonResource
 
                 $data['relationships']['jobs'] = [
                     'links' => [
-                        'related' => route('jobs.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('jobs.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ];
             }
@@ -79,13 +79,13 @@ class UserResource extends JsonResource
 
                 $data['relationships']['applications'] = [
                     'links' => [
-                        'related' => route('applications.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('applications.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ];
 
                 $data['relationships']['resumes'] = [
                     'links' => [
-                        'related' => route('resumes.index') . '?filter[user_id]=' . $this->uuid,
+                        'related' => route('resumes.index').'?filter[user_id]='.$this->uuid,
                     ],
                 ];
             }

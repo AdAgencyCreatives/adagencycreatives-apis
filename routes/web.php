@@ -27,5 +27,4 @@ Route::get('/test', function () {
         'started_at' => '2022-08-11',
         'completed_at' => '2023-08-11',
     ]);
-
 });

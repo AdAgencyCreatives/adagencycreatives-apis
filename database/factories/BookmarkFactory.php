@@ -14,6 +14,5 @@ class BookmarkFactory extends Factory
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
     }
 }

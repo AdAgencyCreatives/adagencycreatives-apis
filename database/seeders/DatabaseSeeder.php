@@ -59,9 +59,7 @@ class DatabaseSeeder extends Seeder
                 foreach ($jobs as $job) {
                     $jobIds[] = $job->id;
                 }
-
             }
-
         }
 
         // ********************************************************
@@ -108,7 +106,6 @@ class DatabaseSeeder extends Seeder
                 ]
                 );
             }
-
         }
 
         // ********************************************************
@@ -116,6 +113,5 @@ class DatabaseSeeder extends Seeder
         // ********************************************************
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
-
     }
 }

@@ -9,7 +9,7 @@ class UniqueCategoryName implements Rule
 {
     public function passes($attribute, $value)
     {
-        return !Category::where('name', $value)->exists();
+        return ! Category::where('name', $value)->exists();
     }
 
     public function message()

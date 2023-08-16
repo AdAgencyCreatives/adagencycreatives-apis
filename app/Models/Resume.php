@@ -29,7 +29,7 @@ class Resume extends Model
     {
         return $this->hasMany(Education::class);
     }
-    
+
     public function experience()
     {
         return $this->hasMany(Experience::class);
@@ -38,6 +38,8 @@ class Resume extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if($user) return $query->where('user_id', $user->id);
+        if ($user) {
+            return $query->where('user_id', $user->id);
+        }
     }
 }

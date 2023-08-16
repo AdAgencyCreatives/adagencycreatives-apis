@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class ApiException extends Exception
 {
     public $e;
+
     public $code;
 
     public function __construct(Exception $e, $code)
@@ -17,13 +18,13 @@ class ApiException extends Exception
     }
 
     public function render(Request $request)
-    {   
+    {
         $data = [
             'status' => 'failed',
-            'code' => $this->code
+            'code' => $this->code,
         ];
 
-        if(env('APP_ENV') != 'production'){
+        if (env('APP_ENV') != 'production') {
             $data['message'] = $this->e->getMessage();
         }
 

@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+Route::post('/login', [UserController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
+
 Route::apiResource('users', UserController::class);
 Route::apiResource('agencies', AgencyController::class);
 Route::apiResource('creatives', CreativeController::class);

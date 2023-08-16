@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LinkFactory extends Factory
 {
-
     public function definition()
     {
         return [
@@ -16,6 +15,5 @@ class LinkFactory extends Factory
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
     }
 }

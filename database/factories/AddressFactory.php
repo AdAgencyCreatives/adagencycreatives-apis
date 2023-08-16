@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AddressFactory extends Factory
 {
-    
     public function definition()
     {
         return [
             'uuid' => fake()->uuid(),
-            'label' => ['primary','business', 'personal',][rand(0,2)],
+            'label' => ['primary', 'business', 'personal'][rand(0, 2)],
             'street_1' => fake()->streetAddress,
             'street_2' => fake()->secondaryAddress,
             'city' => fake()->city,

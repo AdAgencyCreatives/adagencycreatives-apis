@@ -21,6 +21,5 @@ class StoreEducationRequest extends FormRequest
             'educations.*.started_at' => 'required|date',
             'educations.*.completed_at' => 'nullable|date|after:educations.*.started_at',
         ];
-
     }
 }

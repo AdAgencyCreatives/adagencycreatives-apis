@@ -22,12 +22,11 @@ class ApplicationResource extends JsonResource
             'relationships' => [
                 'notes' => [
                     'links' => [
-                        'related' => route('notes.index') . '?filter[application_id]=' . $this->uuid,
+                        'related' => route('notes.index').'?filter[application_id]='.$this->uuid,
                     ],
                 ],
             ],
 
         ];
-
     }
 }

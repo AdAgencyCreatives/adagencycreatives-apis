@@ -2,9 +2,7 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Lang;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -54,5 +52,4 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
-
 }

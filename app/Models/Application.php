@@ -6,7 +6,6 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Mockery\Matcher\Not;
 
 class Application extends Model
 {
@@ -75,12 +74,16 @@ class Application extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if($user) return $query->where('user_id', $user->id);
+        if ($user) {
+            return $query->where('user_id', $user->id);
+        }
     }
-    
+
     public function scopeJobId(Builder $query, $job_id)
     {
         $job = Job::where('uuid', $job_id)->first();
-        if($job) return $query->where('job_id', $job->id);
+        if ($job) {
+            return $query->where('job_id', $job->id);
+        }
     }
 }

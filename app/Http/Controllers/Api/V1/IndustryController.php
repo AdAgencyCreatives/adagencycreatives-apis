@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Industry;
 use App\Http\Requests\StoreIndustryRequest;
 use App\Http\Requests\UpdateIndustryRequest;
+use App\Models\Industry;
 
 class IndustryController extends Controller
 {
@@ -31,7 +31,6 @@ class IndustryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreIndustryRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreIndustryRequest $request)
@@ -42,7 +41,6 @@ class IndustryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Industry  $industry
      * @return \Illuminate\Http\Response
      */
     public function show(Industry $industry)
@@ -53,7 +51,6 @@ class IndustryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Industry  $industry
      * @return \Illuminate\Http\Response
      */
     public function edit(Industry $industry)
@@ -64,8 +61,6 @@ class IndustryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateIndustryRequest  $request
-     * @param  \App\Models\Industry  $industry
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateIndustryRequest $request, Industry $industry)
@@ -76,7 +71,6 @@ class IndustryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Industry  $industry
      * @return \Illuminate\Http\Response
      */
     public function destroy(Industry $industry)

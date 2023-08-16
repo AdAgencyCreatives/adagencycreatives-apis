@@ -19,12 +19,11 @@ class LinkController extends Controller
 {
     public function index()
     {
-        $query = QueryBuilder::for(Link::class) 
+        $query = QueryBuilder::for(Link::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
-                    'label', 
+                    'label',
                 ]);
-               
 
         $links = $query->paginate(config('global.request.pagination_limit'));
 
@@ -44,7 +43,7 @@ class LinkController extends Controller
 
             return ApiResponse::success(new LinkResource($application), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('LS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('LS-01 '.$e->getMessage(), 400);
         }
     }
 

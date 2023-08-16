@@ -6,7 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExperienceResource extends JsonResource
 {
-
     public function toArray($request)
     {
         return [
@@ -21,6 +20,5 @@ class ExperienceResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
-
     }
 }

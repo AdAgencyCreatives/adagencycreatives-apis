@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NoteFactory extends Factory
 {
-
     public function definition()
     {
         return [
@@ -15,6 +14,5 @@ class NoteFactory extends Factory
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
     }
 }

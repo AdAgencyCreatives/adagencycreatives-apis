@@ -12,6 +12,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,15 +29,15 @@ class UserController extends Controller
 
         $query = QueryBuilder::for(User::class)
                 ->allowedFilters([
-                    'first_name', 
-                    'last_name', 
-                    'username', 
+                    'first_name',
+                    'last_name',
+                    'username',
                     'email',
                     'role',
                     'status',
                     'is_visible',
                 ]);
-    
+
         $users = $query->paginate(config('global.request.pagination_limit'));
 
         return new UserCollection($users);
@@ -72,13 +73,13 @@ class UserController extends Controller
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
+
             return new UserResource($user);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
-
     }
 
     public function update(UpdateUserRequest $request, $uuid)
@@ -100,8 +101,8 @@ class UserController extends Controller
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
             $user->delete();
-            return new UserResource($user);
 
+            return new UserResource($user);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -115,5 +116,30 @@ class UserController extends Controller
         $username = Str::slug($username);
 
         return $username;
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        if (! Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['token' => $token], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 
 class JobSeeder extends Seeder
 {
-
     public function run()
     {
         $agencies = User::where('role', 3)->pluck('id');
@@ -43,6 +42,5 @@ class JobSeeder extends Seeder
             'updated_at' => now(),
             'deleted_at' => null,
         ];
-
     }
 }

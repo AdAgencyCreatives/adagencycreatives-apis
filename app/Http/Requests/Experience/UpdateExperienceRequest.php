@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEducationRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -20,6 +19,5 @@ class UpdateEducationRequest extends FormRequest
             'started_at' => 'sometimes|date',
             'completed_at' => 'sometimes|date|after_or_equal:started_at',
         ];
-
     }
 }

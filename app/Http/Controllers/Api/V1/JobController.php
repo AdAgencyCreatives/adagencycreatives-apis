@@ -21,8 +21,7 @@ class JobController extends Controller
 {
     public function index()
     {
-
-        $query = QueryBuilder::for(Job::class) 
+        $query = QueryBuilder::for(Job::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     AllowedFilter::scope('category'),
@@ -39,11 +38,11 @@ class JobController extends Controller
                     'is_featured',
                     'is_urgent',
                 ]);
-        
 
         $jobs = $query->paginate(config('global.request.pagination_limit'));
 
         $job_collection = new JobCollection($jobs);
+
         return $job_collection;
     }
 
@@ -59,8 +58,8 @@ class JobController extends Controller
             'category_id' => $category->id,
             'address_id' => $address->id,
             'status' => 0,
-            'industry_experience' => "" . implode(',', $request->industry_experience) . "",
-            'media_experience' => "" . implode(',', $request->media_experience) . "",
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
 
         try {
@@ -68,7 +67,7 @@ class JobController extends Controller
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('JS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('JS-01'.$e->getMessage(), 400);
         }
     }
 

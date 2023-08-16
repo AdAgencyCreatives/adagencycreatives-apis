@@ -17,7 +17,6 @@ use Illuminate\Support\Str;
 
 class EducationController extends Controller
 {
-
     public function index()
     {
         $educations = Education::paginate(config('global.request.pagination_limit'));
@@ -27,7 +26,6 @@ class EducationController extends Controller
 
     public function store(StoreEducationRequest $request)
     {
-
         try {
             $resume = Resume::where('uuid', $request->resume_id)->first();
             $educationsData = $request->input('educations');
@@ -46,11 +44,9 @@ class EducationController extends Controller
             }
 
             return new EducationCollection($createdEducations);
-
         } catch (\Exception $e) {
-            return ApiResponse::error('EdS-01 ' . $e->getMessage(), 400);
+            return ApiResponse::error('EdS-01 '.$e->getMessage(), 400);
         }
-
     }
 
     public function update(UpdateEducationRequest $request, $uuid)
@@ -65,7 +61,6 @@ class EducationController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
-
     }
 
     public function destroy($uuid)

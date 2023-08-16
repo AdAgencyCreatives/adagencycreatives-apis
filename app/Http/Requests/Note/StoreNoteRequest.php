@@ -18,6 +18,5 @@ class StoreNoteRequest extends FormRequest
             'application_id' => 'required|exists:applications,uuid',
             'body' => 'required|string|max:255',
         ];
-
     }
 }

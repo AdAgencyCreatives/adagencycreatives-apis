@@ -18,16 +18,15 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class AttachmentController extends Controller
 {
-
     public function index()
     {
-        $query = QueryBuilder::for(Attachment::class) 
+        $query = QueryBuilder::for(Attachment::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     // AllowedFilter::scope('resource_type'),
-                    // 'resource_type'  
+                    // 'resource_type'
                 ]);
-        
+
         $attachments = $query->paginate(config('global.request.pagination_limit'));
 
         return new AttachmentCollection($attachments);
@@ -43,7 +42,7 @@ class AttachmentController extends Controller
             $file = $request->file;
             $resource_type = $request->resource_type;
             $extension = $file->getClientOriginalExtension();
-            $filename = $uuid . '.' . $extension;
+            $filename = $uuid.'.'.$extension;
             $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
 
             $request->merge([
@@ -55,8 +54,8 @@ class AttachmentController extends Controller
             ]);
 
             $attachment = Attachment::create($request->all());
-            return new AttachmentResource($attachment);
 
+            return new AttachmentResource($attachment);
         } catch (\Exception $e) {
             throw new ApiException($e, 'ATS-001');
         }
@@ -66,6 +65,7 @@ class AttachmentController extends Controller
     {
         try {
             $attachment = Attachment::where('uuid', $uuid)->firstOrFail();
+
             return new AttachmentResource($attachment);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
@@ -82,6 +82,7 @@ class AttachmentController extends Controller
         try {
             $attachment = Attachment::where('uuid', $uuid)->firstOrFail();
             $attachment->delete();
+
             return new AttachmentResource($attachment);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
