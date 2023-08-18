@@ -27,7 +27,7 @@ class UserController extends Controller
         //     return User::paginate(config('global.request.pagination_limit'));
         // });
 
-        $query = QueryBuilder::for(User::class)
+        $query = QueryBuilder::for(User::class) 
                 ->allowedFilters([
                     'first_name',
                     'last_name',
@@ -37,6 +37,7 @@ class UserController extends Controller
                     'status',
                     'is_visible',
                 ]);
+        
 
         $users = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -52,10 +53,11 @@ class UserController extends Controller
             $user->uuid = Str::uuid();
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
-            $user->username = $this->get_username_from_email($email);
-            $user->email = $email;
+            $user->username = $this->get_username_from_email($request->email);
+            $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role = $request->role;
+            $user->status = $request->status;
             $user->save();
 
             $role = Role::findByName($request->role);
@@ -124,7 +126,7 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
