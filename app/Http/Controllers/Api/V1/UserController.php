@@ -38,7 +38,7 @@ class UserController extends Controller
                     'is_visible',
                 ]);
 
-        $users = $query->paginate(config('global.request.pagination_limit'));
+        $users = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new UserCollection($users);
     }

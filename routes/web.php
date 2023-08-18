@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +20,11 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
+});
+
+Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('users', UserController::class);
+    Route::get('users/{user}/details', [UserController::class, 'details']);
+    Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
 });

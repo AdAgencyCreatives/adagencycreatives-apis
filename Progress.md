@@ -139,3 +139,16 @@ Following endpoints were created
 -   Attachments
 -   Bookmarks
 -   Notes
+-
+
+## 17/8/2023 - Admin Dashboard
+
+-   Login form for admin
+-   Admin can
+    -- Create new users
+    -- Update existing users (password, status, role etc)
+    -- View all users
+    -- Apply filters on Users (role, status, email, username)
+    -- Pagination (Previous | Next page)
+    -- Per Page Filter (10 | 20 | 50 PerPage)
+-   With proper toast notifications and error alerts

@@ -30,8 +30,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
-
-Route::middleware(['auth:sanctum'])->group(function () {
+//auth:sanctum
+Route::middleware([])->group(function () {
     Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
     Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
     Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');

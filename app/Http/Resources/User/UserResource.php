@@ -8,9 +8,10 @@ class UserResource extends JsonResource
 {
     public function toArray($request)
     {
-        if ($this->role == 'admin') {
-            return [];
-        }
+        //Uncomment this code if you want to hide admin from the response
+        // if ($this->role == 'admin') {
+        //     return [];
+        // }
 
         $data = [
             'type' => 'users',
