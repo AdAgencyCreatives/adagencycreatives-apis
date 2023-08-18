@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,8 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
+    return User::all();
+
 });
 
 Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () {
