@@ -97,7 +97,6 @@ $(document).ready(function() {
             status: selectedStatus,
             username: username,
             email: email,
-
         };
 
         console.log(filters);
@@ -122,7 +121,7 @@ $(document).ready(function() {
                             <div class="table_length" id="table_length"><label>Show <select
                                         name="datatables-reponsive_length" id="per-page-select"
                                         class="form-select form-select-sm">
-                                        <option value="3">3</option>
+                                       
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
