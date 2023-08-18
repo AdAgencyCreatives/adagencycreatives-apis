@@ -28,10 +28,10 @@ class User extends Authenticatable
         'is_visible',
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'uuid';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'uuid';
+    // }
 
     protected $hidden = [
         'password',

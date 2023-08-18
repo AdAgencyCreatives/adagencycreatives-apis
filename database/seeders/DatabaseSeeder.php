@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         User::where('id', '<', 5)->update(['role' => 3]); // 3:Agency
         User::where('id', '>', 10)->update(['role' => 2]); // 2:Advisor
+        User::where('id', 1)->update(['role' => 1]); // 1:Admin
 
         // ********************************************************
         // ******************** AGENCY USERS **********************
@@ -123,5 +124,8 @@ class DatabaseSeeder extends Seeder
         // ********************************************************
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
+
+        //Generate some more users
+        \App\Models\User::factory(15)->create();
     }
 }
