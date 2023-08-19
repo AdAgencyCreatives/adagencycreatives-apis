@@ -45,6 +45,24 @@
                 </ul>
             </li>
 
+            <li class="sidebar-item {{ request()->is('jobs*') ? 'active' : '' }} ">
+                <a data-target="#jobs" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="list"></i>
+                    <span class="align-middle">Jobs</span>
+                </a>
+                <ul id="jobs" class="sidebar-dropdown list-unstyled collapse {{ request()->is('jobs*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('jobs') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('jobs.index') }}">
+                            <i class="align-middle" data-feather="list"></i>
+                            <span class="align-middle">All Jobs</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
         </ul>
     </div>
 </nav>

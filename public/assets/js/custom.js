@@ -58,9 +58,10 @@ function loadPage(page) {
 
 
 
-$('#per-page-select').change(function() {
+$('#per-page-select').change(function () {
     perPage = $(this).val();
     currentPage = 1;
+    console.log(perPage);
     loadPage(currentPage);
 });
 
@@ -153,4 +154,35 @@ function getStatusBadge(status) {
     const badgeColor = statusColors[status] || 'secondary';
 
     return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status + '</span>';
+}
+
+function displayJobOptionsBadges(job) {
+
+    const optionColors = {
+        "is_remote": 'info',
+        "is_hybrid": 'warning',
+        "is_onsite": 'success',
+        "is_featured": 'primary',
+        "is_urgent": 'danger'
+    };
+
+    var optionDisplayNames = {
+        "is_remote": "Remote",
+        "is_hybrid": "Hybrid",
+        "is_onsite": "Onsite",
+        "is_featured": "Featured",
+        "is_urgent": "Urgent"
+    };
+    var output = "";
+ $.each(job, function (option, value) {
+        if (value === 1 && option in optionDisplayNames && option in optionColors) {
+            var displayName = optionDisplayNames[option];
+            var badgeColor = optionColors[option];
+            var badge = '<span class="badge bg-' + badgeColor + ' me-2">' + displayName + '</span>';
+            
+            output += badge;
+        }
+    });
+
+    return output;
 }

@@ -10,14 +10,25 @@ use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::paginate(config('global.request.pagination_limit'));
+        $perPage = $request->input('per_page', config('global.request.pagination_limit'));
 
+        $cacheKey = 'categories_' . $perPage;
+    
+        $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage) {
+            if ($perPage == -1) {
+                return Category::all();
+            } else {
+                return Category::paginate($perPage);
+            }
+        });
         return new CategoryCollection($categories);
     }
 

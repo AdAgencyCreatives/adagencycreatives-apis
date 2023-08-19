@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             \App\Models\Attachment::factory(3)->create($data_user_id);
 
             foreach ($addresses as $address) {
-                $jobs = \App\Models\Job::factory(2)->create([
+                $jobs = \App\Models\Job::factory(10)->create([
                     'user_id' => $user->id,
                     'address_id' => $address->id,
                 ]
