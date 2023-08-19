@@ -25,7 +25,7 @@ function fetchData(page, filters = []) {
 
 
     $.ajax({
-        url: 'api/v1/users',
+        url: 'api/v1/jobs',
         method: 'GET',
         data: requestData,
         dataType: 'json',
@@ -38,38 +38,78 @@ function fetchData(page, filters = []) {
         },
         error: function() {
             alert('Failed to fetch users from the API.');
+        },
+        complete: function() {
+            fetchCategories();
         }
     });
 }
 
-function populateTable(users) {
+function fetchCategories() {
+
+    var requestData = {
+        per_page: -1
+    };
+
+    $.ajax({
+        url: 'api/v1/categories',
+        method: 'GET',
+        data: requestData,
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data);
+        },
+        error: function() {
+            alert('Failed to fetch categories from the API.');
+        }
+    });
+}
+
+function populateFilter(categories) {
+    var selectElement = $('#category');
+
+    $.each(categories, function(index, category) {
+        var option = $('<option>', {
+            value: category.id,
+            text: category.name
+        });
+
+        selectElement.append(option);
+    });
+}
+
+function populateTable(jobs) {
     var tbody = $('#users-table tbody');
     tbody.empty();
-    console.log(users);
-    console.log(users.length);
-    if (users.length === 0) {
+
+    if (jobs.length === 0) {
         displayNoRecordsMessage(7);
     }
 
-    $.each(users, function(index, user) {
-        var editUrl = "/users/" + user.id + "/details";
+    $.each(jobs, function(index, job) {
+        var editUrl = "/users/" + job.id + "/details";
         var roleBasedActions = '';
 
-        if (user.role === 'admin') {
+        if (job.role === 'admin') {
             roleBasedActions = 'Admin';
         } else {
             roleBasedActions = '<a href="' + editUrl +
-                '">Edit</a> | <a href="#" class="delete-user-btn" data-id="' +
-                user.uuid + '">Delete</a>';
+                '">Edit</a> | <a href="#" class="delete-btn" data-id="' +
+                job.id + '">Delete</a>';
         }
 
         var row = '<tr>' +
-            '<td>' + user.id + '</td>' +
-            '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
-            '<td>' + user.email + '</td>' +
-            '<td>' + getRoleBadge(user.role) + '</td>' +
-            '<td>' + getStatusBadge(user.status) + '</td>' +
-            '<td>' + user.created_at + '</td>' +
+            '<td>' + (index + 1) + '</td>' +
+            '<td>' + job.title + '</td>' +
+            '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
+            '<td>' + job.category + '</td>' +
+            '<td>' + job.employement_type + '</td>' +
+            '<td>' + job.industry_experience + '</td>' +
+            '<td>' + job.media_experience + '</td>' +
+            '<td>' + job.salary_range + '</td>' +
+            '<td>' + job.experience + '</td>' +
+            '<td>' + displayJobOptionsBadges(job) + '</td>' +
+            '<td>' + job.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
             '</tr>';
         tbody.append(row);
@@ -81,27 +121,31 @@ function populateTable(users) {
 $(document).ready(function() {
     fetchData(currentPage);
 
-    $(document).on('click', '.delete-user-btn', function() {
+
+    $(document).on('click', '.delete-btn', function() {
         var resourceId = $(this).data('id');
         var csrfToken = '{{ csrf_token() }}';
-        console.log(csrfToken);
-        deleteConfirmation(resourceId, 'user', 'users', csrfToken);
+        deleteConfirmation(resourceId, 'job', 'jobs', csrfToken);
     });
 
 
     $('#filter-form').on('submit', function(e) {
         e.preventDefault();
-        var selectedRole = $('#role').val();
-        var selectedStatus = $('#status').val();
-        var username = $('#username').val();
-        var email = $('#email').val();
+        var selectedCategory = $('#category').val();
+        var selectedLabels = $('#labels').val();
+        var emp_type = $('#employement_type').val();
+        var title = $('#title').val();
 
         filters = {
-            role: selectedRole,
-            status: selectedStatus,
-            username: username,
-            email: email,
+            category_id: selectedCategory,
+            employement_type: emp_type,
+            title: title,
         };
+
+        for (var i = 0; i < selectedLabels.length; i++) {
+            filters[selectedLabels[i]] = 1;
+        }
+
         currentPage = 1;
         fetchData(currentPage, filters);
     });
@@ -112,7 +156,7 @@ $(document).ready(function() {
 @section('content')
 
 
-@include('pages.users._inc.filters')
+@include('pages.jobs._inc.filters')
 
 <div class="row">
     <div class="col-12">
@@ -140,10 +184,11 @@ $(document).ready(function() {
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Status</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Employement Type</th>
+                                        <th>Salary Range</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>

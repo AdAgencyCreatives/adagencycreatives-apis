@@ -69,9 +69,9 @@ class Job extends Model
         return $query->where('user_id', $user->id);
     }
 
-    public function scopeCategory(Builder $query, $category_name): Builder
+    public function scopeCategoryId(Builder $query, $category_id): Builder
     {
-        $category = Category::where('name', $category_name)->firstOrFail();
+        $category = Category::where('uuid', $category_id)->firstOrFail();
 
         return $query->where('category_id', $category->id);
     }

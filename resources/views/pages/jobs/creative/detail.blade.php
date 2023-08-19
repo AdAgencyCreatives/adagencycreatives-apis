@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
-@section('title', __('Add User'))
+@section('title', 'Profile')
+
 @section('scripts')
+
 <script>
 $(document).ready(function() {
 
-    const submitButton = document.getElementById('submitButton');
-    $("form").on("submit", function(event) {
-
-        submitButton.disabled = true; // Disable the submit button
+    $("#profile-form").on("submit", function(event) {
         event.preventDefault();
 
         var $errorContainer = $('#error-messages');
@@ -28,24 +27,24 @@ $(document).ready(function() {
             first_name: $("#first_name").val(),
             last_name: $("#last_name").val(),
             email: $("#email").val(),
-            password: $("#password").val(),
             username: $("#username").val(),
             status: $("#status").val(),
             role: $("#role").val(),
             _token: "{{ csrf_token() }}"
         };
-        console.log(formData);
+
         $.ajax({
-            url: "{{route('users.store')}}",
-            type: "POST",
+            url: "/api/v1/users/" + "{{ $user->uuid }}",
+            type: "PATCH",
             data: JSON.stringify(formData),
 
             contentType: "application/json",
             success: function(response) {
+                // Handle success response
                 console.log("API call success:", response);
                 Swal.fire({
                     title: 'Success',
-                    text: "User created successfully",
+                    text: "User updated successfully",
                     icon: 'success'
                 });
 
@@ -69,17 +68,76 @@ $(document).ready(function() {
                     console.error("API call error:", error.responseText);
                 }
 
+            }
+        });
+    });
+
+    $("#password-form").on("submit", function(event) {
+        event.preventDefault();
+
+        var $errorContainer = $('#error-messages');
+        $errorContainer.hide();
+
+        var password = $("#password").val();
+        var confirm_password = $("#confirm_password").val();
+        if (password !== confirm_password) {
+            var $errorList = $errorContainer.find('ul');
+            $errorList.empty();
+            $errorList.append('<li> Passwords do not match </li>');
+            $errorContainer.show();
+            return;
+        }
+
+        var formData = {
+            password: $("#password").val(),
+            user_id: "{{ $user->id }}",
+            _token: "{{ csrf_token() }}"
+        };
+
+
+        $.ajax({
+            url: "{{ route('user.password.update')}}",
+            type: "PUT",
+            data: JSON.stringify(formData),
+
+            contentType: "application/json",
+            success: function(response) {
+                console.log("API call success:", response);
+                Swal.fire({
+                    title: 'Success',
+                    text: "Password updated successfully",
+                    icon: 'success'
+                });
+
             },
-            complete: function() {
-                submitButton.disabled = false;
+            error: function(error) {
+                if (error.status === 422) {
+                    var errorMessages = error.responseJSON.errors;
+                    var $errorContainer = $('#error-messages');
+                    var $errorList = $errorContainer.find('ul');
+
+                    $errorList.empty();
+
+                    $.each(errorMessages, function(field, errors) {
+                        $.each(errors, function(index, error) {
+                            $errorList.append('<li>' + error + '</li>');
+                        });
+                    });
+
+                    $errorContainer.show();
+                } else {
+                    console.error("API call error:", error.responseText);
+                }
+
             }
         });
     });
 });
 </script>
 @endsection
-@section('content')
 
+@section('content')
+<h1 class="h3 mb-3">Profile</h1>
 
 <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
     <div class="alert-message">
@@ -97,13 +155,14 @@ $(document).ready(function() {
                 <h5 class="card-title mb-0">Personal info</h5>
             </div>
             <div class="card-body">
-                <form>
+                <form id="profile-form">
                     <div class="row">
                         <div class="col-md-6">
 
                             <div class="mb-3">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first_name" placeholder="First Name">
+                                <input type="text" class="form-control" id="first_name" placeholder="First Name"
+                                    value="{{ $user->first_name }}">
                             </div>
 
                         </div>
@@ -111,7 +170,8 @@ $(document).ready(function() {
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last_name" placeholder="Last Name">
+                                <input type="text" class="form-control" id="last_name" placeholder="Last Name"
+                                    value="{{ $user->last_name }}">
                             </div>
                         </div>
                     </div>
@@ -121,7 +181,8 @@ $(document).ready(function() {
 
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" placeholder="Username">
+                                <input type="text" class="form-control" id="username" placeholder="Username"
+                                    value="{{ $user->username }}">
                             </div>
 
                         </div>
@@ -129,26 +190,8 @@ $(document).ready(function() {
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email" placeholder="Email">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password">
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm_password"
-                                    placeholder="Confirm Password">
+                                <input type="text" class="form-control" id="email" placeholder="Email"
+                                    value="{{ $user->email }}">
                             </div>
                         </div>
                     </div>
@@ -160,13 +203,14 @@ $(document).ready(function() {
                                     <label class="form-label" for="status"> Status </label>
                                     <select name="status" id="status"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
-
-                                        <option value="pending">
+                                        <option value="-100"> Select Status</option>
+                                        <option value="pending" @if($user->status == 'pending') selected @endif>
                                             Pending</option>
-                                        <option value="active">
+                                        <option value="active" @if($user->status == 'active') selected @endif>
                                             Active
                                         </option>
-                                        <option value="inactive">
+                                        <option value="inactive" @if($user->status == 'inactive') selected
+                                            @endif>
                                             Inactive</option>
 
                                     </select>
@@ -180,22 +224,22 @@ $(document).ready(function() {
                                     <label class="form-label" for="role"> Role </label>
                                     <select name="role" id="role" class="form-control form-select custom-select select2"
                                         data-toggle="select2">
-                                        <option value="creative">
-                                            Creative</option>
-                                        <option value="agency">
+                                        <option value="-100"> Select Role</option>
+                                        <option value="advisor" @if($user->role == 'advisor') selected @endif>
+                                            Advisor</option>
+                                        <option value="agency" @if($user->role == 'agency') selected @endif>
                                             Agency
                                         </option>
-                                        <option value="advisor">
-                                            Advisor</option>
-                                        <option value="admin">
-                                            Admin</option>
+                                        <option value="creative" @if($user->role == 'creative') selected @endif>
+                                            Creative</option>
+
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="submitButton">Add New User</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
             </div>
 
@@ -203,5 +247,6 @@ $(document).ready(function() {
     </div>
 </div>
 
+@include('pages.users._inc.password')
 
 @endsection

@@ -50,15 +50,18 @@ function updateTableInfo(meta) {
 function loadPage(page) {
     if (page >= 1 && page <= totalPages) {
         currentPage = page;
-        fetchData(currentPage);
+        console.log(currentPage);
+        console.log(filters);
+        fetchData(currentPage, filters);
     }
 }
 
 
 
-$('#per-page-select').change(function() {
+$('#per-page-select').change(function () {
     perPage = $(this).val();
     currentPage = 1;
+    console.log(perPage);
     loadPage(currentPage);
 });
 
@@ -74,6 +77,12 @@ $(document).on('click', '#pagination-prev', function() {
 $(document).on('click', '#pagination-next', function() {  
     loadPage(currentPage + 1);
 });
+
+function displayNoRecordsMessage(colspan) {
+    console.log('yeah inside');
+         var messageRow = '<tr><td colspan="' + colspan + '" class="text-center">No records found.</td></tr>';
+        $('tbody').html(messageRow);
+    }
 
 
 function deleteConfirmation(userId, resource, url, csrfToken) {
@@ -121,3 +130,59 @@ function deleteResource(userId, resource, url, csrfToken) {
 $('#clear-button').on('click', function() {
     location.reload(); // Refresh the page
 });
+
+function getRoleBadge(role) {
+    const roleColors = {
+        admin: 'success',
+        advisor: 'secondary',
+        agency: 'info',
+        creative: 'primary',
+    };
+
+    const badgeColor = roleColors[role] || 'danger';
+
+    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + role + '</span>';
+}
+
+function getStatusBadge(status) {
+    const statusColors = {
+        pending: 'warning',
+        active: 'success',
+        inactive: 'danger',
+    };
+
+    const badgeColor = statusColors[status] || 'secondary';
+
+    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status + '</span>';
+}
+
+function displayJobOptionsBadges(job) {
+
+    const optionColors = {
+        "is_remote": 'info',
+        "is_hybrid": 'warning',
+        "is_onsite": 'success',
+        "is_featured": 'primary',
+        "is_urgent": 'danger'
+    };
+
+    var optionDisplayNames = {
+        "is_remote": "Remote",
+        "is_hybrid": "Hybrid",
+        "is_onsite": "Onsite",
+        "is_featured": "Featured",
+        "is_urgent": "Urgent"
+    };
+    var output = "";
+ $.each(job, function (option, value) {
+        if (value === 1 && option in optionDisplayNames && option in optionColors) {
+            var displayName = optionDisplayNames[option];
+            var badgeColor = optionColors[option];
+            var badge = '<span class="badge bg-' + badgeColor + ' me-2">' + displayName + '</span>';
+            
+            output += badge;
+        }
+    });
+
+    return output;
+}

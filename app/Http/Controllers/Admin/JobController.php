@@ -7,17 +7,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class JobController extends Controller
 {
     public function index()
     {
-        return view('pages.users.index');
+        return view('pages.jobs.index');
     }
 
     public function create()
