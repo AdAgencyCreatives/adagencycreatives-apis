@@ -5,7 +5,10 @@
 <script>
 $(document).ready(function() {
 
+    const submitButton = document.getElementById('submitButton');
     $("form").on("submit", function(event) {
+
+        submitButton.disabled = true; // Disable the submit button
         event.preventDefault();
 
         var $errorContainer = $('#error-messages');
@@ -33,13 +36,12 @@ $(document).ready(function() {
         };
         console.log(formData);
         $.ajax({
-            url: "/api/v1/users",
+            url: "{{route('users.store')}}",
             type: "POST",
             data: JSON.stringify(formData),
 
             contentType: "application/json",
             success: function(response) {
-                // Handle success response
                 console.log("API call success:", response);
                 Swal.fire({
                     title: 'Success',
@@ -54,22 +56,22 @@ $(document).ready(function() {
                     var $errorContainer = $('#error-messages');
                     var $errorList = $errorContainer.find('ul');
 
-                    // Clear previous error messages
                     $errorList.empty();
 
-                    // Iterate over error messages and populate the list
                     $.each(errorMessages, function(field, errors) {
                         $.each(errors, function(index, error) {
                             $errorList.append('<li>' + error + '</li>');
                         });
                     });
 
-
                     $errorContainer.show();
                 } else {
                     console.error("API call error:", error.responseText);
                 }
 
+            },
+            complete: function() {
+                submitButton.disabled = false;
             }
         });
     });
@@ -178,22 +180,22 @@ $(document).ready(function() {
                                     <label class="form-label" for="role"> Role </label>
                                     <select name="role" id="role" class="form-control form-select custom-select select2"
                                         data-toggle="select2">
-
-                                        <option value="advisor">
-                                            Advisor</option>
+                                        <option value="creative">
+                                            Creative</option>
                                         <option value="agency">
                                             Agency
                                         </option>
-                                        <option value="creative">
-                                            Creative</option>
-
+                                        <option value="advisor">
+                                            Advisor</option>
+                                        <option value="admin">
+                                            Admin</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Add New User</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Add New User</button>
                 </form>
             </div>
 

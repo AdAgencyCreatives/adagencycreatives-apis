@@ -8,6 +8,7 @@
 var currentPage = 1;
 var totalPages = 1;
 var perPage = 10;
+var filters = {};
 
 function fetchData(page, filters = []) {
     var requestData = {
@@ -44,10 +45,13 @@ function fetchData(page, filters = []) {
 function populateTable(users) {
     var tbody = $('#users-table tbody');
     tbody.empty();
-
+    console.log(users);
+    console.log(users.length);
+    if (users.length === 0) {
+        displayNoRecordsMessage(7);
+    }
 
     $.each(users, function(index, user) {
-
         var editUrl = "/users/" + user.id + "/details";
         var roleBasedActions = '';
 
@@ -63,8 +67,8 @@ function populateTable(users) {
             '<td>' + user.id + '</td>' +
             '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
             '<td>' + user.email + '</td>' +
-            '<td>' + user.role + '</td>' +
-            '<td>' + user.status + '</td>' +
+            '<td>' + getRoleBadge(user.role) + '</td>' +
+            '<td>' + getStatusBadge(user.status) + '</td>' +
             '<td>' + user.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
             '</tr>';
@@ -92,14 +96,13 @@ $(document).ready(function() {
         var username = $('#username').val();
         var email = $('#email').val();
 
-        var filters = {
+        filters = {
             role: selectedRole,
             status: selectedStatus,
             username: username,
             email: email,
         };
-
-        console.log(filters);
+        currentPage = 1;
         fetchData(currentPage, filters);
     });
 });
@@ -121,7 +124,7 @@ $(document).ready(function() {
                             <div class="table_length" id="table_length"><label>Show <select
                                         name="datatables-reponsive_length" id="per-page-select"
                                         class="form-select form-select-sm">
-                                       
+
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>

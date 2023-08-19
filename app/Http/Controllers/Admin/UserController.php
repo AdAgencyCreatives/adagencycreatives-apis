@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -29,9 +32,7 @@ class UserController extends Controller
 
     public function store(StoreAdminUserRequest $request)
     {
-
         try {
-
             $user = new User();
             $user->uuid = Str::uuid();
             $user->first_name = $request->first_name;
@@ -50,6 +51,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
+
     }
 
     public function updatePassword(Request $request)
