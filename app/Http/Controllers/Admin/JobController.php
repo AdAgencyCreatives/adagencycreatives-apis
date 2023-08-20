@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,9 +25,11 @@ class JobController extends Controller
         return view('pages.users.add');
     }
 
-    public function details(User $user)
+    public function details($id)
     {
-        return view('pages.users.creative.detail', compact('user'));
+        $job = Job::with('applications')->where('uuid', $id)->first();
+
+        return view('pages.jobs.detail.detail', compact('job'));
     }
 
     public function store(StoreAdminUserRequest $request)
@@ -50,12 +53,11 @@ class JobController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
-
     }
 
     public function updatePassword(Request $request)
     {
-        if (!auth()->user()->role == 'admin') {
+        if (! auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 

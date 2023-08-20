@@ -30,6 +30,7 @@ class JobResource extends JsonResource
             'is_urgent' => $this->is_urgent,
             'address' => new AddressResource($this->address),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'expired_at' => $this->expired_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }

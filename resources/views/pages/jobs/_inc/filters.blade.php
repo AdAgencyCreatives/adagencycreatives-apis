@@ -40,6 +40,31 @@
 
                         <div class="col-sm">
                             <div class="form-group">
+                                <label class="form-label" for="industry"> Industry </label>
+                                <select name="industry[]" id="industry"
+                                    class="form-control form-select custom-select select2" multiple="multiple"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select Industry</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="media"> Media </label>
+                                <select name="media[]" id="media" class="form-control form-select custom-select select2"
+                                    multiple="multiple" data-toggle="select2">
+                                    <option value="-100"> Select Media</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm">
+                            <div class="form-group">
                                 <label class="form-label" for="employement_type"> Labels </label>
                                 <select class="form-control select2" id="labels" multiple="multiple" name="labels[]">
                                     <option value="is_remote">Remote</option>

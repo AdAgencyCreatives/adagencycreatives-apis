@@ -1,80 +1,91 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\StoreIndustryRequest;
-use App\Http\Requests\UpdateIndustryRequest;
+use App\Exceptions\ApiException;
+use App\Exceptions\ModelNotFound;
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Industry\StoreIndustryRequest;
+use App\Http\Requests\Industry\UpdateIndustryRequest;
+use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\Category\CategoryResource;
 use App\Models\Industry;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class IndustryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', config('global.request.pagination_limit'));
+
+        $cacheKey = 'industries'.$perPage;
+
+        $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage) {
+            if ($perPage == -1) {
+                return Industry::all();
+            } else {
+                return Industry::paginate($perPage);
+            }
+        });
+
+        return new CategoryCollection($categories);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreIndustryRequest $request)
     {
-        //
+        try {
+            $request->merge([
+                'uuid' => Str::uuid(),
+            ]);
+
+            $industry = Industry::create($request->all());
+
+            return new CategoryResource($industry);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'CS-01');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Industry $industry)
+    public function show($uuid)
     {
-        //
+        try {
+            $industry = Industry::where('uuid', $uuid)->firstOrFail();
+
+            return new CategoryResource($industry);
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFound($e);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Industry $industry)
+    public function update(UpdateIndustryRequest $request, $uuid)
     {
-        //
+        try {
+            $industry = Industry::where('uuid', $uuid)->first();
+            $industry->update($request->only('name'));
+
+            return new CategoryResource($industry);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateIndustryRequest $request, Industry $industry)
+    public function destroy($uuid)
     {
-        //
-    }
+        try {
+            $industry = Industry::where('uuid', $uuid)->firstOrFail();
+            $industry->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Industry $industry)
-    {
-        //
+            return new CategoryResource($industry);
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFound($e);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'US-01');
+        }
     }
 }

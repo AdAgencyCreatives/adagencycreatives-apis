@@ -23,7 +23,6 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     return User::all();
-
 });
 
 Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () {
@@ -34,5 +33,5 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
 
     Route::resource('jobs', JobController::class);
-
+    Route::get('jobs/{job}/details', [JobController::class, 'details']);
 });

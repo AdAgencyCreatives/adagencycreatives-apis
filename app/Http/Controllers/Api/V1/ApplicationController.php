@@ -9,6 +9,7 @@ use App\Http\Requests\Application\UpdateApplicationRequest;
 use App\Http\Resources\Application\ApplicationCollection;
 use App\Http\Resources\Application\ApplicationResource;
 use App\Models\Application;
+use App\Models\Attachment;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -36,12 +37,13 @@ class ApplicationController extends Controller
     {
         $user = User::where('uuid', $request->user_id)->first();
         $job = Job::where('uuid', $request->job_id)->first();
+        $attachment = Attachment::where('uuid', $request->resume_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'job_id' => $job->id,
-            'attachment_id' => $job->id,
+            'attachment_id' => $attachment->id,
             'status' => 0,
         ]);
         try {

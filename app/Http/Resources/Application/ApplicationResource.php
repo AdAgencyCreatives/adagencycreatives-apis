@@ -8,12 +8,15 @@ class ApplicationResource extends JsonResource
 {
     public function toArray($request)
     {
+        $user = $this->user;
+
         return [
             'type' => 'applications',
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
+            'user_id' => $user->uuid,
+            'user' => $user->first_name.' '.$user->last_name,
             'job_id' => $this->job->uuid,
-            'resume_url' => $this->attachment_id,
+            'resume_url' => asset('storage/'.$this->attachment->path),
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),

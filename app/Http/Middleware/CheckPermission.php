@@ -10,7 +10,6 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next, $resourceType)
     {
-
         if (Auth::user()->role == 'admin') {
             return $next($request);
         }
@@ -23,13 +22,13 @@ class CheckPermission
                 ? 'delete'
                 : null));
 
-        if (!$action) {
+        if (! $action) {
             return $next($request);
         }
 
-        $permissionName = $resourceType . '.' . $action;
+        $permissionName = $resourceType.'.'.$action;
 
-        if (!Auth::user()->hasPermissionTo($permissionName)) {
+        if (! Auth::user()->hasPermissionTo($permissionName)) {
             return response()->json(['message' => 'Permission denied'], 403);
         }
 
