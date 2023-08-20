@@ -10,6 +10,7 @@ use App\Http\Resources\Job\JobCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Models\Address;
 use App\Models\Category;
+use App\Models\Industry;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,6 +23,11 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
+        $filters = $request->all();
+
+        $industries = $this->processExperience($request, $filters, 'industry_experience');
+        $medias = $this->processExperience($request, $filters, 'media_experience');
+
         $query = QueryBuilder::for(Job::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
@@ -38,13 +44,40 @@ class JobController extends Controller
                     'is_onsite',
                     'is_featured',
                     'is_urgent',
-                ]);
+                ])
+                ->allowedSorts('created_at');
+
+        if ($industries !== null) {
+            $query->whereIn('industry_experience', $industries);
+        }
+        if ($medias !== null) {
+            $query->whereIn('media_experience', $medias);
+        }
 
         $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         $job_collection = new JobCollection($jobs);
 
         return $job_collection;
+    }
+
+    public function processExperience(Request $request, &$filters, $experienceKey)
+    {
+        if (isset($filters['filter'][$experienceKey])) {
+            $experience_ids = $filters['filter'][$experienceKey];
+            unset($filters['filter'][$experienceKey]);
+            $request->replace($filters);
+
+            if ($experience_ids) {
+                $experience_ids = explode(',', $experience_ids);
+            } else {
+                $experience_ids = [];
+            }
+
+            return Industry::whereIn('uuid', $experience_ids)->pluck('id');
+        }
+
+        return null;
     }
 
     public function store(StoreJobRequest $request)
@@ -59,8 +92,8 @@ class JobController extends Controller
             'category_id' => $category->id,
             'address_id' => $address->id,
             'status' => 0,
-            'industry_experience' => '' . implode(',', $request->industry_experience) . '',
-            'media_experience' => '' . implode(',', $request->media_experience) . '',
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
 
         try {
@@ -68,7 +101,7 @@ class JobController extends Controller
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('JS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('JS-01'.$e->getMessage(), 400);
         }
     }
 

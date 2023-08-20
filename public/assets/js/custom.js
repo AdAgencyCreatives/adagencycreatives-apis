@@ -141,7 +141,7 @@ function getRoleBadge(role) {
 
     const badgeColor = roleColors[role] || 'danger';
 
-    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + role + '</span>';
+    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + role.charAt(0).toUpperCase() + role.slice(1) + '</span>';
 }
 
 function getStatusBadge(status) {
@@ -153,7 +153,7 @@ function getStatusBadge(status) {
 
     const badgeColor = statusColors[status] || 'secondary';
 
-    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status + '</span>';
+    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
 }
 
 function displayJobOptionsBadges(job) {
@@ -185,4 +185,17 @@ function displayJobOptionsBadges(job) {
     });
 
     return output;
+}
+
+function populateFilter(categories, div_id) {
+    var selectElement = $(div_id);
+
+    $.each(categories, function(index, category) {
+        var option = $('<option>', {
+            value: category.id,
+            text: category.name
+        });
+
+        selectElement.append(option);
+    });
 }

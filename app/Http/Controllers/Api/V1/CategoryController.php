@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
@@ -20,8 +22,8 @@ class CategoryController extends Controller
     {
         $perPage = $request->input('per_page', config('global.request.pagination_limit'));
 
-        $cacheKey = 'categories_' . $perPage;
-    
+        $cacheKey = 'categories_'.$perPage;
+
         $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage) {
             if ($perPage == -1) {
                 return Category::all();
@@ -29,6 +31,7 @@ class CategoryController extends Controller
                 return Category::paginate($perPage);
             }
         });
+
         return new CategoryCollection($categories);
     }
 
@@ -57,6 +60,18 @@ class CategoryController extends Controller
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
+        }
+    }
+
+    public function update(UpdateCategoryRequest $request, $uuid)
+    {
+        try {
+            $category = Category::where('uuid', $uuid)->first();
+            $category->update($request->only('name'));
+
+            return new CategoryResource($category);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
 

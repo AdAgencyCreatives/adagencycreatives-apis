@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -51,12 +50,11 @@ class UserController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
-
     }
 
     public function updatePassword(Request $request)
     {
-        if (!auth()->user()->role == 'admin') {
+        if (! auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 

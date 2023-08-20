@@ -41,6 +41,11 @@ class Application extends Model
         return $this->hasMany(Note::class);
     }
 
+    public function attachment()
+    {
+        return $this->belongsTo(Attachment::class);
+    }
+
     public function getStatusAttribute($value)
     {
         switch ($value) {

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\NoteController;
@@ -47,6 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('attachments', AttachmentController::class);
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('industries', IndustryController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
     Route::post('logout', [UserController::class, 'logout']);

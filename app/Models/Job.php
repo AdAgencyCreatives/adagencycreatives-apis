@@ -34,13 +34,9 @@ class Job extends Model
         'expired_at',
     ];
 
-    // protected $casts = [
-    //     'is_remote' => 'boolean',
-    //     'is_hybrid' => 'boolean',
-    //     'is_onsite' => 'boolean',
-    //     'is_featured' => 'boolean',
-    //     'is_urgent' => 'boolean'
-    // ];
+    protected $casts = [
+        'expired_at' => 'datetime',
+    ];
 
     public function user()
     {
@@ -86,6 +82,14 @@ class Job extends Model
     public function scopeState(Builder $query, $state): Builder
     {
         $state_ids = Address::where('state', $state)->pluck('id');
+
+        return $query->whereIn('address_id', $state_ids);
+    }
+
+    public function scopeIndustryExperience(Builder $query, $industries): Builder
+    {
+        dd($industries);
+        $industries = Industry::whereIn('uuid', $industries)->pluck('id');
 
         return $query->whereIn('address_id', $state_ids);
     }

@@ -89,10 +89,12 @@ class DatabaseSeeder extends Seeder
             }
 
             for ($i = 0; $i < 3; $i++) {
+                $attachment_id = $attachments->random()->id;
+                dump($attachment_id);
                 $application = \App\Models\Application::factory()->create([
                     'user_id' => $user->id,
                     'job_id' => $jobIds[array_rand($jobIds)],
-                    'attachment_id' => $attachments->random()->id,
+                    'attachment_id' => $attachment_id,
                 ]
                 );
 
@@ -109,6 +111,7 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
+        dump($attachments);
 
         // *******************************************************
         // ******************** ADVISOR USERS ********************
