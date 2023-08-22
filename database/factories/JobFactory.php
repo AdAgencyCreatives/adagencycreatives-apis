@@ -34,7 +34,7 @@ class JobFactory extends Factory
             'is_urgent' => fake()->boolean,
 
             'expired_at' => fake()->dateTimeBetween('now', '+3 months'),
-            'created_at' => now(),
+            'created_at' => fake()->dateTimeBetween('-8 days', 'now'),
             'updated_at' => now(),
             'deleted_at' => null,
         ];

@@ -199,3 +199,44 @@ function populateFilter(categories, div_id) {
         selectElement.append(option);
     });
 }
+
+function updateStatus(userId, resource, url, csrfToken, selectedStatus) {
+    Swal.fire({
+        title: 'Confirm Update',
+        text: 'Are you sure you want to update this ' + resource + '?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Update',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateResourceStatus(userId, selectedStatus, url, csrfToken);
+        }
+    });
+}
+
+function updateResourceStatus(userId, selectedStatus, url, csrfToken) {
+    $.ajax({
+        url: 'api/v1/'  + url + '/' + userId, 
+        
+        method: 'PUT',
+        data: {
+            status: selectedStatus,
+            _token: csrfToken
+        },
+        dataType: 'json',
+        success: function(response) {
+            console.log(response);
+            Swal.fire({
+                title: 'Success',
+                text: 'Status has been updated.',
+                icon: 'success'
+            }).then((result) => {
+                fetchData(currentPage);
+            });
+        },
+        error: function() {
+            alert('Failed to update the user.');
+        }
+    });
+}

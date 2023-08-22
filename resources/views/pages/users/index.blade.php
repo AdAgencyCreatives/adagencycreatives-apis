@@ -59,18 +59,29 @@ function populateTable(users) {
             roleBasedActions = 'Admin';
         } else {
             roleBasedActions = '<a href="' + editUrl +
-                '">Edit</a> | <a href="#" class="delete-user-btn" data-id="' +
+                '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
                 user.uuid + '">Delete</a>';
         }
+
+
+        var statusDropdown = '<select class="status-dropdown form-control form-select select2" data-user-id="' +
+            user.uuid + '">' +
+            '<option value="pending" ' + (user.status === 'pending' ? 'selected' : '') + '>Pending</option>' +
+            '<option value="active" ' + (user.status === 'active' ? 'selected' : '') + '>Active</option>' +
+            '<option value="inactive" ' + (user.status === 'inactive' ? 'selected' : '') +
+            '>Inactive</option>' +
+            '</select>';
 
         var row = '<tr>' +
             '<td>' + user.id + '</td>' +
             '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
             '<td>' + user.email + '</td>' +
             '<td>' + getRoleBadge(user.role) + '</td>' +
-            '<td>' + getStatusBadge(user.status) + '</td>' +
+            '<td>' + statusDropdown + '</td>' +
+            // '<td>' + getStatusBadge(user.status) + '</td>' +
             '<td>' + user.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
+
             '</tr>';
         tbody.append(row);
     });
@@ -105,6 +116,14 @@ $(document).ready(function() {
         currentPage = 1;
         fetchData(currentPage, filters);
     });
+
+    $(document).on('change', '.status-dropdown', function() {
+        var selectedStatus = $(this).val();
+        var userId = $(this).data('user-id');
+        var csrfToken = '{{ csrf_token() }}';
+        updateStatus(userId, 'user', 'users', csrfToken, selectedStatus);
+    });
+
 });
 </script>
 @endsection

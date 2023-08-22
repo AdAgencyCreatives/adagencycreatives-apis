@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('experience');
             $table->string('apply_type');
             $table->string('external_link')->nullable();
-            $table->integer('status');
+            $table->integer('status')->comment('0:pending, 1:approved, 2:rejected, 3:expired, 4:filled');
             $table->boolean('is_remote');
             $table->boolean('is_hybrid');
             $table->boolean('is_onsite');

@@ -26,7 +26,14 @@ class UserController extends Controller
 
     public function details(User $user)
     {
-        return view('pages.users.creative.detail', compact('user'));
+        if ($user->role == 'agency') {
+            $user->load('agency', 'links');
+        } elseif ($user->role == 'creative') {
+            $user->load('creative');
+        }
+        // dd(getIndustryNames($user->agency->industry_specialty) );
+
+        return view('pages.users.profile', compact('user'));
     }
 
     public function store(StoreAdminUserRequest $request)

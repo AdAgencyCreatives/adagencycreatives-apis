@@ -17,7 +17,7 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'role' => fake()->randomElement([3, 4]),
             'status' => fake()->randomElement([1, 2]),
-            'created_at' => now(),
+            'created_at' => fake()->dateTimeBetween('-8 days', 'now'),
             'updated_at' => now(),
         ];
     }

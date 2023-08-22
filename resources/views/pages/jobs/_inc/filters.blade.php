@@ -29,11 +29,27 @@
                                 <label class="form-label" for="employement_type"> Employement Type </label>
                                 <select name="employement_type" id="employement_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Employement Type</option>
+                                    <option value="-100"> Select Type</option>
                                     <option value="Freelance">Freelance</option>
                                     <option value="Contract">Contract</option>
                                     <option value="Part-time">Part-time</option>
                                     <option value="Full-time">Full-time</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="status"> Status </label>
+                                <select name="status" id="status" class="form-control form-select custom-select select2"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select Status</option>
+                                    <option value="0"> Pending</option>
+                                    <option value="1"> Approved</option>
+                                    <option value="2"> Rejected</option>
+                                    <option value="3"> Expired</option>
+                                    <option value="4"> Filled</option>
+
                                 </select>
                             </div>
                         </div>

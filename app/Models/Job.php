@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Job extends Model
 {
@@ -36,6 +37,14 @@ class Job extends Model
 
     protected $casts = [
         'expired_at' => 'datetime',
+    ];
+
+    const STATUSES = [
+        'PENDING' => 0,
+        'APPROVED' => 1,
+        'REJECTED' => 2,
+        'EXPIRED' => 3,
+        'FILLED' => 4,
     ];
 
     public function user()
@@ -92,5 +101,59 @@ class Job extends Model
         $industries = Industry::whereIn('uuid', $industries)->pluck('id');
 
         return $query->whereIn('address_id', $state_ids);
+    }
+
+    public function getStatusAttribute($value)
+    {
+        switch ($value) {
+            case Job::STATUSES['PENDING']:
+                return 'pending';
+            case Job::STATUSES['APPROVED']:
+                return 'approved';
+            case Job::STATUSES['REJECTED']:
+                return 'rejected';
+            case Job::STATUSES['EXPIRED']:
+                return 'expired';
+            case Job::STATUSES['FILLED']:
+                return 'filled';
+            default:
+                return null;
+        }
+    }
+
+    public function setStatusAttribute($value)
+    {
+        switch ($value) {
+            case 'approved':
+                $this->attributes['status'] = Job::STATUSES['APPROVED'];
+                break;
+            case 'rejected':
+                $this->attributes['status'] = Job::STATUSES['REJECTED'];
+                break;
+            case 'expired':
+                $this->attributes['status'] = Job::STATUSES['EXPIRED'];
+                break;
+            case 'filled':
+                $this->attributes['status'] = Job::STATUSES['FILLED'];
+                break;
+            default:
+                $this->attributes['status'] = Job::STATUSES['PENDING'];
+                break;
+        }
+    }
+
+    protected static function booted()
+    {
+        static::created(function () {
+            Cache::forget('dashboard_stats_cache');
+        });
+
+        static::updated(function () {
+            Cache::forget('dashboard_stats_cache');
+        });
+
+        static::deleted(function () {
+            Cache::forget('dashboard_stats_cache');
+        });
     }
 }
