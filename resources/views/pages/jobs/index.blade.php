@@ -40,7 +40,7 @@ function fetchData(page, filters = []) {
 
         },
         error: function() {
-            alert('Failed to fetch users from the API.');
+            alert('Failed to fetch jobs from the API.');
         },
 
     });
@@ -110,16 +110,27 @@ function populateTable(jobs) {
                 job.id + '">Delete</a>';
         }
 
+        var statusDropdown = '<select class="status-dropdown form-control form-select select2" data-job-id="' +
+            job.id + '">' +
+            '<option value="pending" ' + (job.status === 'pending' ? 'selected' : '') + '>Pending</option>' +
+            '<option value="approved" ' + (job.status === 'approved' ? 'selected' : '') + '>Approved</option>' +
+            '<option value="rejected" ' + (job.status === 'rejected' ? 'selected' : '') + '>Rejected</option>' +
+            '<option value="expired" ' + (job.status === 'expired' ? 'selected' : '') + '>Expired</option>' +
+            '<option value="filled" ' + (job.status === 'filled' ? 'selected' : '') + '>Filled</option>' +
+            '>Inactive</option>' +
+            '</select>';
+
         var row = '<tr>' +
             '<td>' + (index + 1) + '</td>' +
             '<td>' + job.title + '</td>' +
-            '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
+            // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
             '<td>' + job.category + '</td>' +
             '<td>' + job.employement_type + '</td>' +
             '<td>' + displayJobOptionsBadges(job) + '</td>' +
             '<td>' + job.industry_experience + '</td>' +
             '<td>' + job.media_experience + '</td>' +
-            '<td>' + job.experience + '</br> ' + job.salary_range + '</td>' +
+            '<td>' + statusDropdown + '</td>' +
+            // '<td>' + job.experience + '</br> ' + job.salary_range + '</td>' +
 
 
             '<td><span class="badge bg-primary me-2">' + job.created_at +
@@ -149,6 +160,7 @@ $(document).ready(function() {
         var selectedCategory = $('#category').val();
         var selectedLabels = $('#labels').val();
         var emp_type = $('#employement_type').val();
+        var selectedStatus = $('#status').val();
         var title = $('#title').val();
 
         var selectedIndustry = $('#industry').val();
@@ -158,6 +170,7 @@ $(document).ready(function() {
             category_id: selectedCategory,
             employement_type: emp_type,
             title: title,
+            status: selectedStatus,
         };
 
         if (selectedIndustry && selectedIndustry.length > 0) {
@@ -174,6 +187,14 @@ $(document).ready(function() {
 
         currentPage = 1;
         fetchData(currentPage, filters);
+    });
+
+
+    $(document).on('change', '.status-dropdown', function() {
+        var selectedStatus = $(this).val();
+        var jobId = $(this).data('job-id');
+        var csrfToken = '{{ csrf_token() }}';
+        updateStatus(jobId, 'job', 'jobs', csrfToken, selectedStatus);
     });
 });
 </script>
@@ -211,13 +232,13 @@ $(document).ready(function() {
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
-                                        <th>Description</th>
+                                        <!-- <th>Description</th> -->
                                         <th>Category</th>
                                         <th>Employement Type</th>
                                         <th>Labels</th>
                                         <th>Industry</th>
                                         <th>Media</th>
-                                        <th>Experience / Salary</th>
+                                        <th>Status</th>
                                         <th>Created At / Expired At</th>
                                         <th>Actions</th>
                                     </tr>

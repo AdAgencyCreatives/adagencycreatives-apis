@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\BookmarkController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CreativeController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\IndustryController;
@@ -51,5 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('industries', IndustryController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
+
     Route::post('logout', [UserController::class, 'logout']);
 });
+Route::get('stats', [DashboardController::class, 'index']);

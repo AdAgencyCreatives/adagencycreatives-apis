@@ -148,14 +148,17 @@ class User extends Authenticatable
     {
         static::created(function ($user) {
             Cache::forget('users');
+            Cache::forget('dashboard_stats_cache');
         });
 
         static::updated(function ($user) {
             Cache::forget("user:$user->id");
+            Cache::forget('dashboard_stats_cache');
         });
 
         static::deleted(function ($user) {
             Cache::forget("user:$user->id");
+            Cache::forget('dashboard_stats_cache');
         });
     }
 }

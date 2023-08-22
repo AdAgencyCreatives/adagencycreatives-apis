@@ -90,7 +90,7 @@ class AgencyController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $data = $request->all();
+        $data = $request->except(['_token']);
         foreach ($data as $key => $value) {
             $agency->$key = $value;
         }

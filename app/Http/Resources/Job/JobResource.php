@@ -28,6 +28,7 @@ class JobResource extends JsonResource
             'is_onsite' => $this->is_onsite,
             'is_featured' => $this->is_featured,
             'is_urgent' => $this->is_urgent,
+            'status' => $this->status,
             'address' => new AddressResource($this->address),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at->format(config('global.datetime_format')),

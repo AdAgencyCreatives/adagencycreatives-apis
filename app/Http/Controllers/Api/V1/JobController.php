@@ -44,6 +44,7 @@ class JobController extends Controller
                     'is_onsite',
                     'is_featured',
                     'is_urgent',
+                    'status',
                 ])
                 ->allowedSorts('created_at');
 
@@ -61,25 +62,6 @@ class JobController extends Controller
         return $job_collection;
     }
 
-    public function processExperience(Request $request, &$filters, $experienceKey)
-    {
-        if (isset($filters['filter'][$experienceKey])) {
-            $experience_ids = $filters['filter'][$experienceKey];
-            unset($filters['filter'][$experienceKey]);
-            $request->replace($filters);
-
-            if ($experience_ids) {
-                $experience_ids = explode(',', $experience_ids);
-            } else {
-                $experience_ids = [];
-            }
-
-            return Industry::whereIn('uuid', $experience_ids)->pluck('id');
-        }
-
-        return null;
-    }
-
     public function store(StoreJobRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
@@ -91,7 +73,7 @@ class JobController extends Controller
             'user_id' => $user->id,
             'category_id' => $category->id,
             'address_id' => $address->id,
-            'status' => 0,
+            'status' => 0, //pending
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
@@ -138,5 +120,24 @@ class JobController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+    public function processExperience(Request $request, &$filters, $experienceKey)
+    {
+        if (isset($filters['filter'][$experienceKey])) {
+            $experience_ids = $filters['filter'][$experienceKey];
+            unset($filters['filter'][$experienceKey]);
+            $request->replace($filters);
+
+            if ($experience_ids) {
+                $experience_ids = explode(',', $experience_ids);
+            } else {
+                $experience_ids = [];
+            }
+
+            return Industry::whereIn('uuid', $experience_ids)->pluck('id');
+        }
+
+        return null;
     }
 }

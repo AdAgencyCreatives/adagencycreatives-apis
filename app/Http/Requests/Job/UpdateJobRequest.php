@@ -29,6 +29,7 @@ class UpdateJobRequest extends FormRequest
             'is_onsite' => 'sometimes|boolean',
             'is_featured' => 'sometimes|boolean',
             'is_urgent' => 'sometimes|boolean',
+            'status' => 'sometimes|in:pending,approved,rejected,expired,filled',
             'expired_at' => 'sometimes|date',
         ];
     }

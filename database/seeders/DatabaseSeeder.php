@@ -24,7 +24,10 @@ class DatabaseSeeder extends Seeder
 
         User::where('id', '<', 5)->update(['role' => 3]); // 3:Agency
         User::where('id', '>', 10)->update(['role' => 2]); // 2:Advisor
-        User::where('id', 1)->update(['role' => 1]); // 1:Admin
+        User::where('id', 1)->update([
+            'email' => 'admin@gmail.com',
+            'role' => 1,
+        ]); // 1:Admin
 
         // ********************************************************
         // ******************** AGENCY USERS **********************
@@ -90,7 +93,6 @@ class DatabaseSeeder extends Seeder
 
             for ($i = 0; $i < 3; $i++) {
                 $attachment_id = $attachments->random()->id;
-                dump($attachment_id);
                 $application = \App\Models\Application::factory()->create([
                     'user_id' => $user->id,
                     'job_id' => $jobIds[array_rand($jobIds)],
@@ -111,7 +113,6 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
-        dump($attachments);
 
         // *******************************************************
         // ******************** ADVISOR USERS ********************

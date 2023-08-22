@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('attachment_id')->nullable()->comment('logo');
             $table->text('about');
-            $table->integer('size');
+            $table->string('size');
             $table->string('type_of_work');
             $table->string('industry_specialty')->nullable();
             $table->timestamps();
