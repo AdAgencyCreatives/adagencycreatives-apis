@@ -75,7 +75,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     $("#agency-form").on("submit", function(event) {
         event.preventDefault();
 
@@ -88,7 +88,54 @@ $(document).ready(function() {
         };
         console.log(formData);
         $.ajax({
-            url: "/api/v1/agencies/" + "{{ $user->agency->uuid }}",
+            url: "/api/v1/agencies/" + "{{ $user->agency?->uuid }}",
+            type: "PATCH",
+            data: JSON.stringify(formData),
+
+            contentType: "application/json",
+            success: function(response) {
+                console.log("API call success:", response);
+                Swal.fire({
+                    title: 'Success',
+                    text: "Agency info updated successfully",
+                    icon: 'success'
+                });
+
+            },
+            error: function(error) {
+                if (error.status === 422) {
+                    var errorMessages = error.responseJSON.errors;
+                    var $errorContainer = $('#error-messages');
+                    var $errorList = $errorContainer.find('ul');
+
+                    $errorList.empty();
+
+                    $.each(errorMessages, function(field, errors) {
+                        $.each(errors, function(index, error) {
+                            $errorList.append('<li>' + error + '</li>');
+                        });
+                    });
+
+                    $errorContainer.show();
+                } else {
+                    console.error("API call error:", error.responseText);
+                }
+
+            }
+        });
+    });
+
+    $("#creative-form").on("submit", function(event) {
+        event.preventDefault();
+
+        var formData = {
+            years_of_experience: $("input[name='years_of_experience']").val(),
+            type_of_work: $("select[name='type_of_work']").val(),
+            _token: "{{ csrf_token() }}"
+        };
+        console.log(formData);
+        $.ajax({
+            url: "/api/v1/creatives/" + "{{ $user->creative?->uuid }}",
             type: "PATCH",
             data: JSON.stringify(formData),
 
@@ -200,8 +247,12 @@ $(document).ready(function() {
 </div>
 
 
-
+@if($user->role == 'agency')
 @include('pages.users._inc.agency')
+@elseif($user->role == 'creative')
+@include('pages.users._inc.creative')
+@endif
+
 @include('pages.users._inc.personal_info')
 @include('pages.users._inc.password')
 

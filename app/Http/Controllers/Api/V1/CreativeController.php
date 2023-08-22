@@ -19,11 +19,11 @@ class CreativeController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Creative::class)
-        ->allowedFilters([
-            AllowedFilter::scope('user_id'),
-            'years_of_experience',
-            'type_of_work',
-        ]);
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    'years_of_experience',
+                    'type_of_work',
+                ]);
 
         $creatives = $query->paginate(config('global.request.pagination_limit'));
 
@@ -80,7 +80,7 @@ class CreativeController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $data = $request->all();
+        $data = $request->except(['_token']);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
