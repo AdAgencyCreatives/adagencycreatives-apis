@@ -78,7 +78,6 @@ Following endpoints were created
 - Categories API Endpoints
 - Industries API Endpoints
  
-
 ## 15/8/2023 - Filters On All Entities
 - Users ( Agencies | Creatives )
 - Jobs
@@ -124,8 +123,6 @@ Following endpoints were created
 -- Per Page Filter (10 | 20 | 50 PerPage)
 - With proper toast notifications and error alerts  
 
-
-
 ## 18/8/2023 - Admin Dashboard | Job Module
 Admin can
 - View all jobs
@@ -139,3 +136,19 @@ Admin can
     -Labels (Featured, Remote, Urgent etc)
 - See all the applications sent on that particular job
 - Download Resumes attached by candidates	 
+
+## 21/8/2023 - Admin Dashboard | Stat Widgets
+- Admin can update user status
+- Admin can approve or reject job status
+- Admin can also filter jobs based on Status(Pending, Approved, Expired, Filled)
+- Admin can also view agency or creative info by clikcing on detail button
+- Dashboard
+-- User Stats Widgets
+-- Job Stats Widgets
+-- Chart for last 7 days registered users
+-- Chart for last 7 days posted jobs
+
+## 22/8/2023 - Stripe Integration
+- User can purchase the plan
+- User can cancel the subscription
+- List all current subscriptions

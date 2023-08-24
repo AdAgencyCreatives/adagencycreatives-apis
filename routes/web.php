@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PlanController;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,3 +37,12 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('jobs', JobController::class);
     Route::get('jobs/{job}/details', [JobController::class, 'details']);
 });
+
+Route::get('/billing-portal', function (Request $request) {
+    return $request->user()->redirectToBillingPortal();
+});
+
+Route::resource('plans', PlanController::class);
+Route::view('/pricing', 'pricing');
+Route::view('/subscription', 'subscription');
+Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
