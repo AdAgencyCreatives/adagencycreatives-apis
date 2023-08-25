@@ -128,8 +128,10 @@ class DatabaseSeeder extends Seeder
         // ********************************************************
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
+        $this->call(PlansTableSeeder::class);
 
         //Generate some more users
         \App\Models\User::factory(15)->create();
+        \App\Models\Order::factory(15)->create();
     }
 }

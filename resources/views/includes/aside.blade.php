@@ -63,6 +63,16 @@
                 </ul>
             </li>
 
+            <li class="sidebar-header">
+                Reports
+            </li>
+            <li class="sidebar-item {{ request()->is('reports') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('reports.index') }}">
+                    <i class="align-middle" data-feather="trending-up"></i>
+                    <span class="align-middle">Sales</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </nav>

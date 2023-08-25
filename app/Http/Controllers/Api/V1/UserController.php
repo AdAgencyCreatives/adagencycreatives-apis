@@ -131,17 +131,12 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        $agency = Role::findByName('agency');
-        // $user->assignRole($agency);
-        // $user->givePermissionTo('job.create');
-
         $token = $user->createToken('auth_token')->plainTextToken;
         $role_name = $user->getRoleNames();
 
         return response()->json([
             'token' => $token,
-            'role' => $role_name,
-            'permissions' => $user->getAllPermissions(),
+            'user' => new UserResource($user),
         ], 200);
     }
 

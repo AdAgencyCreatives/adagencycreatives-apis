@@ -15,7 +15,9 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Subscription;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -73,7 +75,7 @@ class JobController extends Controller
             'user_id' => $user->id,
             'category_id' => $category->id,
             'address_id' => $address->id,
-            'status' => 0, //pending
+            'status' => 'draft',
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
@@ -102,6 +104,26 @@ class JobController extends Controller
     {
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
+            $oldStatus = $job->status;
+            $newStatus = $request->input('status');
+
+            if ($newStatus === 'published' && $oldStatus === 'draft') {
+                $user = Auth::user();
+                if (! $user) {
+                    return ApiResponse::error(trans('response.unauthorized'), 401);
+                }
+
+                $subscription = Subscription::where('user_id', $user->id)
+                ->where('stripe_status', 'active')
+                ->where('quota_left', '>', 0)
+                ->first();
+
+                if (! $subscription) {
+                    return ApiResponse::error("You don't have enough quota for this job", 402);
+                }
+
+                $subscription->decrement('quota_left', 1);
+            }
             $job->update($request->all());
 
             return new JobResource($job);

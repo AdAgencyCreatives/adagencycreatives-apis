@@ -156,6 +156,18 @@ function getStatusBadge(status) {
     return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
 }
 
+function getPlanBadge(plan) {
+    const planColors = {
+        "Post a Creative Job": 'warning',
+        "Multiple Creative Jobs": 'success',
+        "Premium Creative Jobs": 'primary',
+    };
+
+    const badgeColor = planColors[plan] || 'secondary';
+
+    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + plan + '</span>';
+}
+
 function displayJobOptionsBadges(job) {
 
     const optionColors = {
