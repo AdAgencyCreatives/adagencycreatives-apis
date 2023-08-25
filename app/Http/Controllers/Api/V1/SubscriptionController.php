@@ -31,8 +31,21 @@ class SubscriptionController extends Controller
     {
         try {
             $plan = Plan::find($request->plan_id);
-            $subscription = $request->user()->newSubscription($plan->slug, $plan->stripe_plan)
+            $user = $request->user();
+
+            $subscription = $user->newSubscription($plan->slug, $plan->stripe_plan)
                 ->create($request->token);
+
+            $totalQuota = $plan->quota;
+
+            $subscription->update([
+                'quota_left' => $totalQuota,
+            ]);
+
+            $user->orders()->create([
+                'plan_id' => $plan->id,
+                'amount' => $plan->price,
+            ]);
 
             return $subscription;
         } catch (\Exception $e) {

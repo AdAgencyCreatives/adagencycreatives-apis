@@ -152,3 +152,17 @@ Admin can
 - User can purchase the plan
 - User can cancel the subscription
 - List all current subscriptions
+ 
+## 23/8/2023 - Managing Quota For User's Plan
+- Default Job status set to "Draft"
+- Agency user can publish the job
+- While changing status from draft to published, Checking if he has quota remaning?
+- If no quota remaining 
+    - Dont allow job publishing
+- If has quota:
+    - Allow job publishing
+	- Decrease the quota value for that user's plan
+-  Dashboard widget for Sales (package wise)
+- Last 7 days sale graph
+- Order page:
+    - Admin can see all the orders on single page with their corresponding user and amount	

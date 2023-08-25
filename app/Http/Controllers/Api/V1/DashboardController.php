@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Job;
+use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -12,14 +13,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $cacheKey = 'dashboard_stats_cache'; // Unique key for the cache item
-        $cacheDuration = Carbon::now()->addHours(2); // Cache duration, adjust as needed
-
-        // Attempt to retrieve the data from cache
+        $cacheKey = 'dashboard_stats_cache';
+        $cacheDuration = Carbon::now()->addHours(2);
         $cachedData = Cache::get($cacheKey);
 
         if ($cachedData) {
-            // If data is in cache, return it directly
             return $cachedData;
         } else {
             /*
@@ -54,9 +52,22 @@ class DashboardController extends Controller
             $hybrid_jobs = Job::where('is_hybrid', 1)->count();
             $urgent_jobs = Job::where('is_urgent', 1)->count();
 
+            /*
+             * Revenue based on different plans
+             */
+
+            $total_amount = Order::sum('amount');
+            $basic_amounty = Order::where('plan_id', 1)->sum('amount');
+            $standard_amounty = Order::where('plan_id', 2)->sum('amount');
+            $premium_amounty = Order::where('plan_id', 3)->sum('amount');
+
             $response = [
-                'users_chart' => $this->chartData(User::class),
-                'jobs_chart' => $this->chartData(Job::class),
+
+                'total_amount' => '$'.$total_amount,
+                'post-a-creative-job-amount' => '$'.$basic_amounty,
+                'multiple-creative-jobs-amount' => '$'.$standard_amounty,
+                'premium-creative-jobs-amount' => '$'.$premium_amounty,
+
                 'total_users' => $total_users,
                 'admin_users' => $admin_users,
                 'agency_users' => $agency_users,
@@ -79,6 +90,10 @@ class DashboardController extends Controller
                 'featured_jobs' => $featured_jobs,
                 'hybrid_jobs' => $hybrid_jobs,
                 'urgent_jobs' => $urgent_jobs,
+
+                'orders_chart' => $this->chartData(Order::class),
+                'users_chart' => $this->chartData(User::class),
+                'jobs_chart' => $this->chartData(Job::class),
 
             ];
 

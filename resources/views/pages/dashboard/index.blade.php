@@ -80,12 +80,15 @@ function fetchData() {
         dataType: 'json',
         success: function(response) {
             populateWidgets(response);
-            //Data for user chart
+
             renderChart('usersChart', response.users_chart.labels, response.users_chart.createdData,
-                'New Users in last 7 days', 'Number of users');
+                'New users in last 7 days', 'Number of users');
 
             renderChart('jobsChart', response.jobs_chart.labels, response.jobs_chart.createdData,
                 'New jobs in last 7 days', 'Number of jobs');
+
+            renderChart('ordersChart', response.orders_chart.labels, response.orders_chart.createdData,
+                'New orders in last 7 days', 'Number of orders');
 
 
         },

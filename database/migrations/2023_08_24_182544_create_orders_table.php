@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('stripe_plan');
-            $table->string('price');
-            $table->string('description');
-            $table->integer('quota');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('plan_id');
+            $table->integer('amount');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('orders');
     }
 };

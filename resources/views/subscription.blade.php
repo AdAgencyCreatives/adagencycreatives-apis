@@ -40,7 +40,7 @@ form.addEventListener('submit', async (e) => {
         token.setAttribute('name', 'token')
         token.setAttribute('value', setupIntent.payment_method)
         form.appendChild(token);
-        // form.submit();
+        form.submit();
         console.log(setupIntent.payment_method);
     }
 })
@@ -59,7 +59,7 @@ form.addEventListener('submit', async (e) => {
 
                     <form id="payment-form" action="{{ route('subscription.create') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="plan" id="plan" value="{{ $plan->id }}">
+                        <input type="hidden" name="plan_id" id="plan" value="{{ $plan->id }}">
 
                         <div class="row">
                             <div class="col-xl-4 col-lg-4">

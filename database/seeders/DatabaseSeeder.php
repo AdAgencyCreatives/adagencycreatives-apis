@@ -132,5 +132,6 @@ class DatabaseSeeder extends Seeder
 
         //Generate some more users
         \App\Models\User::factory(15)->create();
+        \App\Models\Order::factory(15)->create();
     }
 }

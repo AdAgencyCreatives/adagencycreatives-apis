@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
+use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -60,5 +61,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);
 
     Route::post('logout', [UserController::class, 'logout']);
+
+    Route::middleware(['admin'])->group(function () {
+        Route::get('reports', [ReportController::class, 'sales']);
+    });
 });
 Route::get('stats', [DashboardController::class, 'index']);

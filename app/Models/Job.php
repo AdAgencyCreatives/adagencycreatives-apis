@@ -45,6 +45,8 @@ class Job extends Model
         'REJECTED' => 2,
         'EXPIRED' => 3,
         'FILLED' => 4,
+        'DRAFT' => 5,
+        'PUBLISHED' => 6,
     ];
 
     public function user()
@@ -116,6 +118,11 @@ class Job extends Model
                 return 'expired';
             case Job::STATUSES['FILLED']:
                 return 'filled';
+            case Job::STATUSES['DRAFT']:
+                return 'draft';
+            case Job::STATUSES['PUBLISHED']:
+                return 'published';
+
             default:
                 return null;
         }
@@ -135,6 +142,12 @@ class Job extends Model
                 break;
             case 'filled':
                 $this->attributes['status'] = Job::STATUSES['FILLED'];
+                break;
+            case 'draft':
+                $this->attributes['status'] = Job::STATUSES['DRAFT'];
+                break;
+            case 'published':
+                $this->attributes['status'] = Job::STATUSES['PUBLISHED'];
                 break;
             default:
                 $this->attributes['status'] = Job::STATUSES['PENDING'];
