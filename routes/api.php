@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LinkController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Models\Group;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('industries', IndustryController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
+    Route::apiResource('groups', GroupController::class)->except(['store']);
 
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);

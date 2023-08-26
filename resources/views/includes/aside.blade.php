@@ -63,6 +63,30 @@
                 </ul>
             </li>
 
+            <li class="sidebar-item {{ request()->is('groups*') ? 'active' : '' }} ">
+                <a data-target="#groups" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="globe"></i>
+                    <span class="align-middle">Groups</span>
+                </a>
+                <ul id="groups"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('groups*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('groups') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('groups.index') }}">
+                            <i class="align-middle" data-feather="globe"></i>
+                            <span class="align-middle">All Groups</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->is('groups/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('groups.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Group</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="sidebar-header">
                 Reports
             </li>
