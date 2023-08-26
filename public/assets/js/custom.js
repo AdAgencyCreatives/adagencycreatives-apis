@@ -12,7 +12,7 @@ function updatePaginationButtons(links, meta_links) {
 
     }
 
-    $.each(meta_links, function(index, link) {
+    $.each(meta_links, function (index, link) {
         var isActive = link.active === true ? 'active' : '';
         var url = link.url;
 
@@ -39,7 +39,7 @@ function updatePaginationButtons(links, meta_links) {
 }
 
 function updateTableInfo(meta) {
-    var from = meta.from !== null ? meta.from : 0; 
+    var from = meta.from !== null ? meta.from : 0;
     var to = meta.to !== null ? meta.to : 0;
     var total = meta.total !== null ? meta.total : 0;
 
@@ -65,24 +65,24 @@ $('#per-page-select').change(function () {
     loadPage(currentPage);
 });
 
-$(document).on('click', '.pagination-number', function() {
+$(document).on('click', '.pagination-number', function () {
     var page = parseInt($(this).text());
     loadPage(page);
 });
 
-$(document).on('click', '#pagination-prev', function() {  
+$(document).on('click', '#pagination-prev', function () {
     loadPage(currentPage - 1);
 });
 
-$(document).on('click', '#pagination-next', function() {  
+$(document).on('click', '#pagination-next', function () {
     loadPage(currentPage + 1);
 });
 
 function displayNoRecordsMessage(colspan) {
     console.log('yeah inside');
-         var messageRow = '<tr><td colspan="' + colspan + '" class="text-center">No records found.</td></tr>';
-        $('tbody').html(messageRow);
-    }
+    var messageRow = '<tr><td colspan="' + colspan + '" class="text-center">No records found.</td></tr>';
+    $('tbody').html(messageRow);
+}
 
 
 function deleteConfirmation(userId, resource, url, csrfToken) {
@@ -102,16 +102,16 @@ function deleteConfirmation(userId, resource, url, csrfToken) {
 
 function deleteResource(userId, resource, url, csrfToken) {
 
-    var msg = resource.charAt(0).toUpperCase() + resource.slice(1) +  ' has been deleted.';
+    var msg = resource.charAt(0).toUpperCase() + resource.slice(1) + ' has been deleted.';
     $.ajax({
-        url: 'api/v1/'  + url + '/' + userId, 
-        
+        url: 'api/v1/' + url + '/' + userId,
+
         method: 'DELETE',
         data: {
             _token: csrfToken
         },
         dataType: 'json',
-        success: function(response) {
+        success: function (response) {
             console.log(response);
             Swal.fire({
                 title: 'Success',
@@ -121,13 +121,13 @@ function deleteResource(userId, resource, url, csrfToken) {
                 fetchData(currentPage);
             });
         },
-        error: function() {
+        error: function () {
             alert('Failed to delete the user.');
         }
     });
 }
 
-$('#clear-button').on('click', function() {
+$('#clear-button').on('click', function () {
     location.reload(); // Refresh the page
 });
 
@@ -148,7 +148,7 @@ function getStatusBadge(status) {
     const statusColors = {
         pending: 'warning',
         active: 'success',
-        inactive: 'danger',
+        inactive: 'danger'
     };
 
     const badgeColor = statusColors[status] || 'secondary';
@@ -186,12 +186,12 @@ function displayJobOptionsBadges(job) {
         "is_urgent": "Urgent"
     };
     var output = "";
- $.each(job, function (option, value) {
+    $.each(job, function (option, value) {
         if (value === 1 && option in optionDisplayNames && option in optionColors) {
             var displayName = optionDisplayNames[option];
             var badgeColor = optionColors[option];
             var badge = '<span class="badge bg-' + badgeColor + ' me-2">' + displayName + '</span>';
-            
+
             output += badge;
         }
     });
@@ -202,7 +202,7 @@ function displayJobOptionsBadges(job) {
 function populateFilter(categories, div_id) {
     var selectElement = $(div_id);
 
-    $.each(categories, function(index, category) {
+    $.each(categories, function (index, category) {
         var option = $('<option>', {
             value: category.id,
             text: category.name
@@ -229,15 +229,15 @@ function updateStatus(userId, resource, url, csrfToken, selectedStatus) {
 
 function updateResourceStatus(userId, selectedStatus, url, csrfToken) {
     $.ajax({
-        url: 'api/v1/'  + url + '/' + userId, 
-        
+        url: 'api/v1/' + url + '/' + userId,
+
         method: 'PUT',
         data: {
             status: selectedStatus,
             _token: csrfToken
         },
         dataType: 'json',
-        success: function(response) {
+        success: function (response) {
             console.log(response);
             Swal.fire({
                 title: 'Success',
@@ -247,7 +247,7 @@ function updateResourceStatus(userId, selectedStatus, url, csrfToken) {
                 fetchData(currentPage);
             });
         },
-        error: function() {
+        error: function () {
             alert('Failed to update the user.');
         }
     });
