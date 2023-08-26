@@ -166,3 +166,16 @@ Admin can
 - Last 7 days sale graph
 - Order page:
     - Admin can see all the orders on single page with their corresponding user and amount	
+## 24/8/2023 - Community | Groups
+- Created Migration and Models for
+    - Groups
+    - Group Members
+    - Posts
+    - Likes
+    - Comments
+- API Endpoint for listing all groups (with status and name filter)
+- Admin Can:
+	- Create New Group
+	- See Details of Group
+	- Update the group (status, name, description, cover_image)
+	- Delete the group
