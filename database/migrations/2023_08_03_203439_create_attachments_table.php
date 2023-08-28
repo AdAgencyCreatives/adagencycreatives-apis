@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('post_id')->nullable();
             $table->string('resource_type');
             $table->string('path');
             $table->string('extension');

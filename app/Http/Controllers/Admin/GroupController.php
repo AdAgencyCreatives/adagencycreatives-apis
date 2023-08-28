@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Group;
+use App\Models\GroupMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -56,7 +57,7 @@ class GroupController extends Controller
                 $oldAttachment = Attachment::find($group->attachment_id);
 
                 if ($oldAttachment) {
-                    Storage::disk('public')->delete($oldAttachment->path);
+                    // Storage::disk('public')->delete($oldAttachment->path);
                     $oldAttachment->delete();
                 }
 
@@ -75,7 +76,7 @@ class GroupController extends Controller
 
     public function details(Group $group)
     {
-        $group->load('attachment');
+        $group->load(['attachment', 'members.user']);
         // dd($group);
         // dd($group->attachment->path);
         return view('pages.groups.detail', compact('group'));
@@ -101,4 +102,15 @@ class GroupController extends Controller
 
         return $attachment;
     }
+
+     public function add_new_member(Request $request)
+     {
+         GroupMember::create([
+             'uuid' => Str::uuid(),
+             'group_id' => $request->group_id,
+             'user_id' => $request->user_id,
+             'role' => 0,
+             'joined_at' => now(),
+         ]);
+     }
 }

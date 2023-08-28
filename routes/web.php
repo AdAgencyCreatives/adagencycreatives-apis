@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::get('jobs/{job}/details', [JobController::class, 'details']);
 
     Route::resource('reports', ReportController::class);
+
+    include_once 'community.php';
 });
 
 Route::resource('plans', PlanController::class);

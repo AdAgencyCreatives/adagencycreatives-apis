@@ -179,3 +179,17 @@ Admin can
 	- See Details of Group
 	- Update the group (status, name, description, cover_image)
 	- Delete the group
+
+## 25/8/2023 - Admin | Posts
+- API Endpoint for Posts
+-   Admin can:
+	- See all Posts
+	- Update post status
+	- Delete the post
+	- Filter posts by:
+		- Group
+		- Author
+		- Status
+- Admin can:		
+	- Add members to group
+	- See all members of group

@@ -212,6 +212,31 @@ function populateFilter(categories, div_id) {
     });
 }
 
+function populateUserFilter(users, div_id) {
+    var selectElement = $(div_id);
+    $.each(users, function (index, user) {
+        var option = $('<option>', {
+            value: user.uuid,
+            text: user.first_name + ' ' + user.last_name + ' -' + user.role + ' (' + user.posts_count + ')'
+        });
+
+        selectElement.append(option);
+    });
+}
+
+function populateGroupFilter(groups, div_id) {
+    var selectElement = $(div_id);
+
+    $.each(groups, function (index, group) {
+        var option = $('<option>', {
+            value: group.uuid,
+            text: group.name
+        });
+
+        selectElement.append(option);
+    });
+}
+
 function updateStatus(userId, resource, url, csrfToken, selectedStatus) {
     Swal.fire({
         title: 'Confirm Update',

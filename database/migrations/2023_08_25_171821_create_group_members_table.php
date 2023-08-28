@@ -13,8 +13,8 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('group_id');
-            $table->integer('role')->default(0)->comment('0: member, 1: moderator, 2: admin');
-            $table->timestamp('joined_at')->nullable();
+            $table->integer('role')->default(0)->comment('1: admin, 2: moderator, 3: member');
+            $table->timestamp('joined_at');
             $table->timestamps();
         });
     }

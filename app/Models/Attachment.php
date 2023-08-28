@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attachment extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -21,6 +22,11 @@ class Attachment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
     }
 
     public function scopeUserId(Builder $query, $user_id)

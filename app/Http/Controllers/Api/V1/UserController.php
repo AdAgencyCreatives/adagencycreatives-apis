@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -145,5 +146,15 @@ class UserController extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out'], 200);
+    }
+
+    public function get_users(Request $request)
+    {
+        $cacheKey = 'all_users';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')->where('role', '!=', 1)->withCount('posts')->get();
+        });
+
+        return $users;
     }
 }
