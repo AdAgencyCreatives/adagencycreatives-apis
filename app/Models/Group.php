@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Group extends Model
 {
@@ -26,6 +27,16 @@ class Group extends Model
     public function attachment()
     {
         return $this->belongsTo(Attachment::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(GroupMember::class);
     }
 
     public function getStatusAttribute($value)
@@ -57,4 +68,19 @@ class Group extends Model
                 break;
         }
     }
+
+        protected static function booted()
+        {
+            static::created(function () {
+                Cache::forget('all_groups');
+            });
+
+            static::updated(function () {
+                Cache::forget('all_groups');
+            });
+
+            static::deleted(function () {
+                Cache::forget('all_groups');
+            });
+        }
 }

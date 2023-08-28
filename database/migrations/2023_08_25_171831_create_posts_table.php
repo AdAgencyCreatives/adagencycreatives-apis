@@ -11,10 +11,9 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('group_id');
             $table->text('content');
-            $table->unsignedBigInteger('attachment_id')->nullable();
             $table->integer('status')->default(0)->comment('0:draft, 1:published');
             $table->timestamps();
             $table->softDeletes();

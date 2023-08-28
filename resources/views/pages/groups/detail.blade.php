@@ -5,67 +5,69 @@
 @section('scripts')
 
 <script>
-function fetchApplications() {
-    var filters = {
-        'job_id': "{{ $group->uuid }}",
-    };
-    var requestData = {};
+function populateUserFilter(users, div_id) {
+    var selectElement = $(div_id);
+    $.each(users, function(index, user) {
+        var option = $('<option>', {
+            value: user.id,
+            text: user.first_name + ' ' + user.last_name + ' - ' + user.role
+        });
 
-    Object.keys(filters).forEach(function(key) {
-        if (filters[key] !== '-100') {
-            requestData[`filter[${key}]`] = filters[key];
-        }
+        selectElement.append(option);
     });
+}
 
+function fetchUsers() {
     $.ajax({
-        url: '/api/v1/applications',
+        url: '/api/v1/get_users',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
-            populateApplications(response.data);
-
-
+            populateUserFilter(response, '#user');
         },
         error: function() {
             alert('Failed to fetch users from the API.');
-        },
-
+        }
     });
 }
 
-function createAttachment() {
-    const formData = new FormData();
-    const imageInput = document.querySelector('input[type="file"]');
-
-    var form = new FormData();
-    formData.append('resource_type', 'cover_image');
-    formData.append('user_id', 'fc29773c-d0e6-3493-a4ca-4d2e2b2c3df1');
-    formData.append('file', imageInput.files[0]);
-
-    var settings = {
-        "url": "/api/v1/attachments",
-        "method": "POST",
-        "timeout": 0,
-        "headers": {
-            "X-CSRF-Token": "{{ csrf_token() }}",
-            "Accept": "application/json",
-            "Authorization": "Bearer 1|z8axd4FBsikytrLF0Zedsb3sKEM9buGXm7GISQcr",
-        },
-        "processData": false,
-        "mimeType": "multipart/form-data",
-        "contentType": false,
-        "data": formData
-    };
-
-    $.ajax(settings).done(function(response) {
-        console.log(response);
-    });
-}
 $(document).ready(function() {
 
 
+    fetchUsers();
 
+    $("#add_members").on("submit", function(event) {
+
+        submitButton.disabled = true; // Disable the submit button
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        $.ajax({
+            url: '{{ route("groups.new-member") }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                Swal.fire({
+                    title: 'Success',
+                    text: "Member added successfully",
+                    icon: 'success'
+                }).then((result) => {
+                    location.reload();
+                });
+
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+                Swal.fire({
+                    title: 'Error',
+                    text: "Something went wrong",
+                    icon: 'error'
+                });
+            }
+        });
+    });
 
 
 });
@@ -152,4 +154,6 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+@include('pages.groups._inc.add_members')
+@include('pages.groups._inc.members')
 @endsection

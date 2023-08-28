@@ -86,6 +86,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public function getRoleAttribute($value)
     {
         switch ($value) {
@@ -152,19 +157,22 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function ($user) {
+        static::created(function () {
             Cache::forget('users');
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('all_users');
         });
 
         static::updated(function ($user) {
             Cache::forget("user:$user->id");
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('all_users');
         });
 
         static::deleted(function ($user) {
             Cache::forget("user:$user->id");
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('all_users');
         });
     }
 }

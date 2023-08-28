@@ -9,8 +9,6 @@ class JobSeeder extends Seeder
 {
     public function run()
     {
-        $agencies = User::where('role', 3)->pluck('id');
-
         $employementTypes = ['Full-time', 'Part-time', 'Contract', 'Freelance'];
         $industryExperiences = ['Entry Level', 'Mid Level', 'Senior Level'];
         $mediaExperiences = ['Digital', 'Print', 'Broadcast'];

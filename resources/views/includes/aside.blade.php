@@ -87,6 +87,25 @@
                 </ul>
             </li>
 
+            <li class="sidebar-item {{ request()->is('posts*') ? 'active' : '' }} ">
+                <a data-target="#posts" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="edit"></i>
+                    <span class="align-middle">Posts</span>
+                </a>
+                <ul id="posts"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('posts*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('posts') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('posts.index') }}">
+                            <i class="align-middle" data-feather="edit"></i>
+                            <span class="align-middle">All Posts</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
             <li class="sidebar-header">
                 Reports
             </li>

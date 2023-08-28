@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
+use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
@@ -38,6 +39,9 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
+    /**
+     * Job Board Routes
+     */
     Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
     Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
     Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
@@ -56,8 +60,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('industries', IndustryController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
-    Route::apiResource('groups', GroupController::class)->except(['store']);
+    Route::get('get_users', [UserController::class, 'get_users']);
 
+    /**
+     * Community Routes
+     */
+    Route::apiResource('groups', GroupController::class)->except(['store']);
+    Route::get('get_groups', [GroupController::class, 'get_groups']);
+    Route::apiResource('posts', PostController::class);
+
+    /**
+     * Stripe Payment Routes
+     */
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);

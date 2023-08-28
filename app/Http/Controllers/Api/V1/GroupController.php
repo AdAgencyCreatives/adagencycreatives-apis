@@ -8,6 +8,7 @@ use App\Http\Resources\Group\GroupCollection;
 use App\Http\Resources\Group\GroupResource;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class GroupController extends Controller
@@ -61,5 +62,15 @@ class GroupController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
+    }
+
+    public function get_groups(Request $request)
+    {
+        $cacheKey = 'all_groups';
+        $groups = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Group::select('uuid', 'name', 'status')->get();
+        });
+
+        return $groups;
     }
 }
