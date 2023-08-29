@@ -23,6 +23,7 @@ class AttachmentController extends Controller
         $query = QueryBuilder::for(Attachment::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('post_id'),
                     // AllowedFilter::scope('resource_type'),
                     // 'resource_type'
                 ]);

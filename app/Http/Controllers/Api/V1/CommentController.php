@@ -1,79 +1,86 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Comment\StoreCommentRequest;
+use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Http\Resources\Comment\CommentCollection;
+use App\Http\Resources\Comment\CommentResource;
 use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = QueryBuilder::for(Comment::class)
+               ->allowedFilters([
+                   AllowedFilter::scope('user_id'),
+                   AllowedFilter::scope('post_id'),
+               ])
+               ->allowedSorts('created_at');
+
+        $comments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new CommentCollection($comments);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(StoreCommentRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->first();
+        $post = Post::where('uuid', $request->post_id)->first();
+
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
+
+        if ($request->has('parent_id')) {
+            $parent_comment = Comment::where('uuid', $request->parent_id)->first();
+            $request->merge([
+                'parent_id' => $parent_comment->id,
+            ]);
+        }
+
+        try {
+            $comment = Comment::create($request->all());
+
+            return ApiResponse::success(new CommentResource($comment), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function update(UpdateCommentRequest $request, $uuid)
     {
-        //
+        try {
+            $comment = Comment::where('uuid', $uuid)->firstOrFail();
+            $comment->update($request->only('content'));
+
+            return new CommentResource($comment);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comment $comment)
+    public function destroy($uuid)
     {
-        //
-    }
+        try {
+            $comment = Comment::where('uuid', $uuid)->firstOrFail();
+            $comment->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Comment $comment)
-    {
-        //
+            return ApiResponse::success(new CommentResource($comment), 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 }

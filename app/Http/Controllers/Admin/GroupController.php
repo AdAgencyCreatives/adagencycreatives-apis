@@ -46,13 +46,11 @@ class GroupController extends Controller
     {
         $group = Group::findOrFail($id);
 
-        // Update group details
         $group->name = $request->input('name');
         $group->description = $request->input('description');
         $group->status = $request->input('status');
 
         if ($request->hasFile('cover_image')) {
-            // Delete old cover image if exists
             if ($group->attachment_id) {
                 $oldAttachment = Attachment::find($group->attachment_id);
 
@@ -112,5 +110,13 @@ class GroupController extends Controller
              'role' => 0,
              'joined_at' => now(),
          ]);
+     }
+
+     public function update_member_role(Request $request)
+     {
+         $groupMember = GroupMember::findOrFail($request->member_id);
+         $groupMember->role = $request->new_role;
+
+         return ($groupMember->save()) ? true : false;
      }
 }

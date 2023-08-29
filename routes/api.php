@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\BookmarkController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
@@ -68,6 +70,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('groups', GroupController::class)->except(['store']);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
     Route::apiResource('posts', PostController::class);
+    Route::apiResource('comments', CommentController::class);
+    Route::apiResource('likes', LikeController::class);
 
     /**
      * Stripe Payment Routes

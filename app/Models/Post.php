@@ -35,6 +35,16 @@ class Post extends Model
         return $this->belongsTo(Group::class);
     }
 
+     public function comments()
+     {
+         return $this->hasMany(Comment::class)->whereNull('parent_id');
+     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public const STATUSES = [
         'DRAFT' => 0,
         'PUBLISHED' => 1,

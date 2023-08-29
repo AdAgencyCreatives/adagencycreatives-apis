@@ -37,6 +37,14 @@ class Attachment extends Model
         }
     }
 
+    public function scopePostId(Builder $query, $post_id)
+    {
+        $post = Post::where('uuid', $post_id)->first();
+        if ($post) {
+            return $query->where('post_id', $post->id);
+        }
+    }
+
     public function scopeResourceType(Builder $query, $resource_type)
     {
         return $query->where('resource_type', $resource_type);

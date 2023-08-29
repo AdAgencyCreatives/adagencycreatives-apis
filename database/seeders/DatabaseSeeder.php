@@ -136,5 +136,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\Group::factory(3)->create();
 
         $this->call(PostSeeder::class);
+        $this->call(CommentSeeder::class);
     }
 }
