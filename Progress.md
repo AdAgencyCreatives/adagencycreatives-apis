@@ -193,3 +193,13 @@ Admin can
 - Admin can:		
 	- Add members to group
 	- See all members of group
+
+## 28/8/2023 - Admin  | Comments | Likes
+- API Endpoints for 
+    - Comments
+    - Likes
+- Admin can:
+	- Update role of group member
+	- Can see all the comments of post (along with comment authors) on single post page
+	- Can see all the attachments of post.
+	- Can see total likes on the post

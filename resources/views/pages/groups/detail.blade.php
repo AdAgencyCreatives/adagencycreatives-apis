@@ -69,6 +69,36 @@ $(document).ready(function() {
         });
     });
 
+    $('select[name="group_role"]').change(function() {
+        const memberId = $(this).data('member-id');
+        const newRole = $(this).val();
+        const url = $(this).data('url');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                member_id: memberId,
+                new_role: newRole,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log(response);
+                if (response == true) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Role has been updated.',
+                        icon: 'success',
+                    })
+                }
+            },
+
+            error: function(xhr) {
+                // Handle error response if needed
+            }
+        });
+    });
+
 
 });
 </script>
@@ -154,6 +184,6 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-@include('pages.groups._inc.add_members')
 @include('pages.groups._inc.members')
+@include('pages.groups._inc.add_members')
 @endsection

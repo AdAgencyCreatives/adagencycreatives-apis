@@ -21,6 +21,19 @@ class PostResource extends JsonResource
             'attachments' => new AttachmentCollection($this->attachments),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+
+            'relationships' => [
+                'comments' => [
+                    'links' => [
+                        'related' => route('comments.index').'?filter[post_id]='.$this->uuid,
+                    ],
+                ],
+                'likes' => [
+                    'links' => [
+                        'related' => route('likes.index').'?filter[post_id]='.$this->uuid,
+                    ],
+                ],
+            ],
         ];
     }
 }

@@ -6,28 +6,35 @@
                 <h1>All Members</h1>
             </div>
             <div class="card-body">
-                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline" style="width: 100%;">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <!-- <th>Actions</th> -->
+                            <th style="width:40%;">ID</th>
+                            <th style="width:40%;">Name</th>
+                            <th style="width:25%">Role</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @foreach ($group->members as $member)
                         <tr>
                             <td>{{ $member->id }}</td>
                             <td>{{ $member->user->first_name }} {{ $member->user->last_name }}</td>
-                            <td>{{ $member->role }} </td>
+                            <td> <select name="group_role" class="form-control form-select select2"
+                                    data-toggle="select2" data-member-id="{{ $member->id }}"
+                                    data-url="{{ route('groups.update-member') }}">
+                                    <option value="admin" @if($member->role == 'Admin') selected @endif>Admin</option>
+                                    <option value="moderator" @if($member->role == 'Moderator') selected
+                                        @endif>Moderator</option>
+                                    <option value="member" @if($member->role == 'Member') selected @endif>Member
+                                    </option>
+                                </select></td>
                         </tr>
                         @endforeach
-
                     </tbody>
-
                 </table>
+
+
+
             </div>
 
         </div>
