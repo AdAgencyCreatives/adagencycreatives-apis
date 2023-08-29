@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
+use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Models\Group;
@@ -60,6 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('industries', IndustryController::class);
+    Route::apiResource('reviews', ReviewController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
     Route::get('get_users', [UserController::class, 'get_users']);

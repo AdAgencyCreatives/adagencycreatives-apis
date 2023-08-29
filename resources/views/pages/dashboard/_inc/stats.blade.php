@@ -4,4 +4,4 @@
 
 @include('pages.dashboard._inc.plans.stat')
 
-@include('pages.dashboard._inc.users.chart')
+@include('pages.dashboard._inc.chart')

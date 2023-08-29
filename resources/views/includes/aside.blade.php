@@ -2,7 +2,7 @@
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ route('dashboard.index') }}">
             <span class="align-middle me-3">
-
+                <!-- <h1> {{ env('APP_NAME') }} </h1> -->
                 <img src="{{ asset('assets/img/dashboard-logo.png') }}" alt="adagencycreatives" width="200" />
             </span>
         </a>
@@ -114,6 +114,20 @@
                     <i class="align-middle" data-feather="trending-up"></i>
                     <span class="align-middle">Sales</span>
                 </a>
+            </li>
+
+            <li class="sidebar-header">
+                Personal
+            </li>
+            <li class="sidebar-item">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <a class="sidebar-link" href="javascript:void(0);"
+                        onclick="document.getElementById('logout-form').submit();">
+                        <i class="align-middle" data-feather="log-out"></i>
+                        <span class="align-middle">Logout</span>
+                    </a>
+                </form>
             </li>
 
         </ul>

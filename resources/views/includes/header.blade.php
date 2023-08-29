@@ -20,11 +20,8 @@
                     <span class="text-dark">{{ auth()->user()->username }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="#">
-                        <i class="align-middle me-1" data-feather="user"></i> Profile
-                    </a>
 
-                    <div class="dropdown-divider"></div>
+
                     <form method="post" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item">Sign out</button>
