@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PlanController;
@@ -37,6 +38,8 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('jobs', JobController::class);
     Route::get('jobs/{job}/details', [JobController::class, 'details']);
 
+    Route::resource('locations', LocationController::class);
+    Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
     Route::resource('reports', ReportController::class);
 
     include_once 'community.php';
@@ -44,5 +47,6 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
 
 Route::resource('plans', PlanController::class);
 Route::view('/pricing', 'pricing');
+Route::view('/chat', 'chat');
 Route::view('/subscription', 'subscription');
 Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');

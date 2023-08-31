@@ -88,8 +88,6 @@ function fetchIndustries() {
     });
 }
 
-
-
 function populateTable(jobs) {
     var tbody = $('#users-table tbody');
     tbody.empty();
@@ -112,6 +110,8 @@ function populateTable(jobs) {
 
         var statusDropdown = '<select class="status-dropdown form-control form-select select2" data-job-id="' +
             job.id + '">' +
+            '<option value="published" ' + (job.status === 'published' ? 'selected' : '') +
+            '>Published</option>' +
             '<option value="pending" ' + (job.status === 'pending' ? 'selected' : '') + '>Pending</option>' +
             '<option value="approved" ' + (job.status === 'approved' ? 'selected' : '') + '>Approved</option>' +
             '<option value="rejected" ' + (job.status === 'rejected' ? 'selected' : '') + '>Rejected</option>' +

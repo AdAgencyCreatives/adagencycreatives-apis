@@ -69,18 +69,18 @@ class Group extends Model
         }
     }
 
-        protected static function booted()
-        {
-            static::created(function () {
-                Cache::forget('all_groups');
-            });
+    protected static function booted()
+    {
+        static::created(function () {
+            Cache::forget('all_groups');
+        });
 
-            static::updated(function () {
-                Cache::forget('all_groups');
-            });
+        static::updated(function () {
+            Cache::forget('all_groups');
+        });
 
-            static::deleted(function () {
-                Cache::forget('all_groups');
-            });
-        }
+        static::deleted(function () {
+            Cache::forget('all_groups');
+        });
+    }
 }

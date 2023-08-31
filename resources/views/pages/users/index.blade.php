@@ -16,6 +16,36 @@ function fetchData(page, filters = []) {
         per_page: perPage
     };
 
+    var currentUrl = window.location.href;
+    if (currentUrl.includes('role=3')) {
+        $('#users li.sidebar-item').removeClass('active');
+        $('#users li.sidebar-item[data-role="3"]').addClass('active');
+
+        $('#role').val('3');
+        $('#role').trigger('change');
+        $('#role').prop('disabled', true);
+    }
+    if (currentUrl.includes('role=4')) {
+        $('#users li.sidebar-item').removeClass('active');
+        $('#users li.sidebar-item[data-role="4"]').addClass('active');
+
+        $('#role').val('4');
+        $('#role').trigger('change');
+        $('#role').prop('disabled', true);
+    }
+
+    var selectedRole = $('#role').val();
+    var selectedStatus = $('#status').val();
+    var username = $('#username').val();
+    var email = $('#email').val();
+
+    filters = {
+        role: selectedRole,
+        status: selectedStatus,
+        username: username,
+        email: email,
+    };
+
     Object.keys(filters).forEach(function(key) {
         if (filters[key] !== '-100') {
             requestData[`filter[${key}]`] = filters[key];
@@ -90,6 +120,7 @@ function populateTable(users) {
 
 
 $(document).ready(function() {
+
     fetchData(currentPage);
 
     $(document).on('click', '.delete-user-btn', function() {
@@ -102,19 +133,9 @@ $(document).ready(function() {
 
     $('#filter-form').on('submit', function(e) {
         e.preventDefault();
-        var selectedRole = $('#role').val();
-        var selectedStatus = $('#status').val();
-        var username = $('#username').val();
-        var email = $('#email').val();
 
-        filters = {
-            role: selectedRole,
-            status: selectedStatus,
-            username: username,
-            email: email,
-        };
         currentPage = 1;
-        fetchData(currentPage, filters);
+        fetchData(currentPage);
     });
 
     $(document).on('change', '.status-dropdown', function() {

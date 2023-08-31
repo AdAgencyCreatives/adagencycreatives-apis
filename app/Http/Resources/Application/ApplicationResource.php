@@ -15,6 +15,7 @@ class ApplicationResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'user' => $user->first_name.' '.$user->last_name,
+            'user_profile_id' => $user->id,
             'job_id' => $this->job->uuid,
             'resume_url' => asset('storage/'.$this->attachment->path),
             'message' => $this->message,

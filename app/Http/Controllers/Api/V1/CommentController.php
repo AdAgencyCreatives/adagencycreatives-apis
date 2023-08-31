@@ -22,11 +22,11 @@ class CommentController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Comment::class)
-               ->allowedFilters([
-                   AllowedFilter::scope('user_id'),
-                   AllowedFilter::scope('post_id'),
-               ])
-               ->allowedSorts('created_at');
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('post_id'),
+            ])
+            ->allowedSorts('created_at');
 
         $comments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

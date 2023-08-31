@@ -19,36 +19,36 @@ class LikeController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Like::class)
-               ->allowedFilters([
-                   AllowedFilter::scope('user_id'),
-                   AllowedFilter::scope('post_id'),
-               ])
-               ->allowedSorts('created_at');
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('post_id'),
+            ])
+            ->allowedSorts('created_at');
 
         $likes = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new LikeCollection($likes);
     }
 
-       public function store(StoreLikeRequest $request)
-       {
-           $user = User::where('uuid', $request->user_id)->first();
-           $post = Post::where('uuid', $request->post_id)->first();
+    public function store(StoreLikeRequest $request)
+    {
+        $user = User::where('uuid', $request->user_id)->first();
+        $post = Post::where('uuid', $request->post_id)->first();
 
-           $request->merge([
-               'uuid' => Str::uuid(),
-               'user_id' => $user->id,
-               'post_id' => $post->id,
-           ]);
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
 
-           try {
-               $like = Like::create($request->all());
+        try {
+            $like = Like::create($request->all());
 
-               return ApiResponse::success($like, 200);
-           } catch (\Exception $e) {
-               return ApiResponse::error('PS-01'.$e->getMessage(), 400);
-           }
-       }
+            return ApiResponse::success($like, 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+        }
+    }
 
     /**
      * Display the specified resource.

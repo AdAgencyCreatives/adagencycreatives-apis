@@ -23,12 +23,12 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Post::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    AllowedFilter::scope('group_id'),
-                    'status',
-                ])
-                ->allowedSorts('created_at');
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('group_id'),
+                'status',
+            ])
+            ->allowedSorts('created_at');
 
         $posts = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

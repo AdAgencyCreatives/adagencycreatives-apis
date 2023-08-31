@@ -31,24 +31,24 @@ class JobController extends Controller
         $medias = $this->processExperience($request, $filters, 'media_experience');
 
         $query = QueryBuilder::for(Job::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    AllowedFilter::scope('category_id'),
-                    AllowedFilter::scope('country'),
-                    AllowedFilter::scope('state'),
-                    AllowedFilter::scope('city'),
-                    'title',
-                    'employement_type',
-                    'apply_type',
-                    'salary_range',
-                    'is_remote',
-                    'is_hybrid',
-                    'is_onsite',
-                    'is_featured',
-                    'is_urgent',
-                    'status',
-                ])
-                ->allowedSorts('created_at');
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('country'),
+                AllowedFilter::scope('state'),
+                AllowedFilter::scope('city'),
+                'title',
+                'employement_type',
+                'apply_type',
+                'salary_range',
+                'is_remote',
+                'is_hybrid',
+                'is_onsite',
+                'is_featured',
+                'is_urgent',
+                'status',
+            ])
+            ->allowedSorts('created_at');
 
         if ($industries !== null) {
             $query->whereIn('industry_experience', $industries);
@@ -100,10 +100,19 @@ class JobController extends Controller
         return new JobResource($job);
     }
 
-    public function update(UpdateJobRequest $request, $uuid)
+    public function updateFromAdmin(UpdateJobRequest $request, $uuid)
     {
+        // dd($request->all());
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
+
+            $category = Category::where('uuid', $request->category_id)->first();
+            $request->merge([
+                'category_id' => $category->id,
+                'industry_experience' => ''.implode(',', $request->industry_experience).'',
+                'media_experience' => ''.implode(',', $request->media_experience).'',
+            ]);
+
             $oldStatus = $job->status;
             $newStatus = $request->input('status');
 
@@ -114,9 +123,42 @@ class JobController extends Controller
                 }
 
                 $subscription = Subscription::where('user_id', $user->id)
-                ->where('stripe_status', 'active')
-                ->where('quota_left', '>', 0)
-                ->first();
+                    ->where('stripe_status', 'active')
+                    ->where('quota_left', '>', 0)
+                    ->first();
+
+                if (! $subscription) {
+                    return ApiResponse::error("You don't have enough quota for this job", 402);
+                }
+
+                $subscription->decrement('quota_left', 1);
+            }
+            $job->update($request->all());
+
+            return new JobResource($job);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    public function update(Request $request, $uuid)
+    {
+        try {
+            $job = Job::where('uuid', $uuid)->firstOrFail();
+
+            $oldStatus = $job->status;
+            $newStatus = $request->input('status');
+
+            if ($newStatus === 'published' && $oldStatus === 'draft') {
+                $user = Auth::user();
+                if (! $user) {
+                    return ApiResponse::error(trans('response.unauthorized'), 401);
+                }
+
+                $subscription = Subscription::where('user_id', $user->id)
+                    ->where('stripe_status', 'active')
+                    ->where('quota_left', '>', 0)
+                    ->first();
 
                 if (! $subscription) {
                     return ApiResponse::error("You don't have enough quota for this job", 402);

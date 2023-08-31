@@ -16,10 +16,10 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Group::class)
-        ->allowedFilters([
-            'name',
-            'status',
-        ]);
+            ->allowedFilters([
+                'name',
+                'status',
+            ]);
 
         $groups = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

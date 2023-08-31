@@ -29,15 +29,15 @@ class UserController extends Controller
         // });
 
         $query = QueryBuilder::for(User::class)
-                ->allowedFilters([
-                    'first_name',
-                    'last_name',
-                    'username',
-                    'email',
-                    'role',
-                    'status',
-                    'is_visible',
-                ]);
+            ->allowedFilters([
+                'first_name',
+                'last_name',
+                'username',
+                'email',
+                'role',
+                'status',
+                'is_visible',
+            ]);
 
         $users = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
