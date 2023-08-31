@@ -20,9 +20,9 @@ class ResumeController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Resume::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
 
         $resumes = $query->paginate(config('global.request.pagination_limit'));
 

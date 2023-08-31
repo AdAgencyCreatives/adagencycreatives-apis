@@ -2,8 +2,7 @@
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ route('dashboard.index') }}">
             <span class="align-middle me-3">
-                <!-- <h1> {{ env('APP_NAME') }} </h1> -->
-                <img src="{{ asset('assets/img/dashboard-logo.png') }}" alt="adagencycreatives" width="200" />
+                <span class="align-middle">{{ env('APP_NAME') }}</span>
             </span>
         </a>
 
@@ -34,6 +33,18 @@
                         <a class="sidebar-link" href="{{ route('users.index') }}">
                             <i class="align-middle" data-feather="users"></i>
                             <span class="align-middle">All Users</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" data-role="3">
+                        <a class="sidebar-link" href="{{ route('users.index') }}?role=3">
+                            <i class="align-middle" data-feather="layers"></i>
+                            <span class="align-middle">Agencies</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" data-role="4">
+                        <a class="sidebar-link" href="{{ route('users.index') }}?role=4">
+                            <i class="align-middle" data-feather="cloud"></i>
+                            <span class="align-middle">Creatives</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->is('users/create') ? 'active' : '' }}">
@@ -100,6 +111,25 @@
                         <a class="sidebar-link" href="{{ route('posts.index') }}">
                             <i class="align-middle" data-feather="edit"></i>
                             <span class="align-middle">All Posts</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('locations*') ? 'active' : '' }} ">
+                <a data-target="#locations" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="map-pin"></i>
+                    <span class="align-middle">Locations</span>
+                </a>
+                <ul id="locations"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('locations*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('locations') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('locations.index') }}">
+                            <i class="align-middle" data-feather="map-pin"></i>
+                            <span class="align-middle">All Locations</span>
                         </a>
                     </li>
 

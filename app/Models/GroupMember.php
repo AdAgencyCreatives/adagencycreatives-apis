@@ -28,19 +28,19 @@ class GroupMember extends Model
         return $this->belongsTo(User::class);
     }
 
-        public function getRoleAttribute($value)
-        {
-            switch ($value) {
-                case GroupMember::ROLES['ADMIN']:
-                    return 'Admin';
-                case GroupMember::ROLES['MODERATOR']:
-                    return 'Moderator';
-                case GroupMember::ROLES['MEMBER']:
-                    return 'Member';
-                default:
-                    return null;
-            }
+    public function getRoleAttribute($value)
+    {
+        switch ($value) {
+            case GroupMember::ROLES['ADMIN']:
+                return 'Admin';
+            case GroupMember::ROLES['MODERATOR']:
+                return 'Moderator';
+            case GroupMember::ROLES['MEMBER']:
+                return 'Member';
+            default:
+                return null;
         }
+    }
 
     public function setRoleAttribute($value)
     {

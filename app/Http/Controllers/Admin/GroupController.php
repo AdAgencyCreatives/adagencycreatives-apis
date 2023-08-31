@@ -101,22 +101,22 @@ class GroupController extends Controller
         return $attachment;
     }
 
-     public function add_new_member(Request $request)
-     {
-         GroupMember::create([
-             'uuid' => Str::uuid(),
-             'group_id' => $request->group_id,
-             'user_id' => $request->user_id,
-             'role' => 0,
-             'joined_at' => now(),
-         ]);
-     }
+    public function add_new_member(Request $request)
+    {
+        GroupMember::create([
+            'uuid' => Str::uuid(),
+            'group_id' => $request->group_id,
+            'user_id' => $request->user_id,
+            'role' => 0,
+            'joined_at' => now(),
+        ]);
+    }
 
-     public function update_member_role(Request $request)
-     {
-         $groupMember = GroupMember::findOrFail($request->member_id);
-         $groupMember->role = $request->new_role;
+    public function update_member_role(Request $request)
+    {
+        $groupMember = GroupMember::findOrFail($request->member_id);
+        $groupMember->role = $request->new_role;
 
-         return ($groupMember->save()) ? true : false;
-     }
+        return ($groupMember->save()) ? true : false;
+    }
 }

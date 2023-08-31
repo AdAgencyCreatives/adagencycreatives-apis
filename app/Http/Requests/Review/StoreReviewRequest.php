@@ -17,7 +17,7 @@ class StoreReviewRequest extends FormRequest
             'user_id' => 'required|exists:users,uuid',
             'target_id' => 'required|exists:users,uuid',
             'comment' => 'required|string',
-            'rating' => 'required|integer'
+            'rating' => 'required|integer',
         ];
     }
 }

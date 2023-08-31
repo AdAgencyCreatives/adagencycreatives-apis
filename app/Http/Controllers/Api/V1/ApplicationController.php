@@ -22,11 +22,11 @@ class ApplicationController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Application::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    AllowedFilter::scope('job_id'),
-                    'status',
-                ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('job_id'),
+                'status',
+            ]);
 
         $applications = $query->paginate(config('global.request.pagination_limit'));
 

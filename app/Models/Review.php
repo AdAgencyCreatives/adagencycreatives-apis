@@ -15,22 +15,24 @@ class Review extends Model
         'user_id',
         'target_id',
         'comment',
-        'rating'
+        'rating',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function target() {
+    public function target()
+    {
         return $this->belongsTo(User::class, 'target_id');
     }
 
-    
     public function scopeTargetId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
+
         return $query->where('target_id', $user->id);
-        
+
     }
 }

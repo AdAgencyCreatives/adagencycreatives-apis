@@ -39,12 +39,12 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
-     public function scopeUserId(Builder $query, $user_id)
-     {
-         $user = User::where('uuid', $user_id)->firstOrFail();
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        $user = User::where('uuid', $user_id)->firstOrFail();
 
-         return $query->where('user_id', $user->id);
-     }
+        return $query->where('user_id', $user->id);
+    }
 
     public function scopePostId(Builder $query, $post_id)
     {

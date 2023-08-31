@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(LocationSeeder::class);
+
         Artisan::call('adagencycreatives:permission');
 
         \App\Models\User::factory(15)->create();

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
+use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
@@ -61,10 +62,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('industries', IndustryController::class);
+    Route::apiResource('locations', LocationController::class);
     Route::apiResource('reviews', ReviewController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
     Route::get('get_users', [UserController::class, 'get_users']);
+    Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
 
     /**
      * Community Routes

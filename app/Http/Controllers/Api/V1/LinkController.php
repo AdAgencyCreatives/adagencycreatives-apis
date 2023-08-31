@@ -20,10 +20,10 @@ class LinkController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Link::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    'label',
-                ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                'label',
+            ]);
 
         $links = $query->paginate(config('global.request.pagination_limit'));
 

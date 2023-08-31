@@ -169,7 +169,6 @@ function getPlanBadge(plan) {
 }
 
 function displayJobOptionsBadges(job) {
-
     const optionColors = {
         "is_remote": 'info',
         "is_hybrid": 'warning',
@@ -199,7 +198,21 @@ function displayJobOptionsBadges(job) {
     return output;
 }
 
+
 function populateFilter(categories, div_id) {
+    var selectElement = $(div_id);
+
+    $.each(categories, function (index, category) {
+        var option = $('<option>', {
+            value: category.id,
+            text: category.name
+        });
+
+        selectElement.append(option);
+    });
+}
+
+function populateFilterWithSelectedValue(categories, div_id) {
     var selectElement = $(div_id);
 
     $.each(categories, function (index, category) {
@@ -273,7 +286,7 @@ function updateResourceStatus(userId, selectedStatus, url, csrfToken) {
             });
         },
         error: function () {
-            alert('Failed to update the user.');
+            alert('Failed to update.');
         }
     });
 }

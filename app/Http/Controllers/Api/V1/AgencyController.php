@@ -20,11 +20,11 @@ class AgencyController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Agency::class)
-        ->allowedFilters([
-            AllowedFilter::scope('user_id'),
-            'size',
-            'type_of_work',
-        ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                'size',
+                'type_of_work',
+            ]);
 
         $agencies = $query->paginate(config('global.request.pagination_limit'));
 

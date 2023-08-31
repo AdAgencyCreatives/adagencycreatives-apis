@@ -6,7 +6,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ReviewCollection extends ResourceCollection
 {
-
     public function toArray($request)
     {
         $totalRating = $this->collection->sum('rating');

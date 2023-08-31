@@ -12,8 +12,8 @@ class ReportController extends Controller
     public function sales(Request $request)
     {
         $orders = Order::with('user', 'plan')
-        ->latest()
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->latest()
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new OrderCollection($orders);
     }

@@ -20,18 +20,18 @@ class AddressController extends Controller
     public function index()
     {
         $query = QueryBuilder::for(Address::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    'label',
-                    'street_1',
-                    'street_2',
-                    'city',
-                    'state',
-                    'country',
-                    'postal_code',
-                ]
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                'label',
+                'street_1',
+                'street_2',
+                'city',
+                'state',
+                'country',
+                'postal_code',
+            ]
 
-                );
+            );
 
         $addresses = $query->paginate(config('global.request.pagination_limit'));
 
