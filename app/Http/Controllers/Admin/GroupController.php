@@ -83,7 +83,7 @@ class GroupController extends Controller
     public function storeImage($request)
     {
         $uuid = Str::uuid();
-        $file = $request->cover_image;
+        $file = $request->file;
         $resource_type = 'cover_image';
 
         $extension = $file->getClientOriginalExtension();

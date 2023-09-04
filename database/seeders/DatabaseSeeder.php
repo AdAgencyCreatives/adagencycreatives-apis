@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Phone::factory(3)->create($data_user_id);
 
-            \App\Models\Link::factory(3)->create($data_user_id);
+            \App\Models\Link::factory(4)->create($data_user_id);
 
             \App\Models\Attachment::factory(3)->create($data_user_id);
 
@@ -123,6 +123,11 @@ class DatabaseSeeder extends Seeder
         $advisor_users = User::where('role', 2)->get();
         foreach ($advisor_users as $user) {
             $user->assignRole($advisor);
+
+            \App\Models\Agency::factory()->create(
+                [
+                    'user_id' => $user->id
+                ]);
         }
 
         // ********************************************************

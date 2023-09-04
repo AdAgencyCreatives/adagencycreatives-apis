@@ -11,6 +11,11 @@ class Creative extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'industry_experience',
+        'media_experience',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

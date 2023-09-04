@@ -85,6 +85,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $uuid)
     {
+
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
             $user->update($request->all());
