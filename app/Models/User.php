@@ -75,6 +75,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Link::class);
     }
+    
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 
     public function jobs()
     {

@@ -35,6 +35,12 @@
                             <span class="align-middle">All Users</span>
                         </a>
                     </li>
+                    <li class="sidebar-item" data-role="2">
+                        <a class="sidebar-link" href="{{ route('users.index') }}?role=2">
+                            <i class="align-middle" data-feather="sliders"></i>
+                            <span class="align-middle">Advisors</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item" data-role="3">
                         <a class="sidebar-link" href="{{ route('users.index') }}?role=3">
                             <i class="align-middle" data-feather="layers"></i>
@@ -66,8 +72,15 @@
 
                     <li class="sidebar-item {{ request()->is('jobs') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('jobs.index') }}">
-                            <i class="align-middle" data-feather="list"></i>
+                            <i class="align-middle" data-feather="plus-circle"></i>
                             <span class="align-middle">All Jobs</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('jobs') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('jobs.create') }}">
+                            <i class="align-middle" data-feather="list"></i>
+                            <span class="align-middle">Add New Job</span>
                         </a>
                     </li>
 

@@ -14,9 +14,12 @@ class Attachment extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'resource_id',
         'resource_type',
         'path',
         'extension',
+        'created_at',
+        'updated_at',
     ];
 
     public function user()

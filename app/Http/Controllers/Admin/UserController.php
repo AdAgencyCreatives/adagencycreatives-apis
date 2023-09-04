@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\Agency;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,13 +27,17 @@ class UserController extends Controller
 
     public function details(User $user)
     {
-        if ($user->role == 'agency') {
-            $user->load('agency', 'links');
+        if (in_array($user->role, ['agency', 'advisor'])) {
+             $user->load(['agency', 'links', 'attachments' => function ($query) use ($user) {
+            $query->where('resource_id', $user->agency->id)
+            ->latest()->take(1); 
+        }]);
         } elseif ($user->role == 'creative') {
-            $user->load('creative');
+            $user->load( ['creative', 'phones', 'links']);
         }
-        // dd(getIndustryNames($user->agency->industry_specialty) );
 
+
+// dd($user->toArray());
         return view('pages.users.profile', compact('user'));
     }
 
@@ -52,6 +57,18 @@ class UserController extends Controller
 
             $role = Role::findByName($request->role);
             $user->assignRole($role);
+
+            if($user->role == 'advisor') {
+                $agency = new Agency();
+                $agency->uuid = Str::uuid();
+                $agency->user_id = $user->id;
+                $agency->name = 'Default Agency';
+                $agency->about = '';
+                $agency->size = '10';
+                $agency->type_of_work = '';
+                $agency->save();
+            }
+
 
             return new UserResource($user);
         } catch (\Exception $e) {

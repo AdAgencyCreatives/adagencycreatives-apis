@@ -17,6 +17,14 @@ function fetchData(page, filters = []) {
     };
 
     var currentUrl = window.location.href;
+    if (currentUrl.includes('role=2')) {
+        $('#users li.sidebar-item').removeClass('active');
+        $('#users li.sidebar-item[data-role="2"]').addClass('active');
+
+        $('#role').val('2');
+        $('#role').trigger('change');
+        $('#role').prop('disabled', true);
+    }
     if (currentUrl.includes('role=3')) {
         $('#users li.sidebar-item').removeClass('active');
         $('#users li.sidebar-item[data-role="3"]').addClass('active');
@@ -36,6 +44,8 @@ function fetchData(page, filters = []) {
 
     var selectedRole = $('#role').val();
     var selectedStatus = $('#status').val();
+    var firstname = $('#first_name').val();
+    var lastname = $('#last_name').val();
     var username = $('#username').val();
     var email = $('#email').val();
 
@@ -44,6 +54,8 @@ function fetchData(page, filters = []) {
         status: selectedStatus,
         username: username,
         email: email,
+        first_name: firstname,
+        last_name: lastname
     };
 
     Object.keys(filters).forEach(function(key) {
@@ -105,7 +117,8 @@ function populateTable(users) {
         var row = '<tr>' +
             '<td>' + user.id + '</td>' +
             '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
-            '<td>' + user.email + '</td>' +
+            '<td>' + user.username + '</br>' + user.email + '</td>' +
+            // Concatenate email and username in the same column
             '<td>' + getRoleBadge(user.role) + '</td>' +
             '<td>' + statusDropdown + '</td>' +
             // '<td>' + getStatusBadge(user.status) + '</td>' +
@@ -181,7 +194,7 @@ $(document).ready(function() {
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th>Username/Email</th>
                                         <th>Role</th>
                                         <th>Status</th>
                                         <th>Created At</th>

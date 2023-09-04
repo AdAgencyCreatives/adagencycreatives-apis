@@ -22,7 +22,7 @@ class JobController extends Controller
 
     public function create()
     {
-        return view('pages.users.add');
+        return view('pages.jobs.add-job');
     }
 
     public function details($id)
@@ -30,51 +30,5 @@ class JobController extends Controller
         $job = Job::with('applications')->where('uuid', $id)->first();
 
         return view('pages.jobs.detail.detail', compact('job'));
-    }
-
-    public function store(StoreAdminUserRequest $request)
-    {
-        try {
-            $user = new User();
-            $user->uuid = Str::uuid();
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->username = $this->get_username_from_email($request->email);
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password);
-            $user->role = $request->role;
-            $user->status = $request->status;
-            $user->save();
-
-            $role = Role::findByName($request->role);
-            $user->assignRole($role);
-
-            return new UserResource($user);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'US-01');
-        }
-    }
-
-    public function updatePassword(Request $request)
-    {
-        if (! auth()->user()->role == 'admin') {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
-        $userId = $request->input('user_id');
-
-        User::find($userId)->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json(['message' => 'Password updated successfully'], 200);
-    }
-
-    public function get_username_from_email($email)
-    {
-        $username = Str::before($email, '@');
-        $username = Str::slug($username);
-
-        return $username;
     }
 }

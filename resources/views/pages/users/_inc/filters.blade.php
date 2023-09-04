@@ -31,7 +31,32 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email</label>
+                                <input id="email" class="form-control" type="text" name="email"
+                                    placeholder="Enter Email" />
+                            </div>
+                        </div>
 
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="first_name">First Name</label>
+                                <input id="first_name" class="form-control" type="text" name="first_name"
+                                    placeholder="Enter First Name" />
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="last_name">Last Name</label>
+                                <input id="last_name" class="form-control" type="text" name="last_name"
+                                    placeholder="Enter Last Name" />
+                            </div>
+                        </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="username">Username</label>
@@ -40,13 +65,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email</label>
-                                <input id="email" class="form-control" type="text" name="email"
-                                    placeholder="Enter Email" />
-                            </div>
-                        </div>
+
 
                     </div>
 

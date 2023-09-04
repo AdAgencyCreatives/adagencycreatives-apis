@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AgencyController;
+use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
@@ -34,6 +36,10 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('users', UserController::class);
     Route::get('users/{user}/details', [UserController::class, 'details']);
     Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
+
+    Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
+    Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
+    Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
 
     Route::resource('jobs', JobController::class);
     Route::get('jobs/{job}/details', [JobController::class, 'details']);

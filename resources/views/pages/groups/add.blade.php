@@ -105,7 +105,7 @@ Swal.fire({
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Cover Image</label>
                                     <div>
-                                        <input type="file" class="validation-file" name="cover_image">
+                                        <input type="file" class="validation-file" name="file">
                                     </div>
                                 </div>
                             </div>

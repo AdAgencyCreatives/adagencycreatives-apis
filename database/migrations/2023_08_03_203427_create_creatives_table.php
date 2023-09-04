@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('attachment_id')->nullable()->comment('profile picture');
             $table->string('years_of_experience');
             $table->string('type_of_work');
+            $table->text('industry_experience')->nullable();
+            $table->text('media_experience')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
