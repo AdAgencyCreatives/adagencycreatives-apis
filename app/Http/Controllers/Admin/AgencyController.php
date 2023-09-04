@@ -50,12 +50,12 @@ class AgencyController extends Controller
 
         $agency->save();
 
-        if ($request->has('company_linkedin') && $request->input('company_linkedin') != null) {
-            $this->updateLink($user, 'company_linkedin', $request->input('company_linkedin'));
+        if ($request->has('linkedin') && $request->input('linkedin') != null) {
+            $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
 
-        if ($request->has('company_website') && $request->input('company_website') != null) {
-            $this->updateLink($user, 'company_website', $request->input('company_website'));
+        if ($request->has('website') && $request->input('website') != null) {
+            $this->updateLink($user, 'website', $request->input('website'));
         }
 
         if(isset($attachment) && is_object($attachment)) {

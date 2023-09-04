@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\Agency;
+use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,11 +34,11 @@ class UserController extends Controller
             ->latest()->take(1); 
         }]);
         } elseif ($user->role == 'creative') {
-            $user->load( ['creative', 'phones', 'links']);
+            $user->load( ['creative', 'phones', 'links', 'resume.educations', 'resume.experiences']);
         }
 
+        // dd($user->toArray());
 
-// dd($user->toArray());
         return view('pages.users.profile', compact('user'));
     }
 

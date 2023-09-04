@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
     Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
     Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
+    Route::put('/creative-experience/{user}', [CreativeController::class, 'update_experience'])->name('creative.experience.update');
 
     Route::resource('jobs', JobController::class);
     Route::get('jobs/{job}/details', [JobController::class, 'details']);

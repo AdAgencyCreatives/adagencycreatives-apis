@@ -25,12 +25,12 @@ class Resume extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function education()
+    public function educations()
     {
         return $this->hasMany(Education::class);
     }
 
-    public function experience()
+    public function experiences()
     {
         return $this->hasMany(Experience::class);
     }
