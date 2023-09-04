@@ -21,8 +21,6 @@ class CreativeController extends Controller
         $user = User::where('id', $creative->user_id)->first();
 
         $uuid = Str::uuid();
-
-        dd($request->all());
         $data = $request->only(['years_of_experience', 'type_of_work']);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
@@ -50,7 +48,35 @@ class CreativeController extends Controller
 
     public function update_qualification(Request $request, $uuid)
     {
-        
+        $creative = Creative::where('uuid', $uuid)->first();
+        $user = User::where('id', $creative->user_id)->first();
+        $uuid = Str::uuid();
+
+    
+
+        if ($request->input('portfolio') != null) {
+            $this->updateLink($user, 'portfolio', $request->input('portfolio'));
+        }
+
+        if ($request->input('linkedin') != null) {
+            $this->updateLink($user, 'linkedin', $request->input('linkedin'));
+        }
+
+        $creative->update([
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
+        ]);
+
+
+
+        Session::flash('success', 'Creative updated successfully');
+        return redirect()->back();
+
+    }   
+    
+    public function update_experience(Request $request, $uuid)
+    {
+        // dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();

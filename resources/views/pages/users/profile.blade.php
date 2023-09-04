@@ -40,6 +40,7 @@ Profile
 @if(in_array($user->role, ['agency', 'advisor']))
 @include('pages.users.agency.agency')
 @elseif($user->role == 'creative')
+
 @include('pages.users.creative.creative')
 @include('pages.users.creative.qualification')
 @include('pages.users.creative.experience')
