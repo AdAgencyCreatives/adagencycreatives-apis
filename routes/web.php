@@ -13,6 +13,7 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,9 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('reports', ReportController::class);
 
     include_once 'community.php';
+
+    // log viewer
+    Route::get('logs', [LogViewerController::class, 'index'])->middleware('admin');
 });
 
 Route::resource('plans', PlanController::class);
