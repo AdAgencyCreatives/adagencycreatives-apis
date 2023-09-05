@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
@@ -15,7 +18,8 @@
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.7",
         "spatie/laravel-permission": "^5.10",
-        "spatie/laravel-query-builder": "^5.2"
+        "spatie/laravel-query-builder": "^5.2",
+        "rap2hpoutre/laravel-log-viewer": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
@@ -36,8 +40,8 @@
             "App\\Helpers\\": "app/Helpers/"
         },
         "files": [
-        "app/helpers.php"
-    ]
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
