@@ -17,8 +17,7 @@ function fetchCategories() {
         method: 'GET',
         dataType: 'json',
         success: function(response) {
-            console.log(response);
-            populateGroupFilter(response, '#category');
+            populateGroupFilter(response.data, '#category');
         },
         error: function() {
             alert('Failed to fetch categories from the API.');
