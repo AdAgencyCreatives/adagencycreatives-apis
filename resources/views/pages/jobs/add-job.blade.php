@@ -6,16 +6,13 @@
 <script src="{{ asset('/assets/js/custom.js') }}"></script>
 <script>
 function fetchCategories() {
-    var requestData = {
-        per_page: -1
-    };
 
     $.ajax({
-        url: '/api/v1/categories',
+        url: '/api/v1/get_categories',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
+            console.log(response);
             populateFilter(response.data, '#category');
 
         },
@@ -24,8 +21,6 @@ function fetchCategories() {
         }
     });
 }
-
-
 
 function fetchIndustries() {
 
@@ -51,8 +46,19 @@ function fetchIndustries() {
 
 $(document).ready(function() {
 
+    $(".daterange").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        startDate: moment(),
+        locale: {
+            format: "Y-MM-DD"
+        }
+    });
+
     fetchIndustries();
-    // fetchCategories();
+    fetchCategories();
+
+
 });
 </script>
 @endsection
@@ -65,7 +71,7 @@ $(document).ready(function() {
 </style>
 @endsection
 @section('content')
-<h1 class="h3 mb-3">Job Details</h1>
+<h1 class="h3 mb-3">Add New Job</h1>
 
 <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
     <div class="alert-message">
@@ -74,10 +80,15 @@ $(document).ready(function() {
     </div>
 </div>
 
+@if(session('success'))
+<x-created-alert type="success"></x-created-alert>
+@endif
+
 <div class="row">
 
     <div class="col-12 col-lg-12">
-        <form>
+        <form action="{{route('jobs.store')}}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="card">
                 <div class="card-body">
                     <h1>
@@ -100,6 +111,28 @@ $(document).ready(function() {
 
             <div class="card">
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="agency_name"> Agency Name (Optional) </label>
+                                    <input id="agency_name" class="form-control" type="text" name="agency_name"
+                                        placeholder="Agency Name" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <div class="mb-3">
+                                <div class="mb-3 error-placeholder">
+                                    <label class="form-label">Agency Logo (Optional)</label>
+                                    <div>
+                                        <input type="file" class="validation-file" name="file">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
@@ -194,7 +227,13 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label" for="apply_type"> Apply Type </label>
-                                <input id="apply_type" class="form-control" type="text" name="apply_type" />
+                                <select name="apply_type" id="apply_type"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="Internal">Internal
+                                    </option>
+                                    <option value="External">External
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
@@ -207,16 +246,11 @@ $(document).ready(function() {
 
 
                     <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label"> Created At </label>
-                                <input class="form-control" type="text" />
-                            </div>
-                        </div>
+
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label"> Expired At </label>
-                                <input class="form-control" type="text" />
+                                <input class="form-control daterange" type="text" name="expired_at" />
                             </div>
                         </div>
                     </div>
@@ -234,6 +268,22 @@ $(document).ready(function() {
                                     <option value="Director 10+ years">Director 10+ years</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+
+                            <div class="form-group">
+                                <label class="form-label" for="employement_type"> Labels </label>
+                                <select class="form-control select2" id="labels" multiple="multiple" name="labels[]">
+                                    <option value="is_remote">Remote</option>
+                                    <option value="is_hybrid">Hybrid</option>
+                                    <option value="is_onsite">Onsite</option>
+                                    <option value="is_featured">Featured</option>
+                                    <option value="is_urgent">Urgent</option>
+
+                                </select>
+                            </div>
+
                         </div>
 
                     </div>

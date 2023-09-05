@@ -126,7 +126,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Agency::factory()->create(
                 [
-                    'user_id' => $user->id
+                    'user_id' => $user->id,
                 ]);
         }
 

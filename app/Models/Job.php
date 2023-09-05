@@ -18,6 +18,7 @@ class Job extends Model
         'address_id',
         'category_id',
         'title',
+        'agency_name',
         'description',
         'employement_type',
         'industry_experience',
@@ -31,8 +32,8 @@ class Job extends Model
         'is_hybrid',
         'is_onsite',
         'is_featured',
-        'is_urgent',
         'expired_at',
+        'is_urgent',
     ];
 
     protected $casts = [
@@ -69,6 +70,11 @@ class Job extends Model
         return $this->belongsTo(Address::class);
     }
 
+    public function attachment()
+    {
+        return $this->hasOne(Attachment::class, 'resource_id');
+    }
+
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
@@ -99,7 +105,6 @@ class Job extends Model
 
     public function scopeIndustryExperience(Builder $query, $industries): Builder
     {
-        dd($industries);
         $industries = Industry::whereIn('uuid', $industries)->pluck('id');
 
         return $query->whereIn('address_id', $state_ids);

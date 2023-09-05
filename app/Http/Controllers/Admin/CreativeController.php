@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Creative;
-use App\Models\Attachment;
+use App\Models\Education;
+use App\Models\Experience;
 use App\Models\Link;
 use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CreativeController extends Controller
 {
@@ -29,7 +29,7 @@ class CreativeController extends Controller
         $creative->save();
 
         $user->update([
-            'is_visible' => $request->is_visible
+            'is_visible' => $request->is_visible,
         ]);
 
         if ($request->input('country_code') != null && $request->input('phone') != null) {
@@ -40,8 +40,8 @@ class CreativeController extends Controller
             $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
 
-
         Session::flash('success', 'Creative updated successfully');
+
         return redirect()->back();
 
     }
@@ -52,8 +52,6 @@ class CreativeController extends Controller
         $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();
 
-    
-
         if ($request->input('portfolio') != null) {
             $this->updateLink($user, 'portfolio', $request->input('portfolio'));
         }
@@ -67,40 +65,49 @@ class CreativeController extends Controller
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
 
-
-
         Session::flash('success', 'Creative updated successfully');
+
         return redirect()->back();
 
-    }   
-    
+    }
+
     public function update_experience(Request $request, $uuid)
     {
-        // dd($request->all());
-        $creative = Creative::where('uuid', $uuid)->first();
-        $user = User::where('id', $creative->user_id)->first();
-        $uuid = Str::uuid();
+        $experience_ids = $request->input('experience_id');
+        $titles = $request->input('title');
+        $companies = $request->input('company');
+        $descriptions = $request->input('description');
 
-    
-
-        if ($request->input('portfolio') != null) {
-            $this->updateLink($user, 'portfolio', $request->input('portfolio'));
+        foreach ($experience_ids as $key => $experience_id) {
+            $experience = Experience::find($experience_id);
+            $experience->title = $titles[$key];
+            $experience->company = $companies[$key];
+            $experience->description = $descriptions[$key];
+            $experience->save();
         }
-
-        if ($request->input('linkedin') != null) {
-            $this->updateLink($user, 'linkedin', $request->input('linkedin'));
-        }
-
-        $creative->update([
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
-        ]);
-
-
 
         Session::flash('success', 'Creative updated successfully');
-        return redirect()->back();
 
+        return redirect()->back();
+    }
+
+    public function update_education(Request $request, $uuid)
+    {
+
+        $education_ids = $request->input('education_id');
+        $degree = $request->input('degree');
+        $college = $request->input('college');
+
+        foreach ($education_ids as $key => $education_id) {
+            $education = Education::find($education_id);
+            $education->degree = $degree[$key];
+            $education->college = $college[$key];
+            $education->save();
+        }
+
+        Session::flash('success', 'Creative updated successfully');
+
+        return redirect()->back();
     }
 
     private function updatePhone($user, $country_code, $phone_number)

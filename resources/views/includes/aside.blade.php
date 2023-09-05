@@ -20,39 +20,22 @@
             <li class="sidebar-header">
                 Manage
             </li>
-            <li class="sidebar-item {{ request()->is('users*') ? 'active' : '' }} ">
+            <li
+                class="sidebar-item {{ !request()->is('users/*/details') && request()->is('users*') ? 'active' : '' }} ">
                 <a data-target="#users" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="users"></i>
                     <span class="align-middle">Users</span>
                 </a>
                 <ul id="users"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('users*') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ !request()->is('users/*/details') && request()->is('users*') ? 'show' : '' }}"
                     data-parent="#sidebar">
-
                     <li class="sidebar-item {{ request()->is('users') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('users.index') }}">
                             <i class="align-middle" data-feather="users"></i>
                             <span class="align-middle">All Users</span>
                         </a>
                     </li>
-                    <li class="sidebar-item" data-role="2">
-                        <a class="sidebar-link" href="{{ route('users.index') }}?role=2">
-                            <i class="align-middle" data-feather="sliders"></i>
-                            <span class="align-middle">Advisors</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item" data-role="3">
-                        <a class="sidebar-link" href="{{ route('users.index') }}?role=3">
-                            <i class="align-middle" data-feather="layers"></i>
-                            <span class="align-middle">Agencies</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item" data-role="4">
-                        <a class="sidebar-link" href="{{ route('users.index') }}?role=4">
-                            <i class="align-middle" data-feather="cloud"></i>
-                            <span class="align-middle">Creatives</span>
-                        </a>
-                    </li>
+
                     <li class="sidebar-item {{ request()->is('users/create') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('users.create') }}">
                             <i class="align-middle" data-feather="user-plus"></i>
@@ -61,6 +44,65 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="sidebar-item {{ request()->is('advisors*') ? 'active' : '' }} ">
+                <a data-target="#advisors" href="/advisors?role=2" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i>
+                    <span class="align-middle">Advisors</span>
+                </a>
+                <ul id="advisors"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('advisors*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('advisors') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/advisors?role=2">
+                            <i class="align-middle" data-feather="sliders"></i>
+                            <span class="align-middle">All Advisors</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('agencies*') ? 'active' : '' }} ">
+                <a data-target="#agencies" href="/agencies?role=3" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="layers"></i>
+                    <span class="align-middle">Agencies</span>
+                </a>
+                <ul id="agencies"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('agencies*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('agencies') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/agencies?role=3">
+                            <i class="align-middle" data-feather="layers"></i>
+                            <span class="align-middle">All Agencies</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('creatives*') ? 'active' : '' }} ">
+                <a data-target="#creatives" href="/creatives?role=4" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="cloud"></i>
+                    <span class="align-middle">Creatives</span>
+                </a>
+                <ul id="creatives"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('creatives*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('creatives') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/creatives?role=4">
+                            <i class="align-middle" data-feather="cloud"></i>
+                            <span class="align-middle">All Creatives</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
 
             <li class="sidebar-item {{ request()->is('jobs*') ? 'active' : '' }} ">
                 <a data-target="#jobs" data-toggle="collapse" class="sidebar-link collapsed">
@@ -77,7 +119,7 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ request()->is('jobs') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ request()->is('jobs/create') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('jobs.create') }}">
                             <i class="align-middle" data-feather="list"></i>
                             <span class="align-middle">Add New Job</span>
@@ -143,6 +185,25 @@
                         <a class="sidebar-link" href="{{ route('locations.index') }}">
                             <i class="align-middle" data-feather="map-pin"></i>
                             <span class="align-middle">All Locations</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('categories*') ? 'active' : '' }} ">
+                <a data-target="#categories" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="map-pin"></i>
+                    <span class="align-middle">Categories</span>
+                </a>
+                <ul id="categories"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('categories*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('categories') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('categories.index') }}">
+                            <i class="align-middle" data-feather="map-pin"></i>
+                            <span class="align-middle">All Categories</span>
                         </a>
                     </li>
 

@@ -1,52 +1,42 @@
 <div class="row">
 
     <div class="col-md-12 col-xl-12">
-        <form id="creative-form2" action="{{ route('creative.experience.update', $user->creative?->uuid) }}"
+        <form id="creative-form2" action="{{ route('creative.education.update', $user->creative?->uuid) }}"
             method="POST">
             @csrf()
             @method('PUT')
 
-            @if(isset($user->resume->experiences))
-            @foreach ($user->resume->experiences as $key =>
-            $experience)
+
+            @if(isset($user->resume->educations))
+            @foreach ( isset($user->resume->educations) ? $user->resume->educations : [] as $key => $education)
             <div class="card">
 
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Experience {{ $key + 1 }}</h5>
+                    <h5 class="card-title mb-0">Education {{ $key + 1 }}</h5>
                 </div>
+
                 <div class="card-body">
                     <div class="row">
 
                         <div class="col-md-6">
-                            <input type="hidden" name="experience_id[]" value="{{ $experience->id }}">
+                            <input type="hidden" name="education_id[]" value="{{ $education->id }}">
                             <div class="mb-3">
-                                <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" name="title[]" placeholder="Title"
-                                    value="{{ $experience->title }}">
+                                <label for="degree" class="form-label">Degree</label>
+                                <input type="text" class="form-control" name="degree[]" placeholder="Degree"
+                                    value="{{ $education->degree }}">
                             </div>
 
                         </div>
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="company" class="form-label">Company</label>
-                                <input type="text" class="form-control" name="company[]" placeholder="Company"
-                                    value="{{ $experience->company }}">
+                                <label for="college" class="form-label">College</label>
+                                <input type="text" class="form-control" name="college[]" placeholder="College"
+                                    value="{{ $education->college }}">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" name="description[]" rows="5"
-                                    spellcheck="false">{{ $experience->description }}</textarea>
-                            </div>
-
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -54,7 +44,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="started_at"> Started At </label>
                                     <input type="text" class="form-control" placeholder="Started At" disabled
-                                        value="{{ $experience->started_at }}">
+                                        value="{{ $education->started_at }}">
                                 </div>
                             </div>
                         </div>
@@ -64,19 +54,21 @@
                                 <div class="form-group">
                                     <label class="form-label" for="completed_at"> Completed At </label>
                                     <input type="text" class="form-control" placeholder="Completed At" disabled
-                                        value="{{ $experience->completed_at }}">
+                                        value="{{ $education->completed_at }}">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
+
             </div>
             @endforeach
             <button type="submit" class="btn btn-primary">Save changes</button>
             @else
-            <p>No Experience found</p>
+            <p>No Education found</p>
             @endif
+
         </form>
     </div>
 </div>

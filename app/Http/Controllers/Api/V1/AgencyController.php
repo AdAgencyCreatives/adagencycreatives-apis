@@ -76,14 +76,12 @@ class AgencyController extends Controller
 
     public function update(UpdateAgencyRequest $request, $uuid)
     {
-        
+
         if (empty($request->all())) {
             return response()->json([
                 'message' => 'You must provide data to update',
             ], Response::HTTP_NOT_FOUND);
         }
-
-               
 
         $agency = Agency::where('uuid', $uuid)->first();
 

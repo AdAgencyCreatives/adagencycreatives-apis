@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\StoreAdminUserRequest;
-use App\Http\Resources\User\UserResource;
+use App\Models\Attachment;
+use App\Models\Category;
 use App\Models\Job;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 class JobController extends Controller
 {
@@ -27,8 +25,96 @@ class JobController extends Controller
 
     public function details($id)
     {
-        $job = Job::with('applications')->where('uuid', $id)->first();
-
+        $job = Job::with('applications', 'attachment')->where('uuid', $id)->first();
+        // dd($job->toArray());
         return view('pages.jobs.detail.detail', compact('job'));
+    }
+
+    public function store(Request $request)
+    {
+        // dd($request->all());
+        if ($request->hasFile('file')) {
+            $attachment = $this->storeImage($request);
+        }
+        $category = Category::where('uuid', $request->category_id)->first();
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => auth()->id(),
+            'category_id' => $category->id,
+            'address_id' => 5,
+            'status' => $request->status,
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
+        ]);
+
+        $labels = $request->labels;
+
+        foreach ($labels as $label) {
+            $request->merge([
+                $label => 1,
+            ]);
+
+        }
+        $job = Job::create($request->all());
+
+        if (isset($attachment) && is_object($attachment)) {
+            Attachment::whereId($attachment->id)->update([
+                'resource_id' => $job->id,
+            ]);
+        }
+
+        Session::flash('success', 'Job created successfully');
+
+        return redirect()->back();
+    }
+
+    public function update(Request $request, $id)
+    {
+        $job = Job::where('id', $id)->first();
+        // dd($job);
+        // dump($request->all());
+        if ($request->hasFile('file')) {
+            $attachment = $this->storeImage($request);
+        }
+        $category = Category::where('uuid', $request->category_id)->first();
+        $request->merge([
+            'category_id' => $category->id,
+            'address_id' => 5,
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
+        ]);
+
+        $job->update($request->all());
+
+        if (isset($attachment) && is_object($attachment)) {
+            $job->attachment?->delete();
+            Attachment::whereId($attachment->id)->update([
+                'resource_id' => $job->id,
+            ]);
+        }
+        Session::flash('success', 'Job updated successfully');
+
+        return redirect()->back();
+    }
+
+    public function storeImage($request)
+    {
+        $uuid = Str::uuid();
+        $file = $request->file;
+        $resource_type = 'agency_logo';
+
+        $extension = $file->getClientOriginalExtension();
+        $filename = $uuid.'.'.$extension;
+        $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
+
+        $attachment = Attachment::create([
+            'uuid' => $uuid,
+            'user_id' => auth()->id(),
+            'resource_type' => $resource_type,
+            'path' => $file_path,
+            'extension' => $extension,
+        ]);
+
+        return $attachment;
     }
 }

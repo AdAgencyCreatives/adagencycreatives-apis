@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\Agency;
-use App\Models\Resume;
+use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,12 +29,12 @@ class UserController extends Controller
     public function details(User $user)
     {
         if (in_array($user->role, ['agency', 'advisor'])) {
-             $user->load(['agency', 'links', 'attachments' => function ($query) use ($user) {
-            $query->where('resource_id', $user->agency->id)
-            ->latest()->take(1); 
-        }]);
+            $user->load(['agency', 'links', 'attachments' => function ($query) use ($user) {
+                $query->where('resource_id', $user->agency->id)
+                    ->latest()->take(1);
+            }]);
         } elseif ($user->role == 'creative') {
-            $user->load( ['creative', 'phones', 'links', 'resume.educations', 'resume.experiences']);
+            $user->load(['creative', 'phones', 'links', 'resume.educations', 'resume.experiences']);
         }
 
         // dd($user->toArray());
@@ -59,7 +59,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if($user->role == 'advisor') {
+            if (in_array($user->role, ['advisor', 'agency'])) {
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
@@ -68,8 +68,14 @@ class UserController extends Controller
                 $agency->size = '10';
                 $agency->type_of_work = '';
                 $agency->save();
+            } elseif (in_array($user->role, ['creative'])) {
+                $creative = new Creative();
+                $creative->uuid = Str::uuid();
+                $creative->user_id = $user->id;
+                $creative->years_of_experience = 'Junior 0-2 years';
+                $creative->type_of_work = 'Internship';
+                $creative->save();
             }
-
 
             return new UserResource($user);
         } catch (\Exception $e) {
