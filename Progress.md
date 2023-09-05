@@ -203,3 +203,29 @@ Admin can
 	- Can see all the comments of post (along with comment authors) on single post page
 	- Can see all the attachments of post.
 	- Can see total likes on the post
+	
+## 29/8/2023 - Reviews
+- Endpoint for Reviews:
+    - Agency or Creative can put refiew on each other
+    - You can filter the reviews by target entity (e.g. Agency User ID, Creative User ID)
+    - You will also get average rating in the response
+
+## 30/8/2023 - Dashboard | Jobs detail page | Locations
+- Admin Dashboard:
+	- Added more fields on job detail page
+	- Separate dropdows links for Creative and Agencies
+	- Locations module added, admin can:	
+		- Create New States and View Existing states
+		- Create New Cities within specific State and View Existing States
+## 31/8/2023 - Agency | Creative Extra Fields
+- Admin Dashboard:
+	- Can see advisors with different dropdown menu
+	- Extra Fields in agency/advisor profile
+	- Extra fields in creative profile	
+ 
+## 01/9/2023 - Agency | Job Add/Update | Categories
+- Admin Dashboard:
+	- Can see advisors, creatives and agencies as separate menu options
+	- Can add new job
+	- Can update the Job (with more fields)
+	- Can manage categories (View | Update | Delete)
