@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Users'))
+@section('title', __('Categories'))
 
 @section('scripts')
 <script src="{{ asset('/assets/js/custom.js') }}"></script>
@@ -10,56 +10,44 @@ var totalPages = 1;
 var perPage = 10;
 var filters = {};
 
+function fetchCategories() {
+
+    $.ajax({
+        url: 'api/v1/get_categories',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log(response);
+            populateGroupFilter(response, '#category');
+        },
+        error: function() {
+            alert('Failed to fetch categories from the API.');
+        }
+    });
+}
+
 function fetchData(page, filters = []) {
     var requestData = {
         page: page,
         per_page: perPage
     };
 
-    var currentUrl = window.location.href;
-    if (currentUrl.includes('role=2')) {
-        $('#role').val('2');
-        $('#role').trigger('change');
-        $('#role').prop('disabled', true);
-    }
-    if (currentUrl.includes('role=3')) {
-        $('#role').val('3');
-        $('#role').trigger('change');
-        $('#role').prop('disabled', true);
-    }
-    if (currentUrl.includes('role=4')) {
+    var selectedState = $('#category option:selected').text();
 
-        $('#role').val('4');
-        $('#role').trigger('change');
-        $('#role').prop('disabled', true);
+    if (selectedState != 'Select Category') {
+        filters = {
+            name: selectedState
+        };
     }
-
-    var selectedRole = $('#role').val();
-    var selectedStatus = $('#status').val();
-    var firstname = $('#first_name').val();
-    var lastname = $('#last_name').val();
-    var username = $('#username').val();
-    var email = $('#email').val();
-
-    filters = {
-        role: selectedRole,
-        status: selectedStatus,
-        username: username,
-        email: email,
-        first_name: firstname,
-        last_name: lastname
-    };
 
     Object.keys(filters).forEach(function(key) {
         if (filters[key] !== '-100') {
             requestData[`filter[${key}]`] = filters[key];
         }
     });
-    console.log(requestData);
-
 
     $.ajax({
-        url: 'api/v1/users',
+        url: 'api/v1/categories',
         method: 'GET',
         data: requestData,
         dataType: 'json',
@@ -71,50 +59,29 @@ function fetchData(page, filters = []) {
 
         },
         error: function() {
-            alert('Failed to fetch users from the API.');
+            alert('Failed to fetch categories from the API.');
         }
     });
 }
 
-function populateTable(users) {
-    var tbody = $('#users-table tbody');
+function populateTable(categories) {
+    var tbody = $('#categories-table tbody');
     tbody.empty();
-    console.log(users);
-    console.log(users.length);
-    if (users.length === 0) {
+    console.log(categories.length);
+    if (categories.length === 0) {
         displayNoRecordsMessage(7);
     }
 
-    $.each(users, function(index, user) {
-        var editUrl = "/users/" + user.id + "/details";
+    $.each(categories, function(index, category) {
         var roleBasedActions = '';
 
-        if (user.role === 'admin') {
-            roleBasedActions = 'Admin';
-        } else {
-            roleBasedActions = '<a href="' + editUrl +
-                '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
-                user.uuid + '">Delete</a>';
-        }
-
-
-        var statusDropdown = '<select class="status-dropdown form-control form-select select2" data-user-id="' +
-            user.uuid + '">' +
-            '<option value="pending" ' + (user.status === 'pending' ? 'selected' : '') + '>Pending</option>' +
-            '<option value="active" ' + (user.status === 'active' ? 'selected' : '') + '>Active</option>' +
-            '<option value="inactive" ' + (user.status === 'inactive' ? 'selected' : '') +
-            '>Inactive</option>' +
-            '</select>';
+        roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
+            category.id + '">Delete</a>';
 
         var row = '<tr>' +
-            '<td>' + user.id + '</td>' +
-            '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
-            '<td>' + user.username + '</br>' + user.email + '</td>' +
-            // Concatenate email and username in the same column
-            '<td>' + getRoleBadge(user.role) + '</td>' +
-            '<td>' + statusDropdown + '</td>' +
-            // '<td>' + getStatusBadge(user.status) + '</td>' +
-            '<td>' + user.created_at + '</td>' +
+            '<td>' + category.id + '</td>' +
+            '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
+            '<td>' + category.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
 
             '</tr>';
@@ -122,17 +89,16 @@ function populateTable(users) {
     });
 }
 
-
-
 $(document).ready(function() {
 
-    fetchData(currentPage);
+    fetchData();
 
-    $(document).on('click', '.delete-user-btn', function() {
+    fetchCategories();
+    $(document).on('click', '.delete-category-btn', function() {
         var resourceId = $(this).data('id');
         var csrfToken = '{{ csrf_token() }}';
         console.log(csrfToken);
-        deleteConfirmation(resourceId, 'user', 'users', csrfToken);
+        deleteConfirmation(resourceId, 'category', 'categories', csrfToken);
     });
 
 
@@ -143,11 +109,84 @@ $(document).ready(function() {
         fetchData(currentPage);
     });
 
-    $(document).on('change', '.status-dropdown', function() {
-        var selectedStatus = $(this).val();
-        var userId = $(this).data('user-id');
-        var csrfToken = '{{ csrf_token() }}';
-        updateStatus(userId, 'user', 'users', csrfToken, selectedStatus);
+    $('#new_category_form').submit(function(event) {
+        event.preventDefault();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            }
+        });
+
+        var data = {
+            name: $('#new_category').val()
+        };
+
+        $.ajax({
+            url: '/api/v1/categories',
+            method: 'POST',
+            data: data,
+            success: function(response) {
+                Swal.fire({
+                    title: 'Success',
+                    text: "Category Created Successfully.",
+                    icon: 'success'
+                }).then((result) => {
+                    fetchData();
+                })
+            },
+            error: function(error) {
+                console.error('Error creating category:', error);
+            }
+        });
+    });
+
+    $('table').on('dblclick', '.category-name', function() {
+        var currentText = $(this).text();
+        var id = $(this).data('id');
+        var inputField = $('<input>', {
+            type: 'text',
+            value: currentText
+        });
+
+        $(this).html(inputField);
+
+        inputField.focus();
+        inputField.on('blur', function() {
+            var newText = $(this).val();
+            $(this).parent().text(
+                newText);
+
+            console.log(id);
+            console.log(newText);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                }
+            });
+            $.ajax({
+                url: '/api/v1/categories/' + id,
+                method: 'PUT',
+                data: {
+                    name: newText
+                },
+                success: function(response) {
+                    if (response.data) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: "Succesfully updated",
+                            icon: 'success'
+                        });
+                    }
+
+
+                },
+                error: function(error) {
+                    console.error('Error updating category:', error);
+                }
+            });
+        });
     });
 
 });
@@ -157,7 +196,7 @@ $(document).ready(function() {
 @section('content')
 
 
-@include('pages.users._inc.filters')
+@include('pages.categories.filters')
 
 <div class="row">
     <div class="col-12">
@@ -180,22 +219,18 @@ $(document).ready(function() {
                     </div>
                     <div class="row dt-row">
                         <div class="col-sm-12">
-                            <table id="users-table" class="table table-striped dataTable no-footer dtr-inline"
+                            <table id="categories-table" class="table table-striped dataTable no-footer dtr-inline"
                                 style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Username/Email</th>
-                                        <th>Role</th>
-                                        <th>Status</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-
                                 </tbody>
 
                             </table>
@@ -218,4 +253,5 @@ $(document).ready(function() {
     </div>
 </div>
 
+@include('pages.categories.add-category')
 @endsection

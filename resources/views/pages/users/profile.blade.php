@@ -37,18 +37,82 @@ Profile
 @endif
 
 
-@if(in_array($user->role, ['agency', 'advisor']))
-@include('pages.users.agency.agency')
-@elseif($user->role == 'creative')
+<div class="row">
+    <div class="col-md-3 col-xl-2">
 
-@include('pages.users.creative.creative')
-@include('pages.users.creative.qualification')
-@include('pages.users.creative.experience')
+        <div class="card">
+
+            <div class="list-group list-group-flush" role="tablist">
+
+                @if(in_array($user->role, ['agency', 'advisor']))
+                <a class="list-group-item list-group-item-action active" data-toggle="list" href="#agency_info"
+                    role="tab" aria-selected="true">
+                    Agency Info
+                </a>
+
+                @elseif($user->role == 'creative')
+                <a class="list-group-item list-group-item-action active" data-toggle="list" href="#creative_info"
+                    role="tab" aria-selected="true">
+                    Creative Info
+                </a>
+
+                @endif
+                <a class="list-group-item list-group-item-action" data-toggle="list" href="#personal_info" role="tab"
+                    aria-selected="true">
+                    Personal Info
+                </a>
+                @if($user->role == 'creative')
+                <a class="list-group-item list-group-item-action" data-toggle="list" href="#educations" role="tab"
+                    aria-selected="true">
+                    Educations
+                </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#experiences" role="tab"
+                    aria-selected="true">
+                    Experiences
+                </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#qualifications"
+                    role="tab" aria-selected="true">
+                    Qualifications
+                </a>
+                @endif
+                <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"
+                    aria-selected="false" tabindex="-1">
+                    Password
+                </a>
 
 
-@endif
+            </div>
+        </div>
+    </div>
 
-@include('pages.users._inc.personal_info')
-@include('pages.users._inc.password')
+    <div class="col-md-9 col-xl-10">
+        <div class="tab-content">
+            @if(in_array($user->role, ['agency', 'advisor']))
+            <div class="tab-pane fade show active" id="agency_info" role="tabpanel">
+                @include('pages.users.agency.agency')
+            </div>
+            @elseif($user->role == 'creative')
+            <div class="tab-pane fade show active" id="creative_info" role="tabpanel">
+                @include('pages.users.creative.creative')
+            </div>
+            @endif
+            <div class="tab-pane fade" id="personal_info" role="tabpanel">
+                @include('pages.users._inc.personal_info')
+            </div>
+            <div class="tab-pane fade" id="password" role="tabpanel">
+                @include('pages.users._inc.password')
+            </div>
+            @if($user->role == 'creative')
+            <div class="tab-pane fade" id="experiences" role="tabpanel">
+                @include('pages.users.creative.experience')
+            </div>
 
+            <div class="tab-pane fade" id="educations" role="tabpanel">
+                @include('pages.users.creative.education')
+            </div>
+            <div class="tab-pane fade" id="qualifications" role="tabpanel">
+                @include('pages.users.creative.qualification')
+            </div>
+            @endif
+        </div>
+    </div>
+</div>
 @endsection

@@ -8,9 +8,9 @@ use App\Models\Attachment;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AgencyController extends Controller
 {
@@ -20,7 +20,7 @@ class AgencyController extends Controller
         $user = User::where('id', $agency->user_id)->first();
 
         $uuid = Str::uuid();
-        if($request->has('file') && is_object($request->file)) {
+        if ($request->has('file') && is_object($request->file)) {
             $file = $request->file;
             $resource_type = 'agency_logo';
 
@@ -38,10 +38,9 @@ class AgencyController extends Controller
 
         }
 
-
         $request->merge([
-                        'industry_specialty' => ''.implode(',', $request->industry_specialty).''
-                    ]);
+            'industry_specialty' => ''.implode(',', $request->industry_specialty).'',
+        ]);
         // dd($request->all());
         $data = $request->only(['name', 'size', 'type_of_work', 'industry_specialty', 'about']);
         foreach ($data as $key => $value) {
@@ -58,17 +57,18 @@ class AgencyController extends Controller
             $this->updateLink($user, 'website', $request->input('website'));
         }
 
-        if(isset($attachment) && is_object($attachment)) {
+        if (isset($attachment) && is_object($attachment)) {
             Attachment::whereId($attachment->id)->update([
-                        'resource_id' => $agency->id,
-                    ]);
+                'resource_id' => $agency->id,
+            ]);
         }
 
         $user->update([
-            'is_visible' => $request->is_visible
+            'is_visible' => $request->is_visible,
         ]);
 
         Session::flash('success', 'Agency updated successfully');
+
         return redirect()->back();
 
     }

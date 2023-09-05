@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AgencyController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PlanController;
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -30,9 +32,27 @@ Route::get('/test', function () {
     return User::all();
 });
 
+Route::get('/test2', function () {
+    $job = Job::where('id', 31)->first();
+    $job->update(['expired_at' => '2023-08-29']);
+    dd($job->fresh()->toArray());
+
+});
+
 Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    Route::resource('creatives', UserController::class)->parameters([
+        'creatives' => 'user',
+    ]);
+
+    Route::resource('agencies', UserController::class)->parameters([
+        'agencies' => 'user',
+    ]);
+
+    Route::resource('advisors', UserController::class)->parameters([
+        'advisors' => 'user',
+    ]);
     Route::resource('users', UserController::class);
     Route::get('users/{user}/details', [UserController::class, 'details']);
     Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
@@ -40,6 +60,7 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
     Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
     Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
+    Route::put('/creative-educaiton/{user}', [CreativeController::class, 'update_education'])->name('creative.education.update');
     Route::put('/creative-experience/{user}', [CreativeController::class, 'update_experience'])->name('creative.experience.update');
 
     Route::resource('jobs', JobController::class);
@@ -47,6 +68,8 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
 
     Route::resource('locations', LocationController::class);
     Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
+
+    Route::resource('categories', CategoryController::class);
     Route::resource('reports', ReportController::class);
 
     include_once 'community.php';

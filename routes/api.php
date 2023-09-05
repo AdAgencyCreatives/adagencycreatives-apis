@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::apiResource('groups', GroupController::class)->except(['store']);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
+    Route::get('get_categories', [CategoryController::class, 'get_categories']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);

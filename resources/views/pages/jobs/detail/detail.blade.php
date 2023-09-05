@@ -79,14 +79,9 @@ function fetchApplications() {
 
 function fetchCategories() {
 
-    var requestData = {
-        per_page: -1
-    };
-
     $.ajax({
-        url: '/api/v1/categories',
+        url: '/api/v1/get_categories',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
             populateFilter(response.data, '#category');
@@ -152,8 +147,6 @@ function fetchIndustries() {
 
 $(document).ready(function() {
     fetchJobObject();
-    // var job = "{{ $job }}";
-    // 
     fetchIndustries();
     fetchCategories();
     fetchApplications();
@@ -203,6 +196,14 @@ $(document).ready(function() {
         });
     });
 
+    $(".daterange").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {
+            format: "Y-MM-DD"
+        }
+    });
+
 
 });
 </script>
@@ -225,10 +226,15 @@ $(document).ready(function() {
     </div>
 </div>
 
-<div class="row">
+@if(session('success'))
+<x-alert type="success"></x-alert>
+@endif
 
+<div class="row">
     <div class="col-12 col-lg-6">
-        <form>
+        <form action="{{ route('jobs.update', $job->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div class="card">
                 <div class="card-body">
                     <h1>
@@ -252,6 +258,42 @@ $(document).ready(function() {
 
             <div class="card">
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="agency_name"> Agency Name (Optional) </label>
+                                    <input id="agency_name" class="form-control" type="text" name="agency_name"
+                                        placeholder="Agency Name" value="{{ $job->agency_name }}" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="mb-3">
+                                <div class="mb-3 error-placeholder">
+                                    <label class="form-label">Agency Logo</label>
+                                    <div>
+                                        <input type="file" class="validation-file" name="file">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <div class="text-center">
+                                <h4>Agency Logo</h4>
+                                <img class="rounded-circle img-responsive mt-2 lazy"
+                                    src="{{ isset($job->attachment) ? asset('storage/' . $job->attachment->path) : asset('images/default.png') }}"
+                                    alt="{{ $job->attachment }}" width="100" height="100" style="border-radius: 50%;" />
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
@@ -353,14 +395,21 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label" for="apply_type"> Apply Type </label>
-                                <input id="apply_type" class="form-control" type="text" name="apply_type"
-                                    value="{{ $job->apply_type }}" disabled />
+                                <select name="apply_type" id="apply_type"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="Internal" @if($job->apply_type == 'Internal') selected
+                                        @endif>Internal
+                                    </option>
+                                    <option value="External" @if($job->apply_type == 'External') selected
+                                        @endif>External
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label" for="external_link"> Expernal Link </label>
-                                <a href="{{ $job->external_link }}" target="_blank">
+                                <a>
                                     <input id="external_link" class="form-control" type="url" name="external_link"
                                         value="{{ $job->external_link }}" />
                                 </a>
@@ -379,7 +428,8 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label"> Expired At </label>
-                                <input class="form-control" type="text" value="{{ $job->expired_at }}" disabled />
+                                <input class="form-control daterange" name="expired_at" type="text"
+                                    value="{{ $job->expired_at }}" />
                             </div>
                         </div>
                     </div>
@@ -393,7 +443,7 @@ $(document).ready(function() {
                                     <option value="-100"> Select Experience</option>
                                     <option value="Junior 0-2 years" @if($job->experience == 'Junior 0-2 years')
                                         selected @endif>Junior 0-2 years</option>
-                                    <option value="Mid-level 2-5 years" @if($job->experience == 'Mid-level 2-5years')
+                                    <option value="Mid-level 2-5 years" @if($job->experience == 'Mid-level 2-5 years')
                                         selected @endif>Mid-level 2-5 years</option>
                                     <option value="Senior 5-10 years" @if($job->experience == 'Senior 5-10 years')
                                         selected @endif>Senior 5-10 years</option>
@@ -406,14 +456,13 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label class="form-label"> Attached User </label>
                                 <a href="{{ url('/users/' . $job->user_id . '/details') }}" target="_blank">
-
-                                    <input class="form-control" type="url" value="View User Profile" />
+                                    <input class="form-control" value="View User Profile" />
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <button id="save-job" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </form>

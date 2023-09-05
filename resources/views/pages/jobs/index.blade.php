@@ -48,14 +48,9 @@ function fetchData(page, filters = []) {
 
 function fetchCategories() {
 
-    var requestData = {
-        per_page: -1
-    };
-
     $.ajax({
-        url: 'api/v1/categories',
+        url: 'api/v1/get_categories',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
             console.log(response.data);

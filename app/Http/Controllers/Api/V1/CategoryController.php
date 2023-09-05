@@ -15,22 +15,18 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Category::class)
+            ->allowedFilters([
+                'name',
+            ]);
 
-        $cacheKey = 'categories_'.$perPage;
-
-        $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($perPage) {
-            if ($perPage == -1) {
-                return Category::all();
-            } else {
-                return Category::paginate($perPage);
-            }
-        });
+        $categories = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CategoryCollection($categories);
     }
@@ -87,5 +83,15 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
+    }
+
+    public function get_categories(Request $request)
+    {
+        $cacheKey = 'all_categories';
+        $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return new CategoryCollection(Category::all());
+        });
+
+        return $categories;
     }
 }
