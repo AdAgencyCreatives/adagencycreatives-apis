@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PlanController;
 use App\Models\Job;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,10 +33,11 @@ Route::get('/test', function () {
     return User::all();
 });
 
-Route::get('/test2', function () {
-    $job = Job::where('id', 31)->first();
-    $job->update(['expired_at' => '2023-08-29']);
-    dd($job->fresh()->toArray());
+Route::get('/reset', function () {
+    Artisan::call("migrate:fresh --seed");
+    Artisan::call("optimize:clear");
+
+    echo 'Cache Cleared';
 
 });
 
