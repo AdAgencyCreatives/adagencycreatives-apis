@@ -15,7 +15,6 @@ class Group extends Model
         'name',
         'description',
         'status',
-        'attachment_id',
     ];
 
     const STATUSES = [
@@ -26,7 +25,7 @@ class Group extends Model
 
     public function attachment()
     {
-        return $this->belongsTo(Attachment::class);
+        return $this->hasOne(Attachment::class, 'resource_id');
     }
 
     public function posts()

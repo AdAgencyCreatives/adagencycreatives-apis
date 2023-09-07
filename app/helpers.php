@@ -11,3 +11,10 @@ if (! function_exists('getIndustryNames')) {
         return $industries;
     }
 }
+
+if (! function_exists('getAttachmentBasePath')) {
+    function getAttachmentBasePath()
+    {
+        return 'https://ad-agency-creatives.s3.amazonaws.com/';
+    }
+}

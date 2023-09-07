@@ -45,13 +45,14 @@
                 </ul>
             </li>
 
-            <li class="sidebar-item {{ request()->is('advisors*') ? 'active' : '' }} ">
-                <a data-target="#advisors" href="/advisors?role=2" class="sidebar-link collapsed">
+            <li
+                class="sidebar-item {{ request()->is('advisors*') || request()->is('advisor/create') ? 'active' : '' }} ">
+                <a data-target="#advisors" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i>
                     <span class="align-middle">Advisors</span>
                 </a>
                 <ul id="advisors"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('advisors*') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('advisors*') || request()->is('advisor/create') ? 'show' : '' }}"
                     data-parent="#sidebar">
 
                     <li class="sidebar-item {{ request()->is('advisors') ? 'active' : '' }}">
@@ -60,18 +61,26 @@
                             <span class="align-middle">All Advisors</span>
                         </a>
                     </li>
+                    <li
+                        class="sidebar-item {{ request()->is('users/create') || request()->is('advisor/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('advisor.create') }}">
+                            <i class="align-middle" data-feather="user-plus"></i>
+                            <span class="align-middle">Add New Advisor</span>
+                        </a>
+                    </li>
 
 
                 </ul>
             </li>
 
-            <li class="sidebar-item {{ request()->is('agencies*') ? 'active' : '' }} ">
-                <a data-target="#agencies" href="/agencies?role=3" class="sidebar-link collapsed">
+            <li
+                class="sidebar-item {{ request()->is('agencies*') || request()->is('agency/create') ? 'active' : '' }} ">
+                <a data-target="#agencies" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="layers"></i>
                     <span class="align-middle">Agencies</span>
                 </a>
                 <ul id="agencies"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('agencies*') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('agencies*') || request()->is('agency/create') ? 'show' : '' }}"
                     data-parent="#sidebar">
 
                     <li class="sidebar-item {{ request()->is('agencies') ? 'active' : '' }}">
@@ -80,23 +89,37 @@
                             <span class="align-middle">All Agencies</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {{ request()->is('agency/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('agency.create') }}">
+                            <i class="align-middle" data-feather="user-plus"></i>
+                            <span class="align-middle">Add New Agency</span>
+                        </a>
+                    </li>
 
                 </ul>
             </li>
 
-            <li class="sidebar-item {{ request()->is('creatives*') ? 'active' : '' }} ">
-                <a data-target="#creatives" href="/creatives?role=4" class="sidebar-link collapsed">
+            <li
+                class="sidebar-item {{ request()->is('creatives*') || request()->is('creative/create') ? 'active' : '' }} ">
+                <a data-target="#creatives" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="cloud"></i>
                     <span class="align-middle">Creatives</span>
                 </a>
                 <ul id="creatives"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('creatives*') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('creatives*') || request()->is('creative/create') ? 'show' : '' }}"
                     data-parent="#sidebar">
 
                     <li class="sidebar-item {{ request()->is('creatives') ? 'active' : '' }}">
                         <a class="sidebar-link" href="/creatives?role=4">
                             <i class="align-middle" data-feather="cloud"></i>
                             <span class="align-middle">All Creatives</span>
+                        </a>
+                    </li>
+                    <li
+                        class="sidebar-item {{ request()->is('users/create') || request()->is('creative/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('creative.create') }}">
+                            <i class="align-middle" data-feather="user-plus"></i>
+                            <span class="align-middle">Add New Creative</span>
                         </a>
                     </li>
 
@@ -172,13 +195,14 @@
                 </ul>
             </li>
 
-            <li class="sidebar-item {{ request()->is('locations*') ? 'active' : '' }} ">
+            <li
+                class="sidebar-item {{ request()->is('locations*') || request()->is('state/create') ? 'active' : '' }} ">
                 <a data-target="#locations" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="map-pin"></i>
                     <span class="align-middle">Locations</span>
                 </a>
                 <ul id="locations"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('locations*') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('locations*') || request()->is('state/create') || request()->is('city/create') ? 'show' : '' }}"
                     data-parent="#sidebar">
 
                     <li class="sidebar-item {{ request()->is('locations') ? 'active' : '' }}">
@@ -188,12 +212,26 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ request()->is('state/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('state.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New State</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('city/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('city.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New City</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
 
             <li class="sidebar-item {{ request()->is('categories*') ? 'active' : '' }} ">
                 <a data-target="#categories" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="map-pin"></i>
+                    <i class="align-middle" data-feather="layout"></i>
                     <span class="align-middle">Categories</span>
                 </a>
                 <ul id="categories"
@@ -202,8 +240,93 @@
 
                     <li class="sidebar-item {{ request()->is('categories') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('categories.index') }}">
-                            <i class="align-middle" data-feather="map-pin"></i>
+                            <i class="align-middle" data-feather="layout"></i>
                             <span class="align-middle">All Categories</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('categories/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('categories.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Category</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('industries*') ? 'active' : '' }} ">
+                <a data-target="#industries" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="radio"></i>
+                    <span class="align-middle">Industry Experiences</span>
+                </a>
+                <ul id="industries"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('industries*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('industries') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('industries.index') }}">
+                            <i class="align-middle" data-feather="radio"></i>
+                            <span class="align-middle">All Industries</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('industries/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('industries.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Industry</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('medias*') ? 'active' : '' }} ">
+                <a data-target="#medias" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="video"></i>
+                    <span class="align-middle">Media Experiences</span>
+                </a>
+                <ul id="medias"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('medias*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('medias') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('medias.index') }}">
+                            <i class="align-middle" data-feather="video"></i>
+                            <span class="align-middle">All Media Experiences</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('medias/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('medias.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Media</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('experiences*') ? 'active' : '' }} ">
+                <a data-target="#years_of_experience" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="crop"></i>
+                    <span class="align-middle">Years Of Experience</span>
+                </a>
+                <ul id="years_of_experience"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('experiences*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('experiences') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('experiences.index') }}">
+                            <i class="align-middle" data-feather="crop"></i>
+                            <span class="align-middle">All Experiences</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('experiences/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('experiences.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Experience</span>
                         </a>
                     </li>
 

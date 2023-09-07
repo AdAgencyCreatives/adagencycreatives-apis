@@ -17,6 +17,7 @@ class PostController extends Controller
         $post = Post::where('uuid', $uuid)->first();
 
         $post->load(['attachments', 'comments.user']);
+
         // dd($post);
         return view('pages.posts.detail', compact('post'));
     }

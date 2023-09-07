@@ -288,7 +288,7 @@ $(document).ready(function() {
                                 <h4>Agency Logo</h4>
                                 @if(isset($job->attachment))
                                 <img class="rounded-circle img-responsive mt-2 lazy"
-                                    src="{{ isset($job->attachment) ? asset('storage/' . $job->attachment->path) : asset('images/default.png') }}"
+                                    src="{{ isset($job->attachment) ? getAttachmentBasePath() . $job->attachment->path : asset('images/default.png') }}"
                                     alt="{{ $job->attachment->resource_type }}" width="100" height="100"
                                     style="border-radius: 50%;" />
                                 @else

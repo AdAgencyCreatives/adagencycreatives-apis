@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
+use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\YearsOfExperienceController;
 use App\Models\Group;
 use Illuminate\Support\Facades\Route;
 
@@ -61,7 +63,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('attachments', AttachmentController::class);
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('industries', IndustryController::class);
+    Route::get('get_categories', [CategoryController::class, 'get_categories']);
+    Route::apiResource('industry-experiences', IndustryController::class);
+    Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
+    Route::apiResource('media-experiences', MediaController::class);
+    Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
+    Route::apiResource('years-of-experience', YearsOfExperienceController::class);
     Route::apiResource('locations', LocationController::class);
     Route::apiResource('reviews', ReviewController::class);
 
@@ -74,7 +81,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::apiResource('groups', GroupController::class)->except(['store']);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
-    Route::get('get_categories', [CategoryController::class, 'get_categories']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);

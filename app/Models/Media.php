@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-class Industry extends Model
+class Media extends Model
 {
     use HasFactory;
+
+    protected $table = 'medias';
 
     protected $fillable = [
         'uuid',
@@ -18,15 +20,15 @@ class Industry extends Model
     protected static function booted()
     {
         static::created(function () {
-            Cache::forget('all_industries');
+            Cache::forget('all_medias');
         });
 
         static::updated(function () {
-            Cache::forget('all_industries');
+            Cache::forget('all_medias');
         });
 
         static::deleted(function () {
-            Cache::forget('all_industries');
+            Cache::forget('all_medias');
         });
     }
 }

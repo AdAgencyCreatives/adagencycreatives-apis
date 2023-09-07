@@ -6,22 +6,22 @@ use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Industry\StoreIndustryRequest;
-use App\Http\Requests\Industry\UpdateIndustryRequest;
+use App\Http\Requests\Media\StoreMediaRequest;
+use App\Http\Requests\Media\UpdateMediaRequest;
 use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
-use App\Models\Industry;
+use App\Models\Media;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class IndustryController extends Controller
+class MediaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Industry::class)
+        $query = QueryBuilder::for(Media::class)
             ->allowedFilters([
                 'name',
             ]);
@@ -31,16 +31,16 @@ class IndustryController extends Controller
         return new CategoryCollection($industries);
     }
 
-    public function store(StoreIndustryRequest $request)
+    public function store(StoreMediaRequest $request)
     {
         try {
             $request->merge([
                 'uuid' => Str::uuid(),
             ]);
 
-            $industry = Industry::create($request->all());
+            $media = Media::create($request->all());
 
-            return new CategoryResource($industry);
+            return new CategoryResource($media);
         } catch (\Exception $e) {
             throw new ApiException($e, 'CS-01');
         }
@@ -49,9 +49,9 @@ class IndustryController extends Controller
     public function show($uuid)
     {
         try {
-            $industry = Industry::where('uuid', $uuid)->firstOrFail();
+            $media = Media::where('uuid', $uuid)->firstOrFail();
 
-            return new CategoryResource($industry);
+            return new CategoryResource($media);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -59,13 +59,13 @@ class IndustryController extends Controller
         }
     }
 
-    public function update(UpdateIndustryRequest $request, $uuid)
+    public function update(UpdateMediaRequest $request, $uuid)
     {
         try {
-            $industry = Industry::where('uuid', $uuid)->first();
-            $industry->update($request->only('name'));
+            $media = Media::where('uuid', $uuid)->first();
+            $media->update($request->only('name'));
 
-            return new CategoryResource($industry);
+            return new CategoryResource($media);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
@@ -74,10 +74,10 @@ class IndustryController extends Controller
     public function destroy($uuid)
     {
         try {
-            $industry = Industry::where('uuid', $uuid)->firstOrFail();
-            $industry->delete();
+            $media = Media::where('uuid', $uuid)->firstOrFail();
+            $media->delete();
 
-            return new CategoryResource($industry);
+            return new CategoryResource($media);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -85,13 +85,13 @@ class IndustryController extends Controller
         }
     }
 
-    public function get_industries(Request $request)
+    public function get_medias(Request $request)
     {
-        $cacheKey = 'all_industries';
-        $industries = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new CategoryCollection(Industry::all());
+        $cacheKey = 'all_medias';
+        $medias = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return new CategoryCollection(Media::all());
         });
 
-        return $industries;
+        return $medias;
     }
 }
