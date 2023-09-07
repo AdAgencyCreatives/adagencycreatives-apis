@@ -33,7 +33,6 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-
         // dd($request->all());
         if ($request->hasFile('file')) {
             $attachment = $this->storeImage($request);

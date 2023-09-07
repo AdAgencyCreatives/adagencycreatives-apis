@@ -114,6 +114,10 @@ $(document).ready(function() {
     </div>
 </div>
 
+@if(session('success'))
+<x-alert type="success"></x-alert>
+@endif
+
 <div class="row">
 
     <div class="col-md-12 col-xl-12">
@@ -161,7 +165,7 @@ $(document).ready(function() {
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Cover Image</label>
                                     <div>
-                                        <input type="file" class="validation-file" name="cover_image">
+                                        <input type="file" class="validation-file" name="file">
                                     </div>
                                 </div>
                             </div>
@@ -170,9 +174,13 @@ $(document).ready(function() {
                         <div class="col-md-4">
                             <div class="text-center">
                                 <h4>Cover Image</h4>
+                                @if(isset($group->attachment))
                                 <img class="rounded-circle img-responsive mt-2 lazy"
                                     src="{{ isset($group->attachment) ? getAttachmentBasePath() . $group->attachment->path : asset('images/default.png') }}"
                                     alt="{{ $group->attachment->resource_type }}" width="300" height="300" />
+                                @else
+                                <p>No cover image uploaded yet</p>
+                                @endif
                             </div>
                         </div>
                     </div>

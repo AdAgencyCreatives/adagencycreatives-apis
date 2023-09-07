@@ -112,23 +112,11 @@ function fetchJobObject() {
 
 function fetchIndustries() {
 
-    var requestData = {
-        per_page: -1
-    };
-
     $.ajax({
-        url: '/api/v1/industries',
+        url: '/api/v1/industry-experiences',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
-            populateFilter(response.data, '#media');
-            var media_experience = "{{ $job->media_experience }}";
-            var mediaArray = media_experience.split(',');
-            mediaArray.forEach(function(uuid) {
-                $('#media option[value="' + uuid + '"]').prop('selected', true);
-            });
-            $('#media').trigger('change');
 
             populateFilter(response.data, '#industry');
             var industry_experience = "{{ $job->industry_experience }}";
@@ -145,9 +133,31 @@ function fetchIndustries() {
     });
 }
 
+function fetchMedias() {
+    $.ajax({
+        url: '/api/v1/media-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#media');
+            var media_experience = "{{ $job->media_experience }}";
+            var mediaArray = media_experience.split(',');
+            mediaArray.forEach(function(uuid) {
+                $('#media option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#media').trigger('change');
+
+        },
+        error: function() {
+            alert('Failed to fetch medias from the API.');
+        }
+    });
+}
+
 $(document).ready(function() {
     fetchJobObject();
     fetchIndustries();
+    fetchMedias();
     fetchCategories();
     fetchApplications();
 
