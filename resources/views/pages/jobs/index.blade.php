@@ -63,22 +63,29 @@ function fetchCategories() {
 }
 
 function fetchIndustries() {
-
-    var requestData = {
-        per_page: -1
-    };
-
     $.ajax({
-        url: 'api/v1/industries',
+        url: 'api/v1/industry-experiences',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
-            populateFilter(response.data, '#media');
             populateFilter(response.data, '#industry');
         },
         error: function() {
             alert('Failed to fetch industries from the API.');
+        }
+    });
+}
+
+function fetchMedias() {
+    $.ajax({
+        url: 'api/v1/media-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#media');
+        },
+        error: function() {
+            alert('Failed to fetch medias from the API.');
         }
     });
 }
@@ -142,6 +149,7 @@ $(document).ready(function() {
     fetchData(currentPage);
     fetchCategories();
     fetchIndustries();
+    fetchMedias();
 
     $(document).on('click', '.delete-btn', function() {
         var resourceId = $(this).data('id');

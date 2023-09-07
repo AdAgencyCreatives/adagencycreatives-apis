@@ -108,38 +108,6 @@ $(document).ready(function() {
         fetchData(currentPage);
     });
 
-    $('#new_category_form').submit(function(event) {
-        event.preventDefault();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').val()
-            }
-        });
-
-        var data = {
-            name: $('#new_category').val()
-        };
-
-        $.ajax({
-            url: '/api/v1/categories',
-            method: 'POST',
-            data: data,
-            success: function(response) {
-                Swal.fire({
-                    title: 'Success',
-                    text: "Category Created Successfully.",
-                    icon: 'success'
-                }).then((result) => {
-                    fetchData();
-                })
-            },
-            error: function(error) {
-                console.error('Error creating category:', error);
-            }
-        });
-    });
-
     $('table').on('dblclick', '.category-name', function() {
         var currentText = $(this).text();
         var id = $(this).data('id');
@@ -251,6 +219,4 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-
-@include('pages.categories.add-category')
 @endsection

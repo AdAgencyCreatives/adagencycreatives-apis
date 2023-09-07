@@ -3,8 +3,24 @@
 @section('title', __('Add User'))
 @section('scripts')
 <script>
+function selectRoleDropdown() {
+    var currentUrl = window.location.href;
+    var valueToMatch = "";
+
+    if (currentUrl.includes("advisor")) {
+        valueToMatch = "advisor";
+    } else if (currentUrl.includes("agency")) {
+        valueToMatch = "agency";
+    } else if (currentUrl.includes("creative")) {
+        valueToMatch = "creative";
+    }
+    $("#role").val(valueToMatch);
+    $('#role').trigger('change');
+}
+
 $(document).ready(function() {
 
+    selectRoleDropdown();
     const submitButton = document.getElementById('submitButton');
     $("form").on("submit", function(event) {
 
@@ -75,6 +91,9 @@ $(document).ready(function() {
             }
         });
     });
+
+
+
 });
 </script>
 @endsection

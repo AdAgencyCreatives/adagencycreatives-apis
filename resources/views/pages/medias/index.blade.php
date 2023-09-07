@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('States'))
+@section('title', __('Categories'))
 
 @section('scripts')
 <script src="{{ asset('/assets/js/custom.js') }}"></script>
@@ -10,22 +10,17 @@ var totalPages = 1;
 var perPage = 10;
 var filters = {};
 
-function fetchStates() {
-
-    var requestData = {
-        per_page: -1
-    };
+function fetchMedias() {
 
     $.ajax({
-        url: 'api/v1/locations',
+        url: 'api/v1/get_media-experiences',
         method: 'GET',
         dataType: 'json',
-        data: requestData,
         success: function(response) {
-            populateGroupFilter(response.data, '#state');
+            populateGroupFilter(response.data, '#media');
         },
         error: function() {
-            alert('Failed to fetch states from the API.');
+            alert('Failed to fetch industries from the API.');
         }
     });
 }
@@ -36,9 +31,9 @@ function fetchData(page, filters = []) {
         per_page: perPage
     };
 
-    var selectedState = $('#state option:selected').text();
+    var selectedState = $('#media option:selected').text();
 
-    if (selectedState != 'Select State') {
+    if (selectedState != 'Select Media Experience') {
         filters = {
             name: selectedState
         };
@@ -49,9 +44,9 @@ function fetchData(page, filters = []) {
             requestData[`filter[${key}]`] = filters[key];
         }
     });
-    console.log(requestData);
+
     $.ajax({
-        url: 'api/v1/locations',
+        url: 'api/v1/media-experiences',
         method: 'GET',
         data: requestData,
         dataType: 'json',
@@ -63,32 +58,29 @@ function fetchData(page, filters = []) {
 
         },
         error: function() {
-            alert('Failed to fetch states from the API.');
+            alert('Failed to fetch industries from the API.');
         }
     });
 }
 
-function populateTable(states) {
-    var tbody = $('#locations-table tbody');
+function populateTable(categories) {
+    var tbody = $('#categories-table tbody');
     tbody.empty();
-    console.log(states.length);
-    if (states.length === 0) {
+    console.log(categories.length);
+    if (categories.length === 0) {
         displayNoRecordsMessage(7);
     }
 
-    $.each(states, function(index, state) {
-        var editUrl = "/locations/" + state.id + "/cities";
+    $.each(categories, function(index, category) {
         var roleBasedActions = '';
 
-
-        roleBasedActions = '<a href="' + editUrl +
-            '">Cities</a> | <a href="#" class="delete-state-btn" data-id="' +
-            state.uuid + '">Delete</a>';
+        roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
+            category.id + '">Delete</a>';
 
         var row = '<tr>' +
-            '<td>' + state.id + '</td>' +
-            '<td class="state-name" data-id="' + state.uuid + '">' + state.name + '</td>' +
-            '<td>' + state.created_at + '</td>' +
+            '<td>' + category.id + '</td>' +
+            '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
+            '<td>' + category.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
 
             '</tr>';
@@ -96,18 +88,15 @@ function populateTable(states) {
     });
 }
 
-
-
 $(document).ready(function() {
 
     fetchData();
 
-    fetchStates();
-    $(document).on('click', '.delete-state-btn', function() {
+    fetchMedias();
+    $(document).on('click', '.delete-category-btn', function() {
         var resourceId = $(this).data('id');
         var csrfToken = '{{ csrf_token() }}';
-        console.log(csrfToken);
-        deleteConfirmation(resourceId, 'location', 'locations', csrfToken);
+        deleteConfirmation(resourceId, 'media experience', 'media-experiences', csrfToken);
     });
 
 
@@ -118,39 +107,7 @@ $(document).ready(function() {
         fetchData(currentPage);
     });
 
-    $('#new_state_form').submit(function(event) {
-        event.preventDefault();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').val()
-            }
-        });
-
-        var data = {
-            name: $('#new_state').val()
-        };
-
-        $.ajax({
-            url: '/api/v1/locations',
-            method: 'POST',
-            data: data,
-            success: function(response) {
-                Swal.fire({
-                    title: 'Success',
-                    text: "State Created Successfully.",
-                    icon: 'success'
-                }).then((result) => {
-                    fetchData();
-                })
-            },
-            error: function(error) {
-                console.error('Error creating state:', error);
-            }
-        });
-    });
-
-    $('table').on('dblclick', '.state-name', function() {
+    $('table').on('dblclick', '.category-name', function() {
         var currentText = $(this).text();
         var id = $(this).data('id');
         var inputField = $('<input>', {
@@ -160,14 +117,11 @@ $(document).ready(function() {
 
         $(this).html(inputField);
 
-        // Focus on the input field
         inputField.focus();
-
-        // Handle input field blur event
         inputField.on('blur', function() {
             var newText = $(this).val();
             $(this).parent().text(
-                newText); // Replace the input field with the updated state name
+                newText);
 
             console.log(id);
             console.log(newText);
@@ -177,9 +131,8 @@ $(document).ready(function() {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}",
                 }
             });
-            // Send AJAX request
             $.ajax({
-                url: '/api/v1/locations/' + id,
+                url: '/api/v1/media-experiences/' + id,
                 method: 'PUT',
                 data: {
                     name: newText
@@ -196,7 +149,7 @@ $(document).ready(function() {
 
                 },
                 error: function(error) {
-                    console.error('Error updating state:', error);
+                    console.error('Error updating industry experience:', error);
                 }
             });
         });
@@ -209,7 +162,7 @@ $(document).ready(function() {
 @section('content')
 
 
-@include('pages.locations.state.filters')
+@include('pages.medias.filters')
 
 <div class="row">
     <div class="col-12">
@@ -232,12 +185,12 @@ $(document).ready(function() {
                     </div>
                     <div class="row dt-row">
                         <div class="col-sm-12">
-                            <table id="locations-table" class="table table-striped dataTable no-footer dtr-inline"
+                            <table id="categories-table" class="table table-striped dataTable no-footer dtr-inline"
                                 style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>State</th>
+                                        <th>Name</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
@@ -265,5 +218,4 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-
 @endsection

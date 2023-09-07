@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PlanController;
-use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -35,8 +37,8 @@ Route::get('/test', function () {
 });
 
 Route::get('/reset', function () {
-    Artisan::call("migrate:fresh --seed");
-    Artisan::call("optimize:clear");
+    Artisan::call('migrate:fresh --seed');
+    Artisan::call('optimize:clear');
 
     echo 'Cache Cleared';
 
@@ -48,14 +50,17 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('creatives', UserController::class)->parameters([
         'creatives' => 'user',
     ]);
-
     Route::resource('agencies', UserController::class)->parameters([
         'agencies' => 'user',
     ]);
-
     Route::resource('advisors', UserController::class)->parameters([
         'advisors' => 'user',
     ]);
+
+    Route::get('advisor/create', [UserController::class, 'create'])->name('advisor.create');
+    Route::get('agency/create', [UserController::class, 'create'])->name('agency.create');
+    Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
+
     Route::resource('users', UserController::class);
     Route::get('users/{user}/details', [UserController::class, 'details']);
     Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
@@ -69,10 +74,16 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('jobs', JobController::class);
     Route::get('jobs/{job}/details', [JobController::class, 'details']);
 
+    // Taxonomies
+    Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
+    Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
     Route::resource('locations', LocationController::class);
     Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
-
     Route::resource('categories', CategoryController::class);
+    Route::resource('industries', IndustryController::class);
+    Route::resource('medias', MediaController::class);
+    Route::resource('experiences', ExperienceController::class);
+
     Route::resource('reports', ReportController::class);
 
     include_once 'community.php';

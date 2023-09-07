@@ -12,6 +12,16 @@ class LocationController extends Controller
         return view('pages.locations.state.states');
     }
 
+    public function create()
+    {
+        return view('pages.locations.state.add');
+    }
+
+    public function city_create()
+    {
+        return view('pages.locations.city.add');
+    }
+
     public function cities(Location $location)
     {
         return view('pages.locations.city.cities', get_defined_vars());

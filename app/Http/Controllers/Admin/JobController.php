@@ -26,12 +26,14 @@ class JobController extends Controller
     public function details($id)
     {
         $job = Job::with('applications', 'attachment')->where('uuid', $id)->first();
+
         // dd($job->toArray());
         return view('pages.jobs.detail.detail', compact('job'));
     }
 
     public function store(Request $request)
     {
+
         // dd($request->all());
         if ($request->hasFile('file')) {
             $attachment = $this->storeImage($request);
@@ -71,8 +73,7 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $job = Job::where('id', $id)->first();
-        // dd($job);
-        // dump($request->all());
+
         if ($request->hasFile('file')) {
             $attachment = $this->storeImage($request);
         }
@@ -92,6 +93,7 @@ class JobController extends Controller
                 'resource_id' => $job->id,
             ]);
         }
+
         Session::flash('success', 'Job updated successfully');
 
         return redirect()->back();
@@ -104,14 +106,15 @@ class JobController extends Controller
         $resource_type = 'agency_logo';
 
         $extension = $file->getClientOriginalExtension();
-        $filename = $uuid.'.'.$extension;
-        $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
+
+        $folder = $resource_type.'/'.$uuid;
+        $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
             'uuid' => $uuid,
             'user_id' => auth()->id(),
             'resource_type' => $resource_type,
-            'path' => $file_path,
+            'path' => $filePath,
             'extension' => $extension,
         ]);
 

@@ -171,8 +171,8 @@ $(document).ready(function() {
                             <div class="text-center">
                                 <h4>Cover Image</h4>
                                 <img class="rounded-circle img-responsive mt-2 lazy"
-                                    src="{{ isset($group->attachment) ? asset('storage/' . $group->attachment->path) : asset('images/default.png') }}"
-                                    alt="{{ $group->cover_image }}" width="300" height="300" />
+                                    src="{{ isset($group->attachment) ? getAttachmentBasePath() . $group->attachment->path : asset('images/default.png') }}"
+                                    alt="{{ $group->attachment->resource_type }}" width="300" height="300" />
                             </div>
                         </div>
                     </div>

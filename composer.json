@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "aws/aws-sdk-php-laravel": "^3.8",
         "beyondcode/laravel-websockets": "^1.14",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/cashier": "^14.12",
@@ -17,9 +18,10 @@
         "laravel/sanctum": "^3.0",
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.7",
+        "league/flysystem-aws-s3-v3": "^3.15",
+        "rap2hpoutre/laravel-log-viewer": "^2.0",
         "spatie/laravel-permission": "^5.10",
-        "spatie/laravel-query-builder": "^5.2",
-        "rap2hpoutre/laravel-log-viewer": "^2.0"
+        "spatie/laravel-query-builder": "^5.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

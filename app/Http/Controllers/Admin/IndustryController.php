@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class IndustryController extends Controller
 {
     public function index()
     {
-        return view('pages.categories.index');
+        return view('pages.industries.index');
     }
 
     public function create()
     {
-        return view('pages.categories.add');
+        return view('pages.industries.add');
     }
 }

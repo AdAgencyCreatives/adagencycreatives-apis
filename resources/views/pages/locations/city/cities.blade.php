@@ -364,5 +364,4 @@ $(document).ready(function() {
     </div>
 </div>
 
-@include('pages.locations.city.add-city')
 @endsection

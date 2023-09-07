@@ -9,7 +9,7 @@ use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
-/**
+    /**
      * Register any application services.
      */
     public function register(): void
@@ -49,7 +49,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         ]);
     }
 
-        /**
+    /**
      * Register the Telescope gate.
      *
      * This gate determines who can access Telescope in non-local environments.
@@ -58,7 +58,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     {
         Gate::define('viewTelescope', function ($user) {
             return in_array($user->email, [
-                'admin@gmail.com'
+                'admin@gmail.com',
             ]);
         });
     }

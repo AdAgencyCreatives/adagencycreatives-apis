@@ -25,17 +25,22 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('cover_image')) {
-            $attachment = $this->storeImage($request);
-        }
-
-        Group::create([
+        $group = Group::create([
             'uuid' => Str::uuid(),
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
-            'attachment_id' => isset($attachment) ? $attachment->id : null,
         ]);
+
+        if ($request->hasFile('file')) {
+            $attachment = $this->storeImage($request);
+
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $group->id,
+                ]);
+            }
+        }
 
         Session::flash('success', 'Group created successfully');
 
@@ -75,6 +80,7 @@ class GroupController extends Controller
     public function details(Group $group)
     {
         $group->load(['attachment', 'members.user']);
+
         // dd($group);
         // dd($group->attachment->path);
         return view('pages.groups.detail', compact('group'));
@@ -87,14 +93,14 @@ class GroupController extends Controller
         $resource_type = 'cover_image';
 
         $extension = $file->getClientOriginalExtension();
-        $filename = $uuid.'.'.$extension;
-        $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
+        $folder = $resource_type.'/'.$uuid;
+        $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
             'uuid' => $uuid,
             'user_id' => auth()->id(),
             'resource_type' => $resource_type,
-            'path' => $file_path,
+            'path' => $filePath,
             'extension' => $extension,
         ]);
 

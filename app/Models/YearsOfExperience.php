@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-class Industry extends Model
+class YearsOfExperience extends Model
 {
     use HasFactory;
 
@@ -18,15 +18,15 @@ class Industry extends Model
     protected static function booted()
     {
         static::created(function () {
-            Cache::forget('all_industries');
+            Cache::forget('years_of_experience');
         });
 
         static::updated(function () {
-            Cache::forget('all_industries');
+            Cache::forget('years_of_experience');
         });
 
         static::deleted(function () {
-            Cache::forget('all_industries');
+            Cache::forget('years_of_experience');
         });
     }
 }

@@ -135,6 +135,8 @@ class DatabaseSeeder extends Seeder
         // ********************************************************
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
+        $this->call(MediaSeeder::class);
+        $this->call(YearsOfExperienceSeeder::class);
         $this->call(PlansTableSeeder::class);
 
         //Generate some more users
