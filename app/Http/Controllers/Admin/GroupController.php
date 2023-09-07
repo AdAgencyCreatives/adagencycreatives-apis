@@ -49,28 +49,26 @@ class GroupController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $group = Group::findOrFail($id);
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
         $group->status = $request->input('status');
+        $group->save();
 
-        if ($request->hasFile('cover_image')) {
-            if ($group->attachment_id) {
-                $oldAttachment = Attachment::find($group->attachment_id);
-
-                if ($oldAttachment) {
-                    // Storage::disk('public')->delete($oldAttachment->path);
-                    $oldAttachment->delete();
-                }
-
-                $attachment = $this->storeImage($request);
-                $group->attachment_id = $attachment->id;
+        if ($request->hasFile('file')) {
+            if($group->attachment) {
+                $group->attachment->delete();
+            }
+            $attachment = $this->storeImage($request);
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                'resource_id' => $group->id,
+            ]);
             }
         }
 
-        // Save changes
-        $group->save();
 
         Session::flash('success', 'Group updated successfully');
 

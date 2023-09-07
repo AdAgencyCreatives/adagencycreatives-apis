@@ -290,3 +290,47 @@ function updateResourceStatus(userId, selectedStatus, url, csrfToken) {
         }
     });
 }
+
+function fetchCategories() {
+    $.ajax({
+        url: '/api/v1/get_categories',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            populateFilter(response.data, '#category');
+
+        },
+        error: function () {
+            alert('Failed to fetch categories from the API.');
+        }
+    });
+}
+
+function fetchIndustries() {
+    $.ajax({
+        url: '/api/v1/industry-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            populateFilter(response.data, '#industry');
+        },
+        error: function () {
+            alert('Failed to fetch industries from the API.');
+        }
+    });
+}
+
+function fetchMedias() {
+    $.ajax({
+        url: '/api/v1/media-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            populateFilter(response.data, '#media');
+
+        },
+        error: function () {
+            alert('Failed to fetch medias from the API.');
+        }
+    });
+}

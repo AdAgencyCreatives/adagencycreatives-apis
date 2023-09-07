@@ -5,45 +5,6 @@
 @section('scripts')
 <script src="{{ asset('/assets/js/custom.js') }}"></script>
 <script>
-function fetchCategories() {
-
-    $.ajax({
-        url: '/api/v1/get_categories',
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log(response);
-            populateFilter(response.data, '#category');
-
-        },
-        error: function() {
-            alert('Failed to fetch categories from the API.');
-        }
-    });
-}
-
-function fetchIndustries() {
-
-    var requestData = {
-        per_page: -1
-    };
-
-    $.ajax({
-        url: '/api/v1/industries',
-        method: 'GET',
-        data: requestData,
-        dataType: 'json',
-        success: function(response) {
-            populateFilter(response.data, '#media');
-            populateFilter(response.data, '#industry');
-
-        },
-        error: function() {
-            alert('Failed to fetch industries from the API.');
-        }
-    });
-}
-
 $(document).ready(function() {
 
     $(".daterange").daterangepicker({
@@ -56,9 +17,8 @@ $(document).ready(function() {
     });
 
     fetchIndustries();
+    fetchMedias();
     fetchCategories();
-
-
 });
 </script>
 @endsection
