@@ -17,11 +17,16 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('attachment_id')->nullable()->comment('profile picture');
+            $table->string('title');
             $table->string('years_of_experience');
+            $table->text('about');
             $table->string('type_of_work');
             $table->text('industry_experience')->nullable();
             $table->text('media_experience')->nullable();
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_urgent')->default(false);
+            $table->boolean('is_opentoremote')->default(false);
+            $table->boolean('is_opentorelocation')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

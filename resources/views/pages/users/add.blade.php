@@ -61,7 +61,8 @@ $(document).ready(function() {
                 console.log("API call success:", response);
                 Swal.fire({
                     title: 'Success',
-                    text: "User created successfully",
+                    text: response.data.role.toUpperCase() +
+                        " created successfully",
                     icon: 'success'
                 });
 

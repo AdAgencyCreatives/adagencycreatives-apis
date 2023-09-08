@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('educations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('resume_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('degree');
             $table->string('college');
             $table->timestamp('started_at');

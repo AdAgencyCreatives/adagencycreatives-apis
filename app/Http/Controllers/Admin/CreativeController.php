@@ -48,6 +48,7 @@ class CreativeController extends Controller
 
     public function update_qualification(Request $request, $uuid)
     {
+        // dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();
@@ -61,6 +62,7 @@ class CreativeController extends Controller
         }
 
         $creative->update([
+            'title' => $request->title,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);

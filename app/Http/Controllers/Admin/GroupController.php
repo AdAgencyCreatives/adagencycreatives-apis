@@ -58,17 +58,16 @@ class GroupController extends Controller
         $group->save();
 
         if ($request->hasFile('file')) {
-            if($group->attachment) {
+            if ($group->attachment) {
                 $group->attachment->delete();
             }
-            $attachment = $this->storeImage($request);
+            $attachment = $this->storeImage($request, 'aaa');
             if (isset($attachment) && is_object($attachment)) {
                 Attachment::whereId($attachment->id)->update([
-                'resource_id' => $group->id,
-            ]);
+                    'resource_id' => $group->id,
+                ]);
             }
         }
-
 
         Session::flash('success', 'Group updated successfully');
 
@@ -84,11 +83,10 @@ class GroupController extends Controller
         return view('pages.groups.detail', compact('group'));
     }
 
-    public function storeImage($request)
+    public function storeImage($request, $resource_type)
     {
         $uuid = Str::uuid();
         $file = $request->file;
-        $resource_type = 'cover_image';
 
         $extension = $file->getClientOriginalExtension();
         $folder = $resource_type.'/'.$uuid;

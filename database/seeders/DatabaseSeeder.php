@@ -85,13 +85,8 @@ class DatabaseSeeder extends Seeder
 
             $attachments = \App\Models\Attachment::factory(3)->create($data_user_id);
 
-            $resumes = \App\Models\Resume::factory(3)->create($data_user_id);
-
-            foreach ($resumes as $resume) {
-                $data = ['resume_id' => $resume->id];
-                \App\Models\Education::factory(2)->create($data);
-                \App\Models\Experience::factory(2)->create($data);
-            }
+            \App\Models\Education::factory(2)->create($data_user_id);
+            \App\Models\Experience::factory(2)->create($data_user_id);
 
             for ($i = 0; $i < 3; $i++) {
                 $attachment_id = $attachments->random()->id;

@@ -163,7 +163,7 @@ $(document).ready(function() {
                                 <select name="industry_experience[]" id="industry" required
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
-                                    <option value="-100"> Select Industry</option>
+                                    <option value="-100"> Select Industry Experience</option>
                                 </select>
                             </div>
                         </div>
@@ -171,12 +171,18 @@ $(document).ready(function() {
 
                     <div class="row">
                         <div class="col-12 col-lg-12">
+                            <!-- <div class="card-body text-center"> -->
+
+                            <span data-toggle="tooltip" data-placement="top" data-original-title="Tooltipdfdsf">Text</span>
+
+                            <!-- </div> -->
                             <div class="form-group">
-                                <label class="form-label" for="media"> Media </label>
+
+                                <label class="form-label" for="media"> Media Experience </label>
                                 <select name="media_experience[]" id="media" required
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
-                                    <option value="-100"> Select Media</option>
+                                    <option value="-100"> Select Media Experience</option>
 
                                 </select>
                             </div>

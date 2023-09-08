@@ -24,7 +24,7 @@ class Job extends Model
         'industry_experience',
         'media_experience',
         'salary_range',
-        'experience',
+        'years_of_experience',
         'apply_type',
         'external_link',
         'status',

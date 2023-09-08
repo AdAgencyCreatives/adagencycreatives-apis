@@ -15,11 +15,10 @@ class Agency extends Model
         'uuid',
         'user_id',
         'name',
-        'attachment_id',
         'about',
         'size',
-        'type_of_work',
-        'industry_specialty',
+        'industry_experience',
+        'media_experience',
     ];
 
     public function user()

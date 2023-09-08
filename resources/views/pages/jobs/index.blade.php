@@ -191,10 +191,9 @@ $(document).ready(function() {
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
-                                        <!-- <th>Description</th> -->
                                         <th>Category</th>
                                         <th>Employement Type</th>
-                                        <th>Labels</th>
+                                        <th>Workplace Preference</th>
                                         <th>Industry</th>
                                         <th>Media</th>
                                         <th>Status</th>

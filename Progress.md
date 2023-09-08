@@ -229,3 +229,22 @@ Admin can
 	- Can add new job
 	- Can update the Job (with more fields)
 	- Can manage categories (View | Update | Delete)
+
+## 04/9/2023 - Dashboard | Taxonomies
+- Admin can manage:
+	- Industry Experiences
+	- Media Experiences
+	- Years of Experiences
+-  Separate Add and View page for all taxonomies
+-  API endpoints for Industy, Media and Years of Experience
+
+## 05/9/2023 - Dashboard | Static to dynamic dropdowns for Taxonomies
+- Separate endpoints for industry & mdedia experiences
+- Years of experience is dynamic (from backend)
+- Few extra fields added in agency profile 
+- Some visual fixes 
+- Logs endpoint for viewing error logs for admin e.g `/logs`
+- Implemented AWS S3 bucket for storing images
+
+
+	

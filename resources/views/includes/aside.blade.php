@@ -308,11 +308,11 @@
             </li>
 
             <li class="sidebar-item {{ request()->is('experiences*') ? 'active' : '' }} ">
-                <a data-target="#years_of_experience" data-toggle="collapse" class="sidebar-link collapsed">
+                <a data-target="#years_of_experience_sidebar" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="crop"></i>
                     <span class="align-middle">Years Of Experience</span>
                 </a>
-                <ul id="years_of_experience"
+                <ul id="years_of_experience_sidebar"
                     class="sidebar-dropdown list-unstyled collapse {{ request()->is('experiences*') ? 'show' : '' }}"
                     data-parent="#sidebar">
 

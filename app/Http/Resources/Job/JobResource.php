@@ -20,7 +20,7 @@ class JobResource extends JsonResource
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getIndustryNames($this->media_experience),
             'salary_range' => $this->salary_range,
-            'experience' => $this->experience,
+            'experience' => $this->years_of_experience,
             'apply_type' => $this->apply_type,
             'external_link' => $this->external_link,
             'is_remote' => $this->is_remote,

@@ -42,17 +42,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="started_at"> Started At </label>
-                                    <input type="text" class="form-control" placeholder="Started At" disabled
-                                        value="{{ $education->started_at }}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="form-group">
-                                    <label class="form-label" for="completed_at"> Completed At </label>
+                                    <label class="form-label" for="completed_at"> Completion Date </label>
                                     <input type="text" class="form-control" placeholder="Completed At" disabled
                                         value="{{ $education->completed_at }}">
                                 </div>

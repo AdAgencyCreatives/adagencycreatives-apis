@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Attachment;
 use App\Models\Industry;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
@@ -16,5 +19,30 @@ if (! function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
         return 'https://ad-agency-creatives.s3.amazonaws.com/';
+    }
+}
+
+/**
+ * This method is called from Admin Controllers
+ */
+if (! function_exists('storeImage')) {
+    function storeImage($request, $user_id, $resource_type)
+    {
+        $uuid = Str::uuid();
+        $file = $request->file;
+
+        $extension = $file->getClientOriginalExtension();
+        $folder = $resource_type.'/'.$uuid;
+        $filePath = Storage::disk('s3')->put($folder, $file);
+
+        $attachment = Attachment::create([
+            'uuid' => $uuid,
+            'user_id' => $user_id,
+            'resource_type' => $resource_type,
+            'path' => $filePath,
+            'extension' => $extension,
+        ]);
+
+        return $attachment;
     }
 }

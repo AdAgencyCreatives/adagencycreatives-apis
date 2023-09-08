@@ -13,6 +13,18 @@
                     @method('PUT')
 
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="title">Title</label>
+                                <input type="text" class="form-control" name="title" placeholder="Job Title"
+                                    value="{{ $user->creative?->title }}">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="linkedin">LinkedIn Profile</label>

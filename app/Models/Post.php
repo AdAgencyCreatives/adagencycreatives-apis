@@ -22,7 +22,7 @@ class Post extends Model
 
     public function attachments()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->hasMany(Attachment::class, 'resource_id');
     }
 
     public function user()

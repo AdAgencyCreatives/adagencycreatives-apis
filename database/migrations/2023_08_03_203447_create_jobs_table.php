@@ -27,7 +27,7 @@ return new class extends Migration
             $table->text('industry_experience');
             $table->text('media_experience');
             $table->string('salary_range');
-            $table->string('experience');
+            $table->string('years_of_experience');
             $table->string('apply_type');
             $table->string('external_link')->nullable();
             $table->integer('status')->comment('0:pending, 1:approved, 2:rejected, 3:expired, 4:filled, 5:draft, 6:published');
