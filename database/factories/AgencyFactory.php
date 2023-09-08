@@ -14,11 +14,10 @@ class AgencyFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'name' => fake()->name(),
-            'attachment_id' => null,
             'about' => fake()->paragraph(),
             'size' => fake()->randomElement([10, 50, 100, 500]),
-            'type_of_work' => fake()->randomElement(['Freelance', 'Contract', 'Full-time', 'Part-time']),
-            'industry_specialty' => '1,2,3,4',
+            'industry_experience' => '1,2,3,4',
+            'media_experience' => '1,2,3,4',
             'created_at' => now(),
             'updated_at' => now(),
         ];

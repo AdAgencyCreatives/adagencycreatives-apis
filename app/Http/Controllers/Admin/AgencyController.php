@@ -9,40 +9,38 @@ use App\Models\Link;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AgencyController extends Controller
 {
     public function update(Request $request, $uuid)
     {
+        // dd($request->all());
         $agency = Agency::where('uuid', $uuid)->first();
         $user = User::where('id', $agency->user_id)->first();
 
         $uuid = Str::uuid();
         if ($request->has('file') && is_object($request->file)) {
-            $file = $request->file;
-            $resource_type = 'agency_logo';
+            //Delete Previous logo
+            if ($user->attachments->where('resource_type', 'agency_logo')->first()) {
+                $user->attachments->where('resource_type', 'agency_logo')->first()->delete();
+            }
 
-            $extension = $file->getClientOriginalExtension();
-            $filename = $uuid.'.'.$extension;
-            $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
+            $attachment = storeImage($request, $user->id, 'agency_logo');
 
-            $attachment = Attachment::create([
-                'uuid' => $uuid,
-                'user_id' => $user->id,
-                'resource_type' => $resource_type,
-                'path' => $file_path,
-                'extension' => $extension,
-            ]);
-
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $agency->id,
+                ]);
+            }
         }
 
         $request->merge([
-            'industry_specialty' => ''.implode(',', $request->industry_specialty).'',
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
-        // dd($request->all());
-        $data = $request->only(['name', 'size', 'type_of_work', 'industry_specialty', 'about']);
+
+        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured']);
         foreach ($data as $key => $value) {
             $agency->$key = $value;
         }

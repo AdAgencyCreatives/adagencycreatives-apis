@@ -1,24 +1,11 @@
 <script>
-
 function fetchIndustriesForCreative() {
-    var requestData = {
-        per_page: -1
-    };
 
     $.ajax({
-        url: '/api/v1/industries',
+        url: '/api/v1/get_industry-experiences',
         method: 'GET',
-        data: requestData,
         dataType: 'json',
         success: function(response) {
-            populateFilter(response.data, '#media');
-            var media_experience = "{{ $user->creative?->media_experience }}";
-            var mediaArray = media_experience.split(',');
-            mediaArray.forEach(function(uuid) {
-                $('#media option[value="' + uuid + '"]').prop('selected', true);
-            });
-            $('#media').trigger('change');
-
             populateFilter(response.data, '#industry');
             var industry_experience = "{{ $user->creative?->industry_experience }}";
             var industryArray = industry_experience.split(',');
@@ -34,44 +21,85 @@ function fetchIndustriesForCreative() {
     });
 }
 
+function fetchMediasForCreative() {
+    $.ajax({
+        url: '/api/v1/get_media-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#media');
+            var media_experience = "{{ $user->creative?->media_experience }}";
+            var mediaArray = media_experience.split(',');
+            mediaArray.forEach(function(uuid) {
+                $('#media option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#media').trigger('change');
+
+        },
+        error: function() {
+            alert('Failed to fetch medias from the API.');
+        }
+    });
+}
+
 function fetchIndustriesForAgency() {
+    $.ajax({
+        url: '/api/v1/get_industry-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#industry');
+            var industry_experience = "{{ $user->agency?->industry_experience }}";
+            var industryArray = industry_experience.split(',');
+            industryArray.forEach(function(uuid) {
+                $('#industry option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#industry').trigger('change');
 
-var requestData = {
-    per_page: -1
-};
+        },
+        error: function() {
+            alert('Failed to fetch industries from the API.');
+        }
+    });
+}
 
-$.ajax({
-    url: '/api/v1/industries',
-    method: 'GET',
-    data: requestData,
-    dataType: 'json',
-    success: function(response) {
-        populateFilter(response.data, '#industry');
-        var industry_experience = "{{ $user->agency?->industry_specialty }}";
-        var industryArray = industry_experience.split(',');
-        industryArray.forEach(function(uuid) {
-            $('#industry option[value="' + uuid + '"]').prop('selected', true);
-        });
-        $('#industry').trigger('change');
+function fetchMediasForAgency() {
+    $.ajax({
+        url: '/api/v1/get_media-experiences',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#media');
+            var industry_experience = "{{ $user->agency?->media_experience }}";
+            var industryArray = industry_experience.split(',');
+            industryArray.forEach(function(uuid) {
+                $('#media option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#media').trigger('change');
 
-    },
-    error: function() {
-        alert('Failed to fetch industries from the API.');
-    }
-});
+        },
+        error: function() {
+            alert('Failed to fetch medias from the API.');
+        }
+    });
 }
 
 
-    $(document).ready(function() {
+
+$(document).ready(function() {
     var user = @json($user);
-  
-    if(user.role === 'agency' || user.role === 'advisor') {
+
+    if (user.role === 'agency' || user.role === 'advisor') {
         fetchIndustriesForAgency();
-    }
-    else if(user.role === 'creative') {
+        fetchMediasForAgency();
+    } else if (user.role === 'creative') {
+        var creative_years_of_experience = "{{ $user->creative?->years_of_experience }}";
+        fetchYearsOfExperience(creative_years_of_experience);
         fetchIndustriesForCreative();
+        fetchMediasForCreative();
+
     }
- 
+
     $("#profile-form").on("submit", function(event) {
         event.preventDefault();
 

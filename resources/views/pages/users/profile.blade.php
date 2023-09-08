@@ -64,10 +64,10 @@ Profile
                 @if($user->role == 'creative')
                 <a class="list-group-item list-group-item-action" data-toggle="list" href="#educations" role="tab"
                     aria-selected="true">
-                    Educations
+                    Education
                 </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#experiences" role="tab"
                     aria-selected="true">
-                    Experiences
+                    Experience
                 </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#qualifications"
                     role="tab" aria-selected="true">
                     Qualifications

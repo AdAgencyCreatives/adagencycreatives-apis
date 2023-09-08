@@ -154,12 +154,17 @@ function fetchMedias() {
     });
 }
 
+
 $(document).ready(function() {
     fetchJobObject();
+    fetchApplications();
+    fetchCategories();
     fetchIndustries();
     fetchMedias();
-    fetchCategories();
-    fetchApplications();
+
+    var years_of_experience = "{{ $job->years_of_experience }}";
+    console.log(years_of_experience);
+    fetchYearsOfExperience(years_of_experience);
 
     $('#save-job').click(function(event) {
         event.preventDefault();
@@ -452,18 +457,10 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="experience"> Experience </label>
-                                <select name="experience" id="experience"
+                                <label class="form-label" for="years_of_experience"> Years of experience </label>
+                                <select name="years_of_experience" id="years_of_experience"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Experience</option>
-                                    <option value="Junior 0-2 years" @if($job->experience == 'Junior 0-2 years')
-                                        selected @endif>Junior 0-2 years</option>
-                                    <option value="Mid-level 2-5 years" @if($job->experience == 'Mid-level 2-5 years')
-                                        selected @endif>Mid-level 2-5 years</option>
-                                    <option value="Senior 5-10 years" @if($job->experience == 'Senior 5-10 years')
-                                        selected @endif>Senior 5-10 years</option>
-                                    <option value="Director 10+ years" @if($job->experience == 'Director 10+ years')
-                                        selected @endif>Director 10+ years</option>
                                 </select>
                             </div>
                         </div>

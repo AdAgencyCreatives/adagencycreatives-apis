@@ -12,6 +12,12 @@ class Creative extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'uuid',
+        'user_id',
+        'title',
+        'about',
+        'type_of_work',
+        'years_of_experience',
         'industry_experience',
         'media_experience',
     ];

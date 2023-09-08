@@ -56,7 +56,7 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="industry"> Industry </label>
+                                <label class="form-label" for="industry"> Industry Experience </label>
                                 <select name="industry[]" id="industry"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
@@ -68,7 +68,7 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="media"> Media </label>
+                                <label class="form-label" for="media"> Media Experience </label>
                                 <select name="media[]" id="media" class="form-control form-select custom-select select2"
                                     multiple="multiple" data-toggle="select2">
                                     <option value="-100"> Select Media</option>
@@ -81,7 +81,7 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="employement_type"> Labels </label>
+                                <label class="form-label" for="employement_type"> Workplace Preference </label>
                                 <select class="form-control select2" id="labels" multiple="multiple" name="labels[]">
                                     <option value="is_remote">Remote</option>
                                     <option value="is_hybrid">Hybrid</option>
@@ -99,8 +99,6 @@
                         <div class="col-sm mt-4">
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Apply</button>
                             <button type="button" class="btn btn-sm btn-secondary mt-2" id="clear-button">Clear</button>
-
-
                         </div>
                     </div>
 

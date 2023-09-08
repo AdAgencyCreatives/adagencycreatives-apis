@@ -64,15 +64,16 @@ class UserController extends Controller
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
                 $agency->name = 'Default Agency';
-                $agency->about = '';
                 $agency->size = '10';
-                $agency->type_of_work = '';
+                $agency->about = '';
                 $agency->save();
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = Str::uuid();
                 $creative->user_id = $user->id;
+                $creative->title = 'Default Creative';
                 $creative->years_of_experience = 'Junior 0-2 years';
+                $creative->about = '';
                 $creative->type_of_work = 'Internship';
                 $creative->save();
             }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('resume_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->string('company');
             $table->text('description');

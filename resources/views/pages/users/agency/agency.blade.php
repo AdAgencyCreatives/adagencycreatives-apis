@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="type_of_work"> Type of work </label>
                                 <select name="type_of_work" id="type_of_work"
@@ -49,15 +49,25 @@
                                 </select>
                             </div>
 
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="industry"> Industry Experience </label>
-                                <select name="industry_specialty[]" id="industry" required
+                                <select name="industry_experience[]" id="industry" required
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
-                                    <option value="-100"> Select Industry Speciality</option>
+                                    <option value="-100"> Select Industry Experience</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="media"> Media Experience </label>
+                                <select name="media_experience[]" id="media" required
+                                    class="form-control form-select custom-select select2" multiple="multiple"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select Media Experience</option>
                                 </select>
                             </div>
                         </div>
@@ -101,11 +111,25 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label" for="is_visible"> Show Company Profile </label>
+                                <label class="form-label" for="is_visible"> Show Profile </label>
                                 <select name="is_visible" id="is_visible"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="1" @if($user->is_visible == 1) selected @endif> Show</option>
                                     <option value="0" @if($user->is_visible == 0) selected @endif> Hide</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_featured"> Featured? </label>
+                                <select name="is_featured" id="is_featured"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->agency?->is_featured == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->agency?->is_featured == 0) selected @endif> No</option>
 
                                 </select>
                             </div>
@@ -128,9 +152,13 @@
                         <div class="col-md-6">
                             <div class="text-center">
                                 <h4>Logo</h4>
+                                @if(count($user->attachments) > 0)
                                 <img class="rounded-circle img-responsive mt-2 lazy"
-                                    src="{{ isset($user->attachments[0]) ? asset('storage/' . $user->attachments[0]['path']) : asset('images/default.png') }}"
-                                    alt="" width="300" height="300" />
+                                    src="{{ getAttachmentBasePath() . $user->attachments[0]['path'] }}" alt=""
+                                    width="300" height="300" />
+                                @else
+                                <p>No logo uploaded yet</p>
+                                @endif
                             </div>
                         </div>
                     </div>

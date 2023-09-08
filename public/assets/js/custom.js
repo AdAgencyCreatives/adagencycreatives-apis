@@ -170,10 +170,10 @@ function getPlanBadge(plan) {
 
 function displayJobOptionsBadges(job) {
     const optionColors = {
-        "is_remote": 'info',
-        "is_hybrid": 'warning',
-        "is_onsite": 'success',
-        "is_featured": 'primary',
+        "is_remote": 'success',
+        "is_hybrid": 'info',
+        "is_onsite": 'secondary',
+        "is_featured": 'warning',
         "is_urgent": 'danger'
     };
 
@@ -201,7 +201,6 @@ function displayJobOptionsBadges(job) {
 
 function populateFilter(categories, div_id) {
     var selectElement = $(div_id);
-
     $.each(categories, function (index, category) {
         var option = $('<option>', {
             value: category.id,
@@ -331,6 +330,32 @@ function fetchMedias() {
         },
         error: function () {
             alert('Failed to fetch medias from the API.');
+        }
+    });
+}
+
+function fetchYearsOfExperience(user_experience) {
+    $.ajax({
+        url: '/api/v1/years-of-experience',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            var selectElement = $('#years_of_experience');
+            $.each(response.data, function (index, experience) {
+                var option = $('<option>', {
+                    value: experience.name,
+                    text: experience.name
+                });
+
+                selectElement.append(option);
+            });
+
+            $('#years_of_experience').val(user_experience);
+            $('#years_of_experience').trigger('change');
+
+        },
+        error: function () {
+            alert('Failed to fetch years-of-experiences from the API.');
         }
     });
 }
