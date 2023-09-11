@@ -27,7 +27,6 @@ use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
-use App\Models\Group;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,7 +43,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 //auth:sanctum
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware([])->group(function () {
     /**
      * Job Board Routes
      */

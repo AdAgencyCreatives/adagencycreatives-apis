@@ -29,23 +29,16 @@
                                 <select name="type_of_work" id="type_of_work"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Type</option>
-                                    <option value="Freelance" @if($user->creative->type_of_work == 'Freelance') selected
-                                        @endif>Freelance</option>
-                                    <option value="Contract" @if($user->creative->type_of_work == 'Contract') selected
-                                        @endif>Contract</option>
-                                    <option value="Part-time" @if($user->creative->type_of_work == 'Part-time') selected
-                                        @endif>Part-time</option>
-                                    <option value="Full-time" @if($user->creative->type_of_work == 'Full-time') selected
-                                        @endif>Full-time</option>
+
+                                    @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
+                                    <option value="{{$type}}" @if($user->creative->type_of_work == $type) selected
+                                        @endif>{{$type}}</option>
+                                    @endforeach
+
                                 </select>
                             </div>
 
                         </div>
-                    </div>
-
-                    <div class="row">
-
-
                     </div>
 
                     <div class="row">
@@ -56,10 +49,8 @@
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="1" @if($user->is_visible == 1) selected @endif> Show</option>
                                     <option value="0" @if($user->is_visible == 0) selected @endif> Hide</option>
-
                                 </select>
                             </div>
-
                         </div>
 
                         <div class="col-md-6">
@@ -81,6 +72,63 @@
                                             placeholder="Phone Number" value="{{ $phoneNumber }}">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_featured"> Featured Candidate </label>
+                                <select name="is_featured" id="is_featured"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->creative->is_featured == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->creative->is_featured == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_urgent"> Urgent Candidate</label>
+                                <select name="is_urgent" id="is_urgent"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->creative->is_urgent == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->creative->is_urgent == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentoremote"> Open to Remote </label>
+                                <select name="is_opentoremote" id="is_opentoremote"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->creative->is_opentoremote == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->creative->is_opentoremote == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentorelocation"> Open to Relocation </label>
+                                <select name="is_opentorelocation" id="is_opentorelocation"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->creative->is_opentorelocation == 1) selected @endif>
+                                        Yes
+                                    </option>
+                                    <option value="0" @if($user->creative->is_opentorelocation == 0) selected @endif> No
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>

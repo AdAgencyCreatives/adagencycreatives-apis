@@ -8,10 +8,10 @@ use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
 use App\Http\Resources\Job\JobCollection;
 use App\Http\Resources\Job\JobResource;
-use App\Models\Address;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -57,7 +57,7 @@ class JobController extends Controller
             $query->whereIn('media_experience', $medias);
         }
 
-        $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $jobs = $query->with('user.agency')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         $job_collection = new JobCollection($jobs);
 
@@ -68,13 +68,15 @@ class JobController extends Controller
     {
         $user = User::where('uuid', $request->user_id)->first();
         $category = Category::where('uuid', $request->category_id)->first();
-        $address = Address::where('uuid', $request->address_id)->first();
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'category_id' => $category->id,
-            'address_id' => $address->id,
+            'state_id' => $state->id ?? null,
+            'city_id' => $city->id ?? null,
             'status' => 'draft',
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
@@ -92,11 +94,12 @@ class JobController extends Controller
     public function show($uuid)
     {
         try {
-            $job = Job::where('uuid', $uuid)->firstOrFail();
+            $job = Job::with('user.agency', 'attachment')->where('uuid', $uuid)->firstOrFail();
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
+            // return $job;
         return new JobResource($job);
     }
 

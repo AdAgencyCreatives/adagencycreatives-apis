@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Cities'))
+@section('title', __('Add New City'))
 
 @section('scripts')
 <script src="{{ asset('/assets/js/custom.js') }}"></script>

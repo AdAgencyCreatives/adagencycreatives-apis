@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('attachment_id')->nullable()->comment('Agency Logo (optional)');
             $table->string('agency_name')->nullable();
             $table->string('title');
             $table->text('description');

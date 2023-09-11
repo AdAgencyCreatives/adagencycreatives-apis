@@ -139,6 +139,24 @@
 
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="workplace_experience">Workplace Preference</label>
+                                <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
+                                    <option value="is_remote" @if($user->agency?->is_remote) selected @endif>Remote
+                                    </option>
+                                    <option value="is_hybrid" @if($user->agency?->is_hybrid) selected @endif>Hybrid
+                                    </option>
+                                    <option value="is_onsite" @if($user->agency?->is_onsite) selected @endif>Onsite
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Agency Logo</label>

@@ -15,10 +15,19 @@ $(document).ready(function() {
             format: "Y-MM-DD"
         }
     });
-
+    fetchStates();
+    fetchYearsOfExperience();
     fetchIndustries();
     fetchMedias();
     fetchCategories();
+
+
+    $('#state').on('change', function() {
+        var selectedStateId = $(this).val();
+        console.log(selectedStateId);
+        getCitiesByState(selectedStateId);
+    });
+
 });
 </script>
 @endsection
@@ -131,10 +140,18 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
+
+
                                 <div class="form-group">
-                                    <label class="form-label" for="salary_range"> Salary Range </label>
-                                    <input id="salary_range" class="form-control" type="text" name="salary_range"
-                                        placeholder="Enter Salary Range" />
+                                    <label class="form-label" for="labels"> Workplace preference </label>
+                                    <select class="form-control select2" id="labels" multiple="multiple"
+                                        name="labels[]">
+                                        <option value="is_remote">Remote</option>
+                                        <option value="is_hybrid">Hybrid</option>
+                                        <option value="is_onsite">Onsite</option>
+                                        <option value="is_featured">Featured</option>
+                                        <option value="is_urgent">Urgent</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -142,14 +159,14 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="employement_type"> Employement Type </label>
+                                    <label class="form-label" for="employement_type"> Employment Type </label>
                                     <select name="employement_type" id="employement_type"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
                                         <option value="-100"> Select Type</option>
-                                        <option value="Freelance">Freelance</option>
-                                        <option value="Contract">Contract</option>
-                                        <option value="Part-time">Part-time</option>
-                                        <option value="Full-time">Full-time</option>
+                                        @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
+                                        <option value="{{$type}}">{{$type}}</option>
+                                        @endforeach
+
                                     </select>
                                 </div>
                             </div>
@@ -171,11 +188,7 @@ $(document).ready(function() {
 
                     <div class="row">
                         <div class="col-12 col-lg-12">
-                            <!-- <div class="card-body text-center"> -->
 
-                            <span data-toggle="tooltip" data-placement="top" data-original-title="Tooltipdfdsf">Text</span>
-
-                            <!-- </div> -->
                             <div class="form-group">
 
                                 <label class="form-label" for="media"> Media Experience </label>
@@ -224,14 +237,10 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="experience"> Experience </label>
-                                <select name="experience" id="experience"
+                                <label class="form-label" for="years_of_experience"> Years of Experience </label>
+                                <select name="years_of_experience" id="years_of_experience"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Experience</option>
-                                    <option value="Junior 0-2 years">Junior 0-2 years</option>
-                                    <option value="Mid-level 2-5 years">Mid-level 2-5 years</option>
-                                    <option value="Senior 5-10 years">Senior 5-10 years</option>
-                                    <option value="Director 10+ years">Director 10+ years</option>
                                 </select>
                             </div>
                         </div>
@@ -239,14 +248,33 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
 
                             <div class="form-group">
-                                <label class="form-label" for="employement_type"> Labels </label>
-                                <select class="form-control select2" id="labels" multiple="multiple" name="labels[]">
-                                    <option value="is_remote">Remote</option>
-                                    <option value="is_hybrid">Hybrid</option>
-                                    <option value="is_onsite">Onsite</option>
-                                    <option value="is_featured">Featured</option>
-                                    <option value="is_urgent">Urgent</option>
+                                <label class="form-label" for="salary_range"> Salary Range </label>
+                                <input id="salary_range" class="form-control" type="text" name="salary_range"
+                                    placeholder="Enter Salary Range" />
+                            </div>
 
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="state"> State </label>
+                                <select name="state" id="state" class="form-control form-select custom-select select2"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select State</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+
+                            <div class="form-group">
+                                <label class="form-label" for="city"> City </label>
+                                <select name="city" id="city" class="form-control form-select custom-select select2"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select City</option>
                                 </select>
                             </div>
 

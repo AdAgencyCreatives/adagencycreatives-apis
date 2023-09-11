@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(LocationSeeder::class);
+        $this->call(YearsOfExperienceSeeder::class);
 
         Artisan::call('adagencycreatives:permission');
 
@@ -54,17 +55,12 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Attachment::factory(3)->create($data_user_id);
 
-            foreach ($addresses as $address) {
-                $jobs = \App\Models\Job::factory(10)->create([
-                    'user_id' => $user->id,
-                    'address_id' => $address->id,
-                ]
-                );
+            $jobs = \App\Models\Job::factory(10)->create($data_user_id);
 
-                foreach ($jobs as $job) {
-                    $jobIds[] = $job->id;
-                }
+            foreach ($jobs as $job) {
+                $jobIds[] = $job->id;
             }
+
         }
 
         // ********************************************************
@@ -131,7 +127,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
         $this->call(MediaSeeder::class);
-        $this->call(YearsOfExperienceSeeder::class);
+
         $this->call(PlansTableSeeder::class);
 
         //Generate some more users

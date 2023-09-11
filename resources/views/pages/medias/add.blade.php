@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Add New Industry'))
+@section('title', __('Add New Media'))
 
 @section('scripts')
 

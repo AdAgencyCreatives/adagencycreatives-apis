@@ -10,9 +10,9 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next, $resourceType)
     {
-        if (Auth::user()->role == 'admin') {
-            return $next($request);
-        }
+        // if (Auth::user()->role == 'admin') {
+        //     return $next($request);
+        // }
 
         $action = $request->isMethod('post')
         ? 'create'

@@ -94,7 +94,7 @@ $(document).ready(function() {
         fetchMediasForAgency();
     } else if (user.role === 'creative') {
         var creative_years_of_experience = "{{ $user->creative?->years_of_experience }}";
-        fetchYearsOfExperience(creative_years_of_experience);
+        fetchYearsOfExperienceWithSelectedValue(creative_years_of_experience);
         fetchIndustriesForCreative();
         fetchMediasForCreative();
 
