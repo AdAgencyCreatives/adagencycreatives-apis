@@ -245,6 +245,14 @@ Admin can
 - Some visual fixes 
 - Logs endpoint for viewing error logs for admin e.g `/logs`
 - Implemented AWS S3 bucket for storing images
+ 
+## 06/9/2023 - Dashboard | More meta fields in agency, creatives and job 
+- Agency meta fields for making featured and also added workplace preference
+- Creatives meta field for making featured, urgent, remote and relocation.
+- Modified database structure for handling data more efficiently.
+- Job meta fields added for workplace preference, adding location (state and city)
+- Added location and sub-agency info in jobs API
+
 
 
 	

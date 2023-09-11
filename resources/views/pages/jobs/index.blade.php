@@ -83,7 +83,7 @@ function populateTable(jobs) {
             '<td>' + job.title + '</td>' +
             // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
             '<td>' + job.category + '</td>' +
-            '<td>' + job.employement_type + '</td>' +
+            '<td>' + job.employment_type + '</td>' +
             '<td>' + displayJobOptionsBadges(job) + '</td>' +
             '<td>' + job.industry_experience + '</td>' +
             '<td>' + job.media_experience + '</td>' +
@@ -192,11 +192,11 @@ $(document).ready(function() {
                                         <th>ID</th>
                                         <th>Title</th>
                                         <th>Category</th>
-                                        <th>Employement Type</th>
+                                        <th>Employment Type</th>
                                         <th>Workplace Preference</th>
-                                        <th>Industry</th>
-                                        <th>Media</th>
                                         <th>Status</th>
+                                        <th>Industry Experience</th>
+                                        <th>Media Experience</th>
                                         <th>Created At / Expired At</th>
                                         <th>Actions</th>
                                     </tr>

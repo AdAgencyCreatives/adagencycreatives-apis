@@ -53,6 +53,7 @@ Swal.fire({
 </script>
 @endif
 
+
 <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
     <div class="alert-message">
         <strong>Error!</strong> Please fix the following issues:
@@ -60,8 +61,8 @@ Swal.fire({
     </div>
 </div>
 
+<h1 class="h3 mb-3">Add New Group</h1>
 <div class="row">
-
     <div class="col-md-12 col-xl-12">
         <div class="card">
 

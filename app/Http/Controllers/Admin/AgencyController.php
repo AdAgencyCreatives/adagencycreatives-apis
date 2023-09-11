@@ -40,7 +40,8 @@ class AgencyController extends Controller
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
 
-        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured']);
+        $this->appendWorkplacePreference($request);
+        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_remote', 'is_hybrid', 'is_onsite']);
         foreach ($data as $key => $value) {
             $agency->$key = $value;
         }
@@ -85,5 +86,22 @@ class AgencyController extends Controller
                 'url' => $url,
             ]);
         }
+    }
+
+    public function appendWorkplacePreference($request)
+    {
+        $defaultWorkplacePreferences = [
+            'is_hybrid' => 0,
+            'is_remote' => 0,
+            'is_onsite' => 0,
+        ];
+
+        $workplacePreferences = $request->input('workplace_experience', []);
+
+        foreach ($workplacePreferences as $value) {
+            $defaultWorkplacePreferences[$value] = 1;
+        }
+
+        return $request->merge($defaultWorkplacePreferences);
     }
 }

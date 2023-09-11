@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -38,6 +39,9 @@ class JobController extends Controller
             $attachment = $this->storeImage($request);
         }
         $category = Category::where('uuid', $request->category_id)->first();
+        $state = Location::where('uuid', $request->state)->first();
+        $city = Location::where('uuid', $request->city)->first();
+
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => auth()->id(),
@@ -46,6 +50,8 @@ class JobController extends Controller
             'status' => $request->status,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'state_id' => $state->id,
+            'city_id' => $city->id,
         ]);
 
         $labels = $request->labels;
@@ -71,10 +77,16 @@ class JobController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $job = Job::where('id', $id)->first();
 
         if ($request->hasFile('file')) {
-            $attachment = $this->storeImage($request);
+            $attachment = storeImage($request, $job->user_id, 'agency_logo');
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $job->id,
+                ]);
+            }
         }
         $category = Category::where('uuid', $request->category_id)->first();
         $request->merge([
@@ -84,6 +96,7 @@ class JobController extends Controller
             'media_experience' => ''.implode(',', $request->media_experience).'',
         ]);
 
+        $this->appendWorkplacePreference($request);
         $job->update($request->all());
 
         if (isset($attachment) && is_object($attachment)) {
@@ -98,7 +111,7 @@ class JobController extends Controller
         return redirect()->back();
     }
 
-    public function storeImage($request)
+    public function storeImage($request, $resource_type)
     {
         $uuid = Str::uuid();
         $file = $request->file;
@@ -118,5 +131,24 @@ class JobController extends Controller
         ]);
 
         return $attachment;
+    }
+
+    public function appendWorkplacePreference($request)
+    {
+        $defaultWorkplacePreferences = [
+            'is_hybrid' => 0,
+            'is_featured' => 0,
+            'is_remote' => 0,
+            'is_onsite' => 0,
+            'is_urgent' => 0,
+        ];
+
+        $workplacePreferences = $request->input('workplace_experience', []);
+
+        foreach ($workplacePreferences as $value) {
+            $defaultWorkplacePreferences[$value] = 1;
+        }
+
+        return $request->merge($defaultWorkplacePreferences);
     }
 }

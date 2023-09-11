@@ -66,7 +66,7 @@ class AgencyController extends Controller
 
     public function show($uuid)
     {
-        $agency = Agency::where('uuid', $uuid)->first();
+        $agency = Agency::with('attachment')->where('uuid', $uuid)->first();
         if (! $agency) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }

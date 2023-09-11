@@ -26,6 +26,11 @@ class Agency extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attachment()
+    {
+        return $this->hasOne(Attachment::class, 'resource_id');
+    }
+
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();

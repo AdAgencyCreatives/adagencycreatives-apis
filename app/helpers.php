@@ -2,6 +2,7 @@
 
 use App\Models\Attachment;
 use App\Models\Industry;
+use App\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -12,6 +13,16 @@ if (! function_exists('getIndustryNames')) {
         $industries = Industry::whereIn('uuid', $ids)->pluck('name')->toArray();
 
         return $industries;
+    }
+}
+
+if (! function_exists('getMediaNames')) {
+    function getMediaNames($commaSeparatedIds)
+    {
+        $ids = explode(',', $commaSeparatedIds);
+        $medias = Media::whereIn('uuid', $ids)->pluck('name')->toArray();
+
+        return $medias;
     }
 }
 

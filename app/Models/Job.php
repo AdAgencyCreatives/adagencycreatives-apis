@@ -15,7 +15,8 @@ class Job extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'address_id',
+        'state_id',
+        'city_id',
         'category_id',
         'title',
         'agency_name',
@@ -50,9 +51,21 @@ class Job extends Model
         'PUBLISHED' => 6,
     ];
 
+    const EMPLOYMENT_TYPE = [
+        'Freelance',
+        'Contract',
+        'Part-Time',
+        'Full-Time',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class, 'user_id', 'agency_id');
     }
 
     public function applications()
@@ -68,6 +81,16 @@ class Job extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function attachment()

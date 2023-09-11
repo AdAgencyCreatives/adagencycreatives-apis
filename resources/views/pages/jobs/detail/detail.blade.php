@@ -96,13 +96,13 @@ function fetchCategories() {
 }
 
 function fetchJobObject() {
-
     $.ajax({
         url: '/api/v1/jobs/' + "{{ $job->uuid }}",
         method: 'GET',
         dataType: 'json',
         success: function(response) {
             $("#job_options").html(displayJobOptionsBadges(response.data));
+            job = response.data;
         },
         error: function() {
             alert('Failed to fetch job from the API.');
@@ -154,6 +154,32 @@ function fetchMedias() {
     });
 }
 
+function fetchYearsOfExperience(user_experience) {
+    $.ajax({
+        url: '/api/v1/years-of-experience',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            var selectElement = $('#years_of_experience');
+            $.each(response.data, function(index, experience) {
+                var option = $('<option>', {
+                    value: experience.name,
+                    text: experience.name
+                });
+
+                selectElement.append(option);
+            });
+
+            $('#years_of_experience').val(user_experience);
+            $('#years_of_experience').trigger('change');
+
+        },
+        error: function() {
+            alert('Failed to fetch years-of-experiences from the API.');
+        }
+    });
+}
+
 
 $(document).ready(function() {
     fetchJobObject();
@@ -162,8 +188,11 @@ $(document).ready(function() {
     fetchIndustries();
     fetchMedias();
 
+    fetchStates();
+
+
+
     var years_of_experience = "{{ $job->years_of_experience }}";
-    console.log(years_of_experience);
     fetchYearsOfExperience(years_of_experience);
 
     $('#save-job').click(function(event) {
@@ -219,6 +248,18 @@ $(document).ready(function() {
         }
     });
 
+
+    // $('#state').on('change', function() {
+    //     var selectedStateId = $(this).val();
+    //     console.log(selectedStateId);
+    //     getCitiesByState(selectedStateId);
+    // });
+
+
+    var job_state = "{{ $job->state->uuid }}";
+    console.log(job_state);
+    $('#state').val('015a4360-f33e-3bdd-ad6e-89c5ec1ae524');
+    $('#state').trigger('change');
 
 });
 </script>
@@ -354,31 +395,33 @@ $(document).ready(function() {
 
                     <div class="row">
                         <div class="col-12 col-lg-6">
-                            <div class="mb-3">
-                                <div class="form-group">
-                                    <label class="form-label" for="salary_range"> Salary Range </label>
-                                    <input id="salary_range" class="form-control" type="text" name="salary_range"
-                                        placeholder="Enter Salary Range" value="{{ $job->salary_range }}" />
-                                </div>
+                            <div class="form-group">
+                                <label class="form-label" for="workplace_experience">Workplace Preference</label>
+                                <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
+                                    <option value="is_remote" @if($job->is_remote) selected @endif>Remote</option>
+                                    <option value="is_hybrid" @if($job->is_hybrid) selected @endif>Hybrid</option>
+                                    <option value="is_onsite" @if($job->is_onsite) selected @endif>Onsite</option>
+                                    <option value="is_featured" @if($job->is_featured) selected @endif>Featured</option>
+                                    <option value="is_urgent" @if($job->is_urgent) selected @endif>Urgent</option>
+                                </select>
                             </div>
+
                         </div>
 
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="employement_type"> Employement Type </label>
-                                    <select name="employement_type" id="employement_type"
+                                    <label class="form-label" for="employment_type"> Employment Type </label>
+                                    <select name="employement_type" id="employment_type"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
-                                        <option value="-100"> Select Type</option>
-                                        <option value="Freelance" @if($job->employement_type == 'Freelance')
-                                            selected @endif>Freelance</option>
-                                        <option value="Contract" @if($job->employement_type == 'Contract')
-                                            selected @endif>Contract</option>
-                                        <option value="Part-time" @if($job->employement_type == 'Part-time')
-                                            selected @endif>Part-time</option>
-                                        <option value="Full-time" @if($job->employement_type == 'Full-time')
-                                            selected @endif>Full-time</option>
+                                        <option value="-100">Select Type</option>
+                                        @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
+                                        <option value="{{$type}}" @if($job->
+                                            employement_type == $type) selected
+                                            @endif>{{$type}}</option>
+                                        @endforeach
                                     </select>
+
                                 </div>
                             </div>
                         </div>
@@ -465,6 +508,43 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="salary_range"> Salary Range </label>
+                                    <input id="salary_range" class="form-control" type="text" name="salary_range"
+                                        placeholder="Enter Salary Range" value="{{ $job->salary_range }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="state"> State </label>
+                                <select name="state" id="state" class="form-control form-select custom-select select2"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select State</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+
+                            <div class="form-group">
+                                <label class="form-label" for="city"> City </label>
+                                <select name="city" id="city" class="form-control form-select custom-select select2"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select City</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label"> Attached User </label>
                                 <a href="{{ url('/users/' . $job->user_id . '/details') }}" target="_blank">
@@ -473,7 +553,6 @@ $(document).ready(function() {
                             </div>
                         </div>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>

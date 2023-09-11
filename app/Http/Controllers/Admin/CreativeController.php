@@ -17,20 +17,19 @@ class CreativeController extends Controller
 {
     public function update(Request $request, $uuid)
     {
+        // dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
+        $user->update([
+            'is_visible' => $request->is_visible,
+        ]); //Present in users table
 
         $uuid = Str::uuid();
-        $data = $request->only(['years_of_experience', 'type_of_work']);
+        $data = $request->only(['years_of_experience', 'type_of_work', 'is_featured', 'is_urgent', 'is_opentoremote', 'is_opentorelocation']);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
-
         $creative->save();
-
-        $user->update([
-            'is_visible' => $request->is_visible,
-        ]);
 
         if ($request->input('country_code') != null && $request->input('phone') != null) {
             $this->updatePhone($user, $request->input('country_code'), $request->input('phone'));
@@ -48,7 +47,7 @@ class CreativeController extends Controller
 
     public function update_qualification(Request $request, $uuid)
     {
-        // dd($request->all());
+        dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();

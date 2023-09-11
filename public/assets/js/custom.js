@@ -211,6 +211,18 @@ function populateFilter(categories, div_id) {
     });
 }
 
+function populateFilterWithUUID(categories, div_id) {
+    var selectElement = $(div_id);
+    $.each(categories, function (index, category) {
+        var option = $('<option>', {
+            value: category.uuid,
+            text: category.name,
+        });
+
+        selectElement.append(option);
+    });
+}
+
 function populateFilterWithSelectedValue(categories, div_id) {
     var selectElement = $(div_id);
 
@@ -334,7 +346,22 @@ function fetchMedias() {
     });
 }
 
-function fetchYearsOfExperience(user_experience) {
+function fetchYearsOfExperience() {
+    $.ajax({
+        url: '/api/v1/years-of-experience',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            populateFilter(response.data, '#years_of_experience');
+
+        },
+        error: function () {
+            alert('Failed to fetch years of experience from the API.');
+        }
+    });
+}
+
+function fetchYearsOfExperienceWithSelectedValue(user_experience) {
     $.ajax({
         url: '/api/v1/years-of-experience',
         method: 'GET',
@@ -359,3 +386,47 @@ function fetchYearsOfExperience(user_experience) {
         }
     });
 }
+
+function fetchStates() {
+    $.ajax({
+        url: '/api/v1/locations',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            populateFilterWithUUID(response.data, '#state');
+
+        },
+        error: function () {
+            alert('Failed to fetch states from the API.');
+        }
+    });
+}
+
+function getCitiesByState(stateId) {
+
+    if (stateId === '-100') {
+        return;
+    }
+    var filterParam = `filter[state_id]=${stateId}&per_page=-1`;
+    $.ajax({
+        url: '/api/v1/locations', // Replace with the actual URL for fetching cities
+        method: 'GET',
+        data: filterParam,
+        success: function (response) {
+            console.log(response.data);
+            var citySelect = $('#city');
+            citySelect.empty(); // Clear previous options
+            $.each(response.data, function (index, city) {
+                console.log(city);
+                citySelect.append($('<option>', {
+                    value: city.uuid,
+                    text: city.name
+                }));
+            });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.error('Error:', errorThrown);
+        }
+    });
+}
+

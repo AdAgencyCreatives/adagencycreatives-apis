@@ -2,23 +2,22 @@
 
 namespace App\Http\Resources\Job;
 
-use App\Http\Resources\Address\AddressResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
 {
     public function toArray($request)
     {
-        return [
+        $data = [
             'type' => 'jobs',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'title' => $this->title,
             'description' => $this->description,
             'category' => $this->category->name,
-            'employement_type' => $this->employement_type,
+            'employment_type' => $this->employement_type,
             'industry_experience' => getIndustryNames($this->industry_experience),
-            'media_experience' => getIndustryNames($this->media_experience),
+            'media_experience' => getMediaNames($this->media_experience),
             'salary_range' => $this->salary_range,
             'experience' => $this->years_of_experience,
             'apply_type' => $this->apply_type,
@@ -29,10 +28,28 @@ class JobResource extends JsonResource
             'is_featured' => $this->is_featured,
             'is_urgent' => $this->is_urgent,
             'status' => $this->status,
-            'address' => new AddressResource($this->address),
+            'location' => [
+                'state' => $this->state->name,
+                'city' => $this->city->name,
+            ],
+            'agency' => [],
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
+
+        if ($this->agency_name == null) {
+            $data['agency'] = [
+                'name' => $this->user->agency->name,
+                'logo' => $this->user->agency->attachment->path,
+            ];
+        } else {
+            $data['agency'] = [
+                'name' => $this->agency_name,
+                'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
+            ];
+        }
+
+        return $data;
     }
 }

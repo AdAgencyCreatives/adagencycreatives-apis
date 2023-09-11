@@ -13,7 +13,7 @@ class AgencyResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $this->name,
-            'logo' => $this->attachment_id,
+            'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
             'about' => $this->about,
             'size' => $this->size,
             'type_of_work' => $this->type_of_work,
