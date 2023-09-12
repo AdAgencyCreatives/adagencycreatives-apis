@@ -191,9 +191,9 @@ $(document).ready(function() {
                                         <th>Category</th>
                                         <th>Employment Type</th>
                                         <th>Workplace Preference</th>
-                                        <th>Status</th>
                                         <th>Industry Experience</th>
                                         <th>Media Experience</th>
+                                        <th>Status</th>
                                         <th>Created At / Expired At</th>
                                         <th>Actions</th>
                                     </tr>

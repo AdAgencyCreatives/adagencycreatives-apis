@@ -34,4 +34,11 @@ class Creative extends Model
             return $query->where('user_id', $user->id);
         }
     }
+
+    public function scopeYearsOfExperienceId(Builder $query, $exp_id)
+    {
+        $experience = YearsOfExperience::where('uuid', $exp_id)->first();
+        return $query->where('years_of_experience', $experience->name);
+        
+    }
 }
