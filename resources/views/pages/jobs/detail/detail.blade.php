@@ -71,7 +71,7 @@ function fetchApplications() {
 
         },
         error: function() {
-            alert('Failed to fetch users from the API.');
+            alert('Failed to fetch applications from the API.');
         },
 
     });
@@ -182,15 +182,16 @@ function fetchYearsOfExperience(user_experience) {
 
 
 $(document).ready(function() {
+
+
     fetchJobObject();
     fetchApplications();
     fetchCategories();
     fetchIndustries();
     fetchMedias();
 
-    fetchStates();
-
-
+    var job_state = "{{ $job->state->uuid }}";
+    fetchStates(job_state);
 
     var years_of_experience = "{{ $job->years_of_experience }}";
     fetchYearsOfExperience(years_of_experience);
@@ -249,17 +250,11 @@ $(document).ready(function() {
     });
 
 
-    // $('#state').on('change', function() {
-    //     var selectedStateId = $(this).val();
-    //     console.log(selectedStateId);
-    //     getCitiesByState(selectedStateId);
-    // });
-
-
-    var job_state = "{{ $job->state->uuid }}";
-    console.log(job_state);
-    $('#state').val('015a4360-f33e-3bdd-ad6e-89c5ec1ae524');
-    $('#state').trigger('change');
+    $('#state').on('change', function() {
+        var selectedStateId = $(this).val();
+        var city_id = "{{ $job->city->uuid }}";
+        getCitiesByState(selectedStateId, city_id);
+    });
 
 });
 </script>
@@ -401,8 +396,8 @@ $(document).ready(function() {
                                     <option value="is_remote" @if($job->is_remote) selected @endif>Remote</option>
                                     <option value="is_hybrid" @if($job->is_hybrid) selected @endif>Hybrid</option>
                                     <option value="is_onsite" @if($job->is_onsite) selected @endif>Onsite</option>
-                                    <option value="is_featured" @if($job->is_featured) selected @endif>Featured</option>
-                                    <option value="is_urgent" @if($job->is_urgent) selected @endif>Urgent</option>
+                                    <!-- <option value="is_featured" @if($job->is_featured) selected @endif>Featured</option>
+                                    <option value="is_urgent" @if($job->is_urgent) selected @endif>Urgent</option> -->
                                 </select>
                             </div>
 
@@ -541,6 +536,34 @@ $(document).ready(function() {
 
                         </div>
 
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_featured"> Featured? </label>
+                                <select name="is_featured" id="is_featured"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($job->is_featured == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($job->is_featured == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_urgent"> Urgent?</label>
+                                <select name="is_urgent" id="is_urgent"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($job->is_urgent == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($job->is_urgent == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">

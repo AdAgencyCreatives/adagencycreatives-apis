@@ -124,22 +124,6 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label" for="is_featured"> Featured? </label>
-                                <select name="is_featured" id="is_featured"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="1" @if($user->agency?->is_featured == 1) selected @endif> Yes
-                                    </option>
-                                    <option value="0" @if($user->agency?->is_featured == 0) selected @endif> No</option>
-
-                                </select>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label class="form-label" for="workplace_experience">Workplace Preference</label>
                                 <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
                                     <option value="is_remote" @if($user->agency?->is_remote) selected @endif>Remote
@@ -151,7 +135,34 @@
                                 </select>
                             </div>
                         </div>
+
+
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_featured"> Featured? </label>
+                                <select name="is_featured" id="is_featured"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->agency?->is_featured == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->agency?->is_featured == 0) selected @endif> No</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_urgent"> Urgent? </label>
+                                <select name="is_urgent" id="is_urgent"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($user->agency?->is_urgent == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($user->agency?->is_urgent == 0) selected @endif> No</option>
+
+                                </select>
+                            </div>
                         </div>
                     </div>
 

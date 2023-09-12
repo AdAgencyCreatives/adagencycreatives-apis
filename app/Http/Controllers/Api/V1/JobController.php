@@ -34,8 +34,7 @@ class JobController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('category_id'),
-                AllowedFilter::scope('country'),
-                AllowedFilter::scope('state'),
+                AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city'),
                 'title',
                 'employement_type',
@@ -57,7 +56,7 @@ class JobController extends Controller
             $query->whereIn('media_experience', $medias);
         }
 
-        $jobs = $query->with('user.agency')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         $job_collection = new JobCollection($jobs);
 
@@ -116,26 +115,6 @@ class JobController extends Controller
                 'media_experience' => ''.implode(',', $request->media_experience).'',
             ]);
 
-            $oldStatus = $job->status;
-            $newStatus = $request->input('status');
-
-            if ($newStatus === 'published' && $oldStatus === 'draft') {
-                $user = Auth::user();
-                if (! $user) {
-                    return ApiResponse::error(trans('response.unauthorized'), 401);
-                }
-
-                $subscription = Subscription::where('user_id', $user->id)
-                    ->where('stripe_status', 'active')
-                    ->where('quota_left', '>', 0)
-                    ->first();
-
-                if (! $subscription) {
-                    return ApiResponse::error("You don't have enough quota for this job", 402);
-                }
-
-                $subscription->decrement('quota_left', 1);
-            }
             $job->update($request->all());
 
             return new JobResource($job);
@@ -168,6 +147,7 @@ class JobController extends Controller
                 }
 
                 $subscription->decrement('quota_left', 1);
+                $newStatus = 'pending';
             }
             $job->update($request->all());
 

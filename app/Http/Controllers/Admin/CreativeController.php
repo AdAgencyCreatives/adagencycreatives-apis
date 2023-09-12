@@ -31,8 +31,8 @@ class CreativeController extends Controller
         }
         $creative->save();
 
-        if ($request->input('country_code') != null && $request->input('phone') != null) {
-            $this->updatePhone($user, $request->input('country_code'), $request->input('phone'));
+        if ($request->input('phone') != null) {
+            $this->updatePhone($user, $request->input('phone'));
         }
 
         if ($request->has('linkedin') && $request->input('linkedin') != null) {
@@ -111,8 +111,15 @@ class CreativeController extends Controller
         return redirect()->back();
     }
 
-    private function updatePhone($user, $country_code, $phone_number)
+    private function updatePhone($user, $phone_number)
     {
+        $country_code = '+1';
+
+        if (strpos($phone_number, $country_code) === 0) {
+            $phone_number = substr($phone_number, strlen($country_code));
+            $phone_number = trim($phone_number);
+        }
+
         $phone = Phone::where('user_id', $user->id)->where('label', 'personal')->first();
         if ($phone) {
             $phone->update(['country_code' => $country_code, 'phone_number' => $phone_number]);

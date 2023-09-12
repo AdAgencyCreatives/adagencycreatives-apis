@@ -62,14 +62,15 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="country_code" class="form-label">Country Code</label>
-                                    <input type="text" class="form-control" name="country_code" id="country_code"
-                                        placeholder="Country Code" value="{{ $countryCode }}">
+                                    <input type="text" disabled class="form-control" name="country_code"
+                                        id="country_code" placeholder="Country Code" value="+1">
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Phone Number (Personal)</label>
                                         <input type="text" class="form-control" name="phone" id="phone"
-                                            placeholder="Phone Number" value="{{ $phoneNumber }}">
+                                            placeholder="Phone Number (without country code)"
+                                            value="{{ $phoneNumber }}">
                                     </div>
                                 </div>
                             </div>

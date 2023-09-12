@@ -79,7 +79,6 @@ $(document).on('click', '#pagination-next', function () {
 });
 
 function displayNoRecordsMessage(colspan) {
-    console.log('yeah inside');
     var messageRow = '<tr><td colspan="' + colspan + '" class="text-center">No records found.</td></tr>';
     $('tbody').html(messageRow);
 }
@@ -112,7 +111,6 @@ function deleteResource(userId, resource, url, csrfToken) {
         },
         dataType: 'json',
         success: function (response) {
-            console.log(response);
             Swal.fire({
                 title: 'Success',
                 text: msg,
@@ -122,7 +120,7 @@ function deleteResource(userId, resource, url, csrfToken) {
             });
         },
         error: function () {
-            alert('Failed to delete the user.');
+            alert('Failed to delete the ' + resource);
         }
     });
 }
@@ -170,11 +168,11 @@ function getPlanBadge(plan) {
 
 function displayJobOptionsBadges(job) {
     const optionColors = {
-        "is_remote": 'success',
-        "is_hybrid": 'info',
-        "is_onsite": 'secondary',
-        "is_featured": 'warning',
-        "is_urgent": 'danger'
+        "is_remote": '#17bd81',
+        "is_hybrid": '#090070',
+        "is_onsite": '#000000',
+        "is_featured": '#daa520',
+        "is_urgent": '#f40606'
     };
 
     var optionDisplayNames = {
@@ -189,8 +187,7 @@ function displayJobOptionsBadges(job) {
         if (value === 1 && option in optionDisplayNames && option in optionColors) {
             var displayName = optionDisplayNames[option];
             var badgeColor = optionColors[option];
-            var badge = '<span class="badge bg-' + badgeColor + ' me-2">' + displayName + '</span>';
-
+            var badge = '<span class="badge" style="background-color:' + badgeColor + ';">' + displayName + '</span>';
             output += badge;
         }
     });
@@ -211,7 +208,7 @@ function populateFilter(categories, div_id) {
     });
 }
 
-function populateFilterWithUUID(categories, div_id) {
+function populateFilterWithUUID(categories, div_id, selected_id = null) {
     var selectElement = $(div_id);
     $.each(categories, function (index, category) {
         var option = $('<option>', {
@@ -221,6 +218,12 @@ function populateFilterWithUUID(categories, div_id) {
 
         selectElement.append(option);
     });
+
+    if (selected_id !== null) {
+        selectElement.val(selected_id);
+        selectElement.trigger('change');
+    }
+
 }
 
 function populateFilterWithSelectedValue(categories, div_id) {
@@ -387,13 +390,13 @@ function fetchYearsOfExperienceWithSelectedValue(user_experience) {
     });
 }
 
-function fetchStates() {
+function fetchStates(selected_id) {
     $.ajax({
         url: '/api/v1/locations',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
-            populateFilterWithUUID(response.data, '#state');
+            populateFilterWithUUID(response.data, '#state', selected_id);
 
         },
         error: function () {
@@ -402,7 +405,7 @@ function fetchStates() {
     });
 }
 
-function getCitiesByState(stateId) {
+function getCitiesByState(stateId, selected_id = null) {
 
     if (stateId === '-100') {
         return;
@@ -413,16 +416,21 @@ function getCitiesByState(stateId) {
         method: 'GET',
         data: filterParam,
         success: function (response) {
-            console.log(response.data);
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
             $.each(response.data, function (index, city) {
-                console.log(city);
                 citySelect.append($('<option>', {
                     value: city.uuid,
                     text: city.name
                 }));
             });
+
+
+            if (selected_id !== null) {
+                citySelect.val(selected_id);
+                citySelect.trigger('change');
+            }
+
         },
         error: function (xhr, textStatus, errorThrown) {
             console.error('Error:', errorThrown);

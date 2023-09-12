@@ -29,12 +29,12 @@ class Job extends Model
         'apply_type',
         'external_link',
         'status',
-        'is_remote',
         'is_hybrid',
         'is_onsite',
+        'is_remote',
         'is_featured',
-        'expired_at',
         'is_urgent',
+        'expired_at',
     ];
 
     protected $casts = [
@@ -52,8 +52,9 @@ class Job extends Model
     ];
 
     const EMPLOYMENT_TYPE = [
+        'Internship',
         'Freelance',
-        'Contract',
+        'Contract 1099',
         'Part-Time',
         'Full-Time',
     ];
@@ -65,7 +66,7 @@ class Job extends Model
 
     public function agency()
     {
-        return $this->belongsTo(Agency::class, 'user_id', 'agency_id');
+        return $this->belongsTo(Agency::class, 'user_id');
     }
 
     public function applications()
@@ -76,6 +77,11 @@ class Job extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class);
     }
 
     public function address()
@@ -112,18 +118,13 @@ class Job extends Model
         return $query->where('category_id', $category->id);
     }
 
-    public function scopeCountry(Builder $query, $country): Builder
+    public function scopeStateId(Builder $query, $state_id): Builder
     {
-        $country_ids = Address::where('country', $country)->pluck('id');
+        $state = Location::where('uuid', $state_id)->first();
 
-        return $query->whereIn('address_id', $country_ids);
-    }
-
-    public function scopeState(Builder $query, $state): Builder
-    {
-        $state_ids = Address::where('state', $state)->pluck('id');
-
-        return $query->whereIn('address_id', $state_ids);
+        // dump($state_id);
+        // dd($state);
+        return $query->where('state_id', $state->id);
     }
 
     public function scopeIndustryExperience(Builder $query, $industries): Builder
