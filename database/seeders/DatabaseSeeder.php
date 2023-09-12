@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
                     'user_id' => $user->id,
                     'job_id' => $jobIds[array_rand($jobIds)],
                     'attachment_id' => $attachment_id,
-                ]
+              ]
                 );
 
                 \App\Models\Note::factory(1)->create([

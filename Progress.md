@@ -252,7 +252,10 @@ Admin can
 - Modified database structure for handling data more efficiently.
 - Job meta fields added for workplace preference, adding location (state and city)
 - Added location and sub-agency info in jobs API
-
-
-
-	
+ 
+## 07/9/2023 - Dashboard | Bug Fixes | Enhancements | Activity Logs 
+- Modified few fields in agency | creatives | advisors and jobs
+- Some bug fixes on job detail page
+- Corrected the image upload process for job and groups
+- Added more fields in jobs, agency and creatives API
+- Added Telescope for activity logs

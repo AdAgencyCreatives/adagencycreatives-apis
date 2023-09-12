@@ -343,6 +343,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/telescope" target="_blank">
+                    <i class="align-middle" data-feather="activity"></i>
+                    <span class="align-middle">Activity</span>
+                </a>
+            </li>
+
             <li class="sidebar-header">
                 Personal
             </li>

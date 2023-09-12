@@ -47,7 +47,6 @@ class CreativeController extends Controller
 
     public function update_qualification(Request $request, $uuid)
     {
-        dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();

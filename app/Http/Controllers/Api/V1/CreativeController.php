@@ -9,6 +9,7 @@ use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Models\Creative;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -16,12 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+    
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                'years_of_experience',
+                AllowedFilter::scope('years_of_experience_id'),
                 'type_of_work',
             ]);
 

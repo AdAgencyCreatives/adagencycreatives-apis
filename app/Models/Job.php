@@ -121,17 +121,14 @@ class Job extends Model
     public function scopeStateId(Builder $query, $state_id): Builder
     {
         $state = Location::where('uuid', $state_id)->first();
-
-        // dump($state_id);
-        // dd($state);
         return $query->where('state_id', $state->id);
     }
 
     public function scopeIndustryExperience(Builder $query, $industries): Builder
     {
         $industries = Industry::whereIn('uuid', $industries)->pluck('id');
-
-        return $query->whereIn('address_id', $state_ids);
+dd($industries);
+        return $query->whereIn('industry_experience', $industries);
     }
 
     public function getStatusAttribute($value)
