@@ -17,7 +17,7 @@ class ApplicationResource extends JsonResource
             'user' => $user->first_name.' '.$user->last_name,
             'user_profile_id' => $user->id,
             'job_id' => $this->job->uuid,
-            'resume_url' => asset('storage/'.$this->attachment->path),
+            'resume_url' => isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),

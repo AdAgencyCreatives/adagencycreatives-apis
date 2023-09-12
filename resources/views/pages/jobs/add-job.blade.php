@@ -149,8 +149,8 @@ $(document).ready(function() {
                                         <option value="is_remote">Remote</option>
                                         <option value="is_hybrid">Hybrid</option>
                                         <option value="is_onsite">Onsite</option>
-                                        <option value="is_featured">Featured</option>
-                                        <option value="is_urgent">Urgent</option>
+                                        <!-- <option value="is_featured">Featured</option>
+                                        <option value="is_urgent">Urgent</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -280,6 +280,38 @@ $(document).ready(function() {
 
                         </div>
 
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_featured"> Featured </label>
+                                <select name="is_featured" id="is_featured"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-1"> Select
+                                    </option>
+                                    <option value="1"> Yes
+                                    </option>
+                                    <option value="0"> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_urgent"> Urgent</label>
+                                <select name="is_urgent" id="is_urgent"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-1"> Select
+                                    </option>
+                                    <option value="1"> Yes
+                                    </option>
+                                    <option value="0"> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <button id="save-job" class="btn btn-primary">Save</button>

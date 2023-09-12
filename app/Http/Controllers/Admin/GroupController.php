@@ -33,7 +33,7 @@ class GroupController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $attachment = $this->storeImage($request);
+            $attachment = storeImage($request, auth()->id(), 'cover_image');
 
             if (isset($attachment) && is_object($attachment)) {
                 Attachment::whereId($attachment->id)->update([
@@ -49,7 +49,6 @@ class GroupController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $group = Group::findOrFail($id);
 
         $group->name = $request->input('name');
@@ -61,7 +60,7 @@ class GroupController extends Controller
             if ($group->attachment) {
                 $group->attachment->delete();
             }
-            $attachment = $this->storeImage($request, 'aaa');
+            $attachment = storeImage($request, auth()->id(), 'cover_image');
             if (isset($attachment) && is_object($attachment)) {
                 Attachment::whereId($attachment->id)->update([
                     'resource_id' => $group->id,

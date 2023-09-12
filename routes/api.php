@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 //auth:sanctum
-Route::middleware([])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Job Board Routes
      */

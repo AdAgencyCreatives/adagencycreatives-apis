@@ -85,8 +85,11 @@
                                     <option value="is_remote">Remote</option>
                                     <option value="is_hybrid">Hybrid</option>
                                     <option value="is_onsite">Onsite</option>
-                                    <option value="is_featured">Featured</option>
-                                    <option value="is_urgent">Urgent</option>
+                                    <optgroup label="Job Priority">
+                                        <option value="is_featured">Featured</option>
+                                        <option value="is_urgent">Urgent</option>
+                                    </optgroup>
+
 
                                 </select>
                             </div>

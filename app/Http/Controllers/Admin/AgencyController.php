@@ -41,7 +41,7 @@ class AgencyController extends Controller
         ]);
 
         $this->appendWorkplacePreference($request);
-        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_remote', 'is_hybrid', 'is_onsite']);
+        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite']);
         foreach ($data as $key => $value) {
             $agency->$key = $value;
         }

@@ -24,9 +24,6 @@ function fetchData(page, filters = []) {
 
     requestData['sort'] = '-created_at';
 
-    console.log(requestData);
-
-
     $.ajax({
         url: 'api/v1/jobs',
         method: 'GET',

@@ -38,16 +38,20 @@ class JobResource extends JsonResource
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
 
-        if ($this->agency_name == null) {
-            $data['agency'] = [
-                'name' => $this->user->agency->name,
-                'logo' => $this->user->agency->attachment->path,
-            ];
-        } else {
-            $data['agency'] = [
-                'name' => $this->agency_name,
-                'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
-            ];
+        $agency = $this->user->agency;
+        if ($agency) {
+            if ($this->agency_name == null) {
+                $data['agency'] = [
+                    'name' => $agency->name,
+                    'logo' => $agency->attachment ? $agency->attachment->path : null,
+                ];
+
+            } else {
+                $data['agency'] = [
+                    'name' => $this->agency_name,
+                    'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
+                ];
+            }
         }
 
         return $data;
