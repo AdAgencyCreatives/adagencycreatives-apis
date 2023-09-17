@@ -208,6 +208,10 @@ function populateFilter(categories, div_id) {
     });
 }
 
+countries = []
+cities = []
+
+
 function populateFilterWithUUID(categories, div_id, selected_id = null) {
     var selectElement = $(div_id);
     $.each(categories, function (index, category) {

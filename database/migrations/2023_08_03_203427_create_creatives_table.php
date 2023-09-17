@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('type_of_work');
             $table->text('industry_experience')->nullable();
             $table->text('media_experience')->nullable();
+            $table->text('strengths')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_urgent')->default(false);
             $table->boolean('is_opentoremote')->default(false);

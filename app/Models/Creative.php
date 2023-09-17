@@ -20,6 +20,7 @@ class Creative extends Model
         'years_of_experience',
         'industry_experience',
         'media_experience',
+        'strengths',
     ];
 
     public function user()
@@ -38,7 +39,8 @@ class Creative extends Model
     public function scopeYearsOfExperienceId(Builder $query, $exp_id)
     {
         $experience = YearsOfExperience::where('uuid', $exp_id)->first();
+
         return $query->where('years_of_experience', $experience->name);
-        
+
     }
 }

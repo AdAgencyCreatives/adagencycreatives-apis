@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\BookmarkController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\DashboardController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
+use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
@@ -63,6 +65,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::get('get_categories', [CategoryController::class, 'get_categories']);
+    Route::apiResource('strengths', StrengthController::class);
+    Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
     Route::apiResource('media-experiences', MediaController::class);
@@ -91,6 +95,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);
+
+    /**
+     * Chat Routes
+     */
+    Route::get('messages/{receiverId}', [ChatController::class, 'index']);
+    Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
+    Route::get('messages', [ChatController::class, 'fetchMessages']);
+
+    Route::apiResource('messages', ChatController::class);
 
     Route::post('logout', [UserController::class, 'logout']);
 

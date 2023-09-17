@@ -12,7 +12,7 @@ use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
 use App\Models\Location;
-use App\Models\User; 
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

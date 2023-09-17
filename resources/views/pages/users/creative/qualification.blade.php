@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-12 col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="media"> Media </label>
+                                <label class="form-label" for="media"> Media Experience </label>
                                 <select name="media_experience[]" id="media" required
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
@@ -70,6 +70,19 @@
 
                                 </select>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="strengths">Character Traits (Select up to 5)</label>
+                                <select name="strengths[]" id="strengths"
+                                    class="form-control form-select custom-select select2" multiple="multiple"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select Strengths </option>
+                                </select>
+                            </div> 
                         </div>
                     </div>
 
