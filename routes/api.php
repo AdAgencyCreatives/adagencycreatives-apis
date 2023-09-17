@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\BookmarkController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\DashboardController;
@@ -91,6 +92,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);
+
+    /**
+     * Chat Routes
+     */
+    Route::get('messages/{receiverId}', [ChatController::class, 'index']);
+    Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
+    Route::get('messages', [ChatController::class, 'fetchMessages']);
+
+    Route::apiResource('messages', ChatController::class);
 
     Route::post('logout', [UserController::class, 'logout']);
 

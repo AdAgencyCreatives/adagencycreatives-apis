@@ -19,7 +19,7 @@ class CreativeController extends Controller
 {
     public function index(Request $request)
     {
-    
+
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),

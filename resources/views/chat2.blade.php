@@ -4,19 +4,15 @@
 
 @section('scripts')
 @vite('resources/js/app.js')
-
 <script>
 var user = @json(Auth::user());
-
 setTimeout(() => {
-
     window.Echo.private('messanger.' + user.id)
         .listen('.private_msg', (e) => {
             console.log(e.data);
-            displayReceivedMessage('Marilie Okuneva', e.data.message)
+            displayReceivedMessage('Guido Tremblay', e.data.message)
         })
 }, 200);
-
 
 $('#sendMsgForm').submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
@@ -121,7 +117,7 @@ function displayReceivedMessage(sender, message) {
                 <div class="d-flex align-items-start">
 
                     <div class="flex-grow-1 ms-3">
-                        Guido Tremblay
+                        Marilie Okuneva
                         <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
                     </div>
                 </div>
@@ -137,7 +133,7 @@ function displayReceivedMessage(sender, message) {
 
                     </div>
                     <div class="flex-grow-1 ps-3">
-                        <strong>Guido Tremblay</strong>
+                        <strong>Marilie Okuneva</strong>
                         <!-- <div class="text-muted small"><em>Typing...</em></div> -->
                     </div>
 
@@ -146,7 +142,6 @@ function displayReceivedMessage(sender, message) {
 
             <div class="position-relative">
                 <div class="chat-messages p-4" id="chatMessages">
-
                 </div>
             </div>
 
@@ -155,7 +150,7 @@ function displayReceivedMessage(sender, message) {
                     @csrf()
                     <div class="input-group">
                         <input type="text" class="form-control" id="message" placeholder="Type your message">
-                        <input type="hidden" id="receiver" value="e7f09e1d-4eae-3c67-b2b3-b2d7b9b30a91">
+                        <input type="hidden" id="receiver" value="2a697fb5-3e83-3359-81f0-4594d284d2e6">
                         <button id="sendMsgBtn" class="btn btn-primary">Send</button>
                     </div>
                 </form>

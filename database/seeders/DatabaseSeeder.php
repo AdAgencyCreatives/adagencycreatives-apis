@@ -47,6 +47,8 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Agency::factory()->create($data_user_id);
 
+            \App\Models\Message::factory(50)->create(['sender_id' => $user->id]);
+
             $addresses = \App\Models\Address::factory(1)->create($data_user_id);
 
             \App\Models\Phone::factory(3)->create($data_user_id);
@@ -90,7 +92,7 @@ class DatabaseSeeder extends Seeder
                     'user_id' => $user->id,
                     'job_id' => $jobIds[array_rand($jobIds)],
                     'attachment_id' => $attachment_id,
-              ]
+                ]
                 );
 
                 \App\Models\Note::factory(1)->create([

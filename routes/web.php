@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -94,6 +96,22 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
 
 Route::resource('plans', PlanController::class);
 Route::view('/pricing', 'pricing');
-Route::view('/chat', 'chat');
+
 Route::view('/subscription', 'subscription');
 Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
+
+Route::get('test-web', [WebSocketController::class, 'index']);
+
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::view('/chat', 'chat');
+    Route::view('/chat2', 'chat2');
+});
+
+Route::get('all-messages', [ChatController::class, 'fetchMessages']);
+
+Route::get('impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
+
+Route::get('/redirect-to-react/{token}', function ($token) {
+    return view('pages.users.impersonate', compact('token'));
+})->name('react.app');

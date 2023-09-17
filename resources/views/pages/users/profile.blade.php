@@ -78,6 +78,10 @@ Profile
                     Password
                 </a>
 
+                <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
+                    Impersonate
+                </a>
+
 
             </div>
         </div>

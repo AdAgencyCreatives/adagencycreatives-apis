@@ -13,7 +13,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Billable, HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use Billable;
+    use HasApiTokens;
+    use HasFactory;
+    use HasRoles;
+    use Notifiable;
+    use SoftDeletes;
 
     // protected $primaryKey = 'uuid';
 
@@ -38,14 +43,14 @@ class User extends Authenticatable
         'password',
     ];
 
-    const ROLES = [
+    public const ROLES = [
         'ADMIN' => 1,
         'ADVISOR' => 2,
         'AGENCY' => 3,
         'CREATIVE' => 4,
     ];
 
-    const STATUSES = [
+    public const STATUSES = [
         'PENDING' => 0,
         'ACTIVE' => 1,
         'INACTIVE' => 2,
@@ -104,6 +109,16 @@ class User extends Authenticatable
     public function receivedReviews()
     {
         return $this->hasMany(Review::class, 'target_id');
+    }
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 
     public function getRoleAttribute($value)
