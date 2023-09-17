@@ -42,6 +42,27 @@ function fetchMediasForCreative() {
     });
 }
 
+function fetchStrengthsForCreative() {
+    $.ajax({
+        url: '/api/v1/get_strengths',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#strengths');
+            var strengths = "{{ $user->creative?->strengths }}";
+            var strengthArray = strengths.split(',');
+            strengthArray.forEach(function(uuid) {
+                $('#strengths option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#strengths').trigger('change');
+
+        },
+        error: function() {
+            alert('Failed to fetch strength from the API.');
+        }
+    });
+}
+
 function fetchIndustriesForAgency() {
     $.ajax({
         url: '/api/v1/get_industry-experiences',
@@ -97,6 +118,7 @@ $(document).ready(function() {
         fetchYearsOfExperienceWithSelectedValue(creative_years_of_experience);
         fetchIndustriesForCreative();
         fetchMediasForCreative();
+        fetchStrengthsForCreative();
 
     }
 
@@ -323,6 +345,16 @@ $(document).ready(function() {
 
             }
         });
+    });
+
+    $('#strengths').on('change', function () {
+        var selectedOptions = $(this).val();
+
+if (selectedOptions.length > 2) {
+    // Remove the last selected options until only 5 are left
+    $(this).val(selectedOptions.slice(0, 2));
+    alert('You can only select up to 5 options.');
+}
     });
 });
 </script>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
@@ -85,6 +86,7 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::resource('industries', IndustryController::class);
     Route::resource('medias', MediaController::class);
     Route::resource('experiences', ExperienceController::class);
+    Route::resource('strengths', StrengthController::class);
 
     Route::resource('reports', ReportController::class);
 

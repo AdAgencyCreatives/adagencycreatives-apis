@@ -20,6 +20,7 @@ class Creative extends Model
         'years_of_experience',
         'industry_experience',
         'media_experience',
+        'strengths',
     ];
 
     public function user()

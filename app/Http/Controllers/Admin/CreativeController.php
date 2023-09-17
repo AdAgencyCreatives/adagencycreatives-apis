@@ -63,6 +63,7 @@ class CreativeController extends Controller
             'title' => $request->title,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'strengths' => ''.implode(',', $request->strengths ? $request->strengths : []).'',
         ]);
 
         Session::flash('success', 'Creative updated successfully');

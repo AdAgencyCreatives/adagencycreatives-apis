@@ -333,6 +333,32 @@
                 </ul>
             </li>
 
+            <li class="sidebar-item {{ request()->is('strengths*') ? 'active' : '' }} ">
+                <a data-target="#strengths_menu" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="layout"></i>
+                    <span class="align-middle">Strengths</span>
+                </a>
+                <ul id="strengths_menu"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('strengths*') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('strengths') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('strengths.index') }}">
+                            <i class="align-middle" data-feather="layout"></i>
+                            <span class="align-middle">All Strengths</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('strengths/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('strengths.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i>
+                            <span class="align-middle">Add New Strength</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
             <li class="sidebar-header">
                 Reports
             </li>

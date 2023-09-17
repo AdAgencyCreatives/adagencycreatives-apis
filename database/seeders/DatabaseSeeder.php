@@ -129,6 +129,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(IndustrySeeder::class);
         $this->call(MediaSeeder::class);
+        $this->call(MediaSeeder::class);
+        $this->call(StrengthSeeder::class);
 
         $this->call(PlansTableSeeder::class);
 

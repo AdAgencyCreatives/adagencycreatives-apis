@@ -34,7 +34,27 @@ $(document).ready(function() {
                 })
             },
             error: function(error) {
-                console.error('Error creating category:', error);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    var errorMessages = error.responseJSON.errors;
+
+                    // Process and display error messages
+                    var errorMessage = '';
+                    $.each(errorMessages, function(field, messages) {
+                        errorMessage += field + ': ' + messages.join(', ') + '\n';
+                    });
+
+                    Swal.fire({
+                        title: 'Validation Error',
+                        text: errorMessage,
+                        icon: 'error'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.message,
+                        icon: 'error'
+                    });
+                }
             }
         });
     });
