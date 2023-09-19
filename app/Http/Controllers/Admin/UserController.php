@@ -34,7 +34,7 @@ class UserController extends Controller
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {
-            $user->load(['creative', 'phones', 'links', 'resume.educations', 'resume.experiences']);
+            $user->load(['creative', 'phones', 'links', 'educations', 'experiences']);
         }
 
         // dd($user->toArray());

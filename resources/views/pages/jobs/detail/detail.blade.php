@@ -396,8 +396,6 @@ $(document).ready(function() {
                                     <option value="is_remote" @if($job->is_remote) selected @endif>Remote</option>
                                     <option value="is_hybrid" @if($job->is_hybrid) selected @endif>Hybrid</option>
                                     <option value="is_onsite" @if($job->is_onsite) selected @endif>Onsite</option>
-                                    <!-- <option value="is_featured" @if($job->is_featured) selected @endif>Featured</option>
-                                    <option value="is_urgent" @if($job->is_urgent) selected @endif>Urgent</option> -->
                                 </select>
                             </div>
 
@@ -407,12 +405,12 @@ $(document).ready(function() {
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="employment_type"> Employment Type </label>
-                                    <select name="employement_type" id="employment_type"
+                                    <select name="employment_type" id="employment_type"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
                                         <option value="-100">Select Type</option>
                                         @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
                                         <option value="{{$type}}" @if($job->
-                                            employement_type == $type) selected
+                                            employment_type == $type) selected
                                             @endif>{{$type}}</option>
                                         @endforeach
                                     </select>
@@ -438,7 +436,7 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-12 col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="media"> Media </label>
+                                <label class="form-label" for="media"> Media Experience </label>
                                 <select name="media_experience[]" id="media" required
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
@@ -560,6 +558,35 @@ $(document).ready(function() {
                                     <option value="1" @if($job->is_urgent == 1) selected @endif> Yes
                                     </option>
                                     <option value="0" @if($job->is_urgent == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentoremote"> Open to Remote? </label>
+                                <select name="is_opentoremote" id="is_opentoremote"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($job->is_opentoremote == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if($job->is_opentoremote == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentorelocation"> Open to Relocation? </label>
+                                <select name="is_opentorelocation" id="is_opentorelocation"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if($job->is_opentorelocation == 1) selected @endif>
+                                        Yes
+                                    </option>
+                                    <option value="0" @if($job->is_opentorelocation == 0) selected @endif> No
                                     </option>
                                 </select>
                             </div>

@@ -24,7 +24,7 @@ class JobFactory extends Factory
             'media_experience' => fake()->numberBetween(10, 20),
             'title' => fake()->jobTitle,
             'description' => fake()->paragraph,
-            'employement_type' => fake()->randomElement($employementTypes),
+            'employment_type' => fake()->randomElement($employementTypes),
             'salary_range' => fake()->randomElement($salaryRanges),
             'years_of_experience' => fake()->randomElement($experiences),
             'apply_type' => fake()->randomElement($applyTypes),

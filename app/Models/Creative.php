@@ -16,7 +16,7 @@ class Creative extends Model
         'user_id',
         'title',
         'about',
-        'type_of_work',
+        'employment_type',
         'years_of_experience',
         'industry_experience',
         'media_experience',

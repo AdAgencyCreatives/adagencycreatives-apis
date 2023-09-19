@@ -335,7 +335,7 @@
 
             <li class="sidebar-item {{ request()->is('strengths*') ? 'active' : '' }} ">
                 <a data-target="#strengths_menu" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="layout"></i>
+                    <i class="align-middle" data-feather="anchor"></i>
                     <span class="align-middle">Strengths</span>
                 </a>
                 <ul id="strengths_menu"
@@ -344,7 +344,7 @@
 
                     <li class="sidebar-item {{ request()->is('strengths') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('strengths.index') }}">
-                            <i class="align-middle" data-feather="layout"></i>
+                            <i class="align-middle" data-feather="anchor"></i>
                             <span class="align-middle">All Strengths</span>
                         </a>
                     </li>

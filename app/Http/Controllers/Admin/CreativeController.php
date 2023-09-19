@@ -9,15 +9,23 @@ use App\Models\Experience;
 use App\Models\Link;
 use App\Models\Phone;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class CreativeController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function update(Request $request, $uuid)
     {
-        // dd($request->all());
+
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
@@ -25,7 +33,9 @@ class CreativeController extends Controller
         ]); //Present in users table
 
         $uuid = Str::uuid();
-        $data = $request->only(['years_of_experience', 'type_of_work', 'is_featured', 'is_urgent', 'is_opentoremote', 'is_opentorelocation']);
+        $this->userService->appendWorkplacePreference($request);
+
+        $data = $request->only(['years_of_experience', 'type_of_work', 'is_featured', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite', 'is_opentorelocation']);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
@@ -38,7 +48,7 @@ class CreativeController extends Controller
         if ($request->has('linkedin') && $request->input('linkedin') != null) {
             $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
-
+        // dd($request->all());
         Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();

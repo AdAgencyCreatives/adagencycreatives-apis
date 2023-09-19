@@ -6,8 +6,8 @@
             @csrf()
             @method('PUT')
 
-            @if(isset($user->resume->experiences))
-            @foreach ($user->resume->experiences as $key =>
+            @if(isset($user->experiences))
+            @foreach ($user->experiences as $key =>
             $experience)
             <div class="card">
 
@@ -62,9 +62,9 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="completed_at"> Completed At </label>
+                                    <label class="form-label" for="completed_at"> Completion Date </label>
                                     <input type="text" class="form-control" placeholder="Completed At" disabled
-                                        value="{{ $experience->completed_at }}">
+                                        value="{{ $experience->completed_at === null ? 'Not Provided' : $experience->completed_at }}">
                                 </div>
                             </div>
                         </div>
