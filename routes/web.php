@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
+use App\Jobs\SendEmailJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,15 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     return User::all();
+});
+
+Route::get('/email', function () {
+    $user = User::find(5);
+
+    $admin = User::find(1);
+    SendEmailJob::dispatch([
+        'receiver' => $user, 'data' => $user,
+    ], 'account_approved');
 });
 
 Route::get('/reset', function () {

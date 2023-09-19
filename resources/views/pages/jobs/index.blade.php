@@ -52,6 +52,7 @@ function populateTable(jobs) {
     }
 
     $.each(jobs, function(index, job) {
+
         var editUrl = "/jobs/" + job.id + "/details";
         var roleBasedActions = '';
 
@@ -124,7 +125,7 @@ $(document).ready(function() {
 
         filters = {
             category_id: selectedCategory,
-            employement_type: emp_type,
+            employment_type: emp_type,
             title: title,
             status: selectedStatus,
         };

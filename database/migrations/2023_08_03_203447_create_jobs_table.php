@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('job_posts', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('agency_name')->nullable();
             $table->string('title');
             $table->text('description');
-            $table->string('employement_type');
+            $table->string('employment_type');
             $table->text('industry_experience');
             $table->text('media_experience');
             $table->string('salary_range');
@@ -36,6 +36,8 @@ return new class extends Migration
             $table->boolean('is_onsite')->default(0);
             $table->boolean('is_featured')->default(0);
             $table->boolean('is_urgent')->default(0);
+            $table->boolean('is_opentorelocation')->default(0);
+            $table->boolean('is_opentoremote')->default(0);
             $table->timestamp('expired_at');
             $table->timestamps();
             $table->softDeletes();

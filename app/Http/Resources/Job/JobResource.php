@@ -15,7 +15,7 @@ class JobResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'category' => $this->category->name,
-            'employment_type' => $this->employement_type,
+            'employment_type' => $this->employment_type,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
             'salary_range' => $this->salary_range,

@@ -149,8 +149,6 @@ $(document).ready(function() {
                                         <option value="is_remote">Remote</option>
                                         <option value="is_hybrid">Hybrid</option>
                                         <option value="is_onsite">Onsite</option>
-                                        <!-- <option value="is_featured">Featured</option>
-                                        <option value="is_urgent">Urgent</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -159,14 +157,13 @@ $(document).ready(function() {
                         <div class="col-12 col-lg-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="employement_type"> Employment Type </label>
-                                    <select name="employement_type" id="employement_type"
+                                    <label class="form-label" for="employment_type"> Employment Type </label>
+                                    <select name="employment_type" id="employment_type"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
                                         <option value="-100"> Select Type</option>
                                         @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
                                         <option value="{{$type}}">{{$type}}</option>
                                         @endforeach
-
                                     </select>
                                 </div>
                             </div>
@@ -288,8 +285,7 @@ $(document).ready(function() {
                                 <label class="form-label" for="is_featured"> Featured </label>
                                 <select name="is_featured" id="is_featured"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-1"> Select
-                                    </option>
+
                                     <option value="1"> Yes
                                     </option>
                                     <option value="0"> No
@@ -303,12 +299,41 @@ $(document).ready(function() {
                                 <label class="form-label" for="is_urgent"> Urgent</label>
                                 <select name="is_urgent" id="is_urgent"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-1"> Select
-                                    </option>
                                     <option value="1"> Yes
                                     </option>
                                     <option value="0"> No
                                     </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentoremote"> Open to Remote? </label>
+                                <select name="is_opentoremote" id="is_opentoremote"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="0"> No
+                                    </option>
+                                    <option value="1"> Yes
+                                    </option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_opentorelocation"> Open to Relocation? </label>
+                                <select name="is_opentorelocation" id="is_opentorelocation"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="0"> No
+                                    </option>
+                                    <option value="1">
+                                        Yes
+                                    </option>
+
                                 </select>
                             </div>
                         </div>

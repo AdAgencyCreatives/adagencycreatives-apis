@@ -25,8 +25,8 @@ class Education extends Model
         'completed_at' => 'datetime',
     ];
 
-    public function resume()
+    public function user()
     {
-        return $this->belongsTo(Resume::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -25,13 +25,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label" for="type_of_work"> Type of work </label>
-                                <select name="type_of_work" id="type_of_work"
+                                <label class="form-label" for="employment_type"> Employment Type </label>
+                                <select name="employment_type" id="employment_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Type</option>
 
                                     @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                    <option value="{{$type}}" @if($user->creative->type_of_work == $type) selected
+                                    <option value="{{$type}}" @if($user->creative->employment_type == $type) selected
                                         @endif>{{$type}}</option>
                                     @endforeach
 
@@ -108,13 +108,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label" for="is_opentoremote"> Open to Remote </label>
-                                <select name="is_opentoremote" id="is_opentoremote"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="1" @if($user->creative->is_opentoremote == 1) selected @endif> Yes
-                                    </option>
-                                    <option value="0" @if($user->creative->is_opentoremote == 0) selected @endif> No
-                                    </option>
+                                <label class="form-label" for="workplace_experience">Workplace Preference</label>
+                                <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
+                                    @foreach(\App\Models\Job::WORKPLACE_PREFERENCE as $value => $label)
+                                    <option value="{{ $value }}" @if($user->creative?->{$value}) selected
+                                        @endif>{{ $label }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

@@ -347,14 +347,9 @@ $(document).ready(function() {
         });
     });
 
-    $('#strengths').on('change', function () {
-        var selectedOptions = $(this).val();
+    $("#strengths").select2({
+        maximumSelectionLength: 5
+});
 
-if (selectedOptions.length > 2) {
-    // Remove the last selected options until only 5 are left
-    $(this).val(selectedOptions.slice(0, 2));
-    alert('You can only select up to 5 options.');
-}
-    });
 });
 </script>

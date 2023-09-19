@@ -12,6 +12,8 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'job_posts';
+
     protected $fillable = [
         'uuid',
         'user_id',
@@ -21,7 +23,7 @@ class Job extends Model
         'title',
         'agency_name',
         'description',
-        'employement_type',
+        'employment_type',
         'industry_experience',
         'media_experience',
         'salary_range',
@@ -34,6 +36,8 @@ class Job extends Model
         'is_remote',
         'is_featured',
         'is_urgent',
+        'is_opentorelocation',
+        'is_opentoremote',
         'expired_at',
     ];
 
@@ -52,11 +56,17 @@ class Job extends Model
     ];
 
     const EMPLOYMENT_TYPE = [
+        'Full-Time',
+        'Part-Time',
         'Internship',
         'Freelance',
         'Contract 1099',
-        'Part-Time',
-        'Full-Time',
+    ];
+
+    const WORKPLACE_PREFERENCE = [
+        'is_remote' => 'Remote',
+        'is_hybrid' => 'Hybrid',
+        'is_onsite' => 'Onsite',
     ];
 
     public function user()

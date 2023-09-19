@@ -38,7 +38,7 @@ class JobController extends Controller
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city'),
                 'title',
-                'employement_type',
+                'employment_type',
                 'apply_type',
                 'salary_range',
                 'is_remote',

@@ -7,8 +7,8 @@
             @method('PUT')
 
 
-            @if(isset($user->resume->educations))
-            @foreach ( isset($user->resume->educations) ? $user->resume->educations : [] as $key => $education)
+            @if(isset($user->educations))
+            @foreach ( $user->educations as $key => $education)
             <div class="card">
 
                 <div class="card-header">

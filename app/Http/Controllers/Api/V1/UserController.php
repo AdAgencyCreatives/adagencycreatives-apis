@@ -9,6 +9,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
+use App\Jobs\SendEmailJob;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -63,6 +64,11 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
+            $admin = User::find(1);
+            SendEmailJob::dispatch([
+                'receiver' => $admin, 'data' => $user,
+            ], 'new_user_registration');
+
             return new UserResource($user);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
@@ -85,9 +91,16 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $uuid)
     {
-
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
+            $oldStatus = $user->status;
+            $newStatus = $request->input('status');
+
+            if ($newStatus === 'active' && $oldStatus === 'pending') {
+                SendEmailJob::dispatch([
+                    'receiver' => $user, 'data' => $user,
+                ], 'account_approved');
+            }
             $user->update($request->all());
 
             return new UserResource($user);

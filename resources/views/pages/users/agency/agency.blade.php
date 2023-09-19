@@ -32,24 +32,6 @@
                     </div>
 
                     <div class="row">
-                        <!-- <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label" for="type_of_work"> Type of work </label>
-                                <select name="type_of_work" id="type_of_work"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select Type</option>
-                                    <option value="Freelance" @if($user->agency?->type_of_work == 'Freelance') selected
-                                        @endif>Freelance</option>
-                                    <option value="Contract" @if($user->agency?->type_of_work == 'Contract') selected
-                                        @endif>Contract</option>
-                                    <option value="Part-time" @if($user->agency?->type_of_work == 'Part-time') selected
-                                        @endif>Part-time</option>
-                                    <option value="Full-time" @if($user->agency?->type_of_work == 'Full-time') selected
-                                        @endif>Full-time</option>
-                                </select>
-                            </div>
-
-                        </div> -->
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -126,16 +108,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="workplace_experience">Workplace Preference</label>
                                 <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
-                                    <option value="is_remote" @if($user->agency?->is_remote) selected @endif>Remote
-                                    </option>
-                                    <option value="is_hybrid" @if($user->agency?->is_hybrid) selected @endif>Hybrid
-                                    </option>
-                                    <option value="is_onsite" @if($user->agency?->is_onsite) selected @endif>Onsite
-                                    </option>
+                                    @foreach(\App\Models\Job::WORKPLACE_PREFERENCE as $value => $label)
+                                    <option value="{{ $value }}" @if($user->agency?->{$value}) selected
+                                        @endif>{{ $label }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-
 
                     </div>
 
