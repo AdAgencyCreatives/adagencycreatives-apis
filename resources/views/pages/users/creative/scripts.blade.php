@@ -347,9 +347,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#strengths").select2({
-        maximumSelectionLength: 5
-});
+
 
 });
 </script>

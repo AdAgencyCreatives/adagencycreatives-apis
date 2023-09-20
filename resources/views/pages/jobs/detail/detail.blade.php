@@ -154,6 +154,27 @@ function fetchMedias() {
     });
 }
 
+function fetchStrengthsForJobs() {
+    $.ajax({
+        url: '/api/v1/get_strengths',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            populateFilter(response.data, '#strengths');
+            var strengths = "{{ $job->strengths }}";
+            var strengthArray = strengths.split(',');
+            strengthArray.forEach(function(uuid) {
+                $('#strengths option[value="' + uuid + '"]').prop('selected', true);
+            });
+            $('#strengths').trigger('change');
+
+        },
+        error: function() {
+            alert('Failed to fetch strength from the API.');
+        }
+    });
+}
+
 function fetchYearsOfExperience(user_experience) {
     $.ajax({
         url: '/api/v1/years-of-experience',
@@ -189,6 +210,7 @@ $(document).ready(function() {
     fetchCategories();
     fetchIndustries();
     fetchMedias();
+    fetchStrengthsForJobs();
 
     var job_state = "{{ $job->state->uuid }}";
     fetchStates(job_state);
@@ -442,6 +464,19 @@ $(document).ready(function() {
                                     data-toggle="select2">
                                     <option value="-100"> Select Media</option>
 
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="strengths">Character Strengths (Select up to 5)</label>
+                                <select name="strengths[]" id="strengths"
+                                    class="form-control form-select custom-select select2" multiple="multiple"
+                                    data-toggle="select2">
+                                    <option value="-100"> Select Strengths </option>
                                 </select>
                             </div>
                         </div>

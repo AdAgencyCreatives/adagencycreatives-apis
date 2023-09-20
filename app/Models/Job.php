@@ -26,6 +26,7 @@ class Job extends Model
         'employment_type',
         'industry_experience',
         'media_experience',
+        'strengths',
         'salary_range',
         'years_of_experience',
         'apply_type',
