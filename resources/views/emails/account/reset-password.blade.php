@@ -106,7 +106,7 @@
                     <!-- Visually Hidden Preheader Text : BEGIN -->
                     <div
                         style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-                        {{email.preheader}}
+
                     </div>
                     <!-- Visually Hidden Preheader Text : END -->
 
@@ -147,25 +147,21 @@
                                                 <div
                                                     style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; padding: 30px;color:#000">
                                                     <span style="font-weight: normal; font-size: 20px"
-                                                        class="welcome">Hi {{ $data['user']->first_name }},</span>
+                                                        class="welcome">Hi Hamza,</span>
 
-                                                    <p><span style="color: #000000;">Welcome to
-                                                            {{ env('APP_NAME') }}!</span>
+                                                    <p><span style="color: #000000;">We received a request to reset your
+                                                            account password. If you made this request, visit the
+                                                            following link to <a style="color: #000000;"
+                                                                href="{{ $url }}">reset</a> your password.
+                                                        </span></p>
+                                                    <p><span style="color: #000000;">If you did not make this request,
+                                                            no further action is necessary. We recommend you update your
+                                                            password often and keep your information confidential.
+                                                        </span></p>
+                                                    <p><span style="color: #000000;">Thanks, </span><br />
+                                                        <span style="color: #000000;">Ad Agency Creatives</span><br />
+                                                        <span style="color: #000000;">Member Support Team</span>
                                                     </p>
-                                                    <p><span style="color: #000000;">Visit your <a
-                                                                style="color: #000000;"
-                                                                href="{{{profile.url}}}">profile</a>, where you can tell
-                                                            us more about yourself, change your preferences, or make new
-                                                            connections, to get started.</span></p>
-                                                    <p><span style="color: #000000;">Forgot your password? Don't worry,
-                                                            you can reset it with your email address from <a
-                                                                style="color: #000000;"
-                                                                href="{{{lostpassword.url}}}">this page</a> of our
-                                                            site</span></p>
-                                                    <p><span style="color: #000000;">Thanks,<br />
-                                                            <span style="color: #000000;">Ad Agency Creatives<br />
-                                                                <span style="color: #000000;">Member Support
-                                                                    Team</span></span></span></p>
 
                                                 </div>
                                             </td>

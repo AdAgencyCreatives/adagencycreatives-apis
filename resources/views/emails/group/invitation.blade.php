@@ -5,7 +5,9 @@
 <head>
     <title>BuddyPress Emails</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width"> -->
+    <!-- Forcing initial-scale shouldn't be necessary -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name="x-apple-disable-message-reformatting"> <!-- Disable auto-scale in iOS 10 Mail entirely -->
     <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
@@ -92,6 +94,26 @@
     .button-link {
         text-decoration: none !important;
     }
+
+    @media only screen and (max-width: 600px) {
+
+        /* Adjust the max-width and styles for smaller screens */
+        .email-container {
+            width: 100% !important;
+        }
+    }
+
+    img {
+        -ms-interpolation-mode: bicubic;
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
     </style>
 
 </head>
@@ -103,12 +125,6 @@
             <td valign="top">
                 <center style="width: 100%; text-align: left;">
 
-                    <!-- Visually Hidden Preheader Text : BEGIN -->
-                    <div
-                        style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-                        {{email.preheader}}
-                    </div>
-                    <!-- Visually Hidden Preheader Text : END -->
 
                     <div style="max-width: 600px; margin: auto;" class="email-container">
                         <!--[if mso]>
@@ -147,25 +163,18 @@
                                                 <div
                                                     style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; padding: 30px;color:#000">
                                                     <span style="font-weight: normal; font-size: 20px"
-                                                        class="welcome">Hi {{ $data['user']->first_name }},</span>
+                                                        class="welcome">Hi {{ $data['recipient'] }},</span>
 
-                                                    <p><span style="color: #000000;">Welcome to
-                                                            {{ env('APP_NAME') }}!</span>
+                                                    <p><span style="color: #000000;"><a style="color: #000000;"
+                                                                href="#">{{ $data['inviter'] }}</a> has
+                                                            invited you to join the group: "{{$data['group']}}".</span>
                                                     </p>
-                                                    <p><span style="color: #000000;">Visit your <a
-                                                                style="color: #000000;"
-                                                                href="{{{profile.url}}}">profile</a>, where you can tell
-                                                            us more about yourself, change your preferences, or make new
-                                                            connections, to get started.</span></p>
-                                                    <p><span style="color: #000000;">Forgot your password? Don't worry,
-                                                            you can reset it with your email address from <a
-                                                                style="color: #000000;"
-                                                                href="{{{lostpassword.url}}}">this page</a> of our
-                                                            site</span></p>
-                                                    <p><span style="color: #000000;">Thanks,<br />
-                                                            <span style="color: #000000;">Ad Agency Creatives<br />
-                                                                <span style="color: #000000;">Member Support
-                                                                    Team</span></span></span></p>
+
+                                                    <p><span style="color: #000000;"><a style="color: #000000;"
+                                                                href="#">Go here to accept your
+                                                                invitation</a> or <a style="color: #000000;"
+                                                                href="#">visit the group</a> to learn
+                                                            more.</span></p>
 
                                                 </div>
                                             </td>

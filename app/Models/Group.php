@@ -17,7 +17,7 @@ class Group extends Model
         'status',
     ];
 
-    const STATUSES = [
+    public const STATUSES = [
         'PUBLIC' => 0,
         'PRIVATE' => 1,
         'HIDDEN' => 2,
@@ -36,6 +36,16 @@ class Group extends Model
     public function members()
     {
         return $this->hasMany(GroupMember::class);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(GroupInvitation::class);
+    }
+
+    public function isMember(User $user)
+    {
+        return $this->members()->where('user_id', $user->id)->exists();
     }
 
     public function getStatusAttribute($value)
