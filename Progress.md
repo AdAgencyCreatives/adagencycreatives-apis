@@ -259,3 +259,32 @@ Admin can
 - Corrected the image upload process for job and groups
 - Added more fields in jobs, agency and creatives API
 - Added Telescope for activity logs
+
+## 08/9/2023 - Chat Funtionality
+ - API endpoint for sending new message.
+ - API endpoint for all related users 
+    - (with name and last one message to show in left panel of messaging screen 
+    - from where we select any user and start the chat).
+ - Created frontend which will be used by admin to view messages of all the users.
+ 
+## 11/9/2023 - Chat Functionality
+ - API endpoints for chats
+ - Created impersonating route
+
+## 12/9/2023 - Dashboard | Strengths CRUD
+ - API endpoints for all strengths(tags).
+ - Added strengths module in admin dashboard 
+ - Added strengths field in creatives profile
+ - Setup email on admin action (single email for now)
+ 
+## 13/9/2023 - Extra fields
+- Added `open_to_relocation` and `open_to_remote` in jobs section
+- Added `workplace preference` in creatives profile
+- Setup Emails with Queues
+ 
+## 14/9/2023 - Reset Password | Group Invitation
+ - API endpoint which will send email to the user conatining the reset link
+ - API endpoint which will allows user to enter new password alongwith token
+ - API endpoint to allow ther User to send group invitation to other user
+ - API endpoint to update the status of invitation, after that user will become member of that group
+ - API endpoint to get all the invitations [with filter of user and status]

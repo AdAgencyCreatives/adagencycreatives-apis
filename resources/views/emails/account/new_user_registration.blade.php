@@ -1,4 +1,4 @@
-@include('emails.email-header')
+@include('emails.includes.email-header')
 <table style="height: 661px" border="0" width="100%" cellspacing="0" cellpadding="20">
     <tbody>
         <tr>
@@ -45,4 +45,4 @@
 </td>
 </tr>
 <tr>
-    @include('emails.email-footer')
+    @include('emails.includes.email-footer')

@@ -442,3 +442,7 @@ function getCitiesByState(stateId, selected_id = null) {
     });
 }
 
+$("#strengths").select2({
+    maximumSelectionLength: 5
+});
+

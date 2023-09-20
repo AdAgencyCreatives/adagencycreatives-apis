@@ -48,6 +48,7 @@ class JobController extends Controller
             'status' => $request->status,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'strengths' => ''.implode(',', $request->media_experience).'',
             'state_id' => $state->id,
             'city_id' => $city->id,
         ]);
@@ -78,6 +79,7 @@ class JobController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $job = Job::where('id', $id)->first();
 
         $category = Category::where('uuid', $request->category_id)->first();
@@ -89,6 +91,7 @@ class JobController extends Controller
             'address_id' => 5,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'strengths' => ''.implode(',', $request->strengths).'',
             'state_id' => $state->id,
             'city_id' => $city->id,
         ]);

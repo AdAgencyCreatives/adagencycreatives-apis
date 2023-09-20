@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -40,13 +41,27 @@ Route::get('/test', function () {
     return User::all();
 });
 
-Route::get('/email', function () {
-    $user = User::find(5);
+Route::get('/email-template', function () {
+    return view('emails.group.invitation');
+});
 
-    $admin = User::find(1);
+Route::get('/email', function () {
+
+    $invitee = User::find(2);
+    $inviter = User::find(3);
+    $group = Group::find(1);
+
+    $data = [
+        'recipient' => $invitee->first_name,
+        'inviter' => $inviter->first_name.' '.$invitee->last_name,
+        'group' => $group->name,
+        'message' => 'Custom MEssage',
+    ];
+
     SendEmailJob::dispatch([
-        'receiver' => $user, 'data' => $user,
-    ], 'account_approved');
+        'receiver' => $invitee,
+        'data' => $data,
+    ], 'group_invitation');
 });
 
 Route::get('/reset', function () {
@@ -106,11 +121,11 @@ Route::group(['middleware' => ['auth', 'admin', 'admin_or_token']], function () 
     Route::get('logs', [LogViewerController::class, 'index'])->middleware('admin');
 });
 
-Route::resource('plans', PlanController::class);
+// Route::resource('plans', PlanController::class);
 Route::view('/pricing', 'pricing');
 
 Route::view('/subscription', 'subscription');
-Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
+// Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
 
 Route::get('test-web', [WebSocketController::class, 'index']);
 

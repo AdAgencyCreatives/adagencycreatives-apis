@@ -3,29 +3,34 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AccountApproved extends Mailable implements ShouldQueue
+class ResetPassword extends Mailable
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-    public $data;
-
-    public function __construct($user)
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        $this->data['user'] = $user;
+        //
     }
 
+    /**
+     * Get the message envelope.
+     *
+     * @return \Illuminate\Mail\Mailables\Envelope
+     */
     public function envelope()
     {
         return new Envelope(
-            subject: 'Account Approved',
+            subject: 'Reset Password',
         );
     }
 
@@ -37,7 +42,7 @@ class AccountApproved extends Mailable implements ShouldQueue
     public function content()
     {
         return new Content(
-            view: 'emails.account.approved',
+            view: 'emails.account.reset-password',
         );
     }
 

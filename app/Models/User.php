@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendResetPasswordJob;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -38,6 +39,11 @@ class User extends Authenticatable
     // {
     //     return 'uuid';
     // }
+
+    public function sendPasswordResetNotification($token)
+    {
+        SendResetPasswordJob::dispatch($token, $this);
+    }
 
     protected $hidden = [
         'password',

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('employment_type');
             $table->text('industry_experience');
             $table->text('media_experience');
+            $table->text('strengths')->nullable();
             $table->string('salary_range');
             $table->string('years_of_experience');
             $table->string('apply_type');

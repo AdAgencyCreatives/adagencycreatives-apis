@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('group_invitations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('inviter_user_id');
+            $table->unsignedBigInteger('invitee_user_id');
             $table->unsignedBigInteger('group_id');
-            $table->string('invited_email');
-            $table->string('token');
+            $table->integer('status')->default(0)->comment('pending', 'accepted', 'declined');
             $table->timestamp('accepted_at')->nullable();
             $table->timestamps();
         });

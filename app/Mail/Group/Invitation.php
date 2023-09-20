@@ -1,31 +1,28 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Group;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AccountApproved extends Mailable implements ShouldQueue
+class Invitation extends Mailable
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
     public $data;
 
-    public function __construct($user)
+    public function __construct($data)
     {
-        $this->data['user'] = $user;
+        $this->data = $data;
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: 'Account Approved',
+            subject: sprintf('[%s] You have an invitation to the group: “%s”', env('APP_NAME'), $this->data['group']),
         );
     }
 
@@ -36,8 +33,9 @@ class AccountApproved extends Mailable implements ShouldQueue
      */
     public function content()
     {
+        // dd($this->data);
         return new Content(
-            view: 'emails.account.approved',
+            view: 'emails.group.invitation',
         );
     }
 
