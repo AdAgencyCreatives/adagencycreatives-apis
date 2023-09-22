@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Mail\AccountApproved;
 use App\Mail\Group\Invitation;
 use App\Mail\NewUserRegistration;
+use App\Mail\Order\ConfirmationAdmin;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,6 +38,10 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'group_invitation':
                 Mail::to($this->data['receiver'])->send(new Invitation($this->data['data']));
+                break;
+
+            case 'order_confirmation':
+                Mail::to($this->data['receiver'])->send(new ConfirmationAdmin($this->data['data']));
                 break;
 
             default:

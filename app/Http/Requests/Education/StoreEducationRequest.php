@@ -14,12 +14,11 @@ class StoreEducationRequest extends FormRequest
     public function rules()
     {
         return [
-            'resume_id' => 'required|exists:resumes,uuid',
+            'user_id' => 'required|exists:users,uuid',
             'educations' => 'required|array|min:1',
             'educations.*.degree' => 'required|string',
             'educations.*.college' => 'required|string',
-            'educations.*.started_at' => 'required|date',
-            'educations.*.completed_at' => 'nullable|date|after:educations.*.started_at',
+            'educations.*.completed_at' => 'required|date',
         ];
     }
 }

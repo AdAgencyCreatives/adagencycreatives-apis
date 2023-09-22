@@ -6,19 +6,28 @@ use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Education\UpdateEducationRequest;
 use App\Http\Requests\Experience\StoreExperienceRequest;
 use App\Http\Resources\Experience\ExperienceCollection;
-use App\Models\Education;
+use App\Http\Resources\Experience\ExperienceResource;
 use App\Models\Experience;
-use App\Models\Resume;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ExperienceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $experiences = Experience::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Experience::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
+
+        $experiences = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ExperienceCollection($experiences);
     }
@@ -26,7 +35,7 @@ class ExperienceController extends Controller
     public function store(StoreExperienceRequest $request)
     {
         try {
-            $resume = Resume::where('uuid', $request->resume_id)->first();
+            $user = User::where('uuid', $request->user_id)->first();
             $experiencesData = $request->input('experiences');
 
             $createdExperiences = [];
@@ -34,8 +43,7 @@ class ExperienceController extends Controller
             foreach ($experiencesData as $experienceData) {
                 $createdExperiences[] = Experience::create([
                     'uuid' => Str::uuid(),
-                    'resume_id' => $resume->id,
-                    'title' => $experienceData['title'],
+                    'user_id' => $user->id,
                     'company' => $experienceData['company'],
                     'description' => $experienceData['description'],
                     'started_at' => $experienceData['started_at'],
@@ -52,10 +60,10 @@ class ExperienceController extends Controller
     public function update(UpdateEducationRequest $request, $uuid)
     {
         try {
-            $education = Education::where('uuid', $uuid)->firstOrFail();
+            $education = Experience::where('uuid', $uuid)->firstOrFail();
             $education->update($request->all());
 
-            return new EducationResource($education);
+            return new ExperienceResource($education);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -66,10 +74,10 @@ class ExperienceController extends Controller
     public function destroy($uuid)
     {
         try {
-            $education = Education::where('uuid', $uuid)->firstOrFail();
-            $education->delete();
+            $experience = Experience::where('uuid', $uuid)->firstOrFail();
+            $experience->delete();
 
-            return new EducationResource($education);
+            return new ExperienceResource($experience);
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }

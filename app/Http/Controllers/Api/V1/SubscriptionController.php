@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -42,10 +44,25 @@ class SubscriptionController extends Controller
                 'quota_left' => $totalQuota,
             ]);
 
-            $user->orders()->create([
+            $order = $user->orders()->create([
                 'plan_id' => $plan->id,
                 'amount' => $plan->price,
             ]);
+
+            $data = [
+                'order_no' => $order->id,
+                'username' => $user->first_name.' '.$user->last_name,
+                'email' => $user->email,
+                'total' => $plan->price,
+                'pm_type' => $subscription->owner->pm_type,
+                'created_at' => \Carbon\Carbon::parse($subscription->created_at)->format('F d, Y'),
+            ];
+
+            $admin = User::find(1);
+            SendEmailJob::dispatch([
+                'receiver' => $admin,
+                'data' => $data,
+            ], 'order_confirmation');
 
             return $subscription;
         } catch (\Exception $e) {

@@ -31,15 +31,6 @@ class GroupController extends Controller
         return view('pages.groups.add');
     }
 
-    public function show(Group $group)
-    {
-    }
-
-    public function edit(Group $group)
-    {
-        //
-    }
-
     public function update(Request $request, $uuid)
     {
         try {

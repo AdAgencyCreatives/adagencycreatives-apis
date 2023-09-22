@@ -32,6 +32,11 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 | contains the "web" middleware group. Now create something great!
 |
  */
+Route::get('/test2', function () {
+    $created = '2023-09-22T06:43:51.000000Z';
+    $required_format = \Carbon\Carbon::parse($created)->format('F d, Y');
+    dd($required_format);
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,7 +47,7 @@ Route::get('/test', function () {
 });
 
 Route::get('/email-template', function () {
-    return view('emails.group.invitation');
+    return view('emails.order.new-order-alert-admin');
 });
 
 Route::get('/email', function () {
@@ -137,11 +142,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
-// Route::resource('plans', PlanController::class);
+Route::resource('plans', PlanController::class);
 Route::view('/pricing', 'pricing');
-
 Route::view('/subscription', 'subscription');
-// Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
+Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
 
 Route::get('test-web', [WebSocketController::class, 'index']);
 

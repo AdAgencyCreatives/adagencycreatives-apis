@@ -11,15 +11,23 @@ use App\Http\Requests\Education\UpdateEducationRequest;
 use App\Http\Resources\Education\EducationCollection;
 use App\Http\Resources\Education\EducationResource;
 use App\Models\Education;
-use App\Models\Resume;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class EducationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $educations = Education::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Education::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
+
+        $educations = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new EducationCollection($educations);
     }
@@ -27,7 +35,7 @@ class EducationController extends Controller
     public function store(StoreEducationRequest $request)
     {
         try {
-            $resume = Resume::where('uuid', $request->resume_id)->first();
+            $user = User::where('uuid', $request->user_id)->first();
             $educationsData = $request->input('educations');
 
             $createdEducations = [];
@@ -35,10 +43,9 @@ class EducationController extends Controller
             foreach ($educationsData as $educationData) {
                 $createdEducations[] = Education::create([
                     'uuid' => Str::uuid(),
-                    'resume_id' => $resume->id,
+                    'user_id' => $user->id,
                     'degree' => $educationData['degree'],
                     'college' => $educationData['college'],
-                    'started_at' => $educationData['started_at'],
                     'completed_at' => $educationData['completed_at'],
                 ]);
             }

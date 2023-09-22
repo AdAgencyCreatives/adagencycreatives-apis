@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Subscription;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -187,5 +188,15 @@ class JobController extends Controller
         }
 
         return null;
+    }
+
+    public function get_employment_types()
+    {
+        $cacheKey = 'employment_types';
+        $users = Cache::remember($cacheKey, now()->addMinutes(120), function () {
+            return Job::EMPLOYMENT_TYPE;
+        });
+
+        return $users;
     }
 }

@@ -14,9 +14,8 @@ class StoreExperienceRequest extends FormRequest
     public function rules()
     {
         return [
-            'resume_id' => 'required|exists:resumes,uuid',
+            'user_id' => 'required|exists:users,uuid',
             'experiences' => 'required|array|min:1',
-            'experiences.*.title' => 'required|string',
             'experiences.*.company' => 'required|string',
             'experiences.*.description' => 'required|string',
             'experiences.*.started_at' => 'required|date',

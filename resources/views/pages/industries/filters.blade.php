@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="industry"> Industry </label>
+                                <label class="form-label" for="industry"> Industry Experience</label>
                                 <select name="industry" id="industry"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100">Select Industry</option>

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->string('title');
-            $table->string('years_of_experience');
-            $table->text('about');
-            $table->string('employment_type');
+            $table->string('years_of_experience')->nullable();
+            $table->text('about')->nullable();
+            $table->string('employment_type')->nullable();
             $table->text('industry_experience')->nullable();
             $table->text('media_experience')->nullable();
             $table->text('strengths')->nullable();
