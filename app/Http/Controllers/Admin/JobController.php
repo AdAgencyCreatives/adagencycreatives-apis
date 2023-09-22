@@ -48,9 +48,9 @@ class JobController extends Controller
             'status' => $request->status,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
-            'strengths' => ''.implode(',', $request->media_experience).'',
-            'state_id' => $state->id,
-            'city_id' => $city->id,
+            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'state_id' => $state->id ?? 1,
+            'city_id' => $city->id ?? 1,
         ]);
 
         $labels = $request->labels;
@@ -91,9 +91,9 @@ class JobController extends Controller
             'address_id' => 5,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
-            'strengths' => ''.implode(',', $request->strengths).'',
-            'state_id' => $state->id,
-            'city_id' => $city->id,
+            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'state_id' => $state->id ?? $job->state_id,
+            'city_id' => $city->id ?? $job->city_id,
         ]);
 
         $this->appendWorkplacePreference($request);

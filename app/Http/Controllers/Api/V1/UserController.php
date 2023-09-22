@@ -25,10 +25,6 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // $users = Cache::remember('users', $this->cache_expiration_time, function () {
-        //     return User::paginate(config('global.request.pagination_limit'));
-        // });
-
         $query = QueryBuilder::for(User::class)
             ->allowedFilters([
                 'first_name',
@@ -48,8 +44,6 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         try {
-            $email = fake()->unique()->safeEmail();
-
             $user = new User();
             $user->uuid = Str::uuid();
             $user->first_name = $request->first_name;
@@ -91,6 +85,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $uuid)
     {
+
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
             $oldStatus = $user->status;
