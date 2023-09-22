@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('media-experiences', MediaController::class);
     Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
     Route::apiResource('years-of-experience', YearsOfExperienceController::class);
+    Route::get('employment_types', [JobController::class, 'get_employment_types']);
     Route::apiResource('locations', LocationController::class);
     Route::apiResource('reviews', ReviewController::class);
 

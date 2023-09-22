@@ -288,3 +288,10 @@ Admin can
  - API endpoint to allow ther User to send group invitation to other user
  - API endpoint to update the status of invitation, after that user will become member of that group
  - API endpoint to get all the invitations [with filter of user and status]
+  
+ ## 15/9/2023 - Advisor permission | Extra fields 
+ - Added new fields in jobs api endpoint
+ - Added new fields in creatives api endpoint
+ - Setup permission level for advisor role for different pages.
+ - Sending email to admin when user purchases new order/package
+ - Added character strengths field in jobs section

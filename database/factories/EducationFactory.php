@@ -12,7 +12,6 @@ class EducationFactory extends Factory
             'uuid' => fake()->uuid(),
             'degree' => fake()->word,
             'college' => fake()->sentence,
-            'started_at' => fake()->dateTimeThisDecade,
             'completed_at' => fake()->optional()->dateTimeThisDecade,
             'created_at' => now(),
             'updated_at' => now(),

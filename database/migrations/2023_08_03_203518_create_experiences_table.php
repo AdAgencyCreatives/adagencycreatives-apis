@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('title');
             $table->string('company');
             $table->text('description');
             $table->timestamp('started_at');

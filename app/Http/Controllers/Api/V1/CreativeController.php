@@ -19,15 +19,15 @@ class CreativeController extends Controller
 {
     public function index(Request $request)
     {
-
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('years_of_experience_id'),
-                'type_of_work',
+                'employment_type',
+                'title',
             ]);
 
-        $creatives = $query->paginate(config('global.request.pagination_limit'));
+        $creatives = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
     }

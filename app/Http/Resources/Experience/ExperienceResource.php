@@ -11,8 +11,7 @@ class ExperienceResource extends JsonResource
         return [
             'type' => 'experiences',
             'id' => $this->uuid,
-            'resume_id' => $this->resume->uuid,
-            'title' => $this->title,
+            'user_id' => $this->user->uuid,
             'company' => $this->company,
             'description' => $this->description,
             'started_at' => $this->started_at->format(config('global.datetime_format')),

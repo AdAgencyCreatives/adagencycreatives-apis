@@ -34,7 +34,17 @@ class CreativeController extends Controller
         $uuid = Str::uuid();
         $this->userService->appendWorkplacePreference($request);
 
-        $data = $request->only(['years_of_experience', 'type_of_work', 'is_featured', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite', 'is_opentorelocation']);
+        $data = $request->only([
+            'years_of_experience',
+            'type_of_work',
+            'is_featured',
+            'is_urgent',
+            'is_remote',
+            'is_hybrid',
+            'is_onsite',
+            'is_opentorelocation',
+            'about',
+        ]);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('degree');
             $table->string('college');
-            $table->timestamp('started_at');
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

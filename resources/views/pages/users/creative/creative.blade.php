@@ -133,6 +133,18 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="about"> About </label>
+                                    <textarea name="about" class="form-control" rows="2" placeholder="About"
+                                        spellcheck="true" style="height: 225px;">{{ $user->creative?->about }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
             </div>

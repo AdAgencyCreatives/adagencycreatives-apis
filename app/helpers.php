@@ -3,6 +3,7 @@
 use App\Models\Attachment;
 use App\Models\Industry;
 use App\Models\Media;
+use App\Models\Strength;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,16 @@ if (! function_exists('getMediaNames')) {
         $medias = Media::whereIn('uuid', $ids)->pluck('name')->toArray();
 
         return $medias;
+    }
+}
+
+if (! function_exists('getCharacterStrengthNames')) {
+    function getCharacterStrengthNames($commaSeparatedIds)
+    {
+        $ids = explode(',', $commaSeparatedIds);
+        $strengths = Strength::whereIn('uuid', $ids)->pluck('name')->toArray();
+
+        return $strengths;
     }
 }
 

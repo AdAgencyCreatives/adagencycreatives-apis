@@ -82,7 +82,7 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="status"> About </label>
+                                    <label class="form-label" for="about"> About </label>
                                     <textarea name="about" class="form-control" rows="2" placeholder="About"
                                         spellcheck="true" style="height: 225px;">{{ $user->agency?->about }}</textarea>
                                 </div>

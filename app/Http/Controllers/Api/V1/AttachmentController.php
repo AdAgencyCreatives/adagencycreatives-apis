@@ -12,7 +12,6 @@ use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -35,26 +34,10 @@ class AttachmentController extends Controller
 
     public function store(StoreAttachmentRequest $request)
     {
-        $uuid = Str::uuid();
-
         try {
             $user = User::where('uuid', $request->user_id)->first();
-
-            $file = $request->file;
             $resource_type = $request->resource_type;
-            $extension = $file->getClientOriginalExtension();
-            $filename = $uuid.'.'.$extension;
-            $file_path = Storage::disk('public')->putFileAs($resource_type, $file, $filename);
-
-            $request->merge([
-                'uuid' => $uuid,
-                'user_id' => $user->id,
-                'resource_type' => $resource_type,
-                'path' => $file_path,
-                'extension' => $extension,
-            ]);
-
-            $attachment = Attachment::create($request->all());
+            $attachment = storeImage($request, $user->id, $resource_type);
 
             return new AttachmentResource($attachment);
         } catch (\Exception $e) {

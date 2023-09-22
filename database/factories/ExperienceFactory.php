@@ -10,7 +10,7 @@ class ExperienceFactory extends Factory
     {
         return [
             'uuid' => fake()->uuid(),
-            'title' => fake()->jobTitle,
+            // 'title' => fake()->jobTitle,
             'company' => fake()->company,
             'description' => fake()->paragraph,
             'started_at' => fake()->dateTimeThisDecade,
