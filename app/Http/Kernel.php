@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'check.permissions' => \App\Http\Middleware\CheckPermission::class,
         'admin_or_token' => \App\Http\Middleware\AdminOrTokenMiddleware::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'advisor' => \App\Http\Middleware\AdvisorMiddleware::class,
     ];
 }

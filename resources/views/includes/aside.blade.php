@@ -151,7 +151,7 @@
 
                 </ul>
             </li>
-
+            @if(auth()->user()->role == 'admin')
             <li class="sidebar-item {{ request()->is('groups*') ? 'active' : '' }} ">
                 <a data-target="#groups" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="globe"></i>
@@ -362,6 +362,7 @@
             <li class="sidebar-header">
                 Reports
             </li>
+
             <li class="sidebar-item {{ request()->is('reports') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('reports.index') }}">
                     <i class="align-middle" data-feather="trending-up"></i>
@@ -375,7 +376,7 @@
                     <span class="align-middle">Activity</span>
                 </a>
             </li>
-
+            @endif
             <li class="sidebar-header">
                 Personal
             </li>

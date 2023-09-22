@@ -551,7 +551,7 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label class="form-label" for="state"> State </label>
                                 <select name="state" id="state" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                    data-toggle="select2" required>
                                     <option value="-100"> Select State</option>
                                 </select>
                             </div>
@@ -562,7 +562,7 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label class="form-label" for="city"> City </label>
                                 <select name="city" id="city" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                    data-toggle="select2" required>
                                     <option value="-100"> Select City</option>
                                 </select>
                             </div>
@@ -576,7 +576,8 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label class="form-label" for="is_featured"> Featured? </label>
                                 <select name="is_featured" id="is_featured"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    class="form-control form-select custom-select select2" data-toggle="select2"
+                                    @if(auth()->user()->role == 'advisor') disabled @endif>
                                     <option value="1" @if($job->is_featured == 1) selected @endif> Yes
                                     </option>
                                     <option value="0" @if($job->is_featured == 0) selected @endif> No
@@ -589,7 +590,8 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label class="form-label" for="is_urgent"> Urgent?</label>
                                 <select name="is_urgent" id="is_urgent"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    class="form-control form-select custom-select select2" data-toggle="select2"
+                                    @if(auth()->user()->role == 'advisor') disabled @endif>
                                     <option value="1" @if($job->is_urgent == 1) selected @endif> Yes
                                     </option>
                                     <option value="0" @if($job->is_urgent == 0) selected @endif> No

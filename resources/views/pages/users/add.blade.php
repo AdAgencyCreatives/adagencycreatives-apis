@@ -22,7 +22,7 @@ $(document).ready(function() {
 
     selectRoleDropdown();
     const submitButton = document.getElementById('submitButton');
-    $("form").on("submit", function(event) {
+    $("#add-user-form").on("submit", function(event) {
 
         submitButton.disabled = true; // Disable the submit button
         event.preventDefault();
@@ -117,7 +117,7 @@ $(document).ready(function() {
                 <h5 class="card-title mb-0">Personal info</h5>
             </div>
             <div class="card-body">
-                <form>
+                <form id="add-user-form">
                     <div class="row">
                         <div class="col-md-6">
 

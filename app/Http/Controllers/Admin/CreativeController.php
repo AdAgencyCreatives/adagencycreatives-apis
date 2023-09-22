@@ -25,7 +25,6 @@ class CreativeController extends Controller
 
     public function update(Request $request, $uuid)
     {
-
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $user->update([

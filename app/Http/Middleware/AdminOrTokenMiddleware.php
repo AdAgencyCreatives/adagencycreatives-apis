@@ -11,7 +11,7 @@ class AdminOrTokenMiddleware
     public function handle(Request $request, Closure $next)
     {
         if ($request->user()) {
-            if ($request->user()->role == 'admin') {
+            if (in_array($request->user()->role, ['admin', 'advisor'])) {
                 return $next($request);
             }
         }

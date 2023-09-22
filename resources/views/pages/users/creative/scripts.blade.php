@@ -347,7 +347,11 @@ $(document).ready(function() {
         });
     });
 
-
+    // disable submit button if user is advisor
+    const userRole = '{{ auth()->user()->role }}';
+    if (userRole === 'advisor') {
+        $('button[type="submit"]').prop('disabled', true);
+    }
 
 });
 </script>

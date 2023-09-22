@@ -22,8 +22,9 @@
                 <div class="dropdown-menu dropdown-menu-right">
 
 
-                    <form method="post" action="{{ route('logout') }}">
+                    <form id="logout-form-profile" method="post" action="{{ route('logout') }}">
                         @csrf
+
                         <button type="submit" class="dropdown-item">Sign out</button>
                     </form>
 
