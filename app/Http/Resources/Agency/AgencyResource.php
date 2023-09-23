@@ -8,10 +8,12 @@ class AgencyResource extends JsonResource
 {
     public function toArray($request)
     {
+        $user = $this->user;
+
         return [
             'type' => 'agencies',
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
+            'user_id' => $user->uuid,
             'name' => $this->name,
             'size' => $this->size,
             'about' => $this->about,
@@ -23,8 +25,19 @@ class AgencyResource extends JsonResource
             'is_onsite' => $this->is_onsite,
             'is_featured' => $this->is_featured,
             'is_urgent' => $this->is_urgent,
+            'location' => $this->get_location($user),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
+    }
+
+    public function get_location($user)
+    {
+        $address = collect($user->addresses)->firstWhere('label', 'business');
+
+        return $address ? [
+            'state' => $address->state->name,
+            'city' => $address->city->name,
+        ] : null;
     }
 }

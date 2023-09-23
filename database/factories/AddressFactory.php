@@ -10,12 +10,11 @@ class AddressFactory extends Factory
     {
         return [
             'uuid' => fake()->uuid(),
-            'label' => ['primary', 'business', 'personal'][rand(0, 2)],
             'street_1' => fake()->streetAddress,
             'street_2' => fake()->secondaryAddress,
-            'city' => fake()->city,
-            'state' => fake()->state,
-            'country' => fake()->country,
+            'city_id' => 39,
+            'state_id' => 30,
+            'country_id' => 1,
             'postal_code' => fake()->postcode,
             'created_at' => now(),
             'updated_at' => now(),

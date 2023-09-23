@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Link;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -22,10 +24,9 @@ class AgencyController extends Controller
         $uuid = Str::uuid();
         if ($request->has('file') && is_object($request->file)) {
             //Delete Previous logo
-            if ($user->attachments->where('resource_type', 'agency_logo')->first()) {
-                $user->attachments->where('resource_type', 'agency_logo')->first()->delete();
+            if ($user->attachments->where('resource_type', 'agency_logo')->count()) {
+                Attachment::where('user_id', $user->id)->where('resource_type', 'agency_logo')->delete();
             }
-
             $attachment = storeImage($request, $user->id, 'agency_logo');
 
             if (isset($attachment) && is_object($attachment)) {
@@ -66,6 +67,8 @@ class AgencyController extends Controller
             'is_visible' => $request->is_visible,
         ]);
 
+        $this->updateLocation($request, $user);
+
         Session::flash('success', 'Agency updated successfully');
 
         return redirect()->back();
@@ -103,5 +106,24 @@ class AgencyController extends Controller
         }
 
         return $request->merge($defaultWorkplacePreferences);
+    }
+
+    private function updateLocation($request, $user)
+    {
+        $state = Location::where('uuid', $request->state)->first();
+        $city = Location::where('uuid', $request->city)->first();
+        if ($state && $city) {
+            $address = $user->addresses->first();
+            if (! $address) {
+                $address = new Address();
+                $address->uuid = Str::uuid();
+                $address->user_id = $user->id;
+                $address->label = 'business';
+                $address->country_id = 1;
+            }
+            $address->state_id = $state->id;
+            $address->city_id = $city->id;
+            $address->save();
+        }
     }
 }

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
+use App\Models\Attachment;
 use App\Models\Creative;
 use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Link;
+use App\Models\Location;
 use App\Models\Phone;
 use App\Models\User;
 use App\Services\UserService;
@@ -25,6 +28,7 @@ class CreativeController extends Controller
 
     public function update(Request $request, $uuid)
     {
+        // dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
@@ -57,6 +61,24 @@ class CreativeController extends Controller
         if ($request->has('linkedin') && $request->input('linkedin') != null) {
             $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
+
+        if ($request->has('file') && is_object($request->file)) {
+            //Delete Previous picture
+            if ($user->attachments->where('resource_type', 'profile_picture')->count()) {
+                Attachment::where('user_id', $user->id)->where('resource_type', 'profile_picture')->delete();
+            }
+
+            $attachment = storeImage($request, $user->id, 'profile_picture');
+
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $creative->id,
+                ]);
+            }
+        }
+
+        $this->updateLocation($request, $user);
+
         // dd($request->all());
         Session::flash('success', 'Creative updated successfully');
 
@@ -167,6 +189,25 @@ class CreativeController extends Controller
                 'label' => $label,
                 'url' => $url,
             ]);
+        }
+    }
+
+    private function updateLocation($request, $user)
+    {
+        $state = Location::where('uuid', $request->state)->first();
+        $city = Location::where('uuid', $request->city)->first();
+        if ($state && $city) {
+            $address = $user->addresses->first();
+            if (! $address) {
+                $address = new Address();
+                $address->uuid = Str::uuid();
+                $address->user_id = $user->id;
+                $address->label = 'personal';
+                $address->country_id = 1;
+            }
+            $address->state_id = $state->id;
+            $address->city_id = $city->id;
+            $address->save();
         }
     }
 }

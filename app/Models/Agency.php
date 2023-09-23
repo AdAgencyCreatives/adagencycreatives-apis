@@ -34,8 +34,26 @@ class Agency extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if ($user) {
-            return $query->where('user_id', $user->id);
-        }
+
+        return $query->where('user_id', $user->id);
+    }
+
+    public function scopeStateId(Builder $query, $state_id)
+    {
+        $location = Location::with('states')->where('uuid', $state_id)->first();
+
+        return $query->whereIn('user_id', $location->states->pluck('user_id'));
+    }
+
+    public function scopeCityId(Builder $query, $city_id)
+    {
+        $location = Location::with('cities')->where('uuid', $city_id)->first();
+
+        return $query->whereIn('user_id', $location->cities->pluck('user_id'));
+    }
+
+    public function scopeIndustryExperience(Builder $query, $industry_ids): Builder
+    {
+        return $query->whereIn('industry_experience', $industry_ids);
     }
 }

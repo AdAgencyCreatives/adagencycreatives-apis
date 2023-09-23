@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
         Artisan::call('adagencycreatives:permission');
 
-        \App\Models\User::factory(15)->create();
+        \App\Models\User::factory(12)->create();
 
         User::where('id', '<', 5)->update(['role' => 3]); // 3:Agency
         User::where('id', '>', 10)->update(['role' => 2]); // 2:Advisor
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Message::factory(50)->create(['sender_id' => $user->id]);
 
-            $addresses = \App\Models\Address::factory(1)->create($data_user_id);
+            $addresses = \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'business']));
 
             \App\Models\Phone::factory(3)->create($data_user_id);
 
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Creative::factory()->create($data_user_id);
 
-            \App\Models\Address::factory(1)->create($data_user_id);
+            \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'personal']));
 
             \App\Models\Link::factory(3)->create($data_user_id);
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
+use App\Models\Agency;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -33,9 +34,9 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
  */
 Route::get('/test2', function () {
-    $created = '2023-09-22T06:43:51.000000Z';
-    $required_format = \Carbon\Carbon::parse($created)->format('F d, Y');
-    dd($required_format);
+    $ids = ['db4a1d44-e6ee-3cb7-8428-7e7df32b4721'];
+    $agency = Agency::whereIn('industry_experience', $ids)->get();
+    dd($agency);
 });
 
 Route::get('/', function () {
