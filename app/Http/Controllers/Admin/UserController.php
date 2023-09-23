@@ -29,14 +29,15 @@ class UserController extends Controller
     public function details(User $user)
     {
         if (in_array($user->role, ['agency', 'advisor'])) {
-            $user->load(['agency', 'links', 'attachments' => function ($query) use ($user) {
+            $user->load(['agency', 'links', 'addresses.city', 'addresses.state',  'attachments' => function ($query) use ($user) {
                 $query->where('resource_id', $user->agency->id)
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {
-            $user->load(['creative', 'phones', 'links', 'educations', 'experiences']);
+            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences']);
         }
 
+        // dump($user->addresses[0]->state->name);
         // dd($user->toArray());
 
         return view('pages.users.profile', compact('user'));

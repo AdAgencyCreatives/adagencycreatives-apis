@@ -295,3 +295,10 @@ Admin can
  - Setup permission level for advisor role for different pages.
  - Sending email to admin when user purchases new order/package
  - Added character strengths field in jobs section
+ 
+  ## 16/9/2023 - Location | Filters
+ - Added location dropdown for creatives and agencies in admin dashboard
+ - Upload profile Image for Creatives
+ - Added location field in both (agencies | creatives)
+ - Applied filters on agencies (name, location)
+ - Applied filters on creatives (name, location, title)

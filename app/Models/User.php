@@ -62,6 +62,11 @@ class User extends Authenticatable
         'INACTIVE' => 2,
     ];
 
+    public function profile_picture()
+    {
+        return $this->hasOne(Attachment::class)->where('resource_type', 'profile_picture');
+    }
+
     public function agency()
     {
         return $this->hasOne(Agency::class);

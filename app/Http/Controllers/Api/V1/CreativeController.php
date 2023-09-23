@@ -23,11 +23,14 @@ class CreativeController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('years_of_experience_id'),
+                AllowedFilter::scope('name'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
                 'employment_type',
                 'title',
             ]);
 
-        $creatives = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $creatives = $query->with('user.profile_picture', 'user.addresses.state', 'user.addresses.city')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
     }

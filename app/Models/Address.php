@@ -17,15 +17,25 @@ class Address extends Model
         'label',
         'street_1',
         'street_2',
-        'city',
-        'state',
-        'country',
+        'city_id',
+        'state_id',
+        'country_id',
         'postal_code',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(Location::class, 'city_id');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(Location::class, 'state_id');
     }
 
     public function scopeUserId(Builder $query, $user_id)

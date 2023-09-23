@@ -22,4 +22,14 @@ class Location extends Model
 
         return $query->where('parent_id', $state_id);
     }
+
+    public function states()
+    {
+        return $this->hasMany(Address::class, 'state_id', 'id');
+    }
+
+    public function cities()
+    {
+        return $this->hasMany(Address::class, 'city_id', 'id');
+    }
 }

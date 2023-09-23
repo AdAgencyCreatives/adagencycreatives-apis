@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('label');
             $table->string('street_1')->nullable();
             $table->string('street_2')->nullable();
-            $table->string('city');
-            $table->string('state');
-            $table->string('country');
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('country_id');
             $table->string('postal_code')->nullable();
             $table->timestamps();
             $table->softDeletes();

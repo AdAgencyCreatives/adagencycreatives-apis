@@ -9,7 +9,9 @@ use App\Http\Requests\Agency\UpdateAgencyRequest;
 use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Agency\AgencyResource;
 use App\Models\Agency;
+use App\Models\Industry;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,17 +19,32 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AgencyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->all();
+        // $industries = $this->processIndustryExperience($request, $filters);
         $query = QueryBuilder::for(Agency::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('industry_experience'),
                 'size',
                 'type_of_work',
+                'name',
             ]);
+        $agency_user_ids = User::where('role', 3)->pluck('id');
 
-        $agencies = $query->paginate(config('global.request.pagination_limit'));
+        // if ($industries !== null) {
+        //     $query->whereIn('industry_experience', $industries);
+        // }
 
+        $agencies = $query
+            ->with('user.addresses.state', 'user.addresses.city')
+            ->whereIn('user_id', $agency_user_ids)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        // dd($agencies);
         return new AgencyCollection($agencies);
     }
 
@@ -118,5 +135,20 @@ class AgencyController extends Controller
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
+    }
+
+    public function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
+    {
+        if (! isset($filters['filter'][$experienceKey])) {
+            return null;
+        }
+
+        $experience_ids = $filters['filter'][$experienceKey];
+        unset($filters['filter'][$experienceKey]);
+        $request->replace($filters);
+
+        $experience_ids = $experience_ids ? explode(',', $experience_ids) : [];
+
+        return Industry::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
     }
 }
