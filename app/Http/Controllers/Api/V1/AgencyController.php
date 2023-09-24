@@ -10,6 +10,7 @@ use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Agency\AgencyResource;
 use App\Models\Agency;
 use App\Models\Industry;
+use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,30 +23,51 @@ class AgencyController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
-        // $industries = $this->processIndustryExperience($request, $filters);
+        $industries = $this->processIndustryExperience($request, $filters);
+        $medias = $this->processMediaExperience($request, $filters);
+
+        // dd($industries);
         $query = QueryBuilder::for(Agency::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
-                AllowedFilter::scope('industry_experience'),
+                // AllowedFilter::scope('industry_experience'),
                 'size',
                 'type_of_work',
                 'name',
             ]);
         $agency_user_ids = User::where('role', 3)->pluck('id');
 
-        // if ($industries !== null) {
-        //     $query->whereIn('industry_experience', $industries);
-        // }
+        if ($industries !== null) {
+            $this->applyExperienceFilter($query, $industries, 'industry_experience');
+        }
+
+        if ($medias !== null) {
+            $this->applyExperienceFilter($query, $medias, 'media_experience');
+        }
 
         $agencies = $query
             ->with('user.addresses.state', 'user.addresses.city')
             ->whereIn('user_id', $agency_user_ids)
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->paginate();
+        // ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         // dd($agencies);
         return new AgencyCollection($agencies);
+    }
+
+    private function applyExperienceFilter($query, $experience, $experienceType)
+    {
+        $query->whereIn('id', function ($query) use ($experience, $experienceType) {
+            $query->select('id')
+                ->from('agencies')
+                ->where(function ($q) use ($experience, $experienceType) {
+                    foreach ($experience as $targetId) {
+                        $q->orWhereRaw("FIND_IN_SET(?, $experienceType)", [$targetId]);
+                    }
+                });
+        });
     }
 
     public function store(StoreAgencyRequest $request)
@@ -150,5 +172,20 @@ class AgencyController extends Controller
         $experience_ids = $experience_ids ? explode(',', $experience_ids) : [];
 
         return Industry::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
+    }
+
+    public function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
+    {
+        if (! isset($filters['filter'][$experienceKey])) {
+            return null;
+        }
+
+        $experience_ids = $filters['filter'][$experienceKey];
+        unset($filters['filter'][$experienceKey]);
+        $request->replace($filters);
+
+        $experience_ids = $experience_ids ? explode(',', $experience_ids) : [];
+
+        return Media::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
     }
 }

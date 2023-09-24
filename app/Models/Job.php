@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -196,8 +197,42 @@ class Job extends Model
 
     protected static function booted()
     {
-        static::created(function () {
+        static::created(function ($job) {
             Cache::forget('dashboard_stats_cache');
+
+            /**
+             * Send Notification to Admin about new job
+             */
+            $category = Category::find($job->category_id);
+            $author = User::find($job->user_id);
+
+            $data = [
+                'data' => [
+                    'job' => $job,
+                    'category' => $category->name,
+                    'author' => $author->first_name,
+                ],
+                'receiver' => User::find(1),
+            ];
+            SendEmailJob::dispatch($data, 'new_job_added_admin');
+
+        });
+
+        static::updating(function ($job) {
+            $oldStatus = $job->getOriginal('status');
+            if ($oldStatus !== 'approved' && $job->status === 'approved') {
+                $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+                $category = Category::find($job->category_id);
+                $data = [
+                    'email_data' => [
+                        'title' => $job->title,
+                        'url' => env('FRONTEND_JOB_URL'),
+                        'category' => $category->name,
+                    ],
+                    'subscribers' => $categorySubscribers,
+                ];
+                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+            }
         });
 
         static::updated(function () {

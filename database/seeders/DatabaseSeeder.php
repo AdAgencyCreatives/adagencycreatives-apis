@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
 
         Artisan::call('adagencycreatives:permission');
 
-        \App\Models\User::factory(12)->create();
+        \App\Models\User::factory(20)->create();
 
-        User::where('id', '<', 5)->update(['role' => 3]); // 3:Agency
-        User::where('id', '>', 10)->update(['role' => 2]); // 2:Advisor
+        User::where('id', '<', 10)->update(['role' => 3]); // 3:Agency
+        User::where('id', '>', 15)->update(['role' => 2]); // 2:Advisor
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
             'role' => 1,
@@ -141,5 +141,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PostSeeder::class);
         $this->call(CommentSeeder::class);
+        $this->call(JobAlertSeeder::class);
     }
 }

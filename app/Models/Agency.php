@@ -51,9 +51,4 @@ class Agency extends Model
 
         return $query->whereIn('user_id', $location->cities->pluck('user_id'));
     }
-
-    public function scopeIndustryExperience(Builder $query, $industry_ids): Builder
-    {
-        return $query->whereIn('industry_experience', $industry_ids);
-    }
 }
