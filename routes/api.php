@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
+use App\Http\Controllers\Api\V1\JobAlertController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
@@ -81,6 +82,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('users', UserController::class)->except(['store']);
     Route::get('get_users', [UserController::class, 'get_users']);
     Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
+
+    /**
+     * Job Alerts
+     */
+    Route::apiResource('job-alerts', JobAlertController::class);
 
     /**
      * Community Routes

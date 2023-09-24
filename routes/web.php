@@ -16,8 +16,8 @@ use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
-use App\Models\Agency;
 use App\Models\Group;
+use App\Models\JobAlert;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +34,9 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
  */
 Route::get('/test2', function () {
-    $ids = ['db4a1d44-e6ee-3cb7-8428-7e7df32b4721'];
-    $agency = Agency::whereIn('industry_experience', $ids)->get();
-    dd($agency);
+    $categorySubscribers = JobAlert::with('user')->where('category_id', 1)->where('status', 1)->get();
+    dd($categorySubscribers->toArray());
+
 });
 
 Route::get('/', function () {

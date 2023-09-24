@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Mail\AccountApproved;
 use App\Mail\Group\Invitation;
+use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
+use App\Mail\Job\NewJobPosted;
 use App\Mail\NewUserRegistration;
 use App\Mail\Order\ConfirmationAdmin;
 use Illuminate\Bus\Queueable;
@@ -39,11 +41,19 @@ class SendEmailJob implements ShouldQueue
             case 'group_invitation':
                 Mail::to($this->data['receiver'])->send(new Invitation($this->data['data']));
                 break;
-
             case 'order_confirmation':
                 Mail::to($this->data['receiver'])->send(new ConfirmationAdmin($this->data['data']));
                 break;
-
+            case 'job_approved_alert_all_subscribers':
+                $email_data = $this->data['email_data'];
+                $subscribers = $this->data['subscribers'];
+                foreach ($subscribers as $subscriber) {
+                    Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
+                }
+                break;
+            case 'new_job_added_admin':
+                Mail::to($this->data['receiver'])->send(new NewJobPosted($this->data['data']));
+                break;
             default:
                 // Handle unknown email types or fallback logic
                 break;

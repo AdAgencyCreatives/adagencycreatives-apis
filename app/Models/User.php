@@ -117,6 +117,11 @@ class User extends Authenticatable
         return $this->hasMany(Job::class);
     }
 
+    public function alert()
+    {
+        return $this->hasOne(JobAlert::class);
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);
