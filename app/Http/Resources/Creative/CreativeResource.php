@@ -35,6 +35,12 @@ class CreativeResource extends JsonResource
             'location' => $this->get_location($user),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+
+            'seo' => [
+                'title' => $this->seo_title,
+                'description' => $this->seo_description,
+                'tags' => $this->seo_keywords,
+            ],
         ];
     }
 

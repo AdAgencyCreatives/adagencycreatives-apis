@@ -135,7 +135,6 @@ class CreativeController extends Controller
 
     public function update_education(Request $request, $uuid)
     {
-
         $education_ids = $request->input('education_id');
         $degree = $request->input('degree');
         $college = $request->input('college');
@@ -209,5 +208,18 @@ class CreativeController extends Controller
             $address->city_id = $city->id;
             $address->save();
         }
+    }
+
+    public function update_seo(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
+        $creative->update([
+            'seo_title' => $request->seo_title,
+            'seo_description' => $request->seo_description,
+            'seo_keywords' => implode(',', $request->seo_keywords ? $request->seo_keywords : []),
+        ]);
+        Session::flash('success', 'Creative updated successfully');
+
+        return redirect()->back();
     }
 }

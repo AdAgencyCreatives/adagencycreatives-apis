@@ -37,6 +37,7 @@ class CreativeController extends Controller
 
     public function store(StoreCreativeRequest $request)
     {
+        dd($request->all());
         $user = User::where('uuid', $request->user_id)->first();
 
         $creative = Creative::where('user_id', $user->id)->first();
@@ -50,7 +51,8 @@ class CreativeController extends Controller
         $creative->uuid = Str::uuid();
         $creative->user_id = $user->id;
         $creative->years_of_experience = $request->years_of_experience;
-        $creative->type_of_work = $request->type_of_work;
+        $creative->employment_type = $request->employment_type;
+        $creative->seo_title = $request->type_of_work;
         $creative->save();
 
         return new CreativeResource($creative);

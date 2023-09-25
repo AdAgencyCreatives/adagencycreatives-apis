@@ -19,6 +19,9 @@ class Agency extends Model
         'size',
         'industry_experience',
         'media_experience',
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
     ];
 
     public function user()

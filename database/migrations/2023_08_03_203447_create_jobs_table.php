@@ -40,6 +40,11 @@ return new class extends Migration
             $table->boolean('is_opentorelocation')->default(0);
             $table->boolean('is_opentoremote')->default(0);
             $table->timestamp('expired_at');
+
+            $table->string('seo_title')->nullable();
+            $table->string('seo_description')->nullable();
+            $table->text('seo_keywords')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

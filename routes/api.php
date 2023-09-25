@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AgencyController;
 use App\Http\Controllers\Api\V1\ApplicationController;
@@ -111,8 +112,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::get('messages', [ChatController::class, 'fetchMessages']);
-
     Route::apiResource('messages', ChatController::class);
+
+    /**
+     * SEO
+     */
+    Route::resource('website-seo', SeoController::class);
 
     Route::post('logout', [UserController::class, 'logout']);
 

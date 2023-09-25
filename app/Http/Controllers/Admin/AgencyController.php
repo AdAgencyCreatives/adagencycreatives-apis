@@ -126,4 +126,17 @@ class AgencyController extends Controller
             $address->save();
         }
     }
+
+    public function update_seo(Request $request, $uuid)
+    {
+        $agency = Agency::where('uuid', $uuid)->first();
+        $agency->update([
+            'seo_title' => $request->seo_title,
+            'seo_description' => $request->seo_description,
+            'seo_keywords' => implode(',', $request->seo_keywords ? $request->seo_keywords : []),
+        ]);
+        Session::flash('success', 'Agency updated successfully');
+
+        return redirect()->back();
+    }
 }

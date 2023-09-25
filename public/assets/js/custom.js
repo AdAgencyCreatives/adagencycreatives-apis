@@ -446,3 +446,13 @@ $("#strengths").select2({
     maximumSelectionLength: 5
 });
 
+
+//We are overriding select2 library
+$('#seo_keywords').select2({
+    placeholder: "Enter Tags",
+    maximumSelectionLength: 5,
+    tags: true,
+    insertTag: function (data, tag) {
+        data.push(tag);
+    }
+});

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
@@ -111,10 +112,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
 
         Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
+        Route::put('/agency/seo/{user}', [AgencyController::class, 'update_seo'])->name('agency.seo.update');
+
         Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
         Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
         Route::put('/creative-educaiton/{user}', [CreativeController::class, 'update_education'])->name('creative.education.update');
         Route::put('/creative-experience/{user}', [CreativeController::class, 'update_experience'])->name('creative.experience.update');
+        Route::put('/creative/seo/{user}', [CreativeController::class, 'update_seo'])->name('creative.seo.update');
+
+        /**
+         * SEO
+         */
+        Route::resource('website-seo', SeoController::class);
 
         Route::get('impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
 
@@ -138,6 +147,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('jobs', JobController::class);
         Route::get('jobs/{job}/details', [JobController::class, 'details']);
+        Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
 
     });
 
