@@ -27,6 +27,11 @@ return new class extends Migration
             $table->boolean('is_remote')->default(0);
             $table->boolean('is_hybrid')->default(0);
             $table->boolean('is_onsite')->default(0);
+
+            $table->string('seo_title')->nullable();
+            $table->string('seo_description')->nullable();
+            $table->text('seo_keywords')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

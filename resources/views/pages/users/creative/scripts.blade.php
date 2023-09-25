@@ -111,7 +111,6 @@
         var user = @json($user);
 
         var address = {!! json_encode($user->addresses->first()) !!};
-        console.log(address);
         if (user.role === 'agency' || user.role === 'advisor') {
             fetchIndustriesForAgency();
             fetchMediasForAgency();
@@ -373,6 +372,9 @@
         if (userRole === 'advisor') {
             $('button[type="submit"]').prop('disabled', true);
         }
+
+
+
 
     });
 </script>

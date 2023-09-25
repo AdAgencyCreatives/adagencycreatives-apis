@@ -7,6 +7,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
 class Job extends Model
@@ -41,6 +42,9 @@ class Job extends Model
         'is_opentorelocation',
         'is_opentoremote',
         'expired_at',
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
     ];
 
     protected $casts = [
@@ -197,50 +201,54 @@ class Job extends Model
 
     protected static function booted()
     {
-        static::created(function ($job) {
-            Cache::forget('dashboard_stats_cache');
+        if (! App::runningInConsole()) {
 
-            /**
-             * Send Notification to Admin about new job
-             */
-            $category = Category::find($job->category_id);
-            $author = User::find($job->user_id);
+            static::created(function ($job) {
+                Cache::forget('dashboard_stats_cache');
 
-            $data = [
-                'data' => [
-                    'job' => $job,
-                    'category' => $category->name,
-                    'author' => $author->first_name,
-                ],
-                'receiver' => User::find(1),
-            ];
-            SendEmailJob::dispatch($data, 'new_job_added_admin');
-
-        });
-
-        static::updating(function ($job) {
-            $oldStatus = $job->getOriginal('status');
-            if ($oldStatus !== 'approved' && $job->status === 'approved') {
-                $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+                /**
+                 * Send Notification to Admin about new job
+                 */
                 $category = Category::find($job->category_id);
+                $author = User::find($job->user_id);
+
                 $data = [
-                    'email_data' => [
-                        'title' => $job->title,
-                        'url' => env('FRONTEND_JOB_URL'),
+                    'data' => [
+                        'job' => $job,
                         'category' => $category->name,
+                        'author' => $author->first_name,
                     ],
-                    'subscribers' => $categorySubscribers,
+                    'receiver' => User::find(1),
                 ];
-                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
-            }
-        });
+                SendEmailJob::dispatch($data, 'new_job_added_admin');
 
-        static::updated(function () {
-            Cache::forget('dashboard_stats_cache');
-        });
+            });
 
-        static::deleted(function () {
-            Cache::forget('dashboard_stats_cache');
-        });
+            static::updating(function ($job) {
+                $oldStatus = $job->getOriginal('status');
+                if ($oldStatus !== 'approved' && $job->status === 'approved') {
+                    $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+                    $category = Category::find($job->category_id);
+                    $data = [
+                        'email_data' => [
+                            'title' => $job->title,
+                            'url' => env('FRONTEND_JOB_URL'),
+                            'category' => $category->name,
+                        ],
+                        'subscribers' => $categorySubscribers,
+                    ];
+                    SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+                }
+            });
+
+            static::updated(function () {
+                Cache::forget('dashboard_stats_cache');
+            });
+
+            static::deleted(function () {
+                Cache::forget('dashboard_stats_cache');
+            });
+        }
+
     }
 }

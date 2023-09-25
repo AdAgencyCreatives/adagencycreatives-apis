@@ -21,6 +21,9 @@ class Creative extends Model
         'industry_experience',
         'media_experience',
         'strengths',
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
     ];
 
     public function user()

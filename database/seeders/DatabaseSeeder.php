@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Seo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
@@ -142,5 +143,15 @@ class DatabaseSeeder extends Seeder
         $this->call(PostSeeder::class);
         $this->call(CommentSeeder::class);
         $this->call(JobAlertSeeder::class);
+
+        /**
+         * Create Default SEO title
+         */
+        Seo::create([
+            'page' => 'home',
+            'title' => 'Ad Agency Creatives is a community for advertising creatives.',
+            'description' => 'Ad Agency Creatives is a community for advertising agency creatives to find jobs and mentorship, share resources, and gain access to the creative lounge.',
+            'keywords' => 'Ad Agency Creatives',
+        ]);
     }
 }

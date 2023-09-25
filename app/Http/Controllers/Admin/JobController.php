@@ -151,4 +151,17 @@ class JobController extends Controller
 
         return $request->merge($defaultWorkplacePreferences);
     }
+
+    public function update_seo(Request $request, $uuid)
+    {
+        $job = Job::where('uuid', $uuid)->first();
+        $job->update([
+            'seo_title' => $request->seo_title,
+            'seo_description' => $request->seo_description,
+            'seo_keywords' => implode(',', $request->seo_keywords ? $request->seo_keywords : []),
+        ]);
+        Session::flash('success', 'Job updated successfully');
+
+        return redirect()->back();
+    }
 }
