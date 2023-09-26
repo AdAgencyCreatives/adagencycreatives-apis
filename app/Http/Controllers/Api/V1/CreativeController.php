@@ -7,6 +7,7 @@ use App\Http\Requests\Creative\StoreCreativeRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
+use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,7 +38,6 @@ class CreativeController extends Controller
 
     public function store(StoreCreativeRequest $request)
     {
-        dd($request->all());
         $user = User::where('uuid', $request->user_id)->first();
 
         $creative = Creative::where('user_id', $user->id)->first();
@@ -47,13 +47,18 @@ class CreativeController extends Controller
                 'data' => new CreativeResource($creative),
             ], Response::HTTP_CONFLICT);
         }
-        $creative = new Creative();
-        $creative->uuid = Str::uuid();
-        $creative->user_id = $user->id;
-        $creative->years_of_experience = $request->years_of_experience;
-        $creative->employment_type = $request->employment_type;
-        $creative->seo_title = $request->type_of_work;
-        $creative->save();
+
+        $category = Category::where('uuid', $request->category_id)->first();
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'category_id' => $category->id,
+            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
+            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
+            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+        ]);
+
+        $creative = Creative::create($request->all());
 
         return new CreativeResource($creative);
     }

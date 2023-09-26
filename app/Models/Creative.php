@@ -14,13 +14,19 @@ class Creative extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'title',
+        'category_id',
         'about',
         'employment_type',
         'years_of_experience',
         'industry_experience',
         'media_experience',
         'strengths',
+        'is_hybrid',
+        'is_onsite',
+        'is_remote',
+        'is_featured',
+        'is_urgent',
+        'is_opentorelocation',
         'seo_title',
         'seo_description',
         'seo_keywords',
@@ -29,6 +35,11 @@ class Creative extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function profile_picture()
@@ -45,7 +56,7 @@ class Creative extends Model
 
     public function scopeName(Builder $query, $name)
     {
-        $user_ids = User::where('first_name', $name)->orWhere('last_name', $name)->pluck('id');
+        $user_ids = User::where('first_name', 'LIKE', "%$name%")->orWhere('last_name', 'LIKE', "%$name%")->pluck('id');
 
         return $query->whereIn('user_id', $user_ids);
     }

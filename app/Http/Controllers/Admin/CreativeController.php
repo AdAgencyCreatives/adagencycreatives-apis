@@ -19,9 +19,7 @@ use Illuminate\Support\Str;
 
 class CreativeController extends Controller
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
+    public function __construct(protected UserService $userService)
     {
         $this->userService = $userService;
     }
