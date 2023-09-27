@@ -68,3 +68,10 @@ if (! function_exists('storeImage')) {
         return $attachment;
     }
 }
+
+if (! function_exists('replacePlaceholders')) {
+    function replacePlaceholders($format, $replacements)
+    {
+        return str_replace(array_keys($replacements), array_values($replacements), $format);
+    }
+}

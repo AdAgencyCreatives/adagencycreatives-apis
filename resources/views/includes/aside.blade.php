@@ -371,9 +371,16 @@
                         data-parent="#sidebar">
 
                         <li class="sidebar-item {{ request()->is('website-seo') ? 'active' : '' }}">
-                            <a class="sidebar-link" href="{{ route('website-seo.create') }}">
+                            <a class="sidebar-link" href="{{ route('settings.index') }}">
                                 <i class="align-middle" data-feather="search"></i>
                                 <span class="align-middle">Default SEO</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('website-seo') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('settings.create') }}">
+                                <i class="align-middle" data-feather="search"></i>
+                                <span class="align-middle">SEO Settings</span>
                             </a>
                         </li>
                     </ul>

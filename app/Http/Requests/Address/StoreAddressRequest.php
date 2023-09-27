@@ -16,12 +16,8 @@ class StoreAddressRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,uuid',
             'label' => 'required|string|max:255',
-            'street_1' => 'required|string|max:255',
-            'street_2' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'postal_code' => 'nullable|string|max:20',
+            'city_id' => 'required|exists:locations,uuid',
+            'state_id' => 'required|exists:locations,uuid',
         ];
     }
 }

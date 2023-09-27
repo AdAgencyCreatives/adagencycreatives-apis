@@ -222,6 +222,10 @@ class Job extends Model
                 ];
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
 
+                $job->seo_title = settings('job_title');
+                $job->seo_description = settings('job_description');
+                $job->save();
+
             });
 
             static::updating(function ($job) {

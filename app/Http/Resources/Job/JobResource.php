@@ -39,6 +39,7 @@ class JobResource extends JsonResource
                 'state' => $this->state->name,
                 'city' => $this->city->name,
             ],
+            'seo' => $this->generate_seo(),
             'agency' => [],
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at->format(config('global.datetime_format')),
@@ -62,5 +63,43 @@ class JobResource extends JsonResource
         }
 
         return $data;
+    }
+
+    public function generate_seo()
+    {
+        $site_name = settings('site_name');
+        $separator = settings('separator');
+
+        $seo_title = $this->generateSeoTitle($site_name, $separator);
+        $seo_description = $this->generateSeoDescription($site_name, $separator);
+
+        return [
+            'title' => $seo_title,
+            'description' => $seo_description,
+            'tags' => $this->seo_keywords,
+        ];
+
+    }
+
+    private function generateSeoTitle($site_name, $separator)
+    {
+        $seo_title_format = $this->seo_title ? $this->seo_title : settings('job_title');
+
+        return replacePlaceholders($seo_title_format, [
+            '%job_title%' => $this->title,
+            '%site_name%' => $site_name,
+            '%separator%' => $separator,
+        ]);
+    }
+
+    private function generateSeoDescription($site_name, $separator)
+    {
+        $seo_description_format = $this->seo_description ? $this->seo_description : settings('job_description');
+
+        return replacePlaceholders($seo_description_format, [
+            '%job_description%' => $this->description,
+            '%site_name%' => $site_name,
+            '%separator%' => $separator,
+        ]);
     }
 }

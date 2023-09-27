@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
@@ -126,6 +127,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('website-seo', SeoController::class);
 
         Route::get('impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
+
+        /**
+         * Settings
+         */
+        Route::put('settings/job', [SettingsController::class, 'update_job'])->name('settings.job');
+        Route::resource('settings', SettingsController::class);
 
     });
 
