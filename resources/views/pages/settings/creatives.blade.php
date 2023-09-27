@@ -3,10 +3,10 @@
         <div class="card">
 
             <div class="card-header">
-                <h5 class="card-title mb-0">JOB SEO</h5>
+                <h5 class="card-title mb-0">CREATIVES SEO</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('settings.job') }}" method="POST">
+                <form action="{{ route('settings.creatives') }}" method="POST">
                     @csrf()
                     @method('PUT')
 
@@ -14,8 +14,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label" for="title">Title</label>
-                                <input type="text" class="form-control" name="job_title" placeholder="SEO Title"
-                                    value="{{ $settings['job_title'] }}">
+                                <input type="text" class="form-control" name="creative_title" placeholder="SEO Title"
+                                    value="{{ $settings['creative_title'] }}">
                                 </select>
                             </div>
                         </div>
@@ -26,18 +26,17 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label" for="title">Description</label>
-                                <input type="text" class="form-control" name="job_description"
-                                    placeholder="SEO Description" value="{{ $settings['job_description'] }}">
+                                <input type="text" class="form-control" name="creative_description"
+                                    placeholder="SEO Description" value="{{ $settings['creative_description'] }}">
 
-                                <br><span class="font-13 text-muted">%job_title%</span>
-                                <br><span class="font-13 text-muted">%job_location%</span>
-                                <br><span class="font-13 text-muted">%job_employment_type%</span>
-                                <br><span class="font-13 text-muted">%job_description%</span>
-
+                                <br><span class="font-13 text-muted">%creatives_first_name%</span>
+                                <br><span class="font-13 text-muted">%creatives_last_name%</span>
+                                <br><span class="font-13 text-muted">%creatives_title%</span>
+                                <br><span class="font-13 text-muted">%creatives_location%</span>
+                                <br><span class="font-13 text-muted">%creatives_about%</span>
                                 </select>
                             </div>
                         </div>
-
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save changes</button>

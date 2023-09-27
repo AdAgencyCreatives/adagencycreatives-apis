@@ -24,7 +24,9 @@ class MediaController extends Controller
         $query = QueryBuilder::for(Media::class)
             ->allowedFilters([
                 'name',
-            ]);
+            ])
+            ->defaultSort('name')
+            ->allowedSorts('name');
 
         $industries = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

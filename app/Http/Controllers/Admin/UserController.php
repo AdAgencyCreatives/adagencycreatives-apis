@@ -60,26 +60,6 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if (in_array($user->role, ['advisor', 'agency'])) {
-                $agency = new Agency();
-                $agency->uuid = Str::uuid();
-                $agency->user_id = $user->id;
-                $agency->name = 'Default Agency';
-                $agency->size = '10';
-                $agency->about = '';
-                $agency->save();
-            } elseif (in_array($user->role, ['creative'])) {
-                $creative = new Creative();
-                $creative->uuid = Str::uuid();
-                $creative->user_id = $user->id;
-                $creative->title = 'Default Creative';
-                $creative->years_of_experience = 'Junior 0-2 years';
-                $creative->about = '';
-                $creative->employment_type = 'Full-Time';
-                $creative->seo_title = Str::of('Default Creative')->slug('-');
-                $creative->save();
-            }
-
             return new UserResource($user);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');

@@ -25,7 +25,9 @@ class StrengthController extends Controller
         $query = QueryBuilder::for(Strength::class)
             ->allowedFilters([
                 'name',
-            ]);
+            ])
+            ->defaultSort('name')
+            ->allowedSorts('name');
 
         $strengths = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

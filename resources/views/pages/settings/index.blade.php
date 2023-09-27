@@ -12,5 +12,20 @@
 @endif
 
 @section('content')
-    @include('pages.settings.job')
+    @include('pages.settings.creatives')
+    {{-- @include('pages.settings.job') --}}
+
+    <div class="row">
+        <div class="col-md-12 col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <br><span class="font-13 text-muted">%site_name%</span>
+                    <br><span class="font-13 text-muted">%site_description%</span>
+                    <br><span class="font-13 text-muted">%separator%</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 @endsection

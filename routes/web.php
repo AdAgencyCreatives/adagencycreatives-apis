@@ -132,6 +132,7 @@ Route::group(['middleware' => ['auth']], function () {
          * Settings
          */
         Route::put('settings/job', [SettingsController::class, 'update_job'])->name('settings.job');
+        Route::put('settings/creatives', [SettingsController::class, 'update_creatives'])->name('settings.creatives');
         Route::resource('settings', SettingsController::class);
 
     });

@@ -6,16 +6,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CreativeResource extends JsonResource
 {
+    private $title;
+    private $location;
+
     public function toArray($request)
     {
         $user = $this->user;
+
+        $this->title = isset($this->category) ? $this->category->name : null;
+
+        $this->location = $this->get_location($user);
 
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $this->user->first_name.' '.$this->user->last_name,
-            'title' => isset($this->category) ? $this->category->name : null,
+            'title' => $this->title,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
@@ -33,15 +40,11 @@ class CreativeResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'is_opentorelocation' => $this->is_opentorelocation,
-            'location' => $this->get_location($user),
+            'location' => $this->location,
+            'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
-            'seo' => [
-                'title' => $this->seo_title,
-                'description' => $this->seo_description,
-                'tags' => $this->seo_keywords,
-            ],
         ];
     }
 
@@ -58,5 +61,46 @@ class CreativeResource extends JsonResource
             'state' => $address->state->name,
             'city' => $address->city->name,
         ] : null;
+    }
+
+     public function generate_seo()
+    {
+        $site_name = settings('site_name');
+        $separator = settings('separator');
+
+        $seo_title = $this->generateSeoTitle($site_name, $separator);
+        $seo_description = $this->generateSeoDescription($site_name, $separator);
+
+        return [
+            'title' => $seo_title,
+            'description' => $seo_description,
+            'tags' => $this->seo_keywords,
+        ];
+
+    }
+
+    private function generateSeoTitle($site_name, $separator)
+    {
+        $seo_title_format = $this->seo_title ? $this->seo_title : settings('creative_title');
+
+        return replacePlaceholders($seo_title_format, [
+            '%creatives_first_name%' => $this->user->first_name,
+            '%creatives_last_name%' => $this->user->last_name,
+            '%creatives_title%' => $this->title,
+            '%creatives_location%' => sprintf("%s, %s", ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')),
+            '%site_name%' => $site_name,
+            '%separator%' => $separator,
+        ]);
+    }
+
+    private function generateSeoDescription($site_name, $separator)
+    {
+        $seo_description_format = $this->seo_description ? $this->seo_description : settings('creative_description');
+
+        return replacePlaceholders($seo_description_format, [
+            '%creatives_about%' => $this->about,
+            '%site_name%' => $site_name,
+            '%separator%' => $separator,
+        ]);
     }
 }

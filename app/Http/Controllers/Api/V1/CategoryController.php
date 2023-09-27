@@ -24,7 +24,9 @@ class CategoryController extends Controller
         $query = QueryBuilder::for(Category::class)
             ->allowedFilters([
                 'name',
-            ]);
+            ])
+            ->defaultSort('name')
+            ->allowedSorts('name');
 
         $categories = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

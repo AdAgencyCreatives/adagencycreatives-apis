@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -213,10 +215,26 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function () {
+        if (! App::runningInConsole()) {
+        static::created(function ($user) {
             Cache::forget('users');
             Cache::forget('dashboard_stats_cache');
             Cache::forget('all_users');
+
+            $str = Str::uuid();
+            if (in_array($user->role, ['advisor', 'agency'])) {
+                $agency = new Agency();
+                $agency->uuid = $str;
+                $agency->user_id = $user->id;
+                $agency->save();
+            } elseif (in_array($user->role, ['creative'])) {
+                $creative = new Creative();
+                $creative->uuid = $str;
+                $creative->user_id = $user->id;
+                $creative->save();
+            }
+
+
         });
 
         static::updated(function ($user) {
@@ -230,5 +248,7 @@ class User extends Authenticatable
             Cache::forget('dashboard_stats_cache');
             Cache::forget('all_users');
         });
+        }
+
     }
 }

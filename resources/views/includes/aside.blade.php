@@ -361,23 +361,23 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item {{ request()->is('website-seo*') ? 'active' : '' }} ">
+                <li class="sidebar-item {{ request()->is('settings*') ? 'active' : '' }} ">
                     <a data-target="#website-seo" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="search"></i>
                         <span class="align-middle">SEO</span>
                     </a>
                     <ul id="website-seo"
-                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('website-seo*') ? 'show' : '' }}"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('settings*') ? 'show' : '' }}"
                         data-parent="#sidebar">
 
-                        <li class="sidebar-item {{ request()->is('website-seo') ? 'active' : '' }}">
+                        <li class="sidebar-item {{ request()->is('settings') ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('settings.index') }}">
                                 <i class="align-middle" data-feather="search"></i>
                                 <span class="align-middle">Default SEO</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('website-seo') ? 'active' : '' }}">
+                        <li class="sidebar-item {{ request()->is('settings/create') ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('settings.create') }}">
                                 <i class="align-middle" data-feather="search"></i>
                                 <span class="align-middle">SEO Settings</span>

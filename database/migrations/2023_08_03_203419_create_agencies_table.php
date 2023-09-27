@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('name');
-            $table->string('size');
-            $table->text('about');
+            $table->string('name')->nullable();
+            $table->string('size')->nullable();
+            $table->text('about')->nullable();
             $table->text('industry_experience')->nullable();
             $table->text('media_experience')->nullable();
             $table->boolean('is_featured')->default(false);
