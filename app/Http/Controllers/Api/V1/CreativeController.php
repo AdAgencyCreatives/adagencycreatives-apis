@@ -29,7 +29,9 @@ class CreativeController extends Controller
                 AllowedFilter::scope('city_id'),
                 'employment_type',
                 'title',
-            ]);
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at');
 
         $creatives = $query->with('user.profile_picture', 'user.addresses.state', 'user.addresses.city')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
