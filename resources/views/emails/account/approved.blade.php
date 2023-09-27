@@ -12,86 +12,86 @@
 
     <!-- CSS Reset -->
     <style type="text/css">
-    /* What it does: Remove spaces around the email design added by some email clients. */
-    /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
-    html,
-    body {
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 100% !important;
-        width: 100% !important;
-    }
+        /* What it does: Remove spaces around the email design added by some email clients. */
+        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
 
-    /* What it does: Stops email clients resizing small text. */
-    * {
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-    }
+        /* What it does: Stops email clients resizing small text. */
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
 
-    /* What is does: Centers email on Android 4.4 */
-    div[style*="margin: 16px 0"] {
-        margin: 0 !important;
-    }
+        /* What is does: Centers email on Android 4.4 */
+        div[style*="margin: 16px 0"] {
+            margin: 0 !important;
+        }
 
-    /* What it does: Stops Outlook from adding extra spacing to tables. */
-    table,
-    td {
-        mso-table-lspace: 0pt !important;
-        mso-table-rspace: 0pt !important;
-    }
+        /* What it does: Stops Outlook from adding extra spacing to tables. */
+        table,
+        td {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
 
-    /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
-    table {
-        border-spacing: 0 !important;
-        border-collapse: collapse !important;
-        table-layout: fixed !important;
-        margin: 0 auto !important;
-    }
+        /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            margin: 0 auto !important;
+        }
 
-    table table table {
-        table-layout: auto;
-    }
+        table table table {
+            table-layout: auto;
+        }
 
-    /* What it does: Uses a better rendering method when resizing images in IE. */
-    /* & manages img max widths to ensure content body images don't exceed template width. */
-    img {
-        -ms-interpolation-mode: bicubic;
-        height: auto;
-        max-width: 100%;
-    }
+        /* What it does: Uses a better rendering method when resizing images in IE. */
+        /* & manages img max widths to ensure content body images don't exceed template width. */
+        img {
+            -ms-interpolation-mode: bicubic;
+            height: auto;
+            max-width: 100%;
+        }
 
-    /* What it does: A work-around for email clients meddling in triggered links. */
-    *[x-apple-data-detectors],
-    /* iOS */
-    .x-gmail-data-detectors,
-    /* Gmail */
-    .x-gmail-data-detectors *,
-    .aBn {
-        border-bottom: 0 !important;
-        cursor: default !important;
-        color: inherit !important;
-        text-decoration: none !important;
-        font-size: inherit !important;
-        font-family: inherit !important;
-        font-weight: inherit !important;
-        line-height: inherit !important;
-    }
+        /* What it does: A work-around for email clients meddling in triggered links. */
+        *[x-apple-data-detectors],
+        /* iOS */
+        .x-gmail-data-detectors,
+        /* Gmail */
+        .x-gmail-data-detectors *,
+        .aBn {
+            border-bottom: 0 !important;
+            cursor: default !important;
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
 
-    /* What it does: Prevents Gmail from displaying an download button on large, non-linked images. */
-    .a6S {
-        display: none !important;
-        opacity: 0.01 !important;
-    }
+        /* What it does: Prevents Gmail from displaying an download button on large, non-linked images. */
+        .a6S {
+            display: none !important;
+            opacity: 0.01 !important;
+        }
 
-    /* If the above doesn't work, add a .g-img class to any image in question. */
-    img.g-img+div {
-        display: none !important;
-    }
+        /* If the above doesn't work, add a .g-img class to any image in question. */
+        img.g-img+div {
+            display: none !important;
+        }
 
-    /* What it does: Prevents underlining the button text in Windows 10 */
-    .button-link {
-        text-decoration: none !important;
-    }
+        /* What it does: Prevents underlining the button text in Windows 10 */
+        .button-link {
+            text-decoration: none !important;
+        }
     </style>
 
 </head>
@@ -103,19 +103,12 @@
             <td valign="top">
                 <center style="width: 100%; text-align: left;">
 
-                    <!-- Visually Hidden Preheader Text : BEGIN -->
-                    <div
-                        style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-                        {{email.preheader}}
-                    </div>
-                    <!-- Visually Hidden Preheader Text : END -->
-
                     <div style="max-width: 600px; margin: auto;" class="email-container">
                         <!--[if mso]>
-			<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" align="center">
-			<tr>
-			<td>
-			<![endif]-->
+   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" align="center">
+   <tr>
+   <td>
+   <![endif]-->
 
                         <!-- Email Header : BEGIN -->
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
@@ -140,7 +133,8 @@
                             <!-- 1 Column Text : BEGIN -->
                             <tr>
                                 <td>
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                                        width="100%">
                                         <tr>
                                             <td style="padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: 24px; color: #ffffff; font-size: 15px"
                                                 class="body_text_color body_text_size">
@@ -153,14 +147,14 @@
                                                             {{ env('APP_NAME') }}!</span>
                                                     </p>
                                                     <p><span style="color: #000000;">Visit your <a
-                                                                style="color: #000000;"
-                                                                href="{{{profile.url}}}">profile</a>, where you can tell
+                                                                style="color: #000000;" href="#">profile</a>,
+                                                            where you can tell
                                                             us more about yourself, change your preferences, or make new
                                                             connections, to get started.</span></p>
                                                     <p><span style="color: #000000;">Forgot your password? Don't worry,
                                                             you can reset it with your email address from <a
-                                                                style="color: #000000;"
-                                                                href="{{{lostpassword.url}}}">this page</a> of our
+                                                                style="color: #000000;" href="#">this page</a> of
+                                                            our
                                                             site</span></p>
                                                     <p><span style="color: #000000;">Thanks,<br />
                                                             <span style="color: #000000;">Ad Agency Creatives<br />
@@ -180,8 +174,9 @@
 
                         <!-- Email Footer : BEGIN -->
                         <br>
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" width="100%"
-                            style="max-width: 600px; border-radius: 5px;" bgcolor="#0a0909" class="footer_bg">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left"
+                            width="100%" style="max-width: 600px; border-radius: 5px;" bgcolor="#0a0909"
+                            class="footer_bg">
                             <tr>
                                 <td style="padding: 20px; width: 100%; font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height: 19px; text-align: left; color: #ffffff; word-break: break-all;"
                                     class="footer_text_color footer_text_size">
@@ -199,10 +194,10 @@
                         <!-- Email Footer : END -->
 
                         <!--[if mso]>
-			</td>
-			</tr>
-			</table>
-			<![endif]-->
+   </td>
+   </tr>
+   </table>
+   <![endif]-->
                     </div>
                 </center>
             </td>
@@ -212,7 +207,7 @@
 
 </html>
 <style>
-a {
-    color: #ffffff;
-}
+    a {
+        color: #ffffff;
+    }
 </style>
