@@ -220,21 +220,6 @@ class User extends Authenticatable
             Cache::forget('users');
             Cache::forget('dashboard_stats_cache');
             Cache::forget('all_users');
-
-            $str = Str::uuid();
-            if (in_array($user->role, ['advisor', 'agency'])) {
-                $agency = new Agency();
-                $agency->uuid = $str;
-                $agency->user_id = $user->id;
-                $agency->save();
-            } elseif (in_array($user->role, ['creative'])) {
-                $creative = new Creative();
-                $creative->uuid = $str;
-                $creative->user_id = $user->id;
-                $creative->save();
-            }
-
-
         });
 
         static::updated(function ($user) {
