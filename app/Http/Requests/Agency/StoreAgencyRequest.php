@@ -18,7 +18,6 @@ class StoreAgencyRequest extends FormRequest
             'name' => 'required',
             'about' => 'required',
             'size' => 'required',
-            'type_of_work' => 'required',
         ];
     }
 }

@@ -34,12 +34,14 @@ class LinkController extends Controller
     {
         $user = User::where('uuid', $request->user_id)->first();
 
-        $request->merge([
-            'uuid' => Str::uuid(),
-            'user_id' => $user->id,
-        ]);
         try {
-            $application = Link::create($request->all());
+            $application = Link::updateOrCreate([
+                'user_id' => $user->id,
+                'label' => $request->label,
+            ], [
+                'url' => $request->url,
+                'uuid' => Str::uuid(),
+            ]);
 
             return ApiResponse::success(new LinkResource($application), 200);
         } catch (\Exception $e) {

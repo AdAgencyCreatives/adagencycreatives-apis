@@ -82,16 +82,16 @@ class AgencyController extends Controller
             ], Response::HTTP_CONFLICT);
         }
 
-        $agency = new Agency();
-        $agency->uuid = Str::uuid();
-        $agency->user_id = $user->id;
-        $agency->name = $request->name;
-        $agency->about = $request->about;
-        $agency->size = $request->size;
-        $agency->type_of_work = $request->type_of_work;
-        $agency_created = $agency->save();
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
+            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
+        ]);
 
-        if ($agency_created) {
+        $agency = Agency::create($request->all());
+
+        if ($agency) {
             return response()->json([
                 'message' => 'Agency created successfully.',
                 'data' => new AgencyResource($agency),

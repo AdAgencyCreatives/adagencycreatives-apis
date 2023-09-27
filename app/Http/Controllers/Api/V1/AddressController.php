@@ -9,6 +9,7 @@ use App\Http\Requests\Address\UpdateAddressRequest;
 use App\Http\Resources\Address\AddressCollection;
 use App\Http\Resources\Address\AddressResource;
 use App\Models\Address;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
@@ -41,10 +42,15 @@ class AddressController extends Controller
     public function store(StoreAddressRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
+            'state_id' => $state->id,
+            'city_id' => $city->id,
+            'country_id' => 1,
         ]);
         try {
             $address = Address::create($request->all());
