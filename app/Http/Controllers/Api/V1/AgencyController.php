@@ -32,11 +32,12 @@ class AgencyController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
-                // AllowedFilter::scope('industry_experience'),
                 'size',
                 'type_of_work',
                 'name',
-            ]);
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at');
         $agency_user_ids = User::where('role', 3)->pluck('id');
 
         if ($industries !== null) {

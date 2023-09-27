@@ -37,7 +37,9 @@ class UserController extends Controller
                 'role',
                 'status',
                 'is_visible',
-            ]);
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at');
 
         $users = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
