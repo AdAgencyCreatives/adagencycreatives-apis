@@ -24,7 +24,9 @@ class IndustryController extends Controller
         $query = QueryBuilder::for(Industry::class)
             ->allowedFilters([
                 'name',
-            ]);
+            ])
+            ->defaultSort('name')
+            ->allowedSorts('name');
 
         $industries = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

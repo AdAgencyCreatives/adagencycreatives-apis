@@ -39,8 +39,8 @@ class JobResource extends JsonResource
                 'state' => $this->state->name,
                 'city' => $this->city->name,
             ],
-            'seo' => $this->generate_seo(),
             'agency' => [],
+            'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
@@ -87,6 +87,8 @@ class JobResource extends JsonResource
 
         return replacePlaceholders($seo_title_format, [
             '%job_title%' => $this->title,
+            '%job_location%' => sprintf("%s, %s",$this->city->name,  $this->state->name),
+            '%job_employment_type%' => $this->employment_type,
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);

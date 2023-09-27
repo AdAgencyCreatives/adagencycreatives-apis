@@ -14,6 +14,9 @@ class SettingsController extends Controller
         $settings = [
             'job_title' => settings('job_title'),
             'job_description' => settings('job_description'),
+
+            'creative_title' => settings('creative_title'),
+            'creative_description' => settings('creative_description'),
         ];
 
         return view('pages.settings.index', compact('settings'));
@@ -42,8 +45,17 @@ class SettingsController extends Controller
 
     public function update_job(Request $request)
     {
-        // dd($request->all());
         settings($request->only('job_title', 'job_description'));
+        Session::flash('success', 'SEO updated successfully');
+
+        Artisan::call('cache:clear');
+
+        return redirect()->back();
+    }
+
+    public function update_creatives(Request $request)
+    {
+        settings($request->only('creative_title', 'creative_description'));
         Session::flash('success', 'SEO updated successfully');
 
         Artisan::call('cache:clear');

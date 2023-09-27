@@ -54,6 +54,7 @@ class StrengthSeeder extends Seeder
             'Technological',
             'Pop-Culture',
             'Witty',
+            'BIPOC',
         ];
 
         foreach ($strengths as $strength) {

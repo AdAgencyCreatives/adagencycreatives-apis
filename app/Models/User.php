@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -213,7 +215,8 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function () {
+        if (! App::runningInConsole()) {
+        static::created(function ($user) {
             Cache::forget('users');
             Cache::forget('dashboard_stats_cache');
             Cache::forget('all_users');
@@ -230,5 +233,7 @@ class User extends Authenticatable
             Cache::forget('dashboard_stats_cache');
             Cache::forget('all_users');
         });
+        }
+
     }
 }

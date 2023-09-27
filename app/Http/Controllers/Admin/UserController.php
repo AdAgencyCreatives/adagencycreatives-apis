@@ -76,7 +76,6 @@ class UserController extends Controller
                 $creative->years_of_experience = 'Junior 0-2 years';
                 $creative->about = '';
                 $creative->employment_type = 'Full-Time';
-                $creative->seo_title = Str::of('Default Creative')->slug('-');
                 $creative->save();
             }
 

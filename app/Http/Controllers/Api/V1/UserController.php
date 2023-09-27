@@ -10,6 +10,9 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Jobs\SendEmailJob;
+use App\Models\Agency;
+use App\Models\Creative;
+use App\Models\Link;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -52,11 +55,40 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role = $request->role;
-            $user->status = $request->status;
             $user->save();
 
             $role = Role::findByName($request->role);
             $user->assignRole($role);
+
+            $str = Str::uuid();
+            if (in_array($user->role, ['agency'])) {
+                $agency = new Agency();
+                $agency->uuid = $str;
+                $agency->user_id = $user->id;
+                $agency->name = $request->agency_name;
+                $agency->save();
+
+                Link::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => 'linkedin',
+                'url' => $request->linkedin_profile,
+            ]);
+
+            } elseif (in_array($user->role, ['creative'])) {
+                $creative = new Creative();
+                $creative->uuid = $str;
+                $creative->user_id = $user->id;
+                $creative->save();
+
+                Link::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => 'portfolio',
+                'url' => $request->linkedin_profile,
+            ]);
+            }
+
 
             $admin = User::find(1);
             SendEmailJob::dispatch([
