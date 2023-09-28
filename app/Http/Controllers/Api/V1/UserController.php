@@ -70,11 +70,12 @@ class UserController extends Controller
                 $agency->name = $request->agency_name;
                 $agency->save();
 
+                // if()
                 Link::create([
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
                 'label' => 'linkedin',
-                'url' => $request->linkedin_profile,
+                'url' => $request->linkedin_profile ?? '',
             ]);
 
             } elseif (in_array($user->role, ['creative'])) {
@@ -87,7 +88,7 @@ class UserController extends Controller
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
                 'label' => 'portfolio',
-                'url' => $request->linkedin_profile,
+                'url' => $request->linkedin_profile ?? '',
             ]);
             }
 

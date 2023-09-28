@@ -144,13 +144,15 @@ class DatabaseSeeder extends Seeder
         $this->call(JobAlertSeeder::class);
 
         /**
-         * Create Default SEO title
+         * Create Default SEO settings
          */
-        Seo::create([
-            'page' => 'home',
-            'title' => 'Ad Agency Creatives is a community for advertising creatives.',
-            'description' => 'Ad Agency Creatives is a community for advertising agency creatives to find jobs and mentorship, share resources, and gain access to the creative lounge.',
-            'keywords' => 'Ad Agency Creatives',
+        settings([
+            'site_name' => 'AdAgencyCreatives',
+            'site_description' => 'Ad Agency Creatives is a community for advertising agency creatives to find jobs and mentorship, share resources, and gain access to the creative lounge.',
+            'separator' => '|',
+
+            'creative_title' => '%site_name% %separator% %creatives_first_name% %creatives_last_name% %separator% Title (%creatives_title%) %separator% Location (%creatives_location%)',
+            'creative_description' => '%creatives_about%  %separator% %site_name%'
         ]);
     }
 }

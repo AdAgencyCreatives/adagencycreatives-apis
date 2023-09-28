@@ -13,7 +13,7 @@
 
 @section('content')
     @include('pages.settings.creatives')
-    {{-- @include('pages.settings.job') --}}
+    @include('pages.settings.job')
 
     <div class="row">
         <div class="col-md-12 col-xl-12">
