@@ -11,9 +11,9 @@ class YearsOfExperienceSeeder extends Seeder
     {
 
         $experiences = [
-            'Junoir 0-2 years',
+            'Junior 0-2 years',
             'Mid-level 2-5 years',
-            'Senoir 5-10 years',
+            'Senior 5-10 years',
             'Director 10+ years',
         ];
 
