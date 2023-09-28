@@ -8,10 +8,13 @@ class JobResource extends JsonResource
 {
     public function toArray($request)
     {
+        $user = $this->user;
+
         $data = [
             'type' => 'jobs',
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
+            'user_id' => $user->uuid,
+            'slug' => $this->slug,
             'title' => $this->title,
             'description' => $this->description,
             'category' => $this->category->name,
@@ -46,7 +49,7 @@ class JobResource extends JsonResource
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
 
-        $agency = $this->user->agency;
+        $agency = $user->agency;
         if ($agency) {
             if ($this->agency_name == null) {
                 $data['agency'] = [
@@ -60,6 +63,7 @@ class JobResource extends JsonResource
                     'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
                 ];
             }
+            $data['agency']['slug'] = $user->username;
         }
 
         return $data;
@@ -87,7 +91,7 @@ class JobResource extends JsonResource
 
         return replacePlaceholders($seo_title_format, [
             '%job_title%' => $this->title,
-            '%job_location%' => sprintf("%s, %s",$this->city->name,  $this->state->name),
+            '%job_location%' => sprintf('%s, %s', $this->city->name, $this->state->name),
             '%job_employment_type%' => $this->employment_type,
             '%site_name%' => $site_name,
             '%separator%' => $separator,

@@ -29,7 +29,7 @@ class JobFactory extends Factory
             'years_of_experience' => fake()->randomElement($experiences),
             'apply_type' => fake()->randomElement($applyTypes),
             'external_link' => fake()->url,
-            'status' => fake()->numberBetween(0, 1),
+            'status' => fake()->numberBetween(0, 1, 2, 3, 4, 5, 6),
             'is_remote' => fake()->boolean,
             'is_hybrid' => fake()->boolean,
             'is_onsite' => fake()->boolean,

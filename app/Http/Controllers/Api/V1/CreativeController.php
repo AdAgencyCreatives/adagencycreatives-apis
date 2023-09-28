@@ -27,8 +27,11 @@ class CreativeController extends Controller
                 AllowedFilter::scope('name'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('status'),
                 'employment_type',
                 'title',
+                'is_featured',
+                'is_urgent',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');

@@ -59,4 +59,11 @@ class Agency extends Model
 
         return $query->whereIn('user_id', $location->cities->pluck('user_id'));
     }
+
+    public function scopeStatus(Builder $query, $status)
+    {
+        $user_ids = User::where('status', $status)->pluck('id');
+
+        return $query->whereIn('user_id', $user_ids);
+    }
 }

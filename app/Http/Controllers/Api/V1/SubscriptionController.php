@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Plan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -39,9 +41,11 @@ class SubscriptionController extends Controller
                 ->create($request->token);
 
             $totalQuota = $plan->quota;
+            $endDate = Carbon::now()->addDays($plan->days);
 
             $subscription->update([
                 'quota_left' => $totalQuota,
+                'ends_at' => $endDate,
             ]);
 
             $order = $user->orders()->create([
@@ -80,5 +84,14 @@ class SubscriptionController extends Controller
         return [
             'message' => 'Subscriptions cancelled',
         ];
+    }
+
+    public function status(Request $request)
+    {
+        $user = $request->user();
+        $subscription = $user->subscriptions()->select('name', 'quota_left', 'ends_at')->latest()->first();
+
+        return new SubscriptionResource($subscription);
+
     }
 }

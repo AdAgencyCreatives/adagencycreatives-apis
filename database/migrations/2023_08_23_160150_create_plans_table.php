@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('price');
             $table->string('description');
             $table->integer('quota');
+            $table->integer('days');
             $table->timestamps();
         });
     }

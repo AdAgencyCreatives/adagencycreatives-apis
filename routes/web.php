@@ -135,9 +135,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('settings/creatives', [SettingsController::class, 'update_creatives'])->name('settings.creatives');
         Route::resource('settings', SettingsController::class);
 
-    });
-
-    Route::group(['middleware' => ['advisor']], function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
         Route::resource('creatives', UserController::class)->parameters([

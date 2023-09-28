@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PlansTableSeeder::class);
 
         //Generate some more users
-        \App\Models\User::factory(15)->create();
+        // \App\Models\User::factory(15)->create();
         \App\Models\Order::factory(15)->create();
         \App\Models\Group::factory(3)->create();
 
@@ -147,12 +147,15 @@ class DatabaseSeeder extends Seeder
          * Create Default SEO settings
          */
         settings([
-            'site_name' => 'AdAgencyCreatives',
+            'site_name' => 'Ad Agency Creatives',
             'site_description' => 'Ad Agency Creatives is a community for advertising agency creatives to find jobs and mentorship, share resources, and gain access to the creative lounge.',
             'separator' => '|',
 
-            'creative_title' => '%site_name% %separator% %creatives_first_name% %creatives_last_name% %separator% Title (%creatives_title%) %separator% Location (%creatives_location%)',
-            'creative_description' => '%creatives_about%  %separator% %site_name%'
+            'creative_title' => 'Site (%site_name%) %separator% %creatives_first_name% %creatives_last_name% %separator% Title (%creatives_title%) %separator% Location (%creatives_location%)',
+            'creative_description' => '%creatives_about%  %separator% %site_name%',
+
+            'job_title' => '%job_title% %separator% Location (%job_location%) %separator% %job_employment_type% %separator% Site (%site_name%)',
+            'job_description' => '%job_description% %separator% %site_name%',
         ]);
     }
 }

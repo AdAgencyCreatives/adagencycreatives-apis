@@ -16,6 +16,7 @@ class Plan extends Model
         'price',
         'description',
         'quota',
+        'days',
     ];
 
     public function getRouteKeyName()

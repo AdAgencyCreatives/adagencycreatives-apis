@@ -32,9 +32,12 @@ class AgencyController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('status'),
                 'size',
                 'type_of_work',
                 'name',
+                'is_featured',
+                'is_urgent',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');

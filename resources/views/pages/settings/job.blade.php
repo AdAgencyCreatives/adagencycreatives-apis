@@ -33,7 +33,6 @@
                                 <br><span class="font-13 text-muted">%job_location%</span>
                                 <br><span class="font-13 text-muted">%job_employment_type%</span>
                                 <br><span class="font-13 text-muted">%job_description%</span>
-
                                 </select>
                             </div>
                         </div>

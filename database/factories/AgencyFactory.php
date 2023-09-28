@@ -18,7 +18,7 @@ class AgencyFactory extends Factory
             'size' => fake()->randomElement([10, 50, 100, 500]),
             'industry_experience' => '1,2,3,4',
             'media_experience' => '1,2,3,4',
-            'created_at' => now(),
+            'created_at' => fake()->dateTimeBetween('-8 days', 'now'),
             'updated_at' => now(),
         ];
     }

@@ -10,17 +10,23 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next, $resourceType)
     {
-        if (Auth::user()->role == 'admin') {
+        // Allow GET requests without authentication
+        if ($request->isMethod('get')) {
+            return $next($request);
+        }
+
+        // Check for admin role
+        if (Auth::user() && Auth::user()->role == 'admin') {
             return $next($request);
         }
 
         $action = $request->isMethod('post')
-        ? 'create'
-        : ($request->isMethod('put')
-            ? 'update'
-            : ($request->isMethod('delete')
-                ? 'delete'
-                : null));
+            ? 'create'
+            : ($request->isMethod('put')
+                ? 'update'
+                : ($request->isMethod('delete')
+                    ? 'delete'
+                    : null));
 
         if (! $action) {
             return $next($request);
@@ -28,7 +34,7 @@ class CheckPermission
 
         $permissionName = $resourceType.'.'.$action;
 
-        if (! Auth::user()->hasPermissionTo($permissionName)) {
+        if (! Auth::user() || ! Auth::user()->hasPermissionTo($permissionName)) {
             return response()->json(['message' => 'Permission denied'], 403);
         }
 
