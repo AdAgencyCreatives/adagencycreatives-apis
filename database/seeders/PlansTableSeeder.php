@@ -17,6 +17,7 @@ class PlansTableSeeder extends Seeder
                 'stripe_plan' => 'price_1NihRXB5Ooqa5ycAtfZ6GbKc',
                 'price' => '149.0',
                 'quota' => 1,
+                'days' => 30,
                 'description' => 'One (1) Targeted Job Post Duration 30 Days Job Management Dashboard',
             ],
             [
@@ -25,14 +26,16 @@ class PlansTableSeeder extends Seeder
                 'stripe_plan' => 'price_1NihQwB5Ooqa5ycAgQhsJdPd',
                 'price' => '349.0',
                 'quota' => 3,
+                'days' => 45,
                 'description' => '• Up to Three (3) Targeted Job Post• Duration 45 Days • Job Management Dashboard• Urgent Opportunities Option',
             ],
             [
                 'name' => 'Premium Creative Jobs',
                 'slug' => 'premium-creative-jobs',
                 'stripe_plan' => 'price_1NihQQB5Ooqa5ycAlIRtHaJy',
-                'price' => '699.0',
+                'price' => '649.0',
                 'quota' => 5,
+                'days' => 45,
                 'description' => 'Up to Five (5) Targeted Job Post• Duration 45 Days• Job Management Dashboard• Urgent Opportunities Option• Priority Posting',
             ],
 

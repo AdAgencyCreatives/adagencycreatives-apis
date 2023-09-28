@@ -18,7 +18,7 @@ class CreativeFactory extends Factory
             'years_of_experience' => fake()->randomElement(['Junior 0-2 years', 'Mid-level 2-5 years', 'Senior 5-10 years']),
             'employment_type' => fake()->randomElement($employementTypes),
             'about' => fake()->paragraph(),
-            'created_at' => now(),
+            'created_at' => fake()->dateTimeBetween('-8 days', 'now'),
             'updated_at' => now(),
         ];
     }

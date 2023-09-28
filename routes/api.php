@@ -48,14 +48,15 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 // Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
+Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
+Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
+Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
+
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Job Board Routes
      */
-    Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
-    Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
-    Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
     Route::apiResource('applications', ApplicationController::class)->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
     Route::apiResource('educations', EducationController::class)->middleware('check.permissions:education');
@@ -102,6 +103,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Stripe Payment Routes
      */
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
+    Route::get('subscription/status', [SubscriptionController::class, 'status']);
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);

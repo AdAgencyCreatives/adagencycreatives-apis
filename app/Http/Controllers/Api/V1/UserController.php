@@ -72,11 +72,11 @@ class UserController extends Controller
 
                 // if()
                 Link::create([
-                'uuid' => Str::uuid(),
-                'user_id' => $user->id,
-                'label' => 'linkedin',
-                'url' => $request->linkedin_profile ?? '',
-            ]);
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'label' => 'linkedin',
+                    'url' => $request->linkedin_profile ?? '',
+                ]);
 
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
@@ -85,13 +85,12 @@ class UserController extends Controller
                 $creative->save();
 
                 Link::create([
-                'uuid' => Str::uuid(),
-                'user_id' => $user->id,
-                'label' => 'portfolio',
-                'url' => $request->linkedin_profile ?? '',
-            ]);
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'label' => 'portfolio',
+                    'url' => $request->linkedin_profile ?? '',
+                ]);
             }
-
 
             $admin = User::find(1);
             SendEmailJob::dispatch([
@@ -165,6 +164,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -177,7 +177,6 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        $role_name = $user->getRoleNames();
 
         return response()->json([
             'token' => $token,

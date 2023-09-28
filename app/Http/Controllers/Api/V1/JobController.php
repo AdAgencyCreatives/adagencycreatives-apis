@@ -127,6 +127,7 @@ class JobController extends Controller
 
     public function update(Request $request, $uuid)
     {
+
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
 

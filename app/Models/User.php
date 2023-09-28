@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
+use Stripe\Subscription as StripeSubscription;
 
 class User extends Authenticatable
 {
@@ -129,6 +129,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function subscription()
+    {
+        return $this->hasOne(StripeSubscription::class);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -216,23 +221,23 @@ class User extends Authenticatable
     protected static function booted()
     {
         if (! App::runningInConsole()) {
-        static::created(function ($user) {
-            Cache::forget('users');
-            Cache::forget('dashboard_stats_cache');
-            Cache::forget('all_users');
-        });
+            static::created(function ($user) {
+                Cache::forget('users');
+                Cache::forget('dashboard_stats_cache');
+                Cache::forget('all_users');
+            });
 
-        static::updated(function ($user) {
-            Cache::forget("user:$user->id");
-            Cache::forget('dashboard_stats_cache');
-            Cache::forget('all_users');
-        });
+            static::updated(function ($user) {
+                Cache::forget("user:$user->id");
+                Cache::forget('dashboard_stats_cache');
+                Cache::forget('all_users');
+            });
 
-        static::deleted(function ($user) {
-            Cache::forget("user:$user->id");
-            Cache::forget('dashboard_stats_cache');
-            Cache::forget('all_users');
-        });
+            static::deleted(function ($user) {
+                Cache::forget("user:$user->id");
+                Cache::forget('dashboard_stats_cache');
+                Cache::forget('all_users');
+            });
         }
 
     }

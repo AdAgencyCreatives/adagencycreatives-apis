@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CreativeResource extends JsonResource
 {
     private $title;
+
     private $location;
 
     public function toArray($request)
@@ -21,7 +22,7 @@ class CreativeResource extends JsonResource
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
-            'name' => $this->user->first_name . ' ' . $this->user->last_name,
+            'name' => $this->user->first_name.' '.$this->user->last_name,
             'title' => $this->title,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
@@ -50,7 +51,7 @@ class CreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : null;
+        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : null;
     }
 
     public function get_location($user)
@@ -87,7 +88,7 @@ class CreativeResource extends JsonResource
             '%creatives_first_name%' => $this->user->first_name,
             '%creatives_last_name%' => $this->user->last_name,
             '%creatives_title%' => $this->title,
-            '%creatives_location%' => isset($this->location) ? sprintf("%s, %s", ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')) : '',
+            '%creatives_location%' => isset($this->location) ? sprintf('%s, %s', ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')) : '',
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);

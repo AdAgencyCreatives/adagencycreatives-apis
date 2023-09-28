@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('state_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('category_id');
+            $table->string('slug')->nullable();
             $table->string('agency_name')->nullable();
             $table->string('title');
             $table->text('description');

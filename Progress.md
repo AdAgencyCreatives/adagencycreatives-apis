@@ -78,6 +78,8 @@ Following endpoints were created
 - Categories API Endpoints
 - Industries API Endpoints
  
+## 14/8/2023 - Worked on Adeel bhai's personal project
+
 ## 15/8/2023 - Filters On All Entities
 - Users ( Agencies | Creatives )
 - Jobs
@@ -296,9 +298,36 @@ Admin can
  - Sending email to admin when user purchases new order/package
  - Added character strengths field in jobs section
  
-  ## 16/9/2023 - Location | Filters
+  ## 18/9/2023 - Location | Filters
  - Added location dropdown for creatives and agencies in admin dashboard
  - Upload profile Image for Creatives
  - Added location field in both (agencies | creatives)
  - Applied filters on agencies (name, location)
  - Applied filters on creatives (name, location, title)
+  
+ ## 19/9/2023 - Agency Filters | Job Alert Subscription
+ - Created endpoint for users 
+    - To subscribe to any category for receiving emails
+    - To enable/disable the email alert for new jobs
+ - Applied filters on agencies (industry and media experiences)
+ - Job alert to admin when new job is posted
+ - Job alert to all the subscribers who have subscribed to any category when new job is posted
+ 
+ ## 20/9/2023 - SEO
+- Admin can:
+    - Update SEO (title, description, keywords) for creatives 
+    - Update SEO (title, description, keywords) for agencies 
+    - Update SEO (title, description, keywords) for jobs 
+    - Update SEO (title, description, keywords) for home page (Generic SEO) 
+- Created endpoint for getting generic SEO for homepage 
+- Included SEO tags in API response of agencies, creatives and jobs
+ 
+ ## 21/9/2023 - SEO | Addtional fields in API
+- Added dynamic tags in SEO so that admin can easily configure SEO titles
+- Modify the registration flow to comply with need.
+ 
+ ## 22/9/2023 - SEO | Addtional fields in API
+- Admin can set default SEO title for jobs and creatives 
+- Add slug in jobs table, it will be auto-generated  from different values of job table
+- Created endpoint for getting user subscription status, it will also show how many jobs user can post
+- Collaborated with frontend-dev to make proper flow by modifying API response (where needed)

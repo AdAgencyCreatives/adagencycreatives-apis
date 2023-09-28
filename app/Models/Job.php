@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class Job extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'job_posts';
 
@@ -51,7 +53,7 @@ class Job extends Model
         'expired_at' => 'datetime',
     ];
 
-    const STATUSES = [
+    public const STATUSES = [
         'PENDING' => 0,
         'APPROVED' => 1,
         'REJECTED' => 2,
@@ -61,7 +63,7 @@ class Job extends Model
         'PUBLISHED' => 6,
     ];
 
-    const EMPLOYMENT_TYPE = [
+    public const EMPLOYMENT_TYPE = [
         'Full-Time',
         'Part-Time',
         'Internship',
@@ -69,7 +71,7 @@ class Job extends Model
         'Contract 1099',
     ];
 
-    const WORKPLACE_PREFERENCE = [
+    public const WORKPLACE_PREFERENCE = [
         'is_remote' => 'Remote',
         'is_hybrid' => 'Hybrid',
         'is_onsite' => 'Onsite',
@@ -144,7 +146,6 @@ class Job extends Model
     public function scopeIndustryExperience(Builder $query, $industries): Builder
     {
         $industries = Industry::whereIn('uuid', $industries)->pluck('id');
-        dd($industries);
 
         return $query->whereIn('industry_experience', $industries);
     }
@@ -201,9 +202,9 @@ class Job extends Model
 
     protected static function booted()
     {
-        if (! App::runningInConsole()) {
 
-            static::created(function ($job) {
+        static::created(function ($job) {
+            if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
 
                 /**
@@ -221,38 +222,40 @@ class Job extends Model
                     'receiver' => User::find(1),
                 ];
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
+            }
 
-                $job->seo_title = settings('job_title');
-                $job->seo_description = settings('job_description');
-                $job->save();
+            $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
+            $job->slug = Str::slug($slug, '-');
+            $job->seo_title = settings('job_title');
+            $job->seo_description = settings('job_description');
+            $job->save();
 
-            });
+        });
 
-            static::updating(function ($job) {
-                $oldStatus = $job->getOriginal('status');
-                if ($oldStatus !== 'approved' && $job->status === 'approved') {
-                    $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
-                    $category = Category::find($job->category_id);
-                    $data = [
-                        'email_data' => [
-                            'title' => $job->title,
-                            'url' => env('FRONTEND_JOB_URL'),
-                            'category' => $category->name,
-                        ],
-                        'subscribers' => $categorySubscribers,
-                    ];
-                    SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
-                }
-            });
+        static::updating(function ($job) {
+            $oldStatus = $job->getOriginal('status');
+            if ($oldStatus !== 'approved' && $job->status === 'approved') {
+                $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+                $category = Category::find($job->category_id);
+                $data = [
+                    'email_data' => [
+                        'title' => $job->title,
+                        'url' => env('FRONTEND_JOB_URL'),
+                        'category' => $category->name,
+                    ],
+                    'subscribers' => $categorySubscribers,
+                ];
+                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+            }
+        });
 
-            static::updated(function () {
-                Cache::forget('dashboard_stats_cache');
-            });
+        static::updated(function () {
+            Cache::forget('dashboard_stats_cache');
+        });
 
-            static::deleted(function () {
-                Cache::forget('dashboard_stats_cache');
-            });
-        }
+        static::deleted(function () {
+            Cache::forget('dashboard_stats_cache');
+        });
 
     }
 }
