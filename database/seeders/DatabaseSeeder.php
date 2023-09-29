@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Link::factory(4)->create($data_user_id);
 
-            \App\Models\Attachment::factory(3)->create($data_user_id);
+            // \App\Models\Attachment::factory(3)->create($data_user_id);
 
             $jobs = \App\Models\Job::factory(10)->create($data_user_id);
 
@@ -156,6 +156,8 @@ class DatabaseSeeder extends Seeder
 
             'job_title' => '%job_title% %separator% Location (%job_location%) %separator% %job_employment_type% %separator% Site (%site_name%)',
             'job_description' => '%job_description% %separator% %site_name%',
+
+            'creative_spotlight_title' => 'Site Name (%site_name%) %separator% %post_name% %separator% %post_date%',
         ]);
     }
 }

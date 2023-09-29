@@ -1,4 +1,22 @@
 <script>
+    function fetchCategoriesForCreative() {
+        $.ajax({
+            url: '/api/v1/get_categories',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                populateFilter(response.data, '#category');
+                var creative_category = "{{ $user->creative?->category->uuid }}";
+                console.log(creative_category);
+                $('#category').val(creative_category);
+                $('#category').trigger('change');
+            },
+            error: function() {
+                alert('Failed to fetch categories from the API.');
+            }
+        });
+    }
+
     function fetchIndustriesForCreative() {
 
         $.ajax({
@@ -120,6 +138,8 @@
             fetchIndustriesForCreative();
             fetchMediasForCreative();
             fetchStrengthsForCreative();
+
+            fetchCategoriesForCreative();
         }
 
         if (!address) {

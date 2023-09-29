@@ -13,6 +13,7 @@
 
 @section('content')
     @include('pages.settings.creatives')
+    @include('pages.settings.creative-spotlight')
     @include('pages.settings.job')
 
     <div class="row">

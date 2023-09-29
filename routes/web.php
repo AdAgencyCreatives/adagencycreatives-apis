@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
 use App\Models\Group;
-use App\Models\JobAlert;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -35,9 +34,8 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 | contains the "web" middleware group. Now create something great!
 |
  */
-Route::get('/test2', function () {
-    $categorySubscribers = JobAlert::with('user')->where('category_id', 1)->where('status', 1)->get();
-    dd($categorySubscribers->toArray());
+Route::get('/phpinfo', function () {
+    echo phpinfo();
 
 });
 
@@ -133,6 +131,7 @@ Route::group(['middleware' => ['auth']], function () {
          */
         Route::put('settings/job', [SettingsController::class, 'update_job'])->name('settings.job');
         Route::put('settings/creatives', [SettingsController::class, 'update_creatives'])->name('settings.creatives');
+        Route::put('settings/creatives-spotlight', [SettingsController::class, 'update_creative_spotlight'])->name('settings.creative_spotlight');
         Route::resource('settings', SettingsController::class);
 
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');

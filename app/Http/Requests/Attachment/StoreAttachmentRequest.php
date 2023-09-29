@@ -21,14 +21,13 @@ class StoreAttachmentRequest extends FormRequest
                 'file',
                 'max:10240',
                 function ($attribute, $value, $fail) {
-                    $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
+                    $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'mp4', 'avi']; // Add video file extensions here
                     $fileExtension = strtolower($value->getClientOriginalExtension());
                     if (! in_array($fileExtension, $allowedTypes)) {
-                        $fail('Invalid file type. Allowed types: jpg, jpeg, png, pdf, doc, docx');
+                        $fail('Invalid file type. Allowed types: jpg, jpeg, png, pdf, doc, docx, mp4, avi');
                     }
                 },
             ],
-
         ];
     }
 }

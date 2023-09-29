@@ -15,20 +15,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label" for="title">Title</label>
-                                <input type="text" class="form-control" name="title" placeholder="Job Title"
-                                    value="{{ $user->creative?->title }}">
+                                <label class="form-label" for="category">Title</label>
+                                <select name="category" id="category" required
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Title</option>
                                 </select>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="linkedin">LinkedIn Profile</label>
-                                <input type="url" class="form-control" name="linkedin" placeholder="LinkedIn Profile"
+                                <input type="url" class="form-control" name="linkedin"
+                                    placeholder="LinkedIn Profile"
                                     value="{{ $user->links->where('label', 'linkedin')->first()?->url }}">
                                 </select>
                             </div>
@@ -38,7 +39,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="portfolio">Portfolio Website</label>
-                                <input type="url" class="form-control" name="portfolio" placeholder="Portfolio Website"
+                                <input type="url" class="form-control" name="portfolio"
+                                    placeholder="Portfolio Website"
                                     value="{{ $user->links->where('label', 'portfolio')->first()?->url }}">
                                 </select>
                             </div>
