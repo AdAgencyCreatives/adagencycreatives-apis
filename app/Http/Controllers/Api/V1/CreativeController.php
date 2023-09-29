@@ -7,6 +7,8 @@ use App\Http\Requests\Creative\StoreCreativeRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
+use App\Http\Resources\Creative\CreativeSpotlightCollection;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
@@ -124,5 +126,15 @@ class CreativeController extends Controller
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
+    }
+
+    public function creative_spotlight(Request $request)
+    {
+        $creative_spotlights = Attachment::with('user.creative.category')
+            ->where('resource_type', 'creative_spotlight')
+        // ->first();
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new CreativeSpotlightCollection($creative_spotlights);
     }
 }

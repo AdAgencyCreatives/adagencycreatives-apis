@@ -68,6 +68,11 @@
                             role="tab" aria-selected="true">
                             Qualifications
                         </a>
+
+                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#portfolio"
+                            role="tab" aria-selected="true">
+                            Portfolio
+                        </a>
                     @endif
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"
                         aria-selected="false" tabindex="-1">
@@ -118,6 +123,9 @@
                     </div>
                     <div class="tab-pane fade" id="qualifications" role="tabpanel">
                         @include('pages.users.creative.qualification')
+                    </div>
+                    <div class="tab-pane fade" id="portfolio" role="tabpanel">
+                        @include('pages.users.creative.portfolio')
                     </div>
                     <div class="tab-pane fade" id="seo" role="tabpanel">
                         @include('pages.users.creative.seo')

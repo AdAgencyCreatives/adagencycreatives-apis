@@ -49,6 +49,7 @@ Route::post('/users', [UserController::class, 'store']);
 // Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
 Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
+Route::get('creative_spotlight', [CreativeController::class, 'creative_spotlight']);
 Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
 Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
 

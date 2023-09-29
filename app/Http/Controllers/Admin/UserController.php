@@ -34,7 +34,7 @@ class UserController extends Controller
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {
-            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences']);
+            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights']);
         }
 
         // dump($user->addresses[0]->state->name);

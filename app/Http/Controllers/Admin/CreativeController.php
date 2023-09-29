@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Attachment;
+use App\Models\Category;
 use App\Models\Creative;
 use App\Models\Education;
 use App\Models\Experience;
@@ -26,7 +27,6 @@ class CreativeController extends Controller
 
     public function update(Request $request, $uuid)
     {
-        // dd($request->all());
         $creative = Creative::where('uuid', $uuid)->first();
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
@@ -98,10 +98,11 @@ class CreativeController extends Controller
             $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
 
+        $category = Category::where('uuid', $request->category)->first();
         $creative->update([
-            'title' => $request->title,
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
+            'category_id' => $category->id,
+            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
+            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
             'strengths' => ''.implode(',', $request->strengths ? $request->strengths : []).'',
         ]);
 
