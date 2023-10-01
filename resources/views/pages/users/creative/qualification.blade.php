@@ -15,11 +15,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label" for="category">Title</label>
-                                <select name="category" id="category" required
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select Title</option>
-                                </select>
+                                <label class="form-label" for="title">Title</label>
+                                <input type="text" class="form-control" name="title" placeholder="Job Title"
+                                    value="{{ $user->creative?->title }}">
                             </div>
                         </div>
                     </div>
@@ -45,6 +43,18 @@
                                 </select>
                             </div>
 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="category">Industry Job Title</label>
+                                <select name="category" id="category" required
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Title</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 

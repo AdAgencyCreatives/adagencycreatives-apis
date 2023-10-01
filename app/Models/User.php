@@ -74,6 +74,16 @@ class User extends Authenticatable
         return $this->hasMany(Attachment::class)->where('resource_type', 'creative_spotlight');
     }
 
+    public function portfolio_items() //upto 5 items
+    {
+        return $this->hasMany(Attachment::class)->where('resource_type', 'portfolio_item');
+    }
+
+    public function portfolio_item_links() //upto 5 items
+    {
+        return $this->hasMany(Link::class)->where('label', 'portfolio');
+    }
+
     public function agency()
     {
         return $this->hasOne(Agency::class);
