@@ -331,3 +331,13 @@ Admin can
 - Add slug in jobs table, it will be auto-generated  from different values of job table
 - Created endpoint for getting user subscription status, it will also show how many jobs user can post
 - Collaborated with frontend-dev to make proper flow by modifying API response (where needed)
+ 
+ ## 25/9/2023 - Creative Spotlight
+- Admin can set default SEO title for creatives spotlight
+- Created endpoint which lists all the creatives spotlights along with their urls
+- Transformed creative title field from open text box to specific dropdown
+ 
+ ## 26/9/2023 - Job Invitation | Creative Title field
+- Admin can set title (open text field) and also select from industry job title (dropdown).
+- Separate sections for showing portfolio items and spotlights.
+- Job Invitation funtionality for agency users.

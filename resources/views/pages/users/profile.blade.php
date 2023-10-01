@@ -69,6 +69,11 @@
                             Qualifications
                         </a>
 
+                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#spotlight"
+                            role="tab" aria-selected="true">
+                            Spotlight
+                        </a>
+
                         </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#portfolio"
                             role="tab" aria-selected="true">
                             Portfolio
@@ -123,6 +128,9 @@
                     </div>
                     <div class="tab-pane fade" id="qualifications" role="tabpanel">
                         @include('pages.users.creative.qualification')
+                    </div>
+                    <div class="tab-pane fade" id="spotlight" role="tabpanel">
+                        @include('pages.users.creative.spotlight')
                     </div>
                     <div class="tab-pane fade" id="portfolio" role="tabpanel">
                         @include('pages.users.creative.portfolio')

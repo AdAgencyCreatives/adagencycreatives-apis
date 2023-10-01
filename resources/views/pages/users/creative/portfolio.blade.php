@@ -6,35 +6,36 @@
             </div>
             <div class="card-body pt-0">
 
-                @if ($user->portfolio_spotlights->isEmpty())
+                @if ($user->portfolio_items->isEmpty())
 
                     No portfolio items found.
                 @else
-                    <div class="row">
-                        <div class="col-12 col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <!-- Card header content -->
-                                </div>
-                                <div class="card-body pt-0">
-
-                                    @if ($user->portfolio_spotlights->isEmpty())
-
-                                        No portfolio items found.
-                                    @else
-                                        @foreach ($user->portfolio_spotlights as $key => $video)
-                                            <div>
-                                                <video controls loop
-                                                    src="{{ getAttachmentBasePath() . $video->path }}"></video>
-                                            </div>
-                                        @endforeach
-                                    @endif
-
-                                </div>
-                            </div>
+                    @foreach ($user->portfolio_items as $key => $item)
+                        <div>
+                            <img src="{{ getAttachmentBasePath() . $item->path }}"></video>
                         </div>
-                    </div>
+                    @endforeach
+
                 @endif
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <p>Portfolio Links</p>
+            </div>
+            <div class="card-body pt-0">
+
+
+                @foreach ($user->portfolio_item_links as $link)
+                    <div>
+                        <p> {{ $link->url }}</p>
+
+                    </div>
+                @endforeach
+
+
 
             </div>
         </div>

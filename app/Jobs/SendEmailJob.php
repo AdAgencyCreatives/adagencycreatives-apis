@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\AccountApproved;
 use App\Mail\Group\Invitation;
+use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
 use App\Mail\NewUserRegistration;
@@ -53,6 +54,9 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'new_job_added_admin':
                 Mail::to($this->data['receiver'])->send(new NewJobPosted($this->data['data']));
+                break;
+            case 'job_invitation':
+                Mail::to($this->data['receiver'])->send(new JobInvitation($this->data['data']));
                 break;
             default:
                 // Handle unknown email types or fallback logic

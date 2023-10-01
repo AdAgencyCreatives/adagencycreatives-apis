@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Job\StoreJobInvitationRequest;
 use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
 use App\Http\Resources\Job\JobCollection;
 use App\Http\Resources\Job\JobResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
@@ -127,7 +130,6 @@ class JobController extends Controller
 
     public function update(Request $request, $uuid)
     {
-
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
 
@@ -199,5 +201,29 @@ class JobController extends Controller
         });
 
         return $users;
+    }
+
+    public function job_invitation(StoreJobInvitationRequest $request)
+    {
+        $invitee = User::where('uuid', $request->receiver_id)->first();
+        $job = Job::with('user.agency')->where('uuid', $request->job_id)->first();
+
+        try {
+            SendEmailJob::dispatch([
+                'receiver' => $invitee,
+                'data' => [
+                    'receiver_name' => $invitee->first_name,
+                    'agency_name' => $job->user->agency->name,
+                    'job_title' => $job->title,
+                    'job_url' => $job->slug,
+                ],
+            ], 'job_invitation');
+
+            return response()->json([
+                'message' => 'Job invitation sent successfully',
+            ]);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'CS-01');
+        }
     }
 }
