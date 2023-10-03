@@ -11,23 +11,24 @@ use App\Http\Resources\Attachment\AttachmentResource;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class AttachmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = QueryBuilder::for(Attachment::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
-                // AllowedFilter::scope('resource_type'),
+                AllowedFilter::scope('resource_type'),
                 // 'resource_type'
             ]);
 
-        $attachments = $query->paginate(config('global.request.pagination_limit'));
+        $attachments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AttachmentCollection($attachments);
     }

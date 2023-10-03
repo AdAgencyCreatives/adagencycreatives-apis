@@ -13,6 +13,7 @@ class Industry extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'slug',
     ];
 
     protected static function booted()

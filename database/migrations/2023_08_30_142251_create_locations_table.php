@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });

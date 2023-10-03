@@ -159,5 +159,7 @@ class DatabaseSeeder extends Seeder
 
             'creative_spotlight_title' => 'Site Name (%site_name%) %separator% %post_name% %separator% %post_date%',
         ]);
+
+        Artisan::call('optimize:clear');
     }
 }

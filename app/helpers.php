@@ -62,6 +62,7 @@ if (! function_exists('storeImage')) {
             'user_id' => $user_id,
             'resource_type' => $resource_type,
             'path' => $filePath,
+            'name' => $file->getClientOriginalName(),
             'extension' => $extension,
         ]);
 

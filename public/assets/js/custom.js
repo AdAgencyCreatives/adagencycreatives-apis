@@ -243,17 +243,20 @@ function populateFilterWithSelectedValue(categories, div_id) {
     });
 }
 
-function populateUserFilter(users, div_id) {
+function populateUserFilter(users, div_id, count_key_name) {
+
     var selectElement = $(div_id);
     $.each(users, function (index, user) {
+        var userCount = user[count_key_name];
         var option = $('<option>', {
             value: user.uuid,
-            text: user.first_name + ' ' + user.last_name + ' -' + user.role + ' (' + user.posts_count + ')'
+            text: user.first_name + ' ' + user.last_name + ' -' + user.role + ' (' + userCount + ')'
         });
 
         selectElement.append(option);
     });
 }
+
 
 function populateGroupFilter(groups, div_id) {
     var selectElement = $(div_id);

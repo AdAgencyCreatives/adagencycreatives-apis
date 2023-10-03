@@ -14,7 +14,7 @@ class AgencyResource extends JsonResource
             'type' => 'agencies',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'slug' => $user->username,
+            'slug' => $this->slug,
             'name' => $this->name,
             'size' => $this->size,
             'about' => $this->about,

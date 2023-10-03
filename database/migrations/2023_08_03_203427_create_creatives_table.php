@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->string('years_of_experience')->nullable();
             $table->text('about')->nullable();
             $table->string('employment_type')->nullable();

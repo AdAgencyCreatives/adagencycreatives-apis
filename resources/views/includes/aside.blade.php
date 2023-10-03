@@ -386,6 +386,24 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('attachments*') ? 'active' : '' }} ">
+                    <a data-target="#attachment" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="image"></i>
+                        <span class="align-middle">Media</span>
+                    </a>
+                    <ul id="attachment"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('attachments*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('attachments') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('attachments.index') }}">
+                                <i class="align-middle" data-feather="image"></i>
+                                <span class="align-middle">All Media</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-header">
                     Reports
                 </li>
@@ -401,6 +419,13 @@
                     <a class="sidebar-link" href="/telescope" target="_blank">
                         <i class="align-middle" data-feather="activity"></i>
                         <span class="align-middle">Activity</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="https://dashboard.stripe.com/test/coupons/create" target="_blank">
+                        <i class="align-middle" data-feather="percent"></i>
+                        <span class="align-middle">Coupons</span>
                     </a>
                 </li>
             @endif

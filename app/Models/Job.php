@@ -10,11 +10,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class Job extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+    use Searchable;
+
+    public function searchableAs(): string
+    {
+        return 'jobs_index';
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'employment_type' => $this->employment_type,
+        ];
+    }
 
     protected $table = 'job_posts';
 
@@ -225,7 +240,7 @@ class Job extends Model
             }
 
             $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
-            $job->slug = Str::slug($slug, '-');
+            $job->slug = Str::slug($slug);
             $job->seo_title = settings('job_title');
             $job->seo_description = settings('job_description');
             $job->save();

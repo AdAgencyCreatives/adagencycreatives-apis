@@ -38,6 +38,8 @@ class SubscriptionController extends Controller
             $user = $request->user();
 
             $subscription = $user->newSubscription($plan->slug, $plan->stripe_plan)
+                ->allowPromotionCodes()
+                ->withPromotionCode('')
                 ->create($request->token);
 
             $totalQuota = $plan->quota;

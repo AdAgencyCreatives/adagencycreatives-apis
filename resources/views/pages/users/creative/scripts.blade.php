@@ -6,7 +6,7 @@
             dataType: 'json',
             success: function(response) {
                 populateFilter(response.data, '#category');
-                var creative_category = "{{ $user->creative?->category->uuid }}";
+                var creative_category = "{{ $user->creative?->category?->uuid }}";
                 console.log(creative_category);
                 $('#category').val(creative_category);
                 $('#category').trigger('change');

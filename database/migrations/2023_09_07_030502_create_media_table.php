@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('medias', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->string('slug')->nullable();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

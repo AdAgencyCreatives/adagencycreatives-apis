@@ -6,6 +6,8 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 class Attachment extends Model
 {
@@ -17,6 +19,7 @@ class Attachment extends Model
         'resource_id',
         'resource_type',
         'path',
+        'name',
         'extension',
         'created_at',
         'updated_at',
@@ -35,21 +38,36 @@ class Attachment extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if ($user) {
-            return $query->where('user_id', $user->id);
-        }
+        return $query->where('user_id', $user->id);
     }
 
     public function scopePostId(Builder $query, $post_id)
     {
         $post = Post::where('uuid', $post_id)->first();
-        if ($post) {
-            return $query->where('post_id', $post->id);
-        }
+        return $query->where('post_id', $post->id);
+
     }
 
     public function scopeResourceType(Builder $query, $resource_type)
     {
         return $query->where('resource_type', $resource_type);
+    }
+
+    protected static function booted()
+    {
+        if (! App::runningInConsole()) {
+            static::created(function () {
+                Cache::forget('all_users_with_attachments');
+            });
+
+            static::updated(function () {
+                Cache::forget('all_users_with_attachments');
+            });
+
+            static::deleted(function () {
+                Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
+            });
+        }
+
     }
 }
