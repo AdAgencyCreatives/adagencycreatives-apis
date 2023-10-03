@@ -10,12 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 
 class Job extends Model
 {
     use HasFactory, SoftDeletes;
-    use Searchable;
 
     public function searchableAs(): string
     {
