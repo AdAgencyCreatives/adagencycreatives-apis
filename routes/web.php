@@ -171,3 +171,5 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('all-messages', [ChatController::class, 'fetchMessages']);
+
+//Just test
