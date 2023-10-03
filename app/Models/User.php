@@ -239,19 +239,21 @@ class User extends Authenticatable
             static::created(function ($user) {
                 Cache::forget('users');
                 Cache::forget('dashboard_stats_cache');
-                Cache::forget('all_users');
+                Cache::forget('all_users_with_posts');
             });
 
             static::updated(function ($user) {
                 Cache::forget("user:$user->id");
                 Cache::forget('dashboard_stats_cache');
-                Cache::forget('all_users');
+                Cache::forget('all_users_with_posts');
+                Cache::forget('all_users_with_attachments');
             });
 
             static::deleted(function ($user) {
                 Cache::forget("user:$user->id");
                 Cache::forget('dashboard_stats_cache');
-                Cache::forget('all_users');
+                Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
+                Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
             });
         }
 

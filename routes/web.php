@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AgencyController;
+use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -152,6 +153,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('jobs', JobController::class);
         Route::get('jobs/{job}/details', [JobController::class, 'details']);
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
+
+        /**
+         * Attachment Media
+         */
+        Route::resource('attachments', AttachmentController::class);
 
     });
 

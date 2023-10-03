@@ -68,6 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('links', LinkController::class);
     Route::apiResource('notes', NoteController::class);
     Route::apiResource('attachments', AttachmentController::class);
+
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::get('get_categories', [CategoryController::class, 'get_categories']);
@@ -83,8 +84,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('reviews', ReviewController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
-    Route::get('get_users', [UserController::class, 'get_users']);
+
     Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
+
+    /**
+     * Filters
+     */
+    Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
+    Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
 
     /**
      * Job Alerts

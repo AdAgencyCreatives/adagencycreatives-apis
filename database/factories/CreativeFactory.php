@@ -15,6 +15,7 @@ class CreativeFactory extends Factory
             'uuid' => fake()->uuid(),
             'user_id' => fake()->randomElement([6, 7, 8, 9, 10]),
             'category_id' => fake()->randomElement([1, 2, 3, 4, 5]),
+            'title' => fake()->jobTitle(),
             'years_of_experience' => fake()->randomElement(['Junior 0-2 years', 'Mid-level 2-5 years', 'Senior 5-10 years']),
             'employment_type' => fake()->randomElement($employementTypes),
             'about' => fake()->paragraph(),

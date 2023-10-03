@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Strength;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class StrengthSeeder extends Seeder
 {
@@ -58,7 +59,10 @@ class StrengthSeeder extends Seeder
         ];
 
         foreach ($strengths as $strength) {
-            Strength::factory()->create(['name' => $strength]);
+            Strength::factory()->create([
+                'name' => $strength,
+                'slug' => Str::slug($strength),
+            ]);
         }
     }
 }

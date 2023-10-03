@@ -191,11 +191,26 @@ class UserController extends Controller
         return response()->json(['message' => 'Logged out'], 200);
     }
 
-    public function get_users(Request $request)
+    public function get_users_for_posts()
     {
-        $cacheKey = 'all_users';
+        $cacheKey = 'all_users_with_posts';
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
             return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')->where('role', '!=', 1)->withCount('posts')->get();
+        });
+
+        return $users;
+    }
+
+    public function get_users_for_attachments()
+    {
+        $cacheKey = 'all_users_with_attachments';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')
+                ->where('role', '!=', 1)
+                ->whereHas('attachments')
+                ->withCount('attachments')
+                ->orderByDesc('attachments_count') // Order by first name
+                ->get();
         });
 
         return $users;

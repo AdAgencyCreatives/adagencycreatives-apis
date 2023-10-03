@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Media;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class MediaSeeder extends Seeder
 {
@@ -44,7 +45,10 @@ class MediaSeeder extends Seeder
         ];
 
         foreach ($medias as $media) {
-            Media::factory()->create(['name' => $media]);
+            Media::factory()->create([
+                'name' => $media,
+                'slug' => Str::slug($media),
+            ]);
         }
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('resource_id')->nullable();
             $table->string('resource_type');
             $table->string('path');
+            $table->string('name')->nullable();
             $table->string('extension');
             $table->timestamps();
             $table->softDeletes();

@@ -23,6 +23,7 @@ class CreativeResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $this->user->first_name.' '.$this->user->last_name,
+            'slug' => $this->slug,
             'title' => $this->title,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,

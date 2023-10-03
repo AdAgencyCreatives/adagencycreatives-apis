@@ -13,6 +13,7 @@ class Location extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'slug',
         'parent_id',
     ];
 

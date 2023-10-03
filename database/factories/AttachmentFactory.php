@@ -12,6 +12,7 @@ class AttachmentFactory extends Factory
             'uuid' => fake()->uuid(),
             'resource_type' => ['profile_picture', 'logo', 'resume', 'creative_spotlight'][rand(0, 3)],
             'path' => fake()->imageUrl,
+            'name' => fake()->word,
             'extension' => 'jpg',
             'created_at' => now(),
             'updated_at' => now(),

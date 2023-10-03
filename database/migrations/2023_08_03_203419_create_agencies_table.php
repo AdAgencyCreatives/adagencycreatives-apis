@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
+            $table->string('slug')->nullable();
             $table->string('name')->nullable();
             $table->string('size')->nullable();
             $table->text('about')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Creative extends Model
 {
@@ -16,6 +17,7 @@ class Creative extends Model
         'user_id',
         'category_id',
         'title',
+        'slug',
         'about',
         'employment_type',
         'years_of_experience',
@@ -89,5 +91,13 @@ class Creative extends Model
         $user_ids = User::where('status', $status)->pluck('id');
 
         return $query->whereIn('user_id', $user_ids);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($creative) {
+            $creative->slug = Str::slug($creative->user->username);
+            $creative->save();
+        });
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Industry;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class IndustrySeeder extends Seeder
 {
@@ -79,7 +80,10 @@ class IndustrySeeder extends Seeder
         ];
 
         foreach ($industries as $industry) {
-            Industry::factory()->create(['name' => $industry]);
+            Industry::factory()->create([
+                'name' => $industry,
+                'slug' => Str::slug($industry),
+            ]);
         }
     }
 }

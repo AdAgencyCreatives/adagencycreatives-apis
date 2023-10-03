@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Agency extends Model
 {
@@ -15,6 +16,7 @@ class Agency extends Model
         'uuid',
         'user_id',
         'name',
+        'slug',
         'about',
         'size',
         'industry_experience',
@@ -65,5 +67,13 @@ class Agency extends Model
         $user_ids = User::where('status', $status)->pluck('id');
 
         return $query->whereIn('user_id', $user_ids);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($agency) {
+            $agency->slug = Str::slug($agency->user->username);
+            $agency->save();
+        });
     }
 }
