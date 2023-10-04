@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('name')->nullable();
             $table->string('extension');
+            $table->integer('status')->default(0)->comment('0:pending, 1:active, 2:inactive');
             $table->timestamps();
             $table->softDeletes();
         });

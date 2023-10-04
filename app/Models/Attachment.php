@@ -21,8 +21,15 @@ class Attachment extends Model
         'path',
         'name',
         'extension',
+        'status',
         'created_at',
         'updated_at',
+    ];
+
+    public const STATUSES = [
+        'PENDING' => 0,
+        'ACTIVE' => 1,
+        'INACTIVE' => 2,
     ];
 
     public function user()
@@ -38,12 +45,14 @@ class Attachment extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopePostId(Builder $query, $post_id)
     {
         $post = Post::where('uuid', $post_id)->first();
+
         return $query->where('post_id', $post->id);
 
     }
@@ -51,6 +60,36 @@ class Attachment extends Model
     public function scopeResourceType(Builder $query, $resource_type)
     {
         return $query->where('resource_type', $resource_type);
+    }
+
+    public function getStatusAttribute($value)
+    {
+        switch ($value) {
+            case Attachment::STATUSES['PENDING']:
+                return 'pending';
+            case Attachment::STATUSES['ACTIVE']:
+                return 'active';
+            case Attachment::STATUSES['INACTIVE']:
+                return 'inactive';
+
+            default:
+                return null;
+        }
+    }
+
+    public function setStatusAttribute($value)
+    {
+        switch ($value) {
+            case 'active':
+                $this->attributes['status'] = Attachment::STATUSES['ACTIVE'];
+                break;
+            case 'inactive':
+                $this->attributes['status'] = Attachment::STATUSES['INACTIVE'];
+                break;
+            default:
+                $this->attributes['status'] = Attachment::STATUSES['PENDING'];
+                break;
+        }
     }
 
     protected static function booted()

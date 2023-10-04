@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Attachment\StoreAttachmentRequest;
 use App\Http\Resources\Attachment\AttachmentCollection;
@@ -25,10 +26,12 @@ class AttachmentController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
                 AllowedFilter::scope('resource_type'),
-                // 'resource_type'
-            ]);
+                'status',
+            ])
+            ->defaultSort('created_at', 'desc')
+            ->allowedSorts('created_at');
 
-        $attachments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $attachments = $query->with('user')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AttachmentCollection($attachments);
     }
@@ -56,6 +59,19 @@ class AttachmentController extends Controller
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
+        }
+    }
+
+    public function update(Request $request, $uuid)
+    {
+        // dd($request->all());
+        try {
+            $attachment = Attachment::where('uuid', $uuid)->firstOrFail();
+            $attachment->update($request->only('status'));
+
+            return new AttachmentResource($attachment);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
 

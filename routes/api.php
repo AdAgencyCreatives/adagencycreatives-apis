@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);
+    Route::post('webhook/stripe-charge-success', [SubscriptionController::class, 'charge_success']);
 
     /**
      * Chat Routes
