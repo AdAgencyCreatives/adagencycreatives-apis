@@ -3,8 +3,17 @@
 @section('title', __('Media'))
 
 @section('scripts')
+
+    {{-- <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script> --}}
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
+        //LightBox
+        // const lightbox = GLightbox({
+        //     touchNavigation: true,
+        //     loop: true,
+        // });
+        //End LightBox
+
         var currentPage = 1;
         var totalPages = 1;
         var perPage = 10;
@@ -47,8 +56,11 @@
         }
 
         function populateTable(attachments) {
-            var img_div = $('#image_div');
-            img_div.empty(); //Un-Comment this line to create Show More effect
+            // var img_div = $('#image_div');
+            // img_div.empty(); //Un-Comment this line to create Show More effect
+
+            var tbody = $('#attachments-table tbody');
+            tbody.empty();
 
             if (attachments.length === 0) {
                 displayNoRecordsMessage(11);
@@ -59,34 +71,60 @@
                 var extension = attachment.extension;
                 var fileUrl = attachment.url;
 
-                if (extension === 'jpg' || extension === 'png') {
-                    // Display images in img tags
-                    var imageContainer = '<div class="image-container">' +
+                var roleBasedActions = '';
+
+
+                roleBasedActions = '<a href="#" class="delete-btn" data-id="' +
+                    attachment.id + '">Delete</a>';
+
+
+                var displayContent = '';
+
+                var imageExtensions = ['jpg', 'png'];
+                var videoExtensions = ['mp4'];
+                var docExtensions = ['doc', 'pdf'];
+
+                if (imageExtensions.includes(extension)) {
+                    // Display images in anchor tags
+                    displayContent = '<a href="' + fileUrl + '" class="image-container" target="_blank">' +
                         '<img src="' + fileUrl + '" alt="' + attachment.name + '">' +
-                        '</div>';
-                    img_div.append(imageContainer);
-                } else if (extension === 'spotlight') {
-                    // Display video using video tag
-                    var videoContainer = '<div class="video-container">' +
-                        '<video controls>' +
+                        '</a>';
+                } else if (videoExtensions.includes(extension)) {
+                    // Display video using anchor tags
+                    displayContent = '<a href="' + fileUrl + '" class="video-container" target="_blank">' +
+                        '<video width="150" height="150" controls poster="abc">' +
                         '<source src="' + fileUrl + '" type="video/mp4">' +
                         'Your browser does not support the video tag.' +
                         '</video>' +
-                        '</div>';
-                    img_div.append(videoContainer);
-                } else if (extension === 'pdf') {
-                    // Display a button to download PDF
-                    var downloadButton = '<div class="pdf-container">' +
-                        '<a href="' + fileUrl + '" download="file.pdf">Download PDF</a>' +
-                        '</div>';
-                    img_div.append(downloadButton);
-                } else if (extension === 'doc') {
-                    // Display a button to download PDF
-                    var downloadButton = '<div class="pdf-container">' +
-                        '<a href="' + fileUrl + '" download="file.pdf">Download Document</a>' +
-                        '</div>';
-                    img_div.append(downloadButton);
+                        '</a>';
+                } else if (docExtensions.includes(extension)) {
+                    // Display a button to download PDF or document
+                    displayContent = '<a href="' + fileUrl + '" download="' + attachment.name +
+                        '" target="_blank">' +
+                        'Download ' + extension.toUpperCase() + '</a>';
                 }
+
+                var statusDropdown =
+                    '<select class="status-dropdown form-control form-select select2" data-post-id="' +
+                    attachment.id + '">' +
+                    '<option value="pending" ' + (attachment.status === 'pending' ? 'selected' : '') +
+                    '>Pending</option>' +
+                    '<option value="active" ' + (attachment.status === 'active' ? 'selected' : '') +
+                    '>Active</option>' +
+                    '<option value="inactive" ' + (attachment.status === 'inactive' ? 'selected' : '') +
+                    '>InActive</option>' +
+                    '</select>';
+
+                var row = '<tr>' +
+                    '<td>' + displayContent + '</td>' +
+                    '<td>' + attachment.name + '</td>' +
+                    '<td>' + attachment.user_name + '</td>' +
+                    '<td>' + attachment.resource_type + '</td>' +
+                    '<td>' + statusDropdown + '</td>' +
+                    '<td><span class="badge bg-primary me-2">' + attachment.created_at +
+                    '<td>' + roleBasedActions + '</td>' +
+                    '</tr>';
+                tbody.append(row);
             });
         }
 
@@ -105,32 +143,16 @@
             });
         }
 
-        function fetchGroups() {
-
-            $.ajax({
-                url: 'api/v1/get_groups',
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    populateGroupFilter(response, '#group');
-                },
-                error: function() {
-                    alert('Failed to fetch groups from the API.');
-                }
-            });
-        }
-
 
 
         $(document).ready(function() {
             fetchData(currentPage);
             fetchUsers();
-            // fetchGroups();
 
             $(document).on('click', '.delete-btn', function() {
                 var resourceId = $(this).data('id');
                 var csrfToken = '{{ csrf_token() }}';
-                deleteConfirmation(resourceId, 'post', 'posts', csrfToken);
+                deleteConfirmation(resourceId, 'attachment', 'attachments', csrfToken);
             });
 
 
@@ -143,6 +165,7 @@
                 filters = {
                     user_id: selectedUser,
                     resource_type: selectedResourceType,
+                    status: selectedStatus
 
                 };
 
@@ -155,13 +178,14 @@
                 var selectedStatus = $(this).val();
                 var postId = $(this).data('post-id');
                 var csrfToken = '{{ csrf_token() }}';
-                updateStatus(postId, 'post', 'posts', csrfToken, selectedStatus);
+                updateStatus(postId, 'attachment', 'attachments', csrfToken, selectedStatus);
             });
         });
     </script>
 @endsection
 
 @section('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <style>
         .image-container {
             width: auto;
@@ -210,8 +234,26 @@
 
                         </div>
                         <div class="row dt-row">
-                            <div class="col-sm-12" id="image_div">
+                            <div class="col-sm-12">
+                                <table id="attachments-table" class="table table-striped dataTable no-footer dtr-inline"
+                                    style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>File</th>
+                                            <th>Name</th>
+                                            <th>Author</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Created At</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
+
+                                    </tbody>
+
+                                </table>
                             </div>
                         </div>
                         <div class="row">

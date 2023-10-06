@@ -404,6 +404,38 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('pages/create*') ? 'active' : '' }} ">
+                    <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="image"></i>
+                        <span class="align-middle">Pages</span>
+                    </a>
+                    <ul id="pages"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('pages/create*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('pages/create?page=home') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('pages.create') }}?page=home">
+                                <i class="align-middle" data-feather="home"></i>
+                                <span class="align-middle">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('pages/create?page=footer') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('pages.create') }}?page=community">
+                                <i class="align-middle" data-feather="facebook"></i>
+                                <span class="align-middle">Community</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('pages/create?page=footer') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('pages.create') }}?page=footer">
+                                <i class="align-middle" data-feather="chevrons-down"></i>
+                                <span class="align-middle">Footer</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-header">
                     Reports
                 </li>

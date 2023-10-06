@@ -14,7 +14,7 @@ class AttachmentFactory extends Factory
             'path' => fake()->imageUrl,
             'name' => fake()->word,
             'extension' => 'jpg',
-            'created_at' => now(),
+            'created_at' => fake()->dateTimeBetween('-8 days', 'now'),
             'updated_at' => now(),
         ];
     }

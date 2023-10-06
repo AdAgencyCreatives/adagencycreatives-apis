@@ -24,9 +24,23 @@
                                 <select name="resource_type" id="resource_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Type</option>
-                                    <option value="profile_picture"> profile_picture</option>
-                                    <option value="logo"> logo</option>
-                                    <option value="creative_spotlight"> creative_spotlight</option>
+                                    <option value="profile_picture"> Profile Picture</option>
+                                    <option value="logo"> Logo</option>
+                                    <option value="creative_spotlight"> Creative Spotlight</option>
+                                    <option value="resume"> Resume</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="status"> Status </label>
+                                <select name="status" id="status"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Status</option>
+                                    <option value="0"> Pending </option>
+                                    <option value="1"> Active</option>
+                                    <option value="2"> InActive</option>
                                 </select>
                             </div>
                         </div>

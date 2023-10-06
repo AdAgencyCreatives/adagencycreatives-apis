@@ -37,10 +37,14 @@ class SubscriptionController extends Controller
             $plan = Plan::find($request->plan_id);
             $user = $request->user();
 
-            $subscription = $user->newSubscription($plan->slug, $plan->stripe_plan)
-                ->allowPromotionCodes()
-                ->withPromotionCode('')
-                ->create($request->token);
+            $subscriptionBuilder = $user->newSubscription($plan->slug, $plan->stripe_plan);
+
+            // Check if a coupon code was provided and apply it
+            if ($request->has('coupon_code')) {
+
+            }
+            $subscriptionBuilder->withCoupon('TEST40    ');
+            $subscription = $subscriptionBuilder->allowPromotionCodes()->create($request->token);
 
             $totalQuota = $plan->quota;
             $endDate = Carbon::now()->addDays($plan->days);
@@ -94,6 +98,12 @@ class SubscriptionController extends Controller
         $subscription = $user->subscriptions()->select('name', 'quota_left', 'ends_at')->latest()->first();
 
         return new SubscriptionResource($subscription);
+
+    }
+
+    public function charge_success(Request $request)
+    {
+        dd($request->all());
 
     }
 }

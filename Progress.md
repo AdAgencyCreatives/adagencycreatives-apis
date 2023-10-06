@@ -341,3 +341,24 @@ Admin can
 - Admin can set title (open text field) and also select from industry job title (dropdown).
 - Separate sections for showing portfolio items and spotlights.
 - Job Invitation funtionality for agency users.
+ 
+ ## 27/9/2023 - Media page
+- Admin can see all the media attachments uploaded by all users
+- Can Apply all filter to 
+    -   Select medias for particular user 
+    -   Also for particular media type e.g.`logo`, `profile_image` etc 
+
+## 28/9/2023 - Media page | Coupons
+- Admin can 
+    - Update the status of media attachment
+    - Can delete the media attachment
+    - Filter the attachments based on their status
+- Enhanced payment flow a little bit (in progress) 
+
+## 29/9/2023 - Dynamic Content for Pages
+- Admin can 
+    - Update the content of folowing pages:
+    - Home
+    - Community
+    - Footer
+- Enhancments in the payment flow 
