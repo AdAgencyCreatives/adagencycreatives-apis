@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\AccountApproved;
 use App\Mail\Group\Invitation;
+use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
@@ -57,6 +58,9 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'job_invitation':
                 Mail::to($this->data['receiver'])->send(new JobInvitation($this->data['data']));
+                break;
+            case 'custom_job_request_rejected':
+                Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
                 break;
             default:
                 // Handle unknown email types or fallback logic

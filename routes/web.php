@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SeoController;
@@ -151,6 +152,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('users', UserController::class)->only('index', 'details');
         Route::get('users/{user}/details', [UserController::class, 'details']);
 
+        /**
+         * (Job) Package Requests
+         */
+        Route::resource('job-requests', PackageRequestController::class);
+        Route::get('job-requests/{request}/details', [PackageRequestController::class, 'details']);
+
+        /**
+         * Jobs
+         */
         Route::resource('jobs', JobController::class);
         Route::get('jobs/{job}/details', [JobController::class, 'details']);
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
