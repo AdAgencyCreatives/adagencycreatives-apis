@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NoteController;
+use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ReportController;
@@ -97,6 +98,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Alerts
      */
     Route::apiResource('job-alerts', JobAlertController::class);
+    Route::apiResource('package-requests', PackageRequestController::class);
 
     /**
      * Community Routes
@@ -110,12 +112,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Stripe Payment Routes
      */
+    Route::get('packages', [SubscriptionController::class, 'packages']);
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
     Route::get('subscription/status', [SubscriptionController::class, 'status']);
     Route::get('plans/{plan}', [SubscriptionController::class, 'show']);
     Route::post('subscriptions', [SubscriptionController::class, 'subscription']);
     Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel']);
-    Route::post('webhook/stripe-charge-success', [SubscriptionController::class, 'charge_success']);
 
     /**
      * Chat Routes

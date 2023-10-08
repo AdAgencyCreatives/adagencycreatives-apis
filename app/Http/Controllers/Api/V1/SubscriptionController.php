@@ -101,9 +101,9 @@ class SubscriptionController extends Controller
 
     }
 
-    public function charge_success(Request $request)
-    {
-        dd($request->all());
 
-    }
+    public function packages()
+    {
+        return Plan::all();
+        }
 }

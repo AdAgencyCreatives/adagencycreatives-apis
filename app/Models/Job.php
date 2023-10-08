@@ -215,7 +215,6 @@ class Job extends Model
 
     protected static function booted()
     {
-
         static::created(function ($job) {
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
@@ -269,6 +268,5 @@ class Job extends Model
         static::deleted(function () {
             Cache::forget('dashboard_stats_cache');
         });
-
     }
 }

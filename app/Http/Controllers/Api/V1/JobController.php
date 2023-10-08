@@ -109,7 +109,6 @@ class JobController extends Controller
 
     public function updateFromAdmin(UpdateJobRequest $request, $uuid)
     {
-        // dd($request->all());
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
 
