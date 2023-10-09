@@ -431,21 +431,32 @@
                         class="sidebar-dropdown list-unstyled collapse {{ request()->is('pages/create*') ? 'show' : '' }}"
                         data-parent="#sidebar">
 
-                        <li class="sidebar-item {{ request()->is('pages/create?page=home') ? 'active' : '' }}">
+                        <li
+                            class="sidebar-item {{ request()->fullUrlIs(route('pages.create', ['page' => 'home'])) ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('pages.create') }}?page=home">
                                 <i class="align-middle" data-feather="home"></i>
                                 <span class="align-middle">Home</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('pages/create?page=footer') ? 'active' : '' }}">
+                        <li
+                            class="sidebar-item {{ request()->fullUrlIs(route('pages.create', ['page' => 'community'])) ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('pages.create') }}?page=community">
                                 <i class="align-middle" data-feather="facebook"></i>
                                 <span class="align-middle">Community</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('pages/create?page=footer') ? 'active' : '' }}">
+                        <li
+                            class="sidebar-item {{ request()->fullUrlIs(route('pages.create', ['page' => 'about'])) ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('pages.create', ['page' => 'about']) }}">
+                                <i class="align-middle" data-feather="home"></i>
+                                <span class="align-middle">About</span>
+                            </a>
+                        </li>
+
+                        <li
+                            class="sidebar-item {{ request()->fullUrlIs(route('pages.create', ['page' => 'footer'])) ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('pages.create') }}?page=footer">
                                 <i class="align-middle" data-feather="chevrons-down"></i>
                                 <span class="align-middle">Footer</span>

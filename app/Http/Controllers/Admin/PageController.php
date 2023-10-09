@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdatePageRequest;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -25,7 +27,6 @@ class PageController extends Controller
 
     public function store(Request $request)
     {
-
         $pageData = $request->except('_token');
         $page = $request->page;
         foreach ($pageData as $key => $value) {
@@ -39,43 +40,20 @@ class PageController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Page $page)
+    public function store_img(Request $request)
     {
-        //
-    }
+        try {
+            $uuid = Str::uuid();
+            $file = $request->upload;
+            $folder = 'page/'.$uuid;
+            $filePath = Storage::disk('s3')->put($folder, $file);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Page $page)
-    {
-        //
-    }
+            return response()->json([
+                'url' => getAttachmentBasePath().$filePath,
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePageRequest $request, Page $page)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Page $page)
-    {
-        //
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'ATS-001');
+        }
     }
 }

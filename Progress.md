@@ -362,3 +362,17 @@ Admin can
     - Community
     - Footer
 - Enhancments in the payment flow 
+ 
+## 02/10/2023 - Assign advisor to Custom Job Request
+- Admin can 
+    - View all the custom job requests.
+    - Update the status to accepted or rejected.
+    - Assign any advisor to that job request.
+    - Assign any package to that request.
+- API endpoint that will store the custom job reuqest into database.
+
+## 03/10/2023 - Assign advisor to Custom Job Request
+- Admin can 
+     - Enter the text in text editor
+     - Can also upload image in that editor even by dragging image instead of selecting.
+- Custom Job Request form fields updated for API as well as for admin panel.

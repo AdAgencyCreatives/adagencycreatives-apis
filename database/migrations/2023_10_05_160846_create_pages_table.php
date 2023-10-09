@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('page');
             $table->string('key');
-            $table->string('value')->nullable();
+            $table->text('value')->nullable();
             $table->timestamps();
         });
     }

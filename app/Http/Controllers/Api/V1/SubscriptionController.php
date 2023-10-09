@@ -101,9 +101,8 @@ class SubscriptionController extends Controller
 
     }
 
-
     public function packages()
     {
         return Plan::all();
-        }
+    }
 }

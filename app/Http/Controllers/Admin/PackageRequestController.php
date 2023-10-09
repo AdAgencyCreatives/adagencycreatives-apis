@@ -18,7 +18,7 @@ class PackageRequestController extends Controller
 
     public function details($id)
     {
-        $package_request = PackageRequest::with('plan')->where('uuid', $id)->first();
+        $package_request = PackageRequest::with('plan', 'user', 'category')->where('uuid', $id)->first();
 
         return view('pages.package_requests.detail', compact('package_request'));
     }

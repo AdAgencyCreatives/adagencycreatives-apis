@@ -31,6 +31,21 @@ class PageSeeder extends Seeder
                 'title' => 'The Lounge',
                 'sub_title' => 'Creatives only. Ask for help. Offer or solicit advice. Share. Chat. Inspire. Tell jokes.',
             ],
+            'about' => [
+                'description' => 'Ad Agency Creatives come together
+
+talk about the industry
+
+talk about the work
+
+meet other creatives
+
+share ideas and resources
+
+identify and manage job opportunities
+
+do really do cool $#*t!',
+            ],
         ];
 
         // Insert this data into pages table

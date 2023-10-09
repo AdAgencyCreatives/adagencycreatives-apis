@@ -74,7 +74,7 @@
 
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
-                    '<td>' + job.title + '</td>' +
+                    '<td>' + job.category + '</td>' +
                     '<td>' + job.agency_name + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
                     '<td><span class="badge bg-primary me-2">' + job.created_at +

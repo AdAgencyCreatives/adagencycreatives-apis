@@ -5,9 +5,73 @@
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
+        function fetchIndustries() {
+
+            $.ajax({
+                url: '/api/v1/industry-experiences',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+
+                    populateFilter(response.data, '#industry');
+                    var industry_experience = "{{ $package_request->industry_experience }}";
+                    var industryArray = industry_experience.split(',');
+                    industryArray.forEach(function(uuid) {
+                        $('#industry option[value="' + uuid + '"]').prop('selected', true);
+                    });
+                    $('#industry').trigger('change');
+
+                },
+                error: function() {
+                    alert('Failed to fetch industries from the API.');
+                }
+            });
+            }
+
+        function fetchMedias() {
+            $.ajax({
+                url: '/api/v1/media-experiences',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    populateFilter(response.data, '#media');
+                    var media_experience = "{{ $package_request->media_experience }}";
+                    var mediaArray = media_experience.split(',');
+                    mediaArray.forEach(function(uuid) {
+                        $('#media option[value="' + uuid + '"]').prop('selected', true);
+                    });
+                    $('#media').trigger('change');
+
+                },
+                error: function() {
+                    alert('Failed to fetch medias from the API.');
+                }
+            });
+        }
+        function fetchCategories() {
+
+            $.ajax({
+                url: '/api/v1/get_categories',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    populateFilter(response.data, '#category');
+                    var job_category = "{{ $package_request->category->uuid }}";
+                    $('#category').val(job_category);
+                    $('#category').trigger('change');
+                },
+                error: function() {
+                    alert('Failed to fetch categories from the API.');
+                }
+            });
+        }
         $(document).ready(function() {
             var job_state = "{{ $package_request->state->uuid }}";
             fetchStates(job_state);
+
+            fetchCategories();
+            fetchIndustries();
+            fetchMedias();
 
             $('#save-job').click(function(event) {
                 event.preventDefault();
@@ -101,8 +165,8 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Title </label>
                                         <input class="form-control" type="text" name="title"
-                                            placeholder="Enter title of the job" value="{{ $package_request->title }}"
-                                            disabled />
+                                            placeholder="Enter title of the job"
+                                            value="{{ $package_request->category?->name }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +176,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Agency Name</label>
                                         <input id="agency_name" class="form-control" type="text" name="agency_name"
-                                            placeholder="Agency Name" value="{{ $package_request->agency_name }}"
+                                            placeholder="Agency Name" value="{{ $package_request->agency?->name }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -126,7 +190,8 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Contact Name </label>
                                         <input class="form-control" type="text" name="contact_name"
-                                            placeholder="Enter Contact Name" value="{{ $package_request->contact_name }}"
+                                            placeholder="Enter Contact Name"
+                                            value="{{ $package_request->user?->first_name . ' ' . $package_request->user?->last_name }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -137,7 +202,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Email </label>
                                         <input id="agency_name" class="form-control" type="text" name="email"
-                                            placeholder="Email" value="{{ $package_request->email }}" disabled />
+                                            placeholder="Email" value="{{ $package_request->user?->email }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +215,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Phone Number </label>
                                         <input class="form-control" type="text" name="phone_number"
-                                            placeholder="Enter Phone Number" value="{{ $package_request->phone_number }}"
+                                            placeholder="Enter Phone Number" value="{{ $package_request->user?->phones()->where('label', 'business')->first()?->phone_number, }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -194,7 +259,45 @@
 
                         </div>
 
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <div class="mb-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="category"> Category </label>
+                                        <select name="category_id" id="category"
+                                            class="form-control form-select custom-select select2" data-toggle="select2" disabled>
 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="row">
+                            <div class="col-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="industry"> Industry Experience </label>
+                                    <select name="industry_experience[]" id="industry" required
+                                        class="form-control form-select custom-select select2" multiple="multiple"
+                                        data-toggle="select2" disabled>
+                                        <option value="-100"> Select Industry</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="media"> Media Experience </label>
+                                    <select name="media_experience[]" id="media" required
+                                        class="form-control form-select custom-select select2" multiple="multiple"
+                                        data-toggle="select2" disabled>
+                                        <option value="-100"> Select Media</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-12 col-lg-6">
