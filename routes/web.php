@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth']], function () {
         /**
          * Pages Management
          */
+        Route::post('image/store', [PageController::class, 'store_img'])->name('image.store');
         Route::resource('pages', PageController::class);
 
     });

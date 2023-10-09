@@ -15,16 +15,17 @@ class PackageRequest extends Model
         'uuid',
         'user_id',
         'assigned_to',
+        'category_id',
         'state_id',
         'city_id',
-        'agency_name',
-        'title',
-        'contact_name',
-        'email',
-        'phone_number',
         'package',
         'start_date',
         'status',
+        'employment_type',
+        'industry_experience',
+        'media_experience',
+        'is_opentorelocation',
+        'is_opentoremote',
     ];
 
     public function user()
@@ -40,6 +41,16 @@ class PackageRequest extends Model
     public function city()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class, 'user_id');
     }
 
     public function plan()
