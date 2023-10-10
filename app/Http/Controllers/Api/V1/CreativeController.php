@@ -60,9 +60,9 @@ class CreativeController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'category_id' => $category->id,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
-            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
+            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
+            'strengths' => '' . implode(',', $request->strengths ?? []) . '',
         ]);
 
         $creative = Creative::create($request->all());
@@ -132,9 +132,7 @@ class CreativeController extends Controller
     {
         $creative_spotlights = Attachment::with('user.creative.category')
             ->where('resource_type', 'creative_spotlight')
-        // ->first();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
         return new CreativeSpotlightCollection($creative_spotlights);
     }
 }
