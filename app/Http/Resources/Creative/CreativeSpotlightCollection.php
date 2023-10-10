@@ -11,7 +11,7 @@ class CreativeSpotlightCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             $user = $item->user;
-            $title = sprintf('%s, %s', $user->creative->category->name, $user->first_name.' '.$user->last_name);
+            $title = sprintf('%s, %s', $user->creative?->category?->name, $user->first_name.' '.$user->last_name);
 
             return [
                 'id' => $item->uuid,
