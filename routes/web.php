@@ -21,7 +21,11 @@ use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
+use App\Models\Category;
 use App\Models\Group;
+use App\Models\Industry;
+use App\Models\Location;
+use App\Models\Media;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +87,9 @@ Route::get('/reset', function () {
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('import-data', function () {
+        Artisan::call('import:users-data');
+    });
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
@@ -194,3 +201,32 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('all-messages', [ChatController::class, 'fetchMessages']);
+
+// Extras
+Route::get('get_uuids', function () {
+    $agency_user = User::find(2)->uuid;
+    $creative_user = User::find(10)->uuid;
+    $advisor_user = User::find(16)->uuid;
+    $category = Category::find(1)->uuid;
+    $state = Location::find(1)->uuid;
+    $city = Location::find(2)->uuid;
+    $industry_experience = Industry::find(2)->uuid;
+    $media_experience = Media::find(2)->uuid;
+
+    $jsonObject = [
+        'user_id' => $agency_user,
+        'category_id' => $category,
+
+        'state_id' => $state,
+        'city_id' => $city,
+        'industry_experience' => [
+            $industry_experience,
+        ],
+        'media_experience' => [
+            $media_experience,
+        ],
+
+    ];
+
+    return response()->json($jsonObject, 200);
+});

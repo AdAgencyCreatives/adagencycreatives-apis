@@ -7,6 +7,7 @@ use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PackageRequest\StorePackageRequest;
+use App\Http\Resources\AssignedAgency\AssignedAgencyCollection;
 use App\Http\Resources\PackageRequest\PackageRequestCollection;
 use App\Http\Resources\PackageRequest\PackageRequestResource;
 use App\Models\Category;
@@ -88,12 +89,25 @@ class PackageRequestController extends Controller
     public function get_assigned_agencies($uuid)
     {
         try {
-            $user = User::where('uuid', $uuid)->first();
-            $package_requests = PackageRequest::select('user_id')->where('user_id', $user->id)->where('status', 1)->get()->toArray();
-            $agencies = User::whereIn('id', $package_requests)->get();
-            dd($package_requests);
+            // Find the user by UUID
+            $user = User::where('uuid', $uuid)->firstOrFail();
 
-            return new PackageRequestResource($package_request);
+            // Retrieve package requests for the user
+            $packageRequests = PackageRequest::select('user_id')
+                ->where('assigned_to', $user->id)
+                ->where('status', 1) //only approved
+                ->pluck('user_id')
+                ->toArray();
+
+            // dd($packageRequests);
+
+            // Retrieve agencies for the package requests
+            $agencies = User::with('agency')
+                ->whereIn('id', $packageRequests)
+                ->get();
+
+            // dd($agencies->toArray());
+            return new AssignedAgencyCollection($agencies);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {

@@ -376,3 +376,8 @@ Admin can
      - Enter the text in text editor
      - Can also upload image in that editor even by dragging image instead of selecting.
 - Custom Job Request form fields updated for API as well as for admin panel.
+ 
+## 04/10/2023  Data Import
+- Created endpoint for advisor where he can see all the assigned agencies.
+- Created endpoint with the help of that he can impersonate the agency profile.
+- Imported users data from WordPress

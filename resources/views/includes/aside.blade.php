@@ -129,7 +129,7 @@
             <li class="sidebar-item {{ request()->is('job-requests*') ? 'active' : '' }} ">
                 <a data-target="#job-requests" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="help-circle"></i>
-                    <span class="align-middle">Job Requests</span>
+                    <span class="align-middle">Hire An Advisor Request</span>
                 </a>
                 <ul id="job-requests"
                     class="sidebar-dropdown list-unstyled collapse {{ request()->is('job-requests*') ? 'show' : '' }}"
@@ -138,7 +138,7 @@
                     <li class="sidebar-item {{ request()->is('job-requests') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('job-requests.index') }}">
                             <i class="align-middle" data-feather="help-circle"></i>
-                            <span class="align-middle">All Job Requests</span>
+                            <span class="align-middle">All Requests</span>
                         </a>
                     </li>
 
