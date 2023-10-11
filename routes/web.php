@@ -88,7 +88,10 @@ Route::get('/reset', function () {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('import-data', function () {
-        Artisan::call('import:users-data');
+        Artisan::call('import:users');
+        dump('Users imported successfully');
+        Artisan::call('import:agencies');
+        dump('Agencies imported successfully');
     });
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies

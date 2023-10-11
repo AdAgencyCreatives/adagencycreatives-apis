@@ -162,6 +162,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(PageSeeder::class);
+
+        Artisan::call('import:users');
+        sleep(3);
+        Artisan::call('import:agencies');
+
         Artisan::call('optimize:clear');
     }
 }
