@@ -168,19 +168,6 @@ class UserController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-        $password_from_user = 'b8yzCE26jq@tetfFbyi&)dh%';
-        $hashed_password_from_json = '$P$BQ2A3SJB/jZINhoxUh5MZMq0hgtc7b.';
-
-        if (Hash::check($password_from_user, $hashed_password_from_json)) {
-            // Passwords match; authenticate the user
-            dd('done');
-            // Implement your authentication logic here
-
-        }
-
-        if ($this->verify_wordpress_password($password_from_user, $hashed_password_from_json)) {
-            dd('password matched');
-        }
 
         if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
