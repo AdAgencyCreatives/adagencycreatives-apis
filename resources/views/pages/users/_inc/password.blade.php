@@ -12,21 +12,20 @@
                         <div class="col-md-6">
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password">
+                                <label for="password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password1" placeholder="Password">
                             </div>
 
                         </div>
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm_password"
+                                <label for="confirm_password1" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirm_password1"
                                     placeholder="Confirm Password">
                             </div>
                         </div>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Update password</button>
                 </form>
             </div>

@@ -168,19 +168,6 @@ class UserController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-        $password_from_user = 'b8yzCE26jq@tetfFbyi&)dh%';
-        $hashed_password_from_json = '$P$BQ2A3SJB/jZINhoxUh5MZMq0hgtc7b.';
-
-        if (Hash::check($password_from_user, $hashed_password_from_json)) {
-            // Passwords match; authenticate the user
-            dd('done');
-            // Implement your authentication logic here
-
-        }
-
-        if ($this->verify_wordpress_password($password_from_user, $hashed_password_from_json)) {
-            dd('password matched');
-        }
 
         if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
@@ -194,17 +181,6 @@ class UserController extends Controller
             'token' => $token,
             'user' => new UserResource($user),
         ], 200);
-    }
-
-    public function verify_wordpress_password($password, $hash)
-    {
-        // Extract the salt from the hash (first 12 characters)
-        $salt = substr($hash, 0, 12);
-        // Hash the provided password using the extracted salt
-        $hashed_password = crypt($password, $salt);
-
-        // Compare the hashed password with the stored hash
-        return $hashed_password === $hash;
     }
 
     public function logout(Request $request)
