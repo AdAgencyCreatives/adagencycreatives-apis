@@ -22,7 +22,7 @@ class CheckPermission
 
         $action = $request->isMethod('post')
             ? 'create'
-            : ($request->isMethod('put')
+            : ($request->isMethod('patch')
                 ? 'update'
                 : ($request->isMethod('delete')
                     ? 'delete'
