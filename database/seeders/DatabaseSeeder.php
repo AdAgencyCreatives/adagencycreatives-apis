@@ -164,9 +164,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
 
         Artisan::call('import:users');
-        sleep(3);
         Artisan::call('import:agencies');
-        sleep(3);
         Artisan::call('import:creatives');
         Artisan::call('optimize:clear');
     }

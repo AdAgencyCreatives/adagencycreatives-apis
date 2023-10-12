@@ -183,17 +183,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function verify_wordpress_password($password, $hash)
-    {
-        // Extract the salt from the hash (first 12 characters)
-        $salt = substr($hash, 0, 12);
-        // Hash the provided password using the extracted salt
-        $hashed_password = crypt($password, $salt);
-
-        // Compare the hashed password with the stored hash
-        return $hashed_password === $hash;
-    }
-
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();

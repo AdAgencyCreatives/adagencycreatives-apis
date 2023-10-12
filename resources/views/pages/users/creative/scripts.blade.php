@@ -332,8 +332,8 @@
             var $errorContainer = $('#error-messages');
             $errorContainer.hide();
 
-            var password = $("#password").val();
-            var confirm_password = $("#confirm_password").val();
+            var password = $("#password1").val();
+            var confirm_password = $("#confirm_password1").val();
             if (password !== confirm_password) {
                 var $errorList = $errorContainer.find('ul');
                 $errorList.empty();
@@ -343,7 +343,7 @@
             }
 
             var formData = {
-                password: $("#password").val(),
+                password: $("#password1").val(),
                 user_id: "{{ $user->id }}",
                 _token: "{{ csrf_token() }}"
             };
