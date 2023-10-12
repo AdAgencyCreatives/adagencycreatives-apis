@@ -40,7 +40,7 @@ class JobController extends Controller
                 AllowedFilter::scope('category_id'),
                 AllowedFilter::scope('industry_experience'),
                 AllowedFilter::scope('state_id'),
-                AllowedFilter::scope('city'),
+                AllowedFilter::scope('city_id'),
                 'title',
                 'employment_type',
                 'apply_type',

@@ -23,12 +23,15 @@ class ImportAgencies extends Command
         $agenciesData = json_decode($jsonContents, true);
 
         foreach ($agenciesData as $agencyData) {
-            $authorEmail = $agencyData['author_email'];
+            $authorEmail = $agencyData['post_meta']['_employer_email'][0];
             $user = User::where('email', $authorEmail)->first();
 
             if ($user) {
                 $agency = $this->createAgency($agencyData, $user);
                 $agency->save();
+            }
+            else{
+                dump('User not found', $agencyData);
             }
 
         }

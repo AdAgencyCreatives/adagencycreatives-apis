@@ -20,15 +20,18 @@ class ImportCreatives extends Command
     {
         $jsonFilePath = public_path('export/creatives.json');
         $jsonContents = file_get_contents($jsonFilePath);
-        $agenciesData = json_decode($jsonContents, true);
+        $creativesData = json_decode($jsonContents, true);
 
-        foreach ($agenciesData as $agencyData) {
-            $authorEmail = $agencyData['author_email'];
+        foreach ($creativesData as $creativeData) {
+            $authorEmail = $creativeData['post_meta']['_candidate_email'][0];
             $user = User::where('email', $authorEmail)->first();
 
             if ($user) {
-                $agency = $this->createCreative($agencyData, $user);
+                $agency = $this->createCreative($creativeData, $user);
                 $agency->save();
+            }
+            else{
+                dump('User not found', $creativeData);
             }
 
         }
@@ -41,7 +44,6 @@ class ImportCreatives extends Command
         $agency = new Creative();
         $agency->uuid = Str::uuid();
         $agency->user_id = $user->id;
-        $agency->name = $data['post_title'];
         $agency->slug = Str::slug($data['post_title']);
         $agency->title = $data['post_meta']['_candidate_job_title'][0] ?? '';
         $agency->years_of_experience = $data['post_meta']['_candidate_experience_time'][0] ?? '';
@@ -49,11 +51,9 @@ class ImportCreatives extends Command
         $agency->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
         $agency->updated_at = now();
 
-        if($data['post_meta']['_candidate_featured'][0] == 'on'){
+        if(isset($data['post_meta']['_candidate_featured'][0]) && $data['post_meta']['_candidate_featured'][0]  == 'on'){
             $agency->is_featured = true;
         }
-
-
 
 
         if ($data['post_meta']['_candidate_show_profile'][0] == 'hide') {

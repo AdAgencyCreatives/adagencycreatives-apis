@@ -156,6 +156,13 @@ class Job extends Model
         return $query->where('state_id', $state->id);
     }
 
+    public function scopeCityId(Builder $query, $city_id): Builder
+    {
+        $city = Location::where('uuid', $city_id)->first();
+
+        return $query->where('city_id', $city->id);
+    }
+
     public function scopeIndustryExperience(Builder $query, $industries): Builder
     {
         $industries = Industry::whereIn('uuid', $industries)->pluck('id');
