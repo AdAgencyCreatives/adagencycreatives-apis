@@ -6,6 +6,7 @@ use App\Models\Media;
 use App\Models\Strength;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
@@ -75,4 +76,55 @@ if (! function_exists('replacePlaceholders')) {
     {
         return str_replace(array_keys($replacements), array_values($replacements), $format);
     }
+}
+
+if (! function_exists('processIndustryExperience')) {
+    function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
+    {
+        if (! isset($filters['filter'][$experienceKey])) {
+            return null;
+        }
+
+        $experience_ids = $filters['filter'][$experienceKey];
+        unset($filters['filter'][$experienceKey]);
+        $request->replace($filters);
+
+        $experience_ids = $experience_ids ? explode(',', $experience_ids) : [];
+
+        return Industry::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
+    }
+}
+
+if (! function_exists('processMediaExperience')) {
+function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
+    {
+        if (! isset($filters['filter'][$experienceKey])) {
+            return null;
+        }
+
+        $experience_ids = $filters['filter'][$experienceKey];
+        unset($filters['filter'][$experienceKey]);
+        $request->replace($filters);
+
+        $experience_ids = $experience_ids ? explode(',', $experience_ids) : [];
+
+        return Media::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
+    }
+
+}
+
+if (! function_exists('applyExperienceFilter')) {
+function applyExperienceFilter($query, $experience, $experienceType, $tableName)
+    {
+        $query->whereIn('id', function ($query) use ($experience, $experienceType, $tableName) {
+            $query->select('id')
+                ->from($tableName)
+                ->where(function ($q) use ($experience, $experienceType) {
+                    foreach ($experience as $targetId) {
+                        $q->orWhereRaw("FIND_IN_SET(?, $experienceType)", [$targetId]);
+                    }
+                });
+        });
+    }
+
 }
