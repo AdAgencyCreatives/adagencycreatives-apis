@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -174,6 +173,10 @@ class UserController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
+
+        if ($user->status != 'approved') {
+            return response()->json(['message' => 'Account not approved'], 401);
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

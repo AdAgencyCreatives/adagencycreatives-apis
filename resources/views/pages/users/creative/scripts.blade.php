@@ -168,16 +168,6 @@
             var $errorContainer = $('#error-messages');
             $errorContainer.hide();
 
-            var password = $("#password").val();
-            var confirm_password = $("#confirm_password").val();
-            if (password !== confirm_password) {
-                var $errorList = $errorContainer.find('ul');
-                $errorList.empty();
-                $errorList.append('<li> Passwords do not match </li>');
-                $errorContainer.show();
-                return;
-            }
-
             var formData = {
                 first_name: $("#first_name").val(),
                 last_name: $("#last_name").val(),
