@@ -45,6 +45,7 @@ class AgencyController extends Controller
 
         if ($industries !== null) {
             $this->applyExperienceFilter($query, $industries, 'industry_experience');
+
         }
 
         if ($medias !== null) {

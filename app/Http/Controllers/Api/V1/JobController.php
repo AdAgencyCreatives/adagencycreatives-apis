@@ -31,14 +31,14 @@ class JobController extends Controller
     {
         $filters = $request->all();
 
-        $industries = $this->processExperience($request, $filters, 'industry_experience');
-        $medias = $this->processExperience($request, $filters, 'media_experience');
-
+        $industries = processIndustryExperience($request, $filters);
+        $medias = processMediaExperience($request, $filters);
+// dd($industries);
         $query = QueryBuilder::for(Job::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('category_id'),
-                AllowedFilter::scope('industry_experience'),
+                // AllowedFilter::scope('industry_experience'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 'title',
@@ -55,10 +55,11 @@ class JobController extends Controller
             ->allowedSorts('created_at');
 
         if ($industries !== null) {
-            $query->whereIn('industry_experience', $industries);
+            applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
         }
+
         if ($medias !== null) {
-            $query->whereIn('media_experience', $medias);
+             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')->paginate($request->per_page ?? config('global.request.pagination_limit'));
