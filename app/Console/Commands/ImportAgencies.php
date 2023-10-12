@@ -8,12 +8,12 @@ use App\Models\Phone;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ImportAgencies extends Command
 {
     protected $signature = 'import:agencies';
+
     protected $description = 'Import agencies from JSON file';
 
     public function handle()
@@ -29,8 +29,7 @@ class ImportAgencies extends Command
             if ($user) {
                 $agency = $this->createAgency($agencyData, $user);
                 $agency->save();
-            }
-            else{
+            } else {
                 dump('User not found', $agencyData);
             }
 
@@ -74,6 +73,7 @@ class ImportAgencies extends Command
         }
 
         $user->save();
+
         return $agency;
     }
 
@@ -90,11 +90,11 @@ class ImportAgencies extends Command
     public function createPhoneNumber($userId, $phone_number)
     {
         Phone::create([
-                'uuid' => Str::uuid(),
-                'user_id' => $userId,
-                'label' => 'business',
-                'country_code' => +1,
-                'phone_number' => $phone_number,
-            ]);
+            'uuid' => Str::uuid(),
+            'user_id' => $userId,
+            'label' => 'business',
+            'country_code' => +1,
+            'phone_number' => $phone_number,
+        ]);
     }
 }

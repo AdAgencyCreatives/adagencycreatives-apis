@@ -87,7 +87,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('years-of-experience', YearsOfExperienceController::class);
 
-
     Route::apiResource('reviews', ReviewController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);

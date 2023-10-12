@@ -6,8 +6,8 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 class Agency extends Model
 {
@@ -74,9 +74,9 @@ class Agency extends Model
     {
         if (! App::runningInConsole()) {
             static::created(function ($agency) {
-            $agency->slug = Str::slug($agency->user->username);
-            $agency->save();
-        });
+                $agency->slug = Str::slug($agency->user->username);
+                $agency->save();
+            });
         }
 
     }

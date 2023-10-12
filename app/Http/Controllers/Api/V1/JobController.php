@@ -33,15 +33,15 @@ class JobController extends Controller
 
         $industries = processIndustryExperience($request, $filters);
         $medias = processMediaExperience($request, $filters);
-// dd($industries);
+
         $query = QueryBuilder::for(Job::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('category_id'),
-                // AllowedFilter::scope('industry_experience'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 'title',
+                'slug',
                 'employment_type',
                 'apply_type',
                 'salary_range',
@@ -59,7 +59,7 @@ class JobController extends Controller
         }
 
         if ($medias !== null) {
-             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
+            applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')->paginate($request->per_page ?? config('global.request.pagination_limit'));
