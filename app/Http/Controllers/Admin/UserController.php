@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         if (in_array($user->role, ['agency', 'advisor'])) {
             $user->load(['agency', 'links', 'addresses.city', 'addresses.state',  'attachments' => function ($query) use ($user) {
-                $query->where('resource_id', $user->agency->id)
+                $query->where('resource_id', $user->agency?->id)
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {

@@ -4,9 +4,9 @@ use App\Models\Attachment;
 use App\Models\Industry;
 use App\Models\Media;
 use App\Models\Strength;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
@@ -96,7 +96,7 @@ if (! function_exists('processIndustryExperience')) {
 }
 
 if (! function_exists('processMediaExperience')) {
-function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
+    function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
     {
         if (! isset($filters['filter'][$experienceKey])) {
             return null;
@@ -114,7 +114,7 @@ function processMediaExperience(Request $request, &$filters, $experienceKey = 'm
 }
 
 if (! function_exists('applyExperienceFilter')) {
-function applyExperienceFilter($query, $experience, $experienceType, $tableName)
+    function applyExperienceFilter($query, $experience, $experienceType, $tableName)
     {
         $query->whereIn('id', function ($query) use ($experience, $experienceType, $tableName) {
             $query->select('id')

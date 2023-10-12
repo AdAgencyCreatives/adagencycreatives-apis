@@ -8,12 +8,12 @@ use App\Models\Phone;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ImportCreatives extends Command
 {
     protected $signature = 'import:creatives';
+
     protected $description = 'Import creatives from JSON file';
 
     public function handle()
@@ -29,8 +29,7 @@ class ImportCreatives extends Command
             if ($user) {
                 $agency = $this->createCreative($creativeData, $user);
                 $agency->save();
-            }
-            else{
+            } else {
                 dump('User not found', $creativeData);
             }
 
@@ -51,10 +50,9 @@ class ImportCreatives extends Command
         $agency->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
         $agency->updated_at = now();
 
-        if(isset($data['post_meta']['_candidate_featured'][0]) && $data['post_meta']['_candidate_featured'][0]  == 'on'){
+        if (isset($data['post_meta']['_candidate_featured'][0]) && $data['post_meta']['_candidate_featured'][0] == 'on') {
             $agency->is_featured = true;
         }
-
 
         if ($data['post_meta']['_candidate_show_profile'][0] == 'hide') {
             $user->is_visible = false;
@@ -80,6 +78,7 @@ class ImportCreatives extends Command
         }
 
         $user->save();
+
         return $agency;
     }
 
@@ -96,11 +95,11 @@ class ImportCreatives extends Command
     public function createPhoneNumber($userId, $phone_number)
     {
         Phone::create([
-                'uuid' => Str::uuid(),
-                'user_id' => $userId,
-                'label' => 'personal',
-                'country_code' => +1,
-                'phone_number' => $phone_number,
-            ]);
+            'uuid' => Str::uuid(),
+            'user_id' => $userId,
+            'label' => 'personal',
+            'country_code' => +1,
+            'phone_number' => $phone_number,
+        ]);
     }
 }

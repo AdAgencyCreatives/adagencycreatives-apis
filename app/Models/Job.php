@@ -156,18 +156,24 @@ class Job extends Model
         return $query->where('state_id', $state->id);
     }
 
-    public function scopeCityId(Builder $query, $city_id): Builder
+    // public function scopeCityId(Builder $query, $city_id): Builder
+    // {
+    //     $city = Location::where('uuid', $city_id)->first();
+
+    //     return $query->where('city_id', $city->id);
+    // }
+
+    // public function scopeIndustryExperience(Builder $query, $industries): Builder
+    // {
+    //     $industries = Industry::whereIn('uuid', $industries)->pluck('id');
+    //     return $query->whereIn('industry_experience', $industries);
+    // }
+
+    public function scopeMediaExperience(Builder $query, $medias): Builder
     {
-        $city = Location::where('uuid', $city_id)->first();
+        $medias = Media::whereIn('uuid', $medias)->pluck('id');
 
-        return $query->where('city_id', $city->id);
-    }
-
-    public function scopeIndustryExperience(Builder $query, $industries): Builder
-    {
-        $industries = Industry::whereIn('uuid', $industries)->pluck('id');
-
-        return $query->whereIn('industry_experience', $industries);
+        return $query->whereIn('media_experience', $medias);
     }
 
     public function getStatusAttribute($value)
