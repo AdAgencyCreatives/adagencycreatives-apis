@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
 
 class Agency extends Model
 {
@@ -71,9 +72,12 @@ class Agency extends Model
 
     protected static function booted()
     {
-        static::created(function ($agency) {
+        if (! App::runningInConsole()) {
+            static::created(function ($agency) {
             $agency->slug = Str::slug($agency->user->username);
             $agency->save();
         });
+        }
+
     }
 }

@@ -54,6 +54,13 @@ Route::get('creative_spotlight', [CreativeController::class, 'creative_spotlight
 Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
 Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
 
+//Filters
+Route::get('get_categories', [CategoryController::class, 'get_categories']);
+Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
+Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
+Route::get('employment_types', [JobController::class, 'get_employment_types']);
+Route::apiResource('locations', LocationController::class)->middleware('check.permissions:job');
+
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
     /**
@@ -72,16 +79,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
-    Route::get('get_categories', [CategoryController::class, 'get_categories']);
     Route::apiResource('strengths', StrengthController::class);
     Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
     Route::apiResource('industry-experiences', IndustryController::class);
-    Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
+
     Route::apiResource('media-experiences', MediaController::class);
-    Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
+
     Route::apiResource('years-of-experience', YearsOfExperienceController::class);
-    Route::get('employment_types', [JobController::class, 'get_employment_types']);
-    Route::apiResource('locations', LocationController::class);
+
+
     Route::apiResource('reviews', ReviewController::class);
 
     Route::apiResource('users', UserController::class)->except(['store']);
