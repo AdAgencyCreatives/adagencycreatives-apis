@@ -381,3 +381,15 @@ Admin can
 - Created endpoint for advisor where he can see all the assigned agencies.
 - Created endpoint with the help of that he can impersonate the agency profile.
 - Imported users data from WordPress
+ 
+## 05/10/2023  Data Import (Agecnies | Creatives)
+- Fixed endpoint for media experience filter to work according to jobs.
+- Fixed endpoint for industry experience filter to work according to jobs.
+- Working on importing data for agencies and creatives
+ 
+## 06/10/2023  Password Configuration | Filters Improvements
+- Fixed few filter endpoints.
+- Added some new keys in the resposne e.g. job api, agency and creative api
+- Make them filterable by slug
+- Fixed Password Update Bug
+- Configured the Laravel to use same wordpress password for logging into new react app

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Category;
 use App\Models\Creative;
 use App\Models\Link;
 use App\Models\Phone;
@@ -28,7 +29,7 @@ class ImportCreatives extends Command
 
             $user = User::where('email', $authorEmail1)->first();
 
-            if (!$user) {
+            if (! $user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
 
@@ -50,11 +51,41 @@ class ImportCreatives extends Command
         $agency->uuid = Str::uuid();
         $agency->user_id = $user->id;
         $agency->slug = Str::slug($data['post_title']);
-        $agency->title = $data['post_meta']['_candidate_job_title'][0] ?? '';
+
         $agency->years_of_experience = $data['post_meta']['_candidate_experience_time'][0] ?? '';
         $agency->about = $data['post_content'];
         $agency->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
         $agency->updated_at = now();
+
+        if (isset($data['post_meta']['_candidate_job_title'][0])) {
+            $title = $data['post_meta']['_candidate_job_title'][0];
+
+            // Check if "-" is present in the title
+            if (strpos($title, '-') !== false) {
+                // Split the title by "-"
+                $parts = explode('-', $title);
+
+                // Take the first part (category name)
+                $categoryName = trim($parts[0]);
+
+                // Find the category by the extracted name
+                $category = Category::where('name', 'LIKE', $categoryName)->first();
+
+                if ($category) {
+                    $agency->title = $category->name;
+                    $agency->category_id = $category->id;
+                }
+            } else {
+                // If no "-", use the title as is
+                $category = Category::where('name', 'LIKE', $title)->first();
+
+                if ($category) {
+                    $agency->title = $category->name;
+                    $agency->category_id = $category->id;
+                }
+            }
+
+        }
 
         if (isset($data['post_meta']['_candidate_featured'][0]) && $data['post_meta']['_candidate_featured'][0] == 'on') {
             $agency->is_featured = true;
