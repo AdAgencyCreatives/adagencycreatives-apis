@@ -11,7 +11,6 @@ use App\Models\Agency;
 use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
@@ -31,7 +30,7 @@ class UserController extends Controller
     {
         $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor'])) {
-            if( !$user->agency ){
+            if (! $user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -42,7 +41,7 @@ class UserController extends Controller
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {
-            if( !$user->creative ){
+            if (! $user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
                 $creative->user_id = $user->id;
@@ -109,7 +108,7 @@ class UserController extends Controller
         $userId = $request->input('user_id');
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        $hashed = $custom_wp_hasher->HashPassword( trim($request->input('password')) );
+        $hashed = $custom_wp_hasher->HashPassword(trim($request->input('password')));
         dump($hashed);
         User::find($userId)->update([
             'password' => $hashed,

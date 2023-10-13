@@ -9,6 +9,7 @@ class JobResource extends JsonResource
     public function toArray($request)
     {
         $user = $this->user;
+        $category = $this->category;
 
         $data = [
             'type' => 'jobs',
@@ -17,7 +18,8 @@ class JobResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => $this->category->name,
+            'category_id' => $category->uuid,
+            'category' => $category->name,
             'employment_type' => $this->employment_type,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),

@@ -22,7 +22,6 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
 
-
 class UserController extends Controller
 {
     public $cache_expiration_time = 60;
@@ -172,7 +171,7 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
         $user = User::where('email', $request->email)->first();
 
-        if( ! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+        if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 

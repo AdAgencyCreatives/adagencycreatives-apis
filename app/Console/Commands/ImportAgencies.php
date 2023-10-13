@@ -27,7 +27,7 @@ class ImportAgencies extends Command
             $authorEmail2 = $agencyData['author_email'];
             $user = User::where('email', $authorEmail1)->first();
 
-            if (!$user) {
+            if (! $user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
 
