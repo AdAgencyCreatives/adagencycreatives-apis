@@ -174,9 +174,9 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user->status != 'approved') {
-            return response()->json(['message' => 'Account not approved'], 401);
-        }
+        // if ($user->status != 'approved') {
+        //     return response()->json(['message' => 'Account not approved'], 401);
+        // }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
