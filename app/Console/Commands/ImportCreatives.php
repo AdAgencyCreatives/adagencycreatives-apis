@@ -23,14 +23,20 @@ class ImportCreatives extends Command
         $creativesData = json_decode($jsonContents, true);
 
         foreach ($creativesData as $creativeData) {
-            $authorEmail = $creativeData['post_meta']['_candidate_email'][0];
-            $user = User::where('email', $authorEmail)->first();
+            $authorEmail1 = $creativeData['post_meta']['_candidate_email'][0];
+            $authorEmail2 = $creativeData['author_email'];
+
+            $user = User::where('email', $authorEmail1)->first();
+
+            if (!$user) {
+                $user = User::where('email', $authorEmail2)->first();
+            }
 
             if ($user) {
                 $agency = $this->createCreative($creativeData, $user);
                 $agency->save();
             } else {
-                dump('User not found', $creativeData);
+                dump('Creative not found', $authorEmail1);
             }
 
         }

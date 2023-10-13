@@ -36,6 +36,7 @@ class AgencyController extends Controller
                 'size',
                 'type_of_work',
                 'name',
+                'slug',
                 'is_featured',
                 'is_urgent',
             ])

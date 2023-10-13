@@ -32,7 +32,20 @@ class DatabaseSeeder extends Seeder
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
             'role' => 1,
+            'status' => 1,
         ]); // 1:Admin
+
+        User::where('id', 2)->update([
+            'email' => 'agency@gmail.com',
+            'role' => 3,
+            'status' => 1,
+        ]); // Agency
+
+        User::where('id', 3)->update([
+            'email' => 'creative@gmail.com',
+            'role' => 4,
+            'status' => 1,
+        ]); // Agency
 
         // ********************************************************
         // ******************** AGENCY USERS **********************

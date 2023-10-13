@@ -72,12 +72,15 @@ class Agency extends Model
 
     protected static function booted()
     {
-        if (! App::runningInConsole()) {
-            static::created(function ($agency) {
+
+        static::created(function ($agency) {
+            if($agency->slug == null){
                 $agency->slug = Str::slug($agency->user->username);
                 $agency->save();
-            });
-        }
+            }
+
+        });
+
 
     }
 }

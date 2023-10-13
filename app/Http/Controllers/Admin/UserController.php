@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exceptions\ApiException;
+use App\Http\Controllers\Api\V1\PasswordHash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
@@ -28,12 +29,26 @@ class UserController extends Controller
 
     public function details(User $user)
     {
+        $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor'])) {
+            if( !$user->agency ){
+                $agency = new Agency();
+                $agency->uuid = $str;
+                $agency->user_id = $user->id;
+                $agency->save();
+            }
             $user->load(['agency', 'links', 'addresses.city', 'addresses.state',  'attachments' => function ($query) use ($user) {
-                $query->where('resource_id', $user->agency?->id)
+                $query->where('resource_id', $user->agency->id)
                     ->latest()->take(1);
             }]);
         } elseif ($user->role == 'creative') {
+            if( !$user->creative ){
+                $creative = new Creative();
+                $creative->uuid = $str;
+                $creative->user_id = $user->id;
+                $creative->save();
+            }
+
             $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
         }
 
@@ -92,9 +107,12 @@ class UserController extends Controller
         }
 
         $userId = $request->input('user_id');
+        $custom_wp_hasher = new PasswordHash(8, true);
 
+        $hashed = $custom_wp_hasher->HashPassword( trim($request->input('password')) );
+        dump($hashed);
         User::find($userId)->update([
-            'password' => Hash::make($request->password),
+            'password' => $hashed,
         ]);
 
         return response()->json(['message' => 'Password updated successfully'], 200);
