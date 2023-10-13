@@ -46,7 +46,9 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/login', [UserController::class, 'login']);
+
 Route::post('/users', [UserController::class, 'store']);
+
 // Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
 Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
@@ -143,5 +145,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('reports', [ReportController::class, 'sales']);
     });
+
+    Route::post('/re_login', [UserController::class, 're_login']);
+
 });
 Route::get('stats', [DashboardController::class, 'index']);

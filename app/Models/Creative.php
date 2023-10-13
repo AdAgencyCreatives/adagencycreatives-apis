@@ -96,8 +96,10 @@ class Creative extends Model
     protected static function booted()
     {
         static::created(function ($creative) {
-            $creative->slug = Str::slug($creative->user->username);
-            $creative->save();
+            if($creative->slug == null){
+                $creative->slug = Str::slug($creative->user->username);
+                $creative->save();
+            }
         });
     }
 }

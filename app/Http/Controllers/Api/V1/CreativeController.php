@@ -32,6 +32,7 @@ class CreativeController extends Controller
                 AllowedFilter::scope('status'),
                 'employment_type',
                 'title',
+                'slug',
                 'is_featured',
                 'is_urgent',
             ])

@@ -86,9 +86,9 @@
                                 <label class="form-label" for="is_featured"> Featured Candidate </label>
                                 <select name="is_featured" id="is_featured"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="1" @if ($user->creative->is_featured == 1) selected @endif> Yes
+                                    <option value="1" @if ($user->creative?->is_featured == 1) selected @endif> Yes
                                     </option>
-                                    <option value="0" @if ($user->creative->is_featured == 0) selected @endif> No
+                                    <option value="0" @if ($user->creative?->is_featured == 0) selected @endif> No
                                     </option>
                                 </select>
                             </div>
@@ -99,9 +99,9 @@
                                 <label class="form-label" for="is_urgent"> Urgent Candidate</label>
                                 <select name="is_urgent" id="is_urgent"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="1" @if ($user->creative->is_urgent == 1) selected @endif> Yes
+                                    <option value="1" @if ($user->creative?->is_urgent == 1) selected @endif> Yes
                                     </option>
-                                    <option value="0" @if ($user->creative->is_urgent == 0) selected @endif> No
+                                    <option value="0" @if ($user->creative?->is_urgent == 0) selected @endif> No
                                     </option>
                                 </select>
                             </div>
@@ -127,10 +127,10 @@
                                 <label class="form-label" for="is_opentorelocation"> Open to Relocation </label>
                                 <select name="is_opentorelocation" id="is_opentorelocation"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="1" @if ($user->creative->is_opentorelocation == 1) selected @endif>
+                                    <option value="1" @if ($user->creative?->is_opentorelocation == 1) selected @endif>
                                         Yes
                                     </option>
-                                    <option value="0" @if ($user->creative->is_opentorelocation == 0) selected @endif> No
+                                    <option value="0" @if ($user->creative?->is_opentorelocation == 0) selected @endif> No
                                     </option>
                                 </select>
                             </div>

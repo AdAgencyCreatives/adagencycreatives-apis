@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
 
+
 class UserController extends Controller
 {
     public $cache_expiration_time = 60;
@@ -168,20 +169,36 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'))) {
+        $custom_wp_hasher = new PasswordHash(8, true);
+        $user = User::where('email', $request->email)->first();
+
+        if( ! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $user = User::where('email', $request->email)->first();
+        if ($user->status != 'active') {
+            return response()->json(['message' => 'Account not approved'], 401);
+        }
 
-        // if ($user->status != 'approved') {
-        //     return response()->json(['message' => 'Account not approved'], 401);
-        // }
-
+        // Auth::attempt($request->only('email', 'password'));
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
+            'user' => new UserResource($user),
+        ], 200);
+    }
+
+    public function re_login(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->status != 'active') {
+            return response()->json(['message' => 'Account not approved'], 401);
+        }
+
+        return response()->json([
+            'token' => $request->bearerToken(),
             'user' => new UserResource($user),
         ], 200);
     }
