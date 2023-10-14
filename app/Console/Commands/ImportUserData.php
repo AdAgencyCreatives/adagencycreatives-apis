@@ -59,8 +59,7 @@ class ImportUserData extends Command
             return 'agency';
         } elseif (isset($capabilities['wp_job_board_pro_candidate']) && $capabilities['wp_job_board_pro_candidate']) {
             return 'creative';
-        }
-        elseif (isset($capabilities['administrator']) && $capabilities['administrator']) {
+        } elseif (isset($capabilities['administrator']) && $capabilities['administrator']) {
             return 'admin';
         }
 

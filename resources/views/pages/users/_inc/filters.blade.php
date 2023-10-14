@@ -8,9 +8,10 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="role"> Role </label>
-                                <select name="role" id="role" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                <select name="role" id="role"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Role</option>
+                                    <option value="1"> Admin</option>
                                     <option value="2"> Advisor</option>
                                     <option value="3"> Agency</option>
                                     <option value="4"> Creative</option>
@@ -21,8 +22,8 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="status"> Status </label>
-                                <select name="status" id="status" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                <select name="status" id="status"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Status</option>
                                     <option value="0"> Pending</option>
                                     <option value="1"> Active</option>
@@ -72,7 +73,8 @@
                     <div class="row">
                         <div class="col-sm mt-4">
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Search</button>
-                            <button type="button" class="btn btn-sm btn-secondary mt-2" id="clear-button">Clear</button>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2"
+                                id="clear-button">Clear</button>
 
 
                         </div>

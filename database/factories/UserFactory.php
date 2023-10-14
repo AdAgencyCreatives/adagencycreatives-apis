@@ -14,8 +14,8 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            // $P$BKyDIOxEwk1Jr0kwqdGG5TVQbOI4CS0
+            // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$P$BKyDIOxEwk1Jr0kwqdGG5TVQbOI4CS0', // password
             'role' => fake()->randomElement([3, 4]),
             'status' => fake()->randomElement(['pending', 'active', 'inactive']),
             'created_at' => fake()->dateTimeBetween('-8 days', 'now'),

@@ -46,9 +46,11 @@ Route::get('/phpinfo', function () {
     dd(Hash::make('password'));
 });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::redirect('/', '/login');
 
 Route::get('/test', function () {
     return User::all();

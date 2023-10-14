@@ -9,7 +9,7 @@ class UpdateUserRequest extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        return auth()->user()->role === 'admin';
     }
 
     protected function prepareForValidation()
@@ -32,7 +32,7 @@ class UpdateUserRequest extends FormRequest
             'last_name' => 'sometimes|string|max:255',
             'email' => $this->input('email_rules'),
             'password' => 'sometimes|string|min:8',
-            'role' => 'sometimes|in:advisor,agency,creative',
+            'role' => 'sometimes|in:advisor,agency,creative,admin',
             'status' => 'sometimes|in:pending,active,inactive',
         ];
     }

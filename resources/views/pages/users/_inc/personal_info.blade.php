@@ -56,13 +56,12 @@
                                     <select name="status" id="status"
                                         class="form-control form-select custom-select select2" data-toggle="select2">
                                         <option value="-100"> Select Status</option>
-                                        <option value="pending" @if($user->status == 'pending') selected @endif>
+                                        <option value="pending" @if ($user->status == 'pending') selected @endif>
                                             Pending</option>
-                                        <option value="active" @if($user->status == 'active') selected @endif>
+                                        <option value="active" @if ($user->status == 'active') selected @endif>
                                             Active
                                         </option>
-                                        <option value="inactive" @if($user->status == 'inactive') selected
-                                            @endif>
+                                        <option value="inactive" @if ($user->status == 'inactive') selected @endif>
                                             Inactive</option>
 
                                     </select>
@@ -74,16 +73,18 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="role"> Role </label>
-                                    <select name="role" id="role" class="form-control form-select custom-select select2"
-                                        data-toggle="select2">
+                                    <select name="role" id="role"
+                                        class="form-control form-select custom-select select2" data-toggle="select2">
                                         <option value="-100"> Select Role</option>
-                                        <option value="advisor" @if($user->role == 'advisor') selected @endif>
+                                        <option value="advisor" @if ($user->role == 'advisor') selected @endif>
                                             Advisor</option>
-                                        <option value="agency" @if($user->role == 'agency') selected @endif>
+                                        <option value="agency" @if ($user->role == 'agency') selected @endif>
                                             Agency
                                         </option>
-                                        <option value="creative" @if($user->role == 'creative') selected @endif>
+                                        <option value="creative" @if ($user->role == 'creative') selected @endif>
                                             Creative</option>
+                                        <option value="admin" @if ($user->role == 'admin') selected @endif>
+                                            Admin</option>
 
                                     </select>
                                 </div>

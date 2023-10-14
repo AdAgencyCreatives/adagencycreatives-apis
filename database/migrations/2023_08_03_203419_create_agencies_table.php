@@ -16,18 +16,18 @@ return new class extends Migration
         Schema::create('agencies', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('user_id');
-            $table->string('slug')->nullable();
-            $table->string('name')->nullable();
-            $table->string('size')->nullable();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->string('slug')->nullable()->index();
+            $table->string('name')->nullable()->index();
+            $table->string('size')->nullable()->index();
             $table->text('about')->nullable();
-            $table->text('industry_experience')->nullable();
-            $table->text('media_experience')->nullable();
-            $table->boolean('is_featured')->default(false);
-            $table->boolean('is_urgent')->default(0);
-            $table->boolean('is_remote')->default(0);
-            $table->boolean('is_hybrid')->default(0);
-            $table->boolean('is_onsite')->default(0);
+            $table->string('industry_experience', 505)->nullable()->index();
+            $table->string('media_experience', 505)->nullable()->index();
+            $table->boolean('is_featured')->default(false)->index();
+            $table->boolean('is_urgent')->default(0)->index();
+            $table->boolean('is_remote')->default(0)->index();
+            $table->boolean('is_hybrid')->default(0)->index();
+            $table->boolean('is_onsite')->default(0)->index();
 
             $table->string('seo_title')->nullable();
             $table->string('seo_description')->nullable();

@@ -168,8 +168,12 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        $custom_wp_hasher = new PasswordHash(8, true);
         $user = User::where('email', $request->email)->first();
+        if (! $user) {
+            return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
+        }
+
+        $custom_wp_hasher = new PasswordHash(8, true);
 
         if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);

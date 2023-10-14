@@ -7,7 +7,6 @@
             success: function(response) {
                 populateFilter(response.data, '#category');
                 var creative_category = "{{ $user->creative?->category?->uuid }}";
-                console.log(creative_category);
                 $('#category').val(creative_category);
                 $('#category').trigger('change');
             },
@@ -147,8 +146,9 @@
         } else {
             var user_state = address.state.uuid;
             fetchStates(user_state);
+            // console.log(user_state);
         }
-
+        // debugger;
 
         $('#state').on('change', function() {
             var selectedStateId = $(this).val();
@@ -382,9 +382,5 @@
         if (userRole === 'advisor') {
             $('button[type="submit"]').prop('disabled', true);
         }
-
-
-
-
     });
 </script>
