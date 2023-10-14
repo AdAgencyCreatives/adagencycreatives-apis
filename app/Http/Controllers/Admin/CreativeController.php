@@ -36,9 +36,13 @@ class CreativeController extends Controller
         $uuid = Str::uuid();
         $this->userService->appendWorkplacePreference($request);
 
+        $request->merge([
+            'employment_type' => implode(',', $request->employment_type ?? []),
+        ]);
+
         $data = $request->only([
             'years_of_experience',
-            'type_of_work',
+            'employment_type',
             'is_featured',
             'is_urgent',
             'is_remote',
@@ -47,6 +51,7 @@ class CreativeController extends Controller
             'is_opentorelocation',
             'about',
         ]);
+
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
