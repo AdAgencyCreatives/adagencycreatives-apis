@@ -393,3 +393,10 @@ Admin can
 - Make them filterable by slug
 - Fixed Password Update Bug
 - Configured the Laravel to use same wordpress password for logging into new react app
+ 
+## 09/10/2023  Industry | Media Experience | Admin Dashboard Login
+- Admin now can login with wordpress password.
+- Non-admin users will not be even login to the admin dashboard.
+- Make Employment Type dropdown to select multiple values.
+- Industry | Media experiences are exported from wordpress.
+- Title (Free Text) is exported from wordpress.

@@ -42,37 +42,7 @@ class MediaSeeder extends Seeder
             'UI User Interface Design',
             'UX User Experience Design',
             'Website',
-            'In-store or Point-of-Sale',
-            'Bilingual',
-            '360 Activation',
-            'Concepts',
-            'Digital',
         ];
-
-        $secondMedias = [
-            '360 Activation',
-            'Bilingual',
-            'Branding',
-            'Broadcast Television',
-            'Concepts',
-            'Digital',
-            'Experiential',
-            'In-store or Point-of-Sale',
-            'Motion',
-            'Packaging',
-            'Print and Out of Home',
-            'Radio',
-            'Shopper Marketing',
-            'Social',
-            'Strategy',
-            'Traditional Agency',
-            'UI User Interface Design',
-            'UX User Experience Design',
-            'Branding',
-            'Experiential',
-        ];
-
-        $finalArray = array_diff($secondMedias, $medias);
 
         foreach ($medias as $media) {
             Media::factory()->create([
