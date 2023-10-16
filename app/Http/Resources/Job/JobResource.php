@@ -65,7 +65,7 @@ class JobResource extends JsonResource
                     'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
                 ];
             }
-            $data['agency']['slug'] = $user->username;
+            $data['agency']['slug'] = $agency->slug;
         }
 
         return $data;

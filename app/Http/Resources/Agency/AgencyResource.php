@@ -28,6 +28,11 @@ class AgencyResource extends JsonResource
                 'is_featured' => $this->is_featured,
                 'is_urgent' => $this->is_urgent,
             ],
+            'workplace_preference' => [
+                'is_remote' => $this->is_remote,
+                'is_hybrid' => $this->is_hybrid,
+                'is_onsite' => $this->is_onsite,
+            ],
             'location' => $this->get_location($user),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('degree');
-            $table->string('college');
+            $table->string('degree')->nullable();
+            $table->string('college')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

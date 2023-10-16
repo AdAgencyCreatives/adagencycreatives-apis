@@ -142,8 +142,9 @@
         }
 
         if (!address) {
-            fetchStates()
+            fetchStates();
         } else {
+
             var user_state = address.state.uuid;
             fetchStates(user_state);
             // console.log(user_state);
@@ -152,7 +153,8 @@
 
         $('#state').on('change', function() {
             var selectedStateId = $(this).val();
-
+            console.log("state id inside change listner");
+            console.log(selectedStateId);
             if (!address) {
                 getCitiesByState(selectedStateId);
             } else {

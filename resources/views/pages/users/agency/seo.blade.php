@@ -16,7 +16,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="title">Title</label>
                                 <input type="text" class="form-control" name="seo_title" placeholder="SEO Title"
-                                    value="{{ $user->agency?->seo_title }}">
+                                    value="{{ $user->agency->seo_title ?? settings('creative_description') }}">
                                 </select>
                             </div>
                         </div>

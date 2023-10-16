@@ -5,8 +5,7 @@
             @csrf()
             @method('PUT')
 
-
-            @if (isset($user->educations) && count($user->experiences))
+            @if (isset($user->educations) && count($user->educations))
                 @foreach ($user->educations as $key => $education)
                     <div class="card">
 

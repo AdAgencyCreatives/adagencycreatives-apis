@@ -51,7 +51,7 @@ class UserController extends Controller
             $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
         }
 
-        // dump($user->addresses[0]->state->name);
+        // dump($user->addresses[0]);
         // dd($user->toArray());
 
         return view('pages.users.profile', compact('user'));

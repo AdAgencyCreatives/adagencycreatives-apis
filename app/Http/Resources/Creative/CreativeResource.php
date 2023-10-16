@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CreativeResource extends JsonResource
 {
-    private $title;
+    private $category;
 
     private $location;
 
@@ -14,7 +14,7 @@ class CreativeResource extends JsonResource
     {
         $user = $this->user;
 
-        $this->title = isset($this->category) ? $this->category->name : null;
+        $this->category = isset($this->category) ? $this->category->name : null;
 
         $this->location = $this->get_location($user);
 
@@ -25,6 +25,7 @@ class CreativeResource extends JsonResource
             'name' => $this->user->first_name.' '.$this->user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
+            'category' => $this->category,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,

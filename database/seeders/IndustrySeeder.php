@@ -77,61 +77,9 @@ class IndustrySeeder extends Seeder
             'Travel Leisure',
             'UI / UX',
             'Video Gaming',
-            'Transportation',
-            'Beverage | Spirits',
-            'Finance',
-            'Food',
-            'Media',
-            'Multicultural',
-            'POP | Point of Purchase',
-            'Public Relations',
         ];
-
-        $industries2 = [
-            '360 Activations',
-            'Automotive and Transportation',
-            'Beauty',
-            'Beverage | Spirits',
-            'Bilingual',
-            'Branding',
-            'CPG | Consumer Package Goods',
-            'Digital | Social',
-            'Entertainment',
-            'Experiential',
-            'Education',
-            'Fashion',
-            'Finance',
-            'Food',
-            'Government',
-            'Healthcare',
-            'Media',
-            'Music and Arts',
-            'Multicultural',
-            'Influencer',
-            'Insurance',
-            'Non-Profit',
-            'Packaging',
-            'POP | Point of Purchase',
-            'Public Relations',
-            'QSR | Quick Serve Restaurant',
-            'Retail',
-            'Sports',
-            'Technology',
-            'Travel',
-            'Traditional Agency',
-            'Other',
-        ];
-
-        $finalArray = array_diff($industries2, $industries);
 
         foreach ($industries as $industry) {
-            Industry::factory()->create([
-                'name' => $industry,
-                'slug' => Str::slug($industry),
-            ]);
-        }
-
-        foreach ($finalArray as $industry) {
             Industry::factory()->create([
                 'name' => $industry,
                 'slug' => Str::slug($industry),
