@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Agency;
 
+use App\Http\Resources\Link\LinkCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AgencyResource extends JsonResource
@@ -34,6 +35,8 @@ class AgencyResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'location' => $this->get_location($user),
+            'open_jobs' => $user->open_jobs(),
+            'links' => new LinkCollection($user->links),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];

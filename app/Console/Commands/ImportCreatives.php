@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Address;
 use App\Models\Creative;
+use App\Models\Education;
+use App\Models\Experience;
 use App\Models\Industry;
 use App\Models\Link;
 use App\Models\Location;
@@ -23,7 +25,7 @@ class ImportCreatives extends Command
 
     public function handle()
     {
-        DB::table('creatives')->truncate();
+        // DB::table('creatives')->truncate();
 
         $jsonFilePath = public_path('export/creatives.json');
         $jsonContents = file_get_contents($jsonFilePath);
@@ -33,7 +35,7 @@ class ImportCreatives extends Command
         foreach ($creativesData as $creativeData) {
             $authorEmail1 = $creativeData['post_meta']['_candidate_email'][0];
             $authorEmail2 = $creativeData['author_email'];
-            // if($authorEmail1 != 'roye.segal@gmail.com') {
+            // if($authorEmail1 != 'hmbellipro@gmail.com') {
             //     continue;
             // }
             $user = User::where('email', $authorEmail1)->first();
@@ -44,7 +46,9 @@ class ImportCreatives extends Command
 
             if ($user) {
                 $this->createCreative($creativeData, $user, $industry_media_experiences);
-                // $this->createLocation($creativeData, $user);
+                $this->createLocation($creativeData, $user);
+                $this->storeEducation($creativeData, $user);
+                $this->storeExperience($creativeData, $user);
             } else {
                 dump('Creative not found', $authorEmail1);
             }
@@ -56,27 +60,31 @@ class ImportCreatives extends Command
 
     public function createCreative($data, $user, $industry_media_experiences)
     {
-        $agency = new Creative();
-        $agency->uuid = Str::uuid();
-        $agency->user_id = $user->id;
-        $agency->slug = Str::slug($data['post_title']);
+        $creative = new Creative();
+        $creative->uuid = Str::uuid();
+        $creative->user_id = $user->id;
+        $creative->slug = Str::slug($data['post_title']);
 
-        $agency->years_of_experience = $data['post_meta']['_candidate_experience_time'][0] ?? '';
-        $agency->about = $data['post_content'];
-        $agency->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
-        $agency->updated_at = now();
+        $creative->years_of_experience = $data['post_meta']['_candidate_experience_time'][0] ?? '';
+        $creative->about = $data['post_content'];
+        $creative->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
+        $creative->updated_at = now();
 
         if (isset($data['post_meta']['_candidate_job_title'][0])) {
-            $agency->title = $data['post_meta']['_candidate_job_title'][0];
+            $creative->title = $data['post_meta']['_candidate_job_title'][0];
         }
 
         if (isset($data['post_meta']['_candidate_featured'][0]) && $data['post_meta']['_candidate_featured'][0] == 'on') {
-            $agency->is_featured = true;
+            $creative->is_featured = true;
         }
 
-        $agency = $this->mapEmploymentType($data, $agency);
-        $agency = $this->mapMediaExperience($data, $agency, $industry_media_experiences);
-        $agency = $this->mapIndustryExperience($data, $agency, $industry_media_experiences);
+        if (isset($data['post_meta']['custom-radio-28265865'][0]) && $data['post_meta']['custom-radio-28265865'][0] == 'Yes') {
+            $creative->is_opentorelocation = true;
+        }
+
+        $creative = $this->mapEmploymentType($data, $creative);
+        $creative = $this->mapMediaExperience($data, $creative, $industry_media_experiences);
+        $creative = $this->mapIndustryExperience($data, $creative, $industry_media_experiences);
 
         if ($data['post_meta']['_candidate_show_profile'][0] == 'hide') {
             $user->is_visible = false;
@@ -93,7 +101,7 @@ class ImportCreatives extends Command
         }
 
         if (isset($data['post_meta']['_employer_company_size'][0]) && $data['post_meta']['_employer_company_size'][0] !== '') {
-            $agency->size = $data['post_meta']['_employer_company_size'][0];
+            $creative->size = $data['post_meta']['_employer_company_size'][0];
         }
 
         if (isset($data['post_meta']['_candidate_phone'][0]) && $data['post_meta']['_candidate_phone'][0] !== '') {
@@ -101,7 +109,7 @@ class ImportCreatives extends Command
         }
 
         $user->save();
-        $agency->save();
+        $creative->save();
     }
 
     public function createLink($userId, $label, $url)
@@ -125,28 +133,24 @@ class ImportCreatives extends Command
         ]);
     }
 
-    public function mapEmploymentType($data, $agency)
+    public function mapEmploymentType($data, $creative)
     {
         if (isset($data['post_meta']['custom-multiselect-31509246'][0])) {
             $employmentTypesArray = unserialize($data['post_meta']['custom-multiselect-31509246'][0]);
 
-            // Replace "Contract" with "Contract 1099"
-            $employmentTypesArray = array_map(function ($type) {
-                return ($type === 'Contract') ? 'Contract 1099' : $type;
-            }, $employmentTypesArray);
-
             $employmentTypesString = implode(',', $employmentTypesArray);
-            $agency->employment_type = $employmentTypesString;
+            $creative->employment_type = $employmentTypesString;
         }
 
-        return $agency;
+        return $creative;
     }
 
-    public function mapIndustryExperience($data, $agency, $industry_media_experiences)
+    public function mapIndustryExperience($data, $creative, $industry_media_experiences)
     {
         if (isset($data['post_meta']['custom-multiselect-31108659'][0])) {
             $IndustryExperienceArray = unserialize($data['post_meta']['custom-multiselect-31108659'][0]);
             $industrUuids = [];
+            $count = 0;
             foreach ($IndustryExperienceArray as $industryName) {
                 // Check if the UUID is already in the dictionary
                 if (isset($industry_media_experiences[$industryName])) {
@@ -162,18 +166,23 @@ class ImportCreatives extends Command
                         $industry_media_experiences[$industryName] = $media->uuid;
                     }
                 }
+                $count++;
+                if ($count > 10) {
+                    break;
+                }
             }
-            $agency->industry_experience = implode(',', $industrUuids);
+            $creative->industry_experience = implode(',', $industrUuids);
         }
 
-        return $agency;
+        return $creative;
     }
 
-    public function mapMediaExperience($data, $agency, $industry_media_experiences)
+    public function mapMediaExperience($data, $creative, $industry_media_experiences)
     {
         if (isset($data['post_meta']['media-experience'][0])) {
             $mediaExperienceArray = unserialize($data['post_meta']['media-experience'][0]);
             $mediaUuids = [];
+            $count = 0;
             foreach ($mediaExperienceArray as $mediaName) {
                 // Check if the UUID is already in the dictionary
                 if (isset($industry_media_experiences[$mediaName])) {
@@ -189,35 +198,74 @@ class ImportCreatives extends Command
                         $industry_media_experiences[$mediaName] = $media->uuid;
                     }
                 }
+                $count++;
+                if ($count > 10) {
+                    break;
+                }
             }
-            $agency->media_experience = implode(',', $mediaUuids);
+            $creative->media_experience = implode(',', $mediaUuids);
         }
 
-        return $agency;
+        return $creative;
     }
 
     public function createLocation($data, $user)
     {
-        $state = '';
-        $city = '';
-        foreach ($data['location'] as $location) {
-            $locationModel = Location::where('slug', $location['slug'])->first();
-
-            if ($location['parent'] == 0) {
-                $state = $locationModel->id;
-            } else {
-                $city = $locationModel->id;
+        try {
+            $state = null;
+            $city = null;
+            foreach ($data['location'] as $location) {
+                $locationModel = Location::where('name', $location['name'])->first();
+                if ($location['parent'] == 0) {
+                    $state = $locationModel->id;
+                } else {
+                    $city = $locationModel->id;
+                }
             }
+
+            $address = new Address();
+            $address->uuid = Str::uuid();
+            $address->user_id = $user->id;
+            $address->label = 'personal';
+            $address->country_id = 1;
+            $address->state_id = $state ?? 1;
+            $address->city_id = $city ?? $address->state_id + 1;
+            $address->save();
+        } catch (\Exception $e) {
+
         }
 
-        $address = new Address();
-        $address->uuid = Str::uuid();
-        $address->user_id = $user->id;
-        $address->label = 'personal';
-        $address->country_id = 1;
-        $address->state_id = $state;
-        $address->city_id = $city;
-        // $address->save();
+    }
 
+    public function storeEducation($data, $creative)
+    {
+        if (isset($data['post_meta']['_candidate_education'][0])) {
+            $educationArray = unserialize($data['post_meta']['_candidate_education'][0]);
+            foreach ($educationArray as $edu) {
+                $education = new Education();
+                $education->uuid = Str::uuid();
+                $education->user_id = $creative->id;
+                $education->degree = $edu['title'] ?? '';
+                $education->college = $edu['academy'] ?? '';
+                $education->save();
+            }
+        }
+    }
+
+    public function storeExperience($data, $creative)
+    {
+        if (isset($data['post_meta']['_candidate_experience'][0])) {
+            $experienceArray = unserialize($data['post_meta']['_candidate_experience'][0]);
+            foreach ($experienceArray as $edu) {
+
+                $experience = new Experience();
+                $experience->uuid = Str::uuid();
+                $experience->user_id = $creative->id;
+                $experience->title = $edu['title'] ?? '';
+                $experience->company = $edu['company'] ?? '';
+                $experience->description = $edu['description'] ?? '';
+                $experience->save();
+            }
+        }
     }
 }

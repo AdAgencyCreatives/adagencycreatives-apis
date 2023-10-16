@@ -46,51 +46,58 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/login', [UserController::class, 'login']);
-
 Route::post('/users', [UserController::class, 'store']);
 
 // Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
-Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
+// Public GET routes
+Route::get('agencies', [AgencyController::class, 'index']);
+Route::get('creatives', [CreativeController::class, 'index']);
+Route::get('jobs', [JobController::class, 'index']);
+
+Route::get('links', [LinkController::class, 'index'])->name('links.index');
+Route::get('attachments', [AttachmentController::class, 'index']);
+Route::get('experiences', [ExperienceController::class, 'index']);
+Route::get('educations', [EducationController::class, 'index']);
 Route::get('creative_spotlight', [CreativeController::class, 'creative_spotlight']);
-Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
-Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
 
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 Route::get('employment_types', [JobController::class, 'get_employment_types']);
-Route::apiResource('locations', LocationController::class)->middleware('check.permissions:job');
+Route::get('locations', [LocationController::class, 'index']);
+Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Job Board Routes
      */
+    Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
+    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
+    Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');
+
+    Route::apiResource('links', LinkController::class, ['except' => ['index']]);
+    Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
+
     Route::apiResource('applications', ApplicationController::class)->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
-    Route::apiResource('educations', EducationController::class)->middleware('check.permissions:education');
-    Route::apiResource('experiences', ExperienceController::class)->middleware('check.permissions:experience');
+    Route::apiResource('educations', EducationController::class, ['except' => ['index']])->middleware('check.permissions:education');
+    Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience');
 
     Route::apiResource('phone-numbers', PhoneController::class);
     Route::apiResource('addresses', AddressController::class);
-    Route::apiResource('links', LinkController::class);
-    Route::apiResource('notes', NoteController::class);
-    Route::apiResource('attachments', AttachmentController::class);
 
+    Route::apiResource('notes', NoteController::class);
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('strengths', StrengthController::class);
-    Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
+
     Route::apiResource('industry-experiences', IndustryController::class);
-
     Route::apiResource('media-experiences', MediaController::class);
-
     Route::apiResource('years-of-experience', YearsOfExperienceController::class);
-
     Route::apiResource('reviews', ReviewController::class);
-
     Route::apiResource('users', UserController::class)->except(['store']);
 
     Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
@@ -98,6 +105,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Filters
      */
+    Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job');
     Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
     Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
 

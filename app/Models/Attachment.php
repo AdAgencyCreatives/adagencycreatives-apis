@@ -44,14 +44,14 @@ class Attachment extends Model
 
     public function scopeUserId(Builder $query, $user_id)
     {
-        $user = User::where('uuid', $user_id)->first();
+        $user = User::where('uuid', $user_id)->firstOrFail();
 
         return $query->where('user_id', $user->id);
     }
 
     public function scopePostId(Builder $query, $post_id)
     {
-        $post = Post::where('uuid', $post_id)->first();
+        $post = Post::where('uuid', $post_id)->firstOrFail();
 
         return $query->where('post_id', $post->id);
 

@@ -28,7 +28,7 @@ class AttachmentController extends Controller
                 AllowedFilter::scope('resource_type'),
                 'status',
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
         $attachments = $query->with('user')->paginate($request->per_page ?? config('global.request.pagination_limit'));

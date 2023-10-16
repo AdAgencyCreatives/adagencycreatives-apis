@@ -134,6 +134,11 @@ class User extends Authenticatable
         return $this->hasMany(Job::class);
     }
 
+    public function open_jobs()
+    {
+        return $this->hasMany(Job::class)->where('status', Job::STATUSES['APPROVED'])->count();
+    }
+
     public function alert()
     {
         return $this->hasOne(JobAlert::class);

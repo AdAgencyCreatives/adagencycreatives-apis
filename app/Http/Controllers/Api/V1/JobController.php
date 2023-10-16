@@ -64,9 +64,7 @@ class JobController extends Controller
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        $job_collection = new JobCollection($jobs);
-
-        return $job_collection;
+        return new JobCollection($jobs);
     }
 
     public function store(StoreJobRequest $request)

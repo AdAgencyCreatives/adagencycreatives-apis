@@ -54,12 +54,14 @@ class AgencyController extends Controller
         }
 
         $agencies = $query
-            ->with('user.addresses.state', 'user.addresses.city')
+            ->with([
+                'user.addresses.state',
+                'user.addresses.city',
+                'user.links',
+            ])
             ->whereIn('user_id', $agency_user_ids)
-            // ->paginate();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        // dd($agencies);
         return new AgencyCollection($agencies);
     }
 
