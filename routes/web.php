@@ -27,6 +27,7 @@ use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,14 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
  */
 Route::get('/phpinfo', function () {
     dd(Hash::make('password'));
+});
+
+Route::get('/tt', function () {
+    $edu = 1999;
+    dump($edu);
+
+    $date = Carbon::create($edu, 1, 1, 0, 0, 0)->format('Y-m-d H:i:s');
+    dd($date);
 });
 
 // Route::get('/', function () {

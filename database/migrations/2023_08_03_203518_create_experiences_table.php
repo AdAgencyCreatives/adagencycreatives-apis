@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('company');
-            $table->text('description');
-            $table->timestamp('started_at');
+            $table->string('title')->nullable();
+            $table->string('company')->nullable();
+            $table->text('description')->nullable();
+            $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
