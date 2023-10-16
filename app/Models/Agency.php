@@ -10,7 +10,8 @@ use Illuminate\Support\Str;
 
 class Agency extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -30,6 +31,12 @@ class Agency extends Model
         'seo_description',
         'seo_keywords',
     ];
+
+    public function getApprovedJobCountAttribute()
+    {
+        // Access the 'open_jobs' relationship through the 'user' relationship
+        return $this->user->open_jobs()->count();
+    }
 
     public function user()
     {

@@ -107,9 +107,9 @@ class CreativeController extends Controller
         $creative->update([
             'category_id' => $category->id,
             'title' => $request->title,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
-            'strengths' => ''.implode(',', $request->strengths ? $request->strengths : []).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
         ]);
 
         Session::flash('success', 'Creative updated successfully');

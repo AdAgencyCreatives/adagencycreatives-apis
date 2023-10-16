@@ -49,8 +49,6 @@ Route::get('/phpinfo', function () {
 
 Route::get('/tt', function () {
     $edu = 1999;
-    dump($edu);
-
     $date = Carbon::create($edu, 1, 1, 0, 0, 0)->format('Y-m-d H:i:s');
     dd($date);
 });

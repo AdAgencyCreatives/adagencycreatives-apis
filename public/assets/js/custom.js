@@ -399,7 +399,7 @@ function fetchYearsOfExperienceWithSelectedValue(user_experience) {
 
 function fetchStates(selected_id) {
     $.ajax({
-        url: '/api/v1/locations',
+        url: '/api/v1/locations?per_page=-1',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -420,7 +420,7 @@ function getCitiesByState(stateId, selected_id = null) {
     console.log(stateId);
     var filterParam = `filter[state_id]=${stateId}&per_page=-1`;
     $.ajax({
-        url: '/api/v1/locations', // Replace with the actual URL for fetching cities
+        url: '/api/v1/locations?per_page=-1', // Replace with the actual URL for fetching cities
         method: 'GET',
         data: filterParam,
         success: function (response) {
