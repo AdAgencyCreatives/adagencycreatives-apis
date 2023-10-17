@@ -4,12 +4,15 @@ namespace App\Console\Commands;
 
 use App\Models\Address;
 use App\Models\Agency;
+use App\Models\Industry;
 use App\Models\Link;
 use App\Models\Location;
+use App\Models\Media;
 use App\Models\Phone;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ImportAgencies extends Command
@@ -20,13 +23,21 @@ class ImportAgencies extends Command
 
     public function handle()
     {
+        // DB::table('agencies')->truncate();
+
         $jsonFilePath = public_path('export/agencies.json');
         $jsonContents = file_get_contents($jsonFilePath);
         $agenciesData = json_decode($jsonContents, true);
 
+        $industry_media_experiences = [];
         foreach ($agenciesData as $agencyData) {
             $authorEmail1 = $agencyData['post_meta']['_employer_email'][0];
             $authorEmail2 = $agencyData['author_email'];
+
+            // if($authorEmail1 != 'contactburrell@adagencycreatives.com') {
+            //     continue;
+            // }
+
             $user = User::where('email', $authorEmail1)->first();
 
             if (! $user) {
@@ -36,6 +47,7 @@ class ImportAgencies extends Command
             if ($user) {
                 $agency = $this->createAgency($agencyData, $user);
                 $this->createLocation($agencyData, $user);
+                $this->mapIndustryExperience($agencyData, $user, $industry_media_experiences);
                 $agency->save();
             } else {
                 dump('Agency not found', $authorEmail1);
@@ -78,6 +90,10 @@ class ImportAgencies extends Command
 
         if (isset($data['post_meta']['_employer_phone'][0]) && $data['post_meta']['_employer_phone'][0] !== '') {
             $this->createPhoneNumber($user->id, $data['post_meta']['_employer_phone'][0]);
+        }
+
+        if (isset($data['post_meta']['_viewed_count'][0])) {
+            $agency->views = $data['post_meta']['_viewed_count'][0];
         }
 
         $user->save();
@@ -132,5 +148,36 @@ class ImportAgencies extends Command
 
         }
 
+    }
+
+    public function mapIndustryExperience($data, $creative, $industry_media_experiences)
+    {
+        $industrUuids = [];
+        $count = 0;
+        foreach ($data['categories'] as $industryName) {
+            $industryName = $industryName['name'];
+            // Check if the UUID is already in the dictiona
+            if (isset($industry_media_experiences[$industryName])) {
+                $industrUuids[] = $industry_media_experiences[$industryName];
+            } else {
+                $media = Media::where('name', $industryName)->first();
+                if (! $media) {
+                    $media = Industry::where('name', $industryName)->first();
+                }
+
+                if ($media) {
+                    $industrUuids[] = $media->uuid;
+                    // Store the association in the dictionary
+                    $industry_media_experiences[$industryName] = $media->uuid;
+                }
+            }
+            $count++;
+            if ($count > 10) {
+                break;
+            }
+        }
+        $creative->industry_experience = implode(',', $industrUuids);
+
+        return $creative;
     }
 }

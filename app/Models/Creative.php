@@ -33,6 +33,7 @@ class Creative extends Model
         'seo_title',
         'seo_description',
         'seo_keywords',
+        'views',
     ];
 
     public function user()

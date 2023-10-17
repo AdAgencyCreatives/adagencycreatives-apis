@@ -60,6 +60,7 @@ class Job extends Model
         'seo_title',
         'seo_description',
         'seo_keywords',
+        'views',
     ];
 
     protected $casts = [
