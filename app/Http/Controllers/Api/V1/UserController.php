@@ -107,9 +107,9 @@ class UserController extends Controller
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
-            $user_resource = new UserResource($user);
 
-            return 'html';
+            return new UserResource($user);
+
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {

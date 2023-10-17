@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Address;
 use App\Models\Agency;
 use App\Models\Link;
+use App\Models\Location;
 use App\Models\Phone;
 use App\Models\User;
 use Carbon\Carbon;
@@ -33,6 +35,7 @@ class ImportAgencies extends Command
 
             if ($user) {
                 $agency = $this->createAgency($agencyData, $user);
+                $this->createLocation($agencyData, $user);
                 $agency->save();
             } else {
                 dump('Agency not found', $authorEmail1);
@@ -101,5 +104,33 @@ class ImportAgencies extends Command
             'country_code' => +1,
             'phone_number' => $phone_number,
         ]);
+    }
+
+    public function createLocation($data, $user)
+    {
+        try {
+            $state = null;
+            $city = null;
+            foreach ($data['location'] as $location) {
+                $locationModel = Location::where('name', $location['name'])->first();
+                if ($location['parent'] == 0) {
+                    $state = $locationModel->id;
+                } else {
+                    $city = $locationModel->id;
+                }
+            }
+
+            $address = new Address();
+            $address->uuid = Str::uuid();
+            $address->user_id = $user->id;
+            $address->label = 'personal';
+            $address->country_id = 1;
+            $address->state_id = $state ?? 1;
+            $address->city_id = $city ?? $address->state_id + 1;
+            $address->save();
+        } catch (\Exception $e) {
+
+        }
+
     }
 }

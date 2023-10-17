@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->hasOne(Attachment::class)->where('resource_type', 'profile_picture');
     }
 
+    public function agency_logo()
+    {
+        return $this->hasOne(Attachment::class)->where('resource_type', 'logo')->latest();
+    }
+
     public function portfolio_spotlights()
     {
         return $this->hasMany(Attachment::class)->where('resource_type', 'creative_spotlight');
