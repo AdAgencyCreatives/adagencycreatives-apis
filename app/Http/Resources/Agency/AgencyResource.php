@@ -47,7 +47,9 @@ class AgencyResource extends JsonResource
         $address = collect($user->addresses)->firstWhere('label', 'business');
 
         return $address ? [
+            'state_id' => $address->state->uuid,
             'state' => $address->state->name,
+            'city_id' => $address->city->uuid,
             'city' => $address->city->name,
         ] : null;
     }
