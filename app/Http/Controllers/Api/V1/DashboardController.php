@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
+    //For admin dashboard
     public function index()
     {
         $cacheKey = 'dashboard_stats_cache';
@@ -139,5 +140,37 @@ class DashboardController extends Controller
             'labels' => $dateRange,
             'createdData' => $createdCount,
         ];
+    }
+
+    //For Agency Dashboard
+    public function agency_dashboard_stats()
+    {
+        $stats = [
+            'number_of_posts' => rand(1, 3),
+            'applications' => rand(1, 3),
+            'shortlisted' => rand(1, 3),
+            'review' => rand(1, 3),
+        ];
+
+        return response()->json([
+            'stats' => $stats,
+        ]);
+
+    }
+
+    //For Creative Dashboard
+    public function creative_dashboard_stats()
+    {
+        $stats = [
+            'jobs_applied' => rand(1, 3),
+            'review' => rand(1, 3),
+            'views' => rand(1, 3),
+            'shortlisted' => rand(1, 3),
+        ];
+
+        return response()->json([
+            'stats' => $stats,
+        ]);
+
     }
 }

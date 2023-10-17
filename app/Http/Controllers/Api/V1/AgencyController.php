@@ -34,7 +34,6 @@ class AgencyController extends Controller
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
                 'size',
-                'type_of_work',
                 'name',
                 'slug',
                 'is_featured',
@@ -123,7 +122,6 @@ class AgencyController extends Controller
 
     public function update(UpdateAgencyRequest $request, $uuid)
     {
-
         if (empty($request->all())) {
             return response()->json([
                 'message' => 'You must provide data to update',
@@ -143,6 +141,56 @@ class AgencyController extends Controller
             $agency->$key = $value;
         }
         $agency_updated = $agency->save();
+        if ($agency_updated) {
+            $agency->fresh();
+
+            return response()->json([
+                'message' => 'Agency updated successfully.',
+                'data' => new AgencyResource($agency),
+            ], Response::HTTP_OK);
+        }
+    }
+
+    public function update_profile(Request $request, $uuid)
+    {
+        $agency = Agency::where('uuid', $uuid)->first();
+
+        if (! $agency) {
+            return response()->json([
+                'message' => 'No agency found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $agency->name = $request->company_name;
+        $agency->size = $request->size;
+        $agency->about = $request->about;
+        $agency->slug = $request->slug;
+        $agency->is_remote = $request->is_remote;
+        $agency->is_hybrid = $request->is_hybrid;
+        $agency->is_onsite = $request->is_onsite;
+        $agency->save();
+
+        $user = User::where('uuid', $agency->user_id)->first();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->is_visible = $request->show_profile;
+        $user->save();
+
+        $category = Category::where('uuid', $request->category_id)->first();
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
+
+        $request->merge([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'category_id' => $category->id,
+            'state_id' => $state->id ?? null,
+            'city_id' => $city->id ?? null,
+            'status' => 'draft',
+            'industry_experience' => ''.implode(',', $request->industry_experience).'',
+            'media_experience' => ''.implode(',', $request->media_experience).'',
+        ]);
         if ($agency_updated) {
             $agency->fresh();
 
