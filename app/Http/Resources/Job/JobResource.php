@@ -40,10 +40,7 @@ class JobResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'is_opentoremote' => $this->is_opentoremote,
             'status' => $this->status,
-            'location' => [
-                'state' => $this->state->name,
-                'city' => $this->city->name,
-            ],
+            'location' => $this->get_location(),
             'agency' => [],
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
@@ -70,6 +67,16 @@ class JobResource extends JsonResource
         }
 
         return $data;
+    }
+
+    public function get_location()
+    {
+        return [
+            'state_id' => $this->state->uuid,
+            'state' => $this->state->name,
+            'city_id' => $this->city->uuid,
+            'city' => $this->city->name,
+        ] ?? [];
     }
 
     public function generate_seo()
