@@ -9,7 +9,6 @@ class YearsOfExperienceSeeder extends Seeder
 {
     public function run()
     {
-
         $experiences = [
             'Junior 0-2 years',
             'Mid-level 2-5 years',

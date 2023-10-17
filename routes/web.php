@@ -27,7 +27,6 @@ use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -45,12 +44,6 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
  */
 Route::get('/phpinfo', function () {
     dd(Hash::make('password'));
-});
-
-Route::get('/tt', function () {
-    $edu = 1999;
-    $date = Carbon::create($edu, 1, 1, 0, 0, 0)->format('Y-m-d H:i:s');
-    dd($date);
 });
 
 // Route::get('/', function () {
@@ -219,11 +212,11 @@ Route::get('get_uuids', function () {
     $agency_user = User::find(2)->uuid;
     $creative_user = User::find(10)->uuid;
     $advisor_user = User::find(16)->uuid;
-    $category = Category::find(1)->uuid;
-    $state = Location::find(1)->uuid;
-    $city = Location::find(2)->uuid;
-    $industry_experience = Industry::find(2)->uuid;
-    $media_experience = Media::find(2)->uuid;
+    $category = Category::find(5)->uuid;
+    $state = Location::find(30)->uuid;
+    $city = Location::find(34)->uuid;
+    $industry_experience = Industry::find(5)->uuid;
+    $media_experience = Media::find(5)->uuid;
 
     $jsonObject = [
         'user_id' => $agency_user,

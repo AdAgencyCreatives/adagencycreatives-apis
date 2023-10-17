@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Creative;
 use App\Models\Seo;
 use App\Models\User;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
@@ -20,9 +22,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        // ********************************************************
+        // ******************** GENERAL SEEDERS *******************
+        // ********************************************************
+        $this->call(CategorySeeder::class);
+        $this->call(IndustrySeeder::class);
+        $this->call(MediaSeeder::class);
+        $this->call(StrengthSeeder::class);
+        $this->call(PlansTableSeeder::class);
         $this->call(LocationSeeder::class);
         $this->call(YearsOfExperienceSeeder::class);
-
+        $this->call(PageSeeder::class);
         Artisan::call('adagencycreatives:permission');
 
         \App\Models\User::factory(20)->create();
@@ -35,18 +45,10 @@ class DatabaseSeeder extends Seeder
             'status' => 1,
         ]); // 1:Admin
 
-        User::where('id', 2)->update([
-            'email' => 'agency@gmail.com',
-            'role' => 3,
-            'status' => 1,
-        ]); // Agency
-
-        User::where('id', 3)->update([
-            'email' => 'creative@gmail.com',
-            'role' => 4,
-            'status' => 1,
-        ]); // Agency
-
+        Artisan::call('import:users');
+        Artisan::call('import:agencies');
+        Artisan::call('import:creatives');
+        Artisan::call('optimize:clear');
         // ********************************************************
         // ******************** AGENCY USERS **********************
         // ********************************************************
@@ -138,16 +140,6 @@ class DatabaseSeeder extends Seeder
                 ]);
         }
 
-        // ********************************************************
-        // ******************** GENERAL SEEDERS *******************
-        // ********************************************************
-        $this->call(CategorySeeder::class);
-        $this->call(IndustrySeeder::class);
-        $this->call(MediaSeeder::class);
-        $this->call(StrengthSeeder::class);
-
-        $this->call(PlansTableSeeder::class);
-
         //Generate some more users
         // \App\Models\User::factory(15)->create();
         \App\Models\Order::factory(15)->create();
@@ -174,11 +166,6 @@ class DatabaseSeeder extends Seeder
             'creative_spotlight_title' => 'Site Name (%site_name%) %separator% %post_name% %separator% %post_date%',
         ]);
 
-        $this->call(PageSeeder::class);
-
-        Artisan::call('import:users');
-        Artisan::call('import:agencies');
-        Artisan::call('import:creatives');
-        Artisan::call('optimize:clear');
+        $this->call(TestUserSeeder::class);
     }
 }

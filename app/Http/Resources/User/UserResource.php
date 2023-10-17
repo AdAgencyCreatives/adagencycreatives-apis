@@ -13,11 +13,9 @@ class UserResource extends JsonResource
         //     return [];
         // }
 
-        if($this->role == 'creative'){
+        if ($this->role == 'creative') {
             $image = $this->profile_picture ? getAttachmentBasePath().$this->profile_picture->path : null;
-        }
-
-        elseif($this->role == 'agency' || $this->role == 'advisor'){
+        } elseif ($this->role == 'agency' || $this->role == 'advisor') {
             $image = $this->agency_logo ? getAttachmentBasePath().$this->agency_logo->path : null;
         }
 

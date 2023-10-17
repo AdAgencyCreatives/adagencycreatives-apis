@@ -8,8 +8,10 @@ use App\Http\Requests\Agency\StoreAgencyRequest;
 use App\Http\Requests\Agency\UpdateAgencyRequest;
 use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Agency\AgencyResource;
+use App\Models\Address;
 use App\Models\Agency;
 use App\Models\Industry;
+use App\Models\Location;
 use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -153,51 +155,63 @@ class AgencyController extends Controller
 
     public function update_profile(Request $request, $uuid)
     {
-        $agency = Agency::where('uuid', $uuid)->first();
+        try {
+            $agency = Agency::where('uuid', $uuid)->first();
 
-        if (! $agency) {
-            return response()->json([
-                'message' => 'No agency found.',
-            ], Response::HTTP_NOT_FOUND);
-        }
+            if (! $agency) {
+                return response()->json([
+                    'message' => 'No agency found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
 
-        $agency->name = $request->company_name;
-        $agency->size = $request->size;
-        $agency->about = $request->about;
-        $agency->slug = $request->slug;
-        $agency->is_remote = $request->is_remote;
-        $agency->is_hybrid = $request->is_hybrid;
-        $agency->is_onsite = $request->is_onsite;
-        $agency->save();
+            $agency->name = $request->company_name;
+            $agency->size = $request->size;
+            $agency->about = $request->about;
+            $agency->slug = $request->slug;
+            $agency->is_remote = $request->is_remote;
+            $agency->is_hybrid = $request->is_hybrid;
+            $agency->is_onsite = $request->is_onsite;
+            $agency->industry_experience = implode(',', array_slice($request->industry_experience ?? [], 0, 10));
+            $agency->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
+            $agency->save();
 
-        $user = User::where('uuid', $agency->user_id)->first();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->is_visible = $request->show_profile;
-        $user->save();
+            $user = User::where('id', $agency->user_id)->first();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->is_visible = $request->show_profile;
+            $user->save();
 
-        $category = Category::where('uuid', $request->category_id)->first();
-        $state = Location::where('uuid', $request->state_id)->first();
-        $city = Location::where('uuid', $request->city_id)->first();
-
-        $request->merge([
-            'uuid' => Str::uuid(),
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-            'state_id' => $state->id ?? null,
-            'city_id' => $city->id ?? null,
-            'status' => 'draft',
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
-        ]);
-        if ($agency_updated) {
-            $agency->fresh();
+            $this->updateLocation($request, $user);
 
             return response()->json([
                 'message' => 'Agency updated successfully.',
                 'data' => new AgencyResource($agency),
             ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+    }
+
+    private function updateLocation($request, $user)
+    {
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
+        if ($state && $city) {
+            $address = $user->addresses->first();
+            if (! $address) {
+                $address = new Address();
+                $address->uuid = Str::uuid();
+                $address->user_id = $user->id;
+                $address->label = 'business';
+                $address->country_id = 1;
+            }
+            $address->state_id = $state->id;
+            $address->city_id = $city->id;
+            $address->save();
         }
     }
 

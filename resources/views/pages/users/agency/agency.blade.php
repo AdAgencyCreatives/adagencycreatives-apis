@@ -195,8 +195,8 @@
                                 <h4>Logo</h4>
                                 @if (count($user->attachments) > 0)
                                     <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ getAttachmentBasePath() . $user->attachments[0]['path'] }}"
-                                        alt="" width="300" height="300" />
+                                        src="{{ getAttachmentBasePath() . $user->agency_logo?->path }}" alt=""
+                                        width="300" height="300" />
                                 @else
                                     <p>No logo uploaded yet</p>
                                 @endif
