@@ -109,7 +109,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"admin@gmail.com\"\r\n}",
+									"raw": "{\r\n    \"email\": \"6793siddique@gmail.com\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -177,7 +177,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"token\": \"814712d6bd4cb45110e227b307c2e58c369eb0f088538d63e849e09e3eb3504c\",\r\n    \r\n    \"password\": \"PASSWORD\",\r\n    \"password_confirmation\": \"PASSWORD\"\r\n}",
+									"raw": "{\r\n    \"email\": \"6793siddique@gmail.com\",\r\n    \"token\": \"ef9b7e0917d9e90f46a76b9bff19c69bc1a322c8d61486bdca1ec2a192ee3e2b\",\r\n    \r\n    \"password\": \"PASSWORD2\",\r\n    \"password_confirmation\": \"PASSWORD2\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -220,7 +220,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users?filter[role]=2&sort=-created_at",
+							"raw": "{{BASE_URL}}/users?filter[email]=lennie06@example.net",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -245,13 +245,13 @@
 								},
 								{
 									"key": "filter[email]",
-									"value": "amara.gerlach@example.org",
-									"disabled": true
+									"value": "lennie06@example.net"
 								},
 								{
 									"key": "filter[role]",
 									"value": "2",
-									"description": "1: admin, 2: advisor, 3: agency, 4: creative"
+									"description": "1: admin, 2: advisor, 3: agency, 4: creative",
+									"disabled": true
 								},
 								{
 									"key": "filter[status]",
@@ -266,7 +266,8 @@
 								},
 								{
 									"key": "sort",
-									"value": "-created_at"
+									"value": "-created_at",
+									"disabled": true
 								}
 							]
 						}
@@ -290,13 +291,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users/682c36b0-6a83-3304-b9c8-3d7bfca59040",
+							"raw": "{{BASE_URL}}/users/03c8a5eb-6232-347a-a29f-78f8413cccb1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"users",
-								"682c36b0-6a83-3304-b9c8-3d7bfca59040"
+								"03c8a5eb-6232-347a-a29f-78f8413cccb1"
 							]
 						}
 					},
@@ -439,6 +440,93 @@
 					"response": []
 				},
 				{
+					"name": "Login Admin",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "VKn2fPu7ePhVnCiouTVuWtNbqFjyP24JLeWK3e13",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"adeelakhtarit@gmail.com\",\r\n    \"password\": \"aaaaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Session",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mboehm@example.net\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/re_login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"re_login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Logout",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
@@ -508,6 +596,9 @@
 				{
 					"name": "agencies",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -527,7 +618,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "3307da5c-0741-4716-baf9-3f175d8fdd47",
+									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1",
 									"disabled": true
 								},
 								{
@@ -536,13 +627,8 @@
 									"disabled": true
 								},
 								{
-									"key": "filter[type_of_work]",
-									"value": "Internship",
-									"disabled": true
-								},
-								{
 									"key": "filter[name]",
-									"value": "Erica Bradshaw",
+									"value": "Pearl Powell",
 									"disabled": true
 								},
 								{
@@ -557,7 +643,7 @@
 								},
 								{
 									"key": "filter[industry_experience]",
-									"value": "fcd9ca99-952b-3247-90be-01dd308aa6be",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0",
 									"disabled": true
 								},
 								{
@@ -579,6 +665,98 @@
 									"key": "filter[status]",
 									"value": "1",
 									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "sigurd17",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agency-profile",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/agency-profile?filter[user_id]=03c8a5eb-6232-347a-a29f-78f8413cccb1&filter[employment_type]=Internship",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"agency-profile"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1"
+								},
+								{
+									"key": "filter[size]",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "filter[employment_type]",
+									"value": "Internship"
+								},
+								{
+									"key": "filter[name]",
+									"value": "Pearl Powell",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_id]",
+									"value": "f09a0dbb-de04-370b-9296-3b4c6ffbb515",
+									"disabled": true
+								},
+								{
+									"key": "filter[city_id]",
+									"value": "169143d1-3e90-3145-8825-7e35a6e786e8",
+									"disabled": true
+								},
+								{
+									"key": "filter[industry_experience]",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0",
+									"disabled": true
+								},
+								{
+									"key": "filter[media_experience]",
+									"value": "59500c2f-776f-3d04-9e87-149cdeeee42f",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_featured]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_urgent]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "sigurd17",
 									"disabled": true
 								}
 							]
@@ -603,13 +781,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies/3307da5c-0741-4716-baf9-3f175d8fdd47",
+							"raw": "{{BASE_URL}}/agencies/f1fcd5fd-0021-30ee-911d-2d0ab4f193c9",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"agencies",
-								"3307da5c-0741-4716-baf9-3f175d8fdd47"
+								"f1fcd5fd-0021-30ee-911d-2d0ab4f193c9"
 							]
 						}
 					},
@@ -656,10 +834,16 @@
 					"name": "agencies/{uuid}",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"name\": \"dasdkdashkj\",\r\n\"type_of_work\": \"dasdkdashkj\",\r\n\"size\": \"10\",\r\n\"about\": \"New about\"\r\n}",
+							"raw": "{\r\n    \"first_name\": \"\",\r\n    \"last_name\": \"\",\r\n    \"email\": \"\",\r\n    \"show_profile\": \"\",\r\n    \r\n    \"company_name\": \"Daigle Creative\",\r\n    \"size\": \"5-10 full time staff members\",\r\n    \"about\": \"Daigle Creative is a full-service advertising, public relations and design agency with a long track record of helping clients succeed.\",\r\n    \"slug\": \"daigle-creative\",\r\n    \"phone_number\": \"\",\r\n    \"linkedin\": \"\",\r\n    \"website\": \"\",\r\n    \"location\": {\r\n        \"state_id\": \"\",\r\n        \"city_id\": \"\"\r\n    },\r\n    \"industry_experience\": [\r\n        \"194cf417-0e28-36a8-be4e-fcfbb3f25320\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"b91cefcd-4cb0-3d13-bdbe-c6a4f6673080\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": false,\r\n    \"is_onsite\": true,\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -667,13 +851,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/agencies/27106d58-2175-32a0-bcfc-bbe8c0e8f7c8",
+							"raw": "{{BASE_URL}}/agency_profile/786ac74f-b785-37a6-9fdf-0848bd2524ab",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"agencies",
-								"27106d58-2175-32a0-bcfc-bbe8c0e8f7c8"
+								"agency_profile",
+								"786ac74f-b785-37a6-9fdf-0848bd2524ab"
 							]
 						}
 					},
@@ -705,6 +889,9 @@
 				{
 					"name": "creatives",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -714,7 +901,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/creatives",
+							"raw": "{{BASE_URL}}/creatives?filter[name]=Humberto",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -740,13 +927,12 @@
 								},
 								{
 									"key": "filter[title]",
-									"value": "Veterinarian",
+									"value": "Creative Director",
 									"disabled": true
 								},
 								{
 									"key": "filter[name]",
-									"value": "Dicki",
-									"disabled": true
+									"value": "Humberto"
 								},
 								{
 									"key": "filter[state_id]",
@@ -777,6 +963,11 @@
 									"key": "filter[status]",
 									"value": "1",
 									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "loren95",
 									"disabled": true
 								}
 							]
@@ -1028,7 +1219,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/jobs",
+							"raw": "{{BASE_URL}}/jobs?filter[user_id]=66175195-d903-341e-86c6-2824ea517ad3&filter[status]=1",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1038,18 +1229,17 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "0c9dcfc7-d6c3-300a-b91c-0e356801b776",
-									"disabled": true
+									"value": "66175195-d903-341e-86c6-2824ea517ad3"
 								},
 								{
 									"key": "filter[category_id]",
-									"value": "07449b82-67bb-3e05-889b-3290ecf59387",
+									"value": "aed8d18b-a1c8-34ce-be7c-2bdf48576120",
 									"description": "Category ID ",
 									"disabled": true
 								},
 								{
 									"key": "filter[title]",
-									"value": "Ticket Agent",
+									"value": "New Accounts Clerk",
 									"disabled": true
 								},
 								{
@@ -1090,22 +1280,22 @@
 								},
 								{
 									"key": "filter[state_id]",
-									"value": "ca06bf8a-731e-3bd0-b031-f28da84f485e",
+									"value": "44aaa251-ffca-3ed7-8cc2-4a1de06d9bcc",
 									"disabled": true
 								},
 								{
-									"key": "filter[city]",
-									"value": "",
+									"key": "filter[city_id]",
+									"value": "04711e77-3f93-357d-bd52-6ffb972f713e",
 									"disabled": true
 								},
 								{
 									"key": "filter[industry_experience]",
-									"value": "c2cb0999-cdab-3aa3-ab44-eda3660380da",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0,4d790d7d-5dff-3351-9f52-91526d44a26d",
 									"disabled": true
 								},
 								{
 									"key": "filter[media_experience]",
-									"value": "93f8bc7a-53e6-39b1-830f-3a012335c9aa",
+									"value": "6c7d93c8-2d9d-3706-accc-7ab805f7b7021",
 									"disabled": true
 								},
 								{
@@ -1120,8 +1310,12 @@
 								},
 								{
 									"key": "filter[status]",
-									"value": "3",
-									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that.",
+									"value": "1",
+									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that."
+								},
+								{
+									"key": "filter[slug]",
+									"value": "laurelcasper-alabama-birmingham-contract-1099-shampooer",
 									"disabled": true
 								}
 							]
@@ -1251,7 +1445,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/applications?filter[job_id]=689232ed-8377-39d2-bcba-852e5c83088a",
+							"raw": "{{BASE_URL}}/applications?filter[user_id]=46fe500f-f656-32e5-9b5d-7fc370c0559d",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1262,11 +1456,13 @@
 								{
 									"key": "filter[user_id]",
 									"value": "46fe500f-f656-32e5-9b5d-7fc370c0559d",
-									"disabled": true
+									"description": "For Creatives"
 								},
 								{
 									"key": "filter[job_id]",
-									"value": "689232ed-8377-39d2-bcba-852e5c83088a"
+									"value": "1347162c-7eb3-349c-9bd3-7f70b4155e24",
+									"description": " For agencies",
+									"disabled": true
 								}
 							]
 						}
@@ -1522,9 +1718,15 @@
 					"name": "links",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/links?filter[user_id]=c2a2392a-9e2f-3c49-a463-cbf525cbefa2&label=website",
+							"raw": "{{BASE_URL}}/links",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1534,11 +1736,13 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "c2a2392a-9e2f-3c49-a463-cbf525cbefa2"
+									"value": "86f85717-0c65-3a85-9203-43db164a7a27",
+									"disabled": true
 								},
 								{
 									"key": "label",
-									"value": "website"
+									"value": "website",
+									"disabled": true
 								}
 							]
 						}
@@ -1651,6 +1855,57 @@
 							"path": [
 								"links",
 								"bcfcc63f-8a3f-4a93-a77a-7defb9176f63"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "agency_stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/agency_stats",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"agency_stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creative_stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creative_stats",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative_stats"
 							]
 						}
 					},
@@ -2180,7 +2435,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/attachments?filter[status]=2",
+							"raw": "{{BASE_URL}}/attachments?filter[user_id]=86f85717-0c65-3a85-9203-43db164a7a27&filter[resource_type]=logo",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2190,13 +2445,11 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "784376e1-dcaf-3240-840b-838c7dec057b",
-									"disabled": true
+									"value": "86f85717-0c65-3a85-9203-43db164a7a27"
 								},
 								{
 									"key": "filter[resource_type]",
-									"value": "profile_picture",
-									"disabled": true
+									"value": "logo"
 								},
 								{
 									"key": "filter[post_id]",
@@ -2205,8 +2458,9 @@
 								},
 								{
 									"key": "filter[status]",
-									"value": "2",
-									"description": "0: pending, 1: active, 2: inactive"
+									"value": "1",
+									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
 								}
 							]
 						}
@@ -2252,7 +2506,7 @@
 							"formdata": [
 								{
 									"key": "user_id",
-									"value": "69a978f1-6eaa-39ea-878f-4d2bc66117fd",
+									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1",
 									"type": "text"
 								},
 								{
@@ -2264,7 +2518,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/E:/C - Downloads/unnamed (2).png"
+									"src": "/E:/C - Downloads/small image.png"
 								},
 								{
 									"key": "",
@@ -2314,9 +2568,15 @@
 					"name": "educations",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/educations?filter[user_id]=d1a7d063-6581-3fac-bf91-adc20fa3e87e",
+							"raw": "{{BASE_URL}}/educations",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2326,7 +2586,8 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e"
+									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e",
+									"disabled": true
 								}
 							]
 						}
@@ -2435,9 +2696,15 @@
 					"name": "experiences",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/experiences?filter[user_id]=d1a7d063-6581-3fac-bf91-adc20fa3e87e",
+							"raw": "{{BASE_URL}}/experiences",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2447,7 +2714,8 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e"
+									"value": "af791ffe-e561-3b3b-bca6-b9b5a5588f6d",
+									"disabled": true
 								}
 							]
 						}
@@ -2686,7 +2954,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/get_categories?",
+							"raw": "{{BASE_URL}}/get_categories",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2695,9 +2963,10 @@
 							],
 							"query": [
 								{
-									"key": null,
+									"key": "",
 									"value": null,
-									"description": "This endpoint will give you all categories from cache"
+									"description": "This endpoint will give you all categories from cache",
+									"disabled": true
 								}
 							]
 						}
@@ -2810,6 +3079,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -2819,7 +3091,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/strengths?page=2&per_page=3",
+							"raw": "{{BASE_URL}}/strengths",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2834,11 +3106,13 @@
 								},
 								{
 									"key": "page",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "3"
+									"value": "3",
+									"disabled": true
 								}
 							]
 						}
@@ -2853,6 +3127,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -3454,6 +3731,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -3463,7 +3743,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/locations?filter[state_id]=b85f97db-bd3d-3995-b0f3-8f8c4578e5b4",
+							"raw": "{{BASE_URL}}/locations?filter[state_id]=b5ca41ea-7ab3-38eb-8ddb-5c529299134f&per_page=-1",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3473,7 +3753,7 @@
 							"query": [
 								{
 									"key": "filter[state_id]",
-									"value": "b85f97db-bd3d-3995-b0f3-8f8c4578e5b4"
+									"value": "b5ca41ea-7ab3-38eb-8ddb-5c529299134f"
 								},
 								{
 									"key": "filter[name]",
@@ -3482,8 +3762,7 @@
 								},
 								{
 									"key": "per_page",
-									"value": "-1",
-									"disabled": true
+									"value": "-1"
 								}
 							]
 						}
@@ -3508,7 +3787,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Ne\",\r\n    \"parent_id\": \"sfdsf\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Ne\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3516,12 +3795,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/locations",
+							"raw": "{{BASE_URL}}/locations/",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"locations"
+								"locations",
+								""
 							]
 						}
 					},
@@ -3553,13 +3833,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/locations/e0f4c2eb-c7f7-3465-95f0-a07f64166d27",
+							"raw": "{{BASE_URL}}/locations/e4bed140-eaf3-37e9-ab96-4856757f1375",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"locations",
-								"e0f4c2eb-c7f7-3465-95f0-a07f64166d27"
+								"e4bed140-eaf3-37e9-ab96-4856757f1375"
 							]
 						}
 					},
@@ -3571,13 +3851,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/locations/24895f24-aaff-322e-8f88-a45cca7e1f6a",
+							"raw": "{{BASE_URL}}/locations/e4bed140-eaf3-37e9-ab96-4856757f1375",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"locations",
-								"24895f24-aaff-322e-8f88-a45cca7e1f6a"
+								"e4bed140-eaf3-37e9-ab96-4856757f1375"
 							]
 						}
 					},
@@ -5034,13 +5314,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/get_assigned_agencies/330ee737-59eb-3336-87e8-163cca1e57ff",
+							"raw": "{{BASE_URL}}/get_assigned_agencies/a59a6aa0-1283-3032-8f6c-e202d312eb18",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"get_assigned_agencies",
-								"330ee737-59eb-3336-87e8-163cca1e57ff"
+								"a59a6aa0-1283-3032-8f6c-e202d312eb18"
 							],
 							"query": [
 								{
@@ -5091,7 +5371,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"330ee737-59eb-3336-87e8-163cca1e57ff\",\r\n    \"category_id\": \"51e70674-6a88-35bc-8b2f-ec3c2f5dc8f8\", //title\r\n    \"start_date\": \"ASAP\", // ['ASAP', 'In 2 days', 'In 1 week' , 'In 1 Month']\r\n    \"employment_type\": \"Part-Time\",\r\n    \"state_id\": \"4f4fbcea-ebc6-3d94-99f5-42b46de08938\",\r\n    \"city_id\": \"e8922484-9851-35e6-be30-c37d692bafb6\",\r\n    \"industry_experience\": [\r\n        \"f2ef6f36-8463-3edb-8038-78872ff4d12e\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"4147b2e6-8d16-3492-b106-e36a30160dd1\"\r\n    ],\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"is_opentoremote\": 0,\r\n    \"is_opentorelocation\": 0,\r\n    \"comments\": \"This is just comment\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"d33599fd-7d6b-303c-9d6c-b8d0ae2dc21d\",\r\n    \"category_id\": \"e24cb90b-89c8-3e27-aeb9-62457fd2c426\", //title\r\n    \"start_date\": \"ASAP\", // ['ASAP', 'In 2 days', 'In 1 week' , 'In 1 Month']\r\n    \"employment_type\": \"Part-Time\",\r\n    \"state_id\": \"2c85d128-9bd4-335c-91e2-e22ece31959c\",\r\n    \"city_id\": \"2a83849f-f70d-3931-b84c-73565b4b05bd\",\r\n    \"industry_experience\": [\r\n        \"ae5b7d21-3e7e-359f-9090-c9e133d8d5cf\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"3ae0cd25-11dd-3d70-98df-b2170e81d216\"\r\n    ],\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"is_opentoremote\": 0,\r\n    \"is_opentorelocation\": 0,\r\n    \"comments\": \"This is just comment\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5152,7 +5432,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "1|0BOggonFypGI6GS0CDHKPeLmPUo8OOfmZzsci0UI1731c974",
+				"value": "1|2iYcNH0OkaYFeSOCPiLbwhZTB3e33bex0ZQUpwqY02344df6",
 				"type": "string"
 			}
 		]
