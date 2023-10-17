@@ -108,6 +108,10 @@ class ImportCreatives extends Command
             $this->createPhoneNumber($user->id, $data['post_meta']['_candidate_phone'][0]);
         }
 
+        if (isset($data['post_meta']['_viewed_count'][0])) {
+            $creative->views = $data['post_meta']['_viewed_count'][0];
+        }
+
         $user->save();
         $creative->save();
     }
