@@ -183,7 +183,6 @@ class UserController extends Controller
             return response()->json(['message' => 'Account not approved'], 401);
         }
 
-        // Auth::attempt($request->only('email', 'password'));
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

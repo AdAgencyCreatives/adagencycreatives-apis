@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function profile_picture()
     {
-        return $this->hasOne(Attachment::class)->where('resource_type', 'profile_picture');
+        return $this->hasOne(Attachment::class)->where('resource_type', 'profile_picture')->latest();
     }
 
     public function agency_logo()
