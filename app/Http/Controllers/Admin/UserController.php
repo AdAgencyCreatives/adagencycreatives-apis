@@ -36,10 +36,7 @@ class UserController extends Controller
                 $agency->user_id = $user->id;
                 $agency->save();
             }
-            $user->load(['agency', 'links', 'addresses.city', 'addresses.state',  'attachments' => function ($query) use ($user) {
-                $query->where('resource_id', $user->agency->id)
-                    ->latest()->take(1);
-            }]);
+            $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo']);
         } elseif ($user->role == 'creative') {
             if (! $user->creative) {
                 $creative = new Creative();
