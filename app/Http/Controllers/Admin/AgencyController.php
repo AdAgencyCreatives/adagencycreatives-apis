@@ -37,8 +37,8 @@ class AgencyController extends Controller
         }
 
         $request->merge([
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
         ]);
 
         $this->appendWorkplacePreference($request);
