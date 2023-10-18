@@ -186,6 +186,8 @@ class AgencyController extends Controller
 
             $this->updateLocation($request, $user);
             updatePhone( $user, $request->phone_number, 'business');
+            updateLink( $user, $request->linkedin, 'linkedin');
+            updateLink( $user, $request->website, 'website');
 
             return response()->json([
                 'message' => 'Agency updated successfully.',
@@ -212,6 +214,7 @@ class AgencyController extends Controller
                 $address->label = 'business';
                 $address->country_id = 1;
             }
+            // dump($state, $city);
             $address->state_id = $state->id;
             $address->city_id = $city->id;
             $address->save();

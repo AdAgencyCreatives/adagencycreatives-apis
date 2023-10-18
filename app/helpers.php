@@ -13,9 +13,9 @@ use Illuminate\Support\Str;
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
     {
+
         $ids = explode(',', $commaSeparatedIds);
         $industries = Industry::whereIn('uuid', $ids)->pluck('name')->toArray();
-
         return $industries;
     }
 }
@@ -159,7 +159,7 @@ if (! function_exists('updatePhone')) {
 }
 
 if (! function_exists('updateLink')) {
-    function updateLink($user, $label, $url)
+    function updateLink($user, $url, $label )
     {
         $link = Link::where('user_id', $user->id)->where('label', $label)->first();
         if ($link) {
