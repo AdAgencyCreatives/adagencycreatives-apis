@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
         Artisan::call('import:users');
         Artisan::call('import:agencies');
         Artisan::call('import:creatives');
+        Artisan::call('import:jobs');
         Artisan::call('optimize:clear');
         // ********************************************************
         // ******************** AGENCY USERS **********************

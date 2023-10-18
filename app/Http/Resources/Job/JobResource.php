@@ -18,8 +18,8 @@ class JobResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'description' => $this->description,
-            'category_id' => $category->uuid,
-            'category' => $category->name,
+            'category_id' => $category?->uuid,
+            'category' => $category?->name,
             'employment_type' => $this->employment_type,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
@@ -45,7 +45,7 @@ class JobResource extends JsonResource
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
-            'expired_at' => $this->expired_at->format(config('global.datetime_format')),
+            'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
 
@@ -72,10 +72,10 @@ class JobResource extends JsonResource
     public function get_location()
     {
         return [
-            'state_id' => $this->state->uuid,
-            'state' => $this->state->name,
-            'city_id' => $this->city->uuid,
-            'city' => $this->city->name,
+            'state_id' => $this->state?->uuid,
+            'state' => $this->state?->name,
+            'city_id' => $this->city?->uuid,
+            'city' => $this->city?->name,
         ] ?? [];
     }
 
@@ -101,7 +101,7 @@ class JobResource extends JsonResource
 
         return replacePlaceholders($seo_title_format, [
             '%job_title%' => $this->title,
-            '%job_location%' => sprintf('%s, %s', $this->city->name, $this->state->name),
+            '%job_location%' => sprintf('%s, %s', $this->city?->name, $this->state?->name),
             '%job_employment_type%' => $this->employment_type,
             '%site_name%' => $site_name,
             '%separator%' => $separator,

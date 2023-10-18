@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Agency;
 
 use App\Http\Resources\Link\LinkCollection;
-use App\Http\Resources\Phone\PhoneResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AgencyResource extends JsonResource

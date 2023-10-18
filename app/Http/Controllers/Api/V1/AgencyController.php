@@ -177,7 +177,6 @@ class AgencyController extends Controller
             $agency->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
             $agency->save();
 
-
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
             $user->email = $request->email;
@@ -185,9 +184,12 @@ class AgencyController extends Controller
             $user->save();
 
             $this->updateLocation($request, $user);
-            updatePhone( $user, $request->phone_number, 'business');
-            updateLink( $user, $request->linkedin, 'linkedin');
-            updateLink( $user, $request->website, 'website');
+            if ($request->has('phone_number')) {
+                updatePhone($user, $request->phone_number, 'business');
+            }
+
+            updateLink($user, $request->linkedin, 'linkedin');
+            updateLink($user, $request->website, 'website');
 
             return response()->json([
                 'message' => 'Agency updated successfully.',
