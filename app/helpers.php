@@ -2,7 +2,9 @@
 
 use App\Models\Attachment;
 use App\Models\Industry;
+use App\Models\Link;
 use App\Models\Media;
+use App\Models\Phone;
 use App\Models\Strength;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,9 +13,9 @@ use Illuminate\Support\Str;
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
     {
+
         $ids = explode(',', $commaSeparatedIds);
         $industries = Industry::whereIn('uuid', $ids)->pluck('name')->toArray();
-
         return $industries;
     }
 }
@@ -55,7 +57,7 @@ if (! function_exists('storeImage')) {
         $file = $request->file;
 
         $extension = $file->getClientOriginalExtension();
-        $folder = $resource_type.'/'.$uuid;
+        $folder = $resource_type . '/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
@@ -127,4 +129,49 @@ if (! function_exists('applyExperienceFilter')) {
         });
     }
 
+}
+
+if (! function_exists('updatePhone')) {
+    function updatePhone($user, $phone_number, $label)
+    {
+        $country_code = '+1';
+
+        if (strpos($phone_number, $country_code) === 0) {
+            $phone_number = substr($phone_number, strlen($country_code));
+            $phone_number = trim($phone_number);
+        }
+
+        $phone = Phone::where('user_id', $user->id)->where('label', $label)->first();
+        if ($phone) {
+            $phone->update(['country_code' => $country_code, 'phone_number' => $phone_number]);
+        } else {
+
+            Phone::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => $label,
+                'country_code' => $country_code,
+                'phone_number' => $phone_number,
+            ]);
+        }
+    }
+
+}
+
+if (! function_exists('updateLink')) {
+    function updateLink($user, $url, $label )
+    {
+        $link = Link::where('user_id', $user->id)->where('label', $label)->first();
+        if ($link) {
+            $link->update(['url' => $url]);
+        } else {
+
+            Link::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => $label,
+                'url' => $url,
+            ]);
+        }
+    }
 }

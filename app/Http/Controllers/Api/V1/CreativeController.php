@@ -11,6 +11,8 @@ use App\Http\Resources\Creative\CreativeSpotlightCollection;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
+use App\Models\Link;
+use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -39,7 +41,12 @@ class CreativeController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $creatives = $query->with('user.profile_picture', 'user.addresses.state', 'user.addresses.city')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $creatives = $query->with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
     }
@@ -136,5 +143,52 @@ class CreativeController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeSpotlightCollection($creative_spotlights);
+    }
+
+    public function update_profile(Request $request, $uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->first();
+            $creative= Creative::where('user_id', $user->id)->first();
+
+            if (! $creative) {
+                return response()->json([
+                    'message' => 'No creative found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            $creative->name = $request->employment_type;
+            $creative->size = $request->years_of_experience;
+            $creative->about = $request->about;
+            $creative->slug = $request->slug;
+            $creative->is_remote = $request->is_remote;
+            $creative->is_hybrid = $request->is_hybrid;
+            $creative->is_onsite = $request->is_onsite;
+            $creative->is_onsite = $request->is_opentorelocation;
+            $creative->industry_experience = implode(',', array_slice($request->industry_experience ?? [], 0, 10));
+            $creative->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
+            $creative->strengths = implode(',', array_slice($request->strengths ?? [], 0, 5));
+            $creative->save();
+
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->is_visible = $request->show_profile;
+            $user->save();
+
+            $this->updateLocation($request, $user);
+            updateLink($user, 'linkedin', $request->input('linkedin'));
+            updateLink($user, 'portfolio', $request->input('portfolio'));
+
+            return response()->json([
+                'message' => 'Creative updated successfully.',
+                'data' => new CreativeResource($creative),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
     }
 }
