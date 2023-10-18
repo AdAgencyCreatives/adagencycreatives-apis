@@ -104,6 +104,16 @@ class User extends Authenticatable
         return $this->hasMany(Phone::class);
     }
 
+    public function personal_phone()
+    {
+        return $this->hasOne(Phone::class)->where('label', 'personal');
+    }
+
+    public function business_phone()
+    {
+        return $this->hasOne(Phone::class)->where('label', 'business');
+    }
+
     public function addresses()
     {
         return $this->hasMany(Address::class);

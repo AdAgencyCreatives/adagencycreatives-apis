@@ -400,3 +400,17 @@ Admin can
 - Make Employment Type dropdown to select multiple values.
 - Industry | Media experiences are exported from wordpress.
 - Title (Free Text) is exported from wordpress.
+ 
+## 10/10/2023  Education | Experience | Bug Fix
+- Exported education and experience for creatives 
+- Exported Location for creatives
+- Location dropdown bug fixed
+- Added open_jobs field in agencies endpoint
+ 
+## 11/10/2023  API enhancements
+- Agency Profile update endpoint
+- Agency Logo fixed
+- Added logo field in login route
+- Added location_id in job, creatives and agencies alongwith location name
+- Added test user (creative and agency) so that we don't have to create all details of particular user for testing.
+- Exported views count for creatives and agencies

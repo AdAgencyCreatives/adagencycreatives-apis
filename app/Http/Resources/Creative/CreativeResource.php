@@ -43,6 +43,7 @@ class CreativeResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'is_opentorelocation' => $this->is_opentorelocation,
+            'phone_number' => $user->personal_phone ? $user->personal_phone->phone_number : null,
             'location' => $this->location,
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),

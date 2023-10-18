@@ -59,6 +59,7 @@ class AgencyController extends Controller
                 'user.addresses.state',
                 'user.addresses.city',
                 'user.links',
+                'user.business_phone',
             ])
             ->whereIn('user_id', $agency_user_ids)
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
@@ -156,7 +157,8 @@ class AgencyController extends Controller
     public function update_profile(Request $request, $uuid)
     {
         try {
-            $agency = Agency::where('uuid', $uuid)->first();
+            $user = User::where('uuid', $uuid)->first();
+            $agency = Agency::where('user_id', $user->id)->first();
 
             if (! $agency) {
                 return response()->json([
@@ -175,7 +177,7 @@ class AgencyController extends Controller
             $agency->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
             $agency->save();
 
-            $user = User::where('id', $agency->user_id)->first();
+
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
             $user->email = $request->email;
@@ -183,6 +185,7 @@ class AgencyController extends Controller
             $user->save();
 
             $this->updateLocation($request, $user);
+            updatePhone( $user, $request->phone_number, 'business');
 
             return response()->json([
                 'message' => 'Agency updated successfully.',

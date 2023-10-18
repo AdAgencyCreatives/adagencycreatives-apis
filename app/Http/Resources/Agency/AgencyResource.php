@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Agency;
 
 use App\Http\Resources\Link\LinkCollection;
+use App\Http\Resources\Phone\PhoneResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AgencyResource extends JsonResource
@@ -34,6 +35,7 @@ class AgencyResource extends JsonResource
                 'is_hybrid' => $this->is_hybrid,
                 'is_onsite' => $this->is_onsite,
             ],
+            'phone_number' => $user->business_phone ? $user->business_phone->phone_number : null,
             'location' => $this->get_location($user),
             'open_jobs' => $user->open_jobs(),
             'links' => new LinkCollection($user->links),
