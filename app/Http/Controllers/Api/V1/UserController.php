@@ -69,7 +69,6 @@ class UserController extends Controller
                 $agency->name = $request->agency_name;
                 $agency->save();
 
-                // if()
                 Link::create([
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,

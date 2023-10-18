@@ -16,6 +16,7 @@ if (! function_exists('getIndustryNames')) {
 
         $ids = explode(',', $commaSeparatedIds);
         $industries = Industry::whereIn('uuid', $ids)->pluck('name')->toArray();
+
         return $industries;
     }
 }
@@ -57,7 +58,7 @@ if (! function_exists('storeImage')) {
         $file = $request->file;
 
         $extension = $file->getClientOriginalExtension();
-        $folder = $resource_type . '/' . $uuid;
+        $folder = $resource_type.'/'.$uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
@@ -134,6 +135,10 @@ if (! function_exists('applyExperienceFilter')) {
 if (! function_exists('updatePhone')) {
     function updatePhone($user, $phone_number, $label)
     {
+        if ($phone_number == null || $phone_number == '') {
+            return;
+        }
+
         $country_code = '+1';
 
         if (strpos($phone_number, $country_code) === 0) {
@@ -159,8 +164,12 @@ if (! function_exists('updatePhone')) {
 }
 
 if (! function_exists('updateLink')) {
-    function updateLink($user, $url, $label )
+    function updateLink($user, $url, $label)
     {
+        if ($url == null || $url == '') {
+            return;
+        }
+
         $link = Link::where('user_id', $user->id)->where('label', $label)->first();
         if ($link) {
             $link->update(['url' => $url]);

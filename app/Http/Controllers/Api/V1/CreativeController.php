@@ -11,8 +11,6 @@ use App\Http\Resources\Creative\CreativeSpotlightCollection;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
-use App\Models\Link;
-use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -149,7 +147,7 @@ class CreativeController extends Controller
     {
         try {
             $user = User::where('uuid', $uuid)->first();
-            $creative= Creative::where('user_id', $user->id)->first();
+            $creative = Creative::where('user_id', $user->id)->first();
 
             if (! $creative) {
                 return response()->json([

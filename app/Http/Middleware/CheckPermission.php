@@ -38,7 +38,6 @@ class CheckPermission
         }
 
         $permissionName = $resourceType.'.'.$action;
-
         if (! Auth::user()->hasPermissionTo($permissionName)) {
             return response()->json(['message' => 'Permission denied'], 403);
         }

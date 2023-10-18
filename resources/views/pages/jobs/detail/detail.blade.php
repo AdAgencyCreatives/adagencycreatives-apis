@@ -85,7 +85,7 @@
                 dataType: 'json',
                 success: function(response) {
                     populateFilter(response.data, '#category');
-                    var job_category = "{{ $job->category->uuid }}";
+                    var job_category = "{{ $job->category?->uuid }}";
                     $('#category').val(job_category);
                     $('#category').trigger('change');
                 },
@@ -113,7 +113,7 @@
         function fetchIndustries() {
 
             $.ajax({
-                url: '/api/v1/industry-experiences',
+                url: '/api/v1/get_industry-experiences',
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -135,7 +135,7 @@
 
         function fetchMedias() {
             $.ajax({
-                url: '/api/v1/media-experiences',
+                url: '/api/v1/get_media-experiences',
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
