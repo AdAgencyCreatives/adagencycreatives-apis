@@ -2,19 +2,19 @@
 
 namespace App\Http\Resources\Creative;
 
+use App\Http\Resources\Link\LinkCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CreativeResource extends JsonResource
 {
-    private $category;
+    private $creative_category;
 
     private $location;
 
     public function toArray($request)
     {
         $user = $this->user;
-
-        $this->category = isset($this->category) ? $this->category->name : null;
+        $this->creative_category = isset($this->category) ? $this->category->name : null;
 
         $this->location = $this->get_location($user);
 
@@ -25,7 +25,7 @@ class CreativeResource extends JsonResource
             'name' => $this->user->first_name.' '.$this->user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
-            'category' => $this->category,
+            'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
@@ -45,6 +45,7 @@ class CreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $user->personal_phone ? $user->personal_phone->phone_number : null,
             'location' => $this->location,
+            'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),

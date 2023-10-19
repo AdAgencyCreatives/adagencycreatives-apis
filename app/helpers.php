@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Address;
 use App\Models\Attachment;
 use App\Models\Industry;
 use App\Models\Link;
+use App\Models\Location;
 use App\Models\Media;
 use App\Models\Phone;
 use App\Models\Strength;
@@ -181,6 +183,28 @@ if (! function_exists('updateLink')) {
                 'label' => $label,
                 'url' => $url,
             ]);
+        }
+    }
+}
+
+if (! function_exists('updateLocation')) {
+    function updateLocation($request, $user)
+    {
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
+        if ($state && $city) {
+            $address = $user->addresses->first();
+            if (! $address) {
+                $address = new Address();
+                $address->uuid = Str::uuid();
+                $address->user_id = $user->id;
+                $address->label = 'personal';
+                $address->country_id = 1;
+            }
+            // dump($state, $city);
+            $address->state_id = $state->id;
+            $address->city_id = $city->id;
+            $address->save();
         }
     }
 }
