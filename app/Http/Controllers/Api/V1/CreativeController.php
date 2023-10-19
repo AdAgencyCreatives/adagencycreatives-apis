@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Creative\StoreCreativeRequest;
+use App\Http\Requests\Creative\UpdateCreativeProfileRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
@@ -12,6 +13,7 @@ use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -44,6 +46,7 @@ class CreativeController extends Controller
             'user.addresses.state',
             'user.addresses.city',
             'user.personal_phone',
+            'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
@@ -66,9 +69,9 @@ class CreativeController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'category_id' => $category->id,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
-            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
+            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
+            'strengths' => '' . implode(',', $request->strengths ?? []) . '',
         ]);
 
         $creative = Creative::create($request->all());
@@ -143,11 +146,11 @@ class CreativeController extends Controller
         return new CreativeSpotlightCollection($creative_spotlights);
     }
 
-    public function update_profile(Request $request, $uuid)
+    public function update_profile(UpdateCreativeProfileRequest $request, $uuid)
     {
         try {
-            $user = User::where('uuid', $uuid)->first();
-            $creative = Creative::where('user_id', $user->id)->first();
+            $user = User::where('uuid', $uuid)->firstOrFail();
+            $creative = $user->creative;
 
             if (! $creative) {
                 return response()->json([
@@ -155,28 +158,56 @@ class CreativeController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            $creative->name = $request->employment_type;
-            $creative->size = $request->years_of_experience;
-            $creative->about = $request->about;
-            $creative->slug = $request->slug;
-            $creative->is_remote = $request->is_remote;
-            $creative->is_hybrid = $request->is_hybrid;
-            $creative->is_onsite = $request->is_onsite;
-            $creative->is_onsite = $request->is_opentorelocation;
-            $creative->industry_experience = implode(',', array_slice($request->industry_experience ?? [], 0, 10));
-            $creative->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
-            $creative->strengths = implode(',', array_slice($request->strengths ?? [], 0, 5));
+            // Update Creative
+            $creativeData = [
+                'title' => $request->title,
+                'employment_type' => $request->employment_type,
+                'years_of_experience' => $request->years_of_experience,
+                'about' => $request->about,
+                'is_remote' => $request->is_remote,
+                'is_hybrid' => $request->is_hybrid,
+                'is_onsite' => $request->is_onsite,
+                'is_opentorelocation' => $request->is_opentorelocation,
+                'industry_experience' => implode(',', array_slice($request->industry_experience ?? [], 0, 10)),
+                'media_experience' => implode(',', array_slice($request->media_experience ?? [], 0, 10)),
+                'strengths' => implode(',', array_slice($request->strength ?? [], 0, 5)),
+            ];
+
+            if ($request->category_id) {
+                $category = Category::where('uuid', $request->category_id)->first();
+                if ($category) {
+                    $creativeData['category_id'] = $category->id;
+                }
+            }
+
+            $creative->fill(array_filter($creativeData, function ($value) {
+                return !is_null($value);
+            }));
             $creative->save();
 
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $user->is_visible = $request->show_profile;
+            // Update User
+            $userData = [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'username' => $request->username,
+                'is_visible' => $request->show_profile,
+            ];
+
+            $user->fill(array_filter($userData, function ($value) {
+                return !is_null($value);
+            }));
             $user->save();
 
-            $this->updateLocation($request, $user);
-            updateLink($user, 'linkedin', $request->input('linkedin'));
-            updateLink($user, 'portfolio', $request->input('portfolio'));
+            // Update Phone, Location, and Links
+            if ($request->has('phone_number')) {
+                updatePhone($user, $request->phone_number, 'personal');
+            }
+            if ($request->input('linkedin')) {
+                updateLink($user, $request->input('linkedin'), 'linkedin');
+            }
+            if ($request->input('website')) {
+                updateLink($user, $request->input('website'), 'website');
+            }
 
             return response()->json([
                 'message' => 'Creative updated successfully.',

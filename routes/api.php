@@ -74,7 +74,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Job Board Routes
      */
-    Route::patch('agency_profile/{agency}', [AgencyController::class, 'update_profile']);
+    Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
+    Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
     Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
     Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');

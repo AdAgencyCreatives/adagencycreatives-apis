@@ -232,7 +232,7 @@ Route::get('get_uuids', function () {
         'media_experience' => [
             $media_experience,
         ],
-        'character_strength' => [
+        'strength' => [
             $character_strengths,
         ],
 
