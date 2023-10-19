@@ -26,7 +26,6 @@ class StoreJobRequest extends FormRequest
             'media_experience' => 'required|array',
             'media_experience.*' => 'exists:medias,uuid',
             'salary_range' => 'required|string|max:255',
-
             'apply_type' => 'required|string|max:255',
             'external_link' => 'nullable|url',
             'is_remote' => 'required|boolean',

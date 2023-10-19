@@ -270,7 +270,7 @@ class Job extends Model
                     'email_data' => [
                         'title' => $job->title,
                         'url' => env('FRONTEND_JOB_URL'),
-                        'category' => $category->name,
+                        'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
