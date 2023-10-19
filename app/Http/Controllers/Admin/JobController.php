@@ -46,9 +46,9 @@ class JobController extends Controller
             'category_id' => $category->id,
             'address_id' => 5,
             'status' => $request->status,
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
-            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 10)).'',
             'state_id' => $state->id ?? 1,
             'city_id' => $city->id ?? 1,
         ]);
@@ -89,9 +89,9 @@ class JobController extends Controller
         $request->merge([
             'category_id' => $category->id,
             'address_id' => 5,
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
-            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+             'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 10)).'',
             'state_id' => $state->id ?? $job->state_id,
             'city_id' => $city->id ?? $job->city_id,
         ]);

@@ -20,7 +20,7 @@ class ImportJobs extends Command
 
     public function handle()
     {
-        DB::table('job_posts')->truncate();
+        // DB::table('job_posts')->truncate();
 
         $jsonFilePath = public_path('export/jobs.json');
         $jsonContents = file_get_contents($jsonFilePath);
