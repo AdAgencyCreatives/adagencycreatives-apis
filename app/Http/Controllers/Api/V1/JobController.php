@@ -83,8 +83,9 @@ class JobController extends Controller
             'state_id' => $state->id ?? null,
             'city_id' => $city->id ?? null,
             'status' => 'draft',
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
         ]);
 
         try {
@@ -130,13 +131,14 @@ class JobController extends Controller
 
     public function update(Request $request, $uuid)
     {
+        // dd($request->all());
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
 
             $oldStatus = $job->status;
             $newStatus = $request->input('status');
 
-            if ($newStatus === 'published' && $oldStatus === 'draft') {
+            if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
                 if (! $user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
@@ -152,8 +154,20 @@ class JobController extends Controller
                 }
 
                 $subscription->decrement('quota_left', 1);
-                $newStatus = 'pending';
+
             }
+            $category = Category::where('uuid', $request->category_id)->first();
+            $state = Location::where('uuid', $request->state_id)->first();
+            $city = Location::where('uuid', $request->city_id)->first();
+
+            $request->merge([
+                'category_id' => $category->id,
+                'state_id' => $state->id ?? null,
+                'city_id' => $city->id ?? null,
+                'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+                'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+                'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
+            ]);
             $job->update($request->all());
 
             return new JobResource($job);

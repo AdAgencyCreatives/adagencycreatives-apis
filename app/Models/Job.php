@@ -15,19 +15,19 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function searchableAs(): string
-    {
-        return 'jobs_index';
-    }
+    // public function searchableAs(): string
+    // {
+    //     return 'jobs_index';
+    // }
 
-    public function toSearchableArray()
-    {
-        return [
-            'title' => $this->title,
-            'description' => $this->description,
-            'employment_type' => $this->employment_type,
-        ];
-    }
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'title' => $this->title,
+    //         'description' => $this->description,
+    //         'employment_type' => $this->employment_type,
+    //     ];
+    // }
 
     protected $table = 'job_posts';
 
