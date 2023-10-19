@@ -212,7 +212,9 @@
             fetchMedias();
             fetchStrengthsForJobs();
 
-            var job_state = "{{ $job->state->uuid }}";
+
+            var job_state = "{{ $job->state?->uuid }}";
+            console.log(job_state);
             fetchStates(job_state);
 
             var years_of_experience = "{{ $job->years_of_experience }}";
@@ -275,7 +277,7 @@
 
             $('#state').on('change', function() {
                 var selectedStateId = $(this).val();
-                var city_id = "{{ $job->city->uuid }}";
+                var city_id = "{{ $job->city?->uuid }}";
                 getCitiesByState(selectedStateId, city_id);
             });
 
