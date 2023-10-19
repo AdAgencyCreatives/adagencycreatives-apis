@@ -161,7 +161,7 @@ class JobController extends Controller
             $city = Location::where('uuid', $request->city_id)->first();
 
             $request->merge([
-                'category_id' => $category->id,
+                'category_id' => $category->id ?? null,
                 'state_id' => $state->id ?? null,
                 'city_id' => $city->id ?? null,
                 'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
