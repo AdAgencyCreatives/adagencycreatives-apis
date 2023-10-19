@@ -26,6 +26,7 @@ use App\Models\Group;
 use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
+use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
@@ -217,6 +218,7 @@ Route::get('get_uuids', function () {
     $city = Location::find(34)->uuid;
     $industry_experience = Industry::find(5)->uuid;
     $media_experience = Media::find(5)->uuid;
+    $character_strengths = Strength::find(5)->uuid;
 
     $jsonObject = [
         'user_id' => $agency_user,
@@ -229,6 +231,9 @@ Route::get('get_uuids', function () {
         ],
         'media_experience' => [
             $media_experience,
+        ],
+        'character_strength' => [
+            $character_strengths,
         ],
 
     ];
