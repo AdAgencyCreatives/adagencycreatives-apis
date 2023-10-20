@@ -161,9 +161,14 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function subscription()
+    public function active_subscription()
     {
-        return $this->hasOne(Subscription::class)->latestOfMany();
+        return $this->hasOne(Subscription::class)->where('quota_left', '>', 0)->latestOfMany();
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     public function posts()

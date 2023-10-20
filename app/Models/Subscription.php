@@ -17,4 +17,9 @@ class Subscription extends Model
         'quota_left',
         'ends_at',
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'name', 'slug');
+    }
 }

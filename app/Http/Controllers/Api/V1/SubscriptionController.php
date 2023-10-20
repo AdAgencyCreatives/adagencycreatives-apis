@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Subscription\AllPackagesCollection;
 use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Plan;
@@ -16,9 +17,9 @@ class SubscriptionController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $subscriptions = $user->subscriptions()->get();
+        $subscriptions = $user->subscriptions()->with('plan')->get();
 
-        return $subscriptions;
+        return new AllPackagesCollection($subscriptions);
     }
 
     public function show(Plan $plan, Request $request)
@@ -96,9 +97,9 @@ class SubscriptionController extends Controller
     public function status(Request $request)
     {
         $user = $request->user();
-        $subscription = $user->subscription;
 
-        if ($user->subscription) {
+        $subscription = $user->active_subscription;
+        if ($subscription) {
             return new SubscriptionResource($subscription);
         } else {
             return response()->json([], 404);
@@ -121,6 +122,7 @@ class SubscriptionController extends Controller
             $total_amount_of_package = $data['object']['amount_subtotal'];
             $total_amount_of_package = $total_amount_of_package / 100;
             $current_paid_amount = $data['object']['amount_total']; // This can be discounted amount if user used coupon
+            $current_paid_amount = $current_paid_amount / 100; // This can be discounted amount if user used coupon
 
             $user = User::whereEmail($email)->first();
             $plan = Plan::where('price', $total_amount_of_package)->first();
@@ -128,7 +130,7 @@ class SubscriptionController extends Controller
             $totalQuota = $plan->quota;
             $endDate = Carbon::now()->addDays($plan->days);
 
-            $user->subscription()->create([
+            $user->subscriptions()->create([
                 'name' => $plan->slug,
                 'price' => $current_paid_amount,
                 'quantity' => $totalQuota,

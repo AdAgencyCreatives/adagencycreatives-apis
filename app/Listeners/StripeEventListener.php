@@ -26,6 +26,7 @@ class StripeEventListener
             $total_amount_of_package = $data['object']['amount_subtotal'];
             $total_amount_of_package = $total_amount_of_package / 100;
             $current_paid_amount = $data['object']['amount_total']; // This can be discounted amount if user used coupon
+            $current_paid_amount = $current_paid_amount / 100; // This can be discounted amount if user used coupon
 
             $user = User::whereEmail($email)->first();
             $plan = Plan::where('price', $total_amount_of_package)->first();
@@ -33,7 +34,7 @@ class StripeEventListener
             $totalQuota = $plan->quota;
             $endDate = Carbon::now()->addDays($plan->days);
 
-            $user->subscription()->create([
+            $user->subscriptions()->create([
                 'name' => $plan->slug,
                 'price' => $current_paid_amount,
                 'quantity' => $totalQuota,
