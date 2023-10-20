@@ -100,12 +100,8 @@ class SubscriptionController extends Controller
             return new SubscriptionResource($subscription);
         }
         else{
-            return response()->json([
-                'message' => 'No subscription found',
-            ]);
+            return response()->json([], 404);
         }
-
-
     }
 
     public function packages()
