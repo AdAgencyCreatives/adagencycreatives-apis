@@ -17,6 +17,7 @@ class StripeEventListener
     public function handle(WebhookReceived $event)
     {
         if ($event->payload['type'] === 'checkout.session.completed') {
+
             $data = $event->payload['data'];
             $email = $data['object']['customer_details']['email'];
             $amount = $data['object']['amount_total'];
@@ -27,7 +28,7 @@ class StripeEventListener
 
             $order = $user->orders()->create([
                 'plan_id' => $plan->id,
-                'amount' => $amount, //Amount from API response, it can be discounted price if user used any coupons
+                'amount' => $amount, //Amount from API response, it can be discounted price if user used any coupon code
             ]);
 
             $data = [
