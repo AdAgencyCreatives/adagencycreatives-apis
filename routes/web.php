@@ -198,7 +198,7 @@ Route::resource('plans', PlanController::class);
 Route::view('/pricing', 'pricing');
 Route::view('/subscription', 'subscription');
 Route::post('subscription', [PlanController::class, 'subscription'])->name('subscription.create');
-Route::post('stripe/webhook2', [SubscriptionController::class, 'webhook2'])->name('stripe.webhook');
+Route::post('stripe/webhook2', [SubscriptionController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('test-web', [WebSocketController::class, 'index']);
 
