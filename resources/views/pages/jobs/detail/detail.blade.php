@@ -507,7 +507,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="external_link"> Expernal Link </label>
                                     <a>
-                                        <input id="external_link" class="form-control" type="url"
+                                        <input id="external_link" class="form-control" type="text"
                                             name="external_link" value="{{ $job->external_link }}" />
                                     </a>
                                 </div>
