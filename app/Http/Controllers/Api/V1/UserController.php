@@ -203,6 +203,30 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function update_password(Request $request)
+    {
+        $request->validate([
+        'old_password' => 'required',
+        'password' => 'required|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        $custom_wp_hasher = new PasswordHash(8, true);
+
+        if (! $custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
+            return response()->json(['message' => 'Incorrect old password'], 401);
+        }
+
+        // Update the user's password using your custom password hashing method
+        $user->password = $custom_wp_hasher->HashPassword($request->input('password'));
+        $user->save();
+
+        return response()->json(['message' => 'Password updated successfully'], 200);
+
+
+    }
+
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
