@@ -206,8 +206,8 @@ class UserController extends Controller
     public function update_password(Request $request)
     {
         $request->validate([
-        'old_password' => 'required',
-        'password' => 'required|confirmed',
+            'old_password' => 'required',
+            'password' => 'required|confirmed',
         ]);
 
         $user = auth()->user();
@@ -223,7 +223,6 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Password updated successfully'], 200);
-
 
     }
 

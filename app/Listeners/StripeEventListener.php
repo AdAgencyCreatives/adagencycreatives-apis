@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Jobs\SendEmailJob;
 use App\Models\Plan;
 use App\Models\User;
+use Carbon\Carbon;
 use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeEventListener
@@ -19,23 +20,37 @@ class StripeEventListener
         if ($event->payload['type'] === 'checkout.session.completed') {
 
             $data = $event->payload['data'];
+            app('log')->channel('stripe_payments')->info($data);
+
             $email = $data['object']['customer_details']['email'];
-            $amount = $data['object']['amount_total'];
-            $metadata = $data['object']['metadata']['plan'] ?? null;
+            $total_amount_of_package = $data['object']['amount_subtotal'];
+            $total_amount_of_package = $total_amount_of_package / 100;
+            $current_paid_amount = $data['object']['amount_total']; // This can be discounted amount if user used coupon
 
             $user = User::whereEmail($email)->first();
-            $plan = Plan::where('slug', $metadata)->first();
+            $plan = Plan::where('price', $total_amount_of_package)->first();
+
+            $totalQuota = $plan->quota;
+            $endDate = Carbon::now()->addDays($plan->days);
+
+            $user->subscription()->create([
+                'name' => $plan->slug,
+                'price' => $current_paid_amount,
+                'quantity' => $totalQuota,
+                'quota_left' => $totalQuota,
+                'ends_at' => $endDate,
+            ]);
 
             $order = $user->orders()->create([
                 'plan_id' => $plan->id,
-                'amount' => $amount, //Amount from API response, it can be discounted price if user used any coupon code
+                'amount' => $current_paid_amount, //Amount from API response, it can be discounted price if user used any coupon code
             ]);
 
             $data = [
                 'order_no' => $order->id,
                 'username' => $user->first_name.' '.$user->last_name,
                 'email' => $user->email,
-                'total' => $plan->price,
+                'total' => $current_paid_amount,
                 'pm_type' => '',
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];

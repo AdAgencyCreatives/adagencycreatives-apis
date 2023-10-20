@@ -9,14 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Stripe\Subscription as StripeSubscription;
 
 class User extends Authenticatable
 {
-    use Billable;
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
@@ -166,7 +163,7 @@ class User extends Authenticatable
 
     public function subscription()
     {
-        return $this->hasOne(StripeSubscription::class);
+        return $this->hasOne(Subscription::class)->latestOfMany();
     }
 
     public function posts()
