@@ -96,8 +96,15 @@ class SubscriptionController extends Controller
     {
         $user = $request->user();
         $subscription = $user->subscriptions()->select('name', 'quota_left', 'ends_at')->latest()->first();
+        if($subscription){
+            return new SubscriptionResource($subscription);
+        }
+        else{
+            return response()->json([
+                'message' => 'No subscription found',
+            ]);
+        }
 
-        return new SubscriptionResource($subscription);
 
     }
 

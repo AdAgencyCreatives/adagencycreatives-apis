@@ -30,7 +30,10 @@ class PostController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        $posts = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $posts = $query
+            ->withCount('comments')
+            ->withCount('likes')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new PostCollection($posts);
     }

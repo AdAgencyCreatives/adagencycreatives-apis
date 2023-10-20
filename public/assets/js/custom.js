@@ -329,7 +329,7 @@ function fetchCategories() {
 
 function fetchIndustries() {
     $.ajax({
-        url: '/api/v1/industry-experiences',
+        url: '/api/v1/get_industry-experiences',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -343,7 +343,7 @@ function fetchIndustries() {
 
 function fetchMedias() {
     $.ajax({
-        url: '/api/v1/media-experiences',
+        url: '/api/v1/get_media-experiences',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
