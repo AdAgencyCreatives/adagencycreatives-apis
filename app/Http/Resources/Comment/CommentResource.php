@@ -28,9 +28,9 @@ class CommentResource extends JsonResource
     {
         $image = null;
         if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath() . $user->profile_picture->path : null;
+            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : null;
         } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath() . $user->agency_logo->path : null;
+            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null;
         }
 
         return $image;

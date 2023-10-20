@@ -89,7 +89,7 @@ class JobController extends Controller
         $request->merge([
             'category_id' => $category->id,
             'address_id' => 5,
-             'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
             'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
             'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 10)).'',
             'state_id' => $state->id ?? $job->state_id,

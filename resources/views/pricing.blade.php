@@ -61,7 +61,7 @@
                                         </li>
                                     </ul>
                                     <div class="mt-auto">
-                                        <a href="{{ route('plans.show', 'multiple-creative-jobs') }}"
+                                        <a href="https://buy.stripe.com/test_7sI8xk6zM6OE4eY6ot?prefilled_email={{ auth()->user()->email }}"
                                             class="btn btn-lg btn-primary">Buy</a>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                         </li>
                                     </ul>
                                     <div class="mt-auto">
-                                        <a href="{{ route('plans.show', 'premium-creative-jobs') }}"
+                                        <a href="https://buy.stripe.com/test_00g00O2jwflafXG148?prefilled_email={{ auth()->user()->email }}"
                                             class="btn btn-lg btn-outline-primary">Buy</a>
                                     </div>
                                 </div>

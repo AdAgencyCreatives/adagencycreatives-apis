@@ -118,8 +118,9 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        'stripe' => [
-            'path' => storage_path('logs/stripe.log'),
+        'stripe_payments' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/stripe_payments.log'),
         ],
     ],
 

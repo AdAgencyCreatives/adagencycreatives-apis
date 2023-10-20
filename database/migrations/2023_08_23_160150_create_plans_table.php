@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('stripe_plan');
-            $table->string('price');
+            $table->integer('price');
             $table->string('description');
             $table->integer('quota');
             $table->integer('days');

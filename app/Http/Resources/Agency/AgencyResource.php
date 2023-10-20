@@ -56,7 +56,7 @@ class AgencyResource extends JsonResource
         ] : null;
     }
 
-        public function generate_seo()
+    public function generate_seo()
     {
         $site_name = settings('site_name');
         $separator = settings('separator');

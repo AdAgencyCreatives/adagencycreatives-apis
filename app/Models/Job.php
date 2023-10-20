@@ -249,17 +249,15 @@ class Job extends Model
                 ];
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
 
-
-
             }
 
             if ($job->slug == null) {
-                    $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
-                    $job->slug = Str::slug($slug);
-                    $job->seo_title = settings('job_title');
-                    $job->seo_description = settings('job_description');
-                    $job->save();
-                }
+                $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
+                $job->slug = Str::slug($slug);
+                $job->seo_title = settings('job_title');
+                $job->seo_description = settings('job_description');
+                $job->save();
+            }
 
         });
 

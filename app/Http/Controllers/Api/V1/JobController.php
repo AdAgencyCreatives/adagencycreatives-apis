@@ -145,16 +145,14 @@ class JobController extends Controller
                 }
 
                 $subscription = Subscription::where('user_id', $user->id)
-                    ->where('stripe_status', 'active')
                     ->where('quota_left', '>', 0)
-                    ->first();
+                    ->latest();
 
                 if (! $subscription) {
                     return ApiResponse::error("You don't have enough quota for this job", 402);
                 }
 
                 $subscription->decrement('quota_left', 1);
-
             }
             $category = Category::where('uuid', $request->category_id)->first();
             $state = Location::where('uuid', $request->state_id)->first();
