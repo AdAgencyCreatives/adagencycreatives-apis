@@ -32,93 +32,93 @@ class ImportAttachments extends Command
 
         $count = 1;
         dump('Agency');
-        // foreach ($agenciesData as $agencyData) {
-        //     if ($count < $startIndex) {
-        //         $count++;
+        foreach ($agenciesData as $agencyData) {
+            if ($count < $startIndex) {
+                $count++;
 
-        //         continue; // Skip this image if already processed
-        //     }
+                continue; // Skip this image if already processed
+            }
 
-        //     $authorEmail1 = $agencyData['post_meta']['_employer_email'][0];
-        //     $authorEmail2 = $agencyData['author_email'];
+            $authorEmail1 = $agencyData['post_meta']['_employer_email'][0];
+            $authorEmail2 = $agencyData['author_email'];
 
-        //     $user = User::where('email', $authorEmail1)->first();
-        //     if (! $user) {
-        //         $user = User::where('email', $authorEmail2)->first();
-        //     }
-        //     if (! $user) {
-        //         continue;
-        //     }
+            $user = User::where('email', $authorEmail1)->first();
+            if (! $user) {
+                $user = User::where('email', $authorEmail2)->first();
+            }
+            if (! $user) {
+                continue;
+            }
 
-        //     dump(sprintf('User ID: %d', $user->id));
+            dump(sprintf('User ID: %d', $user->id));
 
-        //     if (isset($agencyData['post_meta']['_employer_featured_image'][0])) {
-        //         $featured_img = $agencyData['post_meta']['_employer_featured_image'][0];
+            if (isset($agencyData['post_meta']['_employer_featured_image'][0])) {
+                $featured_img = $agencyData['post_meta']['_employer_featured_image'][0];
 
-        //         $this->storeAttachment($featured_img, $user->id, 'agency_logo');
-        //         echo sprintf("<img src='%s'/>", $featured_img);
-        //         echo "</br>" . $count;
-        //         $count++;
-        //     }
+                $this->storeAttachment($featured_img, $user->id, 'agency_logo');
+                echo sprintf("<img src='%s'/>", $featured_img);
+                echo "</br>" . $count;
+                $count++;
+            }
 
-        // }
+        }
 
         $jsonFilePath = public_path('export/creatives.json');
         $jsonContents = file_get_contents($jsonFilePath);
         $creativesData = json_decode($jsonContents, true);
 
         dump('Creative');
-        // foreach ($creativesData as $creativeData) {
-        //     if ($count < $startIndex) {
-        //         $count++;
+        foreach ($creativesData as $creativeData) {
+            if ($count < $startIndex) {
+                $count++;
 
-        //         continue; // Skip this image if already processed
-        //     }
+                continue; // Skip this image if already processed
+            }
 
-        //     $authorEmail1 = $creativeData['post_meta']['_candidate_email'][0];
-        //     $authorEmail2 = $creativeData['author_email'];
+            $authorEmail1 = $creativeData['post_meta']['_candidate_email'][0];
+            $authorEmail2 = $creativeData['author_email'];
 
-        //     $user = User::where('email', $authorEmail1)->first();
-        //     if (! $user) {
-        //         $user = User::where('email', $authorEmail2)->first();
-        //     }
-        //     if (! $user) {
-        //         continue;
-        //     }
+            $user = User::where('email', $authorEmail1)->first();
+            if (! $user) {
+                $user = User::where('email', $authorEmail2)->first();
+            }
+            if (! $user) {
+                continue;
+            }
 
-        //     dump(sprintf('User ID: %d', $user->id));
-        //     if (isset($creativeData['post_meta']['_candidate_featured_image'][0])) {
-        //         $featured_img = $creativeData['post_meta']['_candidate_featured_image'][0];
+            dump(sprintf('User ID: %d', $user->id));
+            if (isset($creativeData['post_meta']['_candidate_featured_image'][0])) {
+                $featured_img = $creativeData['post_meta']['_candidate_featured_image'][0];
 
-        //         $this->storeAttachment($featured_img, $user->id, 'profile_picture');
-        //         echo sprintf("<img src='%s'/>", $featured_img);
-        //         echo "</br>" . $count;
-        //         $count++;
-        //     }
+                $this->storeAttachment($featured_img, $user->id, 'profile_picture');
+                echo sprintf("<img src='%s'/>", $featured_img);
+                echo "</br>" . $count;
+                $count++;
+            }
 
-        //     if (isset($creativeData['post_meta']['_candidate_cv_attachment'][0])) {
-        //         $cvs = unserialize($creativeData['post_meta']['_candidate_cv_attachment'][0]);
-        //         foreach ($cvs as $cv) {
-        //             $this->storeAttachment($cv, $user->id, 'resume');
-        //             echo sprintf('%s', $cv);
-        //         }
-        //         echo "</br>" . $count;
-        //         $count++;
-        //     }
+            if (isset($creativeData['post_meta']['_candidate_cv_attachment'][0])) {
+                $cvs = unserialize($creativeData['post_meta']['_candidate_cv_attachment'][0]);
+                foreach ($cvs as $cv) {
+                    $this->storeAttachment($cv, $user->id, 'resume');
+                    echo sprintf('%s', $cv);
+                }
+                echo "</br>" . $count;
+                $count++;
+            }
 
-        //     if (isset($creativeData['post_meta']['_candidate_portfolio_photos'][0])) {
+            if (isset($creativeData['post_meta']['_candidate_portfolio_photos'][0])) {
 
-        //         $portfolio_photos = unserialize($creativeData['post_meta']['_candidate_portfolio_photos'][0]);
-        //         foreach ($portfolio_photos as $portfolio_photo) {
+                $portfolio_photos = unserialize($creativeData['post_meta']['_candidate_portfolio_photos'][0]);
+                foreach ($portfolio_photos as $portfolio_photo) {
 
-        //             $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
-        //             echo sprintf("<img src='%s'/>", $portfolio_photo);
-        //         }
-        //         echo "</br>" . $count;
-        //         $count++;
-        //     }
+                    $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
+                    echo sprintf("<img src='%s'/>", $portfolio_photo);
+                }
+                echo "</br>" . $count;
+                $count++;
+            }
 
-        // }
+        }
 
         $jsonFilePath = public_path('export/spotlights.json');
         $jsonContents = file_get_contents($jsonFilePath);
