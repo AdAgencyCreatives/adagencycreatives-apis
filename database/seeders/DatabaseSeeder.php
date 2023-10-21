@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Agency::factory()->create($data_user_id);
 
-            \App\Models\Message::factory(50)->create(['sender_id' => $user->id]);
+            \App\Models\Message::factory(5)->create(['sender_id' => $user->id]);
 
             $addresses = \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'business']));
 

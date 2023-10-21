@@ -13,12 +13,20 @@ use App\Models\Note;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class NoteController extends Controller
 {
     public function index()
     {
-        $notes = Note::paginate(config('global.request.pagination_limit'));
+         $query = QueryBuilder::for(Note::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('application_id'),
+            ]);
+
+        $notes = $query->paginate(config('global.request.pagination_limit'));
 
         return new NoteCollection($notes);
     }

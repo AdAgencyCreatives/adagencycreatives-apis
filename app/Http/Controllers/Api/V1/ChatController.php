@@ -17,9 +17,9 @@ class ChatController extends Controller
 {
     public function index(Request $request, $contactId)
     {
-
         $contact = User::where('uuid', $contactId)->firstOrFail();
         $contact_id = $contact->id;
+
         $userId = request()->user()->id;
 
         $messages = Message::where(function ($query) use ($userId, $contact_id) {
@@ -56,9 +56,17 @@ class ChatController extends Controller
                 'message' => $request->message,
             ]);
 
+            //Mark previous messages as read
+            Message::where('receiver_id', $receiver->id)
+                ->where('sender_id', $sender->id )
+                ->whereNull('read_at')
+                ->update(['read_at' => now()]);
+
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message);
             event(new MessageReceived($event_data));
+
+
 
             return $msg_resource;
         } catch (\Exception $e) {
@@ -66,7 +74,7 @@ class ChatController extends Controller
         }
     }
 
-    public function getAllMessageContacts()
+    public function getAllMessageContacts() // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
 

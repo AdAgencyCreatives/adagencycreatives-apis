@@ -78,10 +78,9 @@ class Application extends Model
 
     public function scopeUserId(Builder $query, $user_id)
     {
-        $user = User::where('uuid', $user_id)->first();
-        if ($user) {
-            return $query->where('user_id', $user->id);
-        }
+        $user = User::where('uuid', $user_id)->firstOrFail();
+        return $query->where('user_id', $user->id);
+
     }
 
     public function scopeJobId(Builder $query, $job_id)

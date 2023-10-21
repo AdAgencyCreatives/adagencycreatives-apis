@@ -37,15 +37,16 @@ class ApplicationController extends Controller
     {
         $user = User::where('uuid', $request->user_id)->first();
         $job = Job::where('uuid', $request->job_id)->first();
-        $attachment = Attachment::where('uuid', $request->resume_id)->first();
+        // $attachment = Attachment::where('uuid', $request->resume_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'job_id' => $job->id,
-            'attachment_id' => $attachment->id,
+            // 'attachment_id' => $attachment->id,
             'status' => 0,
         ]);
+
         try {
             $application = Application::create($request->all());
 
