@@ -19,7 +19,7 @@ class TestUserSeeder extends Seeder
         /**
          * Creative User
          */
-        $creative_user_id = 15;
+        $creative_user_id = 9;
         User::where('id', $creative_user_id)->update([
             'first_name' => 'TEST',
             'last_name' => 'CREATIVE',
@@ -49,7 +49,7 @@ class TestUserSeeder extends Seeder
             'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3b',
             'user_id' => $creative_user_id,
             'resource_type' => 'profile_picture',
-            'path' => 'profile_picture/41b9d69d-2f04-47fc-8735-2705591ecf3b/uZVJwdVoB6num2hPqhI097I2BTfj9OVJiC9HKIY8.jpg',
+            'path' => 'profile_picture/ef6a4047-db36-4879-b376-299aeec38fa7/6go1bM7kDfrwdcw5lvKIOqng7XketnjZfmR64GKt.jpg',
             'name' => 'avatar.jpg',
             'extension' => 'jpg',
         ]);
@@ -57,7 +57,7 @@ class TestUserSeeder extends Seeder
         /**
          * Agency User
          */
-        $agency_user_id = 9;
+        $agency_user_id = 15;
         User::where('id', $agency_user_id)->update([
             'email' => 'agency@gmail.com',
             'role' => 3,
@@ -78,7 +78,7 @@ class TestUserSeeder extends Seeder
             'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3c',
             'user_id' => $agency_user_id,
             'resource_type' => 'agency_logo',
-            'path' => 'agency_logo/540c079d-0344-413f-b25e-dd12c3695a33/w6MGkMCmtQj4vUBzeEmtMQZkI9o1R4pIK5yBQNkY.png',
+            'path' => 'agency_logo/38147c51-7017-4d3b-a91b-f497e9bb7ae3/OX9ZBp2WvkcUnmA7s3Uugn19cU2I4ofEIBa6YYLV.png',
             'name' => 'unnamed (2).png',
             'extension' => 'png',
         ]);

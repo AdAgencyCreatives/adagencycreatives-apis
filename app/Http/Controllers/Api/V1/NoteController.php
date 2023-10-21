@@ -20,7 +20,7 @@ class NoteController extends Controller
 {
     public function index()
     {
-         $query = QueryBuilder::for(Note::class)
+        $query = QueryBuilder::for(Note::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('application_id'),

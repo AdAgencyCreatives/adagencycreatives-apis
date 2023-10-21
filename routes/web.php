@@ -44,9 +44,7 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 | contains the "web" middleware group. Now create something great!
 |
  */
-Route::get('/phpinfo', function () {
-    dd(Hash::make('password'));
-});
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -189,6 +187,15 @@ Route::group(['middleware' => ['auth']], function () {
          */
         Route::post('image/store', [PageController::class, 'store_img'])->name('image.store');
         Route::resource('pages', PageController::class);
+
+        /**
+         * Import Attachments from WP
+         */
+        Route::get('/import-attachments', function () {
+            $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
+            Artisan::call('import:attachments', ['startIndex' => $startIndex, 'limit' => $limit]);
+        });
 
     });
 

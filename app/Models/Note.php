@@ -30,12 +30,14 @@ class Note extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopeApplicationId(Builder $query, $app_id)
     {
         $application = Application::where('uuid', $app_id)->firstOrFail();
+
         return $query->where('application_id', $application->id);
     }
 }

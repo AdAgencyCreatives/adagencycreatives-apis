@@ -58,6 +58,13 @@ class Creative extends Model
         return $query->where('user_id', $user->id);
     }
 
+    public function scopeEmail(Builder $query, $email)
+    {
+        $user = User::where('email', $email)->first();
+
+        return $query->where('user_id', $user->id);
+    }
+
     public function scopeName(Builder $query, $name)
     {
         $user_ids = User::where('first_name', 'LIKE', "%$name%")->orWhere('last_name', 'LIKE', "%$name%")->pluck('id');

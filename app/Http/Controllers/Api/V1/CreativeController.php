@@ -28,6 +28,7 @@ class CreativeController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('years_of_experience_id'),
                 AllowedFilter::scope('name'),
+                AllowedFilter::scope('email'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),

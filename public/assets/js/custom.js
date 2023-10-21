@@ -250,7 +250,7 @@ function populateUserFilter(users, div_id, count_key_name) {
         var userCount = user[count_key_name];
         var option = $('<option>', {
             value: user.uuid,
-            text: user.first_name + ' ' + user.last_name + ' -' + user.role + ' (' + userCount + ')'
+            text: user.first_name + ' ' + user.last_name + ' - ' + user.email + ' - ' + user.role + ' (' + userCount + ')'
         });
 
         selectElement.append(option);
