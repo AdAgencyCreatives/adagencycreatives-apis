@@ -45,6 +45,7 @@ class CreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $user->personal_phone ? $user->personal_phone->phone_number : null,
             'location' => $this->location,
+            'resume' => $this->get_resume($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -56,6 +57,11 @@ class CreativeResource extends JsonResource
     public function get_profile_image($user)
     {
         return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : null;
+    }
+
+    public function get_resume($user)
+    {
+        return isset($user->resume) ? getAttachmentBasePath().$user->resume->path : null;
     }
 
     public function get_location($user)

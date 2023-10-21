@@ -247,7 +247,7 @@ class UserController extends Controller
     {
         $cacheKey = 'all_users_with_attachments';
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'email', 'role', 'is_visible')
                 ->where('role', '!=', 1)
                 ->whereHas('attachments')
                 ->withCount('attachments')

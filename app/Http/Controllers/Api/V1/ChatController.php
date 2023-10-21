@@ -58,15 +58,13 @@ class ChatController extends Controller
 
             //Mark previous messages as read
             Message::where('receiver_id', $receiver->id)
-                ->where('sender_id', $sender->id )
+                ->where('sender_id', $sender->id)
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
 
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message);
             event(new MessageReceived($event_data));
-
-
 
             return $msg_resource;
         } catch (\Exception $e) {

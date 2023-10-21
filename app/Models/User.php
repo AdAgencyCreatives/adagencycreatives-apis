@@ -126,9 +126,14 @@ class User extends Authenticatable
         return $this->hasMany(Attachment::class);
     }
 
+    // public function resume()
+    // {
+    //     return $this->hasOne(Resume::class);
+    // }
+
     public function resume()
     {
-        return $this->hasOne(Resume::class);
+        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latestOfMany();
     }
 
     public function educations()

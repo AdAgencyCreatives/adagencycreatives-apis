@@ -200,11 +200,71 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Update Password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "CSRF-TOKEN",
+										"value": "F9QtLNzB2J2BurHtdVVDmwqjQcGkG7BtFrDKKioP",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "ad_agency_creatives_session",
+										"value": "eyJpdiI6IldxdnZHR1huUWxsWVlTY2gwMFYrdkE9PSIsInZhbHVlIjoiLzBJaXZHVTRrVDVwb1Y5SmxuK3JnWHZOd3hyS1Vob280c21tbzl5RHQ1eFc5LzBHTnBFbzhHdTNKOG1sQkQ4RVpzR1A3MmdXR2xVT0plM3dnQlZGMGVuck0wbUFsb1UwWktjQks0dFJiTmhzaDdYdStpU241c2h3KzFpd2pNcGUiLCJtYWMiOiI0NDM2MzM5NTllZmNmNTFmMzQyMWMwMGY0NjY5MTI2ZTE2Y2JlMjEzM2ViMGM0MTQ1NjU0ZWU5MjUzNGFkZDdkIiwidGFnIjoiIn0%3D",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"old_password\": \"password\",\r\n    \"password\": \"password2\",\r\n    \"password_confirmation\": \"password2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/update_password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"update_password"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
 				{
-					"name": "users",
+					"name": "Get All Users",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -291,20 +351,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users/03c8a5eb-6232-347a-a29f-78f8413cccb1",
+							"raw": "{{BASE_URL}}/users/434e7b27-6281-3c5a-bef3-14435eb3b603",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"users",
-								"03c8a5eb-6232-347a-a29f-78f8413cccb1"
+								"434e7b27-6281-3c5a-bef3-14435eb3b603"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "users",
+					"name": "Create New User",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -324,7 +384,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "//role: agency, creative\r\n{\r\n    \"first_name\": \"Usman\",\r\n    \"last_name\": \"Arshad\",\r\n    \"email\": \"hamazaaaaa@gaamail.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"creative\",\r\n    //For Agency\r\n    \"agency_name\": \"ABC Agency\"\r\n    // \"linkedin_profile\": \"\",\r\n    //For Creatives\r\n    // \"portfolio_site\": \"\"\r\n}",
+							"raw": "//role: agency, creative\r\n{\r\n    \"first_name\": \"Usman\",\r\n    \"last_name\": \"Arshad\",\r\n    \"email\": \"usman@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"creative\",\r\n    //For Agency\r\n    // \"agency_name\": \"ABC Agency\",\r\n    // \"linkedin_profile\": \"\",\r\n    //For Creatives\r\n     \"portfolio_site\": \"abc.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -344,7 +404,7 @@
 					"response": []
 				},
 				{
-					"name": "users/{uuid}",
+					"name": "Update",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -401,6 +461,19 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"TOKEN\", jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -420,7 +493,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"email\": \"creative@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -608,7 +681,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies",
+							"raw": "{{BASE_URL}}/agencies?filter[name]=TEST_AGENCY",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -618,7 +691,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1",
+									"value": "434e7b27-6281-3c5a-bef3-14435eb3b603",
 									"disabled": true
 								},
 								{
@@ -628,95 +701,7 @@
 								},
 								{
 									"key": "filter[name]",
-									"value": "Pearl Powell",
-									"disabled": true
-								},
-								{
-									"key": "filter[state_id]",
-									"value": "f09a0dbb-de04-370b-9296-3b4c6ffbb515",
-									"disabled": true
-								},
-								{
-									"key": "filter[city_id]",
-									"value": "169143d1-3e90-3145-8825-7e35a6e786e8",
-									"disabled": true
-								},
-								{
-									"key": "filter[industry_experience]",
-									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0",
-									"disabled": true
-								},
-								{
-									"key": "filter[media_experience]",
-									"value": "59500c2f-776f-3d04-9e87-149cdeeee42f",
-									"disabled": true
-								},
-								{
-									"key": "filter[is_featured]",
-									"value": "1",
-									"disabled": true
-								},
-								{
-									"key": "filter[is_urgent]",
-									"value": "1",
-									"disabled": true
-								},
-								{
-									"key": "filter[status]",
-									"value": "1",
-									"description": "0: pending, 1: active, 2: inactive",
-									"disabled": true
-								},
-								{
-									"key": "filter[slug]",
-									"value": "sigurd17",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "agency-profile",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{BASE_URL}}/agency-profile?filter[user_id]=03c8a5eb-6232-347a-a29f-78f8413cccb1&filter[employment_type]=Internship",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"agency-profile"
-							],
-							"query": [
-								{
-									"key": "filter[user_id]",
-									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1"
-								},
-								{
-									"key": "filter[size]",
-									"value": "10",
-									"disabled": true
-								},
-								{
-									"key": "filter[employment_type]",
-									"value": "Internship"
-								},
-								{
-									"key": "filter[name]",
-									"value": "Pearl Powell",
-									"disabled": true
+									"value": "TEST_AGENCY"
 								},
 								{
 									"key": "filter[state_id]",
@@ -781,13 +766,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies/f1fcd5fd-0021-30ee-911d-2d0ab4f193c9",
+							"raw": "{{BASE_URL}}/agencies/47d935a7-2867-4def-a7f5-56cded91922e",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"agencies",
-								"f1fcd5fd-0021-30ee-911d-2d0ab4f193c9"
+								"47d935a7-2867-4def-a7f5-56cded91922e"
 							]
 						}
 					},
@@ -811,7 +796,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n{\r\n    \"user_id\": \"b1af451c-eed1-3375-b1aa-a447421931fb\",\r\n    \"name\": \"Ad Agency\",\r\n    \"about\": \"Possimus iste ut quam consequuntur atque rem. Voluptate\",\r\n    \"size\": \"10\",\r\n    \"industry_experience\": [\r\n        \"a699b404-1f42-37e6-b1bb-51cd315e4c2e\"\r\n    ], //Comma separated UUIDs\r\n    \"media_experience\": [\r\n        \"a90503c7-59a6-3218-988b-4c1203cb8325\"\r\n    ],\r\n    \"is_remote\": 1,\r\n    \"is_hybrid\": 0,\r\n    \"is_onsite\": 0,\r\n    \"is_featured\": 1,\r\n    \"is_urgent\": 1\r\n}",
+							"raw": "\r\n{\r\n    \"user_id\": \"b1af451c-eed1-3375-b1aa-a447421931fb\",\r\n    \"name\": \"Ad Agency\",\r\n    \"about\": \"Possimus iste ut quam consequuntur atque rem. Voluptate\",\r\n    \"size\": \"10\",\r\n    \"industry_experience\": [\r\n        \"a699b404-1f42-37e6-b1bb-51cd315e4c2e\"\r\n    ], //Comma separated UUIDs\r\n   \r\n    \"is_remote\": 1,\r\n    \"is_hybrid\": 0,\r\n    \"is_onsite\": 0,\r\n    \"is_featured\": 1,\r\n    \"is_urgent\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -831,7 +816,7 @@
 					"response": []
 				},
 				{
-					"name": "agencies/{uuid}",
+					"name": "agency_profile/{uuid}",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -843,7 +828,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"first_name\": \"\",\r\n    \"last_name\": \"\",\r\n    \"email\": \"\",\r\n    \"show_profile\": \"\",\r\n    \r\n    \"company_name\": \"Daigle Creative\",\r\n    \"size\": \"5-10 full time staff members\",\r\n    \"about\": \"Daigle Creative is a full-service advertising, public relations and design agency with a long track record of helping clients succeed.\",\r\n    \"slug\": \"daigle-creative\",\r\n    \"phone_number\": \"\",\r\n    \"linkedin\": \"\",\r\n    \"website\": \"\",\r\n    \"location\": {\r\n        \"state_id\": \"\",\r\n        \"city_id\": \"\"\r\n    },\r\n    \"industry_experience\": [\r\n        \"194cf417-0e28-36a8-be4e-fcfbb3f25320\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"b91cefcd-4cb0-3d13-bdbe-c6a4f6673080\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": false,\r\n    \"is_onsite\": true,\r\n}",
+							"raw": "{\r\n    \"first_name\": \"Usman\",\r\n    \"last_name\": \"Arshad\",\r\n    \"email\": \"usman@gmail.com2\",\r\n    \"show_profile\": true,\r\n    \"company_name\": \"Daigle Creative2\",\r\n    \"slug\": \"daigle-creative\",\r\n    \"size\": \"5-10 \",\r\n    \"about\": \"Daigle Creative is a full-service advertising.\",\r\n    \"phone_number\": \"+55555\",\r\n    \"linkedin\": \"www.linkedin.com\",\r\n    \"website\": \"www.company.com2\",\r\n    \"state_id\": \"bc1e94d1-ae73-3ba7-90f5-9b8b915810b3\",\r\n    \"city_id\": \"58dff4e5-c10f-3c5e-9e0c-92bb387cc533\",\r\n    \"industry_experience\": [\r\n        \"5d602fb7-5e9e-3b87-9ca8-9a0fd71e2dc2\",\r\n        \"a48a1c1c-48f8-33a2-8f10-955ecbe1dbc2\"\r\n    ],\r\n   \r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -851,13 +836,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/agency_profile/786ac74f-b785-37a6-9fdf-0848bd2524ab",
+							"raw": "{{BASE_URL}}/agency_profile/658dd542-9fc5-3e16-a3d5-ec2b7bbaef5e",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"agency_profile",
-								"786ac74f-b785-37a6-9fdf-0848bd2524ab"
+								"658dd542-9fc5-3e16-a3d5-ec2b7bbaef5e"
 							]
 						}
 					},
@@ -901,7 +886,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/creatives?filter[name]=Humberto",
+							"raw": "{{BASE_URL}}/creatives?filter[email]=mattbrinker@gmail.com",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -909,11 +894,6 @@
 								"creatives"
 							],
 							"query": [
-								{
-									"key": "filter[user_id]",
-									"value": "dd9a4e2b-cd70-4e2b-a118-83034ff4ccab",
-									"disabled": true
-								},
 								{
 									"key": "filter[years_of_experience_id]",
 									"value": "8ea2b763-fb16-3fe7-b46f-22d950a349cd",
@@ -932,7 +912,8 @@
 								},
 								{
 									"key": "filter[name]",
-									"value": "Humberto"
+									"value": "Matt",
+									"disabled": true
 								},
 								{
 									"key": "filter[state_id]",
@@ -969,6 +950,15 @@
 									"key": "filter[slug]",
 									"value": "loren95",
 									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "fbc85c73-087f-356b-b126-97f501a4df92",
+									"disabled": true
+								},
+								{
+									"key": "filter[email]",
+									"value": "mattbrinker@gmail.com"
 								}
 							]
 						}
@@ -1143,6 +1133,39 @@
 					"response": []
 				},
 				{
+					"name": "creative_profile/{uuid}",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Usman1\",\r\n    \"last_name\": \"Arshad1\",\r\n    \"username\": \"hulda63q\",\r\n    \"show_profile\": false,\r\n    \"title\": \"Advisora\",\r\n    \"category_id\": \"be6cf4d0-e001-359d-b91d-d628d1a1149d\",\r\n    \"years_of_experience\": \"Daigle Creativea\",\r\n    \"employment_type\": \"Full-Time2\",\r\n    \"about\": \"bbb\",\r\n    \"phone_number\": \"+92123456aa\",\r\n    \"linkedin\": \"www.linkedin.com_2\",\r\n    \"website\": \"www.company.com1\",\r\n    \"state_id\": \"3a143586-c184-3a8f-a2c9-f0eb0514e39b\",\r\n    \"city_id\": \"bca659b0-1992-3c16-9f2a-c0fbcfbea143\",\r\n    \"industry_experience\": [\r\n        \"92be1470-4c9c-3b14-9dc6-68cf30c7ba76\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"8026da26-bd76-315a-8a8b-552ad41fec51\"\r\n    ],\r\n    \"strength\": [\r\n        \"267e7851-705e-34a0-9170-50dba7ee25c0\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_opentorelocation\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/creative_profile/b886bac8-e2d2-3a28-8d8c-dd285055d8a5",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative_profile",
+								"b886bac8-e2d2-3a28-8d8c-dd285055d8a5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "creatives/{uuid}",
 					"request": {
 						"method": "DELETE",
@@ -1219,7 +1242,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/jobs?filter[user_id]=66175195-d903-341e-86c6-2824ea517ad3&filter[status]=1",
+							"raw": "{{BASE_URL}}/jobs?filter[category_id]=be2a287e-81a9-3681-a25e-251e18f0ed7e",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1229,13 +1252,13 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "66175195-d903-341e-86c6-2824ea517ad3"
+									"value": "66175195-d903-341e-86c6-2824ea517ad3",
+									"disabled": true
 								},
 								{
 									"key": "filter[category_id]",
-									"value": "aed8d18b-a1c8-34ce-be7c-2bdf48576120",
-									"description": "Category ID ",
-									"disabled": true
+									"value": "be2a287e-81a9-3681-a25e-251e18f0ed7e",
+									"description": "Category ID "
 								},
 								{
 									"key": "filter[title]",
@@ -1311,7 +1334,8 @@
 								{
 									"key": "filter[status]",
 									"value": "1",
-									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that."
+									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that.",
+									"disabled": true
 								},
 								{
 									"key": "filter[slug]",
@@ -1359,7 +1383,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"b852a6a2-3428-30ed-9039-dc73bf857ed3\",\r\n    \"category_id\": \"69a64f1d-ae91-3443-b79f-aa45fbf5e4a7\",\r\n    \"state_id\": \"c2b3d89e-d09c-32c1-adbf-0645c6c4f027\",\r\n    \"city_id\": \"fe74c499-0d9f-379b-af4f-b1453ce68df5\",\r\n    \"years_of_experience\": \"4163b4d9-f483-3916-8385-25bafb33e787\",\r\n    \"title\": \"Job Title 2\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Part-Time\",\r\n    \"industry_experience\": [\r\n        \"194cf417-0e28-36a8-be4e-fcfbb3f25320\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"b91cefcd-4cb0-3d13-bdbe-c6a4f6673080\"\r\n    ],\r\n    \r\n    \"salary_range\": \"$200 - $400\",\r\n    \"experience\": \"Experience\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": false,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": false,\r\n    \"expired_at\": \"2023-12-31\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"fd2b929d-3223-375c-9482-05123e5d85b1\",\r\n    \"category_id\": \"d8eefbad-2d19-3961-a83b-6c819a29d9a4\",\r\n    \"state_id\": \"ff170360-2195-3fa5-a17a-8f4d0b9fcea0\",\r\n    \"city_id\": \"e4201cd4-3520-35e7-99cf-a803d4275bdb\",\r\n    \"years_of_experience\": \"Director 10+ years\",\r\n    \"title\": \"Job Title 2\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Freelance\",\r\n    \"industry_experience\": [\r\n        \"b11b7cc7-a72f-332e-bbde-3137b634e26e\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"cad0963a-73b4-359c-864b-d024136d618f\"\r\n    ],\r\n   \r\n    \"salary_range\": \"$200 - $400\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": true,\r\n    \"expired_at\": \"2023-12-31\",\r\n\r\n     \"is_opentoremote\": true,\r\n    \"is_opentorelocation\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1396,7 +1420,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// {\r\n//     \"description\": \"Job description goes here 2\",\r\n//     \"category\": \"Category Name\",\r\n//     \"employement_type\": \"Full-time2\",\r\n//     \"industry_experience\": \"Industry Experience2\",\r\n//     \"media_experience\": \"Media Experience2\",\r\n//     \"salary_range\": \"$200 - $4002\",\r\n//     \"experience\": \"Experience\",\r\n//     \"apply_type\": \"Internal2\",\r\n//     \"external_link\": \"https://example.com2\",\r\n//     \"status\": \"\", // pending,approved,rejected,expired,filled\r\n//     \"is_remote\": false,\r\n//     \"is_hybrid\": false,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": false,\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"street_1\": \"\",\r\n//     \"street_2\": \"\",\r\n//     \"city\": \"\",\r\n//     \"state\": \"\",\r\n   \r\n//     \"country\": \"\",\r\n//     \"postal_code\": \"\"\r\n// }\r\n\r\n{\r\n    \"status\": \"published\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n// {\r\n//     \"title\": \"Job Title\",\r\n//     \"description\": \"Job description goes here ddd\",\r\n//     // \"status\": \"\",\r\n//     \"category_id\": \"d8eefbad-2d19-3961-a83b-6c819a29d9a4\",\r\n//     \"employment_type\": \"Freelance\",\r\n//     \"industry_experience\": [\r\n//         \"b11b7cc7-a72f-332e-bbde-3137b634e26e\"\r\n//     ],\r\n//     \"media_experience\": [\r\n//         \"cad0963a-73b4-359c-864b-d024136d618f\"\r\n//     ],\r\n   \r\n//     \"years_of_experience\": \"Director 10+ years\",\r\n//     \"salary_range\": \"$200 - $500\",\r\n//     \"apply_type\": \"External\",\r\n//     \"external_link\": \"https://example.com1\",\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"state_id\": \"ff170360-2195-3fa5-a17a-8f4d0b9fcea0\",\r\n//     \"city_id\": \"e4201cd4-3520-35e7-99cf-a803d4275bdb\",\r\n//     \"is_remote\": true,\r\n//     \"is_hybrid\": true,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": true,\r\n//     \"is_opentoremote\": true,\r\n//     \"is_opentorelocation\": true\r\n// }\r\n\r\n{\r\n    \"status\": \"filled\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1404,13 +1428,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/jobs/da60a9cf-717e-4ff4-a13f-9959cba5610a",
+							"raw": "{{BASE_URL}}/jobs/0bde2ca7-253b-34b1-b6ba-62a356a24a56",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"jobs",
-								"da60a9cf-717e-4ff4-a13f-9959cba5610a"
+								"0bde2ca7-253b-34b1-b6ba-62a356a24a56"
 							]
 						}
 					},
@@ -1443,9 +1467,15 @@
 					"name": "applications",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/applications?filter[user_id]=46fe500f-f656-32e5-9b5d-7fc370c0559d",
+							"raw": "{{BASE_URL}}/applications?filter[user_id]=196f25e2-8b3c-302b-9eb3-c7408bb879ec&filter[job_id]=d156b76e-9d38-49f2-bba7-8e994ba6d5b9",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1455,14 +1485,13 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "46fe500f-f656-32e5-9b5d-7fc370c0559d",
+									"value": "196f25e2-8b3c-302b-9eb3-c7408bb879ec",
 									"description": "For Creatives"
 								},
 								{
 									"key": "filter[job_id]",
-									"value": "1347162c-7eb3-349c-9bd3-7f70b4155e24",
-									"description": " For agencies",
-									"disabled": true
+									"value": "d156b76e-9d38-49f2-bba7-8e994ba6d5b9",
+									"description": " For agencies"
 								}
 							]
 						}
@@ -1505,7 +1534,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"ac2f5f14-c5ce-3b1c-8559-e351b7ed8513\",\r\n    \"job_id\": \"689232ed-8377-39d2-bcba-852e5c83088a\",\r\n    \"resume_id\": \"b5919bcb-777e-441e-b5bd-0bb8f4ef444f\",\r\n    \"message\": \"This is message in application\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"b2a3816c-ec9e-3e45-840d-557ce6ae281d\",\r\n    \"job_id\": \"d156b76e-9d38-49f2-bba7-8e994ba6d5b9\",\r\n    \"message\": \"This is message in application\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1513,13 +1542,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/applications/",
+							"raw": "{{BASE_URL}}/applications",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"applications",
-								""
+								"applications"
 							]
 						}
 					},
@@ -1540,13 +1568,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/applications/bf3b07e1-22e3-44f5-a4f6-7ea45660a808",
+							"raw": "{{BASE_URL}}/applications/18a6756a-31a5-3805-b7eb-40d86caf2160",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"applications",
-								"bf3b07e1-22e3-44f5-a4f6-7ea45660a808"
+								"18a6756a-31a5-3805-b7eb-40d86caf2160"
 							]
 						}
 					},
@@ -2240,12 +2268,22 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/notes",
+							"raw": "{{BASE_URL}}/notes?filter[user_id]=62efaa8b-04bd-3825-a1c7-70c545a5eeea&filter[application_id]=fd8f1940-1004-3bc5-8ef7-307cd3c4049c",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"notes"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "62efaa8b-04bd-3825-a1c7-70c545a5eeea"
+								},
+								{
+									"key": "filter[application_id]",
+									"value": "fd8f1940-1004-3bc5-8ef7-307cd3c4049c"
+								}
 							]
 						}
 					},
@@ -2435,7 +2473,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/attachments?filter[user_id]=86f85717-0c65-3a85-9203-43db164a7a27&filter[resource_type]=logo",
+							"raw": "{{BASE_URL}}/attachments",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2445,11 +2483,13 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "86f85717-0c65-3a85-9203-43db164a7a27"
+									"value": "55be163b-7363-3eef-b354-fb87ac17a5f2",
+									"disabled": true
 								},
 								{
 									"key": "filter[resource_type]",
-									"value": "logo"
+									"value": "logo",
+									"disabled": true
 								},
 								{
 									"key": "filter[post_id]",
@@ -2506,13 +2546,13 @@
 							"formdata": [
 								{
 									"key": "user_id",
-									"value": "03c8a5eb-6232-347a-a29f-78f8413cccb1",
+									"value": "4fdb9e8d-6071-349e-8bf5-2a9fb8d4d9d0",
 									"type": "text"
 								},
 								{
 									"key": "resource_type",
-									"value": "logo",
-									"description": "profile_picture, logo, resume,creative_spotlight, portfolio_item",
+									"value": "agency_logo",
+									"description": "profile_picture, agency_logo, resume,creative_spotlight, portfolio_item",
 									"type": "text"
 								},
 								{
@@ -2576,7 +2616,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/educations",
+							"raw": "{{BASE_URL}}/educations?filter[user_id]=89d3f97e-17e9-35ed-a383-10616bca3d93",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2586,8 +2626,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e",
-									"disabled": true
+									"value": "89d3f97e-17e9-35ed-a383-10616bca3d93"
 								}
 							]
 						}
@@ -2704,7 +2743,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/experiences",
+							"raw": "{{BASE_URL}}/experiences?filter[user_id]=89d3f97e-17e9-35ed-a383-10616bca3d93",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2714,8 +2753,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "af791ffe-e561-3b3b-bca6-b9b5a5588f6d",
-									"disabled": true
+									"value": "89d3f97e-17e9-35ed-a383-10616bca3d93"
 								}
 							]
 						}
@@ -3743,7 +3781,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/locations?filter[state_id]=b5ca41ea-7ab3-38eb-8ddb-5c529299134f&per_page=-1",
+							"raw": "{{BASE_URL}}/locations?filter[name]=Alabama&per_page=-1",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3753,12 +3791,12 @@
 							"query": [
 								{
 									"key": "filter[state_id]",
-									"value": "b5ca41ea-7ab3-38eb-8ddb-5c529299134f"
+									"value": "b5ca41ea-7ab3-38eb-8ddb-5c529299134f",
+									"disabled": true
 								},
 								{
 									"key": "filter[name]",
-									"value": "Alabama",
-									"disabled": true
+									"value": "Alabama"
 								},
 								{
 									"key": "per_page",
@@ -4091,7 +4129,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"evt_1Nxqi2B5Ooqa5ycAdp2qVdcy\",\r\n    \"object\": \"event\",\r\n    \"api_version\": \"2023-08-16\",\r\n    \"created\": 1696509077,\r\n    \"data\": {\r\n        \"object\": {\r\n            \"id\": \"cs_test_a1KHendMKwxZ8BA7obRaD2LqUlHMiu8qKlyFYnMPOoUt84U9KfKEDp1P0N\",\r\n            \"object\": \"checkout.session\",\r\n            \"after_expiration\": null,\r\n            \"allow_promotion_codes\": null,\r\n            \"amount_subtotal\": 3000,\r\n            \"amount_total\": 3000,\r\n            \"automatic_tax\": {\r\n                \"enabled\": false,\r\n                \"status\": null\r\n            },\r\n            \"billing_address_collection\": null,\r\n            \"cancel_url\": \"https://httpbin.org/post\",\r\n            \"client_reference_id\": null,\r\n            \"consent\": null,\r\n            \"consent_collection\": null,\r\n            \"created\": 1696509071,\r\n            \"currency\": \"usd\",\r\n            \"currency_conversion\": null,\r\n            \"custom_fields\": [],\r\n            \"custom_text\": {\r\n                \"shipping_address\": null,\r\n                \"submit\": null,\r\n                \"terms_of_service_acceptance\": null\r\n            },\r\n            \"customer\": \"cus_OlNSWWJybJTKaf\",\r\n            \"customer_creation\": \"always\",\r\n            \"customer_details\": {\r\n                \"address\": {\r\n                    \"city\": \"South San Francisco\",\r\n                    \"country\": \"US\",\r\n                    \"line1\": \"354 Oyster Point Blvd\",\r\n                    \"line2\": null,\r\n                    \"postal_code\": \"94080\",\r\n                    \"state\": \"CA\"\r\n                },\r\n                \"email\": \"stripe@example.com\",\r\n                \"name\": \"Jenny Rosen\",\r\n                \"phone\": null,\r\n                \"tax_exempt\": \"none\",\r\n                \"tax_ids\": []\r\n            },\r\n            \"customer_email\": null,\r\n            \"expires_at\": 1696595471,\r\n            \"invoice\": null,\r\n            \"invoice_creation\": {\r\n                \"enabled\": false,\r\n                \"invoice_data\": {\r\n                    \"account_tax_ids\": null,\r\n                    \"custom_fields\": null,\r\n                    \"description\": null,\r\n                    \"footer\": null,\r\n                    \"metadata\": {},\r\n                    \"rendering_options\": null\r\n                }\r\n            },\r\n            \"livemode\": false,\r\n            \"locale\": null,\r\n            \"metadata\": {},\r\n            \"mode\": \"payment\",\r\n            \"payment_intent\": \"pi_3NxqhvB5Ooqa5ycA1uBwpm8y\",\r\n            \"payment_link\": null,\r\n            \"payment_method_collection\": \"always\",\r\n            \"payment_method_configuration_details\": {\r\n                \"id\": \"pmc_1NxbxjB5Ooqa5ycAvV9CE7Oi\",\r\n                \"parent\": null\r\n            },\r\n            \"payment_method_options\": {},\r\n            \"payment_method_types\": [\r\n                \"card\",\r\n                \"link\",\r\n                \"cashapp\"\r\n            ],\r\n            \"payment_status\": \"paid\",\r\n            \"phone_number_collection\": {\r\n                \"enabled\": false\r\n            },\r\n            \"recovered_from\": null,\r\n            \"setup_intent\": null,\r\n            \"shipping_address_collection\": null,\r\n            \"shipping_options\": [],\r\n            \"status\": \"complete\",\r\n            \"submit_type\": null,\r\n            \"subscription\": null,\r\n            \"success_url\": \"https://httpbin.org/post\",\r\n            \"total_details\": {\r\n                \"amount_discount\": 0,\r\n                \"amount_shipping\": 0,\r\n                \"amount_tax\": 0\r\n            },\r\n            \"url\": null,\r\n            \"shipping_cost\": null,\r\n            \"shipping_details\": null\r\n        }\r\n    },\r\n    \"livemode\": false,\r\n    \"pending_webhooks\": 3,\r\n    \"request\": {\r\n        \"id\": null,\r\n        \"idempotency_key\": null\r\n    },\r\n    \"type\": \"checkout.session.completed\"\r\n}",
+							"raw": "{\r\n    \"id\": \"evt_1O3MVTB5Ooqa5ycAhb3PKZxi\",\r\n    \"object\": \"event\",\r\n    \"api_version\": \"2023-10-16\",\r\n    \"created\": 1697822946,\r\n    \"data\": {\r\n        \"object\": {\r\n            \"id\": \"cs_test_b1kLNOFuXTrkRgKJeltoCSsOL3PjpGOGi5u7VEvicqv2UyiOgjuAcEX04N\",\r\n            \"object\": \"checkout.session\",\r\n            \"after_expiration\": null,\r\n            \"allow_promotion_codes\": true,\r\n            \"amount_subtotal\": 34900,\r\n            \"amount_total\": 17900,\r\n            \"automatic_tax\": {\r\n                \"enabled\": false,\r\n                \"status\": null\r\n            },\r\n            \"billing_address_collection\": \"auto\",\r\n            \"cancel_url\": \"https://stripe.com\",\r\n            \"client_reference_id\": null,\r\n            \"client_secret\": null,\r\n            \"consent\": null,\r\n            \"consent_collection\": {\r\n                \"promotions\": \"none\",\r\n                \"terms_of_service\": \"none\"\r\n            },\r\n            \"created\": 1697822682,\r\n            \"currency\": \"usd\",\r\n            \"currency_conversion\": null,\r\n            \"custom_fields\": [],\r\n            \"custom_text\": {\r\n                \"shipping_address\": null,\r\n                \"submit\": null,\r\n                \"terms_of_service_acceptance\": null\r\n            },\r\n            \"customer\": null,\r\n            \"customer_creation\": \"if_required\",\r\n            \"customer_details\": {\r\n                \"address\": {\r\n                    \"city\": null,\r\n                    \"country\": \"PK\",\r\n                    \"line1\": null,\r\n                    \"line2\": null,\r\n                    \"postal_code\": null,\r\n                    \"state\": null\r\n                },\r\n                \"email\": \"admin@gmail.com\",\r\n                \"name\": \"Usadj sdasd\",\r\n                \"phone\": null,\r\n                \"tax_exempt\": \"none\",\r\n                \"tax_ids\": []\r\n            },\r\n            \"customer_email\": null,\r\n            \"expires_at\": 1697909081,\r\n            \"invoice\": null,\r\n            \"invoice_creation\": {\r\n                \"enabled\": false,\r\n                \"invoice_data\": {\r\n                    \"account_tax_ids\": null,\r\n                    \"custom_fields\": null,\r\n                    \"description\": null,\r\n                    \"footer\": null,\r\n                    \"metadata\": [],\r\n                    \"rendering_options\": null\r\n                }\r\n            },\r\n            \"livemode\": false,\r\n            \"locale\": \"auto\",\r\n            \"metadata\": {\r\n                \"plan\": \"post-a-creative-job\"\r\n            },\r\n            \"mode\": \"payment\",\r\n            \"payment_intent\": \"pi_3O3MVQB5Ooqa5ycA12O7lcGL\",\r\n            \"payment_link\": \"plink_1Ny3QwB5Ooqa5ycA0tttc8Ye\",\r\n            \"payment_method_collection\": \"always\",\r\n            \"payment_method_configuration_details\": {\r\n                \"id\": \"pmc_1NxbxjB5Ooqa5ycAvV9CE7Oi\",\r\n                \"parent\": null\r\n            },\r\n            \"payment_method_options\": [],\r\n            \"payment_method_types\": [\r\n                \"card\",\r\n                \"link\",\r\n                \"cashapp\"\r\n            ],\r\n            \"payment_status\": \"paid\",\r\n            \"phone_number_collection\": {\r\n                \"enabled\": false\r\n            },\r\n            \"recovered_from\": null,\r\n            \"setup_intent\": null,\r\n            \"shipping_address_collection\": null,\r\n            \"shipping_options\": [],\r\n            \"status\": \"complete\",\r\n            \"submit_type\": \"auto\",\r\n            \"subscription\": null,\r\n            \"success_url\": \"https://stripe.com\",\r\n            \"total_details\": {\r\n                \"amount_discount\": 0,\r\n                \"amount_shipping\": 0,\r\n                \"amount_tax\": 0\r\n            },\r\n            \"ui_mode\": \"hosted\",\r\n            \"url\": null,\r\n            \"shipping_cost\": null,\r\n            \"shipping_details\": null\r\n        }\r\n    },\r\n    \"livemode\": false,\r\n    \"pending_webhooks\": 1,\r\n    \"request\": {\r\n        \"id\": null,\r\n        \"idempotency_key\": null\r\n    },\r\n    \"type\": \"checkout.session.completed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4099,7 +4137,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/stripe/webhook",
+							"raw": "http://localhost:8000/stripe/webhook2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -4107,14 +4145,14 @@
 							"port": "8000",
 							"path": [
 								"stripe",
-								"webhook"
+								"webhook2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Webhook Charge Success Copy",
+					"name": "Webhook Charge Success production",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -4139,13 +4177,17 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/webhook/stripe-charge-success",
+							"raw": "http://35.173.50.140/stripe/webhook",
+							"protocol": "http",
 							"host": [
-								"{{BASE_URL}}"
+								"35",
+								"173",
+								"50",
+								"140"
 							],
 							"path": [
-								"webhook",
-								"stripe-charge-success"
+								"stripe",
+								"webhook"
 							]
 						}
 					},
@@ -4559,7 +4601,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"341c58db-5d03-3c33-ac63-157e67efbbd1\",\r\n    \"group_id\": \"48b4a935-4f1c-3a68-9ad1-510ca37b8e6a\",\r\n    \"content\": \"This is my test content for post\",\r\n    \"attachment_ids\": [\r\n        \"3069f80b-5cbb-4b20-ba4b-91ee25473167\",\r\n         \"ce24886e-e910-4519-80c4-ca61017c4b66\",\r\n          \"25b9a657-bc83-4474-bca3-361e66bc0270\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"user_id\": \"fbc85c73-087f-356b-b126-97f501a4df92\",\r\n    \"group_id\": \"4a090d73-cef8-3f25-8108-a17985bdf561\",\r\n    \"content\": \"This is my test content for post\",\r\n    \"attachment_ids\": [\r\n        \"41b9d69d-2f04-47fc-8735-2705591ecf3c\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4651,7 +4693,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/comments?filter[post_id]=17fe7afe-e32a-352b-b9fa-90a43fbde937",
+							"raw": "{{BASE_URL}}/comments?filter[post_id]=b141f9df-c1a3-3a00-b966-fb1010c245c4",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4666,7 +4708,7 @@
 								},
 								{
 									"key": "filter[post_id]",
-									"value": "17fe7afe-e32a-352b-b9fa-90a43fbde937"
+									"value": "b141f9df-c1a3-3a00-b966-fb1010c245c4"
 								},
 								{
 									"key": "sort",
@@ -4798,7 +4840,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/likes?filter[post_id]=17fe7afe-e32a-352b-b9fa-90a43fbde937",
+							"raw": "{{BASE_URL}}/likes?filter[post_id]=b141f9df-c1a3-3a00-b966-fb1010c245c4",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4813,7 +4855,7 @@
 								},
 								{
 									"key": "filter[post_id]",
-									"value": "17fe7afe-e32a-352b-b9fa-90a43fbde937"
+									"value": "b141f9df-c1a3-3a00-b966-fb1010c245c4"
 								},
 								{
 									"key": "sort",
@@ -4853,7 +4895,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"341c58db-5d03-3c33-ac63-157e67efbbd1\",\r\n    \"post_id\": \"17fe7afe-e32a-352b-b9fa-90a43fbde937\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"e50a4755-93d7-3719-be91-0ecec51a7c15\",\r\n    \"post_id\": \"b141f9df-c1a3-3a00-b966-fb1010c245c4\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5078,13 +5120,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/messages/8750d5b5-aa27-3622-9b51-2337317fee87",
+							"raw": "{{BASE_URL}}/messages/f486da6b-a34f-3bcd-859b-edc78504b449",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"messages",
-								"8750d5b5-aa27-3622-9b51-2337317fee87"
+								"f486da6b-a34f-3bcd-859b-edc78504b449"
 							],
 							"query": [
 								{
@@ -5130,7 +5172,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sender_id\": \"3d8016f5-ffa9-33fe-b429-bd05ac0c486f\",\r\n    \"receiver_id\": \"cbd6f0ce-081d-3a1e-9484-3f869f3e27be\",\r\n    \"message\": \"This is message from \"\r\n}\r\n\r\n",
+							"raw": "{\r\n    \"sender_id\": \"f2f72316-bec6-3ef8-ae88-0cb503f30b30\",\r\n    \"receiver_id\": \"f486da6b-a34f-3bcd-859b-edc78504b449\",\r\n    \"message\": \"This is message from \"\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5432,7 +5474,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "1|2iYcNH0OkaYFeSOCPiLbwhZTB3e33bex0ZQUpwqY02344df6",
+				"value": "{{TOKEN}}",
 				"type": "string"
 			}
 		]
@@ -5468,6 +5510,11 @@
 			"value": "http://35.173.50.140/api/v1",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
