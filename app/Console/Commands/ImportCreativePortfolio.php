@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ImportCreativePictures extends Command
+class ImportCreativePortfolio extends Command
 {
-    protected $signature = 'import:creatives-profiles';
-    protected $description = 'It imports only creative profile pictures';
+    protected $signature = 'import:creative-portfolio';
+    protected $description = 'It imports only creative portfolio items';
 
 
     protected function configure()
@@ -31,7 +31,7 @@ class ImportCreativePictures extends Command
         $jsonContents = file_get_contents($jsonFilePath);
         $creativesData = json_decode($jsonContents, true);
 
-        dump('Creative');
+        dump('Portfolio Photos');
         foreach ($creativesData as $key => $creativeData) {
 
             if ($key < $startIndex) {
@@ -49,27 +49,19 @@ class ImportCreativePictures extends Command
                 continue;
             }
 
-            if (isset($creativeData['post_meta']['_candidate_featured_image'][0])) {
-                dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
+            if (isset($creativeData['post_meta']['_candidate_portfolio_photos'][0])) {
+                dump(sprintf('%d - User ID: %d Email: %s',$key, $user->id, $user->email));
+                $portfolio_photos = unserialize($creativeData['post_meta']['_candidate_portfolio_photos'][0]);
+                foreach ($portfolio_photos as $portfolio_photo) {
 
-                $featured_img = $creativeData['post_meta']['_candidate_featured_image'][0];
-
-                $this->storeAttachment($featured_img, $user->id, 'profile_picture');
-                echo sprintf("<img src='%s'/>", $featured_img);
-            }
-
-            if (isset($creativeData['post_meta']['_candidate_cv_attachment'][0])) {
-                dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
-                $cvs = unserialize($creativeData['post_meta']['_candidate_cv_attachment'][0]);
-                foreach ($cvs as $cv) {
-                    $this->storeAttachment($cv, $user->id, 'resume');
-                    echo sprintf('%s', $cv);
+                    $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
+                    echo sprintf("<img src='%s'/>", $portfolio_photo);
                 }
 
-            }
+                if ($endIndex > 0 && $key >= $endIndex) {
+                    break;
+                }
 
-            if ($endIndex > 0 && $key >= $endIndex) {
-                break;
             }
 
         }
@@ -80,9 +72,10 @@ class ImportCreativePictures extends Command
         $uuid = Str::uuid();
 
         $filename = basename($url);
-        try {
-            $contents = file_get_contents($url);
-        } catch(\Exception $e) {
+        try{
+             $contents = file_get_contents($url);
+        }
+        catch(\Exception $e){
             dump($e->getMessage());
             return;
         }

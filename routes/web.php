@@ -191,22 +191,28 @@ Route::group(['middleware' => ['auth']], function () {
         /**
          * Import Attachments from WP
          */
-        Route::get('/import-attachments', function () {
-            $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
-            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
-            Artisan::call('import:attachments', ['startIndex' => $startIndex, 'limit' => $limit]);
-        });
-
         Route::get('import/agency-logos', function () {
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:agency-logos', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
-        Route::get('import/creatives-pictures', function () {
+        Route::get('import/creatives-profiles', function () {
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:creatives-profiles', ['startIndex' => $startIndex, 'limit' => $limit]);
+        });
+
+        Route::get('import/creative-spotlights', function () {
+            $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
+            Artisan::call('import:creative-spotlights', ['startIndex' => $startIndex, 'limit' => $limit]);
+        });
+
+        Route::get('import/creative-portfolio', function () {
+            $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
+            Artisan::call('import:creative-portfolio', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
     });

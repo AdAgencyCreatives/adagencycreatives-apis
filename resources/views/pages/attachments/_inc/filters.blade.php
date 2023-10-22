@@ -27,6 +27,7 @@
                                     <option value="profile_picture"> Profile Picture</option>
                                     <option value="agency_logo"> Agency Logo</option>
                                     <option value="creative_spotlight"> Creative Spotlight</option>
+                                    <option value="portfolio_item"> Portfolio Items</option>
                                     <option value="resume"> Resume</option>
                                 </select>
                             </div>
