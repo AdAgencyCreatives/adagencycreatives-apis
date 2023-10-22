@@ -76,7 +76,6 @@ class ImportCreativePictures extends Command
 
     public function storeAttachment($url, $user_id, $resource_type)
     {
-        return 0;
         $uuid = Str::uuid();
 
         $filename = basename($url);
