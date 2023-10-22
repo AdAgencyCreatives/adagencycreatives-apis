@@ -32,20 +32,15 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         Artisan::call('adagencycreatives:permission');
 
-        \App\Models\User::factory(15)->create();
+        \App\Models\User::factory(6)->create();
 
         User::where('id', '<', 5)->update(['role' => 2]);  // 2:Advisor
-        User::where('id', '>', 10)->update(['role' => 3]); // 3:Agency
+        User::where('id', 5)->update(['role' => 3]); // 3:Agency
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
             'role' => 1,
             'status' => 1,
         ]); // 1:Admin
-
-        Artisan::call('import:users');
-        Artisan::call('import:agencies');
-        Artisan::call('import:creatives');
-        Artisan::call('import:jobs');
 
         // ********************************************************
         // ******************** AGENCY USERS **********************
@@ -165,6 +160,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(TestUserSeeder::class);
+
+        Artisan::call('import:users');
+        Artisan::call('import:agencies');
+        Artisan::call('import:creatives');
+        Artisan::call('import:jobs');
 
         Artisan::call('optimize:clear');
     }

@@ -14,7 +14,7 @@ class EducationResource extends JsonResource
             'user_id' => $this->user->uuid,
             'degree' => $this->degree,
             'college' => $this->college,
-            'completed_at' => $this->completed_at ? $this->completed_at->format(config('global.datetime_format')) : null,
+            'completed_at' => $this->completed_at?->format(config('global.datetime_format')),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];

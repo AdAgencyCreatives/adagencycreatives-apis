@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Attachment;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,15 +12,14 @@ use Symfony\Component\Console\Input\InputArgument;
 class ImportCreativePortfolio extends Command
 {
     protected $signature = 'import:creative-portfolio';
-    protected $description = 'It imports only creative portfolio items';
 
+    protected $description = 'It imports only creative portfolio items';
 
     protected function configure()
     {
         $this->addArgument('startIndex', InputArgument::OPTIONAL, 'Description of startIndex argument');
         $this->addArgument('limit', InputArgument::OPTIONAL, 'Description of startIndex argument');
     }
-
 
     public function handle()
     {
@@ -50,18 +49,20 @@ class ImportCreativePortfolio extends Command
             }
 
             if (isset($creativeData['post_meta']['_candidate_portfolio_photos'][0])) {
-                dump(sprintf('%d - User ID: %d Email: %s',$key, $user->id, $user->email));
+
+                dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
+
                 $portfolio_photos = unserialize($creativeData['post_meta']['_candidate_portfolio_photos'][0]);
                 foreach ($portfolio_photos as $portfolio_photo) {
 
                     $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
+
                     echo sprintf("<img src='%s'/>", $portfolio_photo);
                 }
+            }
 
-                if ($endIndex > 0 && $key >= $endIndex) {
-                    break;
-                }
-
+            if ($endIndex > 0 && $key >= $endIndex) {
+                break;
             }
 
         }
@@ -69,19 +70,20 @@ class ImportCreativePortfolio extends Command
 
     public function storeAttachment($url, $user_id, $resource_type)
     {
+        return 0;
         $uuid = Str::uuid();
 
         $filename = basename($url);
-        try{
-             $contents = file_get_contents($url);
-        }
-        catch(\Exception $e){
+        try {
+            $contents = file_get_contents($url);
+        } catch (\Exception $e) {
             dump($e->getMessage());
+
             return;
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $folder = $resource_type . '/' . $uuid . '/' . $filename;
+        $folder = $resource_type.'/'.$uuid.'/'.$filename;
         $filePath = Storage::disk('s3')->put($folder, $contents);
 
         $attachment = Attachment::create([

@@ -26,7 +26,6 @@ class ImportAttachments extends Command
         $startIndex = $this->argument('startIndex');
         $limit = $this->argument('limit');
 
-
         $jsonFilePath = public_path('export/creatives.json');
         $jsonContents = file_get_contents($jsonFilePath);
         $creativesData = json_decode($jsonContents, true);
@@ -56,7 +55,7 @@ class ImportAttachments extends Command
 
                 $this->storeAttachment($featured_img, $user->id, 'profile_picture');
                 echo sprintf("<img src='%s'/>", $featured_img);
-                echo "</br>" . $count;
+                echo '</br>'.$count;
                 $count++;
             }
 
@@ -66,7 +65,7 @@ class ImportAttachments extends Command
                     $this->storeAttachment($cv, $user->id, 'resume');
                     echo sprintf('%s', $cv);
                 }
-                echo "</br>" . $count;
+                echo '</br>'.$count;
                 $count++;
             }
 
@@ -78,7 +77,7 @@ class ImportAttachments extends Command
                     $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
                     echo sprintf("<img src='%s'/>", $portfolio_photo);
                 }
-                echo "</br>" . $count;
+                echo '</br>'.$count;
                 $count++;
             }
 
@@ -93,6 +92,7 @@ class ImportAttachments extends Command
         foreach ($SpotlightsData as $Spotlight) {
             if ($count < $startIndex) {
                 $count++;
+
                 continue; // Skip this image if already processed
             }
 
@@ -103,14 +103,14 @@ class ImportAttachments extends Command
                 $lastName = $matches[2];
                 try {
                     $user = User::where('first_name', $firstName)
-                ->where('last_name', $lastName)
-                ->where('status', 1)->first();
+                        ->where('last_name', $lastName)
+                        ->where('status', 1)->first();
 
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     dump($firstName, $lastName);
+
                     continue;
                 }
-
 
                 dump(sprintf('User ID: %d', $user->id));
                 if (isset($Spotlight['post_meta']['enclosure'][0])) {
@@ -118,14 +118,14 @@ class ImportAttachments extends Command
                     if (preg_match('/(.+\.mp4)\s/', $spotlight_url, $matches)) {
                         $partBeforeMp4 = $matches[1];
                         $this->storeAttachment($partBeforeMp4, $user->id, 'creative_spotlight');
-                        echo sprintf("%s", $partBeforeMp4);
-                        echo "</br>" . $count;
+                        echo sprintf('%s', $partBeforeMp4);
+                        echo '</br>'.$count;
                         $count++;
                     }
                 }
 
             } else {
-                dump($post_title, "not found");
+                dump($post_title, 'not found');
             }
         }
 
@@ -137,16 +137,16 @@ class ImportAttachments extends Command
         $uuid = Str::uuid();
 
         $filename = basename($url);
-        try{
-             $contents = file_get_contents($url);
-        }
-        catch(\Exception $e){
+        try {
+            $contents = file_get_contents($url);
+        } catch (\Exception $e) {
             dump($e->getMessage());
+
             return;
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $folder = $resource_type . '/' . $uuid . '/' . $filename;
+        $folder = $resource_type.'/'.$uuid.'/'.$filename;
         $filePath = Storage::disk('s3')->put($folder, $contents);
 
         $attachment = Attachment::create([

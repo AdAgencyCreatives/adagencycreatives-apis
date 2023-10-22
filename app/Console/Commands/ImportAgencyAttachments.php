@@ -2,27 +2,24 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Attachment;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 class ImportAgencyAttachments extends Command
 {
-
     protected $signature = 'import:agency-logos';
 
     protected $description = 'It imports only agency logos';
-
 
     protected function configure()
     {
         $this->addArgument('startIndex', InputArgument::OPTIONAL, 'Description of startIndex argument');
         $this->addArgument('limit', InputArgument::OPTIONAL, 'Description of startIndex argument');
     }
-
 
     public function handle()
     {
@@ -51,7 +48,7 @@ class ImportAgencyAttachments extends Command
             }
 
             if (isset($agencyData['post_meta']['_employer_featured_image'][0])) {
-                dump(sprintf('%d - User ID: %d Email: %s',$key, $user->id, $user->email));
+                dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
 
                 $featured_img = $agencyData['post_meta']['_employer_featured_image'][0];
 
@@ -70,16 +67,16 @@ class ImportAgencyAttachments extends Command
         $uuid = Str::uuid();
 
         $filename = basename($url);
-        try{
-             $contents = file_get_contents($url);
-        }
-        catch(\Exception $e){
+        try {
+            $contents = file_get_contents($url);
+        } catch (\Exception $e) {
             dump($e->getMessage());
+
             return;
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $folder = $resource_type . '/' . $uuid . '/' . $filename;
+        $folder = $resource_type.'/'.$uuid.'/'.$filename;
         $filePath = Storage::disk('s3')->put($folder, $contents);
 
         $attachment = Attachment::create([
