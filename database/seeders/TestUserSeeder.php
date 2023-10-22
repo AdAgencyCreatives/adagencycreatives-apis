@@ -19,7 +19,7 @@ class TestUserSeeder extends Seeder
         /**
          * Creative User
          */
-        $creative_user_id = 9;
+        $creative_user_id = 6;
         User::where('id', $creative_user_id)->update([
             'first_name' => 'TEST',
             'last_name' => 'CREATIVE',
@@ -57,7 +57,7 @@ class TestUserSeeder extends Seeder
         /**
          * Agency User
          */
-        $agency_user_id = 15;
+        $agency_user_id = 5;
         User::where('id', $agency_user_id)->update([
             'email' => 'agency@gmail.com',
             'role' => 3,
