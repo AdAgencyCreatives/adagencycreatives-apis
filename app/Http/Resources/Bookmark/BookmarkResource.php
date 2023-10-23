@@ -2,19 +2,46 @@
 
 namespace App\Http\Resources\Bookmark;
 
+use App\Http\Resources\Agency\AgencyResource;
+use App\Http\Resources\Creative\CreativeResource;
+use App\Http\Resources\Job\JobResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookmarkResource extends JsonResource
 {
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
-            'resource_type' => $this->resource_type,
-            'resource_url' => '',
+            'resource_type' => $this->bookmarkable_type,
+            'resource' => $this->mapResourcePath(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
         ];
+
+        return $data;
+    }
+
+    public function mapResourcePath()
+    {
+
+        $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
+        switch ($this->bookmarkable_type) {
+            case 'App\Models\Creative':
+                // return sprintf("/creative/%s", new CreativeResource($model));
+                return new CreativeResource($model);
+
+            case 'App\Models\Agency':
+                // return sprintf("/agency/%s", $model->slug);
+                return new AgencyResource($model);
+
+            case 'App\Models\Job':
+                return new JobResource($model);
+                // return sprintf("/agency/%s", $model->slug);
+
+            default:
+                return null;
+        }
     }
 }

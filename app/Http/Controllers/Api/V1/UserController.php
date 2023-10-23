@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
@@ -36,7 +37,9 @@ class UserController extends Controller
                 'role',
                 'status',
                 'is_visible',
+                AllowedFilter::scope('company_slug'),
             ])
+
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 

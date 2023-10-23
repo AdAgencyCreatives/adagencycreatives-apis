@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\SendResetPasswordJob;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -194,6 +195,18 @@ class User extends Authenticatable
     public function receivedMessages()
     {
         return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
+
+    public function scopeCompanySlug(Builder $query, $company_slug): Builder
+    {
+        $agency = Agency::where('slug', $company_slug)->firstOrFail();
+
+        return $query->where('id', $agency->user_id);
     }
 
     public function getRoleAttribute($value)

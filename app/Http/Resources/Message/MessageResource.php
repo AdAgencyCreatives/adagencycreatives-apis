@@ -11,8 +11,8 @@ class MessageResource extends JsonResource
         $user = $request->user();
 
         return [
-            'sender_id' => $this->sender->id,
-            'receiver_id' => $this->receiver->id,
+            'sender_id' => $this->sender->uuid,
+            'receiver_id' => $this->receiver->uuid,
             'message' => $this->message,
             'type' => ($this->sender_id === $user->uuid) ? 'sent' : 'received',
             'created_at' => $this->created_at->format(config('global.datetime_format')),
