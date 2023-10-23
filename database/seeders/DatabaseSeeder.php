@@ -111,11 +111,11 @@ class DatabaseSeeder extends Seeder
                 ]
                 );
 
-                \App\Models\Bookmark::factory(1)->create([
-                    'user_id' => $user->id,
-                    'resource_id' => $jobIds[array_rand($jobIds)],
-                ]
-                );
+                // \App\Models\Bookmark::factory(1)->create([
+                //     'user_id' => $user->id,
+                //     'resource_id' => $jobIds[array_rand($jobIds)],
+                // ]
+                //);
             }
         }
 
