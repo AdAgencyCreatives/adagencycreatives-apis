@@ -20,11 +20,11 @@ class MessageCollection extends ResourceCollection
             'messages' => $this->collection->map(function ($message) {
                 return [
                     'id' => $message->id,
-                    'sender_id' => $message->sender_id,
-                    'receiver_id' => $message->receiver_id,
+                    'sender_id' => $message->sender->uuid,
+                    'receiver_id' => $message->receiver->uuid,
                     'message' => $message->message,
-                    'created_at' => $message->created_at,
                     'message_type' => $this->getMessageType($message),
+                    'created_at' => $message->created_at,
                 ];
             }),
         ];
