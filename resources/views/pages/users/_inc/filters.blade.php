@@ -71,12 +71,22 @@
                     </div>
 
                     <div class="row">
+
+                        <div class="col-sm d-none" id="agency_slug_filter">
+                            <div class="form-group">
+                                <label class="form-label" for="slug">Slug</label>
+                                <input id="agency_slug" class="form-control" type="text" name="agency_slug"
+                                    placeholder="Enter slug" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
                         <div class="col-sm mt-4">
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Search</button>
                             <button type="button" class="btn btn-sm btn-secondary mt-2"
                                 id="clear-button">Clear</button>
-
-
                         </div>
                     </div>
 

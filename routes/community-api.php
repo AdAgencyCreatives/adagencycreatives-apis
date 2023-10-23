@@ -10,12 +10,15 @@ use Illuminate\Support\Facades\Route;
  * *******************************************************
  */
 
-/**
- * Groups Invitation
- */
-Route::resource('invitations', InvitationController::class);
+//auth:sanctum
+Route::middleware(['auth:sanctum'])->group(function () {
+    /**
+     * Groups Invitation
+     */
+    Route::resource('invitations', InvitationController::class);
 
-/**
- * Job Invitation
- */
-Route::post('job-invitation', [JobController::class, 'job_invitation']);
+    /**
+     * Job Invitation
+     */
+    Route::post('job-invitation', [JobController::class, 'job_invitation']);
+});

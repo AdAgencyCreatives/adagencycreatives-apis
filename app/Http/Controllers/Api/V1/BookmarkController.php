@@ -9,16 +9,22 @@ use App\Http\Requests\Bookmark\StoreBookmarkRequest;
 use App\Http\Resources\Bookmark\BookmarkCollection;
 use App\Http\Resources\Bookmark\BookmarkResource;
 use App\Models\Bookmark;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class BookmarkController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookmarks = Bookmark::paginate(config('global.request.pagination_limit'));
+        $query = QueryBuilder::for(Bookmark::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
+
+        $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new BookmarkCollection($bookmarks);
     }
@@ -26,21 +32,19 @@ class BookmarkController extends Controller
     public function store(StoreBookmarkRequest $request)
     {
         try {
-            $user = User::where('uuid', $request->user_id)->firstOrFail();
+            $user = $request->user();
 
-            $resource_type = $request->resource_type;
-            $resource_id = $request->resource_id;
+            $modelAlias = $request->resource_type;
+            $model_uuid = $request->resource_id;
+            $modelClass = Bookmark::$modelAliases[$modelAlias] ?? null;
 
-            $resource = DB::table($resource_type)->where('uuid', $resource_id)->first();
-            if (! $resource) {
-                throw new ModelNotFound('Not found', 404);
-            }
+            $model_id = Bookmark::getIdByUUID($modelClass, $model_uuid);
 
             $request->merge([
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
-                'resource_type' => $resource_type,
-                'resource_id' => $resource->id,
+                'bookmarkable_type' => $modelClass,
+                'bookmarkable_id' => $model_id,
             ]);
 
             $bookmark = Bookmark::create($request->all());

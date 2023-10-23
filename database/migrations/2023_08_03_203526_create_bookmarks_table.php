@@ -17,10 +17,13 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('resource_type');
-            $table->unsignedBigInteger('resource_id');
+            $table->morphs('bookmarkable');
+            // $table->string('bookmarkable_type'); // Polymorphic type to indicate the type of entity being bookmarked (e.g., Agency, Creative, JobPost, etc.)
+            // $table->unsignedBigInteger('bookmarkable_id'); // Polymorphic ID to store the ID of the specific entity being bookmarked
             $table->timestamps();
             $table->softDeletes();
+
+            // $table->unique(['user_id', 'bookmarkable_type', 'bookmarkable_id']); // Ensure a user can only bookmark an entity once
         });
     }
 
