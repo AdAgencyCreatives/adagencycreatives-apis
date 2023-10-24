@@ -19,7 +19,7 @@ class TestUserSeeder extends Seeder
         /**
          * Creative User
          */
-        $creative_user_id = 6;
+        $creative_user_id = 11;
         User::where('id', $creative_user_id)->update([
             'first_name' => 'TEST',
             'last_name' => 'CREATIVE',
@@ -54,10 +54,41 @@ class TestUserSeeder extends Seeder
             'extension' => 'jpg',
         ]);
 
+        $creative_user_id = 12;
+        User::where('id', $creative_user_id)->update([
+            'first_name' => 'TEST2',
+            'last_name' => 'CREATIVE2',
+            'email' => 'creative2@gmail.com',
+            'role' => 4,
+            'status' => 1,
+            'status' => 1,
+        ]);
+
+        $creative = Creative::where('user_id', $creative_user_id)->first();
+        $creative->industry_experience = implode(',', $industry_exp);
+        $creative->media_experience = implode(',', $media_exp);
+        $creative->strengths = implode(',', $strengths);
+
+        $creative->is_featured = 1;
+        $creative->is_hybrid = 1;
+        $creative->is_onsite = 1;
+        $creative->save();
+
+        Attachment::where('user_id', $creative_user_id)
+            ->where('resource_type', 'profile_picture')->delete();
+        Attachment::create([
+            'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3b',
+            'user_id' => $creative_user_id,
+            'resource_type' => 'profile_picture',
+            'path' => 'profile_picture/f8d0b6db-9449-4763-b312-94c28a2b4cb2/5KtFlh6iQEDsVbrkt2AxS7cF725JaNQVD4ktDA7p.jpg',
+            'name' => 'download.jfif',
+            'extension' => 'jfif',
+        ]);
+
         /**
          * Agency User
          */
-        $agency_user_id = 5;
+        $agency_user_id = 9;
         User::where('id', $agency_user_id)->update([
             'email' => 'agency@gmail.com',
             'role' => 3,
