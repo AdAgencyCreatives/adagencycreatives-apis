@@ -524,3 +524,12 @@ Admin can
 -   Audit the admin dashboard and fixed few bugs.
 -   Audit the frontend side and reported few bugs and fixed.
 -   Group invitation email
+
+## 19/10/2023 Chat | Bookmarks
+
+-   Bookmarks API enhanced to include all the relevant fields.
+-   In Chat API
+    -   In contacts endpoint, added the user resource and its image along with latest one message.
+    -   Also added field message_type, it tells the frontend whether it is received or sent message(with respect to currently logged in user).
+    -   In messages endpoint, also added same message_type field, and sorted the messages response (older at the top, latest at the end).
+-   Figured out , why chat funtionality is not working.
