@@ -34,7 +34,7 @@ class ChatController extends Controller
                 $query->where('sender_id', $contact_id)
                     ->where('receiver_id', $userId);
             })
-            ->latest()
+            ->oldest()
                         //    ->toSql();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -61,8 +61,8 @@ class ChatController extends Controller
             ]);
 
             //Mark previous messages as read
-            Message::where('receiver_id', $receiver->id)
-                ->where('sender_id', $sender->id)
+            Message::where('receiver_id', $sender->id) // Only those messages in which I am receiver,
+                ->where('sender_id', $receiver->id)
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
 
@@ -103,14 +103,18 @@ class ChatController extends Controller
             if (!in_array($sortedPair, $uniquePairs)) {
 
                 if ($senderId == $userId) {
+                    $contact->message_type = "sent";
                     unset($contact['sender']);
                     $contact->contact = new UserResource($contact->receiver);
                     unset($contact['receiver']);
+
                 }
                 elseif($receiverId == $userId){
+                     $contact->message_type = "received";
                     unset($contact['receiver']);
                     $contact->contact = new UserResource($contact->sender);
                     unset($contact['sender']);
+
                 }
                   $uniquePairs[] = $sortedPair;
                   $uniqueContacts[] = $contact;
@@ -119,6 +123,11 @@ class ChatController extends Controller
 
 
         return response()->json(['contacts' => $uniqueContacts]);
+    }
+
+    private function getMessageType($sender1, $current_user)
+    {
+        return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
     }
 
     public function fetchMessages($contactId)
