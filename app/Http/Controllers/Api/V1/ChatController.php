@@ -91,10 +91,10 @@ class ChatController extends Controller
         $uniqueContacts = [];
         $uniquePairs = []; // To store unique pairs
 
-        foreach ($contacts as $contact) {
+        try {
+            foreach ($contacts as $contact) {
             $senderId = $contact->sender_id;
             $receiverId = $contact->receiver_id;
-
 
             $sortedPair = [$senderId, $receiverId];
             sort($sortedPair);
@@ -102,24 +102,35 @@ class ChatController extends Controller
             // Check if the reverse pair is already added
             if (!in_array($sortedPair, $uniquePairs)) {
 
+                if( ! isset($contact->receiver)) continue;
+                if( ! isset($contact->sender)) continue;
+
                 if ($senderId == $userId) {
                     $contact->message_type = "sent";
                     unset($contact['sender']);
                     $contact->contact = new UserResource($contact->receiver);
                     unset($contact['receiver']);
 
-                }
-                elseif($receiverId == $userId){
-                     $contact->message_type = "received";
+                } elseif($receiverId == $userId) {
+                    $contact->message_type = "received";
                     unset($contact['receiver']);
                     $contact->contact = new UserResource($contact->sender);
                     unset($contact['sender']);
 
                 }
-                  $uniquePairs[] = $sortedPair;
-                  $uniqueContacts[] = $contact;
+
+
+
+
+                $uniquePairs[] = $sortedPair;
+                $uniqueContacts[] = $contact;
             }
         }
+        }
+        catch(\Exception $e){
+            dd($e->getMessage());
+        }
+
 
 
         return response()->json(['contacts' => $uniqueContacts]);
