@@ -6,8 +6,12 @@ use App\Events\MessageReceived;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
+use App\Http\Resources\Agency\AgencyResource;
+use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Message\MessageCollection;
 use App\Http\Resources\Message\MessageResource;
+use App\Http\Resources\User\UserResource;
+use App\Models\Creative;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,7 +39,7 @@ class ChatController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         //    dd($messages);
-        return new MessageCollection($messages, $userId);
+        return new MessageCollection($messages);
     }
 
     public function store(StoreMessageRequest $request)
@@ -63,7 +67,7 @@ class ChatController extends Controller
                 ->update(['read_at' => now()]);
 
             $message = Message::create($request->all());
-            $msg_resource = new MessageResource($message);
+            $msg_resource = new MessageResource($message, $sender->uuid);
             event(new MessageReceived($event_data));
 
             return $msg_resource;
@@ -76,21 +80,45 @@ class ChatController extends Controller
     {
         $userId = request()->user()->id;
 
-        $contacts = Message::select('sender_id', 'receiver_id', 'message')
-            ->where(function ($query) use ($userId) {
-                $query->where('sender_id', $userId)
-                    ->orWhere('receiver_id', $userId);
-            })
-            ->distinct()
-            ->select(
-                \DB::raw('IF(sender_id = '.$userId.', receiver_id, sender_id) AS id'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT uuid FROM users WHERE id = receiver_id), (SELECT uuid FROM users WHERE id = sender_id)) AS uuid'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT first_name FROM users WHERE id = receiver_id), (SELECT first_name FROM users WHERE id = sender_id)) AS first_name'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT last_name FROM users WHERE id = receiver_id), (SELECT last_name FROM users WHERE id = sender_id)) AS last_name'),
-            )
-            ->get();
+        $contacts = Message::with('sender', 'receiver')
+        ->where(function ($query) use ($userId) {
+            $query->where('sender_id', $userId)
+                ->orWhere('receiver_id', $userId);
+        })
+        ->latest()
+        ->get();
 
-        return response()->json(['contacts' => $contacts]);
+        $uniqueContacts = [];
+        $uniquePairs = []; // To store unique pairs
+
+        foreach ($contacts as $contact) {
+            $senderId = $contact->sender_id;
+            $receiverId = $contact->receiver_id;
+
+
+            $sortedPair = [$senderId, $receiverId];
+            sort($sortedPair);
+
+            // Check if the reverse pair is already added
+            if (!in_array($sortedPair, $uniquePairs)) {
+
+                if ($senderId == $userId) {
+                    unset($contact['sender']);
+                    $contact->contact = new UserResource($contact->receiver);
+                    unset($contact['receiver']);
+                }
+                elseif($receiverId == $userId){
+                    unset($contact['receiver']);
+                    $contact->contact = new UserResource($contact->sender);
+                    unset($contact['sender']);
+                }
+                  $uniquePairs[] = $sortedPair;
+                  $uniqueContacts[] = $contact;
+            }
+        }
+
+
+        return response()->json(['contacts' => $uniqueContacts]);
     }
 
     public function fetchMessages($contactId)

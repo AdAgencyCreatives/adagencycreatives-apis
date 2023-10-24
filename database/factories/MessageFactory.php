@@ -11,7 +11,7 @@ class MessageFactory extends Factory
         return [
             // 'uuid' => fake()->uuid(),
 
-            'receiver_id' => rand(10, 20),
+            'receiver_id' => rand(2, 15),
             'message' => fake()->sentence(),
             'created_at' => fake()->dateTimeBetween('-5 days', 'now'),
             'updated_at' => now(),

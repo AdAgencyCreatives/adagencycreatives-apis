@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\Agency::factory()->create($data_user_id);
 
-            \App\Models\Message::factory(5)->create(['sender_id' => $user->id]);
+            \App\Models\Message::factory(20)->create(['sender_id' => $user->id]);
 
             $addresses = \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'business']));
 
@@ -161,10 +161,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TestUserSeeder::class);
 
-        Artisan::call('import:users');
-        Artisan::call('import:agencies');
-        Artisan::call('import:creatives');
-        Artisan::call('import:jobs');
+        // Artisan::call('import:users');
+        // Artisan::call('import:agencies');
+        // Artisan::call('import:creatives');
+        // Artisan::call('import:jobs');
 
         Artisan::call('optimize:clear');
     }

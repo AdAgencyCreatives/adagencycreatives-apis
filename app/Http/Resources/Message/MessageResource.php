@@ -8,14 +8,19 @@ class MessageResource extends JsonResource
 {
     public function toArray($request)
     {
-        $user = $request->user();
-
+        $current_user = $request->user();
+        $sender1 = $this->sender;
         return [
-            'sender_id' => $this->sender->uuid,
+            'sender_id' => $sender1->uuid,
             'receiver_id' => $this->receiver->uuid,
             'message' => $this->message,
-            'type' => ($this->sender_id === $user->uuid) ? 'sent' : 'received',
-            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'message_type' => $this->getMessageType($sender1, $current_user),
+            'created_at' => $this->created_at,
         ];
+    }
+
+    private function getMessageType($sender1, $current_user)
+    {
+        return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
     }
 }

@@ -16,7 +16,7 @@ class CreativeResource extends JsonResource
         $user = $this->user;
         $this->creative_category = isset($this->category) ? $this->category->name : null;
 
-        $this->location = $this->get_location($user);
+        $this->location = null; //$this->get_location($user);
 
         return [
             'type' => 'creatives',
@@ -66,7 +66,7 @@ class CreativeResource extends JsonResource
 
     public function get_location($user)
     {
-        $address = collect($user->addresses)->firstWhere('label', 'personal');
+        $address = $user->addresses ?  collect($user->addresses)->firstWhere('label', 'personal') : null;
 
         return $address ? [
             'state_id' => $address->state->uuid,
