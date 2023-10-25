@@ -13,7 +13,8 @@ class Note extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'application_id',
+        'notable_type',
+        'notable_id',
         'body',
     ];
 
@@ -22,16 +23,28 @@ class Note extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function notable()
+    {
+        return $this->morphTo();
+    }
+
     public function application()
     {
         return $this->belongsTo(Application::class);
     }
 
-    public function scopeUserId(Builder $query, $user_id)
+    public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
 
         return $query->where('user_id', $user->id);
+    }
+
+    public function scopeResourceType(Builder $query, $resource): Builder
+    {
+        $resource = Bookmark::$modelAliases[$resource] ?? null;
+
+        return $query->where('notable_type', $resource);
     }
 
     public function scopeApplicationId(Builder $query, $app_id)

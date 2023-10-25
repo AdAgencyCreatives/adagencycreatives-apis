@@ -66,7 +66,7 @@ class CreativeResource extends JsonResource
 
     public function get_location($user)
     {
-        $address = $user->addresses ?  collect($user->addresses)->firstWhere('label', 'personal') : null;
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
 
         return $address ? [
             'state_id' => $address->state->uuid,

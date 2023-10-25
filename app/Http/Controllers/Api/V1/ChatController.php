@@ -6,12 +6,9 @@ use App\Events\MessageReceived;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
-use App\Http\Resources\Agency\AgencyResource;
-use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Message\MessageCollection;
 use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\User\UserResource;
-use App\Models\Creative;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -81,57 +78,55 @@ class ChatController extends Controller
         $userId = request()->user()->id;
 
         $contacts = Message::with('sender', 'receiver')
-        ->where(function ($query) use ($userId) {
-            $query->where('sender_id', $userId)
-                ->orWhere('receiver_id', $userId);
-        })
-        ->latest()
-        ->get();
+            ->where(function ($query) use ($userId) {
+                $query->where('sender_id', $userId)
+                    ->orWhere('receiver_id', $userId);
+            })
+            ->latest()
+            ->get();
 
         $uniqueContacts = [];
         $uniquePairs = []; // To store unique pairs
 
         try {
             foreach ($contacts as $contact) {
-            $senderId = $contact->sender_id;
-            $receiverId = $contact->receiver_id;
+                $senderId = $contact->sender_id;
+                $receiverId = $contact->receiver_id;
 
-            $sortedPair = [$senderId, $receiverId];
-            sort($sortedPair);
+                $sortedPair = [$senderId, $receiverId];
+                sort($sortedPair);
 
-            // Check if the reverse pair is already added
-            if (!in_array($sortedPair, $uniquePairs)) {
+                // Check if the reverse pair is already added
+                if (! in_array($sortedPair, $uniquePairs)) {
 
-                if( ! isset($contact->receiver)) continue;
-                if( ! isset($contact->sender)) continue;
+                    if (! isset($contact->receiver)) {
+                        continue;
+                    }
+                    if (! isset($contact->sender)) {
+                        continue;
+                    }
 
-                if ($senderId == $userId) {
-                    $contact->message_type = "sent";
-                    unset($contact['sender']);
-                    $contact->contact = new UserResource($contact->receiver);
-                    unset($contact['receiver']);
+                    if ($senderId == $userId) {
+                        $contact->message_type = 'sent';
+                        unset($contact['sender']);
+                        $contact->contact = new UserResource($contact->receiver);
+                        unset($contact['receiver']);
 
-                } elseif($receiverId == $userId) {
-                    $contact->message_type = "received";
-                    unset($contact['receiver']);
-                    $contact->contact = new UserResource($contact->sender);
-                    unset($contact['sender']);
+                    } elseif ($receiverId == $userId) {
+                        $contact->message_type = 'received';
+                        unset($contact['receiver']);
+                        $contact->contact = new UserResource($contact->sender);
+                        unset($contact['sender']);
 
+                    }
+
+                    $uniquePairs[] = $sortedPair;
+                    $uniqueContacts[] = $contact;
                 }
-
-
-
-
-                $uniquePairs[] = $sortedPair;
-                $uniqueContacts[] = $contact;
             }
-        }
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             dd($e->getMessage());
         }
-
-
 
         return response()->json(['contacts' => $uniqueContacts]);
     }

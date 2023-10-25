@@ -25,20 +25,16 @@ class BookmarkResource extends JsonResource
 
     public function mapResourcePath()
     {
-
         $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
         switch ($this->bookmarkable_type) {
             case 'App\Models\Creative':
-                // return sprintf("/creative/%s", new CreativeResource($model));
                 return new CreativeResource($model);
 
             case 'App\Models\Agency':
-                // return sprintf("/agency/%s", $model->slug);
                 return new AgencyResource($model);
 
             case 'App\Models\Job':
                 return new JobResource($model);
-                // return sprintf("/agency/%s", $model->slug);
 
             default:
                 return null;

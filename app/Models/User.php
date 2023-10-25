@@ -202,6 +202,11 @@ class User extends Authenticatable
         return $this->morphMany(Bookmark::class, 'bookmarkable');
     }
 
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'notable');
+    }
+
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
     {
         $agency = Agency::where('slug', $company_slug)->firstOrFail();

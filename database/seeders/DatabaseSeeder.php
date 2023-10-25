@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory(15)->create();
 
-        User::where('id','<', 10)->update(['role' => 3]); // 3:Agency
+        User::where('id', '<', 10)->update(['role' => 3]); // 3:Agency
         User::where('id', '<', 5)->update(['role' => 2]);  // 2:Advisor
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
@@ -105,11 +105,11 @@ class DatabaseSeeder extends Seeder
                 ]
                 );
 
-                \App\Models\Note::factory(1)->create([
-                    'user_id' => $user->id,
-                    'application_id' => $application->id,
-                ]
-                );
+                // \App\Models\Note::factory(1)->create([
+                //     'user_id' => $user->id,
+                //     'application_id' => $application->id,
+                // ]
+                // );
 
                 // \App\Models\Bookmark::factory(1)->create([
                 //     'user_id' => $user->id,

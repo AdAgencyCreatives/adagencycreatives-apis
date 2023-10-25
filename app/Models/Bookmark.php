@@ -22,6 +22,7 @@ class Bookmark extends Model
         'creatives' => Creative::class,
         'agencies' => Agency::class,
         'jobs' => Job::class,
+        'applications' => Application::class,
     ];
 
     public function user()
@@ -39,6 +40,13 @@ class Bookmark extends Model
         $user = User::where('uuid', $user_id)->firstOrFail();
 
         return $query->where('user_id', $user->id);
+    }
+
+    public function scopeResourceType(Builder $query, $resource): Builder
+    {
+        $resource = Bookmark::$modelAliases[$resource] ?? null;
+
+        return $query->where('bookmarkable_type', $resource);
     }
 
     public static function getIdByUUID($modelClass, $uuid)
