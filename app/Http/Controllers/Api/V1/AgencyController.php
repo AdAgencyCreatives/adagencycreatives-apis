@@ -183,7 +183,7 @@ class AgencyController extends Controller
             $user->is_visible = $request->show_profile;
             $user->save();
 
-            $this->updateLocation($request, $user);
+            updateLocation($request, $user, 'business');
             if ($request->has('phone_number')) {
                 updatePhone($user, $request->phone_number, 'business');
             }
@@ -201,26 +201,6 @@ class AgencyController extends Controller
             ], 500);
         }
 
-    }
-
-    private function updateLocation($request, $user)
-    {
-        $state = Location::where('uuid', $request->state_id)->first();
-        $city = Location::where('uuid', $request->city_id)->first();
-        if ($state && $city) {
-            $address = $user->addresses->first();
-            if (! $address) {
-                $address = new Address();
-                $address->uuid = Str::uuid();
-                $address->user_id = $user->id;
-                $address->label = 'business';
-                $address->country_id = 1;
-            }
-            // dump($state, $city);
-            $address->state_id = $state->id;
-            $address->city_id = $city->id;
-            $address->save();
-        }
     }
 
     public function destroy($uuid)
