@@ -139,7 +139,7 @@ class ImportAgencies extends Command
             $address = new Address();
             $address->uuid = Str::uuid();
             $address->user_id = $user->id;
-            $address->label = 'personal';
+            $address->label = 'business';
             $address->country_id = 1;
             $address->state_id = $state ?? 1;
             $address->city_id = $city ?? $address->state_id + 1;
