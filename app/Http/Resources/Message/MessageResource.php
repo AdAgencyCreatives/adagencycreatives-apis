@@ -10,6 +10,7 @@ class MessageResource extends JsonResource
     {
         $current_user = $request->user();
         $sender1 = $this->sender;
+
         return [
             'sender_id' => $sender1->uuid,
             'receiver_id' => $this->receiver->uuid,

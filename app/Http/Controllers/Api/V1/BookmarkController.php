@@ -22,6 +22,7 @@ class BookmarkController extends Controller
         $query = QueryBuilder::for(Bookmark::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('resource_type'),
             ]);
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));

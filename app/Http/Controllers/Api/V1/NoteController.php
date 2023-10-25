@@ -9,8 +9,8 @@ use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\Note\NoteCollection;
 use App\Http\Resources\Note\NoteResource;
 use App\Models\Application;
+use App\Models\Bookmark;
 use App\Models\Note;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -23,7 +23,7 @@ class NoteController extends Controller
         $query = QueryBuilder::for(Note::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('application_id'),
+                AllowedFilter::scope('resource_type'),
             ]);
 
         $notes = $query->paginate(config('global.request.pagination_limit'));
@@ -33,13 +33,19 @@ class NoteController extends Controller
 
     public function store(StoreNoteRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
-        $application = Application::where('uuid', $request->application_id)->first();
+        $user = $request->user();
+        // $application = Application::where('uuid', $request->application_id)->first();
+
+        $modelAlias = $request->resource_type;
+        $model_uuid = $request->resource_id;
+        $modelClass = Bookmark::$modelAliases[$modelAlias] ?? null; //we are using same methods from Bookmark Model, no need to create duplicate methods
+        $model_id = Bookmark::getIdByUUID($modelClass, $model_uuid);
 
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'application_id' => $application->id,
+            'notable_type' => $modelClass,
+            'notable_id' => $model_id,
         ]);
 
         try {

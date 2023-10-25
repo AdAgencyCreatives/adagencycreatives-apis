@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('application_id');
+            // $table->unsignedBigInteger('application_id');
+            $table->morphs('notable');
             $table->text('body');
             $table->timestamps();
             $table->softDeletes();
