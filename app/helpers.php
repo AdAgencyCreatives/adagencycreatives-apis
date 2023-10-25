@@ -188,17 +188,18 @@ if (! function_exists('updateLink')) {
 }
 
 if (! function_exists('updateLocation')) {
-    function updateLocation($request, $user)
+    function updateLocation($request, $user, $label)
     {
         $state = Location::where('uuid', $request->state_id)->first();
         $city = Location::where('uuid', $request->city_id)->first();
+
         if ($state && $city) {
             $address = $user->addresses->first();
             if (! $address) {
                 $address = new Address();
                 $address->uuid = Str::uuid();
                 $address->user_id = $user->id;
-                $address->label = 'personal';
+                $address->label = $label;
                 $address->country_id = 1;
             }
             // dump($state, $city);

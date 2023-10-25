@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -287,10 +288,17 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_posts');
             });
 
-            static::updated(function () {
+            static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_users_with_attachments');
+
+                //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
+                if($user->creative){
+                    $creative = $user->creative;
+                    $creative->slug = Str::slug($user->username);
+                    $creative->save();
+                }
             });
 
             static::deleted(function () {

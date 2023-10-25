@@ -158,6 +158,55 @@ class CreativeController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            // Update User
+            $userData = [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'username' => $request->username,
+                'is_visible' => $request->show_profile,
+            ];
+
+            $user->fill(array_filter($userData, function ($value) {
+                return ! is_null($value);
+            }));
+            $user->save();
+
+            // Update Phone, Location, and Links
+            if ($request->has('phone_number')) {
+                updatePhone($user, $request->phone_number, 'personal');
+            }
+            if ($request->input('linkedin')) {
+                updateLink($user, $request->input('linkedin'), 'linkedin');
+            }
+            if ($request->input('portfolio_website')) {
+                updateLink($user, $request->input('portfolio_website'), 'portfolio_website');
+            }
+
+
+            return response()->json([
+                'message' => 'Creative updated successfully.',
+                'data' => new CreativeResource($creative),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+    }
+
+    public function update_resume(Request  $request, $uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->firstOrFail();
+            $creative = $user->creative;
+
+            if (! $creative) {
+                return response()->json([
+                    'message' => 'No creative found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
             // Update Creative
             $creativeData = [
                 'title' => $request->title,
@@ -185,29 +234,7 @@ class CreativeController extends Controller
             }));
             $creative->save();
 
-            // Update User
-            $userData = [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'username' => $request->username,
-                'is_visible' => $request->show_profile,
-            ];
-
-            $user->fill(array_filter($userData, function ($value) {
-                return ! is_null($value);
-            }));
-            $user->save();
-
-            // Update Phone, Location, and Links
-            if ($request->has('phone_number')) {
-                updatePhone($user, $request->phone_number, 'personal');
-            }
-            if ($request->input('linkedin')) {
-                updateLink($user, $request->input('linkedin'), 'linkedin');
-            }
-            if ($request->input('website')) {
-                updateLink($user, $request->input('website'), 'website');
-            }
+            updateLocation($request, $user, 'personal');
 
             return response()->json([
                 'message' => 'Creative updated successfully.',
