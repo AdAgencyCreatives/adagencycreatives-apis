@@ -11,13 +11,19 @@ class CreativeSpotlightCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             $user = $item->user;
-            $title = sprintf('%s, %s', $user->creative?->category?->name, $user->first_name.' '.$user->last_name);
+
+            if ($user->creative && $user->creative->category) {
+                $title = sprintf('%s, %s %s', $user->creative->category?->name, $user->first_name ?? '' , $user->last_name ?? '');
+            } else {
+                $title = sprintf('%s %s', $user->first_name ?? '', $user->last_name ?? '');
+            }
+
 
             return [
                 'id' => $item->uuid,
                 'title' => $title,
                 'slug' => Str::slug($title, '-'),
-                'url' => getAttachmentBasePath().$item->path,
+                'url' => getAttachmentBasePath() . $item->path,
                 'seo' => $this->generateSeoTitle($title, $item->created_at),
                 'created_at' => $item->created_at->format('F j, Y'),
             ];

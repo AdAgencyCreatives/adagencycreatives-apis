@@ -492,7 +492,6 @@ Admin can
 -   Agency Profile update endpoint
 -   Jobs exported (published and Expired status)
 -   Bug Fix(industry and media experience dropdown) on job detail page
--
 
 ## 13/10/2023 Jobs | API enhancements
 
@@ -533,3 +532,22 @@ Admin can
     -   Also added field message_type, it tells the frontend whether it is received or sent message(with respect to currently logged in user).
     -   In messages endpoint, also added same message_type field, and sorted the messages response (older at the top, latest at the end).
 -   Figured out , why chat funtionality is not working.
+
+## 20/10/2023 Notes | Queues
+
+-   `Notes API` enhanced to include all the relevant fields and to work for all entities.
+-   Applied relevant filters on `Notes`.
+-   Applied relevant filters on `Bookmarks`.
+-   Successfully setup `Queues` on the server for emails.
+-   Working on Websockets configurations on server (in progress)
+
+## 23/10/2023 API endpoints enhancement
+
+-   Split the profile endpoint in two separate endpoints (for creative)
+    -   One for basic information e.g. `phone number`, `linkedin` .
+    -   Other for resume fields.
+-   Added author profile picture in posts.
+-   Configured post images filter on attachamnets route.
+-   Map the IP addresses of laravel server and react frontend to test domain name,
+    -   So that websockets can works correctly.
+-   Still working on Websockets configurations on server (in progress)
