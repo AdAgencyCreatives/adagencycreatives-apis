@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('messanger.{receiver}', function ($user, $id) {
-    return $user->uuid == $id;
+Broadcast::channel('messanger.{receiver}', function ($user, $uuid) {
+    return $user->uuid == $uuid;
 });
