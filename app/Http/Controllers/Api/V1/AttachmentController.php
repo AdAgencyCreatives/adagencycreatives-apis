@@ -26,6 +26,7 @@ class AttachmentController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
                 AllowedFilter::scope('resource_type'),
+                AllowedFilter::scope('post_id'),
                 'status',
             ])
             ->defaultSort('-created_at')

@@ -52,8 +52,7 @@ class Attachment extends Model
     public function scopePostId(Builder $query, $post_id)
     {
         $post = Post::where('uuid', $post_id)->firstOrFail();
-
-        return $query->where('post_id', $post->id);
+        return $query->where('resource_id', $post->id);
 
     }
 
@@ -61,6 +60,7 @@ class Attachment extends Model
     {
         return $query->where('resource_type', $resource_type);
     }
+
 
     public function getStatusAttribute($value)
     {

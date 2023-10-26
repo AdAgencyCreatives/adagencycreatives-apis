@@ -15,7 +15,8 @@ class PostResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'group_id' => $this->group->uuid,
-            'author' => $user->first_name.' '.$user->last_name,
+            'author' => $user->first_name . ' ' . $user->last_name,
+            'author_avatar' => $this->get_image($user),
             'content' => $this->content,
             'status' => $this->status,
             // 'attachments' => new AttachmentCollection($this->attachments),
@@ -27,15 +28,26 @@ class PostResource extends JsonResource
             'relationships' => [
                 'comments' => [
                     'links' => [
-                        'related' => route('comments.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('comments.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
                 'likes' => [
                     'links' => [
-                        'related' => route('likes.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('likes.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
             ],
         ];
+    }
+
+
+    public function get_image($user)
+    {
+        if($user->role == 'creative' || $user->role == 'admin') {
+            return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : null;
+        } elseif($user->role == 'agency' || $user->role == 'advisor') {
+            return isset($user->agency_logo) ? getAttachmentBasePath() . $user->agency_logo->path : null;
+        }
+
     }
 }
