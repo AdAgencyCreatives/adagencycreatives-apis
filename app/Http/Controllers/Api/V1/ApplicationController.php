@@ -14,13 +14,14 @@ use App\Models\Attachment;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = QueryBuilder::for(Application::class)
             ->allowedFilters([
@@ -29,7 +30,7 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
-        $applications = $query->paginate(config('global.request.pagination_limit'));
+        $applications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
     }
@@ -93,16 +94,13 @@ class ApplicationController extends Controller
     }
 
 
-    public function applied_jobs()
+    public function applied_jobs(Request $request)
     {
-        $query = QueryBuilder::for(Application::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                'status',
-            ]);
+        $user = $request->user();
 
-        $applications = $query->with('job')
-        ->paginate(config('global.request.pagination_limit'));
+        $applications = Application::with('job')
+        ->where('user_id', $user->id)
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AppliedJobCollection($applications);
     }
