@@ -84,6 +84,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('links', LinkController::class, ['except' => ['index']]);
     Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
 
+    Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);
     Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
     Route::apiResource('educations', EducationController::class, ['except' => ['index']])->middleware('check.permissions:education');
