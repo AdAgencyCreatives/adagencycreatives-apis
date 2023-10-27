@@ -19,19 +19,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import Echo from 'laravel-echo';
-
 import Pusher from 'pusher-js';
+
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true,
+  broadcaster: 'pusher',
+  key: '9fc68307fd984bd9a52d',
+  cluster: 'mt1',
+  forceTLS: true,
+  disableStats: true,
+  wssHost: 'websocket.noorsofttechdev.com',
+  // wsHost: window.location.hostname,
+  wssPort: 6001,
 });
 
-console.log(import.meta.env.VITE_PUSHER_APP_KEY);
-console.log(window.location.hostname);
+
+console.log(window.Echo);
+
