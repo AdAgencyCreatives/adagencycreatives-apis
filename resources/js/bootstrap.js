@@ -28,11 +28,11 @@ window.Echo = new Echo({
   broadcaster: 'pusher',
   key: '9fc68307fd984bd9a52d',
   cluster: 'mt1',
-  forceTLS: true,
+  forceTLS: false,
   disableStats: true,
-  wssHost: 'websocket.noorsofttechdev.com',
+  wsHost: 'websocket.noorsofttechdev.com',
   // wsHost: window.location.hostname,
-  wssPort: 6001,
+  wsPort: 6001,
 });
 
 
