@@ -8,6 +8,7 @@ use App\Http\Requests\Application\StoreApplicationRequest;
 use App\Http\Requests\Application\UpdateApplicationRequest;
 use App\Http\Resources\Application\ApplicationCollection;
 use App\Http\Resources\Application\ApplicationResource;
+use App\Http\Resources\AppliedJob\AppliedJobCollection;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Job;
@@ -89,5 +90,20 @@ class ApplicationController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+
+    public function applied_jobs()
+    {
+        $query = QueryBuilder::for(Application::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                'status',
+            ]);
+
+        $applications = $query->with('job')
+        ->paginate(config('global.request.pagination_limit'));
+
+        return new AppliedJobCollection($applications);
     }
 }
