@@ -12,6 +12,7 @@
     <link class="js-stylesheet" href="{{ asset('assets/css/light.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     @yield('styles')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
@@ -38,12 +39,12 @@
 
     <script src="{{ asset('/assets/js/app.js') }}"></script>
 
-    {{--<script src="{{ mix('/js/app.js') }}"></script>--}}
+    {{-- <script src="{{ mix('/js/app.js') }}"></script> --}}
 
     <script>
-    $(".select2").each(function() {
-        $(this).select2();
-    })
+        $(".select2").each(function() {
+            $(this).select2();
+        })
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
