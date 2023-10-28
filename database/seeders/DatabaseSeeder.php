@@ -165,7 +165,7 @@ class DatabaseSeeder extends Seeder
         Artisan::call('import:agencies');
         Artisan::call('import:creatives');
         Artisan::call('import:jobs');
-        Artisan::call('import:creative-spotlights');
+        // Artisan::call('import:creative-spotlights');
 
         Artisan::call('optimize:clear');
     }
