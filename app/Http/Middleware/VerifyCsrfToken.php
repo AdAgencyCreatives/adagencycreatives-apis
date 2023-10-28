@@ -16,6 +16,6 @@ class VerifyCsrfToken extends Middleware
         'reset-password',
         'api/v1/*',
         'stripe/*',
-        '*'
+        '*',
     ];
 }

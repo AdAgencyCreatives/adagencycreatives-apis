@@ -44,7 +44,7 @@ return [
                 'curl_options' => [
                     'CURLOPT_SSL_VERIFYHOST' => 1,
                     'CURLOPT_SSL_VERIFYPEER' => 1,
-                ]
+                ],
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html

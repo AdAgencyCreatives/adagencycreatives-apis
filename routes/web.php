@@ -212,8 +212,7 @@ Route::group(['middleware' => ['auth']], function () {
             Artisan::call('import:creative-portfolio', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
-
-         Route::get('migrate-fresh-seed', function () {
+        Route::get('migrate-fresh-seed', function () {
             Artisan::call('migrate:fresh --seed');
         });
 
@@ -269,6 +268,5 @@ Route::get('get_uuids', function () {
 
     return response()->json($jsonObject, 200);
 });
-
 
 Route::view('resume', 'resume');

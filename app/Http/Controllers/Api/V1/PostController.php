@@ -11,7 +11,6 @@ use App\Http\Resources\Post\PostResource;
 use App\Models\Attachment;
 use App\Models\Group;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,7 +39,7 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
+        $user = $request->user();
         $group = Group::where('uuid', $request->group_id)->first();
 
         $request->merge([

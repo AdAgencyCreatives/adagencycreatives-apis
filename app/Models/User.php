@@ -10,9 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -178,6 +178,11 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -294,7 +299,7 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_attachments');
 
                 //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
-                if($user->creative){
+                if ($user->creative) {
                     $creative = $user->creative;
                     $creative->slug = Str::slug($user->username);
                     $creative->save();

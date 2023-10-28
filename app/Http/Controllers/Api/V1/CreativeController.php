@@ -182,7 +182,6 @@ class CreativeController extends Controller
                 updateLink($user, $request->input('portfolio_website'), 'portfolio_website');
             }
 
-
             return response()->json([
                 'message' => 'Creative updated successfully.',
                 'data' => new CreativeResource($creative),
@@ -195,7 +194,7 @@ class CreativeController extends Controller
 
     }
 
-    public function update_resume(Request  $request, $uuid)
+    public function update_resume(Request $request, $uuid)
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();

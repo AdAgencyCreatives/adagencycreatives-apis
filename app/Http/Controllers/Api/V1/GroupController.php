@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Group\StoreGroupRequest;
 use App\Http\Resources\Group\GroupCollection;
 use App\Http\Resources\Group\GroupResource;
+use App\Models\Attachment;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class GroupController extends Controller
@@ -19,9 +23,11 @@ class GroupController extends Controller
             ->allowedFilters([
                 'name',
                 'status',
+                AllowedFilter::scope('user_id'),
             ]);
 
-        $groups = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $groups = $query->with('attachment')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new GroupCollection($groups);
     }
@@ -29,6 +35,32 @@ class GroupController extends Controller
     public function create()
     {
         return view('pages.groups.add');
+    }
+
+    public function store(StoreGroupRequest $request)
+    {
+
+        $user = $request->user();
+
+        $group = Group::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'description' => $request->description ?? '',
+            'status' => $request->status ?? 'public',
+        ]);
+
+        if ($request->hasFile('file')) {
+            $attachment = storeImage($request, $user->id, 'cover_image');
+
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $group->id,
+                ]);
+            }
+        }
+
+        return new GroupResource($group);
     }
 
     public function update(Request $request, $uuid)
