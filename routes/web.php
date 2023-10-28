@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
@@ -85,14 +86,12 @@ Route::get('/reset', function () {
 
 });
 
+// Download Resume
+Route::get('download/resume/{uuid}', [ResumeController::class, 'download_resume'])->name('download.resume');
+Route::get('download/resume2/{uuid}', [ResumeController::class, 'download_resume2'])->name('download.resume2');
+
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('import-data', function () {
-        Artisan::call('import:users');
-        dump('Users imported successfully');
-        Artisan::call('import:agencies');
-        dump('Agencies imported successfully');
-    });
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
@@ -272,4 +271,4 @@ Route::get('get_uuids', function () {
 });
 
 
-// \BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter::webSocket('/mywebsocket', \App\WebSockets\GameSocketHandler::class);
+Route::view('resume', 'resume');

@@ -56,12 +56,18 @@ class CreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : null;
+        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
     public function get_resume($user)
     {
-        return isset($user->resume) ? getAttachmentBasePath().$user->resume->path : null;
+        if(isset($user->resume)){
+            return getAttachmentBasePath() . $user->resume->path;
+        }
+        else{
+            return route('download.resume', $user->uuid);
+        }
+
     }
 
     public function get_location($user)

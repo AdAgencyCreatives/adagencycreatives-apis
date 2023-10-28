@@ -6,11 +6,14 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resume\StoreResumeRequest;
 use App\Http\Requests\Resume\UpdateResumeRequest;
+use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Resume\ResumeCollection;
 use App\Http\Resources\Resume\ResumeResource;
+use App\Models\Creative;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -79,5 +82,66 @@ class ResumeController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+    public function download_resume($uuid)
+    {
+        $user = User::where('uuid', $uuid )->firstOrFail();
+
+        $creative = Creative::with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+            'user',
+        ])
+        ->where('user_id', $user->id)
+        ->first();
+
+        $educations = $user->educations;
+        $experiences = $user->experiences;
+        $portfolio_items = $user->portfolio_items;
+        $data = (new CreativeResource($creative))->toArray([]);
+
+        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
+
+        return  $html;
+    }
+
+    public function download_resume2($uuid)
+    {
+        $user = User::where('uuid',$uuid )->firstOrFail();
+
+        $creative = Creative::with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+            'user',
+        ])
+        ->where('user_id', $user->id)
+        ->first();
+
+        $data = (new CreativeResource($creative))->toArray([]);
+
+        $html = view('resume', compact('data', 'user')); // Render the HTML view
+            return $html;
+        $dompdf = new \Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4');
+
+        $options = $dompdf->getOptions();
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+
+        $dompdf->render();
+
+        $fileName = sprintf("%s-%s", Str::slug( $data['name']) , Str::slug( $data['title']) );
+        $dompdf->stream($fileName, ["Attachment" => 1]);
+
+        return "File downloaded.";
+
     }
 }
