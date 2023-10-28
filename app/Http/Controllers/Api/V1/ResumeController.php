@@ -124,6 +124,9 @@ class ResumeController extends Controller
         ->where('user_id', $user->id)
         ->first();
 
+         $educations = $user->educations;
+        $experiences = $user->experiences;
+        $portfolio_items = $user->portfolio_items;
         $data = (new CreativeResource($creative))->toArray([]);
 
         $html = view('resume', compact('data', 'user')); // Render the HTML view
