@@ -93,7 +93,7 @@
             <h1 class="mb-2">{{ $data['name'] ?? '' }}</h1>
             <p class="mb-2 mt-0">{{ $data['title'] }}</p>
             <a href="tel:949-903-6732" class="mb-2" style="display: block;">{{ $data['phone_number'] ?? '' }}</a>
-            <a href="mailto:annie.f.sui@gmail.com" class="mb-2">{{ $user->email }}</a>
+            <a href="mailto:{{ $user->email }}" class="mb-2">{{ $user->email }}</a>
         </div>
     </section>
     <section>
@@ -213,7 +213,7 @@
 
 
     <script>
-        // window.print()
+        window.print()
     </script>
 </body>
 
