@@ -129,8 +129,9 @@ class ResumeController extends Controller
         $portfolio_items = $user->portfolio_items;
         $data = (new CreativeResource($creative))->toArray([]);
 
-        $html = view('resume', compact('data', 'user')); // Render the HTML view
-            return $html;
+        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
+
+
         $dompdf = new \Dompdf\Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4');
