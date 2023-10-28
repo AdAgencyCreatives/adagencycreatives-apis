@@ -42,9 +42,8 @@ return [
                 'encrypted' => false,
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
                 'curl_options' => [
-                    'CURLOPT_SSL_VERIFYHOST' => 0,
-                    'CURLOPT_SSL_VERIFYPEER' => 0,
-
+                    'CURLOPT_SSL_VERIFYHOST' => 1,
+                    'CURLOPT_SSL_VERIFYPEER' => 1,
                 ]
             ],
             'client_options' => [
