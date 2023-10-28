@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('status')->default(0)->comment('0: public, 1: private, 2: hidden');

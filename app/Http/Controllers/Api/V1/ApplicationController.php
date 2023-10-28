@@ -93,14 +93,13 @@ class ApplicationController extends Controller
         }
     }
 
-
     public function applied_jobs(Request $request)
     {
         $user = $request->user();
 
         $applications = Application::with('job')
-        ->where('user_id', $user->id)
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->where('user_id', $user->id)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AppliedJobCollection($applications);
     }

@@ -13,7 +13,6 @@ use App\Models\Creative;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -86,7 +85,7 @@ class ResumeController extends Controller
 
     public function download_resume($uuid)
     {
-        $user = User::where('uuid', $uuid )->firstOrFail();
+        $user = User::where('uuid', $uuid)->firstOrFail();
 
         $creative = Creative::with([
             'user.profile_picture',
@@ -96,8 +95,8 @@ class ResumeController extends Controller
             'category',
             'user',
         ])
-        ->where('user_id', $user->id)
-        ->first();
+            ->where('user_id', $user->id)
+            ->first();
 
         $educations = $user->educations;
         $experiences = $user->experiences;
@@ -106,12 +105,12 @@ class ResumeController extends Controller
 
         $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
 
-        return  $html;
+        return $html;
     }
 
     public function download_resume2($uuid)
     {
-        $user = User::where('uuid',$uuid )->firstOrFail();
+        $user = User::where('uuid', $uuid)->firstOrFail();
 
         $creative = Creative::with([
             'user.profile_picture',
@@ -121,16 +120,15 @@ class ResumeController extends Controller
             'category',
             'user',
         ])
-        ->where('user_id', $user->id)
-        ->first();
+            ->where('user_id', $user->id)
+            ->first();
 
-         $educations = $user->educations;
+        $educations = $user->educations;
         $experiences = $user->experiences;
         $portfolio_items = $user->portfolio_items;
         $data = (new CreativeResource($creative))->toArray([]);
 
         $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
-
 
         $dompdf = new \Dompdf\Dompdf();
         $dompdf->loadHtml($html);
@@ -142,10 +140,10 @@ class ResumeController extends Controller
 
         $dompdf->render();
 
-        $fileName = sprintf("%s-%s", Str::slug( $data['name']) , Str::slug( $data['title']) );
-        $dompdf->stream($fileName, ["Attachment" => 1]);
+        $fileName = sprintf('%s-%s', Str::slug($data['name']), Str::slug($data['title']));
+        $dompdf->stream($fileName, ['Attachment' => 1]);
 
-        return "File downloaded.";
+        return 'File downloaded.';
 
     }
 }

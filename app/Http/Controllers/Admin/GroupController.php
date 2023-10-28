@@ -25,8 +25,11 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        $user = $request->user();
+
         $group = Group::create([
             'uuid' => Str::uuid(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,

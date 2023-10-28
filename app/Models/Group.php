@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +13,7 @@ class Group extends Model
 
     protected $fillable = [
         'uuid',
+        'user_id',
         'name',
         'description',
         'status',
@@ -22,6 +24,11 @@ class Group extends Model
         'PRIVATE' => 1,
         'HIDDEN' => 2,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function attachment()
     {
@@ -51,6 +58,13 @@ class Group extends Model
     public function isInvitationAlreadySent(User $user)
     {
         return $this->invitations()->where('inviter_user_id', $user->id)->where('status', GroupInvitation::STATUSES['PENDING'])->exists();
+    }
+
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        $user = User::where('uuid', $user_id)->firstOrFail();
+
+        return $query->where('user_id', $user->id);
     }
 
     public function getStatusAttribute($value)

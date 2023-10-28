@@ -14,7 +14,6 @@ class StoreLikeRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,uuid',
             'post_id' => 'required|exists:posts,uuid',
         ];
     }

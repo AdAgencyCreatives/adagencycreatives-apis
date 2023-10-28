@@ -123,7 +123,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Community Routes
      */
-    Route::apiResource('groups', GroupController::class)->except(['store']);
+    Route::apiResource('groups', GroupController::class);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);

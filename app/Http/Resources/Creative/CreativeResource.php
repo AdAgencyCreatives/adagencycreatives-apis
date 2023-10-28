@@ -61,10 +61,9 @@ class CreativeResource extends JsonResource
 
     public function get_resume($user)
     {
-        if(isset($user->resume)){
-            return getAttachmentBasePath() . $user->resume->path;
-        }
-        else{
+        if (isset($user->resume)) {
+            return getAttachmentBasePath().$user->resume->path;
+        } else {
             return route('download.resume', $user->uuid);
         }
 
@@ -73,6 +72,7 @@ class CreativeResource extends JsonResource
     public function get_location($user)
     {
         $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
+
         return $address ? [
             'state_id' => $address->state->uuid,
             'state' => $address->state->name,
