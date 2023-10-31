@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Mail\AccountApproved;
+use App\Mail\Friend\FriendshipRequest;
+use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
 use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
@@ -61,6 +63,12 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'custom_job_request_rejected':
                 Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
+                break;
+            case 'friendship_request_sent':
+                Mail::to($this->data['receiver'])->send(new FriendshipRequest($this->data['data']));
+                break;
+            case 'friendship_request_accepted':
+                Mail::to($this->data['receiver'])->send(new FriendshipRequestAccepted($this->data['data']));
                 break;
             default:
                 // Handle unknown email types or fallback logic

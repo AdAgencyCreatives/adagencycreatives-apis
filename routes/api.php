@@ -87,8 +87,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);
     Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
-    Route::apiResource('educations', EducationController::class, ['except' => ['index']])->middleware('check.permissions:education');
+    Route::apiResource('educations', EducationController::class, ['except' => ['index', 'update']])->middleware('check.permissions:education');
     Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience');
+
+    Route::patch('educations', [EducationController::class, 'update'])->middleware('check.permissions:education');
+    Route::patch('experiences', [ExperienceController::class, 'update'])->middleware('check.permissions:education');
 
     Route::apiResource('phone-numbers', PhoneController::class);
     Route::apiResource('addresses', AddressController::class);
