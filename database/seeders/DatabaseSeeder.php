@@ -138,6 +138,14 @@ class DatabaseSeeder extends Seeder
         \App\Models\Order::factory(15)->create();
         \App\Models\Group::factory(3)->create();
 
+        \App\Models\Group::factory(1)->create(
+            [
+                'user_id' => 1,
+                'name' => 'Feed',
+                'status' => 'public',
+            ]
+        );
+
         $this->call(PostSeeder::class);
         $this->call(CommentSeeder::class);
         $this->call(JobAlertSeeder::class);
@@ -161,10 +169,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TestUserSeeder::class);
 
-        Artisan::call('import:users');
-        Artisan::call('import:agencies');
-        Artisan::call('import:creatives');
-        Artisan::call('import:jobs');
+        // Artisan::call('import:users');
+        // Artisan::call('import:agencies');
+        // Artisan::call('import:creatives');
+        // Artisan::call('import:jobs');
         // Artisan::call('import:creative-spotlights');
 
         Artisan::call('optimize:clear');

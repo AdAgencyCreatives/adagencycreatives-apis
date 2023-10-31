@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\JobController;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +22,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Invitation
      */
     Route::post('job-invitation', [JobController::class, 'job_invitation']);
+
+    /**
+     * Friendship Invitataion
+     */
+    Route::get('friendships', [FriendshipController::class, 'index']);
+    Route::post('friendships', [FriendshipController::class, 'sendFriendRequest']);
+    Route::patch('friendships', [FriendshipController::class, 'respondToFriendRequest']);
 });

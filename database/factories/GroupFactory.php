@@ -10,7 +10,7 @@ class GroupFactory extends Factory
     {
         return [
             'uuid' => fake()->uuid(),
-            'user_id' => fake()->randomElement([1, 2, 3, 4, 5]),
+            'user_id' => fake()->randomElement([2, 3, 4, 5]),
             'name' => fake()->name(),
             'description' => fake()->text(),
             'status' => fake()->randomElement(['public', 'private', 'hidden']),

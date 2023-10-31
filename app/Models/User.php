@@ -213,6 +213,24 @@ class User extends Authenticatable
         return $this->morphMany(Note::class, 'notable');
     }
 
+    /**
+     * Community Relations
+     */
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user1_id', 'user2_id');
+    }
+
+    public function friendRequestsSent()
+    {
+        return $this->hasMany(FriendRequest::class, 'sender_id');
+    }
+
+    public function friendRequestsReceived()
+    {
+        return $this->hasMany(FriendRequest::class, 'receiver_id');
+    }
+
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
     {
         $agency = Agency::where('slug', $company_slug)->firstOrFail();

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\ApiException;
-use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Education\StoreEducationRequest;
@@ -12,7 +10,6 @@ use App\Http\Resources\Education\EducationCollection;
 use App\Http\Resources\Education\EducationResource;
 use App\Models\Education;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -56,18 +53,30 @@ class EducationController extends Controller
         }
     }
 
-    public function update(UpdateEducationRequest $request, $uuid)
+    public function update(UpdateEducationRequest $request)
     {
-        try {
-            $education = Education::where('uuid', $uuid)->firstOrFail();
-            $education->update($request->all());
+        $user = $request->user();
 
-            return new EducationResource($education);
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFound($e);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'US-01');
+        $educations = $request->input('educations');
+
+        foreach ($educations as $educationData) {
+
+            $education = Education::where('uuid', $educationData['id'])->first();
+
+            if ($education) {
+                $education->update($educationData);
+
+            } else {
+                Education::create(array_merge($educationData, [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                ]));
+            }
         }
+        $educations = Education::where('user_id', $user->id)->get();
+
+        return new EducationCollection($educations);
+
     }
 
     public function destroy($uuid)
