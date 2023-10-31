@@ -64,6 +64,8 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
+            $admin = User::find(1);
+
             $str = Str::uuid();
             if (in_array($user->role, ['agency'])) {
                 $agency = new Agency();
@@ -79,6 +81,15 @@ class UserController extends Controller
                     'url' => $request->linkedin_profile ?? '',
                 ]);
 
+
+                SendEmailJob::dispatch([
+                'receiver' => $admin,
+                'data' => [
+                    'user' => $user,
+                    'url' => $request->linkedin_profile ?? ''
+                ]
+            ], 'new_user_registration_agency_role');
+
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = $str;
@@ -89,14 +100,21 @@ class UserController extends Controller
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
                     'label' => 'portfolio',
-                    'url' => $request->linkedin_profile ?? '',
+                    'url' => $request->portfolio_site ?? '',
                 ]);
+
+                SendEmailJob::dispatch([
+                'receiver' => $admin,
+                'data' => [
+                    'user' => $user,
+                    'url' => $request->portfolio_site ?? ''
+                ]
+            ], 'new_user_registration_creative_role');
             }
 
-            $admin = User::find(1);
-            SendEmailJob::dispatch([
-                'receiver' => $admin, 'data' => $user,
-            ], 'new_user_registration');
+
+
+
 
             return new UserResource($user);
         } catch (\Exception $e) {
@@ -129,6 +147,12 @@ class UserController extends Controller
                 SendEmailJob::dispatch([
                     'receiver' => $user, 'data' => $user,
                 ], 'account_approved');
+            }
+
+            if ($newStatus === 'inactive' && $oldStatus === 'pending') {
+                SendEmailJob::dispatch([
+                    'receiver' => $user, 'data' => $user,
+                ], 'account_denied');
             }
             $user->update($request->all());
 
@@ -170,13 +194,13 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
         }
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -217,7 +241,7 @@ class UserController extends Controller
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
+        if (!$custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
             return response()->json(['message' => 'Incorrect old password'], 401);
         }
 
