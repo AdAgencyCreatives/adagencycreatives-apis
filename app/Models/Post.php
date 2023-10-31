@@ -40,6 +40,11 @@ class Post extends Model
         return $this->hasMany(Comment::class)->whereNull('parent_id');
     }
 
+    public function firstThreeComments()
+    {
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->take(3);
+    }
+
     public function likes()
     {
         return $this->hasMany(Like::class);

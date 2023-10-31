@@ -10,7 +10,10 @@ class CustomResetPasswordNotification extends ResetPasswordNotification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Reset Your Password')
-            ->view('emails.account.reset-password', ['url' => $this->resetUrl($notifiable)]);
+            ->subject(sprintf("Your %s password reset request", env('APP_NAME')))
+            ->view('emails.account.reset_password', [
+                'url' => sprintf("%s?token=%s&email=%s", env('FRONTEND_RESET_PASSWORD_URL'),  $this->token, $notifiable->email) ,
+                'userName' => $notifiable->first_name ?? $notifiable->username
+            ]);
     }
 }

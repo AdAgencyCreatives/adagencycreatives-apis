@@ -13,6 +13,8 @@ class CreativeResource extends JsonResource
 
     public function toArray($request)
     {
+
+        $logged_in_user = request()->user();
         $user = $this->user;
         $this->creative_category = isset($this->category) ? $this->category->name : null;
 
@@ -45,7 +47,7 @@ class CreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $user->personal_phone ? $user->personal_phone->phone_number : null,
             'location' => $this->location,
-            'resume' => $this->get_resume($user),
+            'resume' => $this->get_resume($user, $logged_in_user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -59,8 +61,9 @@ class CreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user)
+    public function get_resume($user, $logged_in_user)
     {
+        return $logged_in_user;
         if (isset($user->resume)) {
             return getAttachmentBasePath().$user->resume->path;
         } else {

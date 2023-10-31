@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Account;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -30,7 +30,7 @@ class ResetPassword extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Reset Password',
+            subject: sprintf("Your %s password reset request", env('APP_NAME')),
         );
     }
 
@@ -42,7 +42,7 @@ class ResetPassword extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.account.reset-password',
+            view: 'emails.account.reset_password',
         );
     }
 

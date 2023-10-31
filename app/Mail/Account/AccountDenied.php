@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Account;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AccountApproved extends Mailable implements ShouldQueue
+class AccountDenied extends Mailable implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,7 +25,7 @@ class AccountApproved extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: 'Account Approved',
+            subject: sprintf("%s registration denied", env('APP_NAME')),
         );
     }
 
@@ -37,7 +37,7 @@ class AccountApproved extends Mailable implements ShouldQueue
     public function content()
     {
         return new Content(
-            view: 'emails.account.approved',
+            view: 'emails.account.denied',
         );
     }
 

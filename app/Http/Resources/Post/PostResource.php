@@ -21,6 +21,7 @@ class PostResource extends JsonResource
             'status' => $this->status,
             // 'attachments' => new AttachmentCollection($this->attachments),
             'comments_count' => $this->comments_count,
+            'comments' => $this->firstThreeComments,
             'likes_count' => $this->likes_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),

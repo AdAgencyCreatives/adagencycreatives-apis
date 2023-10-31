@@ -21,14 +21,28 @@ class CommentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Comment::class)
+        $comments = QueryBuilder::for(Comment::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
             ])
-            ->allowedSorts('created_at');
+            ->allowedSorts('created_at')->get();
 
-        $comments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+             // Organize comments into a parent-child relationship array
+    $commentsArray = [];
+    foreach ($comments as $comment) {
+        if ($comment->parent_id === null) {
+            $commentsArray[$comment->id] = [
+                'comment' => $comment,
+                'replies' => []
+            ];
+        } else {
+            $commentsArray[$comment->parent_id]['replies'][] = $comment;
+        }
+    }
+    return $commentsArray;
+
+        // $comments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CommentCollection($comments);
     }
