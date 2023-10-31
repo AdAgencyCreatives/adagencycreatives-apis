@@ -19,6 +19,31 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class FriendshipController extends Controller
 {
+    public function all_friends(Request $request)
+    {
+
+        $userId = $request->user()->id;
+
+        $friends = Friendship::with('user')->where(function ($query) use ($userId) {
+            $query->where('user1_id', $userId);
+        })->orWhere(function ($query) use ($userId) {
+            $query->where('user2_id', $userId);
+        })->get();
+
+        dd($friends);
+        $query = QueryBuilder::for(Friendship::class)
+            ->allowedFilters([
+                AllowedFilter::scope('sender_id'),
+                AllowedFilter::scope('receiver_id'),
+                'status',
+            ])
+            ->allowedSorts('created_at');
+
+        $friendRequests = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new FriendshipRequestCollection($friendRequests);
+    }
+
     public function index(Request $request)
     {
         $query = QueryBuilder::for(FriendRequest::class)
@@ -55,11 +80,19 @@ class FriendshipController extends Controller
         ]);
 
         try {
+            if ($sender->role == 'creative') {
+                $profile_url = '/creative/'.$sender->creative?->slug ?? '';
+            } elseif ($sender->role == 'agency') {
+                $profile_url = '/agency/'.$sender->agency?->slug ?? '';
+            } else {
+                $profile_url = $sender->username;
+            }
             SendEmailJob::dispatch([
                 'receiver' => $receiver,
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'inviter' => $sender->first_name,
+                    'iniviter_profile' => env('FRONTEND_URL').$profile_url,
                 ],
             ], 'friendship_request_sent');
         } catch (\Exception $e) {

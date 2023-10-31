@@ -2,11 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Mail\Account\NewUserRegistrationCreative;
-use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\AccountApproved;
 use App\Mail\Account\AccountDenied;
-
+use App\Mail\Account\NewUserRegistrationAgency;
+use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
