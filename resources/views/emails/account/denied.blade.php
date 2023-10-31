@@ -9,23 +9,23 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        Account Activated</h1>
+                        Registration Denied</h1>
                     <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p>Welcome to {{ env('APP_NAME') }}!</p>
+                        <p style="margin-bottom: 30px;">We appreciate your interest in joining {{ env('APP_NAME') }}.
+                            Unfortunately, the following
+                            account has not been approved at this time.
+                        </p>
+                        <h4 style="text-decoration: underline; margin-bottom: 5px;">Details:</h4>
+                        <div><b>Name: </b>{{ $data['user']->username ?? '' }}</div>
+                        <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
 
-                        <div style="margin-bottom: 30px;">To help you get the most out of your account, you’ll want to
-                            first complete your <a href="{{ env('FRONTEND_URL') }}/profile">Profile.</a>
-                            You can start by telling everyone a bit about yourself, your skills, and your goals.</div>
-                        <div style="margin-bottom: 30px;">Once you’ve got your profile popping, take a moment to adjust
-                            your preferences. After that,
-                            you’re ready to get out there and start making some new connections!</div>
-                        <div style="margin-bottom: 30px;">If you forget your password, no problem. You can reset it
-                            <a href="{{ env('FRONTEND_RESET_PASSWORD_URL') }}">here.</a>
 
+                        <div style="margin-top: 30px;">If you have any questions about this decision, reach out to
+                            info@adagencycreatives.com. Our team receives many inquiries and requests, so please allow
+                            up to a few business days for us to respond.
                         </div>
-
 
                         @include('emails.includes.jobboard_footer')

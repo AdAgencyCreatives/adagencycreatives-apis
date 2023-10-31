@@ -2,7 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Mail\AccountApproved;
+use App\Mail\Account\NewUserRegistrationCreative;
+use App\Mail\Account\NewUserRegistrationAgency;
+use App\Mail\Account\AccountApproved;
+use App\Mail\Account\AccountDenied;
+
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
@@ -10,7 +14,6 @@ use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
-use App\Mail\NewUserRegistration;
 use App\Mail\Order\ConfirmationAdmin;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,11 +39,17 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
         switch ($this->emailType) {
-            case 'new_user_registration':
-                Mail::to($this->data['receiver'])->send(new NewUserRegistration($this->data['data']));
+            case 'new_user_registration_creative_role':
+                Mail::to($this->data['receiver'])->send(new NewUserRegistrationCreative($this->data['data']));
+                break;
+            case 'new_user_registration_agency_role':
+                Mail::to($this->data['receiver'])->send(new NewUserRegistrationAgency($this->data['data']));
                 break;
             case 'account_approved':
                 Mail::to($this->data['receiver'])->send(new AccountApproved($this->data['data']));
+                break;
+            case 'account_denied':
+                Mail::to($this->data['receiver'])->send(new AccountDenied($this->data['data']));
                 break;
             case 'group_invitation':
                 Mail::to($this->data['receiver'])->send(new Invitation($this->data['data']));
