@@ -30,7 +30,7 @@ class ResetPassword extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf("Your %s password reset request", env('APP_NAME')),
+            subject: sprintf('Your %s password reset request', env('APP_NAME')),
         );
     }
 

@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Friendship Invitataion
      */
+    Route::get('my-friends', [FriendshipController::class, 'all_friends']);
     Route::get('friendships', [FriendshipController::class, 'index']);
     Route::post('friendships', [FriendshipController::class, 'sendFriendRequest']);
     Route::patch('friendships', [FriendshipController::class, 'respondToFriendRequest']);

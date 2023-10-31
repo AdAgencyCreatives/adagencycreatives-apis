@@ -25,7 +25,7 @@ class AccountDenied extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf("%s registration denied", env('APP_NAME')),
+            subject: sprintf('%s registration denied', env('APP_NAME')),
         );
     }
 

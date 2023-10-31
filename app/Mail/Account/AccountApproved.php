@@ -25,7 +25,7 @@ class AccountApproved extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf("Your %s account has been activated", env('APP_NAME')),
+            subject: sprintf('Your %s account has been activated', env('APP_NAME')),
         );
     }
 

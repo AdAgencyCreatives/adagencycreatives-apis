@@ -28,19 +28,20 @@ class CommentController extends Controller
             ])
             ->allowedSorts('created_at')->get();
 
-             // Organize comments into a parent-child relationship array
-    $commentsArray = [];
-    foreach ($comments as $comment) {
-        if ($comment->parent_id === null) {
-            $commentsArray[$comment->id] = [
-                'comment' => $comment,
-                'replies' => []
-            ];
-        } else {
-            $commentsArray[$comment->parent_id]['replies'][] = $comment;
+        // Organize comments into a parent-child relationship array
+        $commentsArray = [];
+        foreach ($comments as $comment) {
+            if ($comment->parent_id === null) {
+                $commentsArray[$comment->id] = [
+                    'comment' => $comment,
+                    'replies' => [],
+                ];
+            } else {
+                $commentsArray[$comment->parent_id]['replies'][] = $comment;
+            }
         }
-    }
-    return $commentsArray;
+
+        return $commentsArray;
 
         // $comments = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
