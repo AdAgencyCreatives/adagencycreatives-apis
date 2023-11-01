@@ -209,3 +209,18 @@ if (! function_exists('updateLocation')) {
         }
     }
 }
+
+
+if (! function_exists('get_user_slug')) {
+    function get_user_slug($user)
+    {
+        $slug = null;
+        if ($user->role == 'creative') {
+            $slug = $user->creative?->slug;
+        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
+            $slug = $user->agency?->slug;
+        }
+
+        return $slug;
+    }
+}
