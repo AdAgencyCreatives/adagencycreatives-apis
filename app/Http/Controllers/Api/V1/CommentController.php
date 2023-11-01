@@ -26,7 +26,9 @@ class CommentController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
             ])
-            ->allowedSorts('created_at')->get();
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at')
+            ->get();
 
         // Organize comments into a parent-child relationship array
         // $commentsArray = [];

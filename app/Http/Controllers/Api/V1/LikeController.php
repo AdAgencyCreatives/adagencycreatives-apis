@@ -24,7 +24,8 @@ class LikeController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        $likes = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $likes = $query->get();
+        // $likes = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new LikeCollection($likes);
     }

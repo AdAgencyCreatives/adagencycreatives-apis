@@ -27,6 +27,7 @@ class PostController extends Controller
                 AllowedFilter::scope('group_id'),
                 'status',
             ])
+            ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
         $posts = $query

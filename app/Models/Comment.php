@@ -49,7 +49,6 @@ class Comment extends Model
     public function scopePostId(Builder $query, $post_id)
     {
         $post = Post::where('uuid', $post_id)->firstOrFail();
-
         return $query->where('post_id', $post->id);
     }
 }
