@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Post;
 
 use App\Http\Resources\Attachment\AttachmentCollection;
+use App\Http\Resources\Comment\CommentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -21,7 +22,7 @@ class PostResource extends JsonResource
             'status' => $this->status,
             // 'attachments' => new AttachmentCollection($this->attachments),
             'comments_count' => $this->comments_count,
-            'comments' => $this->firstThreeComments,
+            'comments' => new CommentCollection($this->firstThreeComments),
             'likes_count' => $this->likes_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
