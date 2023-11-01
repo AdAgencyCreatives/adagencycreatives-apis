@@ -80,6 +80,7 @@ class ImportCreativeSpotlight extends Command
         $filename = basename($url);
         try {
             $contents = file_get_contents($url);
+            dump($contents);
         } catch (\Exception $e) {
             dump($e->getMessage());
 
