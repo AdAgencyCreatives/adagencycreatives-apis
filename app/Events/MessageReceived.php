@@ -30,12 +30,12 @@ class MessageReceived implements ShouldBroadcast
         $receiver_id = $this->data['receiver_id'];
         $channel2 = 'messanger.'.$receiver_id;
 
-        // dd($channel2);
-        return new PrivateChannel($channel2);
+        return [$channel2];
+        // return new PrivateChannel($channel2); //Channel Name
     }
 
     public function broadcastAs()
     {
-        return 'private_msg';
+        return 'private_msg'; //Event Name
     }
 }
