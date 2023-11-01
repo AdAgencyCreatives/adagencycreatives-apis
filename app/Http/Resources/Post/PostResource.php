@@ -17,6 +17,7 @@ class PostResource extends JsonResource
             'user_id' => $user->uuid,
             'group_id' => $this->group->uuid,
             'author' => $user->first_name.' '.$user->last_name,
+            'author_slug' => get_user_slug($user),
             'author_avatar' => $this->get_image($user),
             'content' => $this->content,
             'status' => $this->status,
