@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FriendshipRequest\FriendRequestRespondRequest;
 use App\Http\Requests\FriendshipRequest\FriendRequestSendRequest;
+use App\Http\Resources\Friendship\FriendshipCollection;
 use App\Http\Resources\Friendship\FriendshipRequestCollection;
 use App\Jobs\SendEmailJob;
 use App\Models\FriendRequest;
@@ -24,24 +25,14 @@ class FriendshipController extends Controller
 
         $userId = $request->user()->id;
 
-        $friends = Friendship::with('user')->where(function ($query) use ($userId) {
+        $friends = Friendship::with('initiatedByUser', 'receivedByUser')->where(function ($query) use ($userId) {
             $query->where('user1_id', $userId);
         })->orWhere(function ($query) use ($userId) {
             $query->where('user2_id', $userId);
         })->get();
 
-        dd($friends);
-        $query = QueryBuilder::for(Friendship::class)
-            ->allowedFilters([
-                AllowedFilter::scope('sender_id'),
-                AllowedFilter::scope('receiver_id'),
-                'status',
-            ])
-            ->allowedSorts('created_at');
-
-        $friendRequests = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
-        return new FriendshipRequestCollection($friendRequests);
+        // dd($friends->toArray());
+        return new FriendshipCollection($friends);
     }
 
     public function index(Request $request)
@@ -61,7 +52,6 @@ class FriendshipController extends Controller
 
     public function sendFriendRequest(FriendRequestSendRequest $request)
     {
-
         // FriendRequest::where('id', '>', 0)->delete();
         $sender = $request->user();
         $receiver = User::where('uuid', $request->receiver_id)->first();
@@ -81,9 +71,9 @@ class FriendshipController extends Controller
 
         try {
             if ($sender->role == 'creative') {
-                $profile_url = '/creative/'.$sender->creative?->slug ?? '';
+                $profile_url = '/creative/' . $sender->creative?->slug ?? '';
             } elseif ($sender->role == 'agency') {
-                $profile_url = '/agency/'.$sender->agency?->slug ?? '';
+                $profile_url = '/agency/' . $sender->agency?->slug ?? '';
             } else {
                 $profile_url = $sender->username;
             }
@@ -92,7 +82,7 @@ class FriendshipController extends Controller
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'inviter' => $sender->first_name,
-                    'iniviter_profile' => env('FRONTEND_URL').$profile_url,
+                    'iniviter_profile' => env('FRONTEND_URL') . $profile_url,
                 ],
             ], 'friendship_request_sent');
         } catch (\Exception $e) {
@@ -108,38 +98,47 @@ class FriendshipController extends Controller
         $requestId = $request->input('request_id');
         $response = $request->input('response');
 
-        $friendRequest = FriendRequest::where('uuid', $requestId)->first();
+        // Fetch the friend request
+        $friendRequest = FriendRequest::where('uuid', $requestId)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$friendRequest) {
+            return response()->json(['message' => 'This request has already been responded.'], 403);
+        }
+
 
         if ($friendRequest->receiver_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized to respond to this request.'], 403);
         }
 
-        if ($response === 'accepted') {
-            $friendRequest->status = 'accepted';
-            $friendRequest->save();
+        DB::beginTransaction();
+        try {
+            if ($response === 'accepted') {
+                $friendRequest->update(['status' => 'accepted']);
 
-            // Create a friendship between the users
-            $this->createFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
+                // Create a friendship between the users
+                $this->createFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
 
-            try {
-                $sender = $friendRequest->sender;
+                // Dispatch email job
                 SendEmailJob::dispatch([
-                    'receiver' => $sender,
+                    'receiver' => $friendRequest->sender,
                     'data' => [
-                        'recipient' => $sender->first_name, // the person who sent the friend request
-                        'member' => $friendRequest->receiver->first_name, //the person who was invited
+                        'recipient' => $friendRequest->sender->first_name,
+                        'member' => $friendRequest->receiver->first_name,
                     ],
                 ], 'friendship_request_accepted');
-            } catch (\Exception $e) {
-                throw new ApiException($e, 'CS-01');
+            } else {
+                $friendRequest->update(['status' => 'declined']);
             }
 
-        } else {
-            $friendRequest->status = 'declined';
-            $friendRequest->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new ApiException($e, 'CS-01');
         }
 
-        return response()->json(['message' => 'Friend request responded.']);
+            return response()->json(['message' => 'Friend request responded.']);
     }
 
     public function getFriends()
@@ -165,7 +164,12 @@ class FriendshipController extends Controller
     private function createFriendship($user1Id, $user2Id)
     {
         DB::table('friendships')->insert([
-            ['user1_id' => $user1Id, 'user2_id' => $user2Id],
+            [
+                'user1_id' => $user1Id,
+                'user2_id' => $user2Id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
