@@ -33,7 +33,8 @@ class PostController extends Controller
             ->withCount('comments')
             ->with('firstThreeComments')
             ->withCount('likes')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new PostCollection($posts);
     }
