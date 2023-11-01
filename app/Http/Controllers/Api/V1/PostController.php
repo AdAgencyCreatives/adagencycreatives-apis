@@ -32,7 +32,7 @@ class PostController extends Controller
 
         $posts = $query
             ->withCount('comments')
-            ->with('firstThreeComments')
+            ->with('comments')
             ->withCount('likes')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
