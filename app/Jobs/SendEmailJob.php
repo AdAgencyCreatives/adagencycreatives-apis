@@ -38,6 +38,9 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
         switch ($this->emailType) {
+            /**
+             * Account
+             */
             case 'new_user_registration_creative_role':
                 Mail::to($this->data['receiver'])->send(new NewUserRegistrationCreative($this->data['data']));
                 break;
@@ -50,6 +53,10 @@ class SendEmailJob implements ShouldQueue
             case 'account_denied':
                 Mail::to($this->data['receiver'])->send(new AccountDenied($this->data['data']));
                 break;
+
+            /**
+             * Group
+             */
             case 'group_invitation':
                 Mail::to($this->data['receiver'])->send(new Invitation($this->data['data']));
                 break;
@@ -63,6 +70,10 @@ class SendEmailJob implements ShouldQueue
                     Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
                 }
                 break;
+
+            /**
+             * Job
+             */
             case 'new_job_added_admin':
                 Mail::to($this->data['receiver'])->send(new NewJobPosted($this->data['data']));
                 break;
@@ -72,6 +83,11 @@ class SendEmailJob implements ShouldQueue
             case 'custom_job_request_rejected':
                 Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
                 break;
+
+
+            /**
+             * Friend
+             */
             case 'friendship_request_sent':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequest($this->data['data']));
                 break;

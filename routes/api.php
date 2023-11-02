@@ -170,6 +170,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creative_stats', [DashboardController::class, 'creative_dashboard_stats']);
     Route::patch('update_password', [UserController::class, 'update_password']);
 
-})->withoutMiddleware('throttle');
+});
 
 Route::get('stats', [DashboardController::class, 'index']);

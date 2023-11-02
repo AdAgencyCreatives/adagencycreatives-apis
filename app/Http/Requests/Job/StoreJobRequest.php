@@ -16,7 +16,7 @@ class StoreJobRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,uuid',
             'category_id' => 'required|exists:categories,uuid',
-            'state_id' => 'required|exists:locations,uuid',
+            'state_id' => 'nullable|exists:locations,uuid',
             'city_id' => 'nullable|exists:locations,uuid',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -27,7 +27,7 @@ class StoreJobRequest extends FormRequest
             'media_experience.*' => 'exists:medias,uuid',
             'salary_range' => 'required|string|max:255',
             'apply_type' => 'required|string|max:255',
-            'external_link' => 'nullable|url',
+            'external_link' => 'nullable',
             'is_remote' => 'required|boolean',
             'is_hybrid' => 'required|boolean',
             'is_onsite' => 'required|boolean',
