@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NoteController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
@@ -149,6 +150,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::get('messages', [ChatController::class, 'fetchMessages']);
     Route::apiResource('messages', ChatController::class);
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::patch('notifications', [NotificationController::class, 'update']);
 
     /**
      * SEO

@@ -147,7 +147,7 @@
                 ""
             ],
             "last_update": [
-                "1698763870"
+                "1698932307"
             ],
             "facebook": [
                 ""
@@ -2624,7 +2624,7 @@
                 "a:6:{s:64:\"2d44e509354d83a6ff1517e7fd2d8192d7e408504b8842145a33e0d873e83667\";a:4:{s:10:\"expiration\";i:1698873233;s:2:\"ip\";s:14:\"182.181.28.211\";s:2:\"ua\";s:111:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1697663633;}s:64:\"10bfa2cf8696278c14cff671baf48269828f685dbbecfd181940d72d64dddd1c\";a:4:{s:10:\"expiration\";i:1699359179;s:2:\"ip\";s:14:\"119.73.100.122\";s:2:\"ua\";s:111:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698149579;}s:64:\"ec53e6838148ef0938569dd5fd270e5bc215d150c09315af9429b71847111ccd\";a:4:{s:10:\"expiration\";i:1699476923;s:2:\"ip\";s:12:\"39.62.18.226\";s:2:\"ua\";s:111:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698267323;}s:64:\"e89ed4c929d77ff3ade06a5cbe95dd68ea3e8f83b1223881243e5a61592b6150\";a:4:{s:10:\"expiration\";i:1699566064;s:2:\"ip\";s:13:\"24.242.250.65\";s:2:\"ua\";s:117:\"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698356464;}s:64:\"01f01d3b4d19c9f352098dc1d8ee97eb45d86146f343078e93e06eaf6105b6b6\";a:4:{s:10:\"expiration\";i:1699827402;s:2:\"ip\";s:14:\"139.135.55.151\";s:2:\"ua\";s:111:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698617802;}s:64:\"7f69bdb7f95b78335d33080d601154e19f1654ff1796f9cbb4ee778ba31d74a0\";a:4:{s:10:\"expiration\";i:1699971254;s:2:\"ip\";s:14:\"182.181.28.211\";s:2:\"ua\";s:111:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698761654;}}"
             ],
             "wc_last_active": [
-                "1698796800"
+                "1698883200"
             ],
             "wfls-last-login": [
                 "1698761654"
@@ -2639,7 +2639,7 @@
                 "a:1:{s:4:\"cart\";a:0:{}}"
             ],
             "community-events-location": [
-                "a:1:{s:2:\"ip\";s:12:\"182.181.28.0\";}"
+                "a:1:{s:2:\"ip\";s:10:\"39.62.18.0\";}"
             ],
             "youzify_profile_views_count": [
                 "18"
@@ -2828,7 +2828,7 @@
                 ""
             ],
             "bpbm_last_activity": [
-                "2023-11-01 20:40:50"
+                "2023-11-02 20:37:39"
             ],
             "bp-better-messages-last-notified": [
                 "a:2:{i:10;s:2:\"22\";i:21;s:2:\"81\";}"
@@ -2895,9 +2895,6 @@
             ],
             "metaboxhidden_job_listing": [
                 "a:1:{i:0;s:26:\"nitropack_manage_cache_box\";}"
-            ],
-            "wp_yoast_notifications": [
-                "a:2:{i:0;a:2:{s:7:\"message\";s:367:\"<p>We need to re-analyze some of your SEO data because of a change in the visibility of your post types. Please help us do that by running the SEO data optimization. <\/p><p>We estimate this will take less than a minute.<\/p><a class=\"button\" href=\"https:\/\/adagencycreatives.com\/wp-admin\/admin.php?page=wpseo_tools&start-indexation=true\">Start SEO data optimization<\/a>\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:13:\"wpseo-reindex\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:2:\"38\";s:10:\"user_login\";s:13:\"Adeel php Dev\";s:9:\"user_pass\";s:34:\"$P$BgvafY7yJ1fGHK\/mdlZe89Fgy9exuG\/\";s:13:\"user_nicename\";s:13:\"adeel-php-dev\";s:10:\"user_email\";s:23:\"adeelakhterit@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-12-19 21:46:41\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:9:\"Community\";}s:2:\"ID\";i:38;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.8;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";s:20:\"wpseo_manage_options\";s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}i:1;a:2:{s:7:\"message\";s:445:\"It looks like you aren't using our <strong>Yoast WooCommerce SEO addon<\/strong>. <a href=\"https:\/\/yoa.st\/1o0?php_version=8.2&platform=wordpress&platform_version=6.3&software=free&software_version=20.13&days_active=257&user_language=en_US\" aria-label=\"More information about Yoast WooCommerce SEO\" target=\"_blank\" rel=\"noopener noreferrer\">Upgrade today<\/a> to unlock more tools and SEO features to make your products stand out in search results.\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:44:\"wpseo-suggested-plugin-yoast-woocommerce-seo\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:2:\"38\";s:10:\"user_login\";s:13:\"Adeel php Dev\";s:9:\"user_pass\";s:34:\"$P$BgvafY7yJ1fGHK\/mdlZe89Fgy9exuG\/\";s:13:\"user_nicename\";s:13:\"adeel-php-dev\";s:10:\"user_email\";s:23:\"adeelakhterit@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-12-19 21:46:41\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:9:\"Community\";}s:2:\"ID\";i:38;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.5;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";a:1:{i:0;s:15:\"install_plugins\";}s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}}"
             ]
         }
     },
@@ -3051,10 +3048,10 @@
                 "1689862231"
             ],
             "last_update": [
-                "1698700061"
+                "1698932307"
             ],
             "wc_last_active": [
-                "1698796800"
+                "1698883200"
             ],
             "wfls-last-login": [
                 "1698856508"
@@ -3063,7 +3060,7 @@
                 "a:1:{s:4:\"cart\";a:0:{}}"
             ],
             "bpbm_last_activity": [
-                "2023-11-01 16:35:33"
+                "2023-11-02 20:37:37"
             ],
             "youzify_profile_views_count": [
                 "10"
@@ -9046,7 +9043,7 @@
                 "a:1:{s:4:\"cart\";a:0:{}}"
             ],
             "last_update": [
-                "1698763879"
+                "1698876866"
             ],
             "youzify_profile_views_count": [
                 "70"
@@ -9237,7 +9234,7 @@
                 "xymDQ"
             ],
             "user_account_status": [
-                "pending"
+                "denied"
             ],
             "_wcs_subscription_ids_cache": [
                 "a:0:{}"
@@ -9247,6 +9244,9 @@
             ],
             "last_update": [
                 "1698872331"
+            ],
+            "bpbm_last_activity": [
+                "1970-01-01 00:00:00"
             ]
         }
     },
@@ -25826,7 +25826,7 @@
                 ""
             ],
             "last_update": [
-                "1698144075"
+                "1698907049"
             ],
             "facebook": [
                 ""
@@ -26432,19 +26432,19 @@
                 ""
             ],
             "session_tokens": [
-                "a:1:{s:64:\"56e1dc83c086913507a7a25084e79779acb97a6940c27f1c82dc9af6839c6fe2\";a:4:{s:10:\"expiration\";i:1692804790;s:2:\"ip\";s:10:\"68.49.90.6\";s:2:\"ua\";s:117:\"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.4 Safari\/605.1.15\";s:5:\"login\";i:1692631990;}}"
+                "a:1:{s:64:\"48713f458000231fd1d0809db43b5685718cb675697c19661038047107caee82\";a:4:{s:10:\"expiration\";i:1700141917;s:2:\"ip\";s:10:\"68.49.90.6\";s:2:\"ua\";s:117:\"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698932317;}}"
             ],
             "wc_last_active": [
-                "1692576000"
+                "1698883200"
             ],
             "wfls-last-login": [
-                "1692631990"
+                "1698932317"
             ],
             "_woocommerce_persistent_cart_1": [
                 "a:1:{s:4:\"cart\";a:0:{}}"
             ],
             "bpbm_last_activity": [
-                "2023-08-21 15:35:55"
+                "2023-11-02 13:49:47"
             ],
             "youzify_profile_views_count": [
                 "62"
@@ -26828,7 +26828,7 @@
                 "1698756075"
             ],
             "last_update": [
-                "1698862874"
+                "1698932307"
             ],
             "bpbm_last_activity": [
                 "2023-11-01 19:07:54"
@@ -27349,7 +27349,7 @@
                 "2023-08-31 14:01:44"
             ],
             "last_update": [
-                "1698867846"
+                "1698876866"
             ],
             "youzify_profile_views_count": [
                 "69"
@@ -28300,7 +28300,7 @@
                 ""
             ],
             "last_update": [
-                "1698871046"
+                "1698934777"
             ],
             "_following_employer": [
                 "a:0:{}"
@@ -34877,13 +34877,13 @@
                 "woo:A4ivpdmeUNFKIMDkXOxzAX8T"
             ],
             "last_update": [
-                "1698777273"
+                "1698941875"
             ],
             "woocommerce_admin_task_list_tracked_started_tasks": [
                 "{\"purchase\":1,\"store_details\":3,\"get-mobile-app\":1}"
             ],
             "wc_last_active": [
-                "1698796800"
+                "1698883200"
             ],
             "wp_user-settings": [
                 "libraryContent=browse&ampampampampeditor=tinymce&ampampampamphidetb=1&ampampampeditor=tinymce&editor=tinymce&advImgDetails=show&hidetb=0"
@@ -35105,7 +35105,7 @@
                 "0"
             ],
             "_yoast_wpseo_profile_updated": [
-                "1698754012"
+                "1698941874"
             ],
             "_yoast_alerts_dismissed": [
                 "a:1:{s:26:\"webinar-promo-notification\";b:1;}"
@@ -35192,7 +35192,7 @@
                 "1"
             ],
             "bpbm_last_activity": [
-                "2023-11-01 20:18:37"
+                "2023-11-02 19:16:58"
             ],
             "bp-better-messages-last-notified": [
                 "a:1:{i:30;s:2:\"82\";}"
@@ -35224,11 +35224,11 @@
             "woocommerce_admin_variable_product_tour_shown": [
                 ""
             ],
-            "wp_yoast_notifications": [
-                "a:2:{i:0;a:2:{s:7:\"message\";s:367:\"<p>We need to re-analyze some of your SEO data because of a change in the visibility of your post types. Please help us do that by running the SEO data optimization. <\/p><p>We estimate this will take less than a minute.<\/p><a class=\"button\" href=\"https:\/\/adagencycreatives.com\/wp-admin\/admin.php?page=wpseo_tools&start-indexation=true\">Start SEO data optimization<\/a>\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:13:\"wpseo-reindex\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:1:\"1\";s:10:\"user_login\";s:11:\"eudstuenAAC\";s:9:\"user_pass\";s:34:\"$P$Bxe0Sbjo8GDV8vn8sjJVlSxB4ywnuL0\";s:13:\"user_nicename\";s:11:\"eudstuenaac\";s:10:\"user_email\";s:22:\"erikaudstuen@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-04-20 19:54:10\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:19:\"Ad Agency Creatives\";}s:2:\"ID\";i:1;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.8;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";s:20:\"wpseo_manage_options\";s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}i:1;a:2:{s:7:\"message\";s:445:\"It looks like you aren't using our <strong>Yoast WooCommerce SEO addon<\/strong>. <a href=\"https:\/\/yoa.st\/1o0?php_version=8.2&platform=wordpress&platform_version=6.3&software=free&software_version=20.13&days_active=257&user_language=en_US\" aria-label=\"More information about Yoast WooCommerce SEO\" target=\"_blank\" rel=\"noopener noreferrer\">Upgrade today<\/a> to unlock more tools and SEO features to make your products stand out in search results.\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:44:\"wpseo-suggested-plugin-yoast-woocommerce-seo\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:1:\"1\";s:10:\"user_login\";s:11:\"eudstuenAAC\";s:9:\"user_pass\";s:34:\"$P$Bxe0Sbjo8GDV8vn8sjJVlSxB4ywnuL0\";s:13:\"user_nicename\";s:11:\"eudstuenaac\";s:10:\"user_email\";s:22:\"erikaudstuen@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-04-20 19:54:10\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:19:\"Ad Agency Creatives\";}s:2:\"ID\";i:1;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.5;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";a:1:{i:0;s:15:\"install_plugins\";}s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}}"
-            ],
             "wfls-dismiss-wfls-woocommerce-integration-notice": [
                 "1"
+            ],
+            "wp_yoast_notifications": [
+                "a:2:{i:0;a:2:{s:7:\"message\";s:367:\"<p>We need to re-analyze some of your SEO data because of a change in the visibility of your post types. Please help us do that by running the SEO data optimization. <\/p><p>We estimate this will take less than a minute.<\/p><a class=\"button\" href=\"https:\/\/adagencycreatives.com\/wp-admin\/admin.php?page=wpseo_tools&start-indexation=true\">Start SEO data optimization<\/a>\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:13:\"wpseo-reindex\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:1:\"1\";s:10:\"user_login\";s:11:\"eudstuenAAC\";s:9:\"user_pass\";s:34:\"$P$Bxe0Sbjo8GDV8vn8sjJVlSxB4ywnuL0\";s:13:\"user_nicename\";s:11:\"eudstuenaac\";s:10:\"user_email\";s:22:\"erikaudstuen@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-04-20 19:54:10\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:19:\"Ad Agency Creatives\";}s:2:\"ID\";i:1;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.8;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";s:20:\"wpseo_manage_options\";s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}i:1;a:2:{s:7:\"message\";s:445:\"It looks like you aren't using our <strong>Yoast WooCommerce SEO addon<\/strong>. <a href=\"https:\/\/yoa.st\/1o0?php_version=8.2&platform=wordpress&platform_version=6.3&software=free&software_version=20.13&days_active=258&user_language=en_US\" aria-label=\"More information about Yoast WooCommerce SEO\" target=\"_blank\" rel=\"noopener noreferrer\">Upgrade today<\/a> to unlock more tools and SEO features to make your products stand out in search results.\";s:7:\"options\";a:10:{s:4:\"type\";s:7:\"warning\";s:2:\"id\";s:44:\"wpseo-suggested-plugin-yoast-woocommerce-seo\";s:4:\"user\";O:7:\"WP_User\":8:{s:4:\"data\";O:8:\"stdClass\":10:{s:2:\"ID\";s:1:\"1\";s:10:\"user_login\";s:11:\"eudstuenAAC\";s:9:\"user_pass\";s:34:\"$P$Bxe0Sbjo8GDV8vn8sjJVlSxB4ywnuL0\";s:13:\"user_nicename\";s:11:\"eudstuenaac\";s:10:\"user_email\";s:22:\"erikaudstuen@gmail.com\";s:8:\"user_url\";s:0:\"\";s:15:\"user_registered\";s:19:\"2022-04-20 19:54:10\";s:19:\"user_activation_key\";s:0:\"\";s:11:\"user_status\";s:1:\"0\";s:12:\"display_name\";s:19:\"Ad Agency Creatives\";}s:2:\"ID\";i:1;s:4:\"caps\";a:1:{s:13:\"administrator\";b:1;}s:7:\"cap_key\";s:15:\"wp_capabilities\";s:5:\"roles\";a:1:{i:0;s:13:\"administrator\";}s:7:\"allcaps\";a:168:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:18:\"manage_woocommerce\";b:1;s:24:\"view_woocommerce_reports\";b:1;s:12:\"edit_product\";b:1;s:12:\"read_product\";b:1;s:14:\"delete_product\";b:1;s:13:\"edit_products\";b:1;s:20:\"edit_others_products\";b:1;s:16:\"publish_products\";b:1;s:21:\"read_private_products\";b:1;s:15:\"delete_products\";b:1;s:23:\"delete_private_products\";b:1;s:25:\"delete_published_products\";b:1;s:22:\"delete_others_products\";b:1;s:21:\"edit_private_products\";b:1;s:23:\"edit_published_products\";b:1;s:20:\"manage_product_terms\";b:1;s:18:\"edit_product_terms\";b:1;s:20:\"delete_product_terms\";b:1;s:20:\"assign_product_terms\";b:1;s:15:\"edit_shop_order\";b:1;s:15:\"read_shop_order\";b:1;s:17:\"delete_shop_order\";b:1;s:16:\"edit_shop_orders\";b:1;s:23:\"edit_others_shop_orders\";b:1;s:19:\"publish_shop_orders\";b:1;s:24:\"read_private_shop_orders\";b:1;s:18:\"delete_shop_orders\";b:1;s:26:\"delete_private_shop_orders\";b:1;s:28:\"delete_published_shop_orders\";b:1;s:25:\"delete_others_shop_orders\";b:1;s:24:\"edit_private_shop_orders\";b:1;s:26:\"edit_published_shop_orders\";b:1;s:23:\"manage_shop_order_terms\";b:1;s:21:\"edit_shop_order_terms\";b:1;s:23:\"delete_shop_order_terms\";b:1;s:23:\"assign_shop_order_terms\";b:1;s:16:\"edit_shop_coupon\";b:1;s:16:\"read_shop_coupon\";b:1;s:18:\"delete_shop_coupon\";b:1;s:17:\"edit_shop_coupons\";b:1;s:24:\"edit_others_shop_coupons\";b:1;s:20:\"publish_shop_coupons\";b:1;s:25:\"read_private_shop_coupons\";b:1;s:19:\"delete_shop_coupons\";b:1;s:27:\"delete_private_shop_coupons\";b:1;s:29:\"delete_published_shop_coupons\";b:1;s:26:\"delete_others_shop_coupons\";b:1;s:25:\"edit_private_shop_coupons\";b:1;s:27:\"edit_published_shop_coupons\";b:1;s:24:\"manage_shop_coupon_terms\";b:1;s:22:\"edit_shop_coupon_terms\";b:1;s:24:\"delete_shop_coupon_terms\";b:1;s:24:\"assign_shop_coupon_terms\";b:1;s:10:\"copy_posts\";b:1;s:11:\"bp_moderate\";b:1;s:26:\"create_notes_elementor-pro\";b:1;s:24:\"edit_notes_elementor-pro\";b:1;s:26:\"delete_notes_elementor-pro\";b:1;s:24:\"read_notes_elementor-pro\";b:1;s:31:\"edit_others_notes_elementor-pro\";b:1;s:33:\"delete_others_notes_elementor-pro\";b:1;s:39:\"read_others_private_notes_elementor-pro\";b:1;s:23:\"wf2fa_activate_2fa_self\";b:1;s:25:\"wf2fa_activate_2fa_others\";b:1;s:21:\"wf2fa_manage_settings\";b:1;s:17:\"manage_email_logs\";b:1;s:20:\"wpseo_manage_options\";b:1;s:15:\"edit_custom_css\";b:1;s:15:\"read_custom_css\";b:1;s:17:\"delete_custom_css\";b:1;s:16:\"edit_custom_csss\";b:1;s:23:\"edit_others_custom_csss\";b:1;s:19:\"publish_custom_csss\";b:1;s:18:\"delete_custom_csss\";b:1;s:28:\"delete_published_custom_csss\";b:1;s:25:\"delete_others_custom_csss\";b:1;s:26:\"edit_published_custom_csss\";b:1;s:16:\"delete_bps_forms\";b:1;s:23:\"delete_others_bps_forms\";b:1;s:26:\"delete_published_bps_forms\";b:1;s:14:\"edit_bps_forms\";b:1;s:21:\"edit_others_bps_forms\";b:1;s:24:\"edit_published_bps_forms\";b:1;s:17:\"publish_bps_forms\";b:1;s:14:\"ure_edit_roles\";b:1;s:16:\"ure_create_roles\";b:1;s:16:\"ure_delete_roles\";b:1;s:23:\"ure_create_capabilities\";b:1;s:23:\"ure_delete_capabilities\";b:1;s:18:\"ure_manage_options\";b:1;s:15:\"ure_reset_roles\";b:1;s:24:\"read_private_custom_csss\";b:1;i:0;b:1;s:22:\"edit_private_bps_forms\";b:1;s:22:\"read_private_bps_forms\";b:1;s:24:\"delete_private_bps_forms\";b:1;s:12:\"create_posts\";b:1;s:17:\"install_languages\";b:1;s:14:\"resume_plugins\";b:1;s:13:\"resume_themes\";b:1;s:23:\"view_site_health_checks\";b:1;s:15:\"wpseo_bulk_edit\";b:1;s:28:\"wpseo_edit_advanced_metadata\";b:1;s:26:\"view_all_aryo_activity_log\";b:1;s:20:\"wpcode_edit_snippets\";b:1;s:24:\"wpcode_activate_snippets\";b:1;s:13:\"administrator\";b:1;}s:6:\"filter\";N;s:16:\"\u0000WP_User\u0000site_id\";i:1;}s:5:\"nonce\";N;s:8:\"priority\";d:0.5;s:9:\"data_json\";a:0:{}s:13:\"dismissal_key\";N;s:12:\"capabilities\";a:1:{i:0;s:15:\"install_plugins\";}s:16:\"capability_check\";s:3:\"all\";s:14:\"yoast_branding\";b:0;}}}"
             ]
         }
     },
@@ -39492,7 +39492,7 @@
                 ""
             ],
             "last_update": [
-                "1698763885"
+                "1698934777"
             ],
             "facebook": [
                 ""
@@ -39525,7 +39525,7 @@
                 ""
             ],
             "youzify_profile_views_count": [
-                "75"
+                "76"
             ],
             "session_tokens": [
                 "a:1:{s:64:\"aec5cb17ecdff41d6c7263da156ecc1c4d96bffa369c94580bbf2a7f5c7e9553\";a:4:{s:10:\"expiration\";i:1691097511;s:2:\"ip\";s:13:\"172.56.192.55\";s:2:\"ua\";s:117:\"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/114.0.0.0 Safari\/537.36\";s:5:\"login\";i:1689887911;}}"
@@ -50189,6 +50189,9 @@
             ],
             "wikipedia": [
                 ""
+            ],
+            "bpbm_last_activity": [
+                "1970-01-01 00:00:00"
             ]
         }
     },
@@ -55491,7 +55494,7 @@
                 "1698328266"
             ],
             "last_update": [
-                "1698700061"
+                "1698932307"
             ],
             "facebook": [
                 ""
@@ -57270,7 +57273,7 @@
                 ""
             ],
             "last_update": [
-                "1698763896"
+                "1698932307"
             ],
             "facebook": [
                 ""
@@ -63265,7 +63268,7 @@
                 "1698860039"
             ],
             "last_update": [
-                "1698866225"
+                "1698932307"
             ],
             "facebook": [
                 ""
@@ -63301,7 +63304,7 @@
                 "a:1:{s:64:\"e8c7252044dfdda086e72accfa47097837136516cb8b374961d8ed02cf66561b\";a:4:{s:10:\"expiration\";i:1700073049;s:2:\"ip\";s:14:\"73.246.107.118\";s:2:\"ua\";s:117:\"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36\";s:5:\"login\";i:1698863449;}}"
             ],
             "wc_last_active": [
-                "1698796800"
+                "1698883200"
             ],
             "wfls-last-login": [
                 "1698863449"
@@ -63310,7 +63313,7 @@
                 "a:1:{s:4:\"cart\";a:0:{}}"
             ],
             "bpbm_last_activity": [
-                "2023-11-01 18:41:58"
+                "2023-11-02 15:24:49"
             ]
         }
     },
@@ -66854,7 +66857,7 @@
                 ""
             ],
             "last_update": [
-                "1698763879"
+                "1698876894"
             ],
             "facebook": [
                 ""
@@ -69441,7 +69444,7 @@
                 ""
             ],
             "last_update": [
-                "1698830719"
+                "1698932307"
             ],
             "facebook": [
                 ""

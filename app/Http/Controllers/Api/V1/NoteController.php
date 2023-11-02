@@ -23,6 +23,7 @@ class NoteController extends Controller
         $query = QueryBuilder::for(Note::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('resource_id'),
                 AllowedFilter::scope('resource_type'),
             ]);
 
@@ -32,6 +33,7 @@ class NoteController extends Controller
     }
 
     public function store(StoreNoteRequest $request)
+
     {
         $user = $request->user();
         // $application = Application::where('uuid', $request->application_id)->first();

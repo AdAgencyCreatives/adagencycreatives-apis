@@ -59,8 +59,7 @@ class ImportCreativeSpotlight extends Command
                     $spotlight_url = $Spotlight['post_meta']['enclosure'][0];
                     if (preg_match('/(.+\.mp4)\s/', $spotlight_url, $matches)) {
                         $partBeforeMp4 = $matches[1];
-                        $this->storeAttachment2($partBeforeMp4, $user->id, 'creative_spotlight');
-                        dd();
+                        $this->storeAttachment($partBeforeMp4, $user->id, 'creative_spotlight');
                         dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
                         if ($endIndex > 0 && $key >= $endIndex) {
                             break;

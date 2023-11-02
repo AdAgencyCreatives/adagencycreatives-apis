@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Subscription;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AllPackagesResource extends JsonResource
@@ -19,6 +20,21 @@ class AllPackagesResource extends JsonResource
             'remaining_posts' => $this->quota_left,
             'purchase_date' => $this->created_at,
             'expiry_date' => $this->ends_at,
+            'status' => $this->getStatus(),
         ];
+    }
+
+
+    public function getStatus()
+    {
+        $endsAtDate = Carbon::parse($this->ends_at);
+        if($this->quota_left < 1){
+            return 'Expired';
+        }
+        elseif($endsAtDate->isPast()){
+            return 'Expired';
+        }
+
+        return 'Active';
     }
 }

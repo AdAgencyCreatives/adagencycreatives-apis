@@ -1,11 +1,13 @@
 <?php
 
+use App\Events\SendNotification;
 use App\Models\Address;
 use App\Models\Attachment;
 use App\Models\Industry;
 use App\Models\Link;
 use App\Models\Location;
 use App\Models\Media;
+use App\Models\Notification;
 use App\Models\Phone;
 use App\Models\Strength;
 use Illuminate\Http\Request;
@@ -222,5 +224,24 @@ if (! function_exists('get_user_slug')) {
         }
 
         return $slug;
+    }
+}
+
+if (! function_exists('create_notification')) {
+    function create_notification($user_id, $body)
+    {
+         $notification = Notification::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user_id,
+            'body' => $body
+        ]);
+
+        $event_data = [
+            'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
+            'body' => $body
+        ];
+        event(new SendNotification($event_data));
+
+        return $notification;
     }
 }

@@ -274,8 +274,11 @@ class Job extends Model
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
+
+                create_notification($job->user_id, sprintf("Job: %s approved.", $job->title));
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
             }
+
         });
 
         static::updated(function () {

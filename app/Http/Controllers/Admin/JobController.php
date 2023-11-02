@@ -110,6 +110,7 @@ class JobController extends Controller
 
         Session::flash('success', 'Job updated successfully');
 
+
         return redirect()->back();
     }
 
