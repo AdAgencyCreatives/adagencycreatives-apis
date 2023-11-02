@@ -32,111 +32,114 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         Artisan::call('adagencycreatives:permission');
 
-        \App\Models\User::factory(15)->create();
+        \App\Models\User::factory(5)->create();
 
-        User::where('id', '<', 10)->update(['role' => 3]); // 3:Agency
-        User::where('id', '<', 5)->update(['role' => 2]);  // 2:Advisor
+
+
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
             'role' => 1,
             'status' => 1,
         ]); // 1:Admin
 
+        User::where('id', 2)->update(['role' => 2]);  // 2:Advisor
+        User::where('id', 3)->update(['role' => 3]); // 3:Agency
+
         // ********************************************************
         // ******************** AGENCY USERS **********************
         // ********************************************************
 
-        $agency_users = User::where('role', 3)->get();
+        // $agency_users = User::where('role', 3)->get();
 
-        $jobIds = [];
-        $agency = Role::findByName('agency');
-        foreach ($agency_users as $user) {
-            $user->assignRole($agency);
+        // $jobIds = [];
+        // $agency = Role::findByName('agency');
+        // foreach ($agency_users as $user) {
+        //     $user->assignRole($agency);
 
-            $data_user_id = ['user_id' => $user->id];
+        //     $data_user_id = ['user_id' => $user->id];
 
-            \App\Models\Agency::factory()->create($data_user_id);
+        //     \App\Models\Agency::factory()->create($data_user_id);
 
-            \App\Models\Message::factory(20)->create(['sender_id' => $user->id]);
+        //     \App\Models\Message::factory(20)->create(['sender_id' => $user->id]);
 
-            $addresses = \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'business']));
+        //     $addresses = \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'business']));
 
-            \App\Models\Phone::factory(3)->create($data_user_id);
+        //     \App\Models\Phone::factory(3)->create($data_user_id);
 
-            \App\Models\Link::factory(4)->create($data_user_id);
+        //     \App\Models\Link::factory(4)->create($data_user_id);
 
-            // \App\Models\Attachment::factory(3)->create($data_user_id);
+        //     // \App\Models\Attachment::factory(3)->create($data_user_id);
 
-            $jobs = \App\Models\Job::factory(10)->create($data_user_id);
+        //     $jobs = \App\Models\Job::factory(10)->create($data_user_id);
 
-            foreach ($jobs as $job) {
-                $jobIds[] = $job->id;
-            }
+        //     foreach ($jobs as $job) {
+        //         $jobIds[] = $job->id;
+        //     }
 
-        }
+        // }
 
         // ********************************************************
         // ******************** CREATIVE USERS ********************
         // ********************************************************
-        $creative = Role::findByName('creative');
-        $creative_users = User::where('role', 4)->get();
-        foreach ($creative_users as $user) {
-            $user->assignRole($creative);
+        // $creative = Role::findByName('creative');
+        // $creative_users = User::where('role', 4)->get();
+        // foreach ($creative_users as $user) {
+        //     $user->assignRole($creative);
 
-            $data_user_id = ['user_id' => $user->id];
+        //     $data_user_id = ['user_id' => $user->id];
 
-            \App\Models\Creative::factory()->create($data_user_id);
+        //     \App\Models\Creative::factory()->create($data_user_id);
 
-            \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'personal']));
+        //     \App\Models\Address::factory(1)->create(array_merge($data_user_id, ['label' => 'personal']));
 
-            \App\Models\Link::factory(3)->create($data_user_id);
+        //     \App\Models\Link::factory(3)->create($data_user_id);
 
-            // $attachments = \App\Models\Attachment::factory(3)->create($data_user_id);
+        //     // $attachments = \App\Models\Attachment::factory(3)->create($data_user_id);
 
-            \App\Models\Education::factory(2)->create($data_user_id);
-            \App\Models\Experience::factory(2)->create($data_user_id);
+        //     \App\Models\Education::factory(2)->create($data_user_id);
+        //     \App\Models\Experience::factory(2)->create($data_user_id);
 
-            for ($i = 0; $i < 3; $i++) {
-                // $attachment_id = $attachments->random()->id;
-                $application = \App\Models\Application::factory()->create([
-                    'user_id' => $user->id,
-                    'job_id' => $jobIds[array_rand($jobIds)],
-                    // 'attachment_id' => $attachment_id,
-                ]
-                );
+        //     for ($i = 0; $i < 3; $i++) {
+        //         // $attachment_id = $attachments->random()->id;
+        //         $application = \App\Models\Application::factory()->create([
+        //             'user_id' => $user->id,
+        //             'job_id' => $jobIds[array_rand($jobIds)],
+        //             // 'attachment_id' => $attachment_id,
+        //         ]
+        //         );
 
-                // \App\Models\Note::factory(1)->create([
-                //     'user_id' => $user->id,
-                //     'application_id' => $application->id,
-                // ]
-                // );
+        //         // \App\Models\Note::factory(1)->create([
+        //         //     'user_id' => $user->id,
+        //         //     'application_id' => $application->id,
+        //         // ]
+        //         // );
 
-                // \App\Models\Bookmark::factory(1)->create([
-                //     'user_id' => $user->id,
-                //     'resource_id' => $jobIds[array_rand($jobIds)],
-                // ]
-                //);
-            }
-        }
+        //         // \App\Models\Bookmark::factory(1)->create([
+        //         //     'user_id' => $user->id,
+        //         //     'resource_id' => $jobIds[array_rand($jobIds)],
+        //         // ]
+        //         //);
+        //     }
+        // }
 
         // *******************************************************
         // ******************** ADVISOR USERS ********************
         // *******************************************************
-        $advisor = Role::findByName('advisor');
-        $advisor_users = User::where('role', 2)->get();
-        foreach ($advisor_users as $user) {
-            $user->assignRole($advisor);
+        // $advisor = Role::findByName('advisor');
+        // $advisor_users = User::where('role', 2)->get();
+        // foreach ($advisor_users as $user) {
+        //     $user->assignRole($advisor);
 
-            \App\Models\Agency::factory()->create(
-                [
-                    'user_id' => $user->id,
-                ]);
-        }
+        //     \App\Models\Agency::factory()->create(
+        //         [
+        //             'user_id' => $user->id,
+        //         ]);
+        // }
 
         //Generate some more users
         // \App\Models\User::factory(15)->create();
-        \App\Models\Order::factory(15)->create();
-        \App\Models\Group::factory(3)->create();
+        // \App\Models\Order::factory(15)->create();
+         \App\Models\Group::factory(3)->create();
 
         \App\Models\Group::factory(1)->create(
             [
@@ -148,7 +151,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PostSeeder::class);
         $this->call(CommentSeeder::class);
-        $this->call(JobAlertSeeder::class);
+        // $this->call(JobAlertSeeder::class);
 
         /**
          * Create Default SEO settings
