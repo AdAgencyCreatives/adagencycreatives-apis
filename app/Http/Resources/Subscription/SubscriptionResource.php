@@ -9,10 +9,15 @@ class SubscriptionResource extends JsonResource
 {
     public function toArray($request)
     {
-        $currentDate = Carbon::now();
         $endsAtDate = Carbon::parse($this->ends_at);
 
-        $status = ($endsAtDate->isPast()) ? 'expired' : 'active';
+        $status = 'active';
+        if($this->quota_left < 1){
+            $status = 'expired';
+        }
+        elseif($endsAtDate->isPast()){
+            $status = 'expired';
+        }
 
         return [
             'name' => $this->name,

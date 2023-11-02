@@ -55,7 +55,6 @@ class ImportCreativePictures extends Command
                 $featured_img = $creativeData['post_meta']['_candidate_featured_image'][0];
 
                 $this->storeAttachment($featured_img, $user->id, 'profile_picture');
-                dd('dd');
                 // echo sprintf("<img src='%s'/>", $featured_img);
             }
 

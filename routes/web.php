@@ -240,6 +240,7 @@ Route::get('all-messages', [ChatController::class, 'fetchMessages']);
 
 // Extras
 Route::get('get_uuids', function () {
+    create_notification(1, 'This is test');
     $agency_user = User::find(2)->uuid;
     $creative_user = User::find(10)->uuid;
     $advisor_user = User::find(16)->uuid;
