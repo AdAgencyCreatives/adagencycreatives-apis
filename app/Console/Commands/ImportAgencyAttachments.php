@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Facades\Http;
 
 class ImportAgencyAttachments extends Command
 {
@@ -64,30 +65,30 @@ class ImportAgencyAttachments extends Command
 
     public function storeAttachment($url, $user_id, $resource_type)
     {
-        $uuid = Str::uuid();
-
-        $filename = basename($url);
         try {
-            $contents = file_get_contents($url);
-        } catch (\Exception $e) {
+            $response = Http::get($url);
+
+            if ($response->successful()) {
+                $uuid = Str::uuid();
+                $filename = basename($url);
+
+                $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $filePath = Storage::disk('s3')->put($folder, $response->body());
+
+                $attachment = Attachment::create([
+                    'uuid' => $uuid,
+                    'user_id' => $user_id,
+                    'resource_type' => $resource_type,
+                    'path' => $folder,
+                    'name' => $filename,
+                    'extension' => $extension,
+                ]);
+
+                return $attachment;
+            }
+        } catch(\Exception $e) {
             dump($e->getMessage());
-
-            return;
         }
-
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $folder = $resource_type.'/'.$uuid.'/'.$filename;
-        $filePath = Storage::disk('s3')->put($folder, $contents);
-
-        $attachment = Attachment::create([
-            'uuid' => $uuid,
-            'user_id' => $user_id,
-            'resource_type' => $resource_type,
-            'path' => $folder,
-            'name' => $filename,
-            'extension' => $extension,
-        ]);
-
-        return $attachment;
     }
 }

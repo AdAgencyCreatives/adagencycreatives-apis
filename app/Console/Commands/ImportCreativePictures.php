@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Facades\Http;
 
 class ImportCreativePictures extends Command
 {
@@ -41,10 +42,10 @@ class ImportCreativePictures extends Command
             $authorEmail2 = $creativeData['author_email'];
 
             $user = User::where('email', $authorEmail1)->first();
-            if (! $user) {
+            if (!$user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
-            if (! $user) {
+            if (!$user) {
                 continue;
             }
 
@@ -54,6 +55,7 @@ class ImportCreativePictures extends Command
                 $featured_img = $creativeData['post_meta']['_candidate_featured_image'][0];
 
                 $this->storeAttachment($featured_img, $user->id, 'profile_picture');
+                dd('dd');
                 // echo sprintf("<img src='%s'/>", $featured_img);
             }
 
@@ -76,30 +78,30 @@ class ImportCreativePictures extends Command
 
     public function storeAttachment($url, $user_id, $resource_type)
     {
-        $uuid = Str::uuid();
-
-        $filename = basename($url);
         try {
-            $contents = file_get_contents($url);
-        } catch (\Exception $e) {
+            $response = Http::get($url);
+
+            if ($response->successful()) {
+                $uuid = Str::uuid();
+                $filename = basename($url);
+
+                $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $filePath = Storage::disk('s3')->put($folder, $response->body());
+
+                $attachment = Attachment::create([
+                    'uuid' => $uuid,
+                    'user_id' => $user_id,
+                    'resource_type' => $resource_type,
+                    'path' => $folder,
+                    'name' => $filename,
+                    'extension' => $extension,
+                ]);
+
+                return $attachment;
+            }
+        } catch(\Exception $e) {
             dump($e->getMessage());
-
-            return;
         }
-
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $folder = $resource_type.'/'.$uuid.'/'.$filename;
-        $filePath = Storage::disk('s3')->put($folder, $contents);
-
-        $attachment = Attachment::create([
-            'uuid' => $uuid,
-            'user_id' => $user_id,
-            'resource_type' => $resource_type,
-            'path' => $folder,
-            'name' => $filename,
-            'extension' => $extension,
-        ]);
-
-        return $attachment;
     }
 }
