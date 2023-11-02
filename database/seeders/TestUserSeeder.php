@@ -19,7 +19,10 @@ class TestUserSeeder extends Seeder
         /**
          * Creative User
          */
-        $creative_user_id = 11;
+        $creative_user_id = 4;
+        $data_user_id = ['user_id' => $creative_user_id];
+        \App\Models\Creative::factory()->create($data_user_id);
+
         User::where('id', $creative_user_id)->update([
             'first_name' => 'TEST',
             'last_name' => 'CREATIVE',
@@ -43,18 +46,10 @@ class TestUserSeeder extends Seeder
         $creative->is_onsite = 1;
         $creative->save();
 
-        Attachment::where('user_id', $creative_user_id)
-            ->where('resource_type', 'profile_picture')->delete();
-        Attachment::create([
-            'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3b',
-            'user_id' => $creative_user_id,
-            'resource_type' => 'profile_picture',
-            'path' => 'profile_picture/ef6a4047-db36-4879-b376-299aeec38fa7/6go1bM7kDfrwdcw5lvKIOqng7XketnjZfmR64GKt.jpg',
-            'name' => 'avatar.jpg',
-            'extension' => 'jpg',
-        ]);
+        $creative_user_id = 5;
+        $data_user_id = ['user_id' => $creative_user_id];
+        \App\Models\Creative::factory()->create($data_user_id);
 
-        $creative_user_id = 12;
         User::where('id', $creative_user_id)->update([
             'first_name' => 'TEST2',
             'last_name' => 'CREATIVE2',
@@ -74,21 +69,13 @@ class TestUserSeeder extends Seeder
         $creative->is_onsite = 1;
         $creative->save();
 
-        Attachment::where('user_id', $creative_user_id)
-            ->where('resource_type', 'profile_picture')->delete();
-        Attachment::create([
-            'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3b',
-            'user_id' => $creative_user_id,
-            'resource_type' => 'profile_picture',
-            'path' => 'profile_picture/f8d0b6db-9449-4763-b312-94c28a2b4cb2/5KtFlh6iQEDsVbrkt2AxS7cF725JaNQVD4ktDA7p.jpg',
-            'name' => 'download.jfif',
-            'extension' => 'jfif',
-        ]);
-
         /**
          * Agency User
          */
-        $agency_user_id = 9;
+        $agency_user_id = 3;
+        $data_user_id = ['user_id' => $agency_user_id];
+        \App\Models\Agency::factory()->create($data_user_id);
+
         User::where('id', $agency_user_id)->update([
             'email' => 'agency@gmail.com',
             'role' => 3,
@@ -104,14 +91,5 @@ class TestUserSeeder extends Seeder
         $agency->is_hybrid = 1;
         $agency->is_onsite = 1;
         $agency->save();
-
-        Attachment::create([
-            'uuid' => '41b9d69d-2f04-47fc-8735-2705591ecf3c',
-            'user_id' => $agency_user_id,
-            'resource_type' => 'agency_logo',
-            'path' => 'agency_logo/38147c51-7017-4d3b-a91b-f497e9bb7ae3/OX9ZBp2WvkcUnmA7s3Uugn19cU2I4ofEIBa6YYLV.png',
-            'name' => 'unnamed (2).png',
-            'extension' => 'png',
-        ]);
     }
 }

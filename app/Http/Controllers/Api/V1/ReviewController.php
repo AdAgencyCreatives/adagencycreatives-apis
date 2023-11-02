@@ -32,7 +32,7 @@ class ReviewController extends Controller
 
     public function store(StoreReviewRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
+        $user = $request->user();
         $target = User::where('uuid', $request->target_id)->first();
 
         $request->merge([
