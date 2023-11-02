@@ -15,7 +15,7 @@ class CommentResource extends JsonResource
             'uuid' => $this->uuid,
             'user_id' => $user->uuid,
             'user' => $user->first_name.' '.$user->last_name,
-            'user_slug' => $this->get_user_slug($user),
+            'user_slug' => get_user_slug($user),
             'profile_picture' => $this->get_profile_picture($user),
             'post_id' => $this->post->uuid,
             'parent_id' => isset($this->parent) ? $this->parent->uuid : null,
@@ -37,15 +37,5 @@ class CommentResource extends JsonResource
         return $image;
     }
 
-    public function get_user_slug($user)
-    {
-        $slug = null;
-        if ($user->role == 'creative') {
-            $slug = $user->creative?->slug;
-        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $slug = $user->agency?->slug;
-        }
 
-        return $slug;
-    }
 }

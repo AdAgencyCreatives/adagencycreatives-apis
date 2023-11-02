@@ -381,8 +381,11 @@
                                         <label class="form-label" for="status"> Status </label>
                                         <select name="status" id="status"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="published" @if ($job->status == 'published') selected @endif>
-                                                Published
+                                            <option value="draft" @if ($job->status == 'draft') selected @endif>
+                                                Draft
+                                            </option>
+                                            <option value="pending" @if ($job->status == 'pending') selected @endif>
+                                                Pending
                                             </option>
                                             <option value="approved" @if ($job->status == 'approved') selected @endif>
                                                 Approved
