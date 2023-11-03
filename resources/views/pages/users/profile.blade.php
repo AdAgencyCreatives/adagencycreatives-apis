@@ -94,6 +94,14 @@
                         SEO
                     </a>
 
+                    @php
+                        $frontend_url = $user->role == 'creative' ? env('FRONTEND_URL') . '/creative/' . ($user->creative ? $user->creative->slug : '') : env('FRONTEND_URL') . '/agency/' . ($user->agency ? $user->agency->slug : '');
+                    @endphp
+
+                    <a class="list-group-item list-group-item-action" href="{{ $frontend_url }}" target="_blank">
+                        Frontend URL
+                    </a>
+
                 </div>
             </div>
         </div>

@@ -13,12 +13,6 @@ class UserResource extends JsonResource
         //     return [];
         // }
 
-        if ($this->role == 'creative') {
-            $image = $this->profile_picture ? getAttachmentBasePath().$this->profile_picture->path : null;
-        } elseif ($this->role == 'agency' || $this->role == 'advisor') {
-            $image = $this->agency_logo ? getAttachmentBasePath().$this->agency_logo->path : null;
-        }
-
         $data = [
             'type' => 'users',
             'uuid' => $this->uuid,
@@ -30,7 +24,7 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'status' => $this->status,
             'is_visible' => $this->is_visible,
-            'image' => $image ?? null,
+            'image' => get_profile_picture($this),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 

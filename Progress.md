@@ -551,3 +551,44 @@ Admin can
 -   Map the IP addresses of laravel server and react frontend to test domain name,
     -   So that websockets can works correctly.
 -   Still working on Websockets configurations on server (in progress)
+
+## 24/10/2023 Resume | Jobs
+
+-   Created endpoint for applied jobs (for creative).
+-   Make resume template with dynamic values.
+-   Still working on Websockets configurations on server (in progress)
+
+## 25/10/2023 Friendship Module
+
+-   Created endpoint for sending friend request.
+-   FriendRequest email configured to sent.
+-   Created endpoint for accepting or rejecting the friend request.
+-   FriendRequest Accepted email configured to sent.
+-   Added User_id in the groups table, so that any user can create the group instead of just admin.
+
+## 26/10/2023 Account Emails | API Endpoints
+
+-   Modified the endpoint for education and experience (for creative user).
+-   Modify the posts endpoint to include atleast 3 comments by default.
+-   Made the following emails ready:
+    -   Agency User Registration
+    -   Creative User Registration
+    -   Account Approved
+    -   Account Rejected
+    -   Reset Password Email
+
+## 27/10/2023 API Endpoint fixed (community section)
+
+-   Added user resource in comments.
+-   Included comments in post resource.
+-   Created endpoint for `my_friends` .
+-   Worked on Pusher Bug Fix.
+-   Added author_slug in posts endpoint.
+
+## 30/10/2023 Website Review | Data Import
+
+-   Reviewed the website from frontend and noted all the bugs and inconsistencies.
+-   Fixed few bugs from admin side.
+-   Created endpoint for fetching notificaitons.
+-   Created endpoint for updating notifications.
+-   Exported the data from Wordpress to Laravel (with all attachments)

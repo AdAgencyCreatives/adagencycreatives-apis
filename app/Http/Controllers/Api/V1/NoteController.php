@@ -33,7 +33,6 @@ class NoteController extends Controller
     }
 
     public function store(StoreNoteRequest $request)
-
     {
         $user = $request->user();
         // $application = Application::where('uuid', $request->application_id)->first();

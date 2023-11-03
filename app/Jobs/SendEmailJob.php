@@ -54,9 +54,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new AccountDenied($this->data['data']));
                 break;
 
-            /**
-             * Group
-             */
+                /**
+                 * Group
+                 */
             case 'group_invitation':
                 Mail::to($this->data['receiver'])->send(new Invitation($this->data['data']));
                 break;
@@ -71,9 +71,9 @@ class SendEmailJob implements ShouldQueue
                 }
                 break;
 
-            /**
-             * Job
-             */
+                /**
+                 * Job
+                 */
             case 'new_job_added_admin':
                 Mail::to($this->data['receiver'])->send(new NewJobPosted($this->data['data']));
                 break;
@@ -84,10 +84,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
                 break;
 
-
-            /**
-             * Friend
-             */
+                /**
+                 * Friend
+                 */
             case 'friendship_request_sent':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequest($this->data['data']));
                 break;

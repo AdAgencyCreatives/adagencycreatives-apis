@@ -34,8 +34,6 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory(5)->create();
 
-
-
         User::where('id', 1)->update([
             'email' => 'admin@gmail.com',
             'role' => 1,
@@ -139,7 +137,7 @@ class DatabaseSeeder extends Seeder
         //Generate some more users
         // \App\Models\User::factory(15)->create();
         // \App\Models\Order::factory(15)->create();
-         \App\Models\Group::factory(3)->create();
+        \App\Models\Group::factory(3)->create();
 
         \App\Models\Group::factory(1)->create(
             [

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Agency;
-use App\Models\Attachment;
 use App\Models\Creative;
 use App\Models\Industry;
 use App\Models\Media;

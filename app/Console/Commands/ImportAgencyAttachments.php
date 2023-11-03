@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\Http;
 
 class ImportAgencyAttachments extends Command
 {
@@ -44,9 +44,6 @@ class ImportAgencyAttachments extends Command
             if (! $user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
-            if (! $user) {
-                continue;
-            }
 
             if (isset($agencyData['post_meta']['_employer_featured_image'][0])) {
                 dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
@@ -73,7 +70,7 @@ class ImportAgencyAttachments extends Command
                 $filename = basename($url);
 
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $folder = $resource_type.'/'.$uuid.'/'.$filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
                 $attachment = Attachment::create([
@@ -87,7 +84,7 @@ class ImportAgencyAttachments extends Command
 
                 return $attachment;
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             dump($e->getMessage());
         }
     }

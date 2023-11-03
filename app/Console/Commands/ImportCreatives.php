@@ -35,7 +35,7 @@ class ImportCreatives extends Command
         foreach ($creativesData as $creativeData) {
             $authorEmail1 = $creativeData['post_meta']['_candidate_email'][0];
             $authorEmail2 = $creativeData['author_email'];
-            // if($authorEmail1 != 'hmbellipro@gmail.com') {
+            // if($authorEmail1 != 'cassidyfletcherthewriter@gmail.com') {
             //     continue;
             // }
             $user = User::where('email', $authorEmail1)->first();

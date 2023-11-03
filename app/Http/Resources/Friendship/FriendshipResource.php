@@ -7,10 +7,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FriendshipResource extends JsonResource
 {
-
     public function toArray($request)
     {
         $user = $request->user();
+
         return [
             'user' => new UserResource($this->get_friend($user)),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -20,10 +20,9 @@ class FriendshipResource extends JsonResource
 
     public function get_friend($user)
     {
-        if($user->id == $this->user1_id){
+        if ($user->id == $this->user1_id) {
             return $this->receivedByUser;
-        }
-        elseif($user->id == $this->user2_id){
+        } elseif ($user->id == $this->user2_id) {
             return $this->initiatedByUser;
         }
 

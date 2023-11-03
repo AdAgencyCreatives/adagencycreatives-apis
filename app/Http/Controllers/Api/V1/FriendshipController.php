@@ -71,9 +71,9 @@ class FriendshipController extends Controller
 
         try {
             if ($sender->role == 'creative') {
-                $profile_url = '/creative/' . $sender->creative?->slug ?? '';
+                $profile_url = '/creative/'.$sender->creative?->slug ?? '';
             } elseif ($sender->role == 'agency') {
-                $profile_url = '/agency/' . $sender->agency?->slug ?? '';
+                $profile_url = '/agency/'.$sender->agency?->slug ?? '';
             } else {
                 $profile_url = $sender->username;
             }
@@ -82,7 +82,7 @@ class FriendshipController extends Controller
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'inviter' => $sender->first_name,
-                    'iniviter_profile' => env('FRONTEND_URL') . $profile_url,
+                    'iniviter_profile' => env('FRONTEND_URL').$profile_url,
                 ],
             ], 'friendship_request_sent');
         } catch (\Exception $e) {
@@ -103,10 +103,9 @@ class FriendshipController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        if (!$friendRequest) {
+        if (! $friendRequest) {
             return response()->json(['message' => 'This request has already been responded.'], 403);
         }
-
 
         if ($friendRequest->receiver_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized to respond to this request.'], 403);

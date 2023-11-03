@@ -36,6 +36,4 @@ class CommentResource extends JsonResource
 
         return $image;
     }
-
-
 }

@@ -72,7 +72,7 @@
 
                 var displayContent = '';
 
-                var imageExtensions = ['jpg', 'png'];
+                var imageExtensions = ['jpg', 'jpeg', 'png'];
                 var videoExtensions = ['mp4'];
                 var docExtensions = ['doc', 'pdf'];
 

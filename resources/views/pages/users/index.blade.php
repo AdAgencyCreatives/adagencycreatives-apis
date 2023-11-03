@@ -114,12 +114,16 @@
 
                 var row = '<tr>' +
                     '<td>' + user.id + '</td>' +
+                    '<td>' +
+                    '<a href="' + user.image + '" class="image-container" target="_blank">' +
+                    '<img src="' + user.image + '">' +
+                    '</a>' +
+                    '</td>' +
                     '<td>' + user.first_name + ' ' + user.last_name + '</td>' +
                     '<td>' + user.username + '</br>' + user.email + '</td>' +
                     // Concatenate email and username in the same column
                     '<td>' + getRoleBadge(user.role) + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
-                    // '<td>' + getStatusBadge(user.status) + '</td>' +
                     '<td>' + user.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
@@ -160,6 +164,30 @@
     </script>
 @endsection
 
+@section('styles')
+    <style>
+        .image-container {
+            width: auto;
+            /* Fixed width for each image container */
+            height: 150px;
+            /* Fixed height for each image container */
+            overflow: hidden;
+            display: inline-block;
+            /* Display images in a row */
+            margin: 10px;
+            /* Add some margin between image containers */
+        }
+
+        .image-container img {
+            max-width: 100%;
+            /* Make the image responsive */
+            max-height: 100%;
+            /* Make the image responsive */
+            object-fit: contain;
+            /* Maintain aspect ratio and fill the container */
+        }
+    </style>
+@endsection
 @section('content')
 
 
@@ -191,6 +219,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Profile</th>
                                             <th>Name</th>
                                             <th>Username/Email</th>
                                             <th>Role</th>

@@ -212,7 +212,6 @@ if (! function_exists('updateLocation')) {
     }
 }
 
-
 if (! function_exists('get_user_slug')) {
     function get_user_slug($user)
     {
@@ -230,15 +229,15 @@ if (! function_exists('get_user_slug')) {
 if (! function_exists('create_notification')) {
     function create_notification($user_id, $body)
     {
-         $notification = Notification::create([
+        $notification = Notification::create([
             'uuid' => Str::uuid(),
             'user_id' => $user_id,
-            'body' => $body
+            'body' => $body,
         ]);
 
         $event_data = [
             'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
-            'body' => $body
+            'body' => $body,
         ];
         event(new SendNotification($event_data));
 
@@ -249,11 +248,11 @@ if (! function_exists('create_notification')) {
 if (! function_exists('get_profile_picture')) {
     function get_profile_picture($user)
     {
-         $image = null;
+        $placeholder_img = asset('assets/img/placeholder.png');
         if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : null;
+            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : $placeholder_img;
         } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null;
+            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : $placeholder_img;
         }
 
         return $image;
