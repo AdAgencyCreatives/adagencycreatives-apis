@@ -44,9 +44,6 @@ class ImportAgencyAttachments extends Command
             if (! $user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
-            if (! $user) {
-                continue;
-            }
 
             if (isset($agencyData['post_meta']['_employer_featured_image'][0])) {
                 dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
