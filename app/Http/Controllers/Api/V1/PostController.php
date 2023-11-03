@@ -40,6 +40,22 @@ class PostController extends Controller
         return new PostCollection($posts);
     }
 
+    public function trending_posts(Request $request)
+    {
+        $query = QueryBuilder::for(Post::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('group_id'),
+            ]);
+
+        $trendingPosts = $query->withCount('likes')
+            ->orderBy('likes_count', 'desc')
+            // ->where('status', 1)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new PostCollection($trendingPosts);
+    }
+
     public function store(StorePostRequest $request)
     {
         $user = $request->user();
@@ -63,7 +79,7 @@ class PostController extends Controller
 
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
         }
     }
 
