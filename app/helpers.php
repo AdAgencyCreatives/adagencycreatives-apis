@@ -248,11 +248,12 @@ if (! function_exists('create_notification')) {
 if (! function_exists('get_profile_picture')) {
     function get_profile_picture($user)
     {
-        $placeholder_img = asset('assets/img/placeholder.png');
+
+        $image = asset('assets/img/placeholder.png');
         if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : $placeholder_img;
+            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
         } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : $placeholder_img;
+            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : asset('assets/img/placeholder.png');
         }
 
         return $image;
