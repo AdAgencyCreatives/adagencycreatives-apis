@@ -92,6 +92,7 @@ class JobController extends Controller
             $job = Job::create($request->all());
 
             create_notification($user->id, 'Job submitted successfully.');
+
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
             return ApiResponse::error('JS-01'.$e->getMessage(), 400);

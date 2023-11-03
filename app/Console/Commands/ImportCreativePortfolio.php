@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\Http;
 
 class ImportCreativePortfolio extends Command
 {
@@ -79,7 +79,7 @@ class ImportCreativePortfolio extends Command
                 $filename = basename($url);
 
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $folder = $resource_type.'/'.$uuid.'/'.$filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
                 $attachment = Attachment::create([
@@ -93,7 +93,7 @@ class ImportCreativePortfolio extends Command
 
                 return $attachment;
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             dump($e->getMessage());
         }
     }

@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\Http;
 
 class ImportCreativePictures extends Command
 {
@@ -42,10 +42,10 @@ class ImportCreativePictures extends Command
             $authorEmail2 = $creativeData['author_email'];
 
             $user = User::where('email', $authorEmail1)->first();
-            if (!$user) {
+            if (! $user) {
                 $user = User::where('email', $authorEmail2)->first();
             }
-            if (!$user) {
+            if (! $user) {
                 continue;
             }
 
@@ -85,7 +85,7 @@ class ImportCreativePictures extends Command
                 $filename = basename($url);
 
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $folder = $resource_type.'/'.$uuid.'/'.$filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
                 $attachment = Attachment::create([
@@ -99,7 +99,7 @@ class ImportCreativePictures extends Command
 
                 return $attachment;
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             dump($e->getMessage());
         }
     }

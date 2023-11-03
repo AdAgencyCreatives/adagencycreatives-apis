@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\MessageReceived;
 use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -34,7 +33,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
-use App\Events\MyEvent;
 
 /*
 |--------------------------------------------------------------------------

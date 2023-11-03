@@ -36,24 +36,28 @@ class Note extends Model
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopeResourceType(Builder $query, $resource): Builder
     {
         $resource = Bookmark::$modelAliases[$resource] ?? null;
+
         return $query->where('notable_type', $resource);
     }
 
     public function scopeResourceId(Builder $query, $resource): Builder
     {
         $resource = Bookmark::$modelAliases[$resource] ?? null;
+
         return $query->where('notable_type', $resource);
     }
 
     public function scopeApplicationId(Builder $query, $app_id)
     {
         $application = Application::where('uuid', $app_id)->firstOrFail();
+
         return $query->where('application_id', $application->id);
     }
 }

@@ -12,10 +12,9 @@ class SubscriptionResource extends JsonResource
         $endsAtDate = Carbon::parse($this->ends_at);
 
         $status = 'active';
-        if($this->quota_left < 1){
+        if ($this->quota_left < 1) {
             $status = 'expired';
-        }
-        elseif($endsAtDate->isPast()){
+        } elseif ($endsAtDate->isPast()) {
             $status = 'expired';
         }
 
