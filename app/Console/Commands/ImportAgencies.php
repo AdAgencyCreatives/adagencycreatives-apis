@@ -34,7 +34,7 @@ class ImportAgencies extends Command
             $authorEmail1 = $agencyData['post_meta']['_employer_email'][0];
             $authorEmail2 = $agencyData['author_email'];
 
-            // if($authorEmail1 != 'contactburrell@adagencycreatives.com') {
+            // if($authorEmail1 != 'contacttpn@adagencycreatives.com') {
             //     continue;
             // }
 
@@ -47,7 +47,7 @@ class ImportAgencies extends Command
             if ($user) {
                 $agency = $this->createAgency($agencyData, $user);
                 $this->createLocation($agencyData, $user);
-                $this->mapIndustryExperience($agencyData, $user, $industry_media_experiences);
+                $agency->industry_experience = $this->mapIndustryExperience($agencyData, $user, $industry_media_experiences);
                 $agency->save();
             } else {
                 dump('Agency not found', $authorEmail1);
@@ -156,7 +156,8 @@ class ImportAgencies extends Command
         $count = 0;
         foreach ($data['categories'] as $industryName) {
             $industryName = $industryName['name'];
-            // Check if the UUID is already in the dictiona
+
+            // Check if the UUID is already in the dictionary
             if (isset($industry_media_experiences[$industryName])) {
                 $industrUuids[] = $industry_media_experiences[$industryName];
             } else {
@@ -165,7 +166,9 @@ class ImportAgencies extends Command
                     $media = Industry::where('name', $industryName)->first();
                 }
 
+
                 if ($media) {
+
                     $industrUuids[] = $media->uuid;
                     // Store the association in the dictionary
                     $industry_media_experiences[$industryName] = $media->uuid;
@@ -176,8 +179,6 @@ class ImportAgencies extends Command
                 break;
             }
         }
-        $creative->industry_experience = implode(',', $industrUuids);
-
-        return $creative;
+        return implode(',', $industrUuids);
     }
 }

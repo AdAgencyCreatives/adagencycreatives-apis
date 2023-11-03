@@ -24,7 +24,7 @@ class CreativeResource extends JsonResource
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
-            'name' => $this->user->first_name.' '.$this->user->last_name,
+            'name' => $this->user->first_name . ' ' . $this->user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
@@ -58,14 +58,14 @@ class CreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
     public function get_resume($user, $logged_in_user)
     {
         return $logged_in_user;
         if (isset($user->resume)) {
-            return getAttachmentBasePath().$user->resume->path;
+            return getAttachmentBasePath() . $user->resume->path;
         } else {
             return route('download.resume', $user->uuid);
         }
@@ -76,12 +76,21 @@ class CreativeResource extends JsonResource
     {
         $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
 
-        return $address ? [
-            'state_id' => $address->state->uuid,
-            'state' => $address->state->name,
-            'city_id' => $address->city->uuid,
-            'city' => $address->city->name,
-        ] : null;
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
     }
 
     public function generate_seo()

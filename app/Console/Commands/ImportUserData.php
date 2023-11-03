@@ -6,6 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class ImportUserData extends Command
 {
@@ -19,15 +20,20 @@ class ImportUserData extends Command
         $jsonContents = file_get_contents($jsonFilePath);
         $usersData = json_decode($jsonContents, true);
 
+        $user_roles['creative'] = Role::findByName('creative');
+        $user_roles['agency'] = Role::findByName('agency');
+        $user_roles['advisor'] = Role::findByName('advisor');
+        $user_roles['admin'] = Role::findByName('admin');
+
         $now = now();
         foreach ($usersData as $userData) {
-            $this->createUser($userData, $now);
+            $this->createUser($userData, $now, $user_roles);
         }
 
         $this->info('User data imported successfully.');
     }
 
-    private function createUser($userData, $now)
+    private function createUser($userData, $now, $user_roles)
     {
         $user = new User();
         $user->uuid = Str::uuid();
@@ -36,13 +42,27 @@ class ImportUserData extends Command
         $user->username = $userData['user_nicename'];
         $user->email = $userData['user_email'];
         $user->password = $userData['user_pass'];
-        $user->role = $this->mapUserRole($userData['user_meta']['wp_capabilities'][0]);
+        $role = $this->mapUserRole($userData['user_meta']['wp_capabilities'][0]);
+        $user->role = $role;
         $user->status = $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved', $user);
 
         $userRegisteredTimestamp = strtotime($userData['user_registered']);
         $user->created_at = Carbon::createFromTimestamp($userRegisteredTimestamp);
 
         $user->updated_at = $now;
+
+        if($role == 'creative'){
+            $user->assignRole($user_roles['creative']);
+        }
+        elseif($role == 'agency'){
+            $user->assignRole($user_roles['agency']);
+
+        }elseif($role == 'advisor'){
+            $user->assignRole($user_roles['advisor']);
+
+        }elseif($role == 'admin'){
+            $user->assignRole($user_roles['admin']);
+        }
 
         try {
             $user->save();
