@@ -129,6 +129,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::apiResource('groups', GroupController::class);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
+    Route::get('trending_posts', [PostController::class, 'trending_posts']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);

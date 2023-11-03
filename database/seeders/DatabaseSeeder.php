@@ -153,8 +153,10 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Group::factory(1)->create(
             [
+                'uuid' => "715bfe90-833e-3459-9700-036ac28d3fd4",
                 'user_id' => 1,
                 'name' => 'Feed',
+                'description' => 'The Lounge Feeds',
                 'status' => 'public',
             ]
         );
