@@ -40,8 +40,20 @@ class DatabaseSeeder extends Seeder
             'status' => 1,
         ]); // 1:Admin
 
-        User::where('id', 2)->update(['role' => 2]);  // 2:Advisor
-        User::where('id', 3)->update(['role' => 3]); // 3:Agency
+        $advisor = User::where('id', 2)->first();
+        $advisor->update(['role' => 2]);// 2:Advisor
+        $advisor->assignRole(Role::findByName('advisor'));
+
+        $agency = User::where('id', 3)->first();
+        $agency->update(['role' => 3]); // 3:Agency
+        $agency->assignRole(Role::findByName('agency'));
+
+        $creative = User::where('id', 4)->first();
+        $creative->assignRole(Role::findByName('creative'));
+
+        $creative2 = User::where('id', 4)->first();
+        $creative2->assignRole(Role::findByName('creative'));
+
 
         // ********************************************************
         // ******************** AGENCY USERS **********************

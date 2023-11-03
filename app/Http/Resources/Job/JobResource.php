@@ -71,12 +71,24 @@ class JobResource extends JsonResource
 
     public function get_location()
     {
-        return [
-            'state_id' => $this->state?->uuid,
-            'state' => $this->state?->name,
-            'city_id' => $this->city?->uuid,
-            'city' => $this->city?->name,
-        ] ?? [];
+        $location = [
+            'state_id' => null,
+            'state' => null,
+            'city_id' => null,
+            'city' => null,
+        ];
+
+        if ($this->state) {
+            $location['state_id'] = $this->state->uuid;
+            $location['state'] = $this->state->name;
+        }
+
+        if ($this->city) {
+            $location['city_id'] = $this->city->uuid;
+            $location['city'] = $this->city->name;
+        }
+
+        return $location;
     }
 
     public function generate_seo()

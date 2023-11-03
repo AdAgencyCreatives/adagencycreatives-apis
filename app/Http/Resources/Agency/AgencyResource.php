@@ -21,7 +21,7 @@ class AgencyResource extends JsonResource
             'about' => $this->about,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
-            'logo' => $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null,
+            'logo' => $user->agency_logo ? getAttachmentBasePath() . $user->agency_logo->path : null,
             'is_remote' => $this->is_remote,
             'is_hybrid' => $this->is_hybrid,
             'is_onsite' => $this->is_onsite,
@@ -48,12 +48,21 @@ class AgencyResource extends JsonResource
     {
         $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'business') : null;
 
-        return $address ? [
-            'state_id' => $address->state->uuid,
-            'state' => $address->state->name,
-            'city_id' => $address->city->uuid,
-            'city' => $address->city->name,
-        ] : null;
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
     }
 
     public function generate_seo()

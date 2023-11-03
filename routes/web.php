@@ -33,6 +33,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,12 @@ Route::redirect('/', '/login');
 
 Route::get('/test', function () {
     return User::all();
+});
+
+
+Route::get('/test2', function () {
+    $user = User::find(4);
+    $agency = Role::findByName('creative');
 });
 
 Route::get('/email-template', function () {
