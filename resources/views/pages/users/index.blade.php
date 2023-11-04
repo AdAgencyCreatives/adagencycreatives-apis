@@ -89,18 +89,20 @@
                 displayNoRecordsMessage(7);
             }
 
+            var current_logged_in_userid = "{{ auth()->id() }}";
+
             $.each(users, function(index, user) {
                 var editUrl = "/users/" + user.id + "/details";
                 var roleBasedActions = '';
 
-                if (user.role === 'admin') {
-                    roleBasedActions = 'Admin';
+                if (current_logged_in_userid == user.id) {
+                    roleBasedActions = '<a href="' + editUrl +
+                        '">Details</a>';
                 } else {
                     roleBasedActions = '<a href="' + editUrl +
                         '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
                         user.uuid + '">Delete</a>';
                 }
-
 
                 var statusDropdown =
                     '<select class="status-dropdown form-control form-select select2" data-user-id="' +

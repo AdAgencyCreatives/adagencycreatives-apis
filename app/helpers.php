@@ -215,11 +215,15 @@ if (! function_exists('updateLocation')) {
 if (! function_exists('get_user_slug')) {
     function get_user_slug($user)
     {
+        // dd($user->role);
         $slug = null;
         if ($user->role == 'creative') {
-            $slug = $user->creative?->slug;
+            $slug = $user->creative ? $user->creative->slug : $user->username;
         } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $slug = $user->agency?->slug;
+            $slug = $user->agency ? $user->agency->slug : $user->username;
+        }
+        elseif ($user->role == 'admin') {
+            $slug = $user->username;
         }
 
         return $slug;

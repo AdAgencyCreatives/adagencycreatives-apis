@@ -85,23 +85,24 @@
                         Password
                     </a>
 
-                    <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
-                        Impersonate
-                    </a>
+                    @if ($user->role != 'admin')
+                        <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
+                            Impersonate
+                        </a>
 
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo" role="tab"
-                        aria-selected="false" tabindex="-1">
-                        SEO
-                    </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo" role="tab"
+                            aria-selected="false" tabindex="-1">
+                            SEO
+                        </a>
 
-                    @php
-                        $frontend_url = $user->role == 'creative' ? env('FRONTEND_URL') . '/creative/' . ($user->creative ? $user->creative->slug : '') : env('FRONTEND_URL') . '/agency/' . ($user->agency ? $user->agency->slug : '');
-                    @endphp
+                        @php
+                            $frontend_url = $user->role == 'creative' ? env('FRONTEND_URL') . '/creative/' . ($user->creative ? $user->creative->slug : '') : env('FRONTEND_URL') . '/agency/' . ($user->agency ? $user->agency->slug : '');
+                        @endphp
 
-                    <a class="list-group-item list-group-item-action" href="{{ $frontend_url }}" target="_blank">
-                        Frontend URL
-                    </a>
-
+                        <a class="list-group-item list-group-item-action" href="{{ $frontend_url }}" target="_blank">
+                            Frontend URL
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -121,7 +122,8 @@
                         @include('pages.users.creative.creative')
                     </div>
                 @endif
-                <div class="tab-pane fade" id="personal_info" role="tabpanel">
+                <div class="tab-pane fade @if ($user->role == 'admin') show active @endif " id="personal_info"
+                    role="tabpanel">
                     @include('pages.users._inc.personal_info')
                 </div>
                 <div class="tab-pane fade" id="password" role="tabpanel">

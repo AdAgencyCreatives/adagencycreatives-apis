@@ -99,3 +99,7 @@
         </div>
     </div>
 </div>
+
+@if ($user->role == 'admin')
+    @include('pages.users.admin.profile_picture')
+@endif

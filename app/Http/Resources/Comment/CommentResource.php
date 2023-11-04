@@ -16,7 +16,7 @@ class CommentResource extends JsonResource
             'user_id' => $user->uuid,
             'user' => $user->first_name.' '.$user->last_name,
             'user_slug' => get_user_slug($user),
-            'profile_picture' => $this->get_profile_picture($user),
+            'profile_picture' => get_profile_picture($user),
             'post_id' => $this->post->uuid,
             'parent_id' => isset($this->parent) ? $this->parent->uuid : null,
             'content' => $this->content,
@@ -25,15 +25,4 @@ class CommentResource extends JsonResource
         ];
     }
 
-    public function get_profile_picture($user)
-    {
-        $image = null;
-        if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : null;
-        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null;
-        }
-
-        return $image;
-    }
 }

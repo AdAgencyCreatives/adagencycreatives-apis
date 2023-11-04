@@ -32,11 +32,20 @@ class PostController extends Controller
 
         $posts = $query
             ->withCount('comments')
-            ->with('comments')
             ->withCount('likes')
+            ->with('comments')
+            // ->with('user.likes')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
+        $authenticatedUserId = auth()->id();
+
+        $posts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
+            $post->user_has_liked = $post->likes->contains('user_id', $authenticatedUserId);
+            return $post;
+        });
+
+            // dd($posts->toArray());
         return new PostCollection($posts);
     }
 
@@ -51,7 +60,19 @@ class PostController extends Controller
         $trendingPosts = $query->withCount('likes')
             ->orderBy('likes_count', 'desc')
             // ->where('status', 1)
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->withCount('comments')
+            ->with('comments')
+            ->withCount('likes')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+            $authenticatedUserId = auth()->id();
+
+        $trendingPosts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
+            $post->user_has_liked = $post->likes->contains('user_id', $authenticatedUserId);
+            return $post;
+        });
+
 
         return new PostCollection($trendingPosts);
     }
