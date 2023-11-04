@@ -56,6 +56,10 @@ Route::get('/test', function () {
     return User::all();
 });
 
+Route::get('/command', function () {
+    return User::all();
+});
+
 
 Route::get('/email-template', function () {
     return view('emails.order.new-order-alert-admin');

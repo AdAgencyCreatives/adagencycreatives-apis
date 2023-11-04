@@ -143,9 +143,9 @@ class UserController extends Controller
             $newStatus = $request->input('status');
 
             if ($newStatus === 'active' && $oldStatus === 'pending') {
-                // SendEmailJob::dispatch([
-                //     'receiver' => $user, 'data' => $user,
-                // ], 'account_approved');
+                SendEmailJob::dispatch([
+                    'receiver' => $user, 'data' => $user,
+                ], 'account_approved');
 
 
             /**

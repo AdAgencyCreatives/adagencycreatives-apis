@@ -14,7 +14,7 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p>Welcome to {{ env('APP_NAME') }}!</p>
+                        <p>Welcome to {{ $data['APP_NAME'] }}!</p>
 
                         <div style="margin-bottom: 30px;">To help you get the most out of your account, you’ll want to
                             first complete your <a href="{{ env('FRONTEND_URL') }}/profile" target="_blank">Profile.</a>
@@ -23,7 +23,7 @@
                             your preferences. After that,
                             you’re ready to get out there and start making some new connections!</div>
                         <div style="margin-bottom: 30px;">If you forget your password, no problem. You can reset it
-                            <a href="{{ env('FRONTEND_RESET_PASSWORD_URL') }}" target="_blank">here.</a>
+                            <a href="{{ $data['FRONTEND_RESET_PASSWORD_URL'] }}" target="_blank">here.</a>
 
                         </div>
 
