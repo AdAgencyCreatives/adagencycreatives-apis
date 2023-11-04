@@ -90,5 +90,12 @@ class TestUserSeeder extends Seeder
         $agency->is_hybrid = 1;
         $agency->is_onsite = 1;
         $agency->save();
+
+        /**
+         * Admin
+         */
+
+        $adeel_admin = User::where('email', 'adeelakhterit@gmail.com')->first();
+
     }
 }

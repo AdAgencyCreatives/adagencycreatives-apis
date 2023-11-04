@@ -8,10 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\Agency;
+use App\Models\Attachment;
 use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -128,5 +130,27 @@ class UserController extends Controller
         $url = sprintf('Location: %s?token=%s', env('FRONTEND_IMPERSONATE_URL'), $token);
         header($url);
         exit();
+    }
+
+
+    public function update_profile_picture(Request $request, $id)
+    {
+        if (! auth()->user()->role == 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $user = User::find($id);
+
+        if ($request->has('file') && is_object($request->file)) {
+
+            //Delete Previous profile picture
+            if ($user->attachments->where('resource_type', 'profile_picture')->count()) {
+                Attachment::where('user_id', $id)->where('resource_type', 'profile_picture')->delete();
+            }
+            storeImage($request, $id, 'profile_picture');
+        }
+
+        Session::flash('success', 'Profile picture updated successfully');
+        return redirect()->back();
     }
 }

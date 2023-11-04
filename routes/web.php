@@ -128,6 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
 
         Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
+        Route::put('/user/profile_picture/{user}', [UserController::class, 'update_profile_picture'])->name('user.profile.picture');
 
         Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
         Route::put('/agency/seo/{user}', [AgencyController::class, 'update_seo'])->name('agency.seo.update');
