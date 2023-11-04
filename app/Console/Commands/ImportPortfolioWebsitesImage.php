@@ -48,6 +48,10 @@ class ImportPortfolioWebsitesImage extends Command
                 $this->storeAttachment($url, $laravel_user->id, 'website_preview');
             }
 
+            if ($endIndex > 0 && $key >= $endIndex) {
+                break;
+            }
+
 
 
         }
@@ -62,7 +66,7 @@ class ImportPortfolioWebsitesImage extends Command
             if ($response->successful()) {
                 $uuid = Str::uuid();
                 $filename = basename($url);
-                echo sprintf("<img src='%s'/>", $url);
+                // echo sprintf("<img src='%s'/>", $url);
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
                 $folder = $resource_type.'/'.$uuid.'/'.$filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
