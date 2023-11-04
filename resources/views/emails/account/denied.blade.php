@@ -14,7 +14,7 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p style="margin-bottom: 30px;">We appreciate your interest in joining {{ env('APP_NAME') }}.
+                        <p style="margin-bottom: 30px;">We appreciate your interest in joining {{ $data['APP_NAME'] }}.
                             Unfortunately, the following
                             account has not been approved at this time.
                         </p>
