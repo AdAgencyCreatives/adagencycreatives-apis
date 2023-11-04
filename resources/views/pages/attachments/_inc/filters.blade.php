@@ -29,6 +29,7 @@
                                     <option value="creative_spotlight"> Creative Spotlight</option>
                                     <option value="portfolio_item"> Portfolio Items</option>
                                     <option value="resume"> Resume</option>
+                                    <option value="website_preview"> Portfolio Website</option>
                                 </select>
                             </div>
                         </div>

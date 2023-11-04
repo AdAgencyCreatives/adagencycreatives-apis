@@ -100,27 +100,14 @@
         <h2>About</h2>
         <p>{{ $data['about'] ?? '' }}</p>
     </section>
-    @if ($user && $user->links)
-        @php
-            $websiteLink = $user->links->where('label', 'website')->first();
 
-            if ($websiteLink && $websiteLink->url) {
-                $url = $websiteLink->url;
-
-                // Check if the URL doesn't start with 'http://' or 'https://'
-    if (!preg_match('/^(http|https):\/\//', $url)) {
-        $url = 'https://' . $url;
-                }
-            }
-        @endphp
-
-        @if (!empty($url))
-            <section>
-                <h2>Portfolio site</h2>
-                <img src="{{ '/image.thum.io/get/' . $url }}" />
-            </section>
-        @endif
+    @if (!is_null($portfolio_website_preview_img))
+        <section>
+            <h2>Portfolio site</h2>
+            <img src="{{ $portfolio_website_preview_img }}" />
+        </section>
     @endif
+
     <section class="creative-details"
         style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 20px; margin-top: 15px;">
         <div>
@@ -202,14 +189,17 @@
 
         </div>
     </section>
-    <section>
-        <h2>Portfolio</h2>
-        <div style="display: grid; gap: 5px;">
-            @foreach ($portfolio_items as $item)
-                <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 800px;" />
-            @endforeach
-        </div>
-    </section>
+    @if (count($portfolio_items))
+        <section>
+            <h2>Portfolio</h2>
+            <div style="display: grid; gap: 5px;">
+                @foreach ($portfolio_items as $item)
+                    <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 800px;" />
+                @endforeach
+            </div>
+        </section>
+    @endif
+
 
 
     <script>

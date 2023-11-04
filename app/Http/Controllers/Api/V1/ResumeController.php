@@ -101,9 +101,15 @@ class ResumeController extends Controller
         $educations = $user->educations;
         $experiences = $user->experiences;
         $portfolio_items = $user->portfolio_items;
+        if($user->portfolio_website_preview){
+            $portfolio_website_preview_img = getAttachmentBasePath() . $user->portfolio_website_preview->path;
+        }
+        else{
+            $portfolio_website_preview_img = null;
+        }
         $data = (new CreativeResource($creative))->toArray([]);
 
-        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
+        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items', 'portfolio_website_preview_img')); // Render the HTML view
 
         return $html;
     }

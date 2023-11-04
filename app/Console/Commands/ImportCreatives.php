@@ -90,12 +90,12 @@ class ImportCreatives extends Command
             $user->is_visible = false;
         }
 
-        // Create LinkedIn link if provided
+        // Create website link if provided
         if (isset($data['post_meta']['portfoliolink'][0]) && $data['post_meta']['portfoliolink'][0] !== '') {
             $this->createLink($user->id, 'portfolio', $data['post_meta']['portfoliolink'][0]);
         }
 
-        // Create website link if provided
+        // Create LinkedIn link if provided
         if (isset($data['post_meta']['linkedinlink'][0]) && $data['post_meta']['linkedinlink'][0] !== '') {
             $this->createLink($user->id, 'linkedin', $data['post_meta']['linkedinlink'][0]);
         }

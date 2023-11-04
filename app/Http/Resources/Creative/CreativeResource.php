@@ -63,7 +63,6 @@ class CreativeResource extends JsonResource
 
     public function get_resume($user, $logged_in_user)
     {
-        return $logged_in_user;
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;
         } else {
