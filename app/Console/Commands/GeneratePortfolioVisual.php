@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 class GeneratePortfolioVisual extends Command
 {
     protected $signature = 'portfolio:generate';
-
     protected $description = 'Generate portfolio visuals';
 
     public function __construct()
