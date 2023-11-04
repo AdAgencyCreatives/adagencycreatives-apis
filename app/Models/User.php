@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $this->hasOne(Link::class)->where('label', 'portfolio');
     }
 
+    public function portfolio_website_preview()
+    {
+        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview');
+    }
+
     public function agency()
     {
         return $this->hasOne(Agency::class);
