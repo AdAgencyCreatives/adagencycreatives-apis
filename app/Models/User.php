@@ -88,6 +88,11 @@ class User extends Authenticatable
         return $this->hasMany(Link::class)->where('label', 'portfolio');
     }
 
+    public function portfolio_website_link()
+    {
+        return $this->hasOne(Link::class)->where('label', 'portfolio');
+    }
+
     public function agency()
     {
         return $this->hasOne(Agency::class);

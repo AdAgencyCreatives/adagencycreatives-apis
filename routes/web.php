@@ -57,11 +57,6 @@ Route::get('/test', function () {
 });
 
 
-Route::get('/test2', function () {
-    $user = User::find(4);
-    $agency = Role::findByName('creative');
-});
-
 Route::get('/email-template', function () {
     return view('emails.order.new-order-alert-admin');
 });
