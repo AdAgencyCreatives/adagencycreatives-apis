@@ -200,8 +200,6 @@
         </section>
     @endif
 
-
-
     <script>
         window.print()
     </script>
