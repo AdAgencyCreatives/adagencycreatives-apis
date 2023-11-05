@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,15 +52,6 @@ use Spatie\Permission\Models\Role;
 // });
 
 Route::redirect('/', '/login');
-
-Route::get('/test', function () {
-    return User::all();
-});
-
-Route::get('/command', function () {
-    return User::all();
-});
-
 
 Route::get('/email-template', function () {
     return view('emails.order.new-order-alert-admin');

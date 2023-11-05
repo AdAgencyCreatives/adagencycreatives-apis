@@ -63,7 +63,7 @@ class ImportCreatives extends Command
         $creative = new Creative();
         $creative->uuid = Str::uuid();
         $creative->user_id = $user->id;
-        $creative->slug = Str::slug($data['post_title']);
+        $creative->slug = $user->username;
 
         $creative->years_of_experience = $data['post_meta']['_candidate_experience_time'][0] ?? '';
         $creative->about = $data['post_content'];
