@@ -32,6 +32,14 @@
                         </p>
                     </div>
                 @endforeach
+
+                @if ($user->portfolio_website_preview)
+                    <div>
+                        <img style="max-width: 400px;"
+                            src="{{ getAttachmentBasePath() . $user->portfolio_website_preview->path }}"></video>
+                    </div>
+                @endif
+
             </div>
         </div>
     </div>
