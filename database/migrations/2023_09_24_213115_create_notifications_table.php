@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
+            $table->string('type');
+            $table->string('message');
             $table->string('body');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();

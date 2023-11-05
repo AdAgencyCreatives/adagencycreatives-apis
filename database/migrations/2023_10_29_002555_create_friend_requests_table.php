@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
-            $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
+            $table->string('status')->default('pending')->comment("'pending', 'accepted', 'declined', 'cancelled'");
             $table->timestamps();
         });
     }

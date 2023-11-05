@@ -151,9 +151,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::get('messages', [ChatController::class, 'fetchMessages']);
     Route::apiResource('messages', ChatController::class);
-    Route::get('notifications', [NotificationController::class, 'index']);
-    Route::patch('notifications', [NotificationController::class, 'update']);
-
+    Route::apiResource('notifications', NotificationController::class);
     /**
      * SEO
      */

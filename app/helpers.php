@@ -233,6 +233,7 @@ if (! function_exists('get_user_slug')) {
 if (! function_exists('create_notification')) {
     function create_notification($user_id, $body)
     {
+        return 0;
         $notification = Notification::create([
             'uuid' => Str::uuid(),
             'user_id' => $user_id,

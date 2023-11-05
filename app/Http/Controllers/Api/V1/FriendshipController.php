@@ -22,7 +22,6 @@ class FriendshipController extends Controller
 {
     public function all_friends(Request $request)
     {
-
         $userId = $request->user()->id;
 
         $friends = Friendship::with('initiatedByUser', 'receivedByUser')->where(function ($query) use ($userId) {
@@ -107,9 +106,9 @@ class FriendshipController extends Controller
             return response()->json(['message' => 'This request has already been responded.'], 403);
         }
 
-        if ($friendRequest->receiver_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized to respond to this request.'], 403);
-        }
+        // if ($friendRequest->receiver_id !== $user->id) {
+        //     return response()->json(['message' => 'Unauthorized to respond to this request.'], 403);
+        // }
 
         DB::beginTransaction();
         try {
@@ -127,8 +126,13 @@ class FriendshipController extends Controller
                         'member' => $friendRequest->receiver->first_name,
                     ],
                 ], 'friendship_request_accepted');
-            } else {
-                $friendRequest->update(['status' => 'declined']);
+            } elseif($response === 'cancelled')
+            {
+                $friendRequest->update(['status' => 'cancelled']);
+            }
+            elseif($response === 'cancelled')
+            {
+                $friendRequest->update(['status' => 'cancelled']);
             }
 
             DB::commit();
@@ -151,13 +155,13 @@ class FriendshipController extends Controller
     // Helper methods
     private function checkFriendshipExists($user1Id, $user2Id)
     {
-        return FriendRequest::where(function ($query) use ($user1Id, $user2Id) {
+        return FriendRequest::where('status', 'pending')
+        ->where(function ($query) use ($user1Id, $user2Id) {
             $query->where('sender_id', $user1Id)->where('receiver_id', $user2Id);
         })->orWhere(function ($query) use ($user1Id, $user2Id) {
             $query->where('sender_id', $user2Id)->where('receiver_id', $user1Id);
         })
-            ->whereIn('status', ['pending', 'accepted'])
-            ->exists();
+        ->exists();
     }
 
     private function createFriendship($user1Id, $user2Id)
