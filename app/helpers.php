@@ -262,3 +262,26 @@ if (! function_exists('get_profile_picture')) {
         return $image;
     }
 }
+
+if (! function_exists('get_location')) {
+    function get_location($user)
+    {
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
+    }
+}
