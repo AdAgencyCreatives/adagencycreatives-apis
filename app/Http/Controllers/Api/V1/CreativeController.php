@@ -41,6 +41,9 @@ class CreativeController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
+        $query->whereHas('user', function ($userQuery) {
+            $userQuery->where('is_visible', true);
+        });
         $creatives = $query->with([
             'user.profile_picture',
             'user.addresses.state',
@@ -171,6 +174,7 @@ class CreativeController extends Controller
             }));
             $user->save();
 
+            updateLocation($request, $user, 'personal');
             // Update Phone, Location, and Links
             if ($request->has('phone_number')) {
                 updatePhone($user, $request->phone_number, 'personal');
