@@ -9,6 +9,7 @@ use App\Http\Requests\Application\UpdateApplicationRequest;
 use App\Http\Resources\Application\ApplicationCollection;
 use App\Http\Resources\Application\ApplicationResource;
 use App\Http\Resources\AppliedJob\AppliedJobCollection;
+use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Job;
@@ -51,6 +52,14 @@ class ApplicationController extends Controller
 
         try {
             $application = Application::create($request->all());
+
+            SendEmailJob::dispatch([
+                'receiver' => $user,
+                'data' => [
+                    'recipient' => $user->first_name,
+                    'job_title' => $job->title
+                ],
+            ], 'application_submitted');
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {

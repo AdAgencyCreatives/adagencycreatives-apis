@@ -6,6 +6,7 @@ use App\Mail\Account\AccountApproved;
 use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
+use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
@@ -84,6 +85,15 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
                 break;
 
+
+                /**
+                 * Application
+                */
+            case 'application_submitted':
+                Mail::to($this->data['receiver'])->send(new ApplicationSubmitted($this->data['data']));
+                break;
+
+
                 /**
                  * Friend
                  */
@@ -93,6 +103,8 @@ class SendEmailJob implements ShouldQueue
             case 'friendship_request_accepted':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequestAccepted($this->data['data']));
                 break;
+
+
             default:
                 // Handle unknown email types or fallback logic
                 break;

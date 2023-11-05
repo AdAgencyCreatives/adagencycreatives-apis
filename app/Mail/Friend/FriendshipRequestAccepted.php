@@ -17,6 +17,8 @@ class FriendshipRequestAccepted extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()

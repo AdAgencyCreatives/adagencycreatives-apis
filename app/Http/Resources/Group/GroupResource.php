@@ -14,6 +14,7 @@ class GroupResource extends JsonResource
             'uuid' => $this->uuid,
             'user' => new UserResource($this->user),
             'name' => $this->name,
+            'slug' => $this->slug,
             'description' => $this->description,
             'status' => $this->status,
             'cover_image' => $this->getCoverImage(),

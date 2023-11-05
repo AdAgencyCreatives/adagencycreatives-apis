@@ -1,30 +1,30 @@
 <?php
 
-namespace App\Mail\Group;
+namespace App\Mail\Application;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Invitation extends Mailable
+class ApplicationSubmitted extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+   public $data;
 
     public function __construct($data)
     {
         $this->data = $data;
-        $this->data['APP_NAME'] = env('APP_NAME');
-        $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
+
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s on {%s} would like you to join their group', $this->data['group'], env('APP_NAME')),
+            subject: sprintf('Application Submitted via {%s}', env('APP_NAME')),
         );
     }
 
@@ -35,9 +35,8 @@ class Invitation extends Mailable
      */
     public function content()
     {
-        // dd($this->data);
         return new Content(
-            view: 'emails.group.invitation',
+            view: 'emails.application.submitted',
         );
     }
 

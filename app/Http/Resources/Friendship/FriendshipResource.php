@@ -10,9 +10,12 @@ class FriendshipResource extends JsonResource
     public function toArray($request)
     {
         $user = $request->user();
+        $friend = $this->get_friend($user);
 
         return [
-            'user' => new UserResource($this->get_friend($user)),
+            'title' => $friend->creative?->title,
+            'location' => get_location($friend),
+            'user' => new UserResource($friend),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
@@ -27,6 +30,5 @@ class FriendshipResource extends JsonResource
         }
 
         return null;
-
     }
 }

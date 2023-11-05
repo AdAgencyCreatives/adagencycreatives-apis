@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class Group extends Model
 {
@@ -15,6 +16,7 @@ class Group extends Model
         'uuid',
         'user_id',
         'name',
+        'slug',
         'description',
         'status',
     ];
@@ -99,8 +101,12 @@ class Group extends Model
 
     protected static function booted()
     {
-        static::created(function () {
+        static::created(function ($group) {
             Cache::forget('all_groups');
+            if ($group->slug == null) {
+                $group->slug = Str::slug($group->name);
+                $group->save();
+            }
         });
 
         static::updated(function () {
