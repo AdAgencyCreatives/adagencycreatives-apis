@@ -130,9 +130,9 @@ class FriendshipController extends Controller
             {
                 $friendRequest->update(['status' => 'cancelled']);
             }
-            elseif($response === 'cancelled')
+            elseif($response === 'declined')
             {
-                $friendRequest->update(['status' => 'cancelled']);
+                $friendRequest->update(['status' => 'declined']);
             }
 
             DB::commit();
