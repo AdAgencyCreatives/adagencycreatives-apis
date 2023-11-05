@@ -57,9 +57,9 @@ class NotificationController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update($uuid)
     {
-        Notification::where('uuid', $request->notification_id)->touch('read_at');
+        Notification::where('uuid', $uuid)->touch('read_at');
 
         return response()->json([
             'message' => 'Notification updated successfully',
