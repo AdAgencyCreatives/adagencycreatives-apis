@@ -64,7 +64,7 @@ class ImportAgencies extends Command
         $agency->uuid = Str::uuid();
         $agency->user_id = $user->id;
         $agency->name = $data['post_title'];
-        $agency->slug = Str::slug($data['post_meta']['_employer_display_name'][0]);
+        $agency->slug = $user->username;
         $agency->about = $data['post_content'];
         $agency->created_at = Carbon::createFromTimestamp($data['post_meta']['post_date'][0]);
         $agency->updated_at = now();
