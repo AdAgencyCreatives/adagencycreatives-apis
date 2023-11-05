@@ -97,7 +97,6 @@ class Creative extends Model
     public function scopeStatus(Builder $query, $status)
     {
         $user_ids = User::where('status', $status)->pluck('id');
-
         return $query->whereIn('user_id', $user_ids);
     }
 

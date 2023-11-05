@@ -52,6 +52,10 @@ class AgencyController extends Controller
             $this->applyExperienceFilter($query, $medias, 'media_experience');
         }
 
+        $query->whereHas('user', function ($userQuery) {
+            $userQuery->where('is_visible', true);
+        });
+
         $agencies = $query
             ->with([
                 'user.addresses.state',

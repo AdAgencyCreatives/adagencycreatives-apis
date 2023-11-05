@@ -48,6 +48,7 @@ class CreativeResource extends JsonResource
             'phone_number' => $user->personal_phone ? $user->personal_phone->phone_number : null,
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user),
+            'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -69,6 +70,11 @@ class CreativeResource extends JsonResource
             return route('download.resume', $user->uuid);
         }
 
+    }
+
+    public function get_website_preview($user)
+    {
+        return $user->portfolio_website_preview ? $user->portfolio_website_preview->path : '';
     }
 
     public function get_location($user)
