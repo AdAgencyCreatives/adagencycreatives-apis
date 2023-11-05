@@ -222,7 +222,7 @@ class CreativeController extends Controller
                 'is_opentorelocation' => $request->is_opentorelocation,
                 'industry_experience' => implode(',', array_slice($request->industry_experience ?? [], 0, 10)),
                 'media_experience' => implode(',', array_slice($request->media_experience ?? [], 0, 10)),
-                'strengths' => implode(',', array_slice($request->strength ?? [], 0, 5)),
+                'strengths' => implode(',', array_slice($request->strengths ?? [], 0, 5)),
             ];
 
             if ($request->category_id) {
