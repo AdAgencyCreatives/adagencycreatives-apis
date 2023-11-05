@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Notification;
+namespace App\Http\Requests\Activity;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateNotificationRequest extends FormRequest
+class StoreActivityRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,7 +14,7 @@ class UpdateNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'notification_id' => 'required|exists:notifications,uuid',
+            'user_id' => 'required|exists:users,uuid'
         ];
     }
 }
