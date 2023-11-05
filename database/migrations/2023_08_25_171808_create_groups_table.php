@@ -13,6 +13,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->integer('status')->default(0)->comment('0: public, 1: private, 2: hidden');
             $table->timestamps();

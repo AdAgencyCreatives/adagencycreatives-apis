@@ -30,7 +30,6 @@ class FriendshipController extends Controller
             $query->where('user2_id', $userId);
         })->get();
 
-        // dd($friends->toArray());
         return new FriendshipCollection($friends);
     }
 
@@ -141,7 +140,7 @@ class FriendshipController extends Controller
             throw new ApiException($e, 'CS-01');
         }
 
-            return response()->json(['message' => 'Friend request responded.']);
+            return response()->json(['message' => sprintf("Friend request %s", $response)]);
     }
 
     public function getFriends()
