@@ -15,7 +15,7 @@ class FriendRequestRespondRequest extends FormRequest
     {
         return [
             'request_id' => 'required|exists:friend_requests,uuid',
-            'response' => 'required|in:accepted,declined',
+            'response' => 'required|in:accepted,declined,cancelled',
         ];
     }
 }

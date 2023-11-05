@@ -223,6 +223,11 @@ class User extends Authenticatable
         return $this->morphMany(Note::class, 'notable');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     /**
      * Community Relations
      */
