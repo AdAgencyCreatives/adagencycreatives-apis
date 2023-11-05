@@ -58,9 +58,9 @@ class ActivityController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update( $uuid)
     {
-        Activity::where('uuid', $request->notification_id)->touch('read_at');
+        Activity::where('uuid', $uuid)->touch('read_at');
 
         return response()->json([
             'message' => 'Activity updated successfully',
