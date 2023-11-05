@@ -74,7 +74,7 @@ class CreativeResource extends JsonResource
 
     public function get_website_preview($user)
     {
-        return $user->portfolio_website_preview ? $user->portfolio_website_preview->path : '';
+        return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
     }
 
     public function get_location($user)
