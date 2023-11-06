@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->text('message');
+            $table->string('type')->default('private')->comment('private | agency | lounge');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

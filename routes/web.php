@@ -53,8 +53,10 @@ use Illuminate\Support\Str;
 
 Route::redirect('/', '/login');
 
-Route::get('/email-template', function () {
-    return view('emails.order.new-order-alert-admin');
+Route::get('/users2', function () {
+    if(env('APP_ENV') == 'local'){
+        return User::all();
+    }
 });
 
 Route::get('/email', function () {

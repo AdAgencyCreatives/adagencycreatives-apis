@@ -77,4 +77,24 @@ class NotificationController extends Controller
             return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
+
+    public function count(Request $request)
+    {
+        $query = QueryBuilder::for(Notification::class)
+        ->allowedFilters([
+                AllowedFilter::scope('user_id')
+        ]);
+
+        if ($request->has('status')) {
+            if ($request->status == 0) {
+                $query->whereNull('read_at');
+            } elseif ($request->status == 1) {
+                $query->whereNotNull('read_at');
+            }
+        }
+
+        return response()->json([
+            'count' => $query->count()
+        ]);
+    }
 }
