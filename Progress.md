@@ -592,3 +592,26 @@ Admin can
 -   Created endpoint for fetching notificaitons.
 -   Created endpoint for updating notifications.
 -   Exported the data from Wordpress to Laravel (with all attachments)
+
+## 31/10/2023 Data Import Bug Fixes
+
+-   Added profile picture on media page
+-   Manually Confirmed profile pictures of users
+-   Handeled the exceptions which came during data export
+-   Bug Fixes
+
+## 01/11/2023 Portfolio website previews
+
+-   Added profile picture section for admin profile.
+-   Created endpoint for trending posts.
+-   Exported existing portfolio website previews.
+-   Added command for storing preview of website for upcoming users.
+-   Added portfolio website on Resume.
+
+## 02/11/2023 Notifications | Friend Request Module
+
+-   Implemented application submitted email.
+-   Created endpoints for notificaitons module (Full CRUD)
+-   Created endpoints for activities module (Full CRUD)
+-   Modify the friendship module endpoints accordingto frontned requirements
+-   Tested the profile page from frontend and noted all the things which we can improve.
