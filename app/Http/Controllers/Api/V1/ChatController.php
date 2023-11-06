@@ -125,7 +125,7 @@ class ChatController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            return response()->json(['error' => $e->getMessage()]);
         }
 
         return response()->json(['contacts' => $uniqueContacts]);
@@ -134,21 +134,5 @@ class ChatController extends Controller
     private function getMessageType($sender1, $current_user)
     {
         return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
-    }
-
-    public function fetchMessages($contactId)
-    {
-        $loggedInUserId = 2;
-        dd($loggedInUserId);
-        $messages = Message::where(function ($query) use ($loggedInUserId, $receiverId) {
-            $query->where('sender_id', $loggedInUserId)
-                ->where('receiver_id', $receiverId);
-        })->orWhere(function ($query) use ($loggedInUserId, $receiverId) {
-            $query->where('sender_id', $receiverId)
-                ->where('receiver_id', $loggedInUserId);
-        })->orderBy('created_at', 'asc')->get();
-
-        return MessageResource::collection($messages);
-
     }
 }

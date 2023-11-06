@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
+use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,13 +56,16 @@ Route::post('/users', [UserController::class, 'store']);
 // Public GET routes
 Route::get('agencies', [AgencyController::class, 'index']);
 Route::get('creatives', [CreativeController::class, 'index']);
+Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
 Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
 Route::get('attachments', [AttachmentController::class, 'index']);
 Route::get('experiences', [ExperienceController::class, 'index']);
 Route::get('educations', [EducationController::class, 'index']);
-Route::get('creative_spotlight', [CreativeController::class, 'creative_spotlight']);
+Route::get('home/creative-spotlights', [CreativeSpotlightController::class, 'homepage_spotlights']);
+Route::resource('creative-spotlights', CreativeSpotlightController::class);
+
 
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
@@ -73,6 +77,12 @@ Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    /**
+     * Creatives
+     */
+    Route::get('creatives', [CreativeController::class, 'index']);
+
     /**
      * Job Board Routes
      */
@@ -150,9 +160,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
-    Route::get('messages', [ChatController::class, 'fetchMessages']);
     Route::apiResource('messages', ChatController::class);
+    Route::get('notifications/count', [NotificationController::class, 'count']);
     Route::apiResource('notifications', NotificationController::class);
+    Route::get('activities/count', [ActivityController::class, 'count']);
     Route::apiResource('activities', ActivityController::class);
     /**
      * SEO

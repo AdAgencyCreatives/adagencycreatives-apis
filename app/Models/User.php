@@ -246,6 +246,11 @@ class User extends Authenticatable
         return $this->hasMany(FriendRequest::class, 'receiver_id');
     }
 
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
     {
         $agency = Agency::where('slug', $company_slug)->firstOrFail();
