@@ -422,6 +422,31 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('creative-spotlights*') ? 'active' : '' }} ">
+                    <a data-target="#creative_spotlights_menu" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="video"></i>
+                        <span class="align-middle">Creative Spotlights</span>
+                    </a>
+                    <ul id="creative_spotlights_menu"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('creative-spotlights*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('creative-spotlights') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('creative-spotlights.index') }}">
+                                <i class="align-middle" data-feather="video"></i>
+                                <span class="align-middle">All Spotlights</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('creative-spotlights/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('creative-spotlights.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Spotlight</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('pages/create*') ? 'active' : '' }} ">
                     <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="image"></i>

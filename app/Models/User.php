@@ -329,12 +329,14 @@ class User extends Authenticatable
                 Cache::forget('users');
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
+                Cache::forget('all_creatives');
             });
 
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_users_with_attachments');
+                Cache::forget('all_creatives');
 
                 //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
                 if ($user->creative) {
@@ -348,6 +350,7 @@ class User extends Authenticatable
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
+                Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
             });
         }
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
@@ -179,6 +180,7 @@ Route::group(['middleware' => ['auth']], function () {
          * Attachment Media
          */
         Route::resource('attachments', AttachmentController::class);
+        Route::resource('creative-spotlights', CreativeSpotlightController::class);
 
         /**
          * Pages Management

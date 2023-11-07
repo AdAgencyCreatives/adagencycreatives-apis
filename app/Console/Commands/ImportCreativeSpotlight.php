@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Resources\Creative\CreativeSpotlight;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -59,7 +60,7 @@ class ImportCreativeSpotlight extends Command
                     $spotlight_url = $Spotlight['post_meta']['enclosure'][0];
                     if (preg_match('/(.+\.mp4)\s/', $spotlight_url, $matches)) {
                         $partBeforeMp4 = $matches[1];
-                        $this->storeAttachment($partBeforeMp4, $user->id, 'creative_spotlight');
+                        $this->storeAttachment($partBeforeMp4, $user, 'creative_spotlight');
                         dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
                         if ($endIndex > 0 && $key >= $endIndex) {
                             break;
@@ -74,26 +75,34 @@ class ImportCreativeSpotlight extends Command
 
     }
 
-    public function storeAttachment($url, $user_id, $resource_type)
+    public function storeAttachment($url, $user, $resource_type)
     {
         try {
             $response = Http::get($url);
 
+            dump("Downloading $url");
             if ($response->successful()) {
                 $uuid = Str::uuid();
                 $filename = basename($url);
 
-                $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                $folder = $resource_type.'/'.$uuid.'/'.$filename;
+                $folder = $resource_type . '/' . $uuid . '/' . $filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
-                $attachment = Attachment::create([
+                if($user->creative?->title) {
+                    $title = sprintf("%s, %s", $user->creative?->title, $user->full_name);
+                } else {
+                    $title = $user->full_name;
+                }
+
+                $attachment = CreativeSpotlight::create([
                     'uuid' => $uuid,
-                    'user_id' => $user_id,
-                    'resource_type' => $resource_type,
-                    'path' => $folder,
+                    'user_id' => $user->id,
+                    'user_name' => $user->full_name,
+                    'title' => $title,
+                    'path' => $filePath,
                     'name' => $filename,
-                    'extension' => $extension,
+                    'slug' => Str::slug($filename),
+                    'status' => 'approved',
                 ]);
 
                 return $attachment;
