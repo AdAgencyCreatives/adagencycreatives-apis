@@ -62,7 +62,7 @@
 
                 var fileUrl = attachment.url;
 
-                roleBasedActions = '<a href="/creative-spotlights/' + attachment.id +
+                roleBasedActions = '<a href="/creative_spotlights/' + attachment.id +
                     '/edit" class="detail-btn">Edit</a> | <a href="#" class="delete-btn" data-id="' +
                     attachment.id + '">Delete</a>';
 

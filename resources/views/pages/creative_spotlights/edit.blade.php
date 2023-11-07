@@ -114,13 +114,13 @@
                     @endif
 
                     @if (session('success'))
-                        <x-alert-created type="success"></x-alert>
+                        <x-alert type="success"></x-alert>
                     @endif
 
-                    <form action="{{ route('creative-spotlights.store') }}" method="POST" enctype="multipart/form-data"
-                        id="myForm">
+                    <form action="{{ route('creative_spotlights.update', $spotlight->id) }}" method="POST"
+                        enctype="multipart/form-data" id="myForm">
                         @csrf
-                        @method('POST')
+                        @method('PUT')
 
                         <div class="mb-3">
                             <div class="form-group">
@@ -145,7 +145,7 @@
                             <div class="mb-3 error-placeholder">
                                 <label class="form-label">Spotlight Video</label>
                                 <div>
-                                    <input type="file" class="validation-file" name="file" required>
+                                    <input type="file" class="validation-file" name="file">
                                 </div>
                             </div>
                             <div>

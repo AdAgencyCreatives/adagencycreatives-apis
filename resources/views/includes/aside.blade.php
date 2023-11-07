@@ -422,24 +422,24 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item {{ request()->is('creative-spotlights*') ? 'active' : '' }} ">
+                <li class="sidebar-item {{ request()->is('creative_spotlights*') ? 'active' : '' }} ">
                     <a data-target="#creative_spotlights_menu" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="video"></i>
                         <span class="align-middle">Creative Spotlights</span>
                     </a>
                     <ul id="creative_spotlights_menu"
-                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('creative-spotlights*') ? 'show' : '' }}"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('creative_spotlights*') ? 'show' : '' }}"
                         data-parent="#sidebar">
 
-                        <li class="sidebar-item {{ request()->is('creative-spotlights') ? 'active' : '' }}">
-                            <a class="sidebar-link" href="{{ route('creative-spotlights.index') }}">
+                        <li class="sidebar-item {{ request()->is('creative_spotlights') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('creative_spotlights.index') }}">
                                 <i class="align-middle" data-feather="video"></i>
                                 <span class="align-middle">All Spotlights</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('creative-spotlights/create') ? 'active' : '' }}">
-                            <a class="sidebar-link" href="{{ route('creative-spotlights.create') }}">
+                        <li class="sidebar-item {{ request()->is('creative_spotlights/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('creative_spotlights.create') }}">
                                 <i class="align-middle" data-feather="plus-circle"></i>
                                 <span class="align-middle">Add New Spotlight</span>
                             </a>

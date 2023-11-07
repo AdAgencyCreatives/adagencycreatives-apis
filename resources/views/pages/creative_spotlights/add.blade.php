@@ -126,7 +126,7 @@
                         <x-alert-created type="success"></x-alert>
                     @endif
 
-                    <form action="{{ route('creative-spotlights.store') }}" method="POST" enctype="multipart/form-data"
+                    <form action="{{ route('creative_spotlights.store') }}" method="POST" enctype="multipart/form-data"
                         id="myForm">
                         @csrf
                         @method('POST')
