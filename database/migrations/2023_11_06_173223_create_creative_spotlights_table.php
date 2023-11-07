@@ -16,12 +16,10 @@ return new class extends Migration
         Schema::create('creative_spotlights', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('user_id');
-            $table->string('user_name')->nullable();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->string('path');
             $table->string('name')->nullable();
-            $table->string('slug')->nullable();
             $table->integer('status')->default(0)->comment('0:pending, 1:approved, 2:rejected');
             $table->timestamps();
             $table->softDeletes();

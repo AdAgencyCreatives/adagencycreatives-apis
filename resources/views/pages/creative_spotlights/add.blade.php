@@ -131,7 +131,7 @@
                         @csrf
                         @method('POST')
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <div class="form-group">
                                 <label class="form-label" for="users"> Author </label>
                                 <select name="author" id="all_users" class="form-control form-select custom-select select2"
@@ -140,7 +140,7 @@
                                     <!-- Add other options if available -->
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
                             <input type="text" class="form-control" name="title">

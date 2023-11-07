@@ -59,9 +59,11 @@ class ImportCreativeSpotlight extends Command
                 if (isset($Spotlight['post_meta']['enclosure'][0])) {
 
                     $spotlight_url = $Spotlight['post_meta']['enclosure'][0];
+                    $spotlight_title = $Spotlight['post_data']['post_title'];
+                    $spotlight_slug = $Spotlight['post_data']['post_name'];
                     if (preg_match('/(.+\.mp4)\s/', $spotlight_url, $matches)) {
                         $partBeforeMp4 = $matches[1];
-                        $this->storeAttachment($partBeforeMp4, $user, 'creative_spotlight');
+                        $this->storeAttachment($partBeforeMp4,'creative_spotlight', $spotlight_title, $spotlight_slug);
                         dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
                         if ($endIndex > 0 && $key >= $endIndex) {
                             break;
@@ -76,7 +78,7 @@ class ImportCreativeSpotlight extends Command
 
     }
 
-    public function storeAttachment($url, $user, $resource_type)
+    public function storeAttachment($url, $resource_type, $title, $slug)
     {
         try {
             $response = Http::get($url);
@@ -89,20 +91,12 @@ class ImportCreativeSpotlight extends Command
                 $folder = $resource_type . '/' . $uuid . '/' . $filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
-                if($user->creative?->title) {
-                    $title = sprintf("%s, %s", $user->creative?->title, $user->full_name);
-                } else {
-                    $title = $user->full_name;
-                }
-
                 $attachment = CreativeSpotlight::create([
                     'uuid' => $uuid,
-                    'user_id' => $user->id,
-                    'user_name' => $user->full_name,
                     'title' => $title,
                     'path' => $folder,
                     'name' => $filename,
-                    'slug' => Str::slug($filename),
+                    'slug' => $slug,
                     'status' => 'approved',
                 ]);
 

@@ -27,13 +27,7 @@ class CreativeSpotlightController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->author) {
-            return redirect()->back()->withErrors(['author' => 'Author is required']);
-        }
-
-        $user = User::find($request->author);
-
-        $this->storeVideo($request, $user, 'accepted');
+        $this->storeVideo($request,'accepted');
 
         Session::flash('success', 'Creative updated successfully');
         return redirect()->back();
@@ -48,21 +42,15 @@ class CreativeSpotlightController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (!$request->author) {
-            return redirect()->back()->withErrors(['author' => 'Author is required']);
-        }
-
-        $user = User::find($request->author);
 
         $spotlight = CreativeSpotlight::find($id);
 
         if($request->has('file')){
             $spotlight->delete();
-            $this->storeVideo($request, $user, 'accepted');
+            $this->storeVideo($request, 'accepted');
         }
         else{
             $spotlight->update([
-                'user_id' => $user->id,
                 'title' => $request->title,
                 'slug' => $request->slug,
             ]);
@@ -73,7 +61,7 @@ class CreativeSpotlightController extends Controller
 
     }
 
-    public function storeVideo($request, $user, $status)
+    public function storeVideo($request, $status)
     {
         $uuid = Str::uuid();
         $file = $request->file;
@@ -85,8 +73,6 @@ class CreativeSpotlightController extends Controller
 
         $attachment = CreativeSpotlight::create([
             'uuid' => $uuid,
-            'user_id' => $user->id,
-            'user_name' => $user->full_name,
             'title' => $request->title,
             'path' => $filePath,
             'name' => $filename,
