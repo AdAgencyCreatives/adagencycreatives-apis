@@ -90,7 +90,6 @@
                     '<td>' + displayContent + '</td>' +
                     '<td>' + attachment.title + '</td>' +
                     '<td>' + attachment.slug + '</td>' +
-                    '<td>' + attachment.user.first_name + ' ' + attachment.user.last_name + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
                     '<td><span class="badge bg-primary me-2">' + attachment.created_at +
                     '<td>' + roleBasedActions + '</td>' +
@@ -211,7 +210,6 @@
                                             <th>File</th>
                                             <th>Title</th>
                                             <th>Slug</th>
-                                            <th>Author</th>
                                             <th>Status</th>
                                             <th>Created At</th>
                                             <th>Actions</th>

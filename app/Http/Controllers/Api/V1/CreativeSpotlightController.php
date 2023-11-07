@@ -36,7 +36,7 @@ class CreativeSpotlightController extends Controller
 
 
 
-    public function store(StoreCreativeSpotlightRequest $request)
+    public function store(Request $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
         $attachment = $this->storeVideo($request, $user, 'pending');
@@ -86,8 +86,6 @@ class CreativeSpotlightController extends Controller
 
         $attachment = CreativeSpotlight::create([
             'uuid' => $uuid,
-            'user_id' => $user->id,
-            'user_name' => $user->full_name,
             'title' => $title,
             'path' => $filePath,
             'name' => $filename,

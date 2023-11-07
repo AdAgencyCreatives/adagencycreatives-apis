@@ -12,8 +12,6 @@ class CreativeSpotlight extends Model
 
     protected $fillable = [
         'uuid',
-        'user_id',
-        'user_name',
         'title',
         'path',
         'name',

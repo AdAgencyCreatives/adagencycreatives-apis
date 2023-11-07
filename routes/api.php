@@ -64,7 +64,7 @@ Route::get('attachments', [AttachmentController::class, 'index']);
 Route::get('experiences', [ExperienceController::class, 'index']);
 Route::get('educations', [EducationController::class, 'index']);
 Route::get('home/creative-spotlights', [CreativeSpotlightController::class, 'homepage_spotlights']);
-Route::resource('creative-spotlights', CreativeSpotlightController::class);
+Route::resource('creative-spotlights', CreativeSpotlightController::class)->only('index');
 
 
 //Filters
@@ -81,6 +81,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Creatives
      */
+
+    Route::get('creatives/new', [CreativeController::class, 'index']);
 
 
     /**
