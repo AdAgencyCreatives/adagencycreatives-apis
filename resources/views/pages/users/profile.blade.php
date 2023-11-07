@@ -18,6 +18,30 @@
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     @include('pages.users.creative.scripts')
+
+    <script>
+        var expired_at = "{{ $user->latest_subscription?->ends_at }}";
+
+        if (expired_at) {
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                startDate: expired_at,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+        } else {
+
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+        }
+    </script>
 @endsection
 
 @section('content')
@@ -85,6 +109,12 @@
                         Password
                     </a>
 
+                    @if ($user->role == 'agency')
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#package" role="tab"
+                            aria-selected="false" tabindex="-1">
+                            Package
+                        </a>
+                    @endif
                     @if ($user->role != 'admin')
                         <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
                             Impersonate
@@ -116,6 +146,10 @@
 
                     <div class="tab-pane fade" id="seo" role="tabpanel">
                         @include('pages.users.agency.seo')
+                    </div>
+
+                    <div class="tab-pane fade" id="package" role="tabpanel">
+                        @include('pages.users.agency.package')
                     </div>
                 @elseif($user->role == 'creative')
                     <div class="tab-pane fade show active" id="creative_info" role="tabpanel">
