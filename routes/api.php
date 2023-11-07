@@ -55,7 +55,6 @@ Route::post('/users', [UserController::class, 'store']);
 
 // Public GET routes
 Route::get('agencies', [AgencyController::class, 'index']);
-Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
 Route::get('jobs', [JobController::class, 'index']);
 

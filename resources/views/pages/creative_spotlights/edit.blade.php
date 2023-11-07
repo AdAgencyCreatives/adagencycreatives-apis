@@ -6,63 +6,9 @@
     <script>
         $(document).ready(function() {
             fetchUsers();
-            $('#new_category_form').submit(function(event) {
-                event.preventDefault();
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                    }
-                });
-
-                var data = {
-                    name: $('#new_category').val()
-                };
-
-                $.ajax({
-                    url: '/api/v1/categories',
-                    method: 'POST',
-                    data: data,
-                    success: function(response) {
-                        Swal.fire({
-                            title: 'Success',
-                            text: "Category Created Successfully.",
-                            icon: 'success'
-                        }).then((result) => {
-                            fetchData();
-                        })
-                    },
-                    error: function(error) {
-                        if (error.responseJSON && error.responseJSON.errors) {
-                            var errorMessages = error.responseJSON.errors;
-
-                            // Process and display error messages
-                            var errorMessage = '';
-                            $.each(errorMessages, function(field, messages) {
-                                errorMessage += field + ': ' + messages.join(', ') +
-                                    '\n';
-                            });
-
-                            Swal.fire({
-                                title: 'Validation Error',
-                                text: errorMessage,
-                                icon: 'error'
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: error.message,
-                                icon: 'error'
-                            });
-                        }
-                    }
-                });
-            });
-
         });
 
         function fetchUsers() {
-
             $.ajax({
                 url: '/api/v1/get_users/spotlights',
                 method: 'GET',
