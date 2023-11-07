@@ -9,6 +9,8 @@ use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\CreativeSpotlightCollection;
+use App\Http\Resources\Creative\HomepageCreativeCollection;
+use App\Http\Resources\Creative\HomepageCreativeResource;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
@@ -54,6 +56,38 @@ class CreativeController extends Controller
 
         return new CreativeCollection($creatives);
     }
+
+
+    public function homepage_creatives(Request $request) //Home page creatives
+    {
+        $query = QueryBuilder::for(Creative::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('name'),
+                AllowedFilter::scope('email'),
+                AllowedFilter::scope('status'),
+                'title',
+                'slug',
+                'is_featured',
+                'is_urgent',
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at');
+
+        $query->whereHas('user', function ($userQuery) {
+            $userQuery->where('is_visible', true);
+        });
+
+        $creatives = $query->with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'category',
+        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new HomepageCreativeCollection ($creatives);
+    }
+
 
     public function store(StoreCreativeRequest $request)
     {

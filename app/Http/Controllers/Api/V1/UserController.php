@@ -297,4 +297,17 @@ class UserController extends Controller
 
         return $users;
     }
+
+
+    public function get_creatives()
+    {
+        $cacheKey = 'all_creatives';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'email')
+            ->where('role', 4)
+            ->get();
+        });
+
+        return $users;
+    }
 }

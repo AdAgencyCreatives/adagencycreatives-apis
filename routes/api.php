@@ -127,6 +127,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job');
     Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
     Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
+    Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']); //for getting
+    Route::get('get_users/spotlights', [UserController::class, 'get_creatives']); //for getting
 
     /**
      * Job Alerts
