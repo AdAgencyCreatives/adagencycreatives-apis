@@ -56,6 +56,7 @@ Route::post('/users', [UserController::class, 'store']);
 // Public GET routes
 Route::get('agencies', [AgencyController::class, 'index']);
 Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
+Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
@@ -80,7 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Creatives
      */
-    Route::get('creatives', [CreativeController::class, 'index']);
+
 
     /**
      * Job Board Routes
