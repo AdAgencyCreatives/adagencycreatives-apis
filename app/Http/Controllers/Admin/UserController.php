@@ -10,6 +10,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -38,7 +39,9 @@ class UserController extends Controller
                 $agency->user_id = $user->id;
                 $agency->save();
             }
-            $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo']);
+            $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
+            $subscription = Subscription::where('user_id', $user->id)->latest();
+
         } elseif ($user->role == 'creative') {
             if (! $user->creative) {
                 $creative = new Creative();

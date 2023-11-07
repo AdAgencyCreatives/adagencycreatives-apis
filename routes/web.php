@@ -127,6 +127,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/agency/{user}', [AgencyController::class, 'update'])->name('agency.update');
         Route::put('/agency/seo/{user}', [AgencyController::class, 'update_seo'])->name('agency.seo.update');
 
+        /**
+         * Package Update
+         */
+        Route::put('/agency/package/{user}', [SubscriptionController::class, 'update_package'])->name('agency.package.update');
+
         Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
         Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
         Route::put('/creative-educaiton/{user}', [CreativeController::class, 'update_education'])->name('creative.education.update');

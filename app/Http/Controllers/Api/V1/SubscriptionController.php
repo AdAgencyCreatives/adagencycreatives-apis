@@ -8,6 +8,8 @@ use App\Http\Resources\Subscription\AllPackagesCollection;
 use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Plan;
+use Illuminate\Support\Facades\Session;
+use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -158,5 +160,39 @@ class SubscriptionController extends Controller
                 'data' => $data,
             ], 'order_confirmation');
         }
+    }
+
+
+    public function update_package(Request $request, $user_id)
+    {
+        if($request->name == '-1') {
+            return redirect()->back();
+        }
+
+        $subscription = Subscription::where('user_id', $user_id)->latest()->first(); // Retrieve the latest subscription
+
+        $data = [
+            'name' => $request->name, // Plan Name
+            'quota_left' => $request->quota_left,
+            'ends_at' => $request->ends_at,
+        ];
+
+        if($subscription) {
+            $subscription->update($data);
+        } else {
+            $plan = Plan::where('slug', $request->name)->first();
+
+            $newSubscriptionData = array_merge($data, [
+                'user_id' => $user_id,
+                'price' => $plan->price, // These are placeholders; you might want to change these values.
+                'quantity' => $plan->quota,
+            ]);
+
+            Subscription::create($newSubscriptionData);
+        }
+
+        Session::flash('success', 'Package updated successfully');
+
+        return redirect()->back();
     }
 }

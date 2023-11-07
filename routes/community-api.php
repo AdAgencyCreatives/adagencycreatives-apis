@@ -30,4 +30,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('friendships', [FriendshipController::class, 'index']);
     Route::post('friendships', [FriendshipController::class, 'sendFriendRequest']);
     Route::patch('friendships', [FriendshipController::class, 'respondToFriendRequest']);
+    Route::delete('friendships/terminate', [FriendshipController::class, 'unfriend']);
 });
