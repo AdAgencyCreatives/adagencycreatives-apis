@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Resources\Creative\CreativeSpotlight;
+
 use App\Models\Attachment;
+use App\Models\CreativeSpotlight;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -99,7 +100,7 @@ class ImportCreativeSpotlight extends Command
                     'user_id' => $user->id,
                     'user_name' => $user->full_name,
                     'title' => $title,
-                    'path' => $filePath,
+                    'path' => $folder,
                     'name' => $filename,
                     'slug' => Str::slug($filename),
                     'status' => 'approved',
