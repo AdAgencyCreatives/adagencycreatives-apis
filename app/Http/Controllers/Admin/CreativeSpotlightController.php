@@ -27,7 +27,6 @@ class CreativeSpotlightController extends Controller
 
     public function store(Request $request)
     {
-        // if authro is missing from request, send back error, not the json error, but the error from the form
         if (!$request->author) {
             return redirect()->back()->withErrors(['author' => 'Author is required']);
         }
@@ -37,7 +36,6 @@ class CreativeSpotlightController extends Controller
         $this->storeVideo($request, $user, 'accepted');
 
         Session::flash('success', 'Creative updated successfully');
-
         return redirect()->back();
     }
 
@@ -48,16 +46,31 @@ class CreativeSpotlightController extends Controller
     }
 
 
-    public function update(Request $request, $uuid)
+    public function update(Request $request, $id)
     {
-        try {
-            $attachment = CreativeSpotlight::where('uuid', $uuid)->firstOrFail();
-            $attachment->update($request->only('status'));
-
-            return new CreativeSpotlightResource($attachment);
-        } catch (ModelNotFoundException $exception) {
-            return ApiResponse::error(trans('response.not_found'), 404);
+        if (!$request->author) {
+            return redirect()->back()->withErrors(['author' => 'Author is required']);
         }
+
+        $user = User::find($request->author);
+
+        $spotlight = CreativeSpotlight::find($id);
+
+        if($request->has('file')){
+            $spotlight->delete();
+            $this->storeVideo($request, $user, 'accepted');
+        }
+        else{
+            $spotlight->update([
+                'user_id' => $user->id,
+                'title' => $request->title,
+                'slug' => $request->slug,
+            ]);
+        }
+
+        Session::flash('success', 'Creative updated successfully');
+        return redirect()->route('creative_spotlights.index');
+
     }
 
     public function storeVideo($request, $user, $status)

@@ -180,7 +180,7 @@ Route::group(['middleware' => ['auth']], function () {
          * Attachment Media
          */
         Route::resource('attachments', AttachmentController::class);
-        Route::resource('creative-spotlights', CreativeSpotlightController::class);
+        Route::resource('creative_spotlights', CreativeSpotlightController::class);
 
         /**
          * Pages Management
