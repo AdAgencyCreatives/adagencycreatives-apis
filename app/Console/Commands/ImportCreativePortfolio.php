@@ -58,7 +58,7 @@ class ImportCreativePortfolio extends Command
 
                     $this->storeAttachment($portfolio_photo, $user->id, 'portfolio_item');
 
-                    echo sprintf("<img src='%s'/>", $portfolio_photo);
+                    // echo sprintf("<img src='%s'/>", $portfolio_photo);
                 }
             }
 
