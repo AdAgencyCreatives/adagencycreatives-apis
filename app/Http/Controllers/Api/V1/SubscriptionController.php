@@ -98,14 +98,7 @@ class SubscriptionController extends Controller
 
     public function status(Request $request)
     {
-        $user = $request->user();
-
-        $subscription = $user->active_subscription;
-        if ($subscription) {
-            return new SubscriptionResource($subscription);
-        } else {
-            return response()->json([], 404);
-        }
+        return subscription_status($request->user()); //Helper Function
     }
 
     public function packages()

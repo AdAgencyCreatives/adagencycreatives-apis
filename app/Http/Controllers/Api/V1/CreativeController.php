@@ -63,9 +63,13 @@ class CreativeController extends Controller
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('years_of_experience_id'),
                 AllowedFilter::scope('name'),
                 AllowedFilter::scope('email'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
+                'employment_type',
                 'title',
                 'slug',
                 'is_featured',
@@ -77,11 +81,11 @@ class CreativeController extends Controller
         $query->whereHas('user', function ($userQuery) {
             $userQuery->where('is_visible', true);
         });
-
         $creatives = $query->with([
             'user.profile_picture',
             'user.addresses.state',
             'user.addresses.city',
+            'user.personal_phone',
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
