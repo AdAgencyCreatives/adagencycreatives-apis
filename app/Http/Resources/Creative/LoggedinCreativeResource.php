@@ -5,7 +5,7 @@ namespace App\Http\Resources\Creative;
 use App\Http\Resources\Link\LinkCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CreativeResource extends JsonResource
+class LoggedinCreativeResource extends JsonResource
 {
     private $creative_category;
 
@@ -13,6 +13,8 @@ class CreativeResource extends JsonResource
 
     public function toArray($request)
     {
+
+        $logged_in_user = request()->user();
         $user = $this->user;
         $this->creative_category = isset($this->category) ? $this->category->name : null;
 
@@ -23,7 +25,7 @@ class CreativeResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
-            'email' => $this->get_email($user),
+            'email' => $this->get_email($user, $logged_in_user),
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
@@ -44,9 +46,9 @@ class CreativeResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'is_opentorelocation' => $this->is_opentorelocation,
-            'phone_number' => $this->get_phone_number($user),
+            'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
-            'resume' => $this->get_resume($user),
+            'resume' => $this->get_resume($user, $logged_in_user),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
@@ -56,13 +58,29 @@ class CreativeResource extends JsonResource
         ];
     }
 
-    public function get_email($user)
+    public function get_email($user, $logged_in_user)
     {
+        if ($logged_in_user->role === 'agency' && get_subscription_status_string($logged_in_user) !== 'active') {
+            return "";
+        }
+
+        if ($logged_in_user->role === 'creative' && !are_they_friend($user->id, $logged_in_user->id)) {
+            return "";
+        }
+
         return $user->email;
     }
 
-    public function get_phone_number($user)
+    public function get_phone_number($user, $logged_in_user)
     {
+        if ($logged_in_user->role === 'creative'){
+            return "";
+        }
+
+        if ($logged_in_user->role === 'agency' &&  !hasAppliedToAgencyJob($user->id, $logged_in_user->id)){
+            return "";
+        }
+
         return $user->personal_phone ? $user->personal_phone->phone_number : null;
     }
 
@@ -72,7 +90,7 @@ class CreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user)
+    public function get_resume($user, $logged_in_user)
     {
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;

@@ -82,7 +82,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Creatives
      */
 
-    Route::get('creatives/new', [CreativeController::class, 'index']);
+    Route::get('creatives/new', [CreativeController::class, 'index2']);
 
 
     /**
