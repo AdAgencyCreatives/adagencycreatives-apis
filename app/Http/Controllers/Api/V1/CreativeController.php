@@ -11,6 +11,8 @@ use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\CreativeSpotlightCollection;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
 use App\Http\Resources\Creative\HomepageCreativeResource;
+use App\Http\Resources\Creative\LoggedinCreativeCollection;
+use App\Http\Resources\Creative\LoggedinCreativeResource;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
@@ -55,6 +57,41 @@ class CreativeController extends Controller
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
+    }
+
+
+    public function index2(Request $request)
+    {
+        $query = QueryBuilder::for(Creative::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('years_of_experience_id'),
+                AllowedFilter::scope('name'),
+                AllowedFilter::scope('email'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('status'),
+                'employment_type',
+                'title',
+                'slug',
+                'is_featured',
+                'is_urgent',
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts('created_at');
+
+        $query->whereHas('user', function ($userQuery) {
+            $userQuery->where('is_visible', true);
+        });
+        $creatives = $query->with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new LoggedinCreativeCollection($creatives);
     }
 
 
