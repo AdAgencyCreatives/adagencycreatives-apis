@@ -71,9 +71,9 @@ class CreativeController extends Controller
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
+                AllowedFilter::exact('slug'),
                 'employment_type',
                 'title',
-                'slug',
                 'is_featured',
                 'is_urgent',
             ])
