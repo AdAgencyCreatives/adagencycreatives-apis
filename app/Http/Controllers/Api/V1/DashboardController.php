@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Job;
 use App\Models\Order;
 use App\Models\User;
@@ -145,9 +146,15 @@ class DashboardController extends Controller
     //For Agency Dashboard
     public function agency_dashboard_stats()
     {
+        $user = request()->user();
+        $jobs = Job::where('user_id', $user->id)->get();
+        $jobs_count = $jobs->count();
+
+        $applications_count = Application::whereIn('job_id', $jobs->pluck('id'))->count();
+
         $stats = [
-            'number_of_posts' => rand(1, 3),
-            'applications' => rand(1, 3),
+            'number_of_posts' => $jobs_count,
+            'applications' => $applications_count,
             'shortlisted' => rand(1, 3),
             'review' => rand(1, 3),
         ];
@@ -161,8 +168,11 @@ class DashboardController extends Controller
     //For Creative Dashboard
     public function creative_dashboard_stats()
     {
+        $user = request()->user();
+        $applied_jobs = Application::where('user_id', $user->id)->count();
+
         $stats = [
-            'jobs_applied' => rand(1, 3),
+            'jobs_applied' => $applied_jobs,
             'review' => rand(1, 3),
             'views' => rand(1, 3),
             'shortlisted' => rand(1, 3),

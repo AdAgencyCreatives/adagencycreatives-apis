@@ -20,6 +20,7 @@ class CreativeResource extends JsonResource
 
         return [
             'type' => 'creatives',
+            'test_id' => $this->id,
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,

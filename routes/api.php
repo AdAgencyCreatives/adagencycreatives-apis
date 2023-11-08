@@ -58,6 +58,7 @@ Route::get('agencies', [AgencyController::class, 'index']);
 Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
 Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('jobs', [JobController::class, 'index']);
+Route::get('featured_cities', [JobController::class, 'featured_cities']);
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
 Route::get('attachments', [AttachmentController::class, 'index']);

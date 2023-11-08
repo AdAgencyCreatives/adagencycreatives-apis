@@ -89,7 +89,6 @@ Route::get('/reset', function () {
 
 // Download Resume
 Route::get('download/resume/{uuid}', [ResumeController::class, 'download_resume'])->name('download.resume');
-Route::get('download/resume2/{uuid}', [ResumeController::class, 'download_resume2'])->name('download.resume2');
 
 Route::group(['middleware' => ['auth']], function () {
 

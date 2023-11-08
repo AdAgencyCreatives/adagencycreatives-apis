@@ -39,8 +39,9 @@ class AgencyController extends Controller
                 'is_featured',
                 'is_urgent',
             ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->defaultSort('-is_featured', '-created_at')
+            ->allowedSorts('created_at', 'is_featured');
+
         $agency_user_ids = User::where('role', 3)->pluck('id');
 
         if ($industries !== null) {

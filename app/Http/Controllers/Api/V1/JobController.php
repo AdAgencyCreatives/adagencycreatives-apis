@@ -83,9 +83,9 @@ class JobController extends Controller
             'state_id' => $state->id ?? null,
             'city_id' => $city->id ?? null,
             'status' => 'draft',
-            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
-            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
         ]);
 
         try {
@@ -95,7 +95,7 @@ class JobController extends Controller
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('JS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('JS-01' . $e->getMessage(), 400);
         }
     }
 
@@ -119,8 +119,8 @@ class JobController extends Controller
             $category = Category::where('uuid', $request->category_id)->first();
             $request->merge([
                 'category_id' => $category->id,
-                'industry_experience' => ''.implode(',', $request->industry_experience).'',
-                'media_experience' => ''.implode(',', $request->media_experience).'',
+                'industry_experience' => '' . implode(',', $request->industry_experience) . '',
+                'media_experience' => '' . implode(',', $request->media_experience) . '',
             ]);
 
             $job->update($request->all());
@@ -142,7 +142,7 @@ class JobController extends Controller
 
             if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
-                if (! $user) {
+                if (!$user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
                 }
 
@@ -150,7 +150,7 @@ class JobController extends Controller
                     ->where('quota_left', '>', 0)
                     ->latest();
 
-                if (! $subscription) {
+                if (!$subscription) {
                     return ApiResponse::error("You don't have enough quota for this job", 402);
                 }
 
@@ -164,9 +164,9 @@ class JobController extends Controller
                 'category_id' => $category->id ?? null,
                 'state_id' => $state->id ?? null,
                 'city_id' => $city->id ?? null,
-                'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-                'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
-                'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
+                'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+                'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+                'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
             ]);
             $job->update($request->all());
 
@@ -239,5 +239,27 @@ class JobController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'CS-01');
         }
+    }
+
+
+
+    public function featured_cities()
+    {
+        return Cache::remember('featured_cities', now()->addMinutes(120), function () {
+            $locations = Location::whereIn('slug', ['dallas', 'new-york', 'los-angeles', 'miami', 'chicago'])->get();
+
+            $locationData = [];
+            foreach ($locations as $location) {
+                $jobs = Job::where('city_id', $location->id)->where('status', 1)->get(); //Approved jobs only
+                $locationData[] = [
+                    'name' => $location->name,
+                    'uuid' => $location->uuid,
+                    'count' => $jobs->count()
+                ];
+            }
+            return $locationData;
+        });
+
+
     }
 }

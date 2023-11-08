@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ApplicationSubmitted extends Mailable
+class NewApplication extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,13 +18,14 @@ class ApplicationSubmitted extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
     }
 
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('Application Submitted via {%s}', env('APP_NAME')),
+            subject: sprintf('You have a new applicant for your %s role! %s,', $this->data['job_title'], $this->data['applicant']->first_name),
         );
     }
 
@@ -36,7 +37,7 @@ class ApplicationSubmitted extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.application.submitted',
+            view: 'emails.application.new_to_the_agency',
         );
     }
 
