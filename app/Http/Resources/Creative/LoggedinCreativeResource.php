@@ -19,13 +19,14 @@ class LoggedinCreativeResource extends JsonResource
         $this->creative_category = isset($this->category) ? $this->category->name : null;
 
         $this->location = $this->get_location($user);
+        $subscription_status = get_subscription_status_string($logged_in_user);
 
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
-            'email' => $this->get_email($user, $logged_in_user),
+            'email' => $this->get_email($user, $logged_in_user, $subscription_status),
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
@@ -49,19 +50,20 @@ class LoggedinCreativeResource extends JsonResource
             'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user),
-            'subscription_status' => get_subscription_status_string($logged_in_user),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
-
+            'logged_in_user' => [
+                'subscription_status' => get_subscription_status_string($logged_in_user),
+            ]
         ];
     }
 
-    public function get_email($user, $logged_in_user)
+    public function get_email($user, $logged_in_user, $subscription_status)
     {
-        if ($logged_in_user->role === 'agency' && get_subscription_status_string($logged_in_user) !== 'active') {
+        if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
             return null;
         }
 
@@ -74,11 +76,11 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_phone_number($user, $logged_in_user)
     {
-        if ($logged_in_user->role === 'creative'){
+        if ($logged_in_user->role === 'creative') {
             return null;
         }
 
-        if ($logged_in_user->role === 'agency' &&  !hasAppliedToAgencyJob($user->id, $logged_in_user->id)){
+        if ($logged_in_user->role === 'agency' &&  !hasAppliedToAgencyJob($user->id, $logged_in_user->id)) {
             return null;
         }
 
@@ -91,12 +93,16 @@ class LoggedinCreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user, $logged_in_user)
+    public function get_resume($user, $subscription_status)
     {
-        if (isset($user->resume)) {
-            return getAttachmentBasePath() . $user->resume->path;
+        if($subscription_status !== 'active') {
+            return null;
         } else {
-            return route('download.resume', $user->uuid);
+            if (isset($user->resume)) {
+                return getAttachmentBasePath() . $user->resume->path;
+            } else {
+                return route('download.resume', $user->uuid);
+            }
         }
 
     }
