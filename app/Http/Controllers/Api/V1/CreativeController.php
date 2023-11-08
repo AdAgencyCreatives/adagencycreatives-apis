@@ -42,12 +42,13 @@ class CreativeController extends Controller
                 'is_featured',
                 'is_urgent',
             ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->defaultSort('-is_featured', '-created_at')
+            ->allowedSorts('created_at', 'is_featured');
 
         $query->whereHas('user', function ($userQuery) {
             $userQuery->where('is_visible', true);
         });
+
         $creatives = $query->with([
             'user.profile_picture',
             'user.addresses.state',

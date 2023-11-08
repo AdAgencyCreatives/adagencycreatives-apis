@@ -7,6 +7,7 @@ use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Application\ApplicationSubmitted;
+use App\Mail\Application\NewApplication;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
@@ -90,7 +91,10 @@ class SendEmailJob implements ShouldQueue
                  * Application
                 */
             case 'application_submitted':
-                Mail::to($this->data['receiver'])->send(new ApplicationSubmitted($this->data['data']));
+                Mail::to($this->data['receiver'])->send(new ApplicationSubmitted($this->data['data'])); // To the applicant
+                break;
+            case 'new_candidate_application':
+                Mail::to($this->data['receiver'])->send(new NewApplication($this->data['data'])); // To the Agency
                 break;
 
 

@@ -232,6 +232,7 @@ class Job extends Model
         static::created(function ($job) {
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
+                Cache::forget('featured_cities');
 
                 /**
                  * Send Notification to Admin about new job
@@ -283,10 +284,13 @@ class Job extends Model
 
         static::updated(function () {
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('featured_cities');
         });
 
         static::deleted(function () {
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('featured_cities');
+
         });
     }
 }

@@ -31,7 +31,7 @@ class ImportPortfolioWebsitesImage extends Command
         $jsonContents = file_get_contents($jsonFilePath);
         $usersData = json_decode($jsonContents, true);
 
-        dump('Spotlights');
+        dump('Website Portfolio');
 
         $count = 1;
         foreach ($usersData as $key => $user) {
