@@ -49,6 +49,7 @@ class LoggedinCreativeResource extends JsonResource
             'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user),
+            'subscription_status' => get_subscription_status_string($logged_in_user),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
@@ -61,11 +62,11 @@ class LoggedinCreativeResource extends JsonResource
     public function get_email($user, $logged_in_user)
     {
         if ($logged_in_user->role === 'agency' && get_subscription_status_string($logged_in_user) !== 'active') {
-            return "";
+            return null;
         }
 
         if ($logged_in_user->role === 'creative' && !are_they_friend($user->id, $logged_in_user->id)) {
-            return "";
+            return null;
         }
 
         return $user->email;
@@ -74,11 +75,11 @@ class LoggedinCreativeResource extends JsonResource
     public function get_phone_number($user, $logged_in_user)
     {
         if ($logged_in_user->role === 'creative'){
-            return "";
+            return null;
         }
 
         if ($logged_in_user->role === 'agency' &&  !hasAppliedToAgencyJob($user->id, $logged_in_user->id)){
-            return "";
+            return null;
         }
 
         return $user->personal_phone ? $user->personal_phone->phone_number : null;
