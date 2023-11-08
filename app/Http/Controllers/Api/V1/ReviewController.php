@@ -19,13 +19,15 @@ class ReviewController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
         $query = QueryBuilder::for(Review::class)
             ->allowedFilters([
                 AllowedFilter::scope('target_id'),
             ])
             ->allowedSorts('created_at');
 
-        $reviews = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $reviews = $query->where('user_id', $user->id)
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ReviewCollection($reviews);
     }
@@ -35,38 +37,37 @@ class ReviewController extends Controller
         $user = $request->user();
         $target = User::where('uuid', $request->target_id)->first();
 
-        $request->merge([
-            'uuid' => Str::uuid(),
-            'user_id' => $user->id,
-            'target_id' => $target->id,
-        ]);
+        $existingReview = Review::where('user_id', $user->id)
+        ->where('target_id', $target->id)
+        ->first();
+
+        $requestData = $request->all();
+        $requestData['uuid'] = Str::uuid();
+        $requestData['user_id'] = $user->id;
+        $requestData['target_id'] = $target->id;
 
         try {
-            $review = Review::create($request->all());
-
-            return ApiResponse::success(new ReviewResource($review), 200);
+            if ($existingReview) {
+                $existingReview->update($requestData);
+                return ApiResponse::success(new ReviewResource($existingReview), 200);
+            } else {
+                $review = Review::create($requestData);
+                return ApiResponse::success(new ReviewResource($review), 200);
+            }
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
         }
     }
 
-    public function show(reviews $reviews)
+    public function destroy($uuid)
     {
-        //
-    }
+        try {
+            $review = Review::where('uuid', $uuid)->firstOrFail();
+            $review->delete();
 
-    public function edit(reviews $reviews)
-    {
-        //
-    }
-
-    public function update(Request $request, reviews $reviews)
-    {
-        //
-    }
-
-    public function destroy(reviews $reviews)
-    {
-        //
+            return ApiResponse::success(new ReviewResource($review), 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 }
