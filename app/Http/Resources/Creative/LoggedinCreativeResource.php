@@ -26,7 +26,7 @@ class LoggedinCreativeResource extends JsonResource
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
+            'user_id' => $user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
             'email' => $this->get_email($user, $logged_in_user, $subscription_status, $is_friend),
             'slug' => $this->slug,

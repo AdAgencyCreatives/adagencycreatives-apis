@@ -20,6 +20,7 @@ class HomepageCreativeResource extends JsonResource
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
+            'user_id' => $user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
