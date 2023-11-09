@@ -225,6 +225,7 @@ class UserController extends Controller
 
         return response()->json([
             'token' => $token,
+            'subscription_status' => get_subscription_status_string($user),
             'user' => new UserResource($user),
         ], 200);
     }
@@ -239,6 +240,7 @@ class UserController extends Controller
 
         return response()->json([
             'token' => $request->bearerToken(),
+            'subscription_status' => get_subscription_status_string($user),
             'user' => new UserResource($user),
         ], 200);
     }
