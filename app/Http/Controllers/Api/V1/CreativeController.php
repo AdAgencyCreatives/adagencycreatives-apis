@@ -36,6 +36,7 @@ class CreativeController extends Controller
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
+                AllowedFilter::scope('is_visible'),
                 'employment_type',
                 'title',
                 'slug',
@@ -45,10 +46,7 @@ class CreativeController extends Controller
             ->defaultSort('-is_featured', '-created_at')
             ->allowedSorts('created_at', 'is_featured');
 
-        $query->whereHas('user', function ($userQuery) {
-            $userQuery->where('is_visible', true);
-        });
-
+        // dd($query->toSql());
         $creatives = $query->with([
             'user.profile_picture',
             'user.addresses.state',
@@ -58,41 +56,6 @@ class CreativeController extends Controller
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new CreativeCollection($creatives);
-    }
-
-
-    public function index2(Request $request)
-    {
-        $query = QueryBuilder::for(Creative::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('years_of_experience_id'),
-                AllowedFilter::scope('name'),
-                AllowedFilter::scope('email'),
-                AllowedFilter::scope('state_id'),
-                AllowedFilter::scope('city_id'),
-                AllowedFilter::scope('status'),
-                AllowedFilter::exact('slug'),
-                'employment_type',
-                'title',
-                'is_featured',
-                'is_urgent',
-            ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
-
-        $query->whereHas('user', function ($userQuery) {
-            $userQuery->where('is_visible', true);
-        });
-        $creatives = $query->with([
-            'user.profile_picture',
-            'user.addresses.state',
-            'user.addresses.city',
-            'user.personal_phone',
-            'category',
-        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
-        return new LoggedinCreativeCollection($creatives);
     }
 
 
@@ -107,18 +70,16 @@ class CreativeController extends Controller
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
+                AllowedFilter::scope('is_visible'),
                 'employment_type',
                 'title',
                 'slug',
                 'is_featured',
                 'is_urgent',
             ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->defaultSort('-is_featured', '-created_at')
+            ->allowedSorts('created_at', 'is_featured');
 
-        $query->whereHas('user', function ($userQuery) {
-            $userQuery->where('is_visible', true);
-        });
         $creatives = $query->with([
             'user.profile_picture',
             'user.addresses.state',

@@ -45,12 +45,15 @@ class ImportAgencies extends Command
             }
 
             if ($user) {
+
                 $agency = $this->createAgency($agencyData, $user);
                 $this->createLocation($agencyData, $user);
                 $agency->industry_experience = $this->mapIndustryExperience($agencyData, $user, $industry_media_experiences);
                 $agency->save();
             } else {
                 dump('Agency not found', $authorEmail1);
+                $user->username = sprintf('%s_dummy', $user->username);
+                $user->save();
             }
 
         }
@@ -96,6 +99,7 @@ class ImportAgencies extends Command
             $agency->views = $data['post_meta']['_viewed_count'][0];
         }
 
+        $user->status = 'active';
         $user->save();
 
         return $agency;

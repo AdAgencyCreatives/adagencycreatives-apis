@@ -56,7 +56,7 @@ Route::post('/users', [UserController::class, 'store']);
 // Public GET routes
 Route::get('agencies', [AgencyController::class, 'index']);
 Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
-Route::get('creatives', [CreativeController::class, 'index']);
+// Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('jobs', [JobController::class, 'index']);
 Route::get('featured_cities', [JobController::class, 'featured_cities']);
 
@@ -83,8 +83,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Creatives
      */
 
-    Route::get('creatives/new', [CreativeController::class, 'index2']);
-
+    Route::get('creatives', [CreativeController::class, 'index']);
 
     /**
      * Job Board Routes
@@ -163,6 +162,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Chat Routes
      */
+    Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::apiResource('messages', ChatController::class);

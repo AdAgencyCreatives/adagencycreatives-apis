@@ -33,6 +33,7 @@ class AgencyController extends Controller
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
+                AllowedFilter::scope('is_visible'),
                 'size',
                 'name',
                 'slug',
@@ -52,10 +53,6 @@ class AgencyController extends Controller
         if ($medias !== null) {
             $this->applyExperienceFilter($query, $medias, 'media_experience');
         }
-
-        $query->whereHas('user', function ($userQuery) {
-            $userQuery->where('is_visible', true);
-        });
 
         $agencies = $query
             ->with([
