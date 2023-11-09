@@ -51,6 +51,8 @@ class ImportCreatives extends Command
                 $this->storeExperience($creativeData, $user);
             } else {
                 dump('Creative not found', $authorEmail1);
+                $user->username = sprintf('%s_dummy', $user->username);
+                $user->save();
             }
 
         }
@@ -112,6 +114,7 @@ class ImportCreatives extends Command
             $creative->views = $data['post_meta']['_viewed_count'][0];
         }
 
+        $user->status = 'active';
         $user->save();
         $creative->save();
     }

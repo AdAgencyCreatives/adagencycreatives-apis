@@ -63,6 +63,10 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_email($user, $logged_in_user, $subscription_status)
     {
+        if($logged_in_user->id == $user->id) {
+            return $user->email;
+        }
+
         if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
             return null;
         }
@@ -76,6 +80,10 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_phone_number($user, $logged_in_user)
     {
+        if($logged_in_user->id == $user->id) {
+            return $user->personal_phone ? $user->personal_phone->phone_number : null;
+        }
+
         if ($logged_in_user->role === 'creative') {
             return null;
         }

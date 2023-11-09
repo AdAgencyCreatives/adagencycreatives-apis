@@ -142,9 +142,16 @@ class ChatController extends Controller
         return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
     }
 
-    private function mark_as_read($sender1, $current_user)
+    public function mark_as_read(Request $request, $sender_id)
     {
+        $user = $request->user();
+        $sender = User::where('uuid', $sender_id)->first();
 
+        Message::where('sender_id', $sender->id)
+            ->where('receiver_id', $user->id)
+            ->whereNull('read_at')
+            ->touch('read_at');
 
+        return response()->json(['success' => true], 200);
     }
 }

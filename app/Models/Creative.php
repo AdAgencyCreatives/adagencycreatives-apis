@@ -54,7 +54,6 @@ class Creative extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-
         return $query->where('user_id', $user->id);
     }
 
@@ -98,6 +97,13 @@ class Creative extends Model
     {
         $user_ids = User::where('status', $status)->pluck('id');
         return $query->whereIn('user_id', $user_ids);
+    }
+
+
+    public function scopeIsVisible(Builder $query, $is_visible)
+    {
+        $user_id = User::where('is_visible', $is_visible)->pluck('id');
+        return $query->whereIn('user_id', $user_id);
     }
 
     protected static function booted()

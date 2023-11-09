@@ -44,7 +44,7 @@ class ImportUserData extends Command
         $user->password = $userData['user_pass'];
         $role = $this->mapUserRole($userData['user_meta']['wp_capabilities'][0]);
         $user->role = $role;
-        $user->status = $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved', $user);
+         // $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved', $user);
 
         $userRegisteredTimestamp = strtotime($userData['user_registered']);
         $user->created_at = Carbon::createFromTimestamp($userRegisteredTimestamp);
@@ -53,15 +53,19 @@ class ImportUserData extends Command
 
         if($role == 'creative'){
             $user->assignRole($user_roles['creative']);
+            $user->status = 'inactive';
         }
         elseif($role == 'agency'){
             $user->assignRole($user_roles['agency']);
+            $user->status = 'inactive';
 
         }elseif($role == 'advisor'){
             $user->assignRole($user_roles['advisor']);
+            $user->status = 'active';
 
         }elseif($role == 'admin'){
             $user->assignRole($user_roles['admin']);
+            $user->status = 'active';
         }
 
         try {
