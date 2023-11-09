@@ -22,7 +22,7 @@ class CreativeResource extends JsonResource
             'type' => 'creatives',
             'test_id' => $this->id,
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
+            'user_id' => $user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
             'email' => $this->get_email($user),
             'slug' => $this->slug,

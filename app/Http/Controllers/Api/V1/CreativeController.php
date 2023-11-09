@@ -55,7 +55,7 @@ class CreativeController extends Controller
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return new CreativeCollection($creatives);
+        return new LoggedinCreativeCollection($creatives);
     }
 
 
