@@ -73,17 +73,23 @@ class ChatController extends Controller
         }
     }
 
-    public function getAllMessageContacts() // Get list of contacts to be shown on left panel
+    public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
 
-        $contacts = Message::with('sender', 'receiver')
-            ->where(function ($query) use ($userId) {
-                $query->where('sender_id', $userId)
-                    ->orWhere('receiver_id', $userId);
-            })
-            ->latest()
-            ->get();
+        $contacts = Message::with('sender', 'receiver');
+
+        if ($request->has('type')) {
+            $type = $request->input('type');
+            $contacts->where('type', $type);
+        }
+
+        $contacts = $contacts->where(function ($query) use ($userId) {
+            $query->where('sender_id', $userId)
+                ->orWhere('receiver_id', $userId);
+        });
+
+        $contacts = $contacts->latest()->get();
 
         $uniqueContacts = [];
         $uniquePairs = []; // To store unique pairs
@@ -134,5 +140,11 @@ class ChatController extends Controller
     private function getMessageType($sender1, $current_user)
     {
         return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
+    }
+
+    private function mark_as_read($sender1, $current_user)
+    {
+
+
     }
 }
