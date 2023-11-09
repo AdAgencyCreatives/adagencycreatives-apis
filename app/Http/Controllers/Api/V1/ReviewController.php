@@ -37,6 +37,10 @@ class ReviewController extends Controller
         $user = $request->user();
         $target = User::where('uuid', $request->target_id)->first();
 
+        if ($user->id === $target->id) {
+            return response()->json(['error' => 'You cannot give a review to yourself.'], 422);
+        }
+
         $existingReview = Review::where('user_id', $user->id)
         ->where('target_id', $target->id)
         ->first();
