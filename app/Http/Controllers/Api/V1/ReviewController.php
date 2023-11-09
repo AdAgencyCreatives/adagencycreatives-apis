@@ -10,6 +10,7 @@ use App\Http\Resources\Review\ReviewResource;
 use App\Models\Review;
 use App\Models\reviews;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -60,6 +61,19 @@ class ReviewController extends Controller
             }
         } catch (\Exception $e) {
             return ApiResponse::error('PS-01' . $e->getMessage(), 400);
+        }
+    }
+
+
+    public function update(Request $request, $uuid)
+    {
+        try {
+            $review = Review::where('uuid', $uuid)->firstOrFail();
+            $review->update($request->only('rating', 'comment'));
+
+            return new ReviewResource($review);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
 

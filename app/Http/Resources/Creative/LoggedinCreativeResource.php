@@ -21,12 +21,14 @@ class LoggedinCreativeResource extends JsonResource
         $this->location = $this->get_location($user);
         $subscription_status = get_subscription_status_string($logged_in_user);
 
+        $is_friend = are_they_friend($user->id, $logged_in_user->id);
+
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
             'name' => $user->first_name . ' ' . $user->last_name,
-            'email' => $this->get_email($user, $logged_in_user, $subscription_status),
+            'email' => $this->get_email($user, $logged_in_user, $subscription_status, $is_friend),
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
@@ -57,11 +59,12 @@ class LoggedinCreativeResource extends JsonResource
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'logged_in_user' => [
                 'subscription_status' => get_subscription_status_string($logged_in_user),
+                'is_friend' => $is_friend,
             ]
         ];
     }
 
-    public function get_email($user, $logged_in_user, $subscription_status)
+    public function get_email($user, $logged_in_user, $subscription_status, $is_friend)
     {
         if($logged_in_user->id == $user->id) {
             return $user->email;
@@ -71,7 +74,7 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'creative' && !are_they_friend($user->id, $logged_in_user->id)) {
+        if ($logged_in_user->role === 'creative' && !$is_friend) {
             return null;
         }
 
