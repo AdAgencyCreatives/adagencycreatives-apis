@@ -62,7 +62,8 @@ class AgencyController extends Controller
                 'user.business_phone',
             ])
             ->whereIn('user_id', $agency_user_ids)
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new AgencyCollection($agencies);
     }
