@@ -39,7 +39,6 @@ class GroupController extends Controller
 
     public function store(StoreGroupRequest $request)
     {
-
         $user = $request->user();
 
         $group = Group::create([
