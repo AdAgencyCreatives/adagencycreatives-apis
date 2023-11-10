@@ -32,6 +32,7 @@ use App\Models\Media;
 use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 use Spatie\Permission\Models\Role;
@@ -62,28 +63,27 @@ Route::get('/users2', function () {
 
 Route::get('/email', function () {
 
-    $invitee = User::find(2);
-    $inviter = User::find(3);
-    $group = Group::find(1);
+    $recipient = User::find(2);
+    $sender = User::find(4);
 
     $data = [
-        'recipient' => $invitee->first_name,
-        'inviter' => $inviter->first_name.' '.$invitee->last_name,
-        'group' => $group->name,
+        'recipient' => $recipient->first_name,
         'message' => 'Custom MEssage',
+        'message_sender_name' => $sender->first_name,
+        'message_sender_profile_url' => get_profile_picture($sender),
+        'message_count' => 6,
+        'profile_url' => env('FRONTEND_URL') . '/profile/',
     ];
 
     SendEmailJob::dispatch([
-        'receiver' => $invitee,
+        'receiver' => $recipient,
         'data' => $data,
-    ], 'group_invitation');
+    ], 'unread_message');
 });
 
-Route::get('/reset', function () {
-    Artisan::call('migrate:fresh --seed');
-    Artisan::call('optimize:clear');
-
-    echo 'Cache Cleared';
+Route::get('/reset-messages', function () {
+    DB::table('messages')->truncate();
+    echo 'Messages Cleared';
 
 });
 
