@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\GroupMemberController;
+use App\Http\Controllers\Api\V1\GroupController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -38,4 +39,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Group Members
      */
     Route::resource('group-members', GroupMemberController::class);
+
+    /**
+     * Lounge sidebar stats
+     */
+    Route::get('lounge/counts', [GroupController::class, 'sidebar_count']);
 });
