@@ -14,7 +14,8 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p>Welcome to {{ $data['APP_NAME'] }}!</p>
+                        <p>Welcome to <a href="{{ env('FRONTEND_URL') }}" target="_blank">{{ $data['APP_NAME'] }}!</a>
+                        </p>
 
                         <div style="margin-bottom: 30px;">To help you get the most out of your account, you’ll want to
                             first complete your <a href="{{ env('FRONTEND_URL') }}/profile" target="_blank">Profile.</a>

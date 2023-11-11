@@ -1,5 +1,5 @@
-<p style="margin-bottom: 30px;"></p>
-<p style="margin: 0;">Thanks,</p>
+<p style="margin-bottom: 20px;"></p>
+<p style="margin-bottom: 20px;">Thanks,</p>
 <img width="150" src="https://adagencycreatives.com/wp-content/uploads/2023/10/ad-agency-creatives-logo.png"
     alt="" />
 <p style="margin: 0;">Member Support</p>

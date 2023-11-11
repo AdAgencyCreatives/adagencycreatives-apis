@@ -14,7 +14,8 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p style="margin-bottom: 30px;">We appreciate your interest in joining {{ $data['APP_NAME'] }}.
+                        <p style="margin-bottom: 30px;">We appreciate your interest in joining <a
+                                href="{{ env('FRONTEND_URL') }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
                             Unfortunately, the following
                             account has not been approved at this time.
                         </p>
