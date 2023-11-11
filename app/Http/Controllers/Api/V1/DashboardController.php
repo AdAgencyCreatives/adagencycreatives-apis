@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\Bookmark;
+use App\Models\Creative;
 use App\Models\Job;
+use App\Models\Message;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
@@ -169,18 +172,39 @@ class DashboardController extends Controller
     public function creative_dashboard_stats()
     {
         $user = request()->user();
-        $applied_jobs = Application::where('user_id', $user->id)->count();
+        $cacheKey = 'creative_dashboard_stats_' . $user->id;
 
-        $stats = [
-            'jobs_applied' => $applied_jobs,
-            'review' => rand(1, 3),
-            'views' => rand(1, 3),
-            'shortlisted' => rand(1, 3),
-        ];
+        $stats = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($user) {
+            $applied_jobs = Application::where('user_id', $user->id)->count();
+            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->count();
+            $creative = Creative::where('user_id', $user->id)->first();
+            $profile_views_count = $creative->views;
+            $shortlisted_count = $this->findBookmarkCount($creative->id);
+
+            $stats = [
+                'jobs_applied' => $applied_jobs,
+                'review' => $unread_messages,
+                'views' => $profile_views_count,
+                'shortlisted' => $shortlisted_count,
+            ];
+
+            return $stats;
+        });
+
+
+
+
 
         return response()->json([
             'stats' => $stats,
         ]);
 
+    }
+
+    public function findBookmarkCount($creative_id)
+    {
+        return Bookmark::where('bookmarkable_type', 'App\Models\Creative')
+                    ->where('bookmarkable_id', $creative_id)
+                    ->count();
     }
 }

@@ -15,6 +15,7 @@ use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
+use App\Mail\Message\UnreadMessage;
 use App\Mail\Order\ConfirmationAdmin;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -98,14 +99,21 @@ class SendEmailJob implements ShouldQueue
                 break;
 
 
-                /**
-                 * Friend
-                 */
+            /**
+             * Friend
+             */
             case 'friendship_request_sent':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequest($this->data['data']));
                 break;
             case 'friendship_request_accepted':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequestAccepted($this->data['data']));
+                break;
+
+            /**
+             * Message Count
+             */
+            case 'unread_message':
+                Mail::to($this->data['receiver'])->send(new UnreadMessage($this->data['data']));
                 break;
 
 

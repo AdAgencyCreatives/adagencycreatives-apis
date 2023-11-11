@@ -27,6 +27,18 @@ class CreativeController extends Controller
 {
     public function index(Request $request)
     {
+        $filters = $request->all();
+
+        if (isset($filters['filter']['slug'])) {
+            $slug = $filters['filter']['slug'];
+            $logged_in_user = request()->user();
+
+            $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
+            if($current_creative->slug == $slug){
+                unset($filters['filter']['is_visible']);
+                $request->replace($filters);
+            }
+        }
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
@@ -54,6 +66,16 @@ class CreativeController extends Controller
             'user.personal_phone',
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+
+        if (isset($filters['filter']['slug'])) { //Means user profile is being viewed on creatives page
+            if ($creatives->count() === 1) { //Check if the collection count is 1 and update views if true
+                $creative = $creatives->first();
+                $creative->increment('views');
+                $creative->save();
+            }
+        }
+
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -88,7 +110,7 @@ class CreativeController extends Controller
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return new HomepageCreativeCollection ($creatives);
+        return new HomepageCreativeCollection($creatives);
     }
 
 
@@ -109,9 +131,9 @@ class CreativeController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'category_id' => $category->id,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
-            'strengths' => ''.implode(',', $request->strengths ?? []).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
+            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
+            'strengths' => '' . implode(',', $request->strengths ?? []) . '',
         ]);
 
         $creative = Creative::create($request->all());
@@ -123,7 +145,7 @@ class CreativeController extends Controller
     {
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (! $creative) {
+        if (!$creative) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -142,7 +164,7 @@ class CreativeController extends Controller
 
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (! $creative) {
+        if (!$creative) {
             return response()->json([
                 'message' => 'No creative found.',
             ], Response::HTTP_NOT_FOUND);
@@ -192,7 +214,7 @@ class CreativeController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
             $creative = $user->creative;
 
-            if (! $creative) {
+            if (!$creative) {
                 return response()->json([
                     'message' => 'No creative found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -207,7 +229,7 @@ class CreativeController extends Controller
             ];
 
             $user->fill(array_filter($userData, function ($value) {
-                return ! is_null($value);
+                return !is_null($value);
             }));
             $user->save();
 
@@ -241,7 +263,7 @@ class CreativeController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
             $creative = $user->creative;
 
-            if (! $creative) {
+            if (!$creative) {
                 return response()->json([
                     'message' => 'No creative found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -270,7 +292,7 @@ class CreativeController extends Controller
             }
 
             $creative->fill(array_filter($creativeData, function ($value) {
-                return ! is_null($value);
+                return !is_null($value);
             }));
             $creative->save();
 
