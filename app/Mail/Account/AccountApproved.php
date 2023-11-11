@@ -22,6 +22,7 @@ class AccountApproved extends Mailable implements ShouldQueue
         $this->data['user'] = $user;
         $this->data['APP_NAME'] = env('APP_NAME');
         $this->data['FRONTEND_RESET_PASSWORD_URL'] = env('FRONTEND_RESET_PASSWORD_URL');
+        $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()

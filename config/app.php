@@ -16,6 +16,8 @@ return [
      */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'frontend_url' => env('FRONTEND_URL', 'https://adagencycreatives.com'),
+    'frontend_reset_password_url' => env('FRONTEND_RESET_PASSWORD_URL', 'https://adagencycreatives.com/reset-password'),
 
     /*
     |--------------------------------------------------------------------------
