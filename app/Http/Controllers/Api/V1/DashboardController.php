@@ -9,6 +9,7 @@ use App\Models\Creative;
 use App\Models\Job;
 use App\Models\Message;
 use App\Models\Order;
+use App\Models\Review;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -176,24 +177,20 @@ class DashboardController extends Controller
 
         $stats = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($user) {
             $applied_jobs = Application::where('user_id', $user->id)->count();
-            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->count();
+            $reviews = Review::where('target_id', $user->id)->count();
             $creative = Creative::where('user_id', $user->id)->first();
             $profile_views_count = $creative->views;
             $shortlisted_count = $this->findBookmarkCount($creative->id);
 
             $stats = [
                 'jobs_applied' => $applied_jobs,
-                'review' => $unread_messages,
+                'review' => $reviews,
                 'views' => $profile_views_count,
                 'shortlisted' => $shortlisted_count,
             ];
 
             return $stats;
         });
-
-
-
-
 
         return response()->json([
             'stats' => $stats,

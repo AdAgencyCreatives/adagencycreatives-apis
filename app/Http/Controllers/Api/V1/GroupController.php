@@ -8,7 +8,11 @@ use App\Http\Requests\Group\StoreGroupRequest;
 use App\Http\Resources\Group\GroupCollection;
 use App\Http\Resources\Group\GroupResource;
 use App\Models\Attachment;
+use App\Models\Friendship;
 use App\Models\Group;
+use App\Models\GroupMember;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -94,5 +98,29 @@ class GroupController extends Controller
         });
 
         return $groups;
+    }
+
+    public function sidebar_count()
+    {
+        try {
+
+            $user = request()->user();
+            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->count();
+            $groups = Group::where('status', 0)->get();
+            $friends_count = Friendship::where('user1_id', $user->id)->orWhere('user2_id', $user->id)->count();
+            $members_count = User::where('role', 4)->where('is_visible', 1)->count();
+
+            $stats = [
+                'members_count' => $members_count,
+                'friends_count' => $friends_count,
+                'groups_count' => $groups->count(),
+                'messages_count' => $unread_messages,
+                'notifications_count' => $user->notifications()->whereNull('read_at')->count(),
+            ];
+            return response()->json($stats);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

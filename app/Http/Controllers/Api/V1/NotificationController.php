@@ -46,7 +46,7 @@ class NotificationController extends Controller
 
             $request->merge([
                'uuid' => Str::uuid(),
-                'user_id' => $user->id
+               'user_id' => $user->id
             ]);
             $notification = Notification::create($request->all());
             return new NotificationResource($notification);
