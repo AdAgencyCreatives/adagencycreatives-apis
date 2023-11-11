@@ -23,6 +23,7 @@ class NewUserRegistrationAgency extends Mailable
         $this->data['link'] = $data['url'];
         $this->data['APP_NAME'] = env('APP_NAME');
         $this->data['APP_URL'] = env('APP_URL');
+        $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
