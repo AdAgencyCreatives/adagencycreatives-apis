@@ -23,6 +23,7 @@ class SendUnreadMessageEmail extends Command
             $recipient = $unreadMessage->receiver;
             $unreadMessageCount = $unreadMessage->message_count;
 
+            dump($recipient->email);
             $data = [
                 'recipient' => $recipient->first_name,
                 'message_sender_name' => $recipient->first_name,
@@ -31,10 +32,10 @@ class SendUnreadMessageEmail extends Command
                 'profile_url' => env('FRONTEND_URL') . '/profile/',
             ];
 
-            SendEmailJob::dispatch([
-                'receiver' => $recipient,
-                'data' => $data,
-            ], 'unread_message');
+            // SendEmailJob::dispatch([
+            //     'receiver' => $recipient,
+            //     'data' => $data,
+            // ], 'unread_message');
 
         }
     }
