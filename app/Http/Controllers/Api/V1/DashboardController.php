@@ -175,7 +175,7 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'creative_dashboard_stats_' . $user->id;
 
-        $stats = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($user) {
+        $stats = Cache::remember($cacheKey, 30, function () use ($user) {
             $applied_jobs = Application::where('user_id', $user->id)->count();
             $reviews = Review::where('target_id', $user->id)->count();
             $creative = Creative::where('user_id', $user->id)->first();
