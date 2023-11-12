@@ -51,7 +51,7 @@ class LoggedinCreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
-            'resume' => $this->get_resume($user, $logged_in_user),
+            'resume' => $this->get_resume($user, $logged_in_user, $subscription_status),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
@@ -104,18 +104,32 @@ class LoggedinCreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user, $subscription_status)
+    public function get_resume($user, $logged_in_user, $subscription_status)
     {
-        if($subscription_status !== 'active') {
-            return null;
-        } else {
-            if (isset($user->resume)) {
-                return getAttachmentBasePath() . $user->resume->path;
-            } else {
-                return route('download.resume', $user->uuid);
-            }
+        // dd($subscription_status);
+        if($logged_in_user->id == $user->id) {
+            return $this->get_resume_url($user);
         }
 
+        if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
+            return null;
+        }
+
+        if ($logged_in_user->role === 'creative') {
+            return null;
+        }
+
+        return $this->get_resume_url($user);
+
+    }
+
+    private function get_resume_url($user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath() . $user->resume->path;
+        } else {
+            return route('download.resume', $user->uuid);
+        }
     }
 
     public function get_website_preview($user)
