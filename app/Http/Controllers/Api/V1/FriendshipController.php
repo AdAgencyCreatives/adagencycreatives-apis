@@ -33,6 +33,7 @@ class FriendshipController extends Controller
         return new FriendshipCollection($friends);
     }
 
+
     public function index(Request $request)
     {
         $query = QueryBuilder::for(FriendRequest::class)

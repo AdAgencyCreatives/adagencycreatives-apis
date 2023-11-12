@@ -235,18 +235,19 @@ if (!function_exists('get_user_slug')) {
 }
 
 if (!function_exists('create_notification')) {
-    function create_notification($user_id, $body)
+    function create_notification($user_id, $msg)
     {
-        return 0;
         $notification = Notification::create([
             'uuid' => Str::uuid(),
             'user_id' => $user_id,
-            'body' => $body,
+            'type' => 'job_board',
+            'body' => '',
+            'message' => $msg,
         ]);
 
         $event_data = [
             'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
-            'body' => $body,
+            'body' => $msg,
         ];
         event(new SendNotification($event_data));
 
