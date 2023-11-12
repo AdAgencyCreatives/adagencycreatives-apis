@@ -104,6 +104,7 @@ class FriendshipController extends Controller
             } elseif ($existingFriendship->status === 'cancelled' || $existingFriendship->status === 'declined') {
                 $existingFriendship->update(['status' => 'pending']);
                 return response()->json(['message' => 'Friendship request sent again.']);
+
             }
         }
 
@@ -115,14 +116,13 @@ class FriendshipController extends Controller
         $requestId = $request->input('request_id');
         $response = $request->input('response');
 
-        // Fetch the friend request
-        $friendRequest = FriendRequest::where('uuid', $requestId)
-            ->where('status', 'pending')
-            ->first();
 
-        if (!$friendRequest) {
-            return response()->json(['message' => 'This request has already been responded.'], 403);
-        }
+        // Fetch the friend request
+        $friendRequest = FriendRequest::where('uuid', $requestId)->first();
+
+        // if (!$friendRequest) {
+        //     return response()->json(['message' => 'This request has already been responded.'], 403);
+        // }
 
         // if ($friendRequest->receiver_id !== $user->id) {
         //     return response()->json(['message' => 'Unauthorized to respond to this request.'], 403);
@@ -148,9 +148,16 @@ class FriendshipController extends Controller
                 $friendRequest->update(['status' => 'cancelled']);
             } elseif($response === 'declined') {
                 $friendRequest->update(['status' => 'declined']);
+            } elseif($response === 'unfriended') {
+                $friendRequest->update(['status' => 'unfriended']);
+                $this->deleteFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
+                DB::commit(); //commit the transaction because in this case we are not using the default resposne message
+                return response()->json(['message' => sprintf("You both are no longer friends.")]);
+
             }
 
             DB::commit();
+
         } catch (\Exception $e) {
             DB::rollBack();
             throw new ApiException($e, 'CS-01');
@@ -180,14 +187,12 @@ class FriendshipController extends Controller
 
     private function createFriendship($user1Id, $user2Id)
     {
-        DB::table('friendships')->insert([
+        Friendship::updateOrCreate(
             [
-                'user1_id' => $user1Id,
-                'user2_id' => $user2Id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+            'user1_id' => $user1Id,
+            'user2_id' => $user2Id,
+        ]
+        );
     }
 
     //create funciton for unfriend user
@@ -209,5 +214,16 @@ class FriendshipController extends Controller
         $friendship->delete();
 
         return response()->json(['message' => 'Friendship deleted.']);
+    }
+
+    public function deleteFriendship($user1Id, $user2Id)
+    {
+        $friendship = Friendship::where(function ($query) use ($user1Id, $user2Id) {
+            $query->where('user1_id', $user1Id)->where('user2_id', $user2Id);
+        })->orWhere(function ($query) use ($user1Id, $user2Id) {
+            $query->where('user1_id', $user2Id)->where('user2_id', $user1Id);
+        })->first();
+
+        $friendship->delete();
     }
 }

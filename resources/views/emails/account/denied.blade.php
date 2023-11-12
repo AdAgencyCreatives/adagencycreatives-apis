@@ -25,7 +25,8 @@
 
 
                         <div style="margin-top: 30px;">If you have any questions about this decision, reach out to
-                            info@adagencycreatives.com. Our team receives many inquiries and requests, so please allow
+                            <a href="mailto:info@adagencycreatives.com">info@adagencycreatives.com</a>. Our team
+                            receives many inquiries and requests, so please allow
                             up to a few business days for us to respond.
                         </div>
 

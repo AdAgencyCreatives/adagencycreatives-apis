@@ -29,7 +29,7 @@ class NewUserRegistrationAgency extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s registration request', env('APP_NAME'))
+            subject: sprintf('%s registration request', config('app.name'))
         );
     }
 
