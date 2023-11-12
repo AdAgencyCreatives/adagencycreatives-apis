@@ -34,7 +34,7 @@ class CreativeController extends Controller
             $logged_in_user = request()->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
-            if($current_creative->slug == $slug){
+            if($current_creative && $current_creative->slug == $slug){
                 unset($filters['filter']['is_visible']);
                 $request->replace($filters);
             }
