@@ -10,7 +10,8 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         Registration request</h1>
-                    <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
+                    <div
+                        style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello Member Support,</span>
 
                         <p>The following user has requested to join <a href="{{ config('app.frontend_url') }}"
