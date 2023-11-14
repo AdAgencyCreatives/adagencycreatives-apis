@@ -21,6 +21,13 @@
             width: 100% !important;
         }
 
+        a {
+            color: black !important;
+            /* Set anchor text color to black */
+            text-decoration: none !important;
+            /* Remove underline */
+        }
+
         /* What it does: Stops email clients resizing small text. */
         * {
             -ms-text-size-adjust: 100%;
