@@ -130,7 +130,7 @@ class UserController extends Controller
     public function impersonate(User $user)
     {
         $token = $user->createToken('impersonation_token')->plainTextToken;
-        $url = sprintf('Location: %s?token=%s', env('FRONTEND_IMPERSONATE_URL'), $token);
+        $url = sprintf('Location: %s/%s', env('FRONTEND_IMPERSONATE_URL'), $token);
         header($url);
         exit();
     }

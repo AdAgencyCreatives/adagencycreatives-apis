@@ -10,21 +10,24 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         Registration Denied</h1>
-                    <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
+                    <div
+                        style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p style="margin-bottom: 30px;">We appreciate your interest in joining <a
+                        <p style="">We appreciate your interest in joining <a
                                 href="{{ config('app.frontend_url') }}" target="_blank">{{ config('app.name') }}</a>.
                             Unfortunately, the following
                             account has not been approved at this time.
                         </p>
-                        <h4 style="text-decoration: underline; margin-bottom: 5px;">Details:</h4>
+
+                        <h4 style="text-decoration: underline;">Details:</h4>
                         <div><b>Name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
 
 
-                        <div style="margin-top: 30px;">If you have any questions about this decision, reach out to
+                        <div style="margin-top: 20px;">If you have any questions about this decision,
+                            reach out to
                             <a href="mailto:info@adagencycreatives.com">info@adagencycreatives.com</a>. Our team
                             receives many inquiries and requests, so please allow
                             up to a few business days for us to respond.

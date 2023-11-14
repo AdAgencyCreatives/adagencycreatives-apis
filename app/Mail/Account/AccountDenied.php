@@ -27,7 +27,7 @@ class AccountDenied extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s registration denied', config('app.name')),
+            subject: sprintf('%s registration denied %s', config('app.name'),  $this->data['user']->username),
         );
     }
 
