@@ -7,7 +7,7 @@
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p>We wanted you to know that you have {{ $data['unread_message_count'] }} new message on
-                <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>
+                <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
             </p>
             <div style="margin: 15px 0;">
 

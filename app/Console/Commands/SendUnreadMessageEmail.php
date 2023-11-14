@@ -20,12 +20,13 @@ class SendUnreadMessageEmail extends Command
             ->get();
 
         foreach ($unreadMessages as $unreadMessage) {
+
             $recipient = $unreadMessage->receiver;
             $unreadMessageCount = $unreadMessage->message_count;
 
             // Get the oldest contacts who sent messages to the user
             $oldestmessages = Message::select('sender_id',  DB::raw('MIN(created_at) as max_created_at'))
-                ->where('receiver_id', $recipient->id)
+                ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereNull('read_at')
                 ->groupBy('sender_id')
                 ->take(5)
@@ -33,6 +34,7 @@ class SendUnreadMessageEmail extends Command
                 ->with('sender')
                 ->get();
 
+            $recent_messages = [];
             foreach($oldestmessages as $msg) {
                 $recent_messages[] = [
                     'name' => $msg->sender->first_name,
