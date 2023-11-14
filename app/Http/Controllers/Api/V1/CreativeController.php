@@ -34,7 +34,7 @@ class CreativeController extends Controller
             $logged_in_user = request()->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
-            if($current_creative && $current_creative->slug == $slug){
+            if($current_creative && $current_creative->slug == $slug) {
                 unset($filters['filter']['is_visible']);
                 $request->replace($filters);
             }
@@ -208,7 +208,7 @@ class CreativeController extends Controller
         return new CreativeSpotlightCollection($creative_spotlights);
     }
 
-    public function update_profile(UpdateCreativeProfileRequest $request, $uuid)
+    public function update_profile(Request $request, $uuid)
     {
         try {
             $user = User::where('uuid', $uuid)->firstOrFail();
@@ -221,16 +221,25 @@ class CreativeController extends Controller
             }
 
             // Update User
-            $userData = [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'username' => $request->username,
-                'is_visible' => $request->show_profile,
-            ];
+            $userData = [];
 
-            $user->fill(array_filter($userData, function ($value) {
-                return !is_null($value);
-            }));
+            if ($request->filled('first_name')) {
+                $userData['first_name'] = $request->first_name;
+            }
+
+            if ($request->filled('last_name')) {
+                $userData['last_name'] = $request->last_name;
+            }
+
+            if ($request->filled('username')) {
+                $userData['username'] = $request->username;
+            }
+
+            if ($request->filled('show_profile')) {
+                $userData['is_visible'] = $request->show_profile;
+            }
+
+            $user->fill($userData);
             $user->save();
 
             updateLocation($request, $user, 'personal');

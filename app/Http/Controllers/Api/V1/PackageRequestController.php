@@ -86,11 +86,12 @@ class PackageRequestController extends Controller
         }
     }
 
-    public function get_assigned_agencies($uuid)
+    public function get_assigned_agencies()
     {
         try {
+
             // Find the user by UUID
-            $user = User::where('uuid', $uuid)->firstOrFail();
+            $user = request()->user();
 
             // Retrieve package requests for the user
             $packageRequests = PackageRequest::select('user_id')
