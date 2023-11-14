@@ -18,6 +18,7 @@ use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -25,6 +26,151 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
+    public function search1(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)->pluck('id')->toArray();
+
+        $creatives = Creative::whereIn('id', $creativeIds)->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
+    public function search2(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id  WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)->pluck('id')->toArray();
+
+        $creatives = Creative::whereIn('id', $creativeIds)->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new LoggedinCreativeCollection($creatives);
+
+
+
+    }
+
+    public function search3(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via City Name
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via State Name
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id  WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Industry Experience
+        $sql .= "SELECT DISTINCT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0 WHERE" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "ind.name LIKE '%" . trim($term) . "%'" . "\n";
+        }
+        // Search via Workplace Preference
+
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? "" : " OR ") . "cr.is_featured LIKE '%" . trim($term) . "%'" . "\n";
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)->pluck('id')->toArray();
+
+        $creatives = Creative::whereIn('id', $creativeIds)->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
     public function index(Request $request)
     {
         $filters = $request->all();
