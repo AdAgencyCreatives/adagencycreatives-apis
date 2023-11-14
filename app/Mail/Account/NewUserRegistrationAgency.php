@@ -29,7 +29,7 @@ class NewUserRegistrationAgency extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s registration request', config('app.name'))
+            subject: sprintf('%s registration request', $this->data['APP_NAME'])
         );
     }
 
