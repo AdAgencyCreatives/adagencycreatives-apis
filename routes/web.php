@@ -61,6 +61,12 @@ Route::get('/users2', function () {
     }
 });
 
+Route::get('/tesss', function () {
+
+    $activateLink = route('user.activate', ['uuid' => 'ba1002d2-1503-476c-9b39-47f1777d0701']);
+dd($activateLink);
+});
+
 Route::get('/email', function () {
 
     $recipient = User::find(2);
@@ -89,6 +95,11 @@ Route::get('/reset-messages', function () {
 
 // Download Resume
 Route::get('download/resume/{uuid}', [ResumeController::class, 'download_resume'])->name('download.resume');
+
+// Approve | Deny User from email
+Route::get('/user/approve/{uuid}', [UserController::class, 'activate'])->name('user.activate');
+Route::get('/user/deny/{uuid}', [UserController::class, 'deactivate'])->name('user.deactivate');
+
 
 Route::group(['middleware' => ['auth']], function () {
 

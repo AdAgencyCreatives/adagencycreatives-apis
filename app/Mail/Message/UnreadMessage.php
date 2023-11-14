@@ -18,13 +18,14 @@ class UnreadMessage extends Mailable
     {
         $this->data = $data;
         $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['APP_URL'] = env('APP_URL');
         $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s, you have a new message waiting for you on %s', $this->data['recipient'], env('APP_NAME')),
+            subject: sprintf('%s, you have a new message waiting for you on %s', $this->data['recipient'], $this->data['APP_NAME']),
         );
     }
 

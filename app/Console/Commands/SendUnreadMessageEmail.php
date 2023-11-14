@@ -15,27 +15,45 @@ class SendUnreadMessageEmail extends Command
     public function handle()
     {
         $unreadMessages = Message::whereNull('read_at')
-        ->select('receiver_id', DB::raw('count(*) as message_count'))
-        ->groupBy('receiver_id')
-        ->get();
+            ->select('receiver_id', DB::raw('count(*) as message_count'))
+            ->groupBy('receiver_id')
+            ->get();
 
         foreach ($unreadMessages as $unreadMessage) {
+
             $recipient = $unreadMessage->receiver;
             $unreadMessageCount = $unreadMessage->message_count;
 
-            dump($recipient->email);
+            // Get the oldest contacts who sent messages to the user
+            $oldestmessages = Message::select('sender_id',  DB::raw('MIN(created_at) as max_created_at'))
+                ->where('receiver_id', $unreadMessage->receiver_id)
+                ->whereNull('read_at')
+                ->groupBy('sender_id')
+                ->take(5)
+                ->orderBy('max_created_at', 'asc')
+                ->with('sender')
+                ->get();
+
+            $recent_messages = [];
+            foreach($oldestmessages as $msg) {
+                $recent_messages[] = [
+                    'name' => $msg->sender->first_name,
+                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
+                    'profile_picture' => get_profile_picture($msg->sender),
+                    'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
+                ];
+            }
+
             $data = [
                 'recipient' => $recipient->first_name,
-                'message_sender_name' => $recipient->first_name,
-                'message_sender_profile_url' => get_profile_picture($recipient),
-                'message_count' => $unreadMessageCount,
-                'profile_url' => env('FRONTEND_URL') . '/profile/',
+                'unread_message_count' => $unreadMessageCount,
+                'recent_messages' => $recent_messages,
             ];
 
-            // SendEmailJob::dispatch([
-            //     'receiver' => $recipient,
-            //     'data' => $data,
-            // ], 'unread_message');
+            SendEmailJob::dispatch([
+                'receiver' => $recipient,
+                'data' => $data,
+            ], 'unread_message');
 
         }
     }

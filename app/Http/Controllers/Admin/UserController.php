@@ -33,7 +33,7 @@ class UserController extends Controller
     {
         $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor'])) {
-            if (! $user->agency) {
+            if (!$user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -43,7 +43,7 @@ class UserController extends Controller
             $subscription = Subscription::where('user_id', $user->id)->latest();
 
         } elseif ($user->role == 'creative') {
-            if (! $user->creative) {
+            if (!$user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
                 $creative->user_id = $user->id;
@@ -103,7 +103,7 @@ class UserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -138,7 +138,7 @@ class UserController extends Controller
 
     public function update_profile_picture(Request $request, $id)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -155,5 +155,27 @@ class UserController extends Controller
 
         Session::flash('success', 'Profile picture updated successfully');
         return redirect()->back();
+    }
+
+    public function activate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            $user->status = 'active';
+            $user->save();
+            return redirect()->back();
+        }
+    }
+
+    public function deactivate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            $user->status = 'inactive';
+            $user->save();
+            return redirect()->back();
+        }
     }
 }
