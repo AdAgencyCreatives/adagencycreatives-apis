@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\PasswordHash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
+use App\Jobs\ProcessPortfolioVisuals;
+use App\Jobs\SendEmailJob;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
@@ -164,6 +166,24 @@ class UserController extends Controller
         if ($user) {
             $user->status = 'active';
             $user->save();
+
+
+            SendEmailJob::dispatch([
+                'receiver' => $user, 'data' => $user,
+            ], 'account_approved');
+
+
+            /**
+            * Generate portfolio website preview
+            */
+            if($user->role == 'creative') {
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if($portfolio_website) {
+                    Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
+                    ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                }
+            }
+
             return redirect()->back();
         }
     }
@@ -175,6 +195,12 @@ class UserController extends Controller
         if ($user) {
             $user->status = 'inactive';
             $user->save();
+
+            SendEmailJob::dispatch([
+                'receiver' => $user, 'data' => $user,
+            ], 'account_denied');
+
+
             return redirect()->back();
         }
     }
