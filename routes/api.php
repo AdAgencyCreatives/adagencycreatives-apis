@@ -137,7 +137,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::apiResource('job-alerts', JobAlertController::class);
     Route::apiResource('package-requests', PackageRequestController::class);
-    Route::get('get_assigned_agencies/{uuid}', [PackageRequestController::class, 'get_assigned_agencies']); //Get assigned agencies for advisor
+    Route::get('get_assigned_agencies', [PackageRequestController::class, 'get_assigned_agencies']); //Get assigned agencies for advisor
 
     /**
      * Community Routes
