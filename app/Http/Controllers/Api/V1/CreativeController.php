@@ -223,20 +223,20 @@ class CreativeController extends Controller
             // Update User
             $userData = [];
 
-            if ($request->filled('first_name') || $request->first_name === null) {
+            if ($request->filled('first_name')) {
                 $userData['first_name'] = $request->first_name;
             }
 
-            if ($request->filled('last_name') || $request->last_name === null) {
+            if ($request->filled('last_name')) {
                 $userData['last_name'] = $request->last_name;
             }
 
-            if ($request->filled('username') || $request->username === null) {
+            if ($request->filled('username')) {
                 $userData['username'] = $request->username;
             }
 
-            if ($request->filled('show_profile') || $request->show_profile === null) {
-                $userData['is_visible'] = $request->show_profile;
+            if ($request->filled('show_profile')) {
+                $userData['is_visible'] = $request->show_profile ? 1 : 0;
             }
 
             $user->fill($userData);
