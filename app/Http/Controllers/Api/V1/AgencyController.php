@@ -96,8 +96,8 @@ class AgencyController extends Controller
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
+            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
         ]);
 
         $agency = Agency::create($request->all());
@@ -117,7 +117,7 @@ class AgencyController extends Controller
     public function show($uuid)
     {
         $agency = Agency::with('attachment')->where('uuid', $uuid)->first();
-        if (! $agency) {
+        if (!$agency) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -134,7 +134,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (! $agency) {
+        if (!$agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);
@@ -161,7 +161,7 @@ class AgencyController extends Controller
             $user = User::where('uuid', $uuid)->first();
             $agency = Agency::where('user_id', $user->id)->first();
 
-            if (! $agency) {
+            if (!$agency) {
                 return response()->json([
                     'message' => 'No agency found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -178,10 +178,26 @@ class AgencyController extends Controller
             $agency->media_experience = implode(',', array_slice($request->media_experience ?? [], 0, 10));
             $agency->save();
 
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $user->is_visible = $request->show_profile;
+            // Update User
+            $userData = [];
+
+            if ($request->filled('first_name') || $request->first_name === null) {
+                $userData['first_name'] = $request->first_name;
+            }
+
+            if ($request->filled('last_name') || $request->last_name === null) {
+                $userData['last_name'] = $request->last_name;
+            }
+
+            if ($request->filled('email') || $request->email === null) {
+                $userData['email'] = $request->email;
+            }
+
+            if ($request->filled('show_profile') || $request->show_profile === null) {
+                $userData['is_visible'] = $request->show_profile;
+            }
+
+            $user->fill($userData);
             $user->save();
 
             updateLocation($request, $user, 'business');
@@ -220,7 +236,7 @@ class AgencyController extends Controller
 
     public function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
@@ -235,7 +251,7 @@ class AgencyController extends Controller
 
     public function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
