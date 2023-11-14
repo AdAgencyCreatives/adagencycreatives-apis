@@ -105,8 +105,8 @@ class CreativeController extends Controller
 
         $category = Category::where('uuid', $request->category)->first();
         $creative->update([
-            'category_id' => $category->id,
-            'title' => $request->title,
+            'category_id' => $category->id ?? null,
+            'title' => $request->title ?? '',
             'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
             'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
             'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',

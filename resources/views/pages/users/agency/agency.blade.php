@@ -36,7 +36,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="industry"> Industry Experience </label>
-                                <select name="industry_experience[]" id="industry" required
+                                <select name="industry_experience[]" id="industry"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
                                     <option value="-100"> Select Industry Experience</option>
@@ -46,7 +46,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="media"> Media Experience </label>
-                                <select name="media_experience[]" id="media" required
+                                <select name="media_experience[]" id="media"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
                                     <option value="-100"> Select Media Experience</option>
@@ -156,8 +156,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="state"> State </label>
                                 <select name="state" id="state"
-                                    class="form-control form-select custom-select select2" data-toggle="select2"
-                                    required>
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select State</option>
                                 </select>
                             </div>
@@ -168,8 +167,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="city"> City </label>
                                 <select name="city" id="city"
-                                    class="form-control form-select custom-select select2" data-toggle="select2"
-                                    required>
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select City</option>
                                 </select>
                             </div>
