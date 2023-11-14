@@ -37,7 +37,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="portfolio">Portfolio Website</label>
-                                <input type="url" class="form-control" name="portfolio"
+                                <input type="text" class="form-control" name="portfolio"
                                     placeholder="Portfolio Website"
                                     value="{{ $user->links->where('label', 'portfolio')->first()?->url }}">
                                 </select>
