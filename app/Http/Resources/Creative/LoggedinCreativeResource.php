@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Creative;
 
 use App\Http\Resources\Link\LinkCollection;
+use App\Models\Job;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LoggedinCreativeResource extends JsonResource
@@ -58,8 +59,9 @@ class LoggedinCreativeResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'logged_in_user' => [
-                'subscription_status' => get_subscription_status_string($logged_in_user),
+                'subscription_status' => $subscription_status,
                 'is_friend' => $is_friend,
+                'has_posted_job' => $this->get_posted_job($logged_in_user, $subscription_status),
             ]
         ];
     }
@@ -130,6 +132,15 @@ class LoggedinCreativeResource extends JsonResource
         } else {
             return route('download.resume', $user->uuid);
         }
+    }
+
+    public function get_posted_job($logged_in_user, $subscription_status)
+    {
+        if ($logged_in_user->role === 'agency' && $subscription_status === 'active') {
+            return Job::where('user_id', $logged_in_user->id)->exists();
+        }
+
+        return false;
     }
 
     public function get_website_preview($user)
