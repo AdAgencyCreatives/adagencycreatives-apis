@@ -17,7 +17,7 @@ class AgencyController extends Controller
 {
     public function update(Request $request, $uuid)
     {
-        // dd($request->all());
+
         $agency = Agency::where('uuid', $uuid)->first();
         $user = User::where('id', $agency->user_id)->first();
 

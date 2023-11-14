@@ -50,7 +50,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label" for="category">Industry Job Title</label>
-                                <select name="category" id="category" required
+                                <select name="category" id="category"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Title</option>
                                 </select>
@@ -62,7 +62,7 @@
                         <div class="col-12 col-lg-12">
                             <div class="form-group">
                                 <label class="form-label" for="industry"> Industry Experience </label>
-                                <select name="industry_experience[]" id="industry" required
+                                <select name="industry_experience[]" id="industry"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
                                     <option value="-100"> Select Industry</option>
@@ -75,7 +75,7 @@
                         <div class="col-12 col-lg-12">
                             <div class="form-group">
                                 <label class="form-label" for="media"> Media Experience </label>
-                                <select name="media_experience[]" id="media" required
+                                <select name="media_experience[]" id="media"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
                                     <option value="-100"> Select Media</option>
