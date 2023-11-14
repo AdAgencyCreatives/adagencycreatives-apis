@@ -14,15 +14,16 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $userName }},</span>
 
-                        <p style="margin-bottom: 30px;">We received a request to reset your account password. If that
-                            was you, click <a href="{{ $url }}" target="_blank">here</a>.
+                        <p style="margin-bottom: 20px;">We received a request to reset your account password. If that
+                            was you,
+                            <a href="{{ $url }}" target="_blank">click here</a>.
                         </p>
 
-                        <p style="margin-bottom: 30px;">If you didn’t make this request, you can safely ignore and
+                        <p style="margin-bottom: 20px;">If you didn’t make this request, you can safely ignore and
                             delete this email.
                         </p>
 
-                        <p style="margin-bottom: 30px;">As always, be sure to update your password often and keep your
+                        <p style="margin-bottom: 20px;">As always, be sure to update your password often and keep your
                             information confidential.
                         </p>
 
