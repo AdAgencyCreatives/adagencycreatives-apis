@@ -66,7 +66,8 @@ class CreativeController extends Controller
         })
         ->orderByDesc('is_featured')
         ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+        ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -120,12 +121,10 @@ class CreativeController extends Controller
         })
         ->orderByDesc('is_featured')
         ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+        ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
-
-
-
     }
 
     public function search3(Request $request)
@@ -231,7 +230,8 @@ class CreativeController extends Controller
         })
         ->orderByDesc('is_featured')
         ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+        ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
     }
