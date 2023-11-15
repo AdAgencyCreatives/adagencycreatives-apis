@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Subscription;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -73,51 +74,44 @@ class JobController extends Controller
 
     public function jobs_for_logged_in(Request $request)
     {
-        $filters = $request->all();
+        $search = $request->search;
+        $terms = explode(',', $search);
 
-        $industries = processIndustryExperience($request, $filters);
-        $medias = processMediaExperience($request, $filters);
-
-        $query = QueryBuilder::for(Job::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('category_id'),
-                AllowedFilter::scope('state_id'),
-                AllowedFilter::scope('city_id'),
-                'title',
-                'slug',
-                'employment_type',
-                'apply_type',
-                'salary_range',
-                'is_remote',
-                'is_hybrid',
-                'is_onsite',
-                'is_featured',
-                'is_urgent',
-                'status',
-            ])
-            ->allowedSorts('created_at');
-
-        if ($industries !== null) {
-            applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
+        // Search via City Name
+        $sql = "SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        if ($medias !== null) {
-            applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via State Name
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $loggedInUserId = $request->user()->id;
-        $userApplications = Application::where('user_id', $loggedInUserId)->pluck('job_id')->toArray();
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $res = DB::select($sql);
+        $jobIds = collect($res)->pluck('id')->toArray();
 
 
-        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
-                ->withCount('applications')
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
-        $jobs = $jobs->map(function ($job) use ($userApplications) {
-            $job['user_has_applied'] = in_array($job->id, $userApplications);
-            return $job;
-        });
+        $jobs = Job::whereIn('id', $jobIds)
+            // ->where('status', 1)
+            ->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->withCount('applications')
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
