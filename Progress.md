@@ -615,3 +615,67 @@ Admin can
 -   Created endpoints for activities module (Full CRUD)
 -   Modify the friendship module endpoints accordingto frontned requirements
 -   Tested the profile page from frontend and noted all the things which we can improve.
+
+## 03/11/2023 CreativeSpotlights
+
+-   Added option in admin dashboard for managing creative spotlights.
+-   Admin can add new spotlight, also can select the user and assign the spotlight.
+-   Admin can update the title , slug and user of the spotlight.
+-   Created endpoint for frontend along with filters (status accepted, rejected)
+
+## 06/11/2023 Package Management | Creative Permission
+
+-   Added option in admin dashboard for managing agency packages.
+-   Enhanced the Friendships api module for better user experience.
+-   Removed the user from creative spotlights page (also from DB).
+-   Creative phone number and email are subject to special conditions based on logged-In user role.
+
+## 07/11/2023 Reviews | Permissions
+
+-   Setup condition for avoiding multiple reviews.
+-   Giving review second time will update the exisitng review.
+-   Added package status field in creatives api
+-   Creatied separate route for creatives endpoint for logged in users
+-   Created featured cities endpoint
+-   Sorted the creatives with featured and then by latest.
+
+## 08/11/2023 Agencies Export | Reviews
+
+-   Analyzed the Agency profiles and manually update their status to inactive.
+-   On frontend, set featured and active filter for agencies.
+-   Mark as read endpoint for messages.
+-   Set condition in backend for avoiding giving review to itself.
+-   Update and delete endpoint for review.
+-   Added friendship status in creatives resource.
+-   Logged in user can see his email and phone on his detail page
+
+## 09/11/2023 Unread Message EMail
+
+-   Created api module for managing group members.
+    -   Group Member can be added.
+    -   Can be removed from group.
+    -   Its role can be updated in group.
+    -   We can fetch groups members of particular group with filter (group filter and role filter)
+-   Setup Unread Message email.
+-   Creative Dashboard Stats
+
+## 10/11/2023 Emails | Stats | Bug Fixed
+
+-   Fixed creative dashboard stats widgets
+-   Created endpoint for lounge stats widgets.
+-   Fixed notification endpoint for job board.
+-   Fixed recent applications endpoint.
+-   Fixed bug on account related emails.
+
+## 13/11/2023 Unread Message Count Email | Approve - Deny links
+
+-   Modify the unread message according to requirement to include profile image of sender.
+-   Added Approve and Deny links in registration email so that admin can perform these actions directly.
+-   Fixed account related emails.
+-   Figured out the reviews bug.
+
+## 14/11/2023 Creative Full Search API
+
+-   Created separated search api endpoints for differet user roles with different permisisons.
+-   A little tweak in the applications endpoint.
+-   Added filter in bookmarks endpoint.
