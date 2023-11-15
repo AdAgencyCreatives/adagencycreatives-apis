@@ -10,6 +10,7 @@ use App\Http\Resources\Note\NoteCollection;
 use App\Http\Resources\Note\NoteResource;
 use App\Models\Application;
 use App\Models\Bookmark;
+use Illuminate\Http\Request;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
@@ -18,14 +19,26 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class NoteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = QueryBuilder::for(Note::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('resource_id'),
-                AllowedFilter::scope('resource_type'),
             ]);
+
+        if ($request->has('resource_type')) {
+            $resourceType = $request->resource_type;
+            $modelClass = $this->getResourceModelClass($resourceType);
+
+            if ($modelClass) {
+                $query->where('notable_type', $modelClass);
+
+                if ($request->has('resource_id')) {
+                    $resource = $modelClass::where('uuid', $request->resource_id)->first();
+                    $query->where('notable_id', $resource->id);
+                }
+            }
+        }
 
         $notes = $query->paginate(config('global.request.pagination_limit'));
 
@@ -91,5 +104,18 @@ class NoteController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+    private function getResourceModelClass($resourceType)
+    {
+        $resourceModels = [
+            'creatives' => 'App\Models\Creative',
+            'agencies' => 'App\Models\Agency',
+            'jobs' => 'App\Models\Job', // Add the appropriate model for each resource_type
+            'applications' => 'App\Models\Application',
+            'posts' => 'App\Models\Post',
+        ];
+
+        return $resourceModels[$resourceType] ?? null;
     }
 }
