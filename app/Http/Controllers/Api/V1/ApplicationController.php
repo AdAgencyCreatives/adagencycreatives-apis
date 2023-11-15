@@ -40,7 +40,7 @@ class ApplicationController extends Controller
     {
         $applicant_user = User::where('uuid', $request->user_id)->first();
         $job = Job::where('uuid', $request->job_id)->first();
-        // $attachment = Attachment::where('uuid', $request->resume_id)->first();
+        $attachment = Attachment::where('uuid', $request->resume_id)->first();
 
         $agency_user = $job->user;
 
@@ -48,7 +48,7 @@ class ApplicationController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $applicant_user->id,
             'job_id' => $job->id,
-            // 'attachment_id' => $attachment->id,
+            'attachment_id' => $attachment->id,
             'status' => 0,
         ]);
 
