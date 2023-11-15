@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Bookmark\StoreBookmarkRequest;
 use App\Http\Resources\Bookmark\BookmarkCollection;
 use App\Http\Resources\Bookmark\BookmarkResource;
+use App\Models\Agency;
 use App\Models\Bookmark;
+use App\Models\Creative;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,8 +24,20 @@ class BookmarkController extends Controller
         $query = QueryBuilder::for(Bookmark::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('resource_type'),
             ]);
+        if ($request->has('resource_type')) {
+            $resourceType = $request->resource_type;
+            $modelClass = $this->getResourceModelClass($resourceType);
+
+            if ($modelClass) {
+                $query->where('bookmarkable_type', $modelClass);
+
+                if ($request->has('resource_id')) {
+                    $resource = $modelClass::where('uuid', $request->resource_id)->first();
+                    $query->where('bookmarkable_id', $resource->id);
+                }
+            }
+        }
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -70,5 +84,18 @@ class BookmarkController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
+    }
+
+    private function getResourceModelClass($resourceType)
+    {
+        $resourceModels = [
+            'creatives' => 'App\Models\Creative',
+            'agencies' => 'App\Models\Agency',
+            'jobs' => 'App\Models\Job', // Add the appropriate model for each resource_type
+            'applications' => 'App\Models\Application',
+            'posts' => 'App\Models\Post',
+        ];
+
+        return $resourceModels[$resourceType] ?? null;
     }
 }
