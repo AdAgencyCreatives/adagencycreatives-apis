@@ -11,6 +11,7 @@ use App\Http\Requests\Job\UpdateJobRequest;
 use App\Http\Resources\Job\JobCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Jobs\SendEmailJob;
+use App\Models\Application;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
@@ -65,6 +66,58 @@ class JobController extends Controller
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->withCount('applications')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new JobCollection($jobs);
+    }
+
+
+    public function jobs_for_logged_in(Request $request)
+    {
+        $filters = $request->all();
+
+        $industries = processIndustryExperience($request, $filters);
+        $medias = processMediaExperience($request, $filters);
+
+        $query = QueryBuilder::for(Job::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+                'title',
+                'slug',
+                'employment_type',
+                'apply_type',
+                'salary_range',
+                'is_remote',
+                'is_hybrid',
+                'is_onsite',
+                'is_featured',
+                'is_urgent',
+                'status',
+            ])
+            ->allowedSorts('created_at');
+
+        if ($industries !== null) {
+            applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
+        }
+
+        if ($medias !== null) {
+            applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
+        }
+
+        $loggedInUserId = $request->user()->id;
+        $userApplications = Application::where('user_id', $loggedInUserId)->pluck('job_id')->toArray();
+
+
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
+                ->withCount('applications')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        $jobs = $jobs->map(function ($job) use ($userApplications) {
+            $job['user_has_applied'] = in_array($job->id, $userApplications);
+            return $job;
+        });
 
         return new JobCollection($jobs);
     }

@@ -96,6 +96,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
     Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
+    Route::get('jobs/new', [JobController::class, 'jobs_for_logged_in']);
     Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');
 
     Route::apiResource('links', LinkController::class, ['except' => ['index']]);

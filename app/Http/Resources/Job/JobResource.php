@@ -47,6 +47,9 @@ class JobResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+            'logged_in_user' => [
+                'user_has_applied' => $this->user_has_applied
+            ]
         ];
 
         $agency = $user->agency;
