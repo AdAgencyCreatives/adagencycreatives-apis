@@ -146,23 +146,40 @@ class Job extends Model
     public function scopeCategoryId(Builder $query, $category_id): Builder
     {
         $category = Category::where('uuid', $category_id)->firstOrFail();
+        return $query->where('category_id', $category->id);
+    }
 
+    public function scopeCategorySlug(Builder $query, $category_slug): Builder
+    {
+        $category = Category::where('slug', $category_slug)->firstOrFail();
         return $query->where('category_id', $category->id);
     }
 
     public function scopeStateId(Builder $query, $state_id): Builder
     {
         $state = Location::where('uuid', $state_id)->first();
-
         return $query->where('state_id', $state->id);
     }
 
-    // public function scopeCityId(Builder $query, $city_id): Builder
-    // {
-    //     $city = Location::where('uuid', $city_id)->first();
+    public function scopeStateSlug(Builder $query, $state_slug): Builder
+    {
+        $city = Location::where('slug', $state_slug)->first();
+        return $query->where('state_id', $city->id);
+    }
 
-    //     return $query->where('city_id', $city->id);
-    // }
+    public function scopeCityId(Builder $query, $city_id): Builder
+    {
+        $city = Location::where('uuid', $city_id)->first();
+        return $query->where('city_id', $city->id);
+    }
+
+    public function scopeCitySlug(Builder $query, $city_slug): Builder
+    {
+        $city = Location::where('slug', $city_slug)->first();
+        return $query->where('city_id', $city->id);
+    }
+
+
 
     // public function scopeIndustryExperience(Builder $query, $industries): Builder
     // {

@@ -48,7 +48,7 @@ class ApplicationController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $applicant_user->id,
             'job_id' => $job->id,
-            'attachment_id' => $attachment->id,
+            'attachment_id' => $attachment->id ?? null,
             'status' => 0,
         ]);
 

@@ -18,7 +18,7 @@ class ApplicationResource extends JsonResource
             'slug' => $user->username,
             'user_profile_id' => $user->id,
             'job_id' => $this->job->uuid,
-            'resume_url' => isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
+            'resume_url' => $this->get_resume($user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -33,5 +33,21 @@ class ApplicationResource extends JsonResource
             ],
 
         ];
+    }
+
+    public function get_resume($user)
+    {
+        if($this->attachment){
+            return getAttachmentBasePath() . $this->attachment->path;
+        }
+        else{
+            if (isset($user->resume)) {
+            return getAttachmentBasePath() . $user->resume->path;
+        } else {
+            return route('download.resume', $user->uuid);
+        }
+        }
+
+
     }
 }

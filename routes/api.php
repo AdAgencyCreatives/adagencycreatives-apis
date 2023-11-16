@@ -61,7 +61,7 @@ Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
 // Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('jobs', [JobController::class, 'index']);
 
-Route::get('jobs/full-search', [JobController::class, 'jobs_full_search']);
+Route::get('home/jobs', [JobController::class, 'jobs_homepage']);
 
 Route::get('featured_cities', [JobController::class, 'featured_cities']);
 
