@@ -190,6 +190,74 @@ class JobController extends Controller
         return new JobCollection($jobs);
     }
 
+    public function jobs_homepage_logged_in(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        // Search via City Name
+        $sql = "SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via State Name
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Job Title
+        $sql .= "SELECT jp.id FROM job_posts jp" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(jp.title ='" . trim($term) . "')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Agency Name
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ag.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+
+        $res = DB::select($sql);
+        $jobIds = collect($res)->pluck('id')->toArray();
+
+        $jobs = Job::whereIn('id', $jobIds)
+            // ->where('status', 1)
+            ->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        $loggedInUserId = $request->user()->id;
+        $userApplications = Application::where('user_id', $loggedInUserId)->pluck('job_id')->toArray();
+
+        $jobs->getCollection()->transform(function ($job) use ($userApplications) {
+            $job['user_has_applied'] = in_array($job->id, $userApplications);
+            return $job;
+            });
+        return new JobLoggedInCollection($jobs);
+    }
+
     public function store(StoreJobRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
