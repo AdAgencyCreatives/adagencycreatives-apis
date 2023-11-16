@@ -21,10 +21,11 @@ class PostResource extends JsonResource
             'author_avatar' => get_profile_picture($user),
             'content' => $this->content,
             'status' => $this->status,
-            // 'attachments' => new AttachmentCollection($this->attachments),
+            'attachments' => new AttachmentCollection($this->attachments),
             'comments_count' => $this->comments_count,
             'comments' => new CommentCollection($this->comments),
             'likes_count' => $this->likes_count,
+            'reactions' => $this->get_reactions_count(),
             'has_liked_post' => $this->user_has_liked,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
@@ -42,6 +43,26 @@ class PostResource extends JsonResource
                 ],
             ],
         ];
+    }
+
+    public function get_reactions_count()
+    {
+        $allReactionTypes = ['like', 'heart', 'laugh'];
+        $reactionsGrouped = $this->reactions->groupBy('type');
+        $reactionsCount = collect($allReactionTypes)->mapWithKeys(function ($type) use ($reactionsGrouped) {
+            return [$type => $reactionsGrouped->get($type, collect())->count()];
+        });
+
+        $authenticatedUserId = auth()->id();
+
+        // Include information about whether the user has liked, laughed, or reacted in any other way
+        $userReactions = collect($allReactionTypes)->mapWithKeys(function ($type) use ($reactionsGrouped, $authenticatedUserId) {
+            return ['user_has_' . $type => $reactionsGrouped->get($type, collect())->where('user_id', $authenticatedUserId)->isNotEmpty()];
+        });
+
+        return $reactionsCount->merge($userReactions);
+
+        return $reactionsCount;
     }
 
     public function get_image($user)

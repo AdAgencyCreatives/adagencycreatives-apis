@@ -50,6 +50,12 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function reactions()
+    {
+        return $this->hasMany(PostReaction::class);
+    }
+
+
     public const STATUSES = [
         'DRAFT' => 0,
         'PUBLISHED' => 1,
