@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobAlert\StoreJobAlertRequest;
 use App\Http\Resources\Address\AddressCollection;
+use App\Http\Resources\JobAlert\JobAlertCollection;
 use App\Http\Resources\JobAlert\JobAlertResource;
 use App\Models\Address;
 use App\Models\Category;
@@ -19,23 +20,16 @@ class JobAlertController extends Controller
 {
     public function index()
     {
-        $query = QueryBuilder::for(Address::class)
+        $query = QueryBuilder::for(JobAlert::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                'label',
-                'street_1',
-                'street_2',
-                'city',
-                'state',
-                'country',
-                'postal_code',
+                'status'
             ]
-
             );
 
-        $addresses = $query->paginate(config('global.request.pagination_limit'));
+        $alerts = $query->paginate(config('global.request.pagination_limit'));
 
-        return new AddressCollection($addresses);
+        return new JobAlertCollection($alerts);
     }
 
     public function store(StoreJobAlertRequest $request)
