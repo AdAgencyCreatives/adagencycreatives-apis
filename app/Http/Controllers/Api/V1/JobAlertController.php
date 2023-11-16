@@ -37,20 +37,20 @@ class JobAlertController extends Controller
         $user = User::where('uuid', $request->user_id)->first();
         $category = Category::where('uuid', $request->category_id)->first();
 
-        $data = [
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-        ];
-
         try {
-            if ($existingJobAlert = JobAlert::where($data)->first()) {
-                $existingJobAlert->update(['status' => $request->status]);
+            if ($existingJobAlert = JobAlert::where('user_id', $user->id)->first()) {
+                $existingJobAlert->update([
+                    'category_id' => $category->id,
+                    'status' => $request->status
+                ]);
 
                 return ApiResponse::success(new JobAlertResource($existingJobAlert), 200);
             }
 
             $data['uuid'] = Str::uuid();
+            $data['user_id'] = $user->id;
             $data['status'] = $request->status;
+            $data['category_id'] = $category->id;
 
             $alert = JobAlert::create($data);
 
