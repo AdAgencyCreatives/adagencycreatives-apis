@@ -159,13 +159,31 @@ class JobController extends Controller
             $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Job Title
+        $sql .= "SELECT jp.id FROM job_posts jp" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(jp.title ='" . trim($term) . "')" . "\n";
+        }
+
+        $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Agency Name
+        $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id" . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ag.name LIKE '%" . trim($term) . "%')" . "\n";
+        }
+
+
         $res = DB::select($sql);
         $jobIds = collect($res)->pluck('id')->toArray();
 
         $jobs = Job::whereIn('id', $jobIds)
             // ->where('status', 1)
             ->with('user.agency', 'category', 'state', 'city', 'attachment')
-            ->withCount('applications')
             ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
