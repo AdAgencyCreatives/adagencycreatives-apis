@@ -27,9 +27,9 @@ class JobAlertController extends Controller
             ]
             );
 
-        $alerts = $query->paginate(config('global.request.pagination_limit'));
+        $alerts = $query->first();
 
-        return new JobAlertCollection($alerts);
+        return new JobAlertResource($alerts);
     }
 
     public function store(StoreJobAlertRequest $request)
