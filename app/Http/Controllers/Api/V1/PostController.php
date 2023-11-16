@@ -11,6 +11,7 @@ use App\Http\Resources\Post\PostResource;
 use App\Models\Attachment;
 use App\Models\Group;
 use App\Models\Post;
+use App\Models\PostReaction;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -30,7 +31,10 @@ class PostController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $posts = $query
+        $posts = $query->with(['reactions' => function ($query) {
+            // You can further customize the reactions query if needed
+        }])
+            ->withCount('reactions')
             ->withCount('comments')
             ->withCount('likes')
             ->with('comments')
@@ -38,14 +42,6 @@ class PostController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
-        $authenticatedUserId = auth()->id();
-
-        $posts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
-            $post->user_has_liked = $post->likes->contains('user_id', $authenticatedUserId);
-            return $post;
-        });
-
-            // dd($posts->toArray());
         return new PostCollection($posts);
     }
 
