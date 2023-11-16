@@ -308,16 +308,15 @@ if (!function_exists('get_subscription_status_string')) { //either active or exp
     function get_subscription_status_string($user)
     {
         $subscription = $user->active_subscription;
+
         if ($subscription) {
             $endsAtDate = Carbon::parse($subscription->ends_at);
 
-            $status = 'active';
-            if ($subscription->quota_left < 1) {
-                $status = 'expired';
-            } elseif ($endsAtDate->isPast()) {
-                $status = 'expired';
+            if ($endsAtDate->isPast()) {
+                return 'expired';
             }
-            return $status;
+
+            return 'active';
         }
         return 'expired';
     }

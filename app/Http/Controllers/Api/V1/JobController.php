@@ -182,7 +182,7 @@ class JobController extends Controller
         $jobIds = collect($res)->pluck('id')->toArray();
 
         $jobs = Job::whereIn('id', $jobIds)
-            // ->where('status', 1)
+            ->where('status', 1)
             ->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
@@ -243,7 +243,7 @@ class JobController extends Controller
         $jobIds = collect($res)->pluck('id')->toArray();
 
         $jobs = Job::whereIn('id', $jobIds)
-            // ->where('status', 1)
+            ->where('status', 1)
             ->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
