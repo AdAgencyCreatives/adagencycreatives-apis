@@ -123,7 +123,7 @@ class JobController extends Controller
         $jobs->getCollection()->transform(function ($job) use ($userApplications) {
             $job['user_has_applied'] = in_array($job->id, $userApplications);
             return $job;
-    });
+        });
 
         return new JobLoggedInCollection($jobs);
     }
@@ -254,7 +254,7 @@ class JobController extends Controller
         $jobs->getCollection()->transform(function ($job) use ($userApplications) {
             $job['user_has_applied'] = in_array($job->id, $userApplications);
             return $job;
-            });
+        });
         return new JobLoggedInCollection($jobs);
     }
 
@@ -345,18 +345,47 @@ class JobController extends Controller
 
                 $subscription->decrement('quota_left', 1);
             }
-            $category = Category::where('uuid', $request->category_id)->first();
-            $state = Location::where('uuid', $request->state_id)->first();
-            $city = Location::where('uuid', $request->city_id)->first();
 
-            $request->merge([
+            if($request->has('category_id')) {
+                $category = Category::where('uuid', $request->category_id)->first();
+                $request->merge([
                 'category_id' => $category->id ?? null,
-                'state_id' => $state->id ?? null,
-                'city_id' => $city->id ?? null,
-                'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
-                'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
-                'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
             ]);
+            }
+
+            if($request->has('state_id')) {
+                $state = Location::where('uuid', $request->state_id)->first();
+                $request->merge([
+                'state_id' => $state->id ?? null,
+            ]);
+            }
+
+            if($request->has('city_id')) {
+                $city = Location::where('uuid', $request->city_id)->first();
+                $request->merge([
+                'city_id' => $city->id ?? null,
+            ]);
+            }
+
+
+            if($request->has('industry_experience')) {
+                $request->merge([
+                'industry_experience' => implode(',', array_slice($request->industry_experience ?? [], 0, 10))
+            ]);
+            }
+
+            if($request->has('media_experience')) {
+                $request->merge([
+                'media_experience' => implode(',', array_slice($request->media_experience ?? [], 0, 10))
+            ]);
+            }
+
+            if($request->has('strengths')) {
+                $request->merge([
+                'strengths' => implode(',', array_slice($request->strengths ?? [], 0, 10))
+            ]);
+            }
+
             $job->update($request->all());
 
             return new JobResource($job);
