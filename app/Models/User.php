@@ -180,7 +180,8 @@ class User extends Authenticatable
 
     public function active_subscription()
     {
-        return $this->hasOne(Subscription::class)->where('quota_left', '>', 0)->latestOfMany();
+        return $this->hasOne(Subscription::class)
+            ->latestOfMany();
     }
 
     public function subscriptions()
