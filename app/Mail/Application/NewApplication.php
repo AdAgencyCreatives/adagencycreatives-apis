@@ -19,6 +19,7 @@ class NewApplication extends Mailable
     {
         $this->data = $data;
         $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['APP_URL'] = env('FRONTEND_URL');
     }
 
 

@@ -10,11 +10,13 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         New Application</h1>
-                    <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
+                    <div
+                        style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
 
                         <p>Great news! A new candidate has applied for your
-                            {{ sprintf('%s', $data['job_title']) }} role on {
-                            {{ $data['APP_NAME'] }} }:</p>
+                            {{ sprintf('%s', $data['job_title']) }} role on
+                            <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
+                        </p>
 
 
                         <div><b>Creative: </b>
