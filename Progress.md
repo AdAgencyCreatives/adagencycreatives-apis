@@ -679,3 +679,20 @@ Admin can
 -   Created separated search api endpoints for differet user roles with different permisisons.
 -   A little tweak in the applications endpoint.
 -   Added filter in bookmarks endpoint.
+
+## 15/11/2023 Post Reaction | Creative Categories
+
+-   Create endpoints for post reactions.
+-   Post reaction module is designed in such a way that it can now handle any number of reactions in the future.
+-   In the post endpoint:
+    -   we are including counts of each reaction.
+    -   user status of reaction for that particular post.
+-   Worked on export of creatives categories.
+-
+
+## 16/11/2023 Subscription Module | Jobs API
+
+-   Create endpoints for jobs full text search.
+-   Customized the subscription module as per request.
+-   Update the Notificaions enable/disable endpoint.
+-   Jobs Module Testing
