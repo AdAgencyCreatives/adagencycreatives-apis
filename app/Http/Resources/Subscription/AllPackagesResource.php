@@ -27,9 +27,8 @@ class AllPackagesResource extends JsonResource
     public function getStatus()
     {
         $endsAtDate = Carbon::parse($this->ends_at);
-        if ($this->quota_left < 1) {
-            return 'Expired';
-        } elseif ($endsAtDate->isPast()) {
+
+        if ($endsAtDate->isPast()) {
             return 'Expired';
         }
 
