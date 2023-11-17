@@ -18,13 +18,15 @@ class ApplicationSubmitted extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['APP_URL'] = env('FRONTEND_URL');
     }
 
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('Application Submitted via {%s}', env('APP_NAME')),
+            subject: sprintf('Application Submitted via %s', $this->data['APP_NAME']),
         );
     }
 
