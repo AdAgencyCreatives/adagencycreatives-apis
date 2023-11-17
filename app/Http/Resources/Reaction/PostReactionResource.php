@@ -6,14 +6,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostReactionResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $user = $this->user;
+
+        return [
+            'id' => $this->id,
+            'uuid' => $this->uuid,
+            'user_id' => $user->uuid,
+            'post_id' => $this->post->uuid,
+            'user' => $user->full_name,
+            'profile_picture' => get_profile_picture($user),
+            'reaction_type' => $this->type,
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
+        ];
     }
 }

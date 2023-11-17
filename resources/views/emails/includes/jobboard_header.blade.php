@@ -28,6 +28,11 @@
             /* Remove underline */
         }
 
+        #footer a {
+            color: #ffffff !important;
+            text-decoration: underline !important;
+        }
+
         /* What it does: Stops email clients resizing small text. */
         * {
             -ms-text-size-adjust: 100%;

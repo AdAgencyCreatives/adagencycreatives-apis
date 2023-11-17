@@ -61,11 +61,6 @@ Route::get('/users2', function () {
     }
 });
 
-Route::get('/tesss', function () {
-
-    $activateLink = route('user.activate', ['uuid' => 'ba1002d2-1503-476c-9b39-47f1777d0701']);
-dd($activateLink);
-});
 
 Route::get('/email', function () {
 
@@ -102,6 +97,8 @@ Route::get('/user/deny/{uuid}', [UserController::class, 'deactivate'])->name('us
 
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('advisor/impersonate/{user}', [UserController::class, 'advisor_impersonate'])->name('advisor.impersonate');
 
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies
@@ -263,7 +260,7 @@ Route::get('all-messages', [ChatController::class, 'fetchMessages']);
 // Extras
 Route::get('get_uuids', function () {
     create_notification(1, 'This is test');
-    $agency_user = User::find(2)->uuid;
+    $agency_user = User::where('role', 3)->first()->uuid;
     $creative_user = User::find(10)->uuid;
     $advisor_user = User::find(16)->uuid;
     $category = Category::find(5)->uuid;

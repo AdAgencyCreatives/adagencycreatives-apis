@@ -262,6 +262,7 @@ class Job extends Model
                         'job' => $job,
                         'category' => $category->name,
                         'author' => $author->first_name,
+                        'agency' => $author->agency?->name,
                     ],
                     'receiver' => User::find(1),
                 ];
@@ -286,14 +287,15 @@ class Job extends Model
                 $category = Category::find($job->category_id);
                 $data = [
                     'email_data' => [
-                        'title' => $job->title,
-                        'url' => env('FRONTEND_JOB_URL'),
+                        'title' => $job->title ?? '',
+                        'url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug) ,
+                        'agency' => $job->user?->agency?->name,
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
 
-                create_notification($job->user_id, sprintf('Job: %s approved.', $job->title));
+                create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
             }
 

@@ -26,7 +26,7 @@
             class="footer_text_color footer_text_size">
             <div style="text-align:center;">
                 <div>© 2023 Ad Agency Creatives. All Rights Reserved.</div>
-                <div style="margin-top: 5px; display: flex; gap: 15px; justify-content: center;">
+                <div style="margin-top: 5px; display: flex; gap: 15px; justify-content: center;" id="footer">
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/terms-and-conditions/">User
                         Agreement</a>
