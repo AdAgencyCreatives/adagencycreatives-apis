@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'broadcasting/auth', 'sanctum/csrf-cookie'],
+    // 'paths' => ['api/*', 'sanctum/csrf-cookie', 'broadcasting/auth', 'sanctum/csrf-cookie'],
 
-    // 'paths' => ['*'],
+    'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
-    // 'allowed_origins' => ['*'],
+    'allowed_origins' => ['*'],
 
-    'allowed_origins' => ['*', 'https://adagencycreatives.noorsofttechdev.com', 'http://localhost:1234'],
+    // 'allowed_origins' => ['*', 'https://adagencycreatives.noorsofttechdev.com', 'http://localhost:1234'],
 
     'allowed_origins_patterns' => [],
 
