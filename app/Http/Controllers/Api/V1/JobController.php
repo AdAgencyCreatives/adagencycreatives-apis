@@ -322,7 +322,6 @@ class JobController extends Controller
 
     public function update(Request $request, $uuid)
     {
-        // dd($request->all());
         try {
             $job = Job::where('uuid', $uuid)->firstOrFail();
 
@@ -344,6 +343,9 @@ class JobController extends Controller
                 }
 
                 $subscription->decrement('quota_left', 1);
+                $request->merge([
+                'status' => 'approved'
+            ]);
             }
 
             if($request->has('category_id')) {

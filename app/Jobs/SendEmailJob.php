@@ -36,6 +36,11 @@ class SendEmailJob implements ShouldQueue
     {
         $this->data = $data;
         $this->emailType = $emailType;
+
+        $adminEmail = 'admin@example.com';
+
+        // Set the admin email address for all cases
+        // $this->data['receiver'] = $adminEmail;
     }
 
     public function handle()
