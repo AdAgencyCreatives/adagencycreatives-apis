@@ -25,9 +25,10 @@ class GroupController extends Controller
     {
         $query = QueryBuilder::for(Group::class)
             ->allowedFilters([
+                AllowedFilter::scope('user_id'), //group created by user
+                AllowedFilter::scope('member_id'), // This filter will return groups where the user is a member
                 'name',
                 'status',
-                AllowedFilter::scope('user_id'),
             ])
             ->allowedSorts('created_at');
 

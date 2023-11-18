@@ -40,7 +40,15 @@ class ApplicationController extends Controller
     {
         $applicant_user = User::where('uuid', $request->user_id)->first();
         $job = Job::where('uuid', $request->job_id)->first();
-        $attachment = Attachment::where('uuid', $request->resume_id)->first();
+        // $attachment = Attachment::where('uuid', $request->resume_id)->first();
+
+        $existingApplication = Application::where('user_id', $applicant_user->id)
+        ->where('job_id', $job->id)
+        ->first();
+
+        if ($existingApplication) {
+            return ApiResponse::error('You have already applied for this job.', 400);
+        }
 
         $agency_user = $job->user;
 
