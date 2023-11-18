@@ -18,12 +18,6 @@ class UpdateUserStatus extends Command
         $jsonContents = file_get_contents($jsonFilePath);
         $usersData = json_decode($jsonContents, true);
 
-        $user_roles['creative'] = Role::findByName('creative');
-        $user_roles['agency'] = Role::findByName('agency');
-        $user_roles['advisor'] = Role::findByName('advisor');
-        $user_roles['admin'] = Role::findByName('admin');
-
-        $now = now();
         foreach ($usersData as $userData) {
             $this->updateUser($userData);
         }
@@ -34,6 +28,9 @@ class UpdateUserStatus extends Command
     private function updateUser($userData)
     {
         $user = User::where('email', $userData['user_email'])->first();
+        if(!$user){
+            return;
+        }
 
         $status = $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved');
         dump($status);
