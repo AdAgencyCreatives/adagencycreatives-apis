@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('media_experience')->nullable();
             $table->boolean('is_opentorelocation')->default(0);
             $table->boolean('is_opentoremote')->default(0);
-            $table->text('remarks')->nullable();
+            $table->text('comment')->nullable();
             $table->unsignedBigInteger('plan_id')->nullable();
             $table->string('package')->nullable();
             $table->boolean('status')->default(false);

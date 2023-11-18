@@ -28,7 +28,8 @@ class GroupController extends Controller
                 'name',
                 'status',
                 AllowedFilter::scope('user_id'),
-            ]);
+            ])
+            ->allowedSorts('created_at');
 
         $groups = $query->with('attachment')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
@@ -109,6 +110,8 @@ class GroupController extends Controller
     {
         try {
             $group = Group::where('uuid', $uuid)->firstOrFail();
+
+            GroupMember::where('group_id', $group->id)->delete();
             $group->delete();
 
             return new GroupResource($group);

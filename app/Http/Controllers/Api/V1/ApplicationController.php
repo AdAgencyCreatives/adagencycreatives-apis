@@ -68,6 +68,7 @@ class ApplicationController extends Controller
             SendEmailJob::dispatch([
                 'receiver' => $agency_user,
                 'data' => [
+                    'receiver_name' => $agency_user->first_name ?? $agency_user->username,
                     'applicant' => $applicant_user,
                     'job_title' => $job->title,
                     'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug),

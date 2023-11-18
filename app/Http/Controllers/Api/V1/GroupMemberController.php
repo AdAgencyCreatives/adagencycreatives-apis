@@ -24,7 +24,8 @@ class GroupMemberController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('group_id'),
                 'role'
-            ]);
+            ])
+            ->allowedSorts('created_at');
 
         $group_members = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

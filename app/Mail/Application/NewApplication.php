@@ -26,7 +26,7 @@ class NewApplication extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('You have a new applicant for your %s role! %s,', $this->data['job_title'], $this->data['applicant']->first_name),
+            subject: sprintf('You have a new applicant for your "%s" role!', $this->data['job_title']),
         );
     }
 
