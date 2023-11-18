@@ -23,6 +23,7 @@ class GroupMemberController extends Controller
         $query = QueryBuilder::for(GroupMember::class)
             ->allowedFilters([
                 AllowedFilter::scope('group_id'),
+                AllowedFilter::scope('user_id'),
                 'role'
             ])
             ->allowedSorts('created_at');
