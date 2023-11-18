@@ -153,6 +153,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Community Routes
      */
+    Route::post('groups/update/{group}', [GroupController::class, 'update']);
     Route::apiResource('groups', GroupController::class);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
     Route::get('trending_posts', [PostController::class, 'trending_posts']);
