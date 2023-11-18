@@ -268,6 +268,17 @@ if (!function_exists('get_profile_picture')) {
     }
 }
 
+if (!function_exists('get_resume')) {
+    function get_resume($user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath() . $user->resume->path;
+        } else {
+            return route('download.resume', $user->uuid);
+        }
+    }
+}
+
 if (!function_exists('get_location')) {
     function get_location($user)
     {

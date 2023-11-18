@@ -42,6 +42,19 @@ class AttachmentController extends Controller
         try {
             $user = User::where('uuid', $request->user_id)->first();
             $resource_type = $request->resource_type;
+
+            if(in_array($resource_type, ['resume', 'profile_picture'])) {
+                // Check if there's an existing attachment of the same type and delete it
+                $existingAttachment = $user->attachments()
+                    ->where('resource_type',  $resource_type  )
+                    ->first();
+
+                if ($existingAttachment) {
+                    // Delete the previous attachment
+                    $existingAttachment->delete();
+                }
+            }
+
             $attachment = storeImage($request, $user->id, $resource_type);
 
             return new AttachmentResource($attachment);

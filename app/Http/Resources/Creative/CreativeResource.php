@@ -47,7 +47,7 @@ class CreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $this->get_phone_number($user),
             'location' => $this->location,
-            'resume' => $this->get_resume($user),
+            'resume' => get_resume($user),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
@@ -73,15 +73,7 @@ class CreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user)
-    {
-        if (isset($user->resume)) {
-            return getAttachmentBasePath() . $user->resume->path;
-        } else {
-            return route('download.resume', $user->uuid);
-        }
 
-    }
 
     public function get_website_preview($user)
     {
