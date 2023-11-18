@@ -101,6 +101,8 @@ class Application extends Model
     {
         static::updating(function ($application) {
 
+
+
             $oldStatus = $application->getOriginal('status');
             if ($oldStatus == 'pending' && in_array($application->status , ['archived', 'rejected'])) {
 
@@ -114,9 +116,27 @@ class Application extends Model
                     ]
 
                 ];
-
-                create_notification($applicant->id, sprintf('Application status on "%s" job updated.', $job->title));
+                create_notification($applicant->id, sprintf('Application rejected on "%s" job.', $job->title));
                 SendEmailJob::dispatch($data, 'application_removed_by_agency');
+            }
+
+            if ($oldStatus == 'pending' && in_array($application->status , ['accepted'])) {
+
+                $job = Job::where('id', $application->job_id)->first();
+                $agency = $job->agency;
+                $applicant = $application->user;
+
+                $data = [
+                    'receiver' => $applicant,
+                    'data' => [
+                        'applicant' => $applicant->first_name ?? '',
+                        'job_title' => $job->title ?? '',
+                        'agency_name' => $agency->name ?? '',
+                    ]
+
+                ];
+                create_notification($applicant->id, sprintf('Application accepted on "%s" job.', $job->title));
+                SendEmailJob::dispatch($data, 'agency_is_interested');
             }
 
         });

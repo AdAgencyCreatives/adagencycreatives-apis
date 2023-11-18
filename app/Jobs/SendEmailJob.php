@@ -7,6 +7,7 @@ use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Application\ApplicationSubmitted;
+use App\Mail\Application\Interested;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\Friend\FriendshipRequest;
@@ -105,6 +106,9 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'application_removed_by_agency':
                 Mail::to($this->data['receiver'])->send(new Removed($this->data['data'])); // To the applicant
+                break;
+            case 'agency_is_interested':
+                Mail::to($this->data['receiver'])->send(new Interested($this->data['data'])); // To the applicant
                 break;
 
 
