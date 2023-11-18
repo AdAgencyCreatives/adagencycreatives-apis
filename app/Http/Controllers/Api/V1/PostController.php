@@ -118,12 +118,16 @@ class PostController extends Controller
             $post->update($request->all());
 
             if ($request->has('attachment_ids')) {
-                foreach ($post->attachments as $attachment) {
-                    $attachment->delete();
-                }
+                $new_attachments = Attachment::whereIn('uuid', $request->attachment_ids)->get();
+                $post_existing_attachments = Attachment::where('resource_id', $post->id)->get();
 
-                $attachments = Attachment::whereIn('uuid', $request->attachment_ids)->get();
-                $post->attachments()->saveMany($attachments);
+                // delete those attachments which are not in new_attachments
+                foreach ($post_existing_attachments as $post_existing_attachment) {
+                    if (!$new_attachments->contains('uuid', $post_existing_attachment->uuid)) {
+                        $post_existing_attachment->delete();
+                    }
+                }
+                $post->attachments()->saveMany($new_attachments);
             }
 
             return new PostResource($post);
