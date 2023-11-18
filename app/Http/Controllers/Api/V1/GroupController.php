@@ -53,6 +53,14 @@ class GroupController extends Controller
             'status' => $request->status ?? 'public',
         ]);
 
+        GroupMember::create([
+            'uuid' => Str::uuid(),
+            'group_id' => $group->id,
+            'user_id' => $user->id,
+            'role' => 'admin',
+            'joined_at' => now(),
+        ]);
+
         if ($request->hasFile('file')) {
             $attachment = storeImage($request, $user->id, 'cover_image');
 
