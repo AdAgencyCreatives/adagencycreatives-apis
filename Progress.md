@@ -688,7 +688,6 @@ Admin can
     -   we are including counts of each reaction.
     -   user status of reaction for that particular post.
 -   Worked on export of creatives categories.
--
 
 ## 16/11/2023 Subscription Module | Jobs API
 
@@ -696,3 +695,13 @@ Admin can
 -   Customized the subscription module as per request.
 -   Update the Notificaions enable/disable endpoint.
 -   Jobs Module Testing
+
+## 17/11/2023 Job - Application Emails
+
+-   Created emails for following:
+    -   New Job submitted(to amdin)
+    -   New Job Added (to creative)
+    -   When creative adds applicaiton (application submitted)
+    -   New application (to agency)
+-   CORS issue fixed in reset password
+-   Some bug fixes
