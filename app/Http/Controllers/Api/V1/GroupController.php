@@ -31,7 +31,8 @@ class GroupController extends Controller
             ]);
 
         $groups = $query->with('attachment')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new GroupCollection($groups);
     }

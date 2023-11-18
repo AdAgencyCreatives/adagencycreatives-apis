@@ -48,7 +48,7 @@ class ApplicationController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $applicant_user->id,
             'job_id' => $job->id,
-            'attachment_id' => $attachment->id ?? null,
+            // 'attachment_id' => $attachment->id ?? null,
             'status' => 0,
         ]);
 
@@ -63,12 +63,7 @@ class ApplicationController extends Controller
                 ],
             ], 'application_submitted');
 
-            $resume_url = "";
-            if (isset($applicant_user->resume)) {
-                $resume_url = getAttachmentBasePath() . $applicant_user->resume->path;
-            } else {
-                $resume_url = route('download.resume', $applicant_user->uuid);
-            }
+            $resume_url = get_resume($applicant_user);
 
             SendEmailJob::dispatch([
                 'receiver' => $agency_user,
