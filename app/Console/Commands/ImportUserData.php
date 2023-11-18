@@ -44,8 +44,8 @@ class ImportUserData extends Command
         $user->password = $userData['user_pass'];
         $role = $this->mapUserRole($userData['user_meta']['wp_capabilities'][0]);
         $user->role = $role;
-         // $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved', $user);
-
+        $status = $this->mapUserStatus($userData['user_meta']['user_account_status'][0] ?? 'approved');
+        $user->status = $status;
         $userRegisteredTimestamp = strtotime($userData['user_registered']);
         $user->created_at = Carbon::createFromTimestamp($userRegisteredTimestamp);
 
@@ -53,15 +53,12 @@ class ImportUserData extends Command
 
         if($role == 'creative'){
             $user->assignRole($user_roles['creative']);
-            $user->status = 'inactive';
         }
         elseif($role == 'agency'){
             $user->assignRole($user_roles['agency']);
-            $user->status = 'inactive';
 
         }elseif($role == 'advisor'){
             $user->assignRole($user_roles['advisor']);
-            $user->status = 'active';
 
         }elseif($role == 'admin'){
             $user->assignRole($user_roles['admin']);
@@ -90,7 +87,7 @@ class ImportUserData extends Command
         return null; // Return null for unhandled cases
     }
 
-    private function mapUserStatus($accountStatus, $user)
+    private function mapUserStatus($accountStatus)
     {
         $statusMapping = [
             'approved' => 'active',  // Active status
@@ -98,5 +95,6 @@ class ImportUserData extends Command
         ];
 
         return $statusMapping[$accountStatus] ?? 'pending'; // Default to pending status if not found
-    }
+
+   }
 }

@@ -114,7 +114,7 @@ class ImportCreatives extends Command
             $creative->views = $data['post_meta']['_viewed_count'][0];
         }
 
-        $user->status = 'active';
+        // $user->status = 'active';
         $user->save();
         $creative->save();
     }
