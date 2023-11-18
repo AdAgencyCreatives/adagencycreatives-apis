@@ -13,6 +13,7 @@ use App\Http\Resources\Job\JobLoggedInCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
@@ -279,6 +280,15 @@ class JobController extends Controller
 
         try {
             $job = Job::create($request->all());
+
+            if ($request->hasFile('file')) {
+                $attachment = storeImage($request, $user->id, 'sub_agency_logo');
+                if (isset($attachment) && is_object($attachment)) {
+                    Attachment::whereId($attachment->id)->update([
+                        'resource_id' => $job->id,
+                    ]);
+                }
+            }
 
             create_notification($user->id, 'Job submitted successfully.');
 
