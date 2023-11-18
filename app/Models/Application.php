@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class Application extends Model
         'PENDING' => 0,
         'ACCEPTED' => 1,
         'REJECTED' => 2,
+        'ARCHIVED' => 3, // Application will remove from agency frontend, but it will still exist in the database, so that candidate can't submit the application again.
     ];
 
     public function user()
@@ -55,6 +57,8 @@ class Application extends Model
                 return 'accepted';
             case Application::STATUSES['REJECTED']:
                 return 'rejected';
+            case Application::STATUSES['ARCHIVED']:
+                return 'archived';
 
             default:
                 return null;
@@ -70,6 +74,9 @@ class Application extends Model
             case 'rejected':
                 $this->attributes['status'] = Application::STATUSES['REJECTED'];
                 break;
+            case 'archived':
+                $this->attributes['status'] = Application::STATUSES['ARCHIVED'];
+                break;
             default:
                 $this->attributes['status'] = Application::STATUSES['PENDING'];
                 break;
@@ -79,9 +86,7 @@ class Application extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
-
         return $query->where('user_id', $user->id);
-
     }
 
     public function scopeJobId(Builder $query, $job_id)
@@ -90,5 +95,30 @@ class Application extends Model
         if ($job) {
             return $query->where('job_id', $job->id);
         }
+    }
+
+    protected static function booted()
+    {
+        static::updating(function ($application) {
+
+            $oldStatus = $application->getOriginal('status');
+            if ($oldStatus == 'pending' && in_array($application->status , ['archived', 'rejected'])) {
+
+                $job = Job::where('id', $application->job_id)->first();
+                $applicant = $application->user;
+                $data = [
+                    'receiver' => $applicant,
+                    'data' => [
+                        'applicant' => $applicant->first_name ?? '',
+                        'job_title' => $job->title ?? '',
+                    ]
+
+                ];
+
+                create_notification($applicant->id, sprintf('Application status on "%s" job updated.', $job->title));
+                SendEmailJob::dispatch($data, 'application_removed_by_agency');
+            }
+
+        });
     }
 }
