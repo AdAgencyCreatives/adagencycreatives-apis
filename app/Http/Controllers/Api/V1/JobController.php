@@ -457,9 +457,9 @@ class JobController extends Controller
                 'receiver' => $invitee,
                 'data' => [
                     'receiver_name' => $invitee->first_name,
-                    'agency_name' => $job->user->agency->name,
+                    'agency_name' => $job->user?->agency?->name ?? '',
                     'job_title' => $job->title,
-                    'job_url' => $job->slug,
+                    'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug) ,
                 ],
             ], 'job_invitation');
 
