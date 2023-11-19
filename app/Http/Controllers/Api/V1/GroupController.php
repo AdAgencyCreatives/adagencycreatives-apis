@@ -27,6 +27,7 @@ class GroupController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'), //group created by user
                 AllowedFilter::scope('member_id'), // This filter will return groups where the user is a member
+                'uuid',
                 'name',
                 'status',
             ])
