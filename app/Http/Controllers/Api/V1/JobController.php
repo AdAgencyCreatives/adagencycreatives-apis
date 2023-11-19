@@ -11,7 +11,6 @@ use App\Http\Requests\Job\UpdateJobRequest;
 use App\Http\Resources\Job\JobCollection;
 use App\Http\Resources\Job\JobLoggedInCollection;
 use App\Http\Resources\Job\JobResource;
-use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -447,29 +446,7 @@ class JobController extends Controller
         return $users;
     }
 
-    public function job_invitation(StoreJobInvitationRequest $request)
-    {
-        $invitee = User::where('uuid', $request->receiver_id)->first();
-        $job = Job::with('user.agency')->where('uuid', $request->job_id)->first();
 
-        try {
-            SendEmailJob::dispatch([
-                'receiver' => $invitee,
-                'data' => [
-                    'receiver_name' => $invitee->first_name,
-                    'agency_name' => $job->user?->agency?->name ?? '',
-                    'job_title' => $job->title,
-                    'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug) ,
-                ],
-            ], 'job_invitation');
-
-            return response()->json([
-                'message' => 'Job invitation sent successfully',
-            ]);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'CS-01');
-        }
-    }
 
 
 
