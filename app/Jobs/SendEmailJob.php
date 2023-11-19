@@ -8,6 +8,7 @@ use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
+use App\Mail\Application\InviteCreative;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\Friend\FriendshipRequest;
