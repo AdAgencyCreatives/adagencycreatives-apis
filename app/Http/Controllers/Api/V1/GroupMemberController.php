@@ -81,11 +81,8 @@ class GroupMemberController extends Controller
 
     public function destroy(Request $request, $uuid)
     {
-        $group = Group::where('uuid', $request->group_id)->firstOrFail();
-        $user = User::where('uuid', $uuid)->firstOrFail();
-
         try {
-            $group_member = GroupMember::where('user_id', $user->id)->where('group_id', $group->id)->firstOrFail();
+            $group_member = GroupMember::where('uuid', $uuid)->firstOrFail();
             $group_member->delete();
 
             return ApiResponse::success(new GroupMemberResource($group_member), 200);
