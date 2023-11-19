@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\InvitationController;
-use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\GroupMemberController;
 use App\Http\Controllers\Api\V1\GroupController;
+use App\Http\Controllers\Api\V1\JobInvitationController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Job Invitation
      */
-    Route::post('job-invitation', [JobController::class, 'job_invitation']);
+    Route::post('job-invitation', [JobInvitationController::class, 'job_invitation']);
 
     /**
      * Friendship Invitataion
