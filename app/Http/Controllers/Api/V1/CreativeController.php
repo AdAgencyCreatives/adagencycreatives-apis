@@ -442,8 +442,8 @@ class CreativeController extends Controller
                 $userData['last_name'] = $request->last_name;
             }
 
-            if ($request->filled('username')) {
-                $userData['username'] = $request->username;
+            if ($request->filled('slug')) {
+                $userData['username'] = $request->slug;
             }
 
             if ($request->filled('show_profile')) {
@@ -458,11 +458,11 @@ class CreativeController extends Controller
             if ($request->has('phone_number')) {
                 updatePhone($user, $request->phone_number, 'personal');
             }
-            if ($request->input('linkedin')) {
-                updateLink($user, $request->input('linkedin'), 'linkedin');
+            if ($request->input('linkedin_profile')) {
+                updateLink($user, $request->input('linkedin_profile'), 'linkedin');
             }
-            if ($request->input('portfolio_website')) {
-                updateLink($user, $request->input('portfolio_website'), 'portfolio_website');
+            if ($request->input('portfolio_site')) {
+                updateLink($user, $request->input('portfolio_site'), 'portfolio_website');
             }
 
             return response()->json([
