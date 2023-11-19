@@ -16,7 +16,8 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['applicant'] }},</span>
 
-                        <p>The status of one of your job applications on {{ $data['APP_NAME'] }} has changed.
+                        <p>The status of one of your job applications on <a href="{{ $data['APP_URL'] }}"
+                                target="_blank">{{ $data['APP_NAME'] }}</a> has changed.
                         </p>
 
                         <p>Unfortunately, <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>

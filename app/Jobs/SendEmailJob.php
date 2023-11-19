@@ -20,6 +20,7 @@ use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
 use App\Mail\Message\UnreadMessage;
 use App\Mail\Order\ConfirmationAdmin;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,15 +36,19 @@ class SendEmailJob implements ShouldQueue
 
     protected $emailType;
 
+    protected $adminEmail;
+
     public function __construct($data, $emailType)
     {
         $this->data = $data;
         $this->emailType = $emailType;
 
-        $adminEmail = 'admin@example.com';
+        $this->adminEmail = User::where('email', 'erikaudstuen@gmail.com')->first();
+        // $this->adminEmail = User::where('email', '6793siddique@gmail.com')->first();
+
 
         // Set the admin email address for all cases
-        // $this->data['receiver'] = $adminEmail;
+        $this->data['receiver'] = $this->adminEmail;
     }
 
     public function handle()
@@ -78,7 +83,8 @@ class SendEmailJob implements ShouldQueue
                 $email_data = $this->data['email_data'];
                 $subscribers = $this->data['subscribers'];
                 foreach ($subscribers as $subscriber) {
-                    Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
+                    // Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
+                    Mail::to($this->adminEmail)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
                 }
                 break;
 
