@@ -71,7 +71,7 @@ class Group extends Model
     public function scopeMemberId(Builder $query, $user_id)
     {
         $user_id = User::where('uuid', $user_id)->pluck('id');
-        $group_id = GroupMember::where('user_id', $user_id)->pluck('group_id');
+        $group_id = GroupMember::where('user_id', $user_id)->where('role', '!=', 1)->pluck('group_id');
         return $query->whereIn('id', $group_id);
     }
 
