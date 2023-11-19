@@ -27,6 +27,7 @@ class PackageRequestController extends Controller
         $query = QueryBuilder::for(PackageRequest::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('assigned_to'),
                 'status',
             ])
             ->defaultSort('-created_at')
@@ -89,26 +90,19 @@ class PackageRequestController extends Controller
     public function get_assigned_agencies()
     {
         try {
-
-            // Find the user by UUID
             $user = request()->user();
-
             // Retrieve package requests for the user
-            $packageRequests = PackageRequest::select('user_id')
-                ->where('assigned_to', $user->id)
+            $packageRequests = PackageRequest::where('assigned_to', $user->id)
                 ->where('status', 1) //only approved
-                ->pluck('user_id')
-                ->toArray();
-
-            // dd($packageRequests);
-
-            // Retrieve agencies for the package requests
-            $agencies = User::with('agency')
-                ->whereIn('id', $packageRequests)
                 ->get();
 
-            // dd($agencies->toArray());
-            return new AssignedAgencyCollection($agencies);
+            // Retrieve agencies for the package requests
+            // $agencies = User::with('agency')
+            //     ->whereIn('id', $packageRequests)
+            //     ->get();
+
+            // dd($packageRequests->toArray());
+            return new AssignedAgencyCollection($packageRequests);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {

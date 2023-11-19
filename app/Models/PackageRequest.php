@@ -26,6 +26,7 @@ class PackageRequest extends Model
         'media_experience',
         'is_opentorelocation',
         'is_opentoremote',
+        'comment',
     ];
 
     public function user()
@@ -61,8 +62,13 @@ class PackageRequest extends Model
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
-
         return $query->where('user_id', $user->id);
+    }
+
+    public function scopeAssignedTo(Builder $query, $user_id): Builder
+    {
+        $user = User::where('uuid', $user_id)->firstOrFail();
+        return $query->where('assigned_to', $user->id);
     }
 
     public function getStatusAttribute($value)

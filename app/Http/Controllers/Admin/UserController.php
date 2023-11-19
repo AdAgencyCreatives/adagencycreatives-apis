@@ -137,6 +137,15 @@ class UserController extends Controller
         exit();
     }
 
+    public function advisor_impersonate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+        $token = $user->createToken('impersonation_token')->plainTextToken;
+        $url = sprintf('Location: %s/%s', env('FRONTEND_IMPERSONATE_URL'), $token);
+        header($url);
+        exit();
+    }
+
 
     public function update_profile_picture(Request $request, $id)
     {
