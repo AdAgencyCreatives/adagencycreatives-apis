@@ -64,6 +64,8 @@ Route::get('/users2', function () {
 
 Route::get('/email', function () {
 
+
+    return view('emails.application.interested');
     $recipient = User::find(2);
     $sender = User::find(4);
 
@@ -95,10 +97,10 @@ Route::get('download/resume/{uuid}', [ResumeController::class, 'download_resume'
 Route::get('/user/approve/{uuid}', [UserController::class, 'activate'])->name('user.activate');
 Route::get('/user/deny/{uuid}', [UserController::class, 'deactivate'])->name('user.deactivate');
 
+Route::get('advisor/impersonate/{uuid}', [UserController::class, 'advisor_impersonate'])->name('advisor.impersonate');
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('advisor/impersonate/{user}', [UserController::class, 'advisor_impersonate'])->name('advisor.impersonate');
 
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies
