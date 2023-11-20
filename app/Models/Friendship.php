@@ -29,4 +29,16 @@ class Friendship extends Model
     {
         return $this->belongsTo(User::class, 'user2_id');
     }
+
+    protected static function booted()
+    {
+        static::deleted(function ($friendship) {
+            $friendship = FriendRequest::where('sender_id', $friendship->user1_id)
+            ->where('receiver_id', $friendship->user2_id)->update([
+                'status' => 'unfriended'
+            ]);
+        });
+
+
+    }
 }
