@@ -52,7 +52,7 @@ class LoggedinCreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
-            'resume' => $this->get_resume($user, $logged_in_user, $subscription_status),
+            'resume' => $this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
@@ -106,9 +106,10 @@ class LoggedinCreativeResource extends JsonResource
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
-    public function get_resume($user, $logged_in_user, $subscription_status)
+    public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
     {
         // dd($subscription_status);
+        //User is viewing his own profile
         if($logged_in_user->id == $user->id) {
             return $this->get_resume_url($user);
         }
@@ -117,7 +118,7 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'creative') {
+        if ($logged_in_user->role === 'creative' && !$is_friend) {
             return null;
         }
 

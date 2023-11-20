@@ -26,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="linkedin">LinkedIn Profile</label>
-                                <input type="url" class="form-control" name="linkedin"
+                                <input type="text" class="form-control" name="linkedin"
                                     placeholder="LinkedIn Profile"
                                     value="{{ $user->links->where('label', 'linkedin')->first()?->url }}">
                                 </select>

@@ -705,3 +705,17 @@ Admin can
     -   New application (to agency)
 -   CORS issue fixed in reset password
 -   Some bug fixes
+
+## 20/11/2023 Application Status Emails
+
+-   Created emails for following:
+    -   Application accepted
+    -   Aplication Rejected
+
+## 21/11/2023 Add Group Members
+
+-   Admin can add members in group
+-   Admin can delete member from group
+-   Resume url changed and bug fixed
+-   Tested the app flow and comiled the bug list.
+-   Redirected all emails to admin email.
