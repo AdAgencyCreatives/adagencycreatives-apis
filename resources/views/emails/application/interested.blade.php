@@ -13,6 +13,9 @@
                     <div
                         style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
 
+                        <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
+                            {{ $data['applicant'] }},</span>
+
                         <p>The hiring team at {{ $data['agency_name'] }} has reviewed your application for
                             {{ $data['job_title'] }}.
                             Each company's hiring process is based on their own unique policies, but things

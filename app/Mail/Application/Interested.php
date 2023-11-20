@@ -26,7 +26,7 @@ class Interested extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s application status update %s,', $this->data['APP_NAME'], $this->data['applicant']),
+            subject: sprintf('%s application status update', $this->data['APP_NAME']),
         );
     }
 
