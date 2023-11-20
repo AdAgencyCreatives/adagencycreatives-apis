@@ -94,7 +94,7 @@ Route::get('/reset-messages', function () {
 });
 
 // Download Resume
-Route::get('download/resume/{uuid}', [ResumeController::class, 'download_resume'])->name('download.resume');
+Route::get('download/resume', [ResumeController::class, 'check_download_resume_permission'])->name('download.resume');
 
 // Approve | Deny User from email
 Route::get('/user/approve/{uuid}', [UserController::class, 'activate'])->name('user.activate');

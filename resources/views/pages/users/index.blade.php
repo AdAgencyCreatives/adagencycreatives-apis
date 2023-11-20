@@ -72,10 +72,9 @@
                     populateTable(response.data);
                     updatePaginationButtons(response.links, response.meta.links);
                     updateTableInfo(response.meta);
-
                 },
                 error: function() {
-                    alert('Failed to fetch users from the API.');
+                    alert('Nothing found');
                 }
             });
         }

@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Resume Download</title>
     <style>
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
         .mt-0 {
             margin-top: 0;
         }
@@ -98,7 +103,7 @@
     </section>
     <section>
         <h2>About</h2>
-        <p>{{ $data['about'] ?? '' }}</p>
+        <p>{{ strip_tags($data['about']) ?? '' }}</p>
     </section>
 
     @if (!is_null($portfolio_website_preview_img))
@@ -201,7 +206,7 @@
     @endif
 
     <script>
-        window.print()
+        // window.print()
     </script>
 </body>
 

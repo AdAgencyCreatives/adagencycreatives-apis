@@ -108,10 +108,9 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
     {
-        // dd($subscription_status);
         //User is viewing his own profile
         if($logged_in_user->id == $user->id) {
-            return $this->get_resume_url($user);
+            return $this->get_resume_url($user, $logged_in_user);
         }
 
         if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
@@ -122,17 +121,17 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        return $this->get_resume_url($user);
+        return $this->get_resume_url($user, $logged_in_user);
 
     }
 
-    private function get_resume_url($user)
+    private function get_resume_url($user, $logged_in_user)
     {
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;
         } else {
-            $queryParams = sprintf("%s_%s_Ad_Agency_Creatives_%s", $user->first_name, $user->last_name, date("Y"));
-            return route('download.resume', ['uuid' => $user->id]) . '?' . $queryParams;
+             $resume_filename = sprintf("%s_%s_Ad_Agency_Creatives_%s", $user->first_name, $user->last_name, date("Y"));
+             return route('download.resume', ['name' => $resume_filename,'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
         }
     }
 
