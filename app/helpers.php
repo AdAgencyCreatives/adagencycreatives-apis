@@ -274,7 +274,7 @@ if (!function_exists('get_resume')) {
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;
         } else {
-            return route('download.resume', $user->uuid);
+            return route('download.resume', $user->id);
         }
     }
 }

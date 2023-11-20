@@ -143,7 +143,7 @@
         </div>
         <div>
             <p>Type of Work</p>
-            <p> {{ $data['years_of_experience'] ?? '' }}</p>
+            <p> {{ $data['employment_type'] ?? '' }}</p>
         </div>
     </section>
     <section>
