@@ -21,12 +21,12 @@ class Friendship extends Model
 
     public function initiatedByUser()
     {
-        return $this->belongsTo(User::class, 'user1_id')->where('status', 1);
+        return $this->belongsTo(User::class, 'user1_id');
     }
 
     // Relationship for the user who received the friendship (user2)
     public function receivedByUser()
     {
-        return $this->belongsTo(User::class, 'user2_id')->where('status', 1);
+        return $this->belongsTo(User::class, 'user2_id');
     }
 }
