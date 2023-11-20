@@ -130,7 +130,8 @@ class LoggedinCreativeResource extends JsonResource
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;
         } else {
-            return route('download.resume', $user->uuid);
+            $queryParams = sprintf("%s_%s_Ad_Agency_Creatives_%s", $user->first_name, $user->last_name, date("Y"));
+            return route('download.resume', ['uuid' => $user->id]) . '?' . $queryParams;
         }
     }
 

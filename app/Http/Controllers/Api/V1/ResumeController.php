@@ -85,7 +85,7 @@ class ResumeController extends Controller
 
     public function download_resume($uuid)
     {
-        $user = User::where('uuid', $uuid)->firstOrFail();
+        $user = User::where('id', $uuid)->firstOrFail();
 
         $creative = Creative::with([
             'user.profile_picture',

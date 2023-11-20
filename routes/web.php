@@ -64,8 +64,11 @@ Route::get('/users2', function () {
 
 Route::get('/email', function () {
 
-
-    return view('emails.application.interested');
+    $data = [
+        'agency_name' => 'Recipient',
+        'job_title' => 'Custom MEssage',
+    ];
+    return view('emails.application.interested', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
