@@ -259,9 +259,13 @@ class User extends Authenticatable
 
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
     {
-        $agency = Agency::where('slug', $company_slug)->firstOrFail();
-
-        return $query->where('id', $agency->user_id);
+        $agency = Agency::where('slug', $company_slug)->first();
+        if($agency){
+            return $query->where('id', $agency->user_id);
+        }
+        else{
+            return $query->where('id', 0);
+        }
     }
 
     public function getRoleAttribute($value)

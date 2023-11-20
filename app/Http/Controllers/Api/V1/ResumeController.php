@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Http\Request;
 
 class ResumeController extends Controller
 {
@@ -83,9 +84,11 @@ class ResumeController extends Controller
         }
     }
 
-    public function download_resume($uuid)
+    public function download_resume(Request $request)
     {
-        $user = User::where('id', $uuid)->firstOrFail();
+
+        $creative_user = User::where('uuid', $request->u1)->firstOrFail();
+        $auth_user = User::where('uuid', $request->u2)->firstOrFail();
 
         $creative = Creative::with([
             'user.profile_picture',
@@ -94,21 +97,27 @@ class ResumeController extends Controller
             'user.personal_phone',
             'category',
             'user',
-        ])
-            ->where('user_id', $user->id)
-            ->first();
+    ])
+        ->where('user_id', $creative_user->id)
+        ->first();
 
-        $educations = $user->educations;
-        $experiences = $user->experiences;
-        $portfolio_items = $user->portfolio_items;
-        if($user->portfolio_website_preview){
-            $portfolio_website_preview_img = getAttachmentBasePath() . $user->portfolio_website_preview->path;
+        $educations = $creative_user->educations;
+        $experiences = $creative_user->experiences;
+        $portfolio_items = $creative_user->portfolio_items;
+        if($creative_user->portfolio_website_preview){
+            $portfolio_website_preview_img = getAttachmentBasePath() . $creative_user->portfolio_website_preview->path;
         }
         else{
             $portfolio_website_preview_img = null;
         }
         $data = (new CreativeResource($creative))->toArray([]);
 
+        //If user role is creative, then hide phone number from resume
+        if($auth_user->role == 'creative'){
+            $data['phone_number'] = '';
+        }
+
+        $user = $creative_user;
         $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items', 'portfolio_website_preview_img')); // Render the HTML view
 
         return $html;

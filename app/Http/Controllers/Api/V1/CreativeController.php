@@ -324,7 +324,6 @@ class CreativeController extends Controller
         return new HomepageCreativeCollection($creatives);
     }
 
-
     public function store(StoreCreativeRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->first();
