@@ -103,6 +103,18 @@
         .button-link {
             text-decoration: none !important;
         }
+
+        @media (max-width:450px) {
+            .content {
+                padding: 0 20px;
+            }
+
+            .footer-logo {
+                position: static !important;
+                margin: 10px auto;
+                display: block;
+            }
+        }
     </style>
 
 </head>

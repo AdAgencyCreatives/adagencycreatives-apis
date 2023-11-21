@@ -10,8 +10,6 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next, $resourceType)
     {
-        dump($request->all());
-        dump(Auth::user());
         // Allow GET requests without authentication
         if ($request->isMethod('get')) {
             return $next($request);

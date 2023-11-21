@@ -2,7 +2,7 @@
 <tr>
     <td style="padding: 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
         class="body_text_color body_text_size">
-        <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
+        <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p><a href="{{ $data['inviter_profile_url'] }}">{{ $data['inviter'] }}</a> would like
