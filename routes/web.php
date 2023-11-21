@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CreativeController;
+use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\IndustryController;
@@ -18,7 +19,6 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
-use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
@@ -35,8 +35,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,19 +54,23 @@ use Illuminate\Support\Str;
 Route::redirect('/', '/login');
 
 Route::get('/users2', function () {
-    if(env('APP_ENV') == 'local'){
+    if (env('APP_ENV') == 'local') {
         return User::all();
     }
 });
-
 
 Route::get('/email', function () {
 
     $data = [
         'agency_name' => 'Recipient',
         'job_title' => 'Custom MEssage',
+        'recipient_name' => 'Erika',
+        'friend_name' => 'Qasim',
+        'APP_NAME' => 'Ad agency',
+        'APP_URL' => 'Ad agency',
     ];
-    return view('emails.application.interested', compact('data'));
+
+    return view('emails.friendship.request_accepted', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
@@ -78,7 +80,7 @@ Route::get('/email', function () {
         'message_sender_name' => $sender->first_name,
         'message_sender_profile_url' => get_profile_picture($sender),
         'message_count' => 6,
-        'profile_url' => env('FRONTEND_URL') . '/profile/',
+        'profile_url' => env('FRONTEND_URL').'/profile/',
     ];
 
     SendEmailJob::dispatch([
@@ -103,7 +105,6 @@ Route::get('/user/deny/{uuid}', [UserController::class, 'deactivate'])->name('us
 Route::get('advisor/impersonate/{uuid}', [UserController::class, 'advisor_impersonate'])->name('advisor.impersonate');
 
 Route::group(['middleware' => ['auth']], function () {
-
 
     Route::group(['middleware' => ['admin']], function () {
         // Taxonomies

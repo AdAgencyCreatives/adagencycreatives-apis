@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Subscription\AllPackagesCollection;
-use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Plan;
-use Illuminate\Support\Facades\Session;
 use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class SubscriptionController extends Controller
 {
@@ -155,10 +154,9 @@ class SubscriptionController extends Controller
         }
     }
 
-
     public function update_package(Request $request, $user_id)
     {
-        if($request->name == '-1') {
+        if ($request->name == '-1') {
             return redirect()->back();
         }
 
@@ -170,7 +168,7 @@ class SubscriptionController extends Controller
             'ends_at' => $request->ends_at,
         ];
 
-        if($subscription) {
+        if ($subscription) {
             $subscription->update($data);
         } else {
             $plan = Plan::where('slug', $request->name)->first();

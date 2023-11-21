@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Creative;
 
-use App\Http\Resources\Link\LinkCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class HomepageCreativeResource extends JsonResource
@@ -21,7 +20,7 @@ class HomepageCreativeResource extends JsonResource
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'name' => $user->first_name . ' ' . $user->last_name,
+            'name' => $user->first_name.' '.$user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
@@ -33,9 +32,8 @@ class HomepageCreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
     }
-
 
     public function get_location($user)
     {

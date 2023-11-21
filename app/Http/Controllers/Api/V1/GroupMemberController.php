@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\ApiResponse;
-use App\Models\GroupMember;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 use App\Http\Requests\GroupMember\StoreGroupMemberRequest;
 use App\Http\Requests\GroupMember\UpdateGroupMemberRequest;
 use App\Http\Resources\GroupMember\GroupMemberCollection;
 use App\Http\Resources\GroupMember\GroupMemberResource;
 use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,7 +24,7 @@ class GroupMemberController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('group_id'),
                 AllowedFilter::scope('user_id'),
-                'role'
+                'role',
             ])
             ->allowedSorts('created_at');
 
@@ -33,12 +33,10 @@ class GroupMemberController extends Controller
         return new GroupMemberCollection($group_members);
     }
 
-
     public function create()
     {
         //
     }
-
 
     public function store(StoreGroupMemberRequest $request)
     {
@@ -60,24 +58,21 @@ class GroupMemberController extends Controller
         return new GroupMemberResource($group_member);
     }
 
-
-
     public function update(UpdateGroupMemberRequest $request, $uuid)
     {
         $group = Group::where('uuid', $request->group_id)->firstOrFail();
         $user = User::where('uuid', $uuid)->firstOrFail();
 
         $group_member = GroupMember::where('user_id', $user->id)
-        ->where('group_id', $group->id)->update(
-            $request->only('role')
-        );
+            ->where('group_id', $group->id)->update(
+                $request->only('role')
+            );
 
         $group_member = GroupMember::where('user_id', $user->id)
-        ->where('group_id', $group->id)->first();
+            ->where('group_id', $group->id)->first();
 
         return new GroupMemberResource($group_member);
     }
-
 
     public function destroy(Request $request, $uuid)
     {

@@ -34,11 +34,10 @@ class Friendship extends Model
     {
         static::deleted(function ($friendship) {
             $friendship = FriendRequest::where('sender_id', $friendship->user1_id)
-            ->where('receiver_id', $friendship->user2_id)->update([
-                'status' => 'unfriended'
+                ->where('receiver_id', $friendship->user2_id)->update([
+                'status' => 'unfriended',
             ]);
         });
-
 
     }
 }

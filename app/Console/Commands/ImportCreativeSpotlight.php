@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-
-use App\Models\Attachment;
 use App\Models\CreativeSpotlight;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -63,7 +61,7 @@ class ImportCreativeSpotlight extends Command
                     $spotlight_slug = $Spotlight['post_data']['post_name'];
                     if (preg_match('/(.+\.mp4)\s/', $spotlight_url, $matches)) {
                         $partBeforeMp4 = $matches[1];
-                        $this->storeAttachment($partBeforeMp4,'creative_spotlight', $spotlight_title, $spotlight_slug);
+                        $this->storeAttachment($partBeforeMp4, 'creative_spotlight', $spotlight_title, $spotlight_slug);
                         dump(sprintf('%d - User ID: %d Email: %s', $key, $user->id, $user->email));
                         if ($endIndex > 0 && $key >= $endIndex) {
                             break;
@@ -88,7 +86,7 @@ class ImportCreativeSpotlight extends Command
                 $uuid = Str::uuid();
                 $filename = basename($url);
 
-                $folder = $resource_type . '/' . $uuid . '/' . $filename;
+                $folder = $resource_type.'/'.$uuid.'/'.$filename;
                 $filePath = Storage::disk('s3')->put($folder, $response->body());
 
                 $attachment = CreativeSpotlight::create([

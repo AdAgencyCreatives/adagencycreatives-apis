@@ -13,10 +13,10 @@ use App\Models\Creative;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Http\Request;
 
 class ResumeController extends Controller
 {
@@ -97,25 +97,23 @@ class ResumeController extends Controller
             'user.personal_phone',
             'category',
             'user',
-    ])
-        ->where('user_id', $creative_user->id)
-        ->first();
+        ])
+            ->where('user_id', $creative_user->id)
+            ->first();
 
         $educations = $creative_user->educations;
         $experiences = $creative_user->experiences;
         $portfolio_items = $creative_user->portfolio_items;
-        if($creative_user->portfolio_website_preview){
-            $portfolio_website_preview_img = getAttachmentBasePath() . $creative_user->portfolio_website_preview->path;
-        }
-        else{
+        if ($creative_user->portfolio_website_preview) {
+            $portfolio_website_preview_img = getAttachmentBasePath().$creative_user->portfolio_website_preview->path;
+        } else {
             $portfolio_website_preview_img = null;
         }
         $data = (new CreativeResource($creative))->toArray([]);
 
         //If user role is creative, then hide phone number from resume
-        if($auth_user->role == 'creative'){
-            if($auth_user->id != $creative_user->id)
-            {
+        if ($auth_user->role == 'creative') {
+            if ($auth_user->id != $creative_user->id) {
                 $data['phone_number'] = '';
             }
 

@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         ]); // 1:Admin
 
         $advisor = User::where('id', 2)->first();
-        $advisor->update(['role' => 2]);// 2:Advisor
+        $advisor->update(['role' => 2]); // 2:Advisor
         $advisor->assignRole(Role::findByName('advisor'));
 
         $agency = User::where('id', 3)->first();
@@ -53,7 +53,6 @@ class DatabaseSeeder extends Seeder
 
         $creative2 = User::where('id', 4)->first();
         $creative2->assignRole(Role::findByName('creative'));
-
 
         // ********************************************************
         // ******************** AGENCY USERS **********************
@@ -153,7 +152,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Group::factory(1)->create(
             [
-                'uuid' => "715bfe90-833e-3459-9700-036ac28d3fd4",
+                'uuid' => '715bfe90-833e-3459-9700-036ac28d3fd4',
                 'user_id' => 1,
                 'name' => 'Feed',
                 'description' => 'The Lounge Feeds',

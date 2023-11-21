@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CreativeController;
+use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\PostReactionController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
@@ -34,9 +36,6 @@ use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
-use App\Http\Controllers\Api\V1\CreativeSpotlightController;
-use App\Http\Controllers\Api\V1\PostReactionController;
-use App\Models\PostReaction;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,7 +71,6 @@ Route::get('educations', [EducationController::class, 'index']);
 Route::get('home/creative-spotlights', [CreativeSpotlightController::class, 'homepage_spotlights']);
 Route::resource('creative-spotlights', CreativeSpotlightController::class)->only('index');
 
-
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
@@ -87,7 +85,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Creatives
      */
-
     Route::get('creatives', [CreativeController::class, 'index']);
     Route::get('creatives/search1', [CreativeController::class, 'search1']);
     Route::get('creatives/search2', [CreativeController::class, 'search2']);

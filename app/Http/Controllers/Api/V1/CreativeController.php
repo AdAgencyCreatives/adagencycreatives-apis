@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Creative\StoreCreativeRequest;
-use App\Http\Requests\Creative\UpdateCreativeProfileRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
-use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\CreativeSpotlightCollection;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
-use App\Http\Resources\Creative\HomepageCreativeResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
-use App\Http\Resources\Creative\LoggedinCreativeResource;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
@@ -32,42 +28,42 @@ class CreativeController extends Controller
         $terms = explode(',', $search);
 
         // Search via First or Last Name
-        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id" . "\n";
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
-            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."ur.first_name LIKE '%".trim($term)."%'"."\n";
+            $sql .= " OR ur.last_name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via City Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via State Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
         $res = DB::select($sql);
         $creativeIds = collect($res)->pluck('id')->toArray();
 
         $creatives = Creative::whereIn('id', $creativeIds)
-        ->whereHas('user', function ($query) {
-            $query->where('is_visible', 1);
-        })
-        ->orderByDesc('is_featured')
-        ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -78,51 +74,51 @@ class CreativeController extends Controller
         $terms = explode(',', $search);
 
         // Search via First or Last Name
-        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id" . "\n";
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
-            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."ur.first_name LIKE '%".trim($term)."%'"."\n";
+            $sql .= " OR ur.last_name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via City Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via State Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Industry Title (a.k.a Category)
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
         }
 
         $res = DB::select($sql);
         $creativeIds = collect($res)->pluck('id')->toArray();
 
         $creatives = Creative::whereIn('id', $creativeIds)
-        ->whereHas('user', function ($query) {
-            $query->where('is_visible', 1);
-        })
-        ->orderByDesc('is_featured')
-        ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -132,92 +128,91 @@ class CreativeController extends Controller
         $search = $request->search;
         $terms = explode(',', $search);
 
-
         // Search via First or Last Name
-        $sql = "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id" . "\n";
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "ur.first_name LIKE '%" . trim($term) . "%'" . "\n";
-            $sql .= " OR ur.last_name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."ur.first_name LIKE '%".trim($term)."%'"."\n";
+            $sql .= " OR ur.last_name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via City Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via State Name
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Industry Title (a.k.a Category)
-        $sql .= "SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Industry Experience
-        $sql .= "SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "ind.name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."ind.name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Media Experience
-        $sql .= "SELECT cr.id FROM creatives cr JOIN medias md ON FIND_IN_SET(md.uuid, cr.media_experience) > 0" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr JOIN medias md ON FIND_IN_SET(md.uuid, cr.media_experience) > 0'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "md.name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."md.name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Strengths
-        $sql .= "SELECT cr.id FROM creatives cr JOIN strengths st ON FIND_IN_SET(st.uuid, cr.strengths) > 0" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr JOIN strengths st ON FIND_IN_SET(st.uuid, cr.strengths) > 0'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "st.name LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."st.name LIKE '%".trim($term)."%'"."\n";
         }
 
-        $sql .= "UNION DISTINCT" . "\n";
+        $sql .= 'UNION DISTINCT'."\n";
 
         // Search via Employment Type
-        $sql .= "SELECT cr.id FROM creatives cr" . "\n";
+        $sql .= 'SELECT cr.id FROM creatives cr'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? " WHERE " : " OR ") . "cr.employment_type LIKE '%" . trim($term) . "%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."cr.employment_type LIKE '%".trim($term)."%'"."\n";
         }
 
-        $workplace_preferences = array(
-            "featured" => "is_featured",
-            "urgent" => "is_urgent",
-            "remote" => "is_remote",
-            "hybrid" => "is_hybrid",
-            "on site" => "is_onsite",
-            "open to relocation" => "is_opentorelocation",
-        );
+        $workplace_preferences = [
+            'featured' => 'is_featured',
+            'urgent' => 'is_urgent',
+            'remote' => 'is_remote',
+            'hybrid' => 'is_hybrid',
+            'on site' => 'is_onsite',
+            'open to relocation' => 'is_opentorelocation',
+        ];
 
         // Search via Workplace Preference
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            if(isset($workplace_preferences[$term])) {
-                $sql .= ($i == 0 ? ("UNION DISTINCT" . "\n" . "SELECT cr.id FROM creatives cr WHERE ") . "\n" : " OR ") . $workplace_preferences[$term] . "=1" . "\n";
+            if (isset($workplace_preferences[$term])) {
+                $sql .= ($i == 0 ? ('UNION DISTINCT'."\n".'SELECT cr.id FROM creatives cr WHERE ')."\n" : ' OR ').$workplace_preferences[$term].'=1'."\n";
             }
         }
 
@@ -225,13 +220,13 @@ class CreativeController extends Controller
         $creativeIds = collect($res)->pluck('id')->toArray();
 
         $creatives = Creative::whereIn('id', $creativeIds)
-        ->whereHas('user', function ($query) {
-            $query->where('is_visible', 1);
-        })
-        ->orderByDesc('is_featured')
-        ->orderBy('created_at')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -245,7 +240,7 @@ class CreativeController extends Controller
             $logged_in_user = request()->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
-            if($current_creative && $current_creative->slug == $slug) {
+            if ($current_creative && $current_creative->slug == $slug) {
                 unset($filters['filter']['is_visible']);
                 $request->replace($filters);
             }
@@ -278,7 +273,6 @@ class CreativeController extends Controller
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-
         if (isset($filters['filter']['slug'])) { //Means user profile is being viewed on creatives page
             if ($creatives->count() === 1) { //Check if the collection count is 1 and update views if true
                 $creative = $creatives->first();
@@ -287,10 +281,8 @@ class CreativeController extends Controller
             }
         }
 
-
         return new LoggedinCreativeCollection($creatives);
     }
-
 
     public function homepage_creatives(Request $request) //Home page creatives
     {
@@ -341,9 +333,9 @@ class CreativeController extends Controller
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'category_id' => $category->id,
-            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
-            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
-            'strengths' => '' . implode(',', $request->strengths ?? []) . '',
+            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
+            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
+            'strengths' => ''.implode(',', $request->strengths ?? []).'',
         ]);
 
         $creative = Creative::create($request->all());
@@ -355,7 +347,7 @@ class CreativeController extends Controller
     {
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (!$creative) {
+        if (! $creative) {
             return response()->json([
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
@@ -374,7 +366,7 @@ class CreativeController extends Controller
 
         $creative = Creative::where('uuid', $uuid)->first();
 
-        if (!$creative) {
+        if (! $creative) {
             return response()->json([
                 'message' => 'No creative found.',
             ], Response::HTTP_NOT_FOUND);
@@ -424,7 +416,7 @@ class CreativeController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
             $creative = $user->creative;
 
-            if (!$creative) {
+            if (! $creative) {
                 return response()->json([
                     'message' => 'No creative found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -482,7 +474,7 @@ class CreativeController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
             $creative = $user->creative;
 
-            if (!$creative) {
+            if (! $creative) {
                 return response()->json([
                     'message' => 'No creative found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -511,7 +503,7 @@ class CreativeController extends Controller
             }
 
             $creative->fill(array_filter($creativeData, function ($value) {
-                return !is_null($value);
+                return ! is_null($value);
             }));
             $creative->save();
 

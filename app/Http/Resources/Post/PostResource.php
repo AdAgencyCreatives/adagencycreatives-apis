@@ -57,7 +57,7 @@ class PostResource extends JsonResource
 
         // Include information about whether the user has liked, laughed, or reacted in any other way
         $userReactions = collect($allReactionTypes)->mapWithKeys(function ($type) use ($reactionsGrouped, $authenticatedUserId) {
-            return ['user_has_' . $type => $reactionsGrouped->get($type, collect())->where('user_id', $authenticatedUserId)->isNotEmpty()];
+            return ['user_has_'.$type => $reactionsGrouped->get($type, collect())->where('user_id', $authenticatedUserId)->isNotEmpty()];
         });
 
         return $reactionsCount->merge($userReactions);

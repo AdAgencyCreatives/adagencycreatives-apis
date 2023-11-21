@@ -37,8 +37,8 @@ class AgencyController extends Controller
         }
 
         $request->merge([
-            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
-            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
         ]);
 
         $this->appendWorkplacePreference($request);
@@ -114,7 +114,7 @@ class AgencyController extends Controller
         $city = Location::where('uuid', $request->city)->first();
         if ($state && $city) {
             $address = $user->addresses->first();
-            if (!$address) {
+            if (! $address) {
                 $address = new Address();
                 $address->uuid = Str::uuid();
                 $address->user_id = $user->id;
@@ -139,6 +139,4 @@ class AgencyController extends Controller
 
         return redirect()->back();
     }
-
-
 }

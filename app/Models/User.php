@@ -254,16 +254,15 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
     {
         $agency = Agency::where('slug', $company_slug)->first();
-        if($agency){
+        if ($agency) {
             return $query->where('id', $agency->user_id);
-        }
-        else{
+        } else {
             return $query->where('id', 0);
         }
     }

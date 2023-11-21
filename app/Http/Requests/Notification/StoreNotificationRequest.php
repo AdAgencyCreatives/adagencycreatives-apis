@@ -14,7 +14,7 @@ class StoreNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,uuid'
+            'user_id' => 'required|exists:users,uuid',
         ];
     }
 }

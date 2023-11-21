@@ -170,7 +170,6 @@ class ImportAgencies extends Command
                     $media = Industry::where('name', $industryName)->first();
                 }
 
-
                 if ($media) {
 
                     $industrUuids[] = $media->uuid;
@@ -183,6 +182,7 @@ class ImportAgencies extends Command
                 break;
             }
         }
+
         return implode(',', $industrUuids);
     }
 }

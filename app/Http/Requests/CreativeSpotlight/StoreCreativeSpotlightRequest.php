@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCreativeSpotlightRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -15,7 +14,7 @@ class StoreCreativeSpotlightRequest extends FormRequest
     public function rules()
     {
         return [
-             'user_id' => 'required|exists:users,uuid',
+            'user_id' => 'required|exists:users,uuid',
         ];
     }
 }

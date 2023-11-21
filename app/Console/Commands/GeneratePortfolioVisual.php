@@ -5,13 +5,14 @@ namespace App\Console\Commands;
 use App\Models\Attachment;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputArgument;
 
 class GeneratePortfolioVisual extends Command
 {
     protected $signature = 'portfolio:generate';
+
     protected $description = 'Generate portfolio visuals';
 
     public function __construct()
@@ -30,19 +31,17 @@ class GeneratePortfolioVisual extends Command
         $user_id = $this->argument('user_id');
         $url = $this->argument('url');
 
-        $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://' . $url;
+        $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://'.$url;
 
         if (
             $url
-            && !preg_match('/(?:aparat\.com|youtube\.com|vimeo\.com|dailymotion\.com)/i', $url)
+            && ! preg_match('/(?:aparat\.com|youtube\.com|vimeo\.com|dailymotion\.com)/i', $url)
         ) {
 
-
-
-            $googlePagespeedResponse = Http::get("https://www.googleapis.com/pagespeedonline/v5/runPagespeed", [
-            'screenshot' => 'true',
-            'url' => $url
-        ]);
+            $googlePagespeedResponse = Http::get('https://www.googleapis.com/pagespeedonline/v5/runPagespeed', [
+                'screenshot' => 'true',
+                'url' => $url,
+            ]);
 
             $googlePagespeedObject = $googlePagespeedResponse->json();
 
@@ -58,15 +57,14 @@ class GeneratePortfolioVisual extends Command
         $this->info('Portfolio visuals generated successfully.');
     }
 
-
     public function storeAttachment($imageData, $user_id, $resource_type)
     {
         try {
             $uuid = Str::uuid();
-            $filename = sprintf("%s_portfolio", $user_id);
+            $filename = sprintf('%s_portfolio', $user_id);
 
             $img = file_get_contents($imageData);
-            $folder = $resource_type . '/' . $uuid . '/' . $filename;
+            $folder = $resource_type.'/'.$uuid.'/'.$filename;
             $filePath = Storage::disk('s3')->put($folder, $img);
 
             $attachment = Attachment::create([

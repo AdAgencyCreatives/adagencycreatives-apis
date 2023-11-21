@@ -8,7 +8,6 @@ use App\Http\Requests\Review\StoreReviewRequest;
 use App\Http\Resources\Review\ReviewCollection;
 use App\Http\Resources\Review\ReviewResource;
 use App\Models\Review;
-use App\Models\reviews;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -28,7 +27,7 @@ class ReviewController extends Controller
             ->allowedSorts('created_at');
 
         $reviews = $query->where('user_id', $user->id)
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ReviewCollection($reviews);
     }
@@ -43,8 +42,8 @@ class ReviewController extends Controller
         }
 
         $existingReview = Review::where('user_id', $user->id)
-        ->where('target_id', $target->id)
-        ->first();
+            ->where('target_id', $target->id)
+            ->first();
 
         $requestData = $request->all();
         $requestData['uuid'] = Str::uuid();
@@ -54,16 +53,17 @@ class ReviewController extends Controller
         try {
             if ($existingReview) {
                 $existingReview->update($requestData);
+
                 return ApiResponse::success(new ReviewResource($existingReview), 200);
             } else {
                 $review = Review::create($requestData);
+
                 return ApiResponse::success(new ReviewResource($review), 200);
             }
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
         }
     }
-
 
     public function update(Request $request, $uuid)
     {

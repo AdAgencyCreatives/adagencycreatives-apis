@@ -6,13 +6,12 @@ use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Notification\StoreNotificationRequest;
-use App\Http\Requests\Notification\UpdateNotificationRequest;
 use App\Http\Resources\Notification\NotificationCollection;
 use App\Http\Resources\Notification\NotificationResource;
 use App\Models\Notification;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -21,9 +20,9 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Notification::class)
-        ->allowedFilters([
+            ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                'type'
+                'type',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
@@ -37,6 +36,7 @@ class NotificationController extends Controller
         }
 
         $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
         return new NotificationCollection($notifications);
     }
 
@@ -46,17 +46,17 @@ class NotificationController extends Controller
             $user = User::where('uuid', $request->user_id)->first();
 
             $request->merge([
-               'uuid' => Str::uuid(),
-               'user_id' => $user->id
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
             ]);
             $notification = Notification::create($request->all());
+
             return new NotificationResource($notification);
 
         } catch (\Exception $e) {
             throw new ApiException($e, 'NS-01');
         }
     }
-
 
     public function update($uuid)
     {
@@ -82,9 +82,9 @@ class NotificationController extends Controller
     public function count(Request $request)
     {
         $query = QueryBuilder::for(Notification::class)
-        ->allowedFilters([
-                AllowedFilter::scope('user_id')
-        ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
 
         if ($request->has('status')) {
             if ($request->status == 0) {
@@ -95,7 +95,7 @@ class NotificationController extends Controller
         }
 
         return response()->json([
-            'count' => $query->count()
+            'count' => $query->count(),
         ]);
     }
 }

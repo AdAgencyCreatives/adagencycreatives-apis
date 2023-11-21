@@ -11,7 +11,7 @@ class Activity extends Model
 {
     use HasFactory, SoftDeletes;
 
-     protected $fillable = [
+    protected $fillable = [
         'uuid',
         'user_id',
         'type',
@@ -32,6 +32,7 @@ class Activity extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 }

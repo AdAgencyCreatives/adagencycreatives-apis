@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\StoreActivityRequest;
 use App\Http\Resources\Notification\NotificationCollection;
 use App\Http\Resources\Notification\NotificationResource;
 use App\Models\Activity;
-use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -22,8 +20,8 @@ class ActivityController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Activity::class)
-        ->allowedFilters([
-                AllowedFilter::scope('user_id')
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
@@ -37,6 +35,7 @@ class ActivityController extends Controller
         }
 
         $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
         return new NotificationCollection($notifications);
     }
 
@@ -46,10 +45,11 @@ class ActivityController extends Controller
             $user = User::where('uuid', $request->user_id)->first();
 
             $request->merge([
-               'uuid' => Str::uuid(),
-                'user_id' => $user->id
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
             ]);
             $notification = Activity::create($request->all());
+
             return new NotificationResource($notification);
 
         } catch (\Exception $e) {
@@ -57,8 +57,7 @@ class ActivityController extends Controller
         }
     }
 
-
-    public function update( $uuid)
+    public function update($uuid)
     {
         Activity::where('uuid', $uuid)->touch('read_at');
 
@@ -82,9 +81,9 @@ class ActivityController extends Controller
     public function count(Request $request)
     {
         $query = QueryBuilder::for(Activity::class)
-        ->allowedFilters([
-                AllowedFilter::scope('user_id')
-        ]);
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+            ]);
 
         if ($request->has('status')) {
             if ($request->status == 0) {
@@ -95,7 +94,7 @@ class ActivityController extends Controller
         }
 
         return response()->json([
-            'count' => $query->count()
+            'count' => $query->count(),
         ]);
     }
 }
