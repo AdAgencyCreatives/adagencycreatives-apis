@@ -112,6 +112,7 @@ class Application extends Model
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
+                        'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug),
                     ],
 
                 ];
