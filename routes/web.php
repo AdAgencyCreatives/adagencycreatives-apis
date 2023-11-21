@@ -80,7 +80,7 @@ Route::get('/email', function () {
         'DENY_URL' => ''
     ];
 
-    return view('emails.account.new_user_registration_agency', compact('data'));
+    return view('emails.account.new_user_registration_creative', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
