@@ -17,7 +17,7 @@
                             {{ $data['applicant'] }},</span>
 
                         <p>The hiring team at {{ $data['agency_name'] }} has reviewed your application for
-                            {{ $data['job_title'] }}.
+                            <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a>.
                             Each company's hiring process is based on their own unique policies, but things
                             look promising!
                         </p>
@@ -27,13 +27,14 @@
                         </p>
 
                         <ul>
-                            <li>Research the agency and your potential creative partners</li>
-                            <li>Have some insightful questions ready to go</li>
+                            <li>Research the agency and your potential creative partners.</li>
+                            <li>Have some insightful questions ready to go.</li>
                             <li>Be on time. Better yet, be a bit early.</li>
                             <li>Be interested and engaging.</li>
-                            <li>Be prepared to talk about your work, and how it specifically aligns with the opportunity
+                            <li>Be prepared to talk about your work, and how it specifically aligns with the
+                                opportunity.
                             </li>
-                            <li>If you have technical difficulties, suggest a phone call or reschedule</li>
+                            <li>If you have technical difficulties, suggest a phone call or reschedule.</li>
                             <li>Don't forget to follow up with an email and say thank you. It’s appreciated!</li>
                             <li>Most of all, be yourself.</li>
                         </ul>
