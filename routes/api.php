@@ -79,6 +79,7 @@ Route::get('employment_types', [JobController::class, 'get_employment_types']);
 Route::get('locations', [LocationController::class, 'index']);
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
+Route::apiResource('years-of-experience', YearsOfExperienceController::class);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -125,7 +126,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
-    Route::apiResource('years-of-experience', YearsOfExperienceController::class);
+
     Route::apiResource('reviews', ReviewController::class);
     Route::apiResource('users', UserController::class)->except(['store']);
 
