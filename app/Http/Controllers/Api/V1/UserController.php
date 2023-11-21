@@ -115,6 +115,7 @@ class UserController extends Controller
 
             return new UserResource($user);
         } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
             throw new ApiException($e, 'US-01');
         }
     }
