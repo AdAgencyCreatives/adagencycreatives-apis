@@ -82,10 +82,11 @@ class ApplicationController extends Controller
                     'job_title' => $job->title,
                     'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
                     'resume_url' => $resume_url,
+                    'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
                     'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
                     'message' => $request->message,
                 ],
-            ], 'new_candidate_application');
+            ], 'new_candidate_application'); // To the agency
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {
