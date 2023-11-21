@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
@@ -39,19 +38,18 @@ class ImportCreativesCategories extends Command
 
             if ($user) {
 
-                try{
+                try {
                     $creative = Creative::where('user_id', $user->id)->first();
 
-                    if($creative){
+                    if ($creative) {
                         $category = Category::where('name', $creativeData['categories'])->first();
-                        if($category){
+                        if ($category) {
                             $creative->category_id = $category->id;
                             $creative->save();
                         }
                     }
 
-                }
-                catch(\Exception $e){
+                } catch (\Exception $e) {
                     dump($creative);
                     dd($e->getMessage());
                 }
@@ -64,5 +62,4 @@ class ImportCreativesCategories extends Command
 
         $this->info('Creatives categories imported successfully.');
     }
-
 }

@@ -149,6 +149,7 @@ class GroupController extends Controller
                 'messages_count' => $unread_messages,
                 'notifications_count' => $user->notifications()->whereNull('read_at')->count(),
             ];
+
             return response()->json($stats);
 
         } catch (\Exception $e) {

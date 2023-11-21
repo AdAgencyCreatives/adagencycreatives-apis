@@ -10,7 +10,7 @@ class JobInvitation extends Model
 {
     use HasFactory;
 
-     protected $fillable = [
+    protected $fillable = [
         'uuid',
         'user_id',
         'creative_id',
@@ -23,12 +23,10 @@ class JobInvitation extends Model
         return $this->belongsTo(Job::class, 'job_id');
     }
 
-
     public function candidate()
     {
         return $this->belongsTo(User::class, 'candidate_id', 'id');
     }
-
 
     public function agency()
     {

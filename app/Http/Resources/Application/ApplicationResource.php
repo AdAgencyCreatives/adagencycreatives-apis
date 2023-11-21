@@ -39,12 +39,11 @@ class ApplicationResource extends JsonResource
     private function get_resume_url($user, $logged_in_user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath() . $user->resume->path;
+            return getAttachmentBasePath().$user->resume->path;
         } else {
-             $resume_filename = sprintf("%s_%s_Ad_Agency_Creatives_%s", $user->first_name, $user->last_name, date("Y"));
-             return route('download.resume', ['name' => $resume_filename,'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
+            $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
         }
     }
-
-
 }

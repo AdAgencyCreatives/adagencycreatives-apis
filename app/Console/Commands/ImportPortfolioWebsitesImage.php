@@ -39,11 +39,11 @@ class ImportPortfolioWebsitesImage extends Command
                 continue;
             }
 
-            if(isset($user['user_meta']['candidate_id'][0])){
+            if (isset($user['user_meta']['candidate_id'][0])) {
                 $candidate_id = $user['user_meta']['candidate_id'][0];
-                dump( sprintf("%d Email: %s candidate_id: %s", $count, $user['user_email'], $candidate_id ) );
+                dump(sprintf('%d Email: %s candidate_id: %s', $count, $user['user_email'], $candidate_id));
                 $count++;
-                $url = sprintf("https://adagencycreatives.com/wp-content/themes/superio/images/portfolio/%s.png", $candidate_id);
+                $url = sprintf('https://adagencycreatives.com/wp-content/themes/superio/images/portfolio/%s.png', $candidate_id);
                 $laravel_user = User::where('email', $user['user_email'])->first();
                 $this->storeAttachment($url, $laravel_user->id, 'website_preview');
             }
@@ -51,8 +51,6 @@ class ImportPortfolioWebsitesImage extends Command
             if ($endIndex > 0 && $key >= $endIndex) {
                 break;
             }
-
-
 
         }
 

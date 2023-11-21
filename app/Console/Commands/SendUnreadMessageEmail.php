@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class SendUnreadMessageEmail extends Command
 {
     protected $signature = 'email:unread-message-count';
+
     protected $description = 'Send email with unread message counts to users';
 
     public function handle()
@@ -25,7 +26,7 @@ class SendUnreadMessageEmail extends Command
             $unreadMessageCount = $unreadMessage->message_count;
 
             // Get the oldest contacts who sent messages to the user
-            $oldestmessages = Message::select('sender_id',  DB::raw('MIN(created_at) as max_created_at'))
+            $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereNull('read_at')
                 ->groupBy('sender_id')
@@ -35,10 +36,10 @@ class SendUnreadMessageEmail extends Command
                 ->get();
 
             $recent_messages = [];
-            foreach($oldestmessages as $msg) {
+            foreach ($oldestmessages as $msg) {
                 $recent_messages[] = [
                     'name' => $msg->sender->first_name,
-                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
+                    'profile_url' => env('FRONTEND_URL').'/profile/'.$msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
                 ];

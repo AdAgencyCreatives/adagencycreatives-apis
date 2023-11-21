@@ -11,7 +11,6 @@ use App\Http\Resources\Post\PostResource;
 use App\Models\Attachment;
 use App\Models\Group;
 use App\Models\Post;
-use App\Models\PostReaction;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -62,13 +61,13 @@ class PostController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
-            $authenticatedUserId = auth()->id();
+        $authenticatedUserId = auth()->id();
 
         $trendingPosts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
             $post->user_has_liked = $post->likes->contains('user_id', $authenticatedUserId);
+
             return $post;
         });
-
 
         return new PostCollection($trendingPosts);
     }
@@ -96,7 +95,7 @@ class PostController extends Controller
 
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
         }
     }
 
@@ -123,7 +122,7 @@ class PostController extends Controller
 
                 // delete those attachments which are not in new_attachments
                 foreach ($post_existing_attachments as $post_existing_attachment) {
-                    if (!$new_attachments->contains('uuid', $post_existing_attachment->uuid)) {
+                    if (! $new_attachments->contains('uuid', $post_existing_attachment->uuid)) {
                         $post_existing_attachment->delete();
                     }
                 }

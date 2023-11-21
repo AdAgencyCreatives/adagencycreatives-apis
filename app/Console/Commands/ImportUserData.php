@@ -51,16 +51,15 @@ class ImportUserData extends Command
 
         $user->updated_at = $now;
 
-        if($role == 'creative'){
+        if ($role == 'creative') {
             $user->assignRole($user_roles['creative']);
-        }
-        elseif($role == 'agency'){
+        } elseif ($role == 'agency') {
             $user->assignRole($user_roles['agency']);
 
-        }elseif($role == 'advisor'){
+        } elseif ($role == 'advisor') {
             $user->assignRole($user_roles['advisor']);
 
-        }elseif($role == 'admin'){
+        } elseif ($role == 'admin') {
             $user->assignRole($user_roles['admin']);
             $user->status = 'active';
         }
@@ -96,5 +95,5 @@ class ImportUserData extends Command
 
         return $statusMapping[$accountStatus] ?? 'pending'; // Default to pending status if not found
 
-   }
+    }
 }

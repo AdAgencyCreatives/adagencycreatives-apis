@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        New Application</h1>
+                        New Applicant</h1>
                     <div
                         style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
 
@@ -22,17 +22,16 @@
                         </p>
 
                         <div><b>Creative: </b>
-                            <a href="{{ $data['creative_profile'] }}" target="_blank">Profile
-                                URL</a>
+                            <a href="{{ $data['creative_profile'] }}" target="_blank">{{ $data['creative_name'] }}</a>
                         </div>
                         <div><b>Email: </b>{{ $data['applicant']->email ?? '' }}</div>
                         <div><b>Job: </b>
                             <a href="{{ $data['job_url'] }}" target="_blank">Job
-                                URL</a>
+                                Link</a>
                         </div>
                         <div><b>Resume: </b>
                             <a href="{{ $data['resume_url'] }}" target="_blank">Resume
-                                URL</a>
+                                Link</a>
                         </div>
                         <div><b>Message: </b>{{ $data['message'] ?? '' }}</div>
 

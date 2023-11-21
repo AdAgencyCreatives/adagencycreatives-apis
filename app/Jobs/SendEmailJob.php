@@ -8,7 +8,6 @@ use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
-use App\Mail\Application\InviteCreative;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\Friend\FriendshipRequest;
@@ -102,10 +101,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new CustomJobRequestRejected($this->data['data']));
                 break;
 
-
                 /**
                  * Application
-                */
+                 */
             case 'application_submitted':
                 Mail::to($this->data['receiver'])->send(new ApplicationSubmitted($this->data['data'])); // To the applicant
                 break;
@@ -119,10 +117,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new Interested($this->data['data'])); // To the applicant
                 break;
 
-
-            /**
-             * Friend
-             */
+                /**
+                 * Friend
+                 */
             case 'friendship_request_sent':
                 Mail::to($this->data['receiver'])->send(new FriendshipRequest($this->data['data']));
                 break;
@@ -130,13 +127,12 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->send(new FriendshipRequestAccepted($this->data['data']));
                 break;
 
-            /**
-             * Message Count
-             */
+                /**
+                 * Message Count
+                 */
             case 'unread_message':
                 Mail::to($this->data['receiver'])->send(new UnreadMessage($this->data['data']));
                 break;
-
 
             default:
                 // Handle unknown email types or fallback logic

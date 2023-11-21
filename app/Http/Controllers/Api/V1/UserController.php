@@ -91,8 +91,6 @@ class UserController extends Controller
                     ],
                 ], 'new_user_registration_agency_role');
 
-
-
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = $str;
@@ -147,17 +145,16 @@ class UserController extends Controller
                     'receiver' => $user, 'data' => $user,
                 ], 'account_approved');
 
-
-            /**
-            * Generate portfolio website preview
-            */
-            if($user->role == 'creative') {
-                $portfolio_website = $user->portfolio_website_link()->first();
-                if($portfolio_website) {
-                    Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
-                    ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                /**
+                 * Generate portfolio website preview
+                 */
+                if ($user->role == 'creative') {
+                    $portfolio_website = $user->portfolio_website_link()->first();
+                    if ($portfolio_website) {
+                        Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
+                        ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                    }
                 }
-            }
             }
 
             if ($newStatus === 'inactive' && $oldStatus === 'pending') {
@@ -166,8 +163,6 @@ class UserController extends Controller
                 ], 'account_denied');
             }
             $user->update($request->all());
-
-
 
             return new UserResource($user);
         } catch (ModelNotFoundException $e) {
@@ -207,13 +202,13 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
         }
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+        if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -256,7 +251,7 @@ class UserController extends Controller
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (!$custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
+        if (! $custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
             return response()->json(['message' => 'Incorrect old password'], 401);
         }
 
@@ -300,14 +295,13 @@ class UserController extends Controller
         return $users;
     }
 
-
     public function get_creatives()
     {
         $cacheKey = 'all_creatives';
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
             return User::select('id', 'uuid', 'first_name', 'last_name', 'email')
-            ->where('role', 4)
-            ->get();
+                ->where('role', 4)
+                ->get();
         });
 
         return $users;

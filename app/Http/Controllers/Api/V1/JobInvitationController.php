@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\ApiException;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\StoreJobInvitationRequest;
 use App\Jobs\SendEmailJob;
@@ -51,7 +49,7 @@ class JobInvitationController extends Controller
                     'receiver_name' => $invitee_user->first_name,
                     'agency_name' => $agency_user?->agency?->name ?? '',
                     'job_title' => $job->title,
-                    'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug) ,
+                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
                 ],
             ], 'job_invitation');
 

@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\V1\FriendshipController;
-use App\Http\Controllers\Api\V1\InvitationController;
-use App\Http\Controllers\Api\V1\GroupMemberController;
 use App\Http\Controllers\Api\V1\GroupController;
+use App\Http\Controllers\Api\V1\GroupMemberController;
+use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\JobInvitationController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +33,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('friendships', [FriendshipController::class, 'sendFriendRequest']);
     Route::patch('friendships', [FriendshipController::class, 'respondToFriendRequest']);
     Route::delete('friendships/terminate', [FriendshipController::class, 'unfriend']);
-
 
     /**
      * Group Members

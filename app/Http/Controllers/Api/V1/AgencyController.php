@@ -96,8 +96,8 @@ class AgencyController extends Controller
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
-            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
+            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
+            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
         ]);
 
         $agency = Agency::create($request->all());
@@ -117,7 +117,7 @@ class AgencyController extends Controller
     public function show($uuid)
     {
         $agency = Agency::with('attachment')->where('uuid', $uuid)->first();
-        if (!$agency) {
+        if (! $agency) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -134,7 +134,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (!$agency) {
+        if (! $agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);
@@ -161,7 +161,7 @@ class AgencyController extends Controller
             $user = User::where('uuid', $uuid)->first();
             $agency = Agency::where('user_id', $user->id)->first();
 
-            if (!$agency) {
+            if (! $agency) {
                 return response()->json([
                     'message' => 'No agency found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -236,7 +236,7 @@ class AgencyController extends Controller
 
     public function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
     {
-        if (!isset($filters['filter'][$experienceKey])) {
+        if (! isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
@@ -251,7 +251,7 @@ class AgencyController extends Controller
 
     public function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
     {
-        if (!isset($filters['filter'][$experienceKey])) {
+        if (! isset($filters['filter'][$experienceKey])) {
             return null;
         }
 

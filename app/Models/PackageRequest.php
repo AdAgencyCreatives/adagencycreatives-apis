@@ -62,12 +62,14 @@ class PackageRequest extends Model
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopeAssignedTo(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('assigned_to', $user->id);
     }
 

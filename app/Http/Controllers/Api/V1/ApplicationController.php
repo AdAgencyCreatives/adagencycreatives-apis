@@ -43,8 +43,8 @@ class ApplicationController extends Controller
         // $attachment = Attachment::where('uuid', $request->resume_id)->first();
 
         $existingApplication = Application::where('user_id', $applicant_user->id)
-        ->where('job_id', $job->id)
-        ->first();
+            ->where('job_id', $job->id)
+            ->first();
 
         if ($existingApplication) {
             return ApiResponse::error('You have already applied for this job.', 400);
@@ -68,7 +68,7 @@ class ApplicationController extends Controller
                 'data' => [
                     'recipient' => $applicant_user->first_name,
                     'job_title' => $job->title,
-                    'job_url' => sprintf("%s/job/%s",env('FRONTEND_URL'), $job->slug) ,
+                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
                 ],
             ], 'application_submitted');
 
@@ -80,12 +80,13 @@ class ApplicationController extends Controller
                     'receiver_name' => $agency_user->first_name ?? $agency_user->username,
                     'applicant' => $applicant_user,
                     'job_title' => $job->title,
-                    'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug),
+                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
                     'resume_url' => $resume_url,
-                    'creative_profile' => sprintf("%s/creative/%s", env('FRONTEND_URL'), $applicant_user->username),
-                    'message' => $request->message
+                    'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
+                    'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
+                    'message' => $request->message,
                 ],
-            ], 'new_candidate_application');
+            ], 'new_candidate_application'); // To the agency
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {

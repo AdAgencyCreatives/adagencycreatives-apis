@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\ApiResponse;
-use App\Models\CreativeSpotlight;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreativeSpotlight\StoreCreativeSpotlightRequest;
 use App\Http\Resources\CreativeSpotlight\CreativeSpotlightCollection;
 use App\Http\Resources\CreativeSpotlight\CreativeSpotlightResource;
+use App\Models\CreativeSpotlight;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -33,8 +32,6 @@ class CreativeSpotlightController extends Controller
 
         return new CreativeSpotlightCollection($creatives);
     }
-
-
 
     public function store(Request $request)
     {
@@ -60,8 +57,9 @@ class CreativeSpotlightController extends Controller
     public function destroy($uuid)
     {
         $creative = CreativeSpotlight::where('uuid', $uuid)->first();
-        if($creative) {
+        if ($creative) {
             $creative->delete();
+
             return ApiResponse::success('CreativeSpot deleted successfully');
         } else {
             return ApiResponse::error('CreativeSpot not found', 400);
@@ -73,13 +71,13 @@ class CreativeSpotlightController extends Controller
         $uuid = Str::uuid();
         $file = $request->file;
 
-        $folder = 'creative_spotlight/' . $uuid;
+        $folder = 'creative_spotlight/'.$uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $filename = $file->getClientOriginalName();
 
-        if($user->creative?->title) {
-            $title = sprintf("%s, %s", $user->creative?->title, $user->full_name);
+        if ($user->creative?->title) {
+            $title = sprintf('%s, %s', $user->creative?->title, $user->full_name);
         } else {
             $title = $user->full_name;
         }

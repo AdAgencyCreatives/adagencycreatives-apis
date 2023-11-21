@@ -20,7 +20,7 @@ class SubscriptionResource extends JsonResource
     protected function getStatus()
     {
         $endsAtDate = Carbon::parse($this->ends_at);
-        if($endsAtDate->isPast()) {
+        if ($endsAtDate->isPast()) {
             return 'expired';
         }
 

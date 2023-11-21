@@ -19,7 +19,7 @@ class FriendshipRequestResource extends JsonResource
             $other_user = $this->sender;
         }
 
-         if ($other_user !== null) {
+        if ($other_user !== null) {
             return [
                 'id' => $this->uuid,
                 'title' => $other_user->creative?->title,

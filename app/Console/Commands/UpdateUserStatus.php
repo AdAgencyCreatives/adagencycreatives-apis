@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Spatie\Permission\Models\Role;
 
 class UpdateUserStatus extends Command
 {
@@ -28,7 +27,7 @@ class UpdateUserStatus extends Command
     private function updateUser($userData)
     {
         $user = User::where('email', $userData['user_email'])->first();
-        if(!$user){
+        if (! $user) {
             return;
         }
 
@@ -47,5 +46,5 @@ class UpdateUserStatus extends Command
 
         return $statusMapping[$accountStatus] ?? 'pending'; // Default to pending status if not found
 
-   }
+    }
 }

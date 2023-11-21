@@ -7,7 +7,6 @@ use App\Models\Application;
 use App\Models\Bookmark;
 use App\Models\Creative;
 use App\Models\Job;
-use App\Models\Message;
 use App\Models\Order;
 use App\Models\Review;
 use App\Models\User;
@@ -173,7 +172,7 @@ class DashboardController extends Controller
     public function creative_dashboard_stats()
     {
         $user = request()->user();
-        $cacheKey = 'creative_dashboard_stats_' . $user->id;
+        $cacheKey = 'creative_dashboard_stats_'.$user->id;
 
         $stats = Cache::remember($cacheKey, 30, function () use ($user) {
             $applied_jobs = Application::where('user_id', $user->id)->count();
@@ -201,7 +200,7 @@ class DashboardController extends Controller
     public function findBookmarkCount($creative_id)
     {
         return Bookmark::where('bookmarkable_type', 'App\Models\Creative')
-                    ->where('bookmarkable_id', $creative_id)
-                    ->count();
+            ->where('bookmarkable_id', $creative_id)
+            ->count();
     }
 }

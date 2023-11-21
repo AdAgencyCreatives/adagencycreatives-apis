@@ -31,13 +31,14 @@ class PostReaction extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
     public function scopePostId(Builder $query, $group_id)
     {
         $post = Post::where('uuid', $group_id)->firstOrFail();
+
         return $query->where('post_id', $post->id);
     }
-
 }

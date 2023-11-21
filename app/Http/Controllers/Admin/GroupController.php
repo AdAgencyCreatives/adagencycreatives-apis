@@ -131,8 +131,8 @@ class GroupController extends Controller
         $cacheKey = 'all_creatives';
         $users = Cache::has('key')::remember($cacheKey, now()->addMinutes(60), function () {
             return User::select('id', 'uuid', 'first_name', 'last_name', 'email')
-            ->where('role', 4)
-            ->get();
+                ->where('role', 4)
+                ->get();
         });
 
         return $users;

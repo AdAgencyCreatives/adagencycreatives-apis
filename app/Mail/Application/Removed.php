@@ -3,7 +3,6 @@
 namespace App\Mail\Application;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -13,7 +12,7 @@ class Removed extends Mailable
 {
     use Queueable, SerializesModels;
 
-   public $data;
+    public $data;
 
     public function __construct($data)
     {
@@ -21,7 +20,6 @@ class Removed extends Mailable
         $this->data['APP_NAME'] = env('APP_NAME');
         $this->data['APP_URL'] = env('FRONTEND_URL');
     }
-
 
     public function envelope()
     {

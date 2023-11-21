@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reaction\StorePostReactionRequest;
 use App\Http\Resources\Reaction\PostReactionCollection;
-use App\Http\Resources\Reaction\PostReactionResource;
 use App\Models\Post;
 use App\Models\PostReaction;
 use Illuminate\Http\Request;
@@ -49,19 +48,19 @@ class PostReactionController extends Controller
             ->where('type', $type)
             ->first();
 
-if ($existingReaction) {
-        // User has already reacted
+        if ($existingReaction) {
+            // User has already reacted
 
-        if ($existingReaction->trashed()) {
-            // If the reaction is soft-deleted, restore it
-            $existingReaction->restore();
-        } else {
-            // If the user is clicking the same reaction type again, soft delete it
-            $existingReaction->delete();
+            if ($existingReaction->trashed()) {
+                // If the reaction is soft-deleted, restore it
+                $existingReaction->restore();
+            } else {
+                // If the user is clicking the same reaction type again, soft delete it
+                $existingReaction->delete();
+            }
+
+            return response()->json(['message' => 'Reaction updated successfully']);
         }
-
-        return response()->json(['message' => 'Reaction updated successfully']);
-    }
 
         // User has not reacted yet, create a new reaction
         PostReaction::create([

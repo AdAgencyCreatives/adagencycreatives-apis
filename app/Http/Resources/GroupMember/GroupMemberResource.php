@@ -7,7 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupMemberResource extends JsonResource
 {
-
     public function toArray($request)
     {
         $user = $this->user;

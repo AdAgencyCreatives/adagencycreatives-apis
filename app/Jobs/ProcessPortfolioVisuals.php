@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,8 +13,8 @@ class ProcessPortfolioVisuals implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
     protected $user_id;
+
     protected $url;
 
     public function __construct($user_id, $url)
@@ -23,7 +22,6 @@ class ProcessPortfolioVisuals implements ShouldQueue
         $this->user_id = $user_id;
         $this->url = $url;
     }
-
 
     public function handle()
     {

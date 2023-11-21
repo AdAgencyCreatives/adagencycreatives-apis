@@ -28,7 +28,7 @@ class LoggedinCreativeResource extends JsonResource
             'type' => 'creatives',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'name' => $user->first_name . ' ' . $user->last_name,
+            'name' => $user->first_name.' '.$user->last_name,
             'email' => $this->get_email($user, $logged_in_user, $subscription_status, $is_friend),
             'slug' => $this->slug,
             'title' => $this->title,
@@ -62,13 +62,13 @@ class LoggedinCreativeResource extends JsonResource
                 'subscription_status' => $subscription_status,
                 'is_friend' => $is_friend,
                 'has_posted_job' => $this->get_posted_job($logged_in_user, $subscription_status),
-            ]
+            ],
         ];
     }
 
     public function get_email($user, $logged_in_user, $subscription_status, $is_friend)
     {
-        if($logged_in_user->id == $user->id) {
+        if ($logged_in_user->id == $user->id) {
             return $user->email;
         }
 
@@ -76,7 +76,7 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'creative' && !$is_friend) {
+        if ($logged_in_user->role === 'creative' && ! $is_friend) {
             return null;
         }
 
@@ -85,7 +85,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_phone_number($user, $logged_in_user)
     {
-        if($logged_in_user->id == $user->id) {
+        if ($logged_in_user->id == $user->id) {
             return $user->personal_phone ? $user->personal_phone->phone_number : null;
         }
 
@@ -93,23 +93,22 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'agency' &&  !hasAppliedToAgencyJob($user->id, $logged_in_user->id)) {
+        if ($logged_in_user->role === 'agency' && ! hasAppliedToAgencyJob($user->id, $logged_in_user->id)) {
             return null;
         }
 
         return $user->personal_phone ? $user->personal_phone->phone_number : null;
     }
 
-
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
     {
         //User is viewing his own profile
-        if($logged_in_user->id == $user->id) {
+        if ($logged_in_user->id == $user->id) {
             return $this->get_resume_url($user, $logged_in_user);
         }
 
@@ -117,7 +116,7 @@ class LoggedinCreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'creative' && !$is_friend) {
+        if ($logged_in_user->role === 'creative' && ! $is_friend) {
             return null;
         }
 
@@ -128,10 +127,11 @@ class LoggedinCreativeResource extends JsonResource
     private function get_resume_url($user, $logged_in_user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath() . $user->resume->path;
+            return getAttachmentBasePath().$user->resume->path;
         } else {
-             $resume_filename = sprintf("%s_%s_Ad_Agency_Creatives_%s", $user->first_name, $user->last_name, date("Y"));
-             return route('download.resume', ['name' => $resume_filename,'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
+            $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
         }
     }
 
@@ -146,7 +146,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_website_preview($user)
     {
-        return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
+        return $user->portfolio_website_preview ? getAttachmentBasePath().$user->portfolio_website_preview->path : '';
     }
 
     public function get_location($user)

@@ -86,6 +86,7 @@ class Application extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
+
         return $query->where('user_id', $user->id);
     }
 
@@ -101,10 +102,8 @@ class Application extends Model
     {
         static::updating(function ($application) {
 
-
-
             $oldStatus = $application->getOriginal('status');
-            if ($oldStatus == 'pending' && in_array($application->status , ['archived', 'rejected'])) {
+            if ($oldStatus == 'pending' && in_array($application->status, ['archived', 'rejected'])) {
 
                 $job = Job::where('id', $application->job_id)->first();
                 $applicant = $application->user;
@@ -113,14 +112,14 @@ class Application extends Model
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
-                    ]
+                    ],
 
                 ];
                 create_notification($applicant->id, sprintf('Application rejected on "%s" job.', $job->title));
                 SendEmailJob::dispatch($data, 'application_removed_by_agency');
             }
 
-            if ($oldStatus == 'pending' && in_array($application->status , ['accepted'])) {
+            if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
                 $job = Job::where('id', $application->job_id)->first();
                 $agency = $job->agency;
@@ -131,8 +130,9 @@ class Application extends Model
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
+                        'job_url' => sprintf("%s/job/%s", env('FRONTEND_URL'), $job->slug),
                         'agency_name' => $agency->name ?? '',
-                    ]
+                    ],
 
                 ];
                 create_notification($applicant->id, sprintf('Application accepted on "%s" job.', $job->title));
