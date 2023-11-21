@@ -16,8 +16,8 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['receiver_name'] }},</span>
 
-                        <p>Great news! A new candidate has applied for your
-                            {{ sprintf('%s', $data['job_title']) }} role on
+                        <p>Great news! A new candidate has applied for your <a href="{{ $data['job_url'] }}"
+                                target="_blank">{{ $data['job_title'] }}</a> role on
                             <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
                         </p>
 
