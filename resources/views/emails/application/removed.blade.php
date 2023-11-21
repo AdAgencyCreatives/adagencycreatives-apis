@@ -22,7 +22,8 @@
 
                         <p>Unfortunately, <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>
                             will not be moving forward with your application
-                            for the role of {{ $data['job_title'] }} at this time.
+                            for the role of <a href="{{ $data['job_url'] }}"
+                                target="_blank">{{ $data['job_title'] }}</a> at this time.
                         </p>
 
                         <p>As you know, our industry is alive and changing every moment. We encourage you
