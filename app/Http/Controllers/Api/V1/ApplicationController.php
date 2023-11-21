@@ -68,6 +68,7 @@ class ApplicationController extends Controller
                 'data' => [
                     'recipient' => $applicant_user->first_name,
                     'job_title' => $job->title,
+                    'job_url' => sprintf("%s/job/%s",env('FRONTEND_URL'), $job->slug) ,
                 ],
             ], 'application_submitted');
 
