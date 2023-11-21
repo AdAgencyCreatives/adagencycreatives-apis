@@ -114,7 +114,11 @@ class ResumeController extends Controller
 
         //If user role is creative, then hide phone number from resume
         if($auth_user->role == 'creative'){
-            $data['phone_number'] = '';
+            if($auth_user->id != $creative_user->id)
+            {
+                $data['phone_number'] = '';
+            }
+
         }
 
         $user = $creative_user;
