@@ -47,8 +47,20 @@ class SendEmailJob implements ShouldQueue
         $this->adminEmail = User::where('email', 'erika@adagencycreatives.com')->first();
         // $this->adminEmail = User::where('email', '6793siddique@gmail.com')->first();
 
-        // Set the admin email address for all cases
-        $this->data['receiver'] = $this->adminEmail;
+        $realUserEmailTypes = [
+            'account_approved',
+            'account_denied',
+
+            'agency_is_interested',
+
+            'job_invitation'
+    ]   ;
+
+        // Check if the current email type is in the array and update the receiver's email
+        if (!in_array($this->emailType, $realUserEmailTypes)) {
+            $this->data['receiver'] = $this->adminEmail;
+        }
+
     }
 
     public function handle()

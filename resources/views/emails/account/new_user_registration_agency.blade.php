@@ -30,13 +30,16 @@
 
                         &nbsp;
                         <hr>
+                        &nbsp;
                         <div>
                             <b>Approve URL: </b>
                             <a href="{{ $data['APPROVE_URL'] }}" target="_blank">Approve</a>
                         </div>
+                        &nbsp;
+                        <hr>
                         <div>
                             <b>Deny URL: </b>
                             <a href="{{ $data['DENY_URL'] }}" target="_blank">Deny</a>
                         </div>
-
+                        <hr>
                         @include('emails.includes.jobboard_footer')
