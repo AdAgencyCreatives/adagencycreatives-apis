@@ -108,6 +108,14 @@ class FriendshipController extends Controller
                 return response()->json(['message' => 'Friendship request sent again.']);
 
             }
+            elseif($existingFriendship->status == 'unfriended'){
+                $existingFriendship->update([
+                    'status' => 'pending',
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id,
+                ]);
+                return response()->json(['message' => 'Friendship request sent again.']);
+            }
         }
 
     }
