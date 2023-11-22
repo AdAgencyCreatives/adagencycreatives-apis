@@ -14,8 +14,8 @@
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello Member Support,</span>
 
-                        <p>The following user has requested to join <a href="{{ config('app.frontend_url') }}"
-                                target="_blank">{{ config('app.name') }}</a>!</p>
+                        <p>The following user has requested to join <a href="{{ $data['FRONTEND_URL'] }}"
+                                target="_blank">{{ $data['APP_NAME'] }}</a>!</p>
 
                         <div><b>Name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
