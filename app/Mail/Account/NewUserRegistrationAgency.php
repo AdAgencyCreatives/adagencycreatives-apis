@@ -21,9 +21,12 @@ class NewUserRegistrationAgency extends Mailable
         $this->data['user'] = $user;
         $this->data['profile_url'] = url("/users/{$user->id}/details");
         $this->data['link'] = $data['url'];
+
         $this->data['APP_NAME'] = env('APP_NAME');
         $this->data['APP_URL'] = env('APP_URL');
+
         $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
+
         $this->data['APPROVE_URL'] = route('user.activate', ['uuid' => $user->uuid]);
         $this->data['DENY_URL'] = route('user.deactivate', ['uuid' => $user->uuid]);
     }
