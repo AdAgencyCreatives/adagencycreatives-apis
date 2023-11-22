@@ -275,7 +275,7 @@ class UserController extends Controller
     {
         $cacheKey = 'all_users_with_posts';
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')->where('role', '!=', 1)->withCount('posts')->get();
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'email', 'role', 'is_visible')->withCount('posts')->get();
         });
 
         return $users;
