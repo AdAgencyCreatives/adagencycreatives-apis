@@ -355,11 +355,14 @@ class User extends Authenticatable
                 }
             });
 
-            static::deleted(function () {
+            static::deleted(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
+
+                // Delete all the user Groups, when group is deleted, all posts will be deleted
+                Group::where('user_id', $user->id)->delete();
             });
         }
 
