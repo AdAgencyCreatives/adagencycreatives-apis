@@ -227,5 +227,7 @@ class FriendshipController extends Controller
         })->first();
 
         $friendship->delete();
+
+        // Friend request will be updated to unfriended in Friendship Model delete event
     }
 }
