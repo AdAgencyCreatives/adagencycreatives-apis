@@ -58,7 +58,8 @@ class CreativeController extends Controller
 
         $creatives = Creative::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1);
+                $query->where('is_visible', 1)
+                ->where('status', 1);
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
@@ -113,7 +114,8 @@ class CreativeController extends Controller
 
         $creatives = Creative::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1);
+                $query->where('is_visible', 1)
+                ->where('status', 1);
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
@@ -221,7 +223,8 @@ class CreativeController extends Controller
 
         $creatives = Creative::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1);
+                $query->where('is_visible', 1)
+                ->where('status', 1);
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')

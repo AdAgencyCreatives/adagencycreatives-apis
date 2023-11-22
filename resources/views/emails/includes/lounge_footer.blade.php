@@ -1,10 +1,10 @@
 <p style="margin: 0;">Thanks,</p>
-<img width="150" src="https://adagencycreatives.com/wp-content/uploads/2023/10/ad-agency-creatives-logo.png"
+<img width="150" src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo.png"
     alt="" />
 <p style="margin: 0;">Member Support</p>
 <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
-<img style="width: 100px; position: absolute; right: 15px; bottom: 15px;"
-    src="https://adagencycreatives.com/wp-content/uploads/2023/04/cropped-Ad-Agency-Creatives-Logo.png">
+<img class="footer-logo" style="width: 100px; position: absolute; right: 15px; bottom: 15px;"
+    src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/cropped-Ad-Agency-Creatives-Logo.png">
 </div>
 </td>
 </tr>

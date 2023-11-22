@@ -121,8 +121,9 @@ class Group extends Model
             Cache::forget('all_groups');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($group) {
             Cache::forget('all_groups');
+            Post::where('group_id', $group->id)->delete();
         });
     }
 }

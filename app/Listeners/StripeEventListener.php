@@ -29,8 +29,8 @@ class StripeEventListener
             $current_paid_amount = $current_paid_amount / 100; // This can be discounted amount if user used coupon
 
             $user = User::whereEmail($email)->first();
+            //we are deciding user pkg based on the price of the pkg, if price x, then pkg x, if price y, then pkg y
             $plan = Plan::where('price', $total_amount_of_package)->first();
-
             $totalQuota = $plan->quota;
             $endDate = Carbon::now()->addDays($plan->days);
 

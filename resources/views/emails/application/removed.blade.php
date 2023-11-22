@@ -10,8 +10,8 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         Status Update</h1>
-                    <div
-                        style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
+                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
+                        class="content">
 
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['applicant'] }},</span>
@@ -22,7 +22,8 @@
 
                         <p>Unfortunately, <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>
                             will not be moving forward with your application
-                            for the role of {{ $data['job_title'] }} at this time.
+                            for the role of <a href="{{ $data['job_url'] }}"
+                                target="_blank">{{ $data['job_title'] }}</a> at this time.
                         </p>
 
                         <p>As you know, our industry is alive and changing every moment. We encourage you

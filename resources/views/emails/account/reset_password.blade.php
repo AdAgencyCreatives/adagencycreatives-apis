@@ -10,7 +10,8 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         Password Reset</h1>
-                    <div style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000">
+                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000"
+                        class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $userName }},</span>
 

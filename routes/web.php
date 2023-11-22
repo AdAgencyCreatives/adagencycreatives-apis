@@ -59,6 +59,10 @@ Route::get('/users2', function () {
     }
 });
 
+Route::get('/test_env', function () {
+    dump(env('APP_URL'));
+});
+
 Route::get('/email', function () {
 
     $data = [
@@ -68,9 +72,15 @@ Route::get('/email', function () {
         'friend_name' => 'Qasim',
         'APP_NAME' => 'Ad agency',
         'APP_URL' => 'Ad agency',
+        'FRONTEND_URL' => 'Ad agency',
+        'recipient' => 'Ad agency',
+        'member' => 'Ad agency',
+        'user' => User::find(2),
+        'APPROVE_URL' => '',
+        'DENY_URL' => ''
     ];
 
-    return view('emails.friendship.request_accepted', compact('data'));
+    return view('emails.account.new_user_registration_creative', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
