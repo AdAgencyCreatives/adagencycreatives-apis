@@ -194,7 +194,7 @@ class UserController extends Controller
 
         $user = User::where('username', $username)->first();
         if ($user) {
-            $username = $username . '-' . Str::random(5);
+            $username = $username.'-'.Str::random(5);
         }
 
         return $username;

@@ -47,7 +47,7 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
  */
 
- //test commit
+//test commit
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -78,7 +78,7 @@ Route::get('/email', function () {
         'member' => 'Ad agency',
         'user' => User::find(2),
         'APPROVE_URL' => '',
-        'DENY_URL' => ''
+        'DENY_URL' => '',
     ];
 
     return view('emails.account.new_user_registration_creative', compact('data'));

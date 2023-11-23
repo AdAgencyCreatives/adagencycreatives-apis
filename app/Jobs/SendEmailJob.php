@@ -53,8 +53,8 @@ class SendEmailJob implements ShouldQueue
 
             'agency_is_interested',
 
-            'job_invitation'
-    ]   ;
+            'job_invitation',
+        ];
 
         // Check if the current email type is in the array and update the receiver's email
         // if (!in_array($this->emailType, $realUserEmailTypes)) {
