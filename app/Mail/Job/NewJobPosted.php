@@ -14,13 +14,14 @@ class NewJobPosted extends Mailable
 
     public function __construct(public $data)
     {
-        //
+        $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: 'New Job Posted: Review and Approval Needed',
+            subject: sprintf("%s posted a new job on %s", $this->data['agency'], $this->data['APP_NAME'] )
         );
     }
 

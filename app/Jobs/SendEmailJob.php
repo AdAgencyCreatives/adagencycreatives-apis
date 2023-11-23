@@ -104,7 +104,7 @@ class SendEmailJob implements ShouldQueue
                 /**
                  * Job
                  */
-            case 'new_job_added_admin':
+            case 'new_job_added_admin': // To inform the admin that a new job has been added
                 Mail::to($this->data['receiver'])->send(new NewJobPosted($this->data['data']));
                 break;
             case 'job_invitation':

@@ -254,29 +254,16 @@ class Job extends Model
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('featured_cities');
-
-                /**
-                 * Send Notification to Admin about new job
-                 */
-                $category = Category::find($job->category_id);
-                $author = User::find($job->user_id);
-
-                $data = [
-                    'data' => [
-                        'job' => $job,
-                        'category' => $category->name,
-                        'author' => $author->first_name,
-                        'agency' => $author->agency?->name,
-                    ],
-                    'receiver' => User::find(1),
-                ];
-                SendEmailJob::dispatch($data, 'new_job_added_admin');
-
             }
 
             if ($job->slug == null) {
-                $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
-                $job->slug = Str::slug($slug);
+                $agencyName = $job->user?->agency?->name ?? '';
+                $slug = sprintf('%s %s %s %s %s', $agencyName, $job->state?->name, $job->city?->name, $job->employment_type, $job->title);
+                $slug = Str::slug($slug);
+                //if slug already exists, then add 2 to it, if that exists, then add 3 to it and so on
+                $slugCount = count(Job::whereRaw("slug REGEXP '^{$slug}(-[0-9]*)?$'")->get());
+                $slug = $slugCount ? "{$slug}-{$slugCount}" : $slug;
+                $job->slug = $slug;
                 $job->seo_title = settings('job_title');
                 $job->seo_description = settings('job_description');
                 $job->save();
@@ -289,11 +276,15 @@ class Job extends Model
             if ($oldStatus !== 'approved' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
                 $category = Category::find($job->category_id);
+                $author = User::find($job->user_id);
+                $agencyName = $author->agency?->name ?? '';
+
+                $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
                 $data = [
                     'email_data' => [
                         'title' => $job->title ?? '',
-                        'url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                        'agency' => $job->user?->agency?->name,
+                        'url' => $job_url,
+                        'agency' => $agencyName,
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
@@ -301,6 +292,23 @@ class Job extends Model
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+
+
+                /**
+                * Send Notification to Admin about new job
+                */
+
+                $data = [
+                    'data' => [
+                        'job' => $job,
+                        'url' => $job_url,
+                        'category' => $category->name,
+                        'author' => $author->first_name,
+                        'agency' => $agencyName,
+                    ],
+                    'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
+                ];
+                SendEmailJob::dispatch($data, 'new_job_added_admin');
             }
 
         });
