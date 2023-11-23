@@ -53,7 +53,8 @@ if (! function_exists('getCharacterStrengthNames')) {
 if (! function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
-        return 'https://ad-agency-creatives.s3.amazonaws.com/';
+        $awsBucket = env('AWS_BUCKET');
+        return "https://{$awsBucket}.s3.amazonaws.com/";
     }
 }
 
