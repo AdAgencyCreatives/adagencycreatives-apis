@@ -291,7 +291,7 @@ class CreativeController extends Controller
             $logged_in_user = request()->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
-            if ($current_creative && $current_creative->slug == $slug) {
+            if ($current_creative && $current_creative->slug == $slug) { // Even if the user is not visible, he/she can view his/her own profile
                 unset($filters['filter']['is_visible']);
                 $request->replace($filters);
             }
@@ -308,7 +308,7 @@ class CreativeController extends Controller
                 AllowedFilter::scope('is_visible'),
                 'employment_type',
                 'title',
-                'slug',
+                AllowedFilter::exact('slug'),
                 'is_featured',
                 'is_urgent',
             ])

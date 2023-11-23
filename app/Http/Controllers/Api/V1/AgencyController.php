@@ -36,7 +36,7 @@ class AgencyController extends Controller
                 AllowedFilter::scope('is_visible'),
                 'size',
                 'name',
-                'slug',
+                AllowedFilter::exact('slug'),
                 'is_featured',
                 'is_urgent',
             ])
