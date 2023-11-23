@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\FestivalController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobAlertController;
@@ -204,3 +205,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::get('stats', [DashboardController::class, 'index']);
+
+Route::apiResource('festivals', FestivalController::class);
