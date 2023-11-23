@@ -45,7 +45,7 @@ class SendEmailJob implements ShouldQueue
         $this->emailType = $emailType;
 
         $this->adminEmail = User::where('email', env('ADMIN_EMAIL'))->first();
-        $this->adminEmail = User::where('email', '6793siddique@gmail.com')->first();
+        // $this->adminEmail = User::where('email', '6793siddique@gmail.com')->first();
 
         $realUserEmailTypes = [
             'account_approved',
