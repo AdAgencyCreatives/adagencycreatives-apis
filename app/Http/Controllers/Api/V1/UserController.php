@@ -66,7 +66,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
             $str = Str::uuid();
             if (in_array($user->role, ['agency'])) {

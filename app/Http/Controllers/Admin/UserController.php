@@ -113,7 +113,6 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
 
         $hashed = $custom_wp_hasher->HashPassword(trim($request->input('password')));
-        dump($hashed);
         User::find($userId)->update([
             'password' => $hashed,
         ]);
