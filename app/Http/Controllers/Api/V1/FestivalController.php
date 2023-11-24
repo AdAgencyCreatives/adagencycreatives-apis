@@ -3,12 +3,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Festival;
 use App\Http\Resources\Festival\FestivalCollection;
 use App\Http\Resources\Festival\FestivalResource;
 use App\Models\Attachment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class FestivalController extends Controller
@@ -64,6 +66,24 @@ class FestivalController extends Controller
 
     public function destroy(Festival $festival)
     {
-        //
+        try {
+            $festival->delete();
+            return new FestivalResource($festival);
+
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    public function get_festival_creatives()
+    {
+        $cacheKey = 'festival_creatives';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return Festival::select('id', 'first_name', 'last_name', 'email')
+                ->get();
+        });
+
+        return $users;
+
     }
 }

@@ -447,6 +447,25 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('festivals*') ? 'active' : '' }} ">
+                    <a data-target="#festival" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="camera"></i>
+                        <span class="align-middle">Festivals</span>
+                    </a>
+                    <ul id="festival"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('festivals*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('festivals') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('festivals.index') }}">
+                                <i class="align-middle" data-feather="camera"></i>
+                                <span class="align-middle">All Festivals</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('pages/create*') ? 'active' : '' }} ">
                     <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="image"></i>

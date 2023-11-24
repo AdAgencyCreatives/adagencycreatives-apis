@@ -26,7 +26,7 @@ class JobInvitationController extends Controller
             'job_id' => $job->id,
         ])->first();
 
-        // If the invitation already exists, show an appropriate message
+        //If the invitation already exists, show an appropriate message
         if ($existingInvitation) {
             return response()->json([
                 'message' => 'Invitation already sent to this user for this job.',

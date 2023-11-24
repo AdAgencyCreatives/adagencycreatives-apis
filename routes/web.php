@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\FestivalController;
 use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
@@ -79,9 +80,9 @@ Route::get('/email', function () {
         'user' => User::find(2),
         'APPROVE_URL' => '',
         'DENY_URL' => '',
+        'unread_message_count' => 6,
     ];
 
-    return view('emails.account.new_user_registration_creative', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
@@ -90,14 +91,14 @@ Route::get('/email', function () {
         'message' => 'Custom MEssage',
         'message_sender_name' => $sender->first_name,
         'message_sender_profile_url' => get_profile_picture($sender),
-        'message_count' => 6,
+        'unread_message_count' => 6,
         'profile_url' => env('FRONTEND_URL').'/profile/',
     ];
 
-    SendEmailJob::dispatch([
-        'receiver' => $recipient,
-        'data' => $data,
-    ], 'unread_message');
+    // SendEmailJob::dispatch([
+    //     'receiver' => $recipient,
+    //     'data' => $data,
+    // ], 'unread_message');
 });
 
 Route::get('/reset-messages', function () {
@@ -210,6 +211,7 @@ Route::group(['middleware' => ['auth']], function () {
          */
         Route::resource('attachments', AttachmentController::class);
         Route::resource('creative_spotlights', CreativeSpotlightController::class);
+        Route::resource('festivals', FestivalController::class);
 
         /**
          * Pages Management
