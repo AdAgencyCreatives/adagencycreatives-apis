@@ -28,7 +28,9 @@ class GroupMemberController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        $group_members = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $group_members = $query
+        ->with('user.creative')
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new GroupMemberCollection($group_members);
     }

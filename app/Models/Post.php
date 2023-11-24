@@ -22,7 +22,13 @@ class Post extends Model
 
     public function attachments()
     {
-        return $this->hasMany(Attachment::class, 'resource_id')->where('resource_type', 'post_attachment_image');
+        return $this->hasMany(Attachment::class, 'resource_id')
+            ->whereIn('resource_type', [
+
+                'post_attachment_image',
+                'post_attachment_video',
+
+            ]);
     }
 
     public function user()
