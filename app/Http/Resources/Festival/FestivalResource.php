@@ -15,8 +15,10 @@ class FestivalResource extends JsonResource
             'last_name' => $this->last_name ?? '',
             'email' => $this->email ?? '',
             'title' => $this->title ?? '',
+            'category' => $this->category ?? '',
             'path' => $this->getFullPath(),
-            'category' => $this->category ?? ''
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 

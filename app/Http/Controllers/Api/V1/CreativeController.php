@@ -104,9 +104,9 @@ class CreativeController extends Controller
                 $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$firstName% $lastName%'" . "\n";
                 $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$lastName% $firstName%'" . "\n";
 
-                 // Additional check for reverse order
-                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'"."\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'"."\n";
+                // Additional check for reverse order
+                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'" . "\n";
             } else {
                 // Search by individual terms
                 $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '%$term%'" . "\n";
@@ -176,9 +176,9 @@ class CreativeController extends Controller
                 $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$firstName% $lastName%'" . "\n";
                 $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$lastName% $firstName%'" . "\n";
 
-                 // Additional check for reverse order
-                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'"."\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'"."\n";
+                // Additional check for reverse order
+                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'" . "\n";
             } else {
                 // Search by individual terms
                 $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '%$term%'" . "\n";
@@ -450,15 +450,6 @@ class CreativeController extends Controller
                 'message' => 'No record found.',
             ], Response::HTTP_NOT_FOUND);
         }
-    }
-
-    public function creative_spotlight(Request $request)
-    {
-        $creative_spotlights = Attachment::with('user.creative.category')
-            ->where('resource_type', 'creative_spotlight')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
-        return new CreativeSpotlightCollection($creative_spotlights);
     }
 
     public function update_profile(Request $request, $uuid)
