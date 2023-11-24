@@ -38,7 +38,6 @@ class SendEmailJob implements ShouldQueue
     protected $adminEmail;
     protected $devEmails;
 
-    protected $additionalEmails;
 
     public function __construct($data, $emailType)
     {
