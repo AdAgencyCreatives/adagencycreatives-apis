@@ -15,20 +15,6 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // public function searchableAs(): string
-    // {
-    //     return 'jobs_index';
-    // }
-
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'title' => $this->title,
-    //         'description' => $this->description,
-    //         'employment_type' => $this->employment_type,
-    //     ];
-    // }
-
     protected $table = 'job_posts';
 
     protected $fillable = [
@@ -273,7 +259,7 @@ class Job extends Model
 
         static::updating(function ($job) {
             $oldStatus = $job->getOriginal('status');
-            if ($oldStatus !== 'approved' && $job->status === 'approved') {
+            if ($oldStatus == 'draft' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
                 $category = Category::find($job->category_id);
                 $author = User::find($job->user_id);
