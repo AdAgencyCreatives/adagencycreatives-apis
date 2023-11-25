@@ -81,7 +81,7 @@
                 } else if (videoExtensions.includes(extension)) {
                     // Display video using anchor tags
                     displayContent = '<a href="' + fileUrl + '" class="video-container" target="_blank">' +
-                        '<video width="150" height="150" controls poster="http://www.java2s.com/style/download.png">' +
+                        '<video width="150" height="150" controls >' +
                         '<source src="' + fileUrl + '" type="video/mp4">' +
                         'Your browser does not support the video tag.' +
                         '</video>' +
@@ -131,8 +131,6 @@
             });
         }
 
-
-
         $(document).ready(function() {
             fetchData(currentPage);
             fetchUsers();
@@ -159,11 +157,40 @@
             });
 
 
-            $(document).on('change', '.status-dropdown', function() {
-                var selectedStatus = $(this).val();
-                var postId = $(this).data('post-id');
-                var csrfToken = '{{ csrf_token() }}';
-                updateStatus(postId, 'attachment', 'attachments', csrfToken, selectedStatus);
+            $('#download-festival-btn').on('click', function() {
+
+                var selectedUser = $('#all_users').val();
+                var selectedCategory = $('#category').val();
+
+                var filters = {
+                    email: selectedUser,
+                    category: selectedCategory
+                };
+
+                var requestData = {};
+
+                Object.keys(filters).forEach(function(key) {
+                    if (filters[key] !== '-100') {
+                        requestData[`filter[${key}]`] = filters[key];
+                    }
+                });
+
+                requestData['sort'] = '-created_at';
+                console.log(requestData);
+
+                var url = '/festivals/download?filter[email]=' + selectedUser + '&filter[category]=' +
+                    selectedCategory;
+
+                // trigger the click funtionality with target _blank, so that the download will start
+                $('<a />', {
+                        "download": "festivals.xlsx",
+                        "href": url,
+                        "target": "_blank"
+                    }).appendTo("body")
+                    .on("click", function() {
+                        $(this).remove()
+                    })[0].click()
+
             });
         });
     </script>
@@ -219,6 +246,7 @@
                         </div>
                         <div class="row dt-row">
                             <div class="col-sm-12">
+
                                 <table id="attachments-table" class="table table-striped dataTable no-footer dtr-inline"
                                     style="width: 100%;">
                                     <thead>

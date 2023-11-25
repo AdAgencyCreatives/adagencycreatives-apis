@@ -17,6 +17,7 @@ class Festival extends Model
         'title',
         'path',
         'category',
+        'version',
     ];
 
     protected static function booted()
