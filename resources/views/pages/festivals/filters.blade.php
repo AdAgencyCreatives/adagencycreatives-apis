@@ -38,13 +38,23 @@
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Apply</button>
                             <button type="button" class="btn btn-sm btn-secondary mt-2"
                                 id="clear-button">Clear</button>
-
-
                         </div>
+
+
+                    </div>
+
+                </form>
+
+                <div class="row">
+                    <div class="col-sm mt-4">
+                        <a href="/festivals/download"><button class="btn btn-primary">Download
+                                Excel</button></a>
                     </div>
 
 
-                </form>
+                </div>
+
+
 
             </div>
         </div>

@@ -207,6 +207,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
 
         /**
+        * Download Festivals
+        */
+        Route::get('festivals/download', [FestivalController::class, 'downloadFestivals'])->name('festivals.download');
+
+        /**
          * Attachment Media
          */
         Route::resource('attachments', AttachmentController::class);
@@ -252,9 +257,11 @@ Route::group(['middleware' => ['auth']], function () {
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
-        Route::get('migrate-fresh-seed', function () {
-            Artisan::call('migrate:fresh --seed');
-        });
+        // Route::get('migrate-fresh-seed', function () {
+        //     Artisan::call('migrate:fresh --seed');
+        // });
+
+
 
     });
 
