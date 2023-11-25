@@ -112,9 +112,9 @@ class SendEmailJob implements ShouldQueue
             case 'job_invitation':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobInvitation($this->data['data']));
                 break;
-            case 'custom_job_request_rejected':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
-                break;
+            // case 'custom_job_request_rejected':
+            //     Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
+            //     break;
 
                 /**
                  * Application
