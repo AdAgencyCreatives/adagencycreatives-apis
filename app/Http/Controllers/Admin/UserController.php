@@ -190,7 +190,7 @@ class UserController extends Controller
                 }
             }
 
-            return redirect()->back();
+            return redirect()->route('users.index');
         }
     }
 
@@ -206,7 +206,7 @@ class UserController extends Controller
                 'receiver' => $user, 'data' => $user,
             ], 'account_denied');
 
-            return redirect()->back();
+            return redirect()->route('users.index');
         }
     }
 }
