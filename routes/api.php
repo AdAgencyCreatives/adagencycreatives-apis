@@ -208,3 +208,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('stats', [DashboardController::class, 'index']);
 
 Route::apiResource('festivals', FestivalController::class);
+Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
