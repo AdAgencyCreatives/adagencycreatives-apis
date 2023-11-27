@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Api\V1\ActivityController;
 use App\Http\Controllers\Api\V1\AddressController;
@@ -209,3 +210,4 @@ Route::get('stats', [DashboardController::class, 'index']);
 
 Route::apiResource('festivals', FestivalController::class);
 Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
+Route::get('pages', [PageController::class, 'index']);
