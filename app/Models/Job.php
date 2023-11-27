@@ -263,14 +263,14 @@ class Job extends Model
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
                 $category = Category::find($job->category_id);
                 $author = User::find($job->user_id);
-                $agencyName = $author->agency?->name ?? '';
+                $agency = $author->agency;
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
                 $data = [
                     'email_data' => [
                         'title' => $job->title ?? '',
                         'url' => $job_url,
-                        'agency' => $agencyName,
+                        'agency' => $agency->name ?? '',
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
@@ -290,7 +290,10 @@ class Job extends Model
                         'url' => $job_url,
                         'category' => $category->name,
                         'author' => $author->first_name,
-                        'agency' => $agencyName,
+                        'agency' => $agency->name ?? '',
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'created_at' => $job->created_at->format('M-d-Y'),
+                        'expired_at' => $job->expired_at->format('M-d-Y'),
                     ],
                     'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
                 ];

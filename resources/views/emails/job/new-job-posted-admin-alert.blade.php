@@ -17,9 +17,11 @@
 
 
                         <p>Great news!</p>
-                        <p>A New Job <strong>"{{ $data['job']->title }}"</strong> has been
+                        <p>A New Job <strong><a href="{{ $data['url'] }}"
+                                    target="_blank">{{ $data['job']->title }}</a></strong> has been
                             posted
-                            by <strong>{{ $data['author'] }}</strong>.</p>
+                            by <strong><a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['author'] }}</a>
+                            </strong>.</p>
 
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">
                             Posted Job Information</h4>
@@ -37,11 +39,11 @@
                         </div>
 
                         <div><b>Posted at:
-                            </b>{{ $data['job']->created_at }}
+                            </b>{{ $data['created_at'] }}
                         </div>
 
                         <div><b>Expires at:
-                            </b>{{ $data['job']->expired_at }}
+                            </b>{{ $data['expired_at'] }}
                         </div>
 
                         <div><b>Posted by:

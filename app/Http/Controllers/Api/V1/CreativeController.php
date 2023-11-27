@@ -242,11 +242,19 @@ class CreativeController extends Controller
 
         $sql .= 'UNION DISTINCT' . "\n";
 
-        // Search via Employment Type
+        // Search via Employment Type (Tye of work e.g. Full-Time)
         $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.employment_type LIKE '%" . trim($term) . "%'" . "\n";
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+        // Search via Years of experience
+        $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.years_of_experience LIKE '%" . trim($term) . "%'" . "\n";
         }
 
         $workplace_preferences = [
