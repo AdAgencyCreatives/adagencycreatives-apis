@@ -31,11 +31,11 @@ class GeneratePortfolioVisual extends Command
         $user_id = $this->argument('user_id');
         $url = $this->argument('url');
 
-        $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://'.$url;
+        // $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://'.$url;
 
         $googlePagespeedResponse = Http::get('https://www.googleapis.com/pagespeedonline/v5/runPagespeed', [
             'screenshot' => 'true',
-            'url' => $url,
+            'url' => trim($url),
         ]);
 
         $googlePagespeedObject = $googlePagespeedResponse->json();
