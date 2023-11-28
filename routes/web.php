@@ -62,6 +62,10 @@ Route::get('/users2', function () {
     }
 });
 
+Route::get('/timezone', function () {
+    dd(now());
+});
+
 Route::get('/find_missing_portfolios', function () {
 
     $creatives = User::where('role', 4)->get();
