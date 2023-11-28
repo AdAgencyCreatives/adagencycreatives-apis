@@ -33,6 +33,7 @@ class PostController extends Controller
         $posts = $query->with(['reactions' => function ($query) {
             // You can further customize the reactions query if needed
         }])
+            ->whereHas('user') // If the user is deleted, don't show the attachment
             ->withCount('reactions')
             ->withCount('comments')
             ->withCount('likes')
