@@ -27,8 +27,8 @@ class PostResource extends JsonResource
             'likes_count' => $this->likes_count,
             'reactions' => $this->get_reactions_count(),
             'has_liked_post' => $this->user_has_liked,
-            // 'created_at' => $this->created_at->format(config('global.datetime_format')),
-            'created_at' => $this->created_at->diffForHumans(),
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
+            // 'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
             'relationships' => [
