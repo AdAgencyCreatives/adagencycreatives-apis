@@ -26,7 +26,6 @@ class AgencyController extends Controller
         $industries = $this->processIndustryExperience($request, $filters);
         $medias = $this->processMediaExperience($request, $filters);
 
-        // dd($industries);
         $query = QueryBuilder::for(Agency::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
