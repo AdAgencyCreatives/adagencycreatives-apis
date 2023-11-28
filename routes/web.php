@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Jobs\SendEmailJob;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Group;
 use App\Models\Industry;
@@ -61,8 +62,23 @@ Route::get('/users2', function () {
     }
 });
 
-Route::get('/test_env', function () {
-    dump(env('APP_URL'));
+Route::get('/find_missing_portfolios', function () {
+
+    $creatives = User::where('role', 4)->get();
+    foreach($creatives as $user) {
+        $portfolio_website = $user->portfolio_website_link()->first();
+        if ($portfolio_website) {
+            $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
+            if(!$existing_preview){
+                dump($user->email . " missing.");
+            }
+            else{
+                echo "<img src='". getAttachmentBasePath() . $existing_preview->path."' width='200px' />";
+            }
+
+        }
+    }
+
 });
 
 Route::get('/email', function () {
