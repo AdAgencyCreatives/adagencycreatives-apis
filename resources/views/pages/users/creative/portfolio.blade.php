@@ -28,7 +28,18 @@
                 @foreach ($user->portfolio_item_links as $link)
                     <div>
                         <p>
-                            <a href="{{ $link->url }}" target="_blank">{{ $link->url }}</a>
+                            @php
+                                // Check if the URL starts with "http://" or "https://"
+                                $url = $link->url;
+                                if (!Str::startsWith($url, ['http://', 'https://'])) {
+                                    // If not, assume it's a relative URL and prepend "http://"
+    $url = 'http://' . $url;
+                                }
+                            @endphp
+
+                            <a href="{{ $url }}" target="_blank">{{ $link->url }}</a>
+
+
                         </p>
                     </div>
                 @endforeach
