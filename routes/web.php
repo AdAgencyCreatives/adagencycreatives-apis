@@ -72,9 +72,6 @@ Route::get('/find_missing_portfolios', function () {
             if(!$existing_preview){
                 dump($user->email . " " . $user->id .  " missing.");
             }
-            else{
-                echo "<img src='". getAttachmentBasePath() . $existing_preview->path."' width='200px' />";
-            }
 
         }
     }
