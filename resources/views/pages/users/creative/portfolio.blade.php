@@ -41,6 +41,7 @@
 
 
                         </p>
+                        <p>{{ $user->uuid }}</p>
                     </div>
                 @endforeach
 
