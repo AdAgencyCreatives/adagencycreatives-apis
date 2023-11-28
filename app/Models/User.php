@@ -95,7 +95,7 @@ class User extends Authenticatable
 
     public function portfolio_website_preview()
     {
-        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview');
+        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview')->latest();
     }
 
     public function agency()
