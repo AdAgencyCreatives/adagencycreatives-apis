@@ -18,6 +18,7 @@ class MessageResource extends JsonResource
             'type' => $this->type,
             'message_type' => $this->getMessageType($sender1, $current_user),
             'created_at' => $this->created_at,
+            'human_readable_date' => $this->created_at->diffForHumans(),
         ];
     }
 
