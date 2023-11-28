@@ -267,6 +267,17 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeFirstName(Builder $query, $name): Builder
+    {
+        $name = explode(' ', $name);
+        //if name is only one, then search in first name, if two then search seocnd term into last_name
+        if(count($name) == 1){
+            return $query->where('first_name', 'LIKE', '%'.$name[0].'%');
+        }else{
+            return $query->where('first_name', 'LIKE', '%'.$name[0].'%')->Where('last_name', 'LIKE', '%'.$name[1].'%');
+        }
+    }
+
     public function getRoleAttribute($value)
     {
         switch ($value) {
