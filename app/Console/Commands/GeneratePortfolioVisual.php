@@ -33,25 +33,18 @@ class GeneratePortfolioVisual extends Command
 
         $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://'.$url;
 
-        if (
-            $url
-            && ! preg_match('/(?:aparat\.com|youtube\.com|vimeo\.com|dailymotion\.com)/i', $url)
-        ) {
+        $googlePagespeedResponse = Http::get('https://www.googleapis.com/pagespeedonline/v5/runPagespeed', [
+            'screenshot' => 'true',
+            'url' => $url,
+        ]);
 
-            $googlePagespeedResponse = Http::get('https://www.googleapis.com/pagespeedonline/v5/runPagespeed', [
-                'screenshot' => 'true',
-                'url' => $url,
-            ]);
+        $googlePagespeedObject = $googlePagespeedResponse->json();
 
-            $googlePagespeedObject = $googlePagespeedResponse->json();
+        if (isset($googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'])) {
+            $screenshot = $googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'];
+            $screenshot = str_replace(['_', '-'], ['/', '+'], $screenshot);
 
-            if (isset($googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'])) {
-                $screenshot = $googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'];
-                $screenshot = str_replace(['_', '-'], ['/', '+'], $screenshot);
-
-                $this->storeAttachment($screenshot, $user_id, 'website_preview');
-            }
-
+            $this->storeAttachment($screenshot, $user_id, 'website_preview');
         }
 
         $this->info('Portfolio visuals generated successfully.');
