@@ -99,7 +99,7 @@
                         '" target="_blank">Details</a>';
                 } else {
                     roleBasedActions = '<a href="' + editUrl +
-                        '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
+                        '" target="_blank">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
                         user.uuid + '">Delete</a>';
                 }
 
