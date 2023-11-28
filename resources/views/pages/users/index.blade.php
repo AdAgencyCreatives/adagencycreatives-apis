@@ -96,7 +96,7 @@
 
                 if (current_logged_in_userid == user.id) {
                     roleBasedActions = '<a href="' + editUrl +
-                        '">Details</a>';
+                        '" target="_blank">Details</a>';
                 } else {
                     roleBasedActions = '<a href="' + editUrl +
                         '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +

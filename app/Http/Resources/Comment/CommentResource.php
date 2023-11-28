@@ -10,6 +10,9 @@ class CommentResource extends JsonResource
     {
         $user = $this->user;
 
+        if(!$user)
+        return [];
+
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
