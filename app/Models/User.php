@@ -353,6 +353,13 @@ class User extends Authenticatable
                     $creative->slug = Str::slug($user->username);
                     $creative->save();
                 }
+
+                //Update slug in agencies table when username is changes, slug in agencies table fallbacks to username
+                if ($user->agency) {
+                    $agency = $user->agency;
+                    $agency->slug = Str::slug($user->username);
+                    $agency->save();
+                }
             });
 
             static::deleted(function ($user) {
