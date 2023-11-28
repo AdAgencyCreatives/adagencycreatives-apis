@@ -67,6 +67,9 @@ class GeneratePortfolioVisual extends Command
             $folder = $resource_type.'/'.$uuid.'/'.$filename;
             $filePath = Storage::disk('s3')->put($folder, $img);
 
+            //Delete previous preview
+            Attachment::where('user_id', $user_id)->where('resource_type', $resource_type)->delete();
+
             $attachment = Attachment::create([
                 'uuid' => $uuid,
                 'user_id' => $user_id,
