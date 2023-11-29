@@ -49,7 +49,7 @@ class EducationController extends Controller
 
             return new EducationCollection($createdEducations);
         } catch (\Exception $e) {
-            return ApiResponse::error('EdS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('EdS-01 ' . $e->getMessage(), 400);
         }
     }
 
@@ -60,6 +60,10 @@ class EducationController extends Controller
         $educations = $request->input('educations');
 
         foreach ($educations as $educationData) {
+
+            if($educationData['degree'] == null && $educationData['college'] == null && $educationData['completed_at'] == null) {
+                continue;
+            }
 
             $education = Education::where('uuid', $educationData['id'])->first();
 

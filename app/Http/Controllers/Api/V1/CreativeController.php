@@ -290,6 +290,61 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
+    public function search4(Request $request)
+    {
+        $term = $request->search;
+        $field = $request->field;
+
+        $sql = '';
+        switch ($field) {
+
+            case 'state':
+                // Search via State Name
+                $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+                $sql .= " WHERE (lc.parent_id IS NULL AND lc.name ='" . trim($term) . "')";
+                break;
+
+            case 'city':
+                // Search via City Name
+                $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+                $sql .= " WHERE(lc.parent_id IS NOT NULL AND lc.name ='" . trim($term) . "')" . "\n";
+                break;
+
+            case 'industry-experience':
+                // Search via Industry Experience
+                $sql = 'SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
+                $sql .= " WHERE ind.name ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'media-experience':
+                // Search via Media Experience
+                $sql = 'SELECT cr.id FROM creatives cr JOIN medias med ON FIND_IN_SET(med.uuid, cr.media_experience) > 0' . "\n";
+                $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'work-type':
+                // Search via Type of Work e.g Freelance, Contract, Full-Time
+                $sql = 'SELECT cr.id FROM creatives cr' . "\n";
+                $sql .= " WHERE cr.employment_type LIKE '%" . trim($term) . "%'" . "\n";
+                break;
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)->pluck('id')->toArray();
+
+        $creatives = Creative::whereIn('id', $creativeIds)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
     public function index(Request $request)
     {
         $filters = $request->all();

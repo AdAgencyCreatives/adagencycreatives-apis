@@ -92,6 +92,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search1', [CreativeController::class, 'search1']);
     Route::get('creatives/search2', [CreativeController::class, 'search2']);
     Route::get('creatives/search3', [CreativeController::class, 'search3']);
+    Route::get('creatives/search4', [CreativeController::class, 'search4']);
 
     /**
      * Job Board Routes
