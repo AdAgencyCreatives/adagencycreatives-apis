@@ -56,12 +56,11 @@ class EducationController extends Controller
     public function update(UpdateEducationRequest $request)
     {
         $user = $request->user();
-
         $educations = $request->input('educations');
 
         foreach ($educations as $educationData) {
 
-            if($educationData['degree'] == null && $educationData['college'] == null && $educationData['completed_at'] == null) {
+            if ($this->isEmptyExperienceData($educationData)) {
                 continue;
             }
 
@@ -81,6 +80,13 @@ class EducationController extends Controller
 
         return new EducationCollection($educations);
 
+    }
+
+    private function isEmptyExperienceData($experienceData)
+    {
+        return empty(array_filter($experienceData, function ($value) {
+            return $value !== null;
+        }));
     }
 
     public function destroy($uuid)
