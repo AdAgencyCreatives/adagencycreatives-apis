@@ -66,21 +66,7 @@ Route::get('/timezone', function () {
     dd(now());
 });
 
-Route::get('/find_missing_portfolios', function () {
 
-    $creatives = User::where('role', 4)->get();
-    foreach($creatives as $user) {
-        $portfolio_website = $user->portfolio_website_link()->first();
-        if ($portfolio_website) {
-            $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
-            if(!$existing_preview){
-                dump($user->email . " " . $user->id .  " missing.");
-            }
-
-        }
-    }
-
-});
 
 Route::get('/email', function () {
 
@@ -109,7 +95,7 @@ Route::get('/email', function () {
         'message_sender_name' => $sender->first_name,
         'message_sender_profile_url' => get_profile_picture($sender),
         'unread_message_count' => 6,
-        'profile_url' => env('FRONTEND_URL').'/profile/',
+        'profile_url' => env('FRONTEND_URL') . '/profile/',
     ];
 
     // SendEmailJob::dispatch([
@@ -136,6 +122,22 @@ Route::get('advisor/impersonate/{uuid}', [UserController::class, 'advisor_impers
 Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['admin']], function () {
+
+         // Get those users whose portfolio preview image is not present
+        Route::get('/find_missing_portfolios', function () {
+            $creatives = User::where('role', 4)->where('status', 1)->get();
+            foreach($creatives as $user) {
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
+                    if(!$existing_preview) {
+                        dump($user->email . " " . $user->id . " missing.");
+                    }
+
+                }
+            }
+        });
+
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
