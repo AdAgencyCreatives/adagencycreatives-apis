@@ -31,20 +31,21 @@ class GeneratePortfolioVisual extends Command
         $user_id = $this->argument('user_id');
         $url = $this->argument('url');
 
-        // $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://'.$url;
+        $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://' . $url;
 
-        $googlePagespeedResponse = Http::get('https://www.googleapis.com/pagespeedonline/v5/runPagespeed', [
-            'screenshot' => 'true',
-            'url' => trim($url),
-        ]);
+        $api_url = sprintf("%s&url=%s%s", env('API_FLASH_BASE_URL'), $url, "&format=png&width=1366&height=768&fresh=true&quality=100&delay=3&no_cookie_banners=true&no_ads=true&no_tracking=true") ;
 
-        $googlePagespeedObject = $googlePagespeedResponse->json();
 
-        if (isset($googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'])) {
-            $screenshot = $googlePagespeedObject['lighthouseResult']['audits']['final-screenshot']['details']['data'];
-            $screenshot = str_replace(['_', '-'], ['/', '+'], $screenshot);
+        $apiflashResponse = Http::get($api_url);
+        // Check if the request was successful
+        if ($apiflashResponse->successful()) {
+            // Store the image in AWS
+            $this->storeAttachment($apiflashResponse, $user_id, 'website_preview');
 
-            $this->storeAttachment($screenshot, $user_id, 'website_preview');
+            $this->info('Portfolio visuals generated successfully.');
+        } else {
+            // Handle the case where the request to Apiflash failed
+            $this->error('Failed to generate portfolio visuals. Apiflash API request failed.');
         }
 
         $this->info('Portfolio visuals generated successfully.');
@@ -56,9 +57,9 @@ class GeneratePortfolioVisual extends Command
             $uuid = Str::uuid();
             $filename = sprintf('%s_portfolio', $user_id);
 
-            $img = file_get_contents($imageData);
-            $folder = $resource_type.'/'.$uuid.'/'.$filename;
-            $filePath = Storage::disk('s3')->put($folder, $img);
+            // $img = file_get_contents($imageData);
+            $folder = $resource_type . '/' . $uuid . '/' . $filename;
+            $filePath = Storage::disk('s3')->put($folder, $imageData);
 
             //Delete previous preview
             Attachment::where('user_id', $user_id)->where('resource_type', $resource_type)->delete();
