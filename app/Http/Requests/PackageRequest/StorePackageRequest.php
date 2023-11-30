@@ -23,7 +23,6 @@ class StorePackageRequest extends FormRequest
             'industry_experience.*' => 'exists:industries,uuid',
             'media_experience' => 'required|array',
             'media_experience.*' => 'exists:medias,uuid',
-            'salary_range' => 'required|string|max:255',
         ];
     }
 }
