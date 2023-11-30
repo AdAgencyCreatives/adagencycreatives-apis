@@ -322,10 +322,22 @@ class CreativeController extends Controller
                 $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
                 break;
 
+            case 'strengths':
+                // Search via Character Strengths
+                $sql = 'SELECT cr.id FROM creatives cr JOIN strengths strn ON FIND_IN_SET(strn.uuid, cr.strengths) > 0' . "\n";
+                $sql .= " WHERE strn.name ='" . trim($term) . "'" . "\n";
+                break;
+
             case 'work-type':
                 // Search via Type of Work e.g Freelance, Contract, Full-Time
                 $sql = 'SELECT cr.id FROM creatives cr' . "\n";
                 $sql .= " WHERE cr.employment_type LIKE '%" . trim($term) . "%'" . "\n";
+                break;
+
+            case 'years-of-experience':
+                // Search via Type of Work e.g Freelance, Contract, Full-Time
+                $sql = 'SELECT cr.id FROM creatives cr' . "\n";
+                $sql .= " WHERE cr.years_of_experience ='" . trim($term) . "'" . "\n";
                 break;
         }
 

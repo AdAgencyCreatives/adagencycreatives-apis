@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\Account\AccountApproved;
+use App\Mail\Account\AccountApprovedAgency;
 use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
@@ -78,6 +79,9 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'new_user_registration_agency_role':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NewUserRegistrationAgency($this->data['data']));
+                break;
+            case 'account_approved_agency':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new AccountApprovedAgency($this->data['data']));
                 break;
             case 'account_approved':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new AccountApproved($this->data['data']));
