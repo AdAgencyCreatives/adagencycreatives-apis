@@ -143,14 +143,25 @@ class UserController extends Controller
             $newStatus = $request->input('status');
 
             if ($newStatus === 'active' && $oldStatus === 'pending') {
-                SendEmailJob::dispatch([
+
+
+                if ($user->role == 'agency') {
+                    SendEmailJob::dispatch([
                     'receiver' => $user, 'data' => $user,
-                ], 'account_approved');
+                ], 'account_approved_agency');
+                }
+
 
                 /**
                  * Generate portfolio website preview
                  */
                 if ($user->role == 'creative') {
+
+                     SendEmailJob::dispatch([
+                        'receiver' => $user, 'data' => $user,
+                    ], 'account_approved');
+
+
                     $portfolio_website = $user->portfolio_website_link()->first();
                     if ($portfolio_website) {
                         Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
