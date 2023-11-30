@@ -140,7 +140,7 @@ class UserController extends Controller
     {
         $user = User::where('uuid', $uuid)->firstOrFail();
         $token = $user->createToken('impersonation_token')->plainTextToken;
-        $url = sprintf('Location: %s/%s', env('FRONTEND_IMPERSONATE_URL'), $token);
+        $url = sprintf('Location: %s/%s?role=advisor', env('FRONTEND_IMPERSONATE_URL'), $token);
         header($url);
         exit();
     }

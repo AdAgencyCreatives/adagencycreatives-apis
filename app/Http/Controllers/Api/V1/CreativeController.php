@@ -335,6 +335,10 @@ class CreativeController extends Controller
                 break;
 
             case 'years-of-experience':
+
+                if($term == 'Director 10  years'){
+                    $term = 'Director 10+ years';
+                }
                 // Search via Type of Work e.g Freelance, Contract, Full-Time
                 $sql = 'SELECT cr.id FROM creatives cr' . "\n";
                 $sql .= " WHERE cr.years_of_experience ='" . trim($term) . "'" . "\n";

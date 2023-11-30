@@ -29,6 +29,7 @@ class PackageRequestController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('assigned_to'),
                 'status',
+                'uuid',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
