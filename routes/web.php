@@ -104,9 +104,10 @@ Route::get('/email', function () {
     // ], 'unread_message');
 });
 
-Route::get('/reset-messages', function () {
-    DB::table('messages')->truncate();
-    echo 'Messages Cleared';
+
+
+Route::get('/check-missing-locations', function () {
+    Artisan::call('check:missing-locations');
 
 });
 
