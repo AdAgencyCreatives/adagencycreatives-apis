@@ -379,6 +379,13 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
 
+                if($user->role == 'creative'){
+                    Creative::where('user_id', $user->id)->delete();
+                }
+                elseif($user->role == 'agency'){
+                    Agency::where('user_id', $user->id)->delete();
+                }
+
                 // Delete all the user Groups, when group is deleted, all posts will be deleted
                 Group::where('user_id', $user->id)->delete();
             });
