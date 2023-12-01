@@ -8,11 +8,13 @@ use App\Http\Requests\Agency\StoreAgencyRequest;
 use App\Http\Requests\Agency\UpdateAgencyRequest;
 use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Agency\AgencyResource;
+use App\Http\Resources\Agency\AgencyShortCollection;
 use App\Models\Agency;
 use App\Models\Industry;
 use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -61,6 +63,69 @@ class AgencyController extends Controller
                 'user.business_phone',
             ])
             ->whereIn('user_id', $agency_user_ids)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        return new AgencyCollection($agencies);
+    }
+
+    public function search1(Request $request)
+    {
+        $term = $request->search;
+        $field = $request->field;
+
+        $sql = '';
+        switch ($field) {
+
+            case 'state':
+                // Search via State Name
+                $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+                $sql .= " WHERE (lc.parent_id IS NULL AND lc.name ='" . trim($term) . "')";
+                break;
+
+            case 'city':
+                // Search via City Name
+                $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+                $sql .= " WHERE(lc.parent_id IS NOT NULL AND lc.name ='" . trim($term) . "')" . "\n";
+                break;
+
+            case 'industry-experience':
+                // Search via Industry Experience
+                $sql = 'SELECT agn.id FROM agencies agn JOIN industries ind ON FIND_IN_SET(ind.uuid, agn.industry_experience) > 0' . "\n";
+                $sql .= " WHERE ind.name ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'media-experience':
+                // Search via Media Experience
+                $sql = 'SELECT agn.id FROM agencies agn JOIN medias med ON FIND_IN_SET(med.uuid, agn.media_experience) > 0' . "\n";
+                $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'workplace-preference':
+                // Search via Workplace Preference
+                $workplace_preferences = [
+                'remote' => 'is_remote',
+                'hybrid' => 'is_hybrid',
+                'on site' => 'is_onsite',
+                ];
+
+                if (isset($workplace_preferences[$term])) {
+                    $sql = 'SELECT agn.id FROM agencies agn WHERE ' . $workplace_preferences[$term] . '=1';
+                }
+                break;
+
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)->pluck('id')->toArray();
+
+        $agencies = Agency::whereIn('id', $creativeIds)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
