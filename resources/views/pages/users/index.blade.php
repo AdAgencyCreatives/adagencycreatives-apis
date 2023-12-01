@@ -27,8 +27,15 @@
                 $('#role').trigger('change');
                 $('#role').prop('disabled', true);
 
-                //Enable agency slug filter
+                //Enable agency slug/Name filter
                 $('#agency_slug_filter').removeClass('d-none');
+                $('#agency_name_filter').removeClass('d-none');
+
+
+                $('#first_name_div').hide();
+                $('#username_div').hide();
+
+
             }
             if (currentUrl.includes('role=4')) {
                 $('#role').val('4');
@@ -43,6 +50,7 @@
             var username = $('#username').val();
             var email = $('#email').val();
             var company_slug = $('#agency_slug').val();
+            var agency_name = $('#agency_name').val();
 
             filters = {
                 role: selectedRole,
@@ -51,7 +59,8 @@
                 email: email,
                 first_name: firstname,
                 last_name: lastname,
-                company_slug: company_slug
+                company_slug: company_slug,
+                agency_name: agency_name
             };
 
             Object.keys(filters).forEach(function(key) {

@@ -44,21 +44,21 @@
 
                     <div class="row">
 
-                        <div class="col-sm">
+                        <div class="col-sm" id="first_name_div">
                             <div class="form-group">
-                                <label class="form-label" for="first_name">First Name</label>
+                                <label class="form-label" for="first_name">Name</label>
                                 <input id="first_name" class="form-control" type="text" name="first_name"
-                                    placeholder="Enter First Name" />
+                                    placeholder="Enter Name" />
                             </div>
                         </div>
-                        <div class="col-sm">
+                        {{-- <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="last_name">Last Name</label>
                                 <input id="last_name" class="form-control" type="text" name="last_name"
                                     placeholder="Enter Last Name" />
                             </div>
-                        </div>
-                        <div class="col-sm">
+                        </div> --}}
+                        <div class="col-sm" id="username_div">
                             <div class="form-group">
                                 <label class="form-label" for="username">Username</label>
                                 <input id="username" class="form-control" type="text" name="username"
@@ -72,6 +72,15 @@
 
                     <div class="row">
 
+                        <div class="col-sm d-none" id="agency_name_filter">
+                            <div class="form-group">
+                                <label class="form-label" for="name">Agency Name</label>
+                                <input id="agency_name" class="form-control" type="text" name="agency_name"
+                                    placeholder="Enter Agency Name" />
+                            </div>
+                        </div>
+
+
                         <div class="col-sm d-none" id="agency_slug_filter">
                             <div class="form-group">
                                 <label class="form-label" for="slug">Slug</label>
@@ -79,6 +88,8 @@
                                     placeholder="Enter slug" />
                             </div>
                         </div>
+
+
 
                     </div>
 
