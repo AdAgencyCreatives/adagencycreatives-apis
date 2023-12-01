@@ -26,6 +26,7 @@ class PackageRequestResource extends JsonResource
                 'state' => $this->state->name,
                 'city' => $this->city->name,
             ],
+            'comment' => $this->comment,
             'impersonate_url' => route('advisor.impersonate', $user->uuid),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
