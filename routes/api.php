@@ -97,7 +97,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Agency Advance Search
      */
-    Route::get('agencies/search1', [AgencyController::class, 'search1']);
+    Route::get('agencies/search1', [AgencyController::class, 'search1']); //For agency Detail page
+    Route::get('agencies/search2', [AgencyController::class, 'search2']); // For agency directory page
 
     /**
      * Job Board Routes

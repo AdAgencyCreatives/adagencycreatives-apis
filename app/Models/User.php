@@ -267,6 +267,16 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeAgencyName(Builder $query, $name): Builder
+    {
+        $agency = Agency::where('name', $name)->first();
+        if ($agency) {
+            return $query->where('id', $agency->user_id);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
     public function scopeFirstName(Builder $query, $name): Builder
     {
         $name = explode(' ', $name);

@@ -32,7 +32,6 @@ class UserController extends Controller
     {
         $query = QueryBuilder::for(User::class)
             ->allowedFilters([
-                // 'first_name',
                 'last_name',
                 'username',
                 'email',
@@ -40,6 +39,7 @@ class UserController extends Controller
                 'status',
                 'is_visible',
                 AllowedFilter::scope('company_slug'),
+                AllowedFilter::scope('agency_name'),
                 AllowedFilter::scope('first_name'),
             ])
 
