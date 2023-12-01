@@ -56,6 +56,7 @@ class PackageRequestController extends Controller
             'city_id' => $city->id ?? null,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'comment' => $request->comments
         ]);
 
         $package_request = PackageRequest::create($request->all());
@@ -67,6 +68,9 @@ class PackageRequestController extends Controller
                 'author' => $user->first_name,
                 'agency' => $agency->name ?? '',
                 'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                'state' => $state?->name,
+                'city' => $city?->name,
+                'comment' => $request->comments
             ],
             'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
         ];

@@ -25,11 +25,19 @@
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">
                             Request Information</h4>
 
-                        <div><b>Category:
+                        <div><b>Title:
                             </b>{{ $data['category'] }}
+                        </div>
+
+                        <div><b>Location:
+                            </b>{{ $data['state'] . ', ' . $data['city'] }}
                         </div>
 
                         <div><b>Posted by:
                             </b>{{ sprintf('%s (%s)', $data['author'], $data['agency']) }}
+                        </div>
+
+                        <div><b>Comment:
+                            </b>{{ $data['comment'] }}
                         </div>
                         @include('emails.includes.jobboard_footer')
