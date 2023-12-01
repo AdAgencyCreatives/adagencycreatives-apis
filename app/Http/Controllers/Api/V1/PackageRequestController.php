@@ -10,6 +10,7 @@ use App\Http\Requests\PackageRequest\StorePackageRequest;
 use App\Http\Resources\AssignedAgency\AssignedAgencyCollection;
 use App\Http\Resources\PackageRequest\PackageRequestCollection;
 use App\Http\Resources\PackageRequest\PackageRequestResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\PackageRequest;
@@ -58,6 +59,18 @@ class PackageRequestController extends Controller
         ]);
 
         $package_request = PackageRequest::create($request->all());
+
+        $agency = $user->agency;
+        $data = [
+            'data' => [
+                'category' => $category->name,
+                'author' => $user->first_name,
+                'agency' => $agency->name ?? '',
+                'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+            ],
+            'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
+        ];
+        SendEmailJob::dispatch($data, 'custom_pkg_request_admin_alert');
 
         return ApiResponse::success(new PackageRequestResource($package_request), 200);
     }

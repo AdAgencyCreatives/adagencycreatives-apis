@@ -25,7 +25,6 @@ class PackageRequestController extends Controller
 
     public function update(Request $request, $uuid)
     {
-
         try {
             $package_request = PackageRequest::where('uuid', $uuid)->firstOrFail();
 
