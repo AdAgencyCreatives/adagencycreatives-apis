@@ -335,13 +335,44 @@ class CreativeController extends Controller
                 break;
 
             case 'years-of-experience':
-
+                // Search via Type of Work e.g Freelance, Contract, Full-Time
                 if($term == 'Director 10  years'){
+                    // + sign is removed, so we are putting it manually.
                     $term = 'Director 10+ years';
                 }
-                // Search via Type of Work e.g Freelance, Contract, Full-Time
+
                 $sql = 'SELECT cr.id FROM creatives cr' . "\n";
                 $sql .= " WHERE cr.years_of_experience ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'industry-title':
+                // Search via Category (Industry Title )
+                $sql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+                $sql .= " WHERE (ca.name ='" . trim($term) . "')" . "\n";
+                break;
+
+            case 'education-college':
+                // Search via Degree Program in Education
+                $sql = 'SELECT cr.id FROM creatives cr ';
+                $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
+                $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
+                $sql .= "WHERE edu.college LIKE '%" . trim($term) . "%'" . "\n";
+                break;
+
+            case 'education-degree-program':
+                // Search via Degree Program in Education
+                $sql = 'SELECT cr.id FROM creatives cr ';
+                $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
+                $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
+                $sql .= "WHERE edu.degree ='" . trim($term) . "'" . "\n";
+                break;
+
+            case 'experience-company':
+                // Search via Company name in Experience table
+                $sql = 'SELECT cr.id FROM creatives cr ';
+                $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
+                $sql .= 'INNER JOIN experiences exp ON ur.id = exp.user_id ';
+                $sql .= "WHERE exp.company ='" . trim($term) . "'" . "\n";
                 break;
         }
 
