@@ -381,10 +381,20 @@ class User extends Authenticatable
 
                 if($user->role == 'creative'){
                     Creative::where('user_id', $user->id)->delete();
+                    Education::where('user_id', $user->id)->delete();
+                    Experience::where('user_id', $user->id)->delete();
+                    PostReaction::where('user_id', $user->id)->delete();
                 }
                 elseif($user->role == 'agency'){
                     Agency::where('user_id', $user->id)->delete();
                 }
+
+                Link::where('user_id', $user->id)->delete();
+                Attachment::where('user_id', $user->id)->delete();
+                Address::where('user_id', $user->id)->delete();
+                Phone::where('user_id', $user->id)->delete();
+                Bookmark::where('user_id', $user->id)->delete();
+                Review::where('user_id', $user->id)->delete();
 
                 // Delete all the user Groups, when group is deleted, all posts will be deleted
                 Group::where('user_id', $user->id)->delete();

@@ -95,6 +95,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search4', [CreativeController::class, 'search4']);
 
     /**
+     * Agency Advance Search
+     */
+    Route::get('agencies/search1', [AgencyController::class, 'search1']);
+
+    /**
      * Job Board Routes
      */
     Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
