@@ -27,8 +27,13 @@ class CreativeSpotlightController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $creatives = $query->with([
+            if ($request->per_page == -1) {
+                $creatives = $query->get();
+            }
+            else{
+                 $creatives = $query->with([
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            }
 
         return new CreativeSpotlightCollection($creatives);
     }
