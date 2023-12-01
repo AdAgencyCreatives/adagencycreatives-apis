@@ -12,6 +12,7 @@ use App\Mail\Application\Interested;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\ContactFormMail;
+use App\Mail\CustomPkg\RequestAdminAlert;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
@@ -120,6 +121,10 @@ class SendEmailJob implements ShouldQueue
             // case 'custom_job_request_rejected':
             //     Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
             //     break;
+
+            case 'custom_pkg_request_admin_alert':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new RequestAdminAlert($this->data['data']));
+                break;
 
                 /**
                  * Application
