@@ -441,7 +441,8 @@ class CreativeController extends Controller
             'user.addresses.city',
             'user.personal_phone',
             'category',
-        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        ])->paginate($request->per_page ?? config('global.request.pagination_limit'))
+        ->withQueryString();
 
         return new HomepageCreativeCollection($creatives);
     }
