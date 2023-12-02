@@ -295,10 +295,6 @@ class CreativeController extends Controller
         $term = $request->search;
         $field = $request->field;
 
-        $characters_to_decode = [
-
-        ];
-
         try{
             $sql = '';
         $bindings = '';

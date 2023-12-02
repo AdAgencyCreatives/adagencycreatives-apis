@@ -178,7 +178,6 @@ class AgencyController extends Controller
         }
 
 
-
         $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Media Experience
