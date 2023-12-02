@@ -74,7 +74,8 @@ class AgencyController extends Controller
         $term = $request->search;
         $field = $request->field;
 
-        $sql = '';
+        try{
+            $sql = '';
         switch ($field) {
 
             case 'state':
@@ -118,7 +119,11 @@ class AgencyController extends Controller
 
         $res = DB::select($sql);
         $creativeIds = collect($res)->pluck('id')->toArray();
+        }
 
+        catch(\Exception $e){
+           $creativeIds = [];
+        }
         $agencies = Agency::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
