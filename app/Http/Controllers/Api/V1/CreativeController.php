@@ -295,6 +295,9 @@ class CreativeController extends Controller
         $term = $request->search;
         $field = $request->field;
 
+        $characters_to_decode = [
+
+        ];
 
         try{
             $sql = '';
@@ -340,12 +343,6 @@ class CreativeController extends Controller
             case 'years-of-experience':
                 // Search via Type of Work e.g Freelance, Contract, Full-Time
                 // + sign is removed, so we are putting it manually.
-                if($term == 'Director 10  years'){
-                    $term = 'Director 10+ years';
-                }
-                elseif($term == 'Chief Executive 20  years'){
-                    $term = 'Chief Executive 20+ years';
-                }
 
                 $sql = 'SELECT cr.id FROM creatives cr' . "\n";
                 $sql .= " WHERE cr.years_of_experience ='" . trim($term) . "'" . "\n";
