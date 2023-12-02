@@ -295,7 +295,10 @@ class CreativeController extends Controller
         $term = $request->search;
         $field = $request->field;
 
-        $sql = '';
+
+        try{
+            $sql = '';
+        $bindings = '';
         switch ($field) {
 
             case 'state':
@@ -336,9 +339,12 @@ class CreativeController extends Controller
 
             case 'years-of-experience':
                 // Search via Type of Work e.g Freelance, Contract, Full-Time
+                // + sign is removed, so we are putting it manually.
                 if($term == 'Director 10  years'){
-                    // + sign is removed, so we are putting it manually.
                     $term = 'Director 10+ years';
+                }
+                elseif($term == 'Chief Executive 20  years'){
+                    $term = 'Chief Executive 20+ years';
                 }
 
                 $sql = 'SELECT cr.id FROM creatives cr' . "\n";
@@ -356,7 +362,8 @@ class CreativeController extends Controller
                 $sql = 'SELECT cr.id FROM creatives cr ';
                 $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                 $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
-                $sql .= "WHERE edu.college LIKE '%" . trim($term) . "%'" . "\n";
+                $sql .= "WHERE edu.college LIKE :term" . "\n";
+                $bindings = ['term' => '%' . $term . '%'];
                 break;
 
             case 'education-degree-program':
@@ -364,7 +371,7 @@ class CreativeController extends Controller
                 $sql = 'SELECT cr.id FROM creatives cr ';
                 $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                 $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
-                $sql .= "WHERE edu.degree ='" . trim($term) . "'" . "\n";
+                $sql .= "WHERE edu.degree = " . DB::raw('"' . trim($term) . '"') . "\n";
                 break;
 
             case 'experience-company':
@@ -372,12 +379,21 @@ class CreativeController extends Controller
                 $sql = 'SELECT cr.id FROM creatives cr ';
                 $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                 $sql .= 'INNER JOIN experiences exp ON ur.id = exp.user_id ';
-                $sql .= "WHERE exp.company ='" . trim($term) . "'" . "\n";
+                $sql .= "WHERE exp.company = " . DB::raw('"' . trim($term) . '"') . "\n";
                 break;
         }
+        if($bindings != ''){
+            $res = DB::select($sql, $bindings);
+        }
+        else{
+            $res = DB::select($sql);
+        }
 
-        $res = DB::select($sql);
         $creativeIds = collect($res)->pluck('id')->toArray();
+        }
+        catch(\Exception $e){
+            $creativeIds = [];
+        }
 
         $creatives = Creative::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
