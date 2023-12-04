@@ -4,23 +4,23 @@
 
 @section('scripts')
     {{-- @include('pages.ckEditor') --}}
-    <script src="/assets/vendor/ckeditor5/build/ckeditor.js"></script>
+    {{-- <script src="/assets/vendor/ckeditor5/build/ckeditor.js"></script> --}}
     <script>
         $(document).ready(function() {});
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var editorElements = document.querySelectorAll('.editor-textarea');
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var editorElements = document.querySelectorAll('.editor-textarea');
 
-            editorElements.forEach(function(element) {
-                ClassicEditor
-                    .create(element)
-                    .catch(error => {
-                        console.error(error);
-                    });
-            });
-        });
+        //     editorElements.forEach(function(element) {
+        //         ClassicEditor
+        //             .create(element)
+        //             .catch(error => {
+        //                 console.error(error);
+        //             });
+        //     });
+        // });
     </script>
 @endsection
 
@@ -64,23 +64,24 @@
                         <div class="row">
 
                             <div class="col-md-12">
-                                <div class="mb-3">
-                                    @foreach ($data as $item)
+
+                                @foreach ($data as $item)
+                                    <div class="mb-3">
                                         <label for="name" class="form-label">{{ Str::ucfirst($item->key) }}</label>
                                         <textarea class="form-control editor-textarea" name="{{ $item->key }}"
                                             placeholder="Put your card info and also paste image here">{{ $item->value }}
                                     </textarea>
-                                        &nbsp;
-                                    @endforeach
+                                    </div>
+                                @endforeach
 
-                                    {{-- @foreach ($data as $item)
+                                {{-- @foreach ($data as $item)
                                         <div class="mb-3">
                                             <label for="name" class="form-label"> {{ Str::ucfirst($item->key) }}</label>
                                             <input type="text" class="form-control" name="{{ $item->key }}"
                                                 value="{{ $item->value }}">
                                         </div>
                                     @endforeach --}}
-                                </div>
+
 
                             </div>
 
