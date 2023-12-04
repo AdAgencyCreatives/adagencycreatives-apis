@@ -69,8 +69,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">{{ Str::ucfirst($item->key) }}</label>
                                         <textarea class="form-control editor-textarea" name="{{ $item->key }}"
-                                            placeholder="Put your card info and also paste image here">{{ $item->value }}
-                                    </textarea>
+                                            placeholder="Enter {{ Str::ucfirst($item->key) }}">{{ $item->value }}</textarea>
                                     </div>
                                 @endforeach
 

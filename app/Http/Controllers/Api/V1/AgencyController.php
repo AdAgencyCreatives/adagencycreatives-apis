@@ -143,6 +143,12 @@ class AgencyController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
+
+                // This will only work for
+                if (request()->is('api/v1/recruiters/search1')) {
+                    $query->whereIn('role', [2,5]); // 2 = advisor, 5 = recruiter
+                }
+
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
@@ -158,55 +164,53 @@ class AgencyController extends Controller
         $term = $request->search;
         $field = $request->field;
 
-        try{
+        try {
             $sql = '';
-        switch ($field) {
+            switch ($field) {
 
-            case 'state':
-                // Search via State Name
-                $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
-                $sql .= " WHERE (lc.parent_id IS NULL AND lc.name ='" . trim($term) . "')";
-                break;
+                case 'state':
+                    // Search via State Name
+                    $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+                    $sql .= " WHERE (lc.parent_id IS NULL AND lc.name ='" . trim($term) . "')";
+                    break;
 
-            case 'city':
-                // Search via City Name
-                $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
-                $sql .= " WHERE(lc.parent_id IS NOT NULL AND lc.name ='" . trim($term) . "')" . "\n";
-                break;
+                case 'city':
+                    // Search via City Name
+                    $sql = 'SELECT agn.id FROM agencies agn INNER JOIN users ur ON agn.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+                    $sql .= " WHERE(lc.parent_id IS NOT NULL AND lc.name ='" . trim($term) . "')" . "\n";
+                    break;
 
-            case 'industry-experience':
-                // Search via Industry Experience
-                $sql = 'SELECT agn.id FROM agencies agn JOIN industries ind ON FIND_IN_SET(ind.uuid, agn.industry_experience) > 0' . "\n";
-                $sql .= " WHERE ind.name ='" . trim($term) . "'" . "\n";
-                break;
+                case 'industry-experience':
+                    // Search via Industry Experience
+                    $sql = 'SELECT agn.id FROM agencies agn JOIN industries ind ON FIND_IN_SET(ind.uuid, agn.industry_experience) > 0' . "\n";
+                    $sql .= " WHERE ind.name ='" . trim($term) . "'" . "\n";
+                    break;
 
-            case 'media-experience':
-                // Search via Media Experience
-                $sql = 'SELECT agn.id FROM agencies agn JOIN medias med ON FIND_IN_SET(med.uuid, agn.media_experience) > 0' . "\n";
-                $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
-                break;
+                case 'media-experience':
+                    // Search via Media Experience
+                    $sql = 'SELECT agn.id FROM agencies agn JOIN medias med ON FIND_IN_SET(med.uuid, agn.media_experience) > 0' . "\n";
+                    $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
+                    break;
 
-            case 'workplace-preference':
-                // Search via Workplace Preference
-                $workplace_preferences = [
-                'remote' => 'is_remote',
-                'hybrid' => 'is_hybrid',
-                'on site' => 'is_onsite',
-                ];
+                case 'workplace-preference':
+                    // Search via Workplace Preference
+                    $workplace_preferences = [
+                    'remote' => 'is_remote',
+                    'hybrid' => 'is_hybrid',
+                    'on site' => 'is_onsite',
+                    ];
 
-                if (isset($workplace_preferences[$term])) {
-                    $sql = 'SELECT agn.id FROM agencies agn WHERE ' . $workplace_preferences[$term] . '=1';
-                }
-                break;
+                    if (isset($workplace_preferences[$term])) {
+                        $sql = 'SELECT agn.id FROM agencies agn WHERE ' . $workplace_preferences[$term] . '=1';
+                    }
+                    break;
 
-        }
+            }
 
-        $res = DB::select($sql);
-        $creativeIds = collect($res)->pluck('id')->toArray();
-        }
-
-        catch(\Exception $e){
-           $creativeIds = [];
+            $res = DB::select($sql);
+            $creativeIds = collect($res)->pluck('id')->toArray();
+        } catch(\Exception $e) {
+            $creativeIds = [];
         }
         $agencies = Agency::whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
@@ -251,8 +255,8 @@ class AgencyController extends Controller
         $request->merge([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience ?? []) . '',
+            'media_experience' => '' . implode(',', $request->media_experience ?? []) . '',
         ]);
 
         $agency = Agency::create($request->all());
@@ -272,7 +276,7 @@ class AgencyController extends Controller
     public function show($uuid)
     {
         $agency = Agency::with('attachment')->where('uuid', $uuid)->first();
-        if (! $agency) {
+        if (!$agency) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
@@ -289,7 +293,7 @@ class AgencyController extends Controller
 
         $agency = Agency::where('uuid', $uuid)->first();
 
-        if (! $agency) {
+        if (!$agency) {
             return response()->json([
                 'message' => 'No agency found.',
             ], Response::HTTP_NOT_FOUND);
@@ -316,7 +320,7 @@ class AgencyController extends Controller
             $user = User::where('uuid', $uuid)->first();
             $agency = Agency::where('user_id', $user->id)->first();
 
-            if (! $agency) {
+            if (!$agency) {
                 return response()->json([
                     'message' => 'No agency found.',
                 ], Response::HTTP_NOT_FOUND);
@@ -391,7 +395,7 @@ class AgencyController extends Controller
 
     public function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
@@ -406,7 +410,7 @@ class AgencyController extends Controller
 
     public function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 

@@ -15,6 +15,7 @@
                                     <option value="2"> Advisor</option>
                                     <option value="3"> Agency</option>
                                     <option value="4"> Creative</option>
+                                    <option value="5"> Recruiter</option>
                                 </select>
                             </div>
                         </div>
