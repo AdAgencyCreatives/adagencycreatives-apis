@@ -100,6 +100,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('agencies/search1', [AgencyController::class, 'search1']); // For agency directory page
     Route::get('agencies/search2', [AgencyController::class, 'search2']); //For agency Detail page
 
+
+    /**
+     * Recruiters
+     */
+    Route::get('recruiters/search1', [AgencyController::class, 'search1']); //For recruiters directory page
+
     /**
      * Job Board Routes
      */

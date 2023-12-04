@@ -83,6 +83,8 @@
                                         </option>
                                         <option value="creative" @if ($user->role == 'creative') selected @endif>
                                             Creative</option>
+                                        <option value="recruiter" @if ($user->role == 'recruiter') selected @endif>
+                                            Recruiter</option>
                                         <option value="admin" @if ($user->role == 'admin') selected @endif>
                                             Admin</option>
 

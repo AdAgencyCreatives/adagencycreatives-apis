@@ -34,7 +34,7 @@ class UserController extends Controller
     public function details(User $user)
     {
         $str = Str::uuid();
-        if (in_array($user->role, ['agency', 'advisor'])) {
+        if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
             if (! $user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
@@ -78,7 +78,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if (in_array($user->role, ['advisor', 'agency'])) {
+            if (in_array($user->role, ['advisor', 'agency', 'recruiter'])) {
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
@@ -99,6 +99,7 @@ class UserController extends Controller
 
             return new UserResource($user);
         } catch (\Exception $e) {
+
             throw new ApiException($e, 'US-01');
         }
     }

@@ -163,6 +163,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('users', UserController::class);
         Route::get('advisor/create', [UserController::class, 'create'])->name('advisor.create');
+        Route::get('recruiter/create', [UserController::class, 'create'])->name('recruiter.create');
         Route::get('agency/create', [UserController::class, 'create'])->name('agency.create');
         Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
 
@@ -208,6 +209,9 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
         Route::resource('advisors', UserController::class)->parameters([
             'advisors' => 'user',
+        ]);
+        Route::resource('recruiters', UserController::class)->parameters([
+            'recruiters' => 'user',
         ]);
 
         Route::resource('users', UserController::class)->only('index', 'details');

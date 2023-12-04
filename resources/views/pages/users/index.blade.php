@@ -42,6 +42,11 @@
                 $('#role').trigger('change');
                 $('#role').prop('disabled', true);
             }
+            if (currentUrl.includes('role=5')) {
+                $('#role').val('5');
+                $('#role').trigger('change');
+                $('#role').prop('disabled', true);
+            }
 
             var selectedRole = $('#role').val();
             var selectedStatus = $('#status').val();

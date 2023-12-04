@@ -74,6 +74,34 @@
             </li>
 
             <li
+                class="sidebar-item {{ request()->is('recruiters*') || request()->is('advisor/create') ? 'active' : '' }} ">
+                <a data-target="#recruiters" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="feather"></i>
+                    <span class="align-middle">Recruiter</span>
+                </a>
+                <ul id="recruiters"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('recruiters*') || request()->is('recruiter/create') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('recruiters') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/recruiters?role=5">
+                            <i class="align-middle" data-feather="feather"></i>
+                            <span class="align-middle">All Recruiter</span>
+                        </a>
+                    </li>
+                    <li
+                        class="sidebar-item {{ request()->is('users/create') || request()->is('recruiter/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('recruiter.create') }}">
+                            <i class="align-middle" data-feather="user-plus"></i>
+                            <span class="align-middle">Add New Recruiter</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+            <li
                 class="sidebar-item {{ request()->is('agencies*') || request()->is('agency/create') ? 'active' : '' }} ">
                 <a data-target="#agencies" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="layers"></i>

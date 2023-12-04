@@ -55,6 +55,7 @@ class User extends Authenticatable
         'ADVISOR' => 2,
         'AGENCY' => 3,
         'CREATIVE' => 4,
+        'RECRUITER' => 5,
     ];
 
     public const STATUSES = [
@@ -299,6 +300,8 @@ class User extends Authenticatable
                 return 'agency';
             case User::ROLES['CREATIVE']:
                 return 'creative';
+            case User::ROLES['RECRUITER']:
+                return 'recruiter';
             default:
                 return null;
         }
@@ -315,6 +318,9 @@ class User extends Authenticatable
                 break;
             case 'agency':
                 $this->attributes['role'] = User::ROLES['AGENCY'];
+                break;
+            case 'recruiter':
+                $this->attributes['role'] = User::ROLES['RECRUITER'];
                 break;
             default:
                 $this->attributes['role'] = User::ROLES['CREATIVE'];

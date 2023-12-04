@@ -71,7 +71,7 @@
                         Personal Info
                     </a>
 
-                    @if (in_array($user->role, ['agency', 'advisor']))
+                    @if (in_array($user->role, ['agency', 'advisor', 'recruiter']))
                         <a class="list-group-item list-group-item-action active" data-toggle="list" href="#agency_info"
                             role="tab" aria-selected="true">
                             Agency Info
@@ -120,10 +120,12 @@
 
 
                     @if ($user->role != 'admin')
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo" role="tab"
-                            aria-selected="false" tabindex="-1">
-                            SEO
-                        </a>
+                        @if ($user->role != 'recruiter')
+                            <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo"
+                                role="tab" aria-selected="false" tabindex="-1">
+                                SEO
+                            </a>
+                        @endif
                     @endif
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"
                         aria-selected="false" tabindex="-1">
@@ -150,7 +152,7 @@
 
         <div class="col-md-9 col-xl-10">
             <div class="tab-content">
-                @if (in_array($user->role, ['agency', 'advisor']))
+                @if (in_array($user->role, ['agency', 'advisor', 'recruiter']))
                     <div class="tab-pane fade show active" id="agency_info" role="tabpanel">
                         @include('pages.users.agency.agency')
                     </div>
