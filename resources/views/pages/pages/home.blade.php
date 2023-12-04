@@ -3,7 +3,7 @@
 @section('title', Str::ucfirst($page))
 
 @section('scripts')
-    @include('pages.ckEditor')
+    {{-- @include('pages.ckEditor') --}}
     <script>
         $(document).ready(function() {});
     </script>
@@ -50,19 +50,21 @@
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    @foreach ($data as $item)
-                                        <textarea class="form-control text-area-description" id="editor" name="{{ $item->key }}"
+                                    {{-- @foreach ($data as $item)
+                                        <textarea class="form-control text-area-description" id="editor_{{ $item->id }}" name="{{ $item->key }}"
                                             placeholder="Put your card info and also paste image here">{{ $item->value }}
                                     </textarea>
+                                    @endforeach --}}
+
+                                    @foreach ($data as $item)
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label"> {{ Str::ucfirst($item->key) }}</label>
+                                            <input type="text" class="form-control" name="{{ $item->key }}"
+                                                value="{{ $item->value }}">
+                                        </div>
                                     @endforeach
                                 </div>
-                                {{-- @foreach ($data as $item)
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label"> {{ Str::ucfirst($item->key) }}</label>
-                                        <input type="text" class="form-control" name="{{ $item->key }}"
-                                            value="{{ $item->value }}">
-                                    </div>
-                                @endforeach --}}
+
                             </div>
 
                         </div>
