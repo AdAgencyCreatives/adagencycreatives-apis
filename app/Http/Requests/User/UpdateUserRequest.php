@@ -32,7 +32,7 @@ class UpdateUserRequest extends FormRequest
             'last_name' => 'sometimes|string|max:255',
             'email' => $this->input('email_rules'),
             'password' => 'sometimes|string|min:8',
-            'role' => 'sometimes|in:advisor,agency,creative,admin',
+            'role' => 'sometimes|in:advisor,agency,creative,admin,recruiter',
             'status' => 'sometimes|in:pending,active,inactive',
         ];
     }
