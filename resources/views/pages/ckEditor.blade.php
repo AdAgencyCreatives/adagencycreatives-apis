@@ -95,7 +95,7 @@
     }
 
     ClassicEditor
-        .create(document.querySelector('#editor'), {
+        .create(document.querySelector('.editor-textarea'), {
             extraPlugins: [SimpleUploadAdapterPlugin, Image],
         })
         .then(editor => {
