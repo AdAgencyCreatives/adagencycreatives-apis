@@ -150,16 +150,24 @@ class DashboardController extends Controller
     public function agency_dashboard_stats()
     {
         $user = request()->user();
-        $jobs = Job::where('user_id', $user->id)->get();
+        $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
         $jobs_count = $jobs->count();
 
-        $applications_count = Application::whereIn('job_id', $jobs->pluck('id'))->count();
+        // dd($jobs);
+        $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
+        $applications_count = $applications->count();
+
+        $shortlisted_count = $applications->where('status', 1)->count();
+
+        $shortlisted_count = $this->findAgencyBookmarkCount($user->id);
+
+        $review_count = Review::where('target_id', $user->id)->count();
 
         $stats = [
             'number_of_posts' => $jobs_count,
             'applications' => $applications_count,
-            'shortlisted' => rand(1, 3),
-            'review' => rand(1, 3),
+            'shortlisted' => $shortlisted_count,
+            'review' => $review_count,
         ];
 
         return response()->json([
@@ -201,6 +209,13 @@ class DashboardController extends Controller
     {
         return Bookmark::where('bookmarkable_type', 'App\Models\Creative')
             ->where('bookmarkable_id', $creative_id)
+            ->count();
+    }
+
+    public function findAgencyBookmarkCount($agency_id) //How many people have bookmarked this agency
+    {
+        return Bookmark::where('bookmarkable_type', 'App\Models\Agency')
+            ->where('bookmarkable_id', $agency_id)
             ->count();
     }
 }
