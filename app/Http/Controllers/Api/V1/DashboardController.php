@@ -150,25 +150,32 @@ class DashboardController extends Controller
     public function agency_dashboard_stats()
     {
         $user = request()->user();
-        $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
-        $jobs_count = $jobs->count();
+        $cacheKey = 'agency_dashboard_stats_'.$user->id;
 
-        // dd($jobs);
-        $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
-        $applications_count = $applications->count();
+        $stats = Cache::remember($cacheKey, 30, function () use ($user) {
+            $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
+            $jobs_count = $jobs->count();
 
-        $shortlisted_count = $applications->where('status', 1)->count();
+            // dd($jobs);
+            $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
+            $applications_count = $applications->count();
 
-        $shortlisted_count = $this->findAgencyBookmarkCount($user->id);
+            $shortlisted_count = $applications->where('status', 1)->count();
 
-        $review_count = Review::where('target_id', $user->id)->count();
+            $shortlisted_count = $this->findAgencyBookmarkCount($user->id);
 
-        $stats = [
-            'number_of_posts' => $jobs_count,
-            'applications' => $applications_count,
-            'shortlisted' => $shortlisted_count,
-            'review' => $review_count,
-        ];
+            $review_count = Review::where('target_id', $user->id)->count();
+
+            $stats = [
+                'number_of_posts' => $jobs_count,
+                'applications' => $applications_count,
+                'shortlisted' => $shortlisted_count,
+                'review' => $review_count,
+            ];
+
+            return $stats;
+        });
+
 
         return response()->json([
             'stats' => $stats,
