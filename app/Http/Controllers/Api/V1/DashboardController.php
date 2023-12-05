@@ -160,8 +160,6 @@ class DashboardController extends Controller
             $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
             $applications_count = $applications->count();
 
-            $shortlisted_count = $applications->where('status', 1)->count();
-
             $shortlisted_count = $this->findAgencyBookmarkCount($user->id);
 
             $review_count = Review::where('target_id', $user->id)->count();
