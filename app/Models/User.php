@@ -270,7 +270,7 @@ class User extends Authenticatable
 
     public function scopeAgencyName(Builder $query, $name): Builder
     {
-        $agency = Agency::where('name', $name)->first();
+        $agency = Agency::where('name', 'LIKE' , "%$name%")->first();
         if ($agency) {
             return $query->where('id', $agency->user_id);
         } else {
