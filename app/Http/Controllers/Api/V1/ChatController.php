@@ -146,9 +146,11 @@ class ChatController extends Controller
     {
         $user = $request->user();
         $sender = User::where('uuid', $sender_id)->first();
+        $msg_type = $request->type;
 
         Message::where('sender_id', $sender->id)
             ->where('receiver_id', $user->id)
+            ->where('type', $msg_type)
             ->whereNull('read_at')
             ->touch('read_at');
 

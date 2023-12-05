@@ -33,7 +33,7 @@ class GeneratePortfolioVisual extends Command
 
         $url = ($url && filter_var($url, FILTER_VALIDATE_URL)) ? $url : 'http://' . $url;
 
-        $api_url = sprintf("%s&url=%s%s", env('API_FLASH_BASE_URL'), $url, "&format=png&width=1366&height=768&fresh=true&quality=100&delay=3&no_cookie_banners=true&no_ads=true&no_tracking=true") ;
+        $api_url = sprintf("%s&url=%s%s", env('API_FLASH_BASE_URL'), $url, "&format=png&width=1366&height=768&fresh=true&quality=100&delay=10&no_cookie_banners=true&no_ads=true&no_tracking=true") ;
 
 
         $apiflashResponse = Http::get($api_url);
