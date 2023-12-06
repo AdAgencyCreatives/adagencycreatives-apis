@@ -32,7 +32,7 @@ class SendUnreadMessageEmail extends Command
                 ->whereNull('read_at')
                 ->groupBy('sender_id')
                 ->take(5)
-                ->orderBy('max_created_at', 'asc')
+                ->orderBy('max_created_at', 'desc')
                 ->with('sender')
                 ->get();
 
