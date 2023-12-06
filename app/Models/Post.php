@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Post extends Model
 {
@@ -98,15 +99,26 @@ class Post extends Model
 
     public function scopeUserId(Builder $query, $user_id)
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
-
-        return $query->where('user_id', $user->id);
+        $user = User::where('uuid', $user_id)->first();
+        if($user) return $query->where('user_id', $user->id);
+        else return $query->where('user_id', 0);
     }
 
     public function scopeGroupId(Builder $query, $group_id)
     {
-        $group = Group::where('uuid', $group_id)->firstOrFail();
+        $group = Group::where('uuid', $group_id)->first();
+        if($group) return $query->where('group_id', $group->id);
+        else return $query->where('group_id', 0);
+    }
 
-        return $query->where('group_id', $group->id);
+    protected static function booted()
+    {
+        static::updated(function () {
+            Cache::forget('trending_posts');
+        });
+
+        static::deleted(function () {
+            Cache::forget('trending_posts');
+        });
     }
 }
