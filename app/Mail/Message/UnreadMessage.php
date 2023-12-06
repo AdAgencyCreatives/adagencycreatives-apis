@@ -25,7 +25,7 @@ class UnreadMessage extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s, you have a new message waiting for you on %s', $this->data['recipient'], $this->data['APP_NAME']),
+            subject: sprintf('You have a new message waiting for you on %s', $this->data['APP_NAME']),
         );
     }
 
