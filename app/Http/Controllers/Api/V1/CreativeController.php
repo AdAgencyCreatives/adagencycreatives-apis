@@ -277,7 +277,8 @@ class CreativeController extends Controller
         $res = DB::select($sql);
         $creativeIds = collect($res)->pluck('id')->toArray();
 
-        $creatives = Creative::whereIn('id', $creativeIds)
+        $creatives = Creative::with('category')
+            ->whereIn('id', $creativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
@@ -287,7 +288,9 @@ class CreativeController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
-        return new LoggedinCreativeCollection($creatives);
+        $sortedCreatives = $creatives->sortBy('category.name');
+
+        return new LoggedinCreativeCollection($sortedCreatives);
     }
 
     public function search4(Request $request)
