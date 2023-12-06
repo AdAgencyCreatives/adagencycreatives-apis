@@ -8,6 +8,7 @@ use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
+use App\Http\Resources\Post\TrendingPostCollection;
 use App\Models\Attachment;
 use App\Models\Group;
 use App\Models\Post;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\Cache;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PostController extends Controller
@@ -47,20 +49,28 @@ class PostController extends Controller
 
     public function trending_posts(Request $request)
     {
-        $query = QueryBuilder::for(Post::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('group_id'),
-            ]);
+        $cacheKey = 'trending_posts';
+         // Attempt to retrieve the data from the cache
+        $trendingPosts = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($request) {
+            $query = QueryBuilder::for(Post::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('group_id'),
+                ]);
 
-        $trendingPosts = $query->withCount('likes')
-            ->orderBy('likes_count', 'desc')
-            // ->where('status', 1)
-            ->withCount('comments')
-            ->with('comments')
-            ->withCount('likes')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
+            return $query
+                ->whereHas('user')
+                ->whereHas('group')
+                ->withCount('reactions')
+                ->withCount('comments')
+                ->orderBy('reactions_count', 'desc')
+                ->orderBy('comments_count', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->with('comments')
+                ->withCount('reactions')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        });
 
         $authenticatedUserId = auth()->id();
 
@@ -70,7 +80,7 @@ class PostController extends Controller
             return $post;
         });
 
-        return new PostCollection($trendingPosts);
+        return new TrendingPostCollection($trendingPosts);
     }
 
     public function store(StorePostRequest $request)
