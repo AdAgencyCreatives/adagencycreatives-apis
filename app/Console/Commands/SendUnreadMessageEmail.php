@@ -15,7 +15,8 @@ class SendUnreadMessageEmail extends Command
 
     public function handle()
     {
-        $unreadMessages = Message::whereNull('read_at')
+        $unreadMessages = Message::where('created_at' , '>', now()->subDay())
+            ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
             ->get();
