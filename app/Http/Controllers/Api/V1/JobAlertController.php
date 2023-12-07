@@ -25,6 +25,9 @@ class JobAlertController extends Controller
             );
 
         $alerts = $query->first();
+        if (!$alerts) {
+            return ApiResponse::error('Job alert not found', 404);
+        }
 
         return new JobAlertResource($alerts);
     }
@@ -33,6 +36,7 @@ class JobAlertController extends Controller
     {
         $user = User::where('uuid', $request->user_id)->first();
         $category = Category::where('uuid', $request->category_id)->first();
+
 
         try {
             if ($existingJobAlert = JobAlert::where('user_id', $user->id)->first()) {
