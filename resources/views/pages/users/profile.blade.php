@@ -1,16 +1,9 @@
 @extends('layouts.app')
 
 @section('title')
-    @if ($user->role == 'agency')
-        Agency
-    @elseif ($user->role == 'creative')
-        Creatives
-    @elseif ($user->role == 'advisor')
-        Advisors
-    @else
-        Profile
-    @endif
+    {{ ucfirst($user->role) }}
 @endsection
+
 
 @section('styles')
 @endsection

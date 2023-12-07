@@ -222,8 +222,8 @@
                                 <h4>Profile Photo</h4>
                                 @if ($user->profile_picture)
                                     <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ getAttachmentBasePath() . $user->profile_picture['path'] }}"
-                                        alt="" width="300" height="300" />
+                                        src="{{ get_profile_picture($user) }}" alt="" width="300"
+                                        height="300" />
                                 @else
                                     <p>No image uploaded yet</p>
                                 @endif

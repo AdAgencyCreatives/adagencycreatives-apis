@@ -263,7 +263,7 @@ if (! function_exists('get_profile_picture')) {
         $attachmentBasePath = getAttachmentBasePath();
         if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
             return $attachmentBasePath.$user->profile_picture->path;
-        } elseif (in_array($user->role, ['agency', 'advisor']) && $user->agency_logo) {
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
             return $attachmentBasePath.$user->agency_logo->path;
         }
 
