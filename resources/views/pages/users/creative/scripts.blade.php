@@ -128,7 +128,7 @@
         var user = @json($user);
 
         var address = {!! json_encode($user->addresses->first()) !!};
-        if (user.role === 'agency' || user.role === 'advisor') {
+        if (user.role === 'agency' || user.role === 'advisor' || user.role === 'recruiter') {
             fetchIndustriesForAgency();
             fetchMediasForAgency();
         } else if (user.role === 'creative') {
