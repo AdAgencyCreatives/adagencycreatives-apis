@@ -189,7 +189,7 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'creative_dashboard_stats_'.$user->id;
 
-        $stats = Cache::remember($cacheKey, 30, function () use ($user) {
+        $stats = Cache::remember($cacheKey, 60, function () use ($user) {
             $jobs = Job::where('status', 1)->pluck('id');
             $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
 

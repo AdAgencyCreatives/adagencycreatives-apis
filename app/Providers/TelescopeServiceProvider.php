@@ -48,7 +48,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
                 'hamzasiddique836@gmail.com',
                 'erikaudstuen@gmail.com',
                 'adeelakhterit@gmail.com',
-                'admin@gmail.com',
+                'staging8553-admin@gmail.com',
             ]);
 
             //  return true;
