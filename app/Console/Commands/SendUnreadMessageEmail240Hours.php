@@ -7,17 +7,18 @@ use App\Models\Message;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class SendUnreadMessageEmail extends Command
+class SendUnreadMessageEmail240Hours extends Command
 {
-    protected $signature = 'email:unread-message-count';
+    protected $signature = 'email:unread-message-count240';
 
-    protected $description = 'Send email with unread message counts to users';
+    protected $description = 'Send email with unread message counts to users for last 10 days';
 
     public function handle()
     {
-        $date_range = now()->subDay();
-
-        $unreadMessages = Message::where('created_at', '>', $date_range)
+        $date_range = [
+            now()->subDays(10), now()->subDays(3)
+        ];
+        $unreadMessages = Message::whereBetween('created_at', $date_range)
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
@@ -32,7 +33,7 @@ class SendUnreadMessageEmail extends Command
             $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereNull('read_at')
-                ->where('created_at', '>', $date_range)
+                ->whereBetween('created_at', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')

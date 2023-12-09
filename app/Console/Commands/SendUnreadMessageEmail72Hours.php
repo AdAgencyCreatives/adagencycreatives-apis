@@ -7,17 +7,19 @@ use App\Models\Message;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class SendUnreadMessageEmail extends Command
+class SendUnreadMessageEmail72Hours extends Command
 {
-    protected $signature = 'email:unread-message-count';
+    protected $signature = 'email:unread-message-count72';
 
-    protected $description = 'Send email with unread message counts to users';
+    protected $description = 'Send email with unread message counts to users for last 3 days';
 
     public function handle()
     {
-        $date_range = now()->subDay();
+        $date_range = [
+            now()->subDays(3), now()->subDays(1)
+        ];
 
-        $unreadMessages = Message::where('created_at', '>', $date_range)
+        $unreadMessages = Message::whereBetween('created_at', $date_range)
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
@@ -32,7 +34,7 @@ class SendUnreadMessageEmail extends Command
             $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereNull('read_at')
-                ->where('created_at', '>', $date_range)
+                ->whereBetween('created_at', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')
@@ -46,6 +48,7 @@ class SendUnreadMessageEmail extends Command
                     'profile_url' => env('FRONTEND_URL').'/profile/'.$msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
+                    'message_time_2' => \Carbon\Carbon::parse($msg->max_created_at)->format('d M Y h:i A'),
                 ];
             }
 
