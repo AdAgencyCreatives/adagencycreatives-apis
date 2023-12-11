@@ -294,10 +294,10 @@ class User extends Authenticatable
     public function scopeCategoryId(Builder $query, $uuid): Builder
     {
         $category = Category::where('uuid', $uuid)->first();
-        $creative = Creative::where('category_id', $category->id)->first();
+        $creative_ids = Creative::where('category_id', $category->id)->pluck('user_id');
 
-        if ($creative) {
-            return $query->where('id', $creative->user_id);
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
         } else {
             return $query->where('id', 0);
         }
