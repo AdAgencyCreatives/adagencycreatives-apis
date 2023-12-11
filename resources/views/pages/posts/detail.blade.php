@@ -82,6 +82,14 @@
             var post_id = '{{ $post->uuid }}';
             fetchPostAttachments(post_id);
 
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+
         });
     </script>
 @endsection
@@ -96,30 +104,40 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <x-alert type="success"></x-alert>
+    @endif
     <div class="row">
 
         <div class="col-md-4 col-xl-6">
-            <div class="card">
+            <form action="{{ route('posts.update', $post->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="card">
+                    <div class="card-body px-4 pt-2">
+                        <h5>Content</h5>
+                        <p> {{ $post->content }} </p>
+                        <div class="badge bg-warning my-2">{{ ucfirst($post->status) }}</div>
+                        <p class="mb-2 fw-bold">Author: <span style="float:right">Created At:</span></p>
+                        <p class="mb-2 fw-bold">
 
-                <div class="card-body px-4 pt-2">
-                    <h5>Content</h5>
-                    <p> {{ $post->content }} </p>
-                    <div class="badge bg-warning my-2">{{ ucfirst($post->status) }}</div>
-                    <p class="mb-2 fw-bold">Author: <span style="float:right">Created At:</span></p>
-                    <p class="mb-2 fw-bold">
+                            <a href="{{ url('/users/' . $post->user?->id . '/details') }}" target="_blank">
+                                {{ $post->user?->username }}
+                            </a>
 
-                        <a href="{{ url('/users/' . $post->user?->id . '/details') }}" target="_blank">
-                            {{ $post->user?->username }}
-                        </a>
+                            <span style="float:right">
+                                <input class="form-control daterange" name="created_at" type="text"
+                                    value="{{ $post->created_at }}" />
+                            </span>
 
+                        </p>
 
+                    </div>
 
-                        <span style="float:right">{{ $post->created_at }}</span>
-                    </p>
-                </div>
-
-            </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+            </form>
         </div>
+    </div>
 
     </div>
 

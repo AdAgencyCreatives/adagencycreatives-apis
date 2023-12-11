@@ -288,8 +288,6 @@ class CreativeController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
-        // $sortedCreatives = $creatives->sortBy('category.name');
-
         return new LoggedinCreativeCollection($creatives);
     }
 

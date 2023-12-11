@@ -79,7 +79,6 @@ class JobController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         $job = Job::where('id', $id)->first();
 
         $category = Category::where('uuid', $request->category_id)->first();

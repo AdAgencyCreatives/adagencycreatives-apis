@@ -522,8 +522,8 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label"> Created At </label>
-                                    <input class="form-control" type="text" value="{{ $job->created_at }}"
-                                        disabled />
+                                    <input class="form-control daterange" type="text" name="created_at"
+                                        value="{{ $job->created_at }}" />
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">

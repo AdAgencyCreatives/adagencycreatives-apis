@@ -17,6 +17,7 @@ class CreativeSpotlight extends Model
         'name',
         'slug',
         'status',
+        'created_at',
     ];
 
     public const STATUSES = [

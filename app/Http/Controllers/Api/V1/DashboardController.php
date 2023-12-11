@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agency;
 use App\Models\Application;
 use App\Models\Bookmark;
 use App\Models\Creative;
 use App\Models\Job;
+use App\Models\Message;
 use App\Models\Order;
 use App\Models\Review;
 use App\Models\User;
@@ -152,28 +154,28 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'agency_dashboard_stats_'.$user->id;
 
-        $stats = Cache::remember($cacheKey, 30, function () use ($user) {
+        $stats = Cache::remember($cacheKey, 60, function () use ($user) {
             $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
             $jobs_count = $jobs->count();
 
-            // dd($jobs);
             $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
             $applications_count = $applications->count();
 
-            $shortlisted_count = $this->findAgencyBookmarkCount($user->id);
+            $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
 
-            $review_count = Review::where('target_id', $user->id)->count();
+            $agency = Agency::where('user_id', $user->id)->first();
+            $profile_views_count = $agency->views;
 
             $stats = [
                 'number_of_posts' => $jobs_count,
                 'applications' => $applications_count,
                 'shortlisted' => $shortlisted_count,
-                'review' => $review_count,
+                'review' => $profile_views_count, // This key we will remove later, because we have renamed it to views
+                'views' => $profile_views_count,
             ];
 
             return $stats;
         });
-
 
         return response()->json([
             'stats' => $stats,
@@ -187,16 +189,18 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'creative_dashboard_stats_'.$user->id;
 
-        $stats = Cache::remember($cacheKey, 30, function () use ($user) {
-            $applied_jobs = Application::where('user_id', $user->id)->count();
-            $reviews = Review::where('target_id', $user->id)->count();
+        $stats = Cache::remember($cacheKey, 60, function () use ($user) {
+            $jobs = Job::where('status', 1)->pluck('id');
+            $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
+
+            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->where('type', 'job')->count();
             $creative = Creative::where('user_id', $user->id)->first();
             $profile_views_count = $creative->views;
-            $shortlisted_count = $this->findBookmarkCount($creative->id);
+            $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
 
             $stats = [
                 'jobs_applied' => $applied_jobs,
-                'review' => $reviews,
+                'review' => $unread_messages,
                 'views' => $profile_views_count,
                 'shortlisted' => $shortlisted_count,
             ];
@@ -210,12 +214,6 @@ class DashboardController extends Controller
 
     }
 
-    public function findBookmarkCount($creative_id)
-    {
-        return Bookmark::where('bookmarkable_type', 'App\Models\Creative')
-            ->where('bookmarkable_id', $creative_id)
-            ->count();
-    }
 
     public function findAgencyBookmarkCount($agency_id) //How many people have bookmarked this agency
     {

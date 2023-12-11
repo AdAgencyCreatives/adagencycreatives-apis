@@ -41,6 +41,10 @@
                 $('#role').val('4');
                 $('#role').trigger('change');
                 $('#role').prop('disabled', true);
+
+                //Enable Category, Location filter
+                $('#creative-category').removeClass('d-none');
+                $('#creative-location').removeClass('d-none');
             }
             if (currentUrl.includes('role=5')) {
                 $('#role').val('5');
@@ -54,8 +58,12 @@
             var lastname = $('#last_name').val();
             var username = $('#username').val();
             var email = $('#email').val();
+            //Agency filters
             var company_slug = $('#agency_slug').val();
             var agency_name = $('#agency_name').val();
+
+            //Creative filters
+            var category = $('#category').val();
 
             filters = {
                 role: selectedRole,
@@ -65,7 +73,8 @@
                 first_name: firstname,
                 last_name: lastname,
                 company_slug: company_slug,
-                agency_name: agency_name
+                agency_name: agency_name,
+                category_id: category
             };
 
             Object.keys(filters).forEach(function(key) {
@@ -151,6 +160,8 @@
 
         $(document).ready(function() {
 
+            fetchCategories();
+            fetchStates();
             fetchData(currentPage);
 
             $(document).on('click', '.delete-user-btn', function() {
@@ -173,6 +184,11 @@
                 var userId = $(this).data('user-id');
                 var csrfToken = '{{ csrf_token() }}';
                 updateStatus(userId, 'user', 'users', csrfToken, selectedStatus);
+            });
+
+            $('#state').on('change', function() {
+                var selectedStateId = $(this).val();
+                getCitiesByState(selectedStateId);
             });
 
         });

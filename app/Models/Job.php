@@ -42,6 +42,7 @@ class Job extends Model
         'is_urgent',
         'is_opentorelocation',
         'is_opentoremote',
+        'created_at',
         'expired_at',
         'seo_title',
         'seo_description',

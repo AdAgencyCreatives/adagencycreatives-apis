@@ -11,7 +11,7 @@
                 @else
                     @foreach ($user->portfolio_items as $key => $item)
                         <div>
-                            <img src="{{ getAttachmentBasePath() . $item->path }}"></video>
+                            <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 100%;" />
                         </div>
                     @endforeach
 

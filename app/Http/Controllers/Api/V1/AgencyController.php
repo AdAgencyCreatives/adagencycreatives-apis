@@ -66,6 +66,14 @@ class AgencyController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
+        if (isset($filters['filter']['slug'])) { //Means user profile is being viewed on Agency detail page
+            if ($agencies->count() === 1) { //Check if the collection count is 1 and update views if true
+                $agency = $agencies->first();
+                $agency->increment('views');
+                $agency->save();
+            }
+        }
+
         return new AgencyCollection($agencies);
     }
 
