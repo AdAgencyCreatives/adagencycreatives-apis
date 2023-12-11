@@ -89,10 +89,9 @@
                                     placeholder="Enter slug" />
                             </div>
                         </div>
-
-
-
                     </div>
+
+                    @include('pages.users._inc.creative_filters')
 
                     <div class="row">
                         <div class="col-sm mt-4">

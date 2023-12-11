@@ -38,9 +38,14 @@ class UserController extends Controller
                 'role',
                 'status',
                 'is_visible',
+
+                //Agency Filters
                 AllowedFilter::scope('company_slug'),
                 AllowedFilter::scope('agency_name'),
                 AllowedFilter::scope('first_name'),
+
+                //Creative Filters
+                AllowedFilter::scope('category_id'),
             ])
 
             ->defaultSort('-created_at')

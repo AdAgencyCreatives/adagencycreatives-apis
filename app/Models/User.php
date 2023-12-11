@@ -280,12 +280,26 @@ class User extends Authenticatable
 
     public function scopeFirstName(Builder $query, $name): Builder
     {
-        $name = explode(' ', $name);
+        $names = explode(' ', $name);
         //if name is only one, then search in first name, if two then search seocnd term into last_name
-        if(count($name) == 1){
-            return $query->where('first_name', 'LIKE', '%'.$name[0].'%');
-        }else{
-            return $query->where('first_name', 'LIKE', '%'.$name[0].'%')->Where('last_name', 'LIKE', '%'.$name[1].'%');
+
+        return $query->where(function ($query) use ($names) {
+        foreach ($names as $term) {
+            $query->orWhere('first_name', 'LIKE', '%' . $term . '%')
+                  ->orWhere('last_name', 'LIKE', '%' . $term . '%');
+        }
+    });
+    }
+
+    public function scopeCategoryId(Builder $query, $uuid): Builder
+    {
+        $category = Category::where('uuid', $uuid)->first();
+        $creative = Creative::where('category_id', $category->id)->first();
+
+        if ($creative) {
+            return $query->where('id', $creative->user_id);
+        } else {
+            return $query->where('id', 0);
         }
     }
 
