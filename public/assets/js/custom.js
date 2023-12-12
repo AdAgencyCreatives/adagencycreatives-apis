@@ -425,6 +425,12 @@ function getCitiesByState(stateId, selected_id = null) {
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
 
+           if (response.data.length > 0) {
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "Select City"
+            }));
+
             $.each(response.data, function (index, city) {
                 citySelect.append($('<option>', {
                     value: city.uuid,
@@ -432,11 +438,21 @@ function getCitiesByState(stateId, selected_id = null) {
                 }));
             });
 
+               if (selected_id !== null) {
+                   citySelect.val(selected_id);
+               }
+               else {
+                   citySelect.val("-100");
+               }
 
-            if (selected_id !== null) {
-                citySelect.val(selected_id);
-                citySelect.trigger('change');
-            }
+               citySelect.trigger('change');
+        } else {
+            // No cities available
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "No Cities available"
+            }));
+        }
 
         },
         error: function (xhr, textStatus, errorThrown) {

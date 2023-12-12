@@ -160,7 +160,6 @@
         }
 
 
-
         $(document).ready(function() {
 
             fetchCategories();
