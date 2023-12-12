@@ -424,6 +424,7 @@ function getCitiesByState(stateId, selected_id = null) {
         success: function (response) {
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
+
             $.each(response.data, function (index, city) {
                 citySelect.append($('<option>', {
                     value: city.uuid,

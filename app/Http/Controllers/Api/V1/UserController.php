@@ -46,6 +46,8 @@ class UserController extends Controller
 
                 //Creative Filters
                 AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
             ])
 
             ->defaultSort('-created_at')
