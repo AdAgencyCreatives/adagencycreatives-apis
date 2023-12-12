@@ -11,7 +11,16 @@
                 @else
                     @foreach ($user->portfolio_items as $key => $item)
                         <div>
-                            <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 100%;" />
+                            @if (pathinfo($item->path, PATHINFO_EXTENSION) == 'mp4')
+                                <video controls style="max-width: 100%;">
+                                    <source
+                                        src="https://ad-agency-creatives.s3.amazonaws.com/portfolio_item/3807109a-28c8-429e-b2b6-75a160061460/KIWI-x-Falko-at-Sneaker-Exchange-Promo-3-1.mp4"
+                                        type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            @else
+                                <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 100%;" />
+                            @endif
                         </div>
                     @endforeach
 

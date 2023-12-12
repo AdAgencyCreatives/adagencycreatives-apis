@@ -64,6 +64,8 @@
 
             //Creative filters
             var category = $('#category').val();
+            var state = $('#state').val();
+            var city = $('#city').val();
 
             filters = {
                 role: selectedRole,
@@ -74,7 +76,9 @@
                 last_name: lastname,
                 company_slug: company_slug,
                 agency_name: agency_name,
-                category_id: category
+                category_id: category,
+                state_id: state,
+                city_id: city,
             };
 
             Object.keys(filters).forEach(function(key) {
@@ -83,7 +87,6 @@
                 }
             });
             console.log(requestData);
-
 
             $.ajax({
                 url: 'api/v1/users',
@@ -155,7 +158,6 @@
                 tbody.append(row);
             });
         }
-
 
 
         $(document).ready(function() {

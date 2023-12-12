@@ -305,6 +305,30 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeStateId(Builder $query, $id): Builder
+    {
+        $state = Location::where('uuid', $id)->first();
+        $creative_ids = Address::where('state_id', $state->id)->pluck('user_id');
+
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
+    public function scopeCityId(Builder $query, $id): Builder
+    {
+        $city = Location::where('uuid', $id)->first();
+        $creative_ids = Address::where('city_id', $city->id)->pluck('user_id');
+
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
     public function getRoleAttribute($value)
     {
         switch ($value) {

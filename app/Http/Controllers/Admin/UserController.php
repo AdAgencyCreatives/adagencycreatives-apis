@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
-            if (! $user->agency) {
+            if (!$user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -45,7 +45,7 @@ class UserController extends Controller
             $subscription = Subscription::where('user_id', $user->id)->latest();
 
         } elseif ($user->role == 'creative') {
-            if (! $user->creative) {
+            if (!$user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
                 $creative->user_id = $user->id;
@@ -106,7 +106,7 @@ class UserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -148,7 +148,7 @@ class UserController extends Controller
 
     public function update_profile_picture(Request $request, $id)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -176,14 +176,21 @@ class UserController extends Controller
             $user->status = 'active';
             $user->save();
 
-            SendEmailJob::dispatch([
+            if ($user->role == 'agency') {
+                SendEmailJob::dispatch([
                 'receiver' => $user, 'data' => $user,
-            ], 'account_approved');
+                ], 'account_approved_agency');
+            }
 
             /**
              * Generate portfolio website preview
              */
             if ($user->role == 'creative') {
+
+                SendEmailJob::dispatch([
+                       'receiver' => $user, 'data' => $user,
+                   ], 'account_approved');
+
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
                     Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
