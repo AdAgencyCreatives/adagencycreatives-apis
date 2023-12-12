@@ -51,6 +51,7 @@ class SendEmailJob implements ShouldQueue
         $this->devEmails = explode(',', env('CC_EMAILS'));
 
         $realUserEmailTypes = [
+            'account_approved_agency',
             'account_approved',
             'account_denied',
 
