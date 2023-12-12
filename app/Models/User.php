@@ -255,7 +255,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name.' '.$this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
@@ -270,7 +270,7 @@ class User extends Authenticatable
 
     public function scopeAgencyName(Builder $query, $name): Builder
     {
-        $agency = Agency::where('name', 'LIKE' , "%$name%")->first();
+        $agency = Agency::where('name', 'LIKE', "%$name%")->first();
         if ($agency) {
             return $query->where('id', $agency->user_id);
         } else {
@@ -280,15 +280,17 @@ class User extends Authenticatable
 
     public function scopeFirstName(Builder $query, $name): Builder
     {
-        $names = explode(' ', $name);
+        $name = explode(' ', $name);
         //if name is only one, then search in first name, if two then search seocnd term into last_name
 
-        return $query->where(function ($query) use ($names) {
-        foreach ($names as $term) {
-            $query->orWhere('first_name', 'LIKE', '%' . $term . '%')
-                  ->orWhere('last_name', 'LIKE', '%' . $term . '%');
+        if(count($name) == 1) {
+            return $query->where('first_name',  $name[0] )->orWhere('last_name', $name[0]);
+        } else {
+            return $query->where('first_name', $name[0] )
+                ->Where('last_name',  $name[1] )
+                ->orWhere('first_name',  $name[1] )
+                ->Where('last_name',  $name[0] );
         }
-    });
     }
 
     public function scopeCategoryId(Builder $query, $uuid): Builder
@@ -374,7 +376,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        if (! App::runningInConsole()) {
+        if (!App::runningInConsole()) {
             static::created(function () {
                 Cache::forget('users');
                 Cache::forget('dashboard_stats_cache');
@@ -409,13 +411,12 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
 
-                if($user->role == 'creative'){
+                if($user->role == 'creative') {
                     Creative::where('user_id', $user->id)->delete();
                     Education::where('user_id', $user->id)->delete();
                     Experience::where('user_id', $user->id)->delete();
                     PostReaction::where('user_id', $user->id)->delete();
-                }
-                elseif($user->role == 'agency'){
+                } elseif($user->role == 'agency') {
                     Agency::where('user_id', $user->id)->delete();
                 }
 

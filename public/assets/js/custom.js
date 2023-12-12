@@ -403,7 +403,6 @@ function fetchStates(selected_id) {
         method: 'GET',
         dataType: 'json',
         success: function (response) {
-            console.log(response.data);
             populateFilterWithUUID(response.data, '#state', selected_id);
         },
         error: function () {
@@ -417,7 +416,6 @@ function getCitiesByState(stateId, selected_id = null) {
     if (stateId === '-100') {
         return;
     }
-    console.log(stateId);
     var filterParam = `filter[state_id]=${stateId}&per_page=-1`;
     $.ajax({
         url: '/api/v1/locations?per_page=-1', // Replace with the actual URL for fetching cities
