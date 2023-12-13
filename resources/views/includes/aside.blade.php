@@ -20,6 +20,7 @@
             <li class="sidebar-header">
                 Manage
             </li>
+
             <li
                 class="sidebar-item {{ !request()->is('users/*/details') && request()->is('users*') ? 'active' : '' }} ">
                 <a data-target="#users" data-toggle="collapse" class="sidebar-link collapsed">
@@ -536,6 +537,49 @@
                         </li>
                     </ul>
                 </li>
+
+
+                <li
+                    class="sidebar-item {{ request()->is('resource*') || request()->is('topic*') ? 'active' : '' }} ">
+                    <a data-target="#mentors" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="anchor"></i>
+                        <span class="align-middle">Mentors</span>
+                    </a>
+                    <ul id="mentors"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('resource*') || request()->is('topic*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('resource') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('resource.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Resources</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('resource/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('resource.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Resource</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('topic') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('topic.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Topics</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('topic/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('topic.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Topic</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
 
                 <li class="sidebar-header">
                     Reports

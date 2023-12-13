@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\MediaController;
+use App\Http\Controllers\Api\V1\MentorResourceController;
+use App\Http\Controllers\Api\V1\MentorTopicController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PackageRequestController;
@@ -93,6 +95,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search2', [CreativeController::class, 'search2']);
     Route::get('creatives/search3', [CreativeController::class, 'search3']);
     Route::get('creatives/search4', [CreativeController::class, 'search4']);
+    Route::get('creatives/search5', [CreativeController::class, 'search_test']);
 
     /**
      * Agency Advance Search
@@ -224,3 +227,7 @@ Route::get('stats', [DashboardController::class, 'index']);
 Route::apiResource('festivals', FestivalController::class);
 Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
 Route::get('pages', [PageController::class, 'index']);
+
+// Mentorship Topic
+Route::resource('topics', MentorTopicController::class);
+Route::resource('mentor-resources', MentorResourceController::class);
