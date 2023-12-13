@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MentorResourceController;
+use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReportController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
+use App\Http\Resources\MentorResource\MentorResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -342,3 +345,7 @@ Route::get('get_uuids', function () {
 });
 
 Route::view('resume', 'resume');
+
+
+Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
+Route::resource('resource', MentorResourceController::class)->except('edit', 'show');
