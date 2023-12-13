@@ -31,7 +31,7 @@
             $.each(topics, function(index, topic) {
                 console.log('d');
                 var option = $('<option>', {
-                    value: topic.id,
+                    value: topic.slug,
                     text: topic.title
                 });
 
@@ -45,7 +45,7 @@
                 per_page: perPage
             };
 
-            var selectedTopic = $('#topic option:selected').text();
+            var selectedTopic = $('#topic option:selected').val();
 
             if (selectedTopic != 'Select Topic') {
                 filters = {
