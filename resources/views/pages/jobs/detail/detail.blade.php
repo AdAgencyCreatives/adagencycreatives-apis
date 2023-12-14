@@ -327,7 +327,7 @@
                         <h5 class="card-title mb-0">Description</h5>
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control" name="description" rows="10" placeholder="Textarea" spellcheck="false">{{ strip_tags($job->description) }}</textarea>
+                        <textarea class="form-control" name="description" rows="10" placeholder="Textarea" spellcheck="false">{{ $job->description }}</textarea>
                     </div>
                 </div>
 
