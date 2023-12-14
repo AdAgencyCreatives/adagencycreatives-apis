@@ -24,7 +24,7 @@ class ChatController extends Controller
         $userId = request()->user()->id;
         $type = $request->type ?? 'private';
 
-        $messages = Message::where(function ($query) use ($userId, $contact_id, $type) {
+        $messages = Message::where(function ($query) use ($userId, $contact_id) {
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $contact_id);
         })

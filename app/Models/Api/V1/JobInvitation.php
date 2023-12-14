@@ -2,6 +2,7 @@
 
 namespace App\Models\Api\V1;
 
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class JobInvitation extends Model
         'creative_id',
         'job_id',
         'status',
+        'read_at',
     ];
 
     public function job()
