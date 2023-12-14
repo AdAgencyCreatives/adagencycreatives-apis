@@ -56,7 +56,7 @@ class JobController extends Controller
                 'is_urgent',
                 'status',
             ])
-            ->allowedSorts('created_at');
+            ->allowedSorts('created_at', 'updated_at');
 
         if ($industries !== null) {
             applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
