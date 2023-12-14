@@ -4,6 +4,8 @@
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
         function populateApplications(applications) {
 
@@ -279,6 +281,12 @@
                 var selectedStateId = $(this).val();
                 var city_id = "{{ $job->city?->uuid }}";
                 getCitiesByState(selectedStateId, city_id);
+            });
+
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             });
 
         });
