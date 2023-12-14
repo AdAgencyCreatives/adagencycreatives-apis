@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Api\V1\ActivityController;
 use App\Http\Controllers\Api\V1\AddressController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\FestivalController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobAlertController;
@@ -23,6 +25,8 @@ use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\MediaController;
+use App\Http\Controllers\Api\V1\MentorResourceController;
+use App\Http\Controllers\Api\V1\MentorTopicController;
 use App\Http\Controllers\Api\V1\NoteController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PackageRequestController;
@@ -79,6 +83,7 @@ Route::get('employment_types', [JobController::class, 'get_employment_types']);
 Route::get('locations', [LocationController::class, 'index']);
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
+Route::apiResource('years-of-experience', YearsOfExperienceController::class);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -89,6 +94,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search1', [CreativeController::class, 'search1']);
     Route::get('creatives/search2', [CreativeController::class, 'search2']);
     Route::get('creatives/search3', [CreativeController::class, 'search3']);
+    Route::get('creatives/search4', [CreativeController::class, 'search4']);
+    Route::get('creatives/search5', [CreativeController::class, 'search_test']);
+
+    /**
+     * Agency Advance Search
+     */
+    Route::get('agencies/search1', [AgencyController::class, 'search1']); // For agency directory page
+    Route::get('agencies/search2', [AgencyController::class, 'search2']); //For agency Detail page
+
+
+    /**
+     * Recruiters
+     */
+    Route::get('recruiters/search1', [AgencyController::class, 'search1']); //For recruiters directory page
 
     /**
      * Job Board Routes
@@ -125,7 +144,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
-    Route::apiResource('years-of-experience', YearsOfExperienceController::class);
+
     Route::apiResource('reviews', ReviewController::class);
     Route::apiResource('users', UserController::class)->except(['store']);
 
@@ -137,8 +156,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job');
     Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
     Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
-    Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']); //for getting
-    Route::get('get_users/spotlights', [UserController::class, 'get_creatives']); //for getting
+    Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']);
+    Route::get('get_users/spotlights', [UserController::class, 'get_creatives']);
+    Route::get('get_users/festivals', [FestivalController::class, 'get_festival_creatives']); //for getting creatives on festival page
 
     /**
      * Job Alerts
@@ -203,3 +223,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::get('stats', [DashboardController::class, 'index']);
+
+Route::apiResource('festivals', FestivalController::class);
+Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
+Route::get('pages', [PageController::class, 'index']);
+
+// Mentorship Topic
+Route::resource('topics', MentorTopicController::class);
+Route::resource('mentor-resources', MentorResourceController::class);

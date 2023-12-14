@@ -50,7 +50,7 @@ class ExperienceController extends Controller
 
             return new ExperienceCollection($createdExperiences);
         } catch (\Exception $e) {
-            return ApiResponse::error('ExpS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('ExpS-01 ' . $e->getMessage(), 400);
         }
     }
 
@@ -59,6 +59,10 @@ class ExperienceController extends Controller
         $user = $request->user();
 
         foreach ($request->input('experiences') as $experienceData) {
+
+            if ($this->isEmptyEducationData($experienceData)) {
+                continue;
+            }
 
             $experience = Experience::where('uuid', $experienceData['id'])->first();
 
@@ -76,6 +80,13 @@ class ExperienceController extends Controller
 
         return new ExperienceCollection($experiences);
 
+    }
+
+    private function isEmptyEducationData($experienceData)
+    {
+        return empty(array_filter($experienceData, function ($value) {
+            return $value !== null;
+        }));
     }
 
     public function destroy($uuid)

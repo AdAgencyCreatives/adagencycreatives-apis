@@ -53,7 +53,8 @@ if (! function_exists('getCharacterStrengthNames')) {
 if (! function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
-        return 'https://ad-agency-creatives.s3.amazonaws.com/';
+        $awsBucket = env('AWS_BUCKET');
+        return "https://{$awsBucket}.s3.amazonaws.com/";
     }
 }
 
@@ -258,14 +259,15 @@ if (! function_exists('create_notification')) {
 if (! function_exists('get_profile_picture')) {
     function get_profile_picture($user)
     {
-        $image = asset('assets/img/placeholder.png');
-        if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
-        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : asset('assets/img/placeholder.png');
+        $defaultImage = asset('assets/img/placeholder.png');
+        $attachmentBasePath = getAttachmentBasePath();
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $attachmentBasePath.$user->profile_picture->path;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $attachmentBasePath.$user->agency_logo->path;
         }
 
-        return $image;
+        return $defaultImage;
     }
 }
 

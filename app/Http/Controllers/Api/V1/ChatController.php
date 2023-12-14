@@ -22,8 +22,9 @@ class ChatController extends Controller
         $contact_id = $contact->id;
 
         $userId = request()->user()->id;
+        $type = $request->type ?? 'private';
 
-        $messages = Message::where(function ($query) use ($userId, $contact_id) {
+        $messages = Message::where(function ($query) use ($userId, $contact_id, $type) {
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $contact_id);
         })
@@ -31,6 +32,7 @@ class ChatController extends Controller
                 $query->where('sender_id', $contact_id)
                     ->where('receiver_id', $userId);
             })
+            ->where('type', $type)
             ->oldest()
                         //    ->toSql();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
@@ -44,6 +46,8 @@ class ChatController extends Controller
         try {
             $sender = User::where('uuid', $request->sender_id)->first();
             $receiver = User::where('uuid', $request->receiver_id)->first();
+            $type = $request->type ?? 'private';
+
             $event_data = [
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
@@ -58,7 +62,8 @@ class ChatController extends Controller
             ]);
 
             //Mark previous messages as read
-            Message::where('receiver_id', $sender->id) // Only those messages in which I am receiver,
+            Message::where('type', $type)
+                ->where('receiver_id', $sender->id) // Only those messages in which I am receiver,
                 ->where('sender_id', $receiver->id)
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
@@ -146,9 +151,11 @@ class ChatController extends Controller
     {
         $user = $request->user();
         $sender = User::where('uuid', $sender_id)->first();
+        $msg_type = $request->type;
 
         Message::where('sender_id', $sender->id)
             ->where('receiver_id', $user->id)
+            ->where('type', $msg_type)
             ->whereNull('read_at')
             ->touch('read_at');
 

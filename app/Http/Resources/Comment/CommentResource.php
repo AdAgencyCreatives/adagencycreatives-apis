@@ -10,6 +10,9 @@ class CommentResource extends JsonResource
     {
         $user = $this->user;
 
+        if(!$user)
+        return [];
+
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
@@ -21,6 +24,7 @@ class CommentResource extends JsonResource
             'parent_id' => isset($this->parent) ? $this->parent->uuid : null,
             'content' => $this->content,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
+            'human_readable_date' => $this->created_at->diffForHumans(),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }

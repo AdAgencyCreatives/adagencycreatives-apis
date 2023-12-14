@@ -65,7 +65,6 @@ class Group extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->firstOrFail();
-
         return $query->where('user_id', $user->id);
     }
 
@@ -121,8 +120,9 @@ class Group extends Model
             Cache::forget('all_groups');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($group) {
             Cache::forget('all_groups');
+            Post::where('group_id', $group->id)->delete();
         });
     }
 }

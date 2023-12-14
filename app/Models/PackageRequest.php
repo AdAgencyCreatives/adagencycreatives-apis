@@ -51,7 +51,7 @@ class PackageRequest extends Model
 
     public function agency()
     {
-        return $this->belongsTo(Agency::class, 'user_id');
+        return $this->belongsTo(Agency::class, 'user_id', 'user_id');
     }
 
     public function plan()

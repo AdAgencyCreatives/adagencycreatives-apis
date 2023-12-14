@@ -30,7 +30,8 @@ class AttachmentController extends Controller
                 'status',
             ])
             ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->allowedSorts('created_at')
+            ->whereHas('user'); // If the user is deleted, don't show the attachment
 
         $attachments = $query->with('user')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

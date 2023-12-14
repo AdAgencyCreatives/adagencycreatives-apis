@@ -1,16 +1,9 @@
 @extends('layouts.app')
 
 @section('title')
-    @if ($user->role == 'agency')
-        Agency
-    @elseif ($user->role == 'creative')
-        Creatives
-    @elseif ($user->role == 'advisor')
-        Advisors
-    @else
-        Profile
-    @endif
+    {{ ucfirst($user->role) }}
 @endsection
+
 
 @section('styles')
 @endsection
@@ -66,7 +59,12 @@
 
                 <div class="list-group list-group-flush" role="tablist">
 
-                    @if (in_array($user->role, ['agency', 'advisor']))
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#personal_info"
+                        role="tab" aria-selected="true">
+                        Personal Info
+                    </a>
+
+                    @if (in_array($user->role, ['agency', 'advisor', 'recruiter']))
                         <a class="list-group-item list-group-item-action active" data-toggle="list" href="#agency_info"
                             role="tab" aria-selected="true">
                             Agency Info
@@ -77,37 +75,34 @@
                             Creative Info
                         </a>
                     @endif
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#personal_info"
-                        role="tab" aria-selected="true">
-                        Personal Info
-                    </a>
+
                     @if ($user->role == 'creative')
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#qualifications"
+                            role="tab" aria-selected="true">
+                            Qualifications
+                        </a>
+                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#portfolio"
+                            role="tab" aria-selected="true">
+                            Portfolio
+                        </a>
+
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#experiences"
+                            role="tab" aria-selected="true">
+                            Experience
+                        </a>
+
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#educations"
                             role="tab" aria-selected="true">
                             Education
-                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#experiences"
-                            role="tab" aria-selected="true">
-                            Experience
-                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#qualifications"
-                            role="tab" aria-selected="true">
-                            Qualifications
                         </a>
 
                         </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#spotlight"
                             role="tab" aria-selected="true">
                             Spotlight
                         </a>
-
-                        </a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#portfolio"
-                            role="tab" aria-selected="true">
-                            Portfolio
-                        </a>
                     @endif
 
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"
-                        aria-selected="false" tabindex="-1">
-                        Password
-                    </a>
+
 
                     @if ($user->role == 'agency')
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#package" role="tab"
@@ -115,16 +110,22 @@
                             Package
                         </a>
                     @endif
+
+
                     @if ($user->role != 'admin')
-                        <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
-                            Impersonate
-                        </a>
+                        @if ($user->role != 'recruiter')
+                            <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo"
+                                role="tab" aria-selected="false" tabindex="-1">
+                                SEO
+                            </a>
+                        @endif
+                    @endif
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"
+                        aria-selected="false" tabindex="-1">
+                        Password
+                    </a>
 
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#seo" role="tab"
-                            aria-selected="false" tabindex="-1">
-                            SEO
-                        </a>
-
+                    @if ($user->role != 'admin')
                         @php
                             $frontend_url = $user->role == 'creative' ? env('FRONTEND_URL') . '/creative/' . ($user->creative ? $user->creative->slug : '') : env('FRONTEND_URL') . '/agency/' . ($user->agency ? $user->agency->slug : '');
                         @endphp
@@ -132,14 +133,19 @@
                         <a class="list-group-item list-group-item-action" href="{{ $frontend_url }}" target="_blank">
                             Frontend URL
                         </a>
+
+                        <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
+                            Impersonate
+                        </a>
                     @endif
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-9 col-xl-10">
             <div class="tab-content">
-                @if (in_array($user->role, ['agency', 'advisor']))
+                @if (in_array($user->role, ['agency', 'advisor', 'recruiter']))
                     <div class="tab-pane fade show active" id="agency_info" role="tabpanel">
                         @include('pages.users.agency.agency')
                     </div>

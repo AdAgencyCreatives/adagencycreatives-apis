@@ -34,8 +34,8 @@ class UserController extends Controller
     public function details(User $user)
     {
         $str = Str::uuid();
-        if (in_array($user->role, ['agency', 'advisor'])) {
-            if (! $user->agency) {
+        if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+            if (!$user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -45,7 +45,7 @@ class UserController extends Controller
             $subscription = Subscription::where('user_id', $user->id)->latest();
 
         } elseif ($user->role == 'creative') {
-            if (! $user->creative) {
+            if (!$user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
                 $creative->user_id = $user->id;
@@ -78,7 +78,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if (in_array($user->role, ['advisor', 'agency'])) {
+            if (in_array($user->role, ['advisor', 'agency', 'recruiter'])) {
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
@@ -99,13 +99,14 @@ class UserController extends Controller
 
             return new UserResource($user);
         } catch (\Exception $e) {
+
             throw new ApiException($e, 'US-01');
         }
     }
 
     public function updatePassword(Request $request)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -113,7 +114,6 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
 
         $hashed = $custom_wp_hasher->HashPassword(trim($request->input('password')));
-        dump($hashed);
         User::find($userId)->update([
             'password' => $hashed,
         ]);
@@ -141,14 +141,14 @@ class UserController extends Controller
     {
         $user = User::where('uuid', $uuid)->firstOrFail();
         $token = $user->createToken('impersonation_token')->plainTextToken;
-        $url = sprintf('Location: %s/%s', env('FRONTEND_IMPERSONATE_URL'), $token);
+        $url = sprintf('Location: %s/%s?role=advisor', env('FRONTEND_IMPERSONATE_URL'), $token);
         header($url);
         exit();
     }
 
     public function update_profile_picture(Request $request, $id)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -176,14 +176,21 @@ class UserController extends Controller
             $user->status = 'active';
             $user->save();
 
-            SendEmailJob::dispatch([
+            if ($user->role == 'agency') {
+                SendEmailJob::dispatch([
                 'receiver' => $user, 'data' => $user,
-            ], 'account_approved');
+                ], 'account_approved_agency');
+            }
 
             /**
              * Generate portfolio website preview
              */
             if ($user->role == 'creative') {
+
+                SendEmailJob::dispatch([
+                       'receiver' => $user, 'data' => $user,
+                   ], 'account_approved');
+
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
                     Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
@@ -191,7 +198,7 @@ class UserController extends Controller
                 }
             }
 
-            return redirect()->back();
+            return redirect()->route('users.index');
         }
     }
 
@@ -207,7 +214,7 @@ class UserController extends Controller
                 'receiver' => $user, 'data' => $user,
             ], 'account_denied');
 
-            return redirect()->back();
+            return redirect()->route('users.index');
         }
     }
 }

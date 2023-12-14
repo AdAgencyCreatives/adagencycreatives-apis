@@ -32,14 +32,22 @@ class UserController extends Controller
     {
         $query = QueryBuilder::for(User::class)
             ->allowedFilters([
-                'first_name',
                 'last_name',
                 'username',
                 'email',
                 'role',
                 'status',
                 'is_visible',
+
+                //Agency Filters
                 AllowedFilter::scope('company_slug'),
+                AllowedFilter::scope('agency_name'),
+                AllowedFilter::scope('first_name'),
+
+                //Creative Filters
+                AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
             ])
 
             ->defaultSort('-created_at')
@@ -66,7 +74,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
             $str = Str::uuid();
             if (in_array($user->role, ['agency'])) {
@@ -115,6 +123,7 @@ class UserController extends Controller
 
             return new UserResource($user);
         } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
             throw new ApiException($e, 'US-01');
         }
     }
@@ -141,14 +150,25 @@ class UserController extends Controller
             $newStatus = $request->input('status');
 
             if ($newStatus === 'active' && $oldStatus === 'pending') {
-                SendEmailJob::dispatch([
+
+
+                if ($user->role == 'agency') {
+                    SendEmailJob::dispatch([
                     'receiver' => $user, 'data' => $user,
-                ], 'account_approved');
+                ], 'account_approved_agency');
+                }
+
 
                 /**
                  * Generate portfolio website preview
                  */
                 if ($user->role == 'creative') {
+
+                     SendEmailJob::dispatch([
+                        'receiver' => $user, 'data' => $user,
+                    ], 'account_approved');
+
+
                     $portfolio_website = $user->portfolio_website_link()->first();
                     if ($portfolio_website) {
                         Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
@@ -190,6 +210,11 @@ class UserController extends Controller
     {
         $username = Str::before($email, '@');
         $username = Str::slug($username);
+
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            $username = $username.'-'.Str::random(5);
+        }
 
         return $username;
     }
@@ -274,7 +299,7 @@ class UserController extends Controller
     {
         $cacheKey = 'all_users_with_posts';
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return User::select('id', 'uuid', 'first_name', 'last_name', 'role', 'is_visible')->where('role', '!=', 1)->withCount('posts')->get();
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'email', 'role', 'is_visible')->withCount('posts')->get();
         });
 
         return $users;
@@ -305,5 +330,15 @@ class UserController extends Controller
         });
 
         return $users;
+    }
+
+    public function contact_us_form_info(Request $request)
+    {
+        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+
+         SendEmailJob::dispatch([
+                'receiver' => $admin,
+                'data' => $request->all(),
+            ], 'contact_us_inquiry');
     }
 }

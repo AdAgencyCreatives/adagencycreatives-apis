@@ -7,10 +7,13 @@ use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\FestivalController;
 use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MentorResourceController;
+use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReportController;
@@ -23,7 +26,9 @@ use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
+use App\Http\Resources\MentorResource\MentorResource;
 use App\Jobs\SendEmailJob;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Group;
 use App\Models\Industry;
@@ -47,6 +52,7 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
  */
 
+//test commit
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -59,6 +65,12 @@ Route::get('/users2', function () {
     }
 });
 
+Route::get('/timezone', function () {
+    dd(now());
+});
+
+
+
 Route::get('/email', function () {
 
     $data = [
@@ -68,9 +80,15 @@ Route::get('/email', function () {
         'friend_name' => 'Qasim',
         'APP_NAME' => 'Ad agency',
         'APP_URL' => 'Ad agency',
+        'FRONTEND_URL' => 'Ad agency',
+        'recipient' => 'Ad agency',
+        'member' => 'Ad agency',
+        'user' => User::find(2),
+        'APPROVE_URL' => '',
+        'DENY_URL' => '',
+        'unread_message_count' => 6,
     ];
 
-    return view('emails.friendship.request_accepted', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
@@ -79,19 +97,20 @@ Route::get('/email', function () {
         'message' => 'Custom MEssage',
         'message_sender_name' => $sender->first_name,
         'message_sender_profile_url' => get_profile_picture($sender),
-        'message_count' => 6,
-        'profile_url' => env('FRONTEND_URL').'/profile/',
+        'unread_message_count' => 6,
+        'profile_url' => env('FRONTEND_URL') . '/profile/',
     ];
 
-    SendEmailJob::dispatch([
-        'receiver' => $recipient,
-        'data' => $data,
-    ], 'unread_message');
+    // SendEmailJob::dispatch([
+    //     'receiver' => $recipient,
+    //     'data' => $data,
+    // ], 'unread_message');
 });
 
-Route::get('/reset-messages', function () {
-    DB::table('messages')->truncate();
-    echo 'Messages Cleared';
+
+
+Route::get('/check-missing-locations', function () {
+    Artisan::call('check:missing-locations');
 
 });
 
@@ -107,6 +126,22 @@ Route::get('advisor/impersonate/{uuid}', [UserController::class, 'advisor_impers
 Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['admin']], function () {
+
+         // Get those users whose portfolio preview image is not present
+        Route::get('/find_missing_portfolios', function () {
+            $creatives = User::where('role', 4)->where('status', 1)->get();
+            foreach($creatives as $user) {
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
+                    if(!$existing_preview) {
+                        dump($user->email . " " . $user->id . " missing.");
+                    }
+
+                }
+            }
+        });
+
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
@@ -131,6 +166,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('users', UserController::class);
         Route::get('advisor/create', [UserController::class, 'create'])->name('advisor.create');
+        Route::get('recruiter/create', [UserController::class, 'create'])->name('recruiter.create');
         Route::get('agency/create', [UserController::class, 'create'])->name('agency.create');
         Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
 
@@ -177,6 +213,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('advisors', UserController::class)->parameters([
             'advisors' => 'user',
         ]);
+        Route::resource('recruiters', UserController::class)->parameters([
+            'recruiters' => 'user',
+        ]);
 
         Route::resource('users', UserController::class)->only('index', 'details');
         Route::get('users/{user}/details', [UserController::class, 'details']);
@@ -195,10 +234,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
 
         /**
+        * Download Festivals
+        */
+        Route::get('festivals/download', [FestivalController::class, 'downloadFestivals'])->name('festivals.download');
+
+        /**
          * Attachment Media
          */
         Route::resource('attachments', AttachmentController::class);
         Route::resource('creative_spotlights', CreativeSpotlightController::class);
+        Route::resource('festivals', FestivalController::class);
 
         /**
          * Pages Management
@@ -239,9 +284,11 @@ Route::group(['middleware' => ['auth']], function () {
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
-        Route::get('migrate-fresh-seed', function () {
-            Artisan::call('migrate:fresh --seed');
-        });
+        // Route::get('migrate-fresh-seed', function () {
+        //     Artisan::call('migrate:fresh --seed');
+        // });
+
+
 
     });
 
@@ -298,3 +345,7 @@ Route::get('get_uuids', function () {
 });
 
 Route::view('resume', 'resume');
+
+
+Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
+Route::resource('resource', MentorResourceController::class)->except('edit', 'show');

@@ -71,7 +71,7 @@ class SubscriptionController extends Controller
                 'created_at' => \Carbon\Carbon::parse($subscription->created_at)->format('F d, Y'),
             ];
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
             SendEmailJob::dispatch([
                 'receiver' => $admin,
                 'data' => $data,
@@ -146,7 +146,7 @@ class SubscriptionController extends Controller
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
             SendEmailJob::dispatch([
                 'receiver' => $admin,
                 'data' => $data,

@@ -73,14 +73,14 @@ class FriendshipController extends Controller
                 } else {
                     $profile_url = $sender->username;
                 }
-                SendEmailJob::dispatch([
-                    'receiver' => $receiver,
-                    'data' => [
-                        'recipient' => $receiver->first_name,
-                        'inviter' => $sender->first_name,
-                        'iniviter_profile' => env('FRONTEND_URL').$profile_url,
-                    ],
-                ], 'friendship_request_sent');
+                // SendEmailJob::dispatch([
+                //     'receiver' => $receiver,
+                //     'data' => [
+                //         'recipient' => $receiver->first_name,
+                //         'inviter' => $sender->first_name,
+                //         'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url) ,
+                //     ],
+                // ], 'friendship_request_sent');
             } catch (\Exception $e) {
                 throw new ApiException($e, 'CS-01');
             }
@@ -107,6 +107,14 @@ class FriendshipController extends Controller
 
                 return response()->json(['message' => 'Friendship request sent again.']);
 
+            } elseif ($existingFriendship->status == 'unfriended') {
+                $existingFriendship->update([
+                    'status' => 'pending',
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id,
+                ]);
+
+                return response()->json(['message' => 'Friendship request sent again.']);
             }
         }
 
@@ -138,13 +146,13 @@ class FriendshipController extends Controller
                 $this->createFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
 
                 // Dispatch email job
-                SendEmailJob::dispatch([
-                    'receiver' => $friendRequest->sender,
-                    'data' => [
-                        'recipient' => $friendRequest->sender->first_name,
-                        'member' => $friendRequest->receiver->first_name,
-                    ],
-                ], 'friendship_request_accepted');
+                // SendEmailJob::dispatch([
+                //     'receiver' => $friendRequest->sender,
+                //     'data' => [
+                //         'recipient' => $friendRequest->sender->first_name,
+                //         'member' => $friendRequest->receiver->first_name,
+                //     ],
+                // ], 'friendship_request_accepted');
             } elseif ($response === 'cancelled') {
                 $friendRequest->update(['status' => 'cancelled']);
             } elseif ($response === 'declined') {
@@ -227,5 +235,7 @@ class FriendshipController extends Controller
         })->first();
 
         $friendship->delete();
+
+        // Friend request will be updated to unfriended in Friendship Model delete event
     }
 }

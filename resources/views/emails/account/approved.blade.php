@@ -10,24 +10,24 @@
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
                         Account Activated</h1>
-                    <div
-                        style="background:#fff; border-radius: 5px; width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important">
+                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
+                        class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
 
-                        <p>Welcome to the <a href="{{ config('app.frontend_url') }}"
-                                target="_blank">{{ config('app.name') }}</a> community!
+                        <p>Welcome to the <a href="{{ $data['FRONTEND_URL'] }}"
+                                target="_blank">{{ $data['APP_NAME'] }}</a> community!
                         </p>
 
                         <div style="">To help you get the most out of your account, you’ll want to
-                            first complete your <a href="{{ config('app.frontend_url') }}/profile"
+                            first complete your <a href="{{ $data['FRONTEND_URL'] }}/profile"
                                 target="_blank">Profile.</a>
                             You can start by telling everyone a bit about yourself, your skills, and your goals.</div>
                         <div style="margin-top: 20px;">Once you’ve got your profile popping, take a moment to adjust
                             your preferences. After that,
                             you’re ready to get out there and start making some new connections!</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can <a
-                                href="{{ config('app.frontend_reset_password_url') }}" target="_blank">reset it
+                                href="{{ $data['FRONTEND_URL'] }}/reset-password" target="_blank">reset it
                                 here.</a>
 
                         </div>

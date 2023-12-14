@@ -103,6 +103,18 @@
         .button-link {
             text-decoration: none !important;
         }
+
+        @media (max-width:450px) {
+            .content {
+                padding: 0 20px;
+            }
+
+            .footer-logo {
+                position: static !important;
+                margin: 10px auto;
+                display: block;
+            }
+        }
     </style>
 
 </head>
@@ -123,7 +135,7 @@
                                 <td style="text-align: center; padding: 15px 0; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold; color: #ffffff; font-size: 14px"
                                     class="header_text_color header_text_size">
                                     <img width="60%"
-                                        src="https://adagencycreatives.com/wp-content/uploads/2022/04/AAC-LOGO-500-×-100-px-1.png"
+                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/AAC-LOGO-500-%C3%97-100-px-1.png"
                                         alt="" />
                                 </td>
                             </tr>

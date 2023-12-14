@@ -14,7 +14,7 @@ class AssignedAgencyResource extends JsonResource
         return [
             'id' => $this->uuid,
             'agency_name' => $agency->name,
-            'logo' => get_profile_picture($agency),
+            'logo' => get_profile_picture($user),
             'impersonate_url' => route('advisor.impersonate', $user->uuid),
         ];
     }

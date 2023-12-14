@@ -26,6 +26,7 @@ class CommentController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
             ])
+            ->whereHas('user')
             ->defaultSort('-created_at')
             ->allowedSorts('created_at')
             ->get();

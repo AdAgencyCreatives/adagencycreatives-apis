@@ -49,17 +49,20 @@ class EducationController extends Controller
 
             return new EducationCollection($createdEducations);
         } catch (\Exception $e) {
-            return ApiResponse::error('EdS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('EdS-01 ' . $e->getMessage(), 400);
         }
     }
 
     public function update(UpdateEducationRequest $request)
     {
         $user = $request->user();
-
         $educations = $request->input('educations');
 
         foreach ($educations as $educationData) {
+
+            if ($this->isEmptyExperienceData($educationData)) {
+                continue;
+            }
 
             $education = Education::where('uuid', $educationData['id'])->first();
 
@@ -77,6 +80,13 @@ class EducationController extends Controller
 
         return new EducationCollection($educations);
 
+    }
+
+    private function isEmptyExperienceData($experienceData)
+    {
+        return empty(array_filter($experienceData, function ($value) {
+            return $value !== null;
+        }));
     }
 
     public function destroy($uuid)

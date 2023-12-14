@@ -44,16 +44,22 @@ class Attachment extends Model
 
     public function scopeUserId(Builder $query, $user_id)
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
-
-        return $query->where('user_id', $user->id);
+        $user = User::where('uuid', $user_id)->first();
+        if ($user) {
+            return $query->where('user_id', $user->id);
+        } else {
+            return $query->where('user_id', 0);
+        }
     }
 
     public function scopePostId(Builder $query, $post_id)
     {
-        $post = Post::where('uuid', $post_id)->firstOrFail();
-
-        return $query->where('resource_id', $post->id);
+        $post = Post::where('uuid', $post_id)->first();
+        if ($post) {
+            return $query->where('resource_id', $post->id);
+        } else {
+            return $query->where('resource_id', 0);
+        }
 
     }
 

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use DateTimeZone;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,8 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('telescope:prune --hours=272')->daily();
-        $schedule->command('email:unread-message-count')->daily();
+        $daily_time = "10:00";
+        $schedule->command('telescope:prune --hours=720')->daily();
+        $schedule->command('email:unread-message-count')->dailyAt($daily_time);
+        $schedule->command('email:unread-message-count72')->dailyAt($daily_time);
+        $schedule->command('email:unread-message-count240')->dailyAt($daily_time);
     }
 
     /**
@@ -28,5 +32,13 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    /**
+    * Get the timezone that should be used by default for scheduled events.
+    */
+    protected function scheduleTimezone(): DateTimeZone|string|null
+    {
+        return 'America/Chicago';
     }
 }
