@@ -37,6 +37,13 @@ class ChatController extends Controller
                         //    ->toSql();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
+            // Read all messages between these two users
+            Message::where('sender_id', $contact_id)
+            ->where('receiver_id', $userId)
+            ->where('type', $type)
+            ->whereNull('read_at')
+            ->touch('read_at');
+
         //    dd($messages);
         return new MessageCollection($messages);
     }
