@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\JobInvitationController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
@@ -349,3 +350,6 @@ Route::view('resume', 'resume');
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
 Route::resource('resource', MentorResourceController::class)->except('edit', 'show');
+
+//Get job invitation uuid from email
+Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');

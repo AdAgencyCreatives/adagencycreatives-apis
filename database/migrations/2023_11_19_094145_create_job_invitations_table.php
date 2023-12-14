@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('creative_id')->index();
             $table->unsignedBigInteger('job_id')->index();
             $table->string('status')->nullable()->index();
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
 
             $table->unique(['job_id', 'creative_id', 'user_id']);
