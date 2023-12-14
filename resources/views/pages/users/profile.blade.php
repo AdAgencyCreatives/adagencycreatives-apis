@@ -12,6 +12,9 @@
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     @include('pages.users.creative.scripts')
 
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
     <script>
         var expired_at = "{{ $user->latest_subscription?->ends_at }}";
 
@@ -34,6 +37,12 @@
                 }
             });
         }
+
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
     </script>
 @endsection
 
