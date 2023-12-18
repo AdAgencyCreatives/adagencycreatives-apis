@@ -270,6 +270,19 @@ if (! function_exists('get_profile_picture')) {
         return $defaultImage;
     }
 }
+if (! function_exists('get_profile_picture_id')) {
+    function get_profile_picture_id($user)
+    {
+        $defaultImage = 0;
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $attachmentBasePath.$user->profile_picture->id;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $attachmentBasePath.$user->agency_logo->id;
+        }
+
+        return $defaultImage;
+    }
+}
 
 if (! function_exists('get_resume')) {
     function get_resume($user)
