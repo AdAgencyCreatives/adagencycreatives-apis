@@ -275,9 +275,9 @@ if (! function_exists('get_profile_picture_id')) {
     {
         $defaultImage = 0;
         if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
-            return $attachmentBasePath.$user->profile_picture->id;
+            return $user->profile_picture->id;
         } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
-            return $attachmentBasePath.$user->agency_logo->id;
+            return $user->agency_logo->id;
         }
 
         return $defaultImage;
