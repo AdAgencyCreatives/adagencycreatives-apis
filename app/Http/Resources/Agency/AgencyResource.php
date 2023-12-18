@@ -19,6 +19,7 @@ class AgencyResource extends JsonResource
             'name' => $this->name,
             'size' => $this->size,
             'about' => $this->about,
+            'role' => $user->role,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
             'logo' => $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null,

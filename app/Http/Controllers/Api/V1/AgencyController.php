@@ -8,7 +8,6 @@ use App\Http\Requests\Agency\StoreAgencyRequest;
 use App\Http\Requests\Agency\UpdateAgencyRequest;
 use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Agency\AgencyResource;
-use App\Http\Resources\Agency\AgencyShortCollection;
 use App\Models\Agency;
 use App\Models\Industry;
 use App\Models\Media;
@@ -25,6 +24,7 @@ class AgencyController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
+
         $industries = $this->processIndustryExperience($request, $filters);
         $medias = $this->processMediaExperience($request, $filters);
 
@@ -35,6 +35,7 @@ class AgencyController extends Controller
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
                 AllowedFilter::scope('is_visible'),
+                AllowedFilter::scope('role'),
                 'size',
                 'name',
                 AllowedFilter::exact('slug'),
@@ -44,15 +45,18 @@ class AgencyController extends Controller
             ->defaultSort('-is_featured', '-created_at')
             ->allowedSorts('created_at', 'is_featured');
 
-        $agency_user_ids = User::where('role', 3)->pluck('id');
-
         if ($industries !== null) {
             $this->applyExperienceFilter($query, $industries, 'industry_experience');
-
         }
 
         if ($medias !== null) {
             $this->applyExperienceFilter($query, $medias, 'media_experience');
+        }
+
+        // Set default value for 'role' filter if not present, because we are using same agencies endpoint for both recruiters and advisors
+        if (!isset($filters['filter']['role'])) {
+            $agency_user_ids = User::where('role', 3)->pluck('id');
+            $query->whereIn('user_id', $agency_user_ids);
         }
 
         $agencies = $query
@@ -62,7 +66,7 @@ class AgencyController extends Controller
                 'user.links',
                 'user.business_phone',
             ])
-            ->whereIn('user_id', $agency_user_ids)
+            ->whereHas('user') // If the user is deleted, don't show the records
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 

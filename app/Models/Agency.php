@@ -84,6 +84,12 @@ class Agency extends Model
         return $query->whereIn('user_id', $user_id);
     }
 
+    public function scopeRole(Builder $query, $role)
+    {
+        $users_ids = User::where('role', $role)->pluck('id');
+        return $query->whereIn('user_id', $users_ids);
+    }
+
     protected static function booted()
     {
 
