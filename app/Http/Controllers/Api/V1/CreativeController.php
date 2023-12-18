@@ -157,25 +157,6 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-    public function search6(Request $request)
-    {
-        $creativeIds =  $this->getCreativeIDs($request->search, $request->match_type);
-
-        $creatives = Creative::with('category')
-                ->whereIn('id', $creativeIds)
-                ->whereHas('user', function ($query) {
-                    $query->where('is_visible', 1)
-                        ->where('status', 1);
-                })
-                ->orderByDesc('is_featured')
-                ->orderBy('created_at')
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-                ->withQueryString();
-
-        return new LoggedinCreativeCollection($creatives);
-
-        return new LoggedinCreativeCollection($creatives);
-    }
 
     public function search3(Request $request)
     {
@@ -346,6 +327,27 @@ class CreativeController extends Controller
             ->toArray();
         return $creativeIds;
     }
+
+    public function search6(Request $request)
+    {
+        $creativeIds =  $this->getCreativeIDs($request->search, $request->match_type);
+
+        $creatives = Creative::with('category')
+                ->whereIn('id', $creativeIds)
+                ->whereHas('user', function ($query) {
+                    $query->where('is_visible', 1)
+                        ->where('status', 1);
+                })
+                ->orderByDesc('is_featured')
+                ->orderBy('created_at')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+
+        return new LoggedinCreativeCollection($creatives);
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
 
     public function search_test(Request $request)
     {
