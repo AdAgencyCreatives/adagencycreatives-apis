@@ -166,8 +166,8 @@ return [
         Watchers\NotificationWatcher::class => env('TELESCOPE_NOTIFICATION_WATCHER', true),
 
         Watchers\QueryWatcher::class => [
-            'enabled' => env('TELESCOPE_QUERY_WATCHER', false),
-            'ignore_packages' => false,
+            'enabled' => env('TELESCOPE_QUERY_WATCHER', true),
+            'ignore_packages' => true,
             'ignore_paths' => [],
             'slow' => 100,
         ],
@@ -177,7 +177,7 @@ return [
         Watchers\RequestWatcher::class => [
             'enabled' => env('TELESCOPE_REQUEST_WATCHER', true),
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
-            'ignore_http_methods' => ['GET'],
+            'ignore_http_methods' => [],
             'ignore_status_codes' => [404],
         ],
 

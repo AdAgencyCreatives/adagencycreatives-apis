@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
@@ -160,30 +161,85 @@ class CreativeController extends Controller
 
     public function search3(Request $request)
     {
-        $creativeIds1 =  $this->getCreativeIDs($request->search, 'exact-match');
-        $creativeIds2 =  array_values(array_diff($this->getCreativeIDs($request->search, 'starts-with'), $creativeIds1));
-        $creativeIds3 =  array_values(array_diff(array_diff($this->getCreativeIDs($request->search, 'contains'), $creativeIds1), $creativeIds2));
+        // Split the search terms into an array
+        $searchTerms = explode(',', $request->search);
 
-        $order = 'CASE ';
-        for ($i = 0; $i < count($creativeIds1); $i++) {
-            $order .= 'WHEN id = ' . $creativeIds1[$i] . ' THEN 0 ';
-        }
-        for ($i = 0; $i < count($creativeIds2); $i++) {
-            $order .= 'WHEN id = ' . $creativeIds2[$i] . ' THEN 1 ';
-        }
-        for ($i = 0; $i < count($creativeIds3); $i++) {
-            $order .= 'WHEN id = ' . $creativeIds3[$i] . ' THEN 2 ';
-        }
-        $order .= 'ELSE 3 END ASC';
+        // Initialize arrays to store IDs for each match type
+        $exactMatchIds = [];
+        $startsWithIds = [];
+        $containsIds = [];
 
-        $creativeIds  = array_merge(array_merge($creativeIds1, $creativeIds2), $creativeIds3);
+        // Iterate through each term for exact match
+        foreach ($searchTerms as $term) {
+            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match');
+        }
 
+        // Find common IDs across all exact match arrays
+        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
+
+// dd($commonExactMatchIds);
+        // Initialize arrays for common starts-with and common contains IDs
+        $commonStartsWithIds = [];
+        $commonContainsIds = [];
+
+        // Initialize the combined array with common exact match IDs
+        $combinedCreativeIds = $commonExactMatchIds;
+
+        // Remove common exact match IDs from individual arrays
+        foreach ($exactMatchIds as &$ids) {
+            $ids = array_values(array_diff($ids, $commonExactMatchIds));
+        }
+
+        // Iterate through each term for starts-with match
+        foreach ($searchTerms as $term) {
+            $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
+        }
+
+        // Find common IDs across all starts-with arrays
+        $commonStartsWithIds = call_user_func_array('array_intersect', $startsWithIds);
+
+        // Prioritize common starts-with match IDs in the combined array
+        $combinedCreativeIds = array_merge($combinedCreativeIds, $commonStartsWithIds);
+
+        // Remove common starts-with match IDs from individual arrays
+        foreach ($startsWithIds as &$ids) {
+            $ids = array_values(array_diff($ids, $commonStartsWithIds));
+        }
+
+        // Iterate through each term for contains match
+        foreach ($searchTerms as $term) {
+            $containsIds[] = $this->getCreativeIDs(trim($term), 'contains');
+        }
+
+        // Find common IDs across all contains arrays
+        $commonContainsIds = call_user_func_array('array_intersect', $containsIds);
+
+        // Prioritize common contains match IDs in the combined array
+        $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
+
+        // Remove common contains match IDs from individual arrays
+        foreach ($containsIds as &$ids) {
+            $ids = array_values(array_diff($ids, $commonContainsIds));
+        }
+
+        $combinedCreativeIds = array_merge($combinedCreativeIds, $exactMatchIds);
+        $combinedCreativeIds = array_merge($combinedCreativeIds, $startsWithIds);
+        $combinedCreativeIds = array_merge($combinedCreativeIds, $containsIds);
+        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+
+        // Combine and deduplicate the IDs while preserving the order
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+
+        $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
+
+
+        // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
-            ->whereIn('id', $creativeIds)
+            ->whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)->where('status', 1);
             })
-            ->orderByRaw($order)
+            ->orderByRaw($rawOrder)
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -348,66 +404,6 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-
-    public function search_test(Request $request)
-    {
-        $search = $request->search;
-        $terms = explode(',', $search);
-
-        // Perform an exact match search
-        $exactMatchSql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $exactMatchSql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name = '" . trim($term) . "')" . "\n";
-        }
-        $exactMatchSql .= ' ORDER BY CASE WHEN ca.name = "' . $terms[0] . '" THEN 0 ELSE 2 END, ca.name';
-
-        $exactMatchResult = DB::select($exactMatchSql);
-        $exactMatchIds = collect($exactMatchResult)->pluck('id')->toArray();
-
-        // Calculate total pages based on exact match result count and default pagination size
-        $totalPages = ceil(count($exactMatchIds) / ($request->per_page ?? config('global.request.pagination_limit')));
-        // dump($totalPages);
-        // Check if it's the first page or if the requested page is within the calculated total
-        $isFirstPage = !$request->has('page') || $request->input('page') == 1;
-        $isWithinCalculatedTotal = $request->has('page') && $request->input('page') <= $totalPages;
-        // dump($isFirstPage);
-        // dump($isWithinCalculatedTotal);
-        // Use the exact match IDs if it's the first page or within the calculated total
-        $combinedIds = ($isFirstPage || $isWithinCalculatedTotal) ? $exactMatchIds : [];
-        // dump($combinedIds);
-        // Perform the related search with LIKE operator if needed
-        if (!$isFirstPage && !$isWithinCalculatedTotal) {
-            $likeMatchSql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-            for ($i = 0; $i < count($terms); $i++) {
-                $term = $terms[$i];
-                $likeMatchSql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
-            }
-            $likeMatchSql .= ' ORDER BY ca.name';
-
-            $likeMatchResult = DB::select($likeMatchSql);
-            $likeMatchIds = collect($likeMatchResult)->pluck('id')->toArray();
-
-            // Combine the initial exact match IDs with the LIKE match IDs
-            $combinedIds = array_merge($combinedIds, $likeMatchIds);
-        }
-
-        // Fetch the creatives using the combined IDs
-        $creatives = Creative::with('category')
-            ->whereIn('id', $combinedIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
-            })
-            ->orderByDesc('is_featured')
-            ->orderBy('created_at')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
-
-
-        return new LoggedinCreativeCollection($creatives);
-    }
-
     public function search4(Request $request)
     {
         $term = $request->search;
@@ -513,6 +509,70 @@ class CreativeController extends Controller
             ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
+    }
+
+    public function related_creatives(Request $request) //based on first Title, Second State, Third City
+    {
+        $user = User::where('uuid', $request->creative_id)->first();
+        $creative = Creative::where('user_id', $user->id)->first();
+        $category = $creative->category;
+        $location = get_location($user);
+
+        $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
+
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        $sql .= " WHERE (lc.parent_id IS NULL AND lc.uuid ='" . $location['state_id'] . "')" . "\n";
+        $res = DB::select($sql);
+        $related_states_ids = collect($res)->pluck('id')->toArray();
+
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        $sql .= " WHERE (lc.parent_id IS NOT NULL AND lc.uuid = '" . $location['city_id'] . "')" . "\n";
+        $res = DB::select($sql);
+        $related_city_ids = collect($res)->pluck('id')->toArray();
+
+        $sortedCreatives = $this->sortCreatives($related_category_ids, $related_states_ids, $related_city_ids, $creative->id);
+
+        $rawOrder = 'FIELD(id, ' . implode(',', $sortedCreatives) . ')';
+
+        $creatives = Creative::whereIn('id', $sortedCreatives)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->orderByRaw($rawOrder)
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
+    public function sortCreatives($idsCategory, $idsState, $idsCity, $currentCreativeId)
+    {
+        $allMatched = array_intersect($idsCategory, $idsState, $idsCity);
+        $twoMatched = array_intersect($idsCategory, $idsState);
+
+        $uniqueElementsArray1 = array_diff($idsCategory, $idsState, $idsCity);
+        $uniqueElementsArray2 = array_diff($idsState, $idsCategory, $idsCity);
+        $uniqueElementsArray3 = array_diff($idsCity, $idsCategory, $idsState);
+
+        $singleMatched = array_merge($uniqueElementsArray1, $uniqueElementsArray2, $uniqueElementsArray3);
+
+
+        $result = array_values(array_unique(array_merge($allMatched, $twoMatched, $singleMatched)));
+
+
+        //exclude current creative id
+        $result = array_diff($result, [$currentCreativeId]);
+
+        // dump($idsCategory,$idsState,  $idsCity);
+        // dump($allMatched);
+        // dump($twoMatched);
+        // dump($singleMatched);
+        // dump($result);
+
+        return $result;
     }
 
     public function index(Request $request)
