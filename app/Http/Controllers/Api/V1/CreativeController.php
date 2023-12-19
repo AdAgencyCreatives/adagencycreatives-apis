@@ -348,66 +348,6 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-
-    public function search_test(Request $request)
-    {
-        $search = $request->search;
-        $terms = explode(',', $search);
-
-        // Perform an exact match search
-        $exactMatchSql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $exactMatchSql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name = '" . trim($term) . "')" . "\n";
-        }
-        $exactMatchSql .= ' ORDER BY CASE WHEN ca.name = "' . $terms[0] . '" THEN 0 ELSE 2 END, ca.name';
-
-        $exactMatchResult = DB::select($exactMatchSql);
-        $exactMatchIds = collect($exactMatchResult)->pluck('id')->toArray();
-
-        // Calculate total pages based on exact match result count and default pagination size
-        $totalPages = ceil(count($exactMatchIds) / ($request->per_page ?? config('global.request.pagination_limit')));
-        // dump($totalPages);
-        // Check if it's the first page or if the requested page is within the calculated total
-        $isFirstPage = !$request->has('page') || $request->input('page') == 1;
-        $isWithinCalculatedTotal = $request->has('page') && $request->input('page') <= $totalPages;
-        // dump($isFirstPage);
-        // dump($isWithinCalculatedTotal);
-        // Use the exact match IDs if it's the first page or within the calculated total
-        $combinedIds = ($isFirstPage || $isWithinCalculatedTotal) ? $exactMatchIds : [];
-        // dump($combinedIds);
-        // Perform the related search with LIKE operator if needed
-        if (!$isFirstPage && !$isWithinCalculatedTotal) {
-            $likeMatchSql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-            for ($i = 0; $i < count($terms); $i++) {
-                $term = $terms[$i];
-                $likeMatchSql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
-            }
-            $likeMatchSql .= ' ORDER BY ca.name';
-
-            $likeMatchResult = DB::select($likeMatchSql);
-            $likeMatchIds = collect($likeMatchResult)->pluck('id')->toArray();
-
-            // Combine the initial exact match IDs with the LIKE match IDs
-            $combinedIds = array_merge($combinedIds, $likeMatchIds);
-        }
-
-        // Fetch the creatives using the combined IDs
-        $creatives = Creative::with('category')
-            ->whereIn('id', $combinedIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
-            })
-            ->orderByDesc('is_featured')
-            ->orderBy('created_at')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
-
-
-        return new LoggedinCreativeCollection($creatives);
-    }
-
     public function search4(Request $request)
     {
         $term = $request->search;
@@ -513,6 +453,70 @@ class CreativeController extends Controller
             ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
+    }
+
+    public function related_creatives(Request $request) //based on first Title, Second State, Third City
+    {
+        $user = User::where('uuid', $request->creative_id)->first();
+        $creative = Creative::where('user_id', $user->id)->first();
+        $category = $creative->category;
+        $location = get_location($user);
+
+        $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
+
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        $sql .= " WHERE (lc.parent_id IS NULL AND lc.uuid ='" . $location['state_id'] . "')" . "\n";
+        $res = DB::select($sql);
+        $related_states_ids = collect($res)->pluck('id')->toArray();
+
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        $sql .= " WHERE (lc.parent_id IS NOT NULL AND lc.uuid = '" . $location['city_id'] . "')" . "\n";
+        $res = DB::select($sql);
+        $related_city_ids = collect($res)->pluck('id')->toArray();
+
+        $sortedCreatives = $this->sortCreatives($related_category_ids, $related_states_ids, $related_city_ids, $creative->id);
+
+        $rawOrder = 'FIELD(id, ' . implode(',', $sortedCreatives) . ')';
+
+        $creatives = Creative::whereIn('id', $sortedCreatives)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->orderByRaw($rawOrder)
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        return new LoggedinCreativeCollection($creatives);
+    }
+
+    public function sortCreatives($idsCategory, $idsState, $idsCity, $currentCreativeId)
+    {
+        $allMatched = array_intersect($idsCategory, $idsState, $idsCity);
+        $twoMatched = array_intersect($idsCategory, $idsState);
+
+        $uniqueElementsArray1 = array_diff($idsCategory, $idsState, $idsCity);
+        $uniqueElementsArray2 = array_diff($idsState, $idsCategory, $idsCity);
+        $uniqueElementsArray3 = array_diff($idsCity, $idsCategory, $idsState);
+
+        $singleMatched = array_merge($uniqueElementsArray1, $uniqueElementsArray2, $uniqueElementsArray3);
+
+
+        $result = array_values(array_unique(array_merge($allMatched, $twoMatched, $singleMatched)));
+
+
+        //exclude current creative id
+        $result = array_diff($result, [$currentCreativeId]);
+
+        // dump($idsCategory,$idsState,  $idsCity);
+        // dump($allMatched);
+        // dump($twoMatched);
+        // dump($singleMatched);
+        // dump($result);
+
+        return $result;
     }
 
     public function index(Request $request)

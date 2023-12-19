@@ -98,6 +98,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search5', [CreativeController::class, 'search_test']);
     Route::get('creatives/search6', [CreativeController::class, 'search6']);
 
+    Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
+
+
     /**
      * Agency Advance Search
      */
