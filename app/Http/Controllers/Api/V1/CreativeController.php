@@ -173,11 +173,10 @@ class CreativeController extends Controller
         foreach ($searchTerms as $term) {
             $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match');
         }
-// dump($exactMatchIds);
+
         // Find common IDs across all exact match arrays
         $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
 
-// dd($commonExactMatchIds);
         // Initialize arrays for common starts-with and common contains IDs
         $commonStartsWithIds = [];
         $commonContainsIds = [];
@@ -197,33 +196,47 @@ class CreativeController extends Controller
         foreach ($searchTerms as $term) {
             $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
         }
+// dump($startsWithIds);
 
         // Find common IDs across all starts-with arrays
         $commonStartsWithIds = call_user_func_array('array_intersect', $startsWithIds);
-
+// dump($commonStartsWithIds);
         // Prioritize common starts-with match IDs in the combined array
         $combinedCreativeIds = array_merge($combinedCreativeIds, $commonStartsWithIds);
-
+// dump($combinedCreativeIds);
         // Remove common starts-with match IDs from individual arrays
         foreach ($startsWithIds as &$ids) {
             $ids = array_values(array_diff($ids, $commonStartsWithIds));
         }
+        //iterate over $startsWithIds nested array and then flatten the nested array and then merge into $combinedCreativeIds
+        foreach ($startsWithIds as $key => $value) {
+            $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($value));
+        }
+        //
 
+
+// dd($combinedCreativeIds);
         // Iterate through each term for contains match
         foreach ($searchTerms as $term) {
             $containsIds[] = $this->getCreativeIDs(trim($term), 'contains');
         }
-
+// dump($combinedCreativeIds);
         // Find common IDs across all contains arrays
         $commonContainsIds = call_user_func_array('array_intersect', $containsIds);
 
         // Prioritize common contains match IDs in the combined array
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
 
         // Remove common contains match IDs from individual arrays
         foreach ($containsIds as &$ids) {
             $ids = array_values(array_diff($ids, $commonContainsIds));
         }
+
+         //iterate over $startsWithIds nested array and then flatten the nested array and then merge into $combinedCreativeIds
+        foreach ($containsIds as $key => $value) {
+            $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($value));
+        }
+        $combinedCreativeIds = array_unique($combinedCreativeIds, SORT_NUMERIC);
 
         $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($exactMatchIds));
         $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($startsWithIds));
