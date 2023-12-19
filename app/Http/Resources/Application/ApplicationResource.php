@@ -10,6 +10,7 @@ class ApplicationResource extends JsonResource
     {
         $logged_in_user = request()->user();
         $user = $this->user;
+        $job = $this->job;;
 
         return [
             'type' => 'applications',
@@ -18,7 +19,8 @@ class ApplicationResource extends JsonResource
             'user' => $user->first_name.' '.$user->last_name,
             'slug' => $user->username,
             'user_profile_id' => $user->id,
-            'job_id' => $this->job->uuid,
+            'job_id' => $job->uuid,
+            'job_title' => $job->title,
             'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
