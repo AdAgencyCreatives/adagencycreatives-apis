@@ -160,87 +160,34 @@ class CreativeController extends Controller
 
     public function search3(Request $request)
     {
-        // Split the search terms into an array
-    $searchTerms = explode(',', $request->search);
+        $creativeIds1 =  $this->getCreativeIDs($request->search, 'exact-match');
+        $creativeIds2 =  array_values(array_diff($this->getCreativeIDs($request->search, 'starts-with'), $creativeIds1));
+        $creativeIds3 =  array_values(array_diff(array_diff($this->getCreativeIDs($request->search, 'contains'), $creativeIds1), $creativeIds2));
 
-    // Initialize arrays to store IDs for each match type
-    $exactMatchIds = [];
-    $startsWithIds = [];
-    $containsIds = [];
+        $order = 'CASE ';
+        for ($i = 0; $i < count($creativeIds1); $i++) {
+            $order .= 'WHEN id = ' . $creativeIds1[$i] . ' THEN 0 ';
+        }
+        for ($i = 0; $i < count($creativeIds2); $i++) {
+            $order .= 'WHEN id = ' . $creativeIds2[$i] . ' THEN 1 ';
+        }
+        for ($i = 0; $i < count($creativeIds3); $i++) {
+            $order .= 'WHEN id = ' . $creativeIds3[$i] . ' THEN 2 ';
+        }
+        $order .= 'ELSE 3 END ASC';
 
-    // Iterate through each term for exact match
-    foreach ($searchTerms as $term) {
-        $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match');
-    }
+        $creativeIds  = array_merge(array_merge($creativeIds1, $creativeIds2), $creativeIds3);
 
-    // Find common IDs across all exact match arrays
-    $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
+        $creatives = Creative::with('category')
+            ->whereIn('id', $creativeIds)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)->where('status', 1);
+            })
+            ->orderByRaw($order)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
-    // Initialize arrays for common starts-with and common contains IDs
-    $commonStartsWithIds = [];
-    $commonContainsIds = [];
-
-    // Initialize the combined array with common exact match IDs
-    $combinedCreativeIds = $commonExactMatchIds;
-
-    // Remove common exact match IDs from individual arrays
-    foreach ($exactMatchIds as &$ids) {
-        $ids = array_values(array_diff($ids, $commonExactMatchIds));
-    }
-
-    // Iterate through each term for starts-with match
-    foreach ($searchTerms as $term) {
-        $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
-    }
-
-    // Find common IDs across all starts-with arrays
-    $commonStartsWithIds = call_user_func_array('array_intersect', $startsWithIds);
-
-    // Prioritize common starts-with match IDs in the combined array
-    $combinedCreativeIds = array_merge($combinedCreativeIds, $commonStartsWithIds);
-
-    // Remove common starts-with match IDs from individual arrays
-    foreach ($startsWithIds as &$ids) {
-        $ids = array_values(array_diff($ids, $commonStartsWithIds));
-    }
-
-    // Iterate through each term for contains match
-    foreach ($searchTerms as $term) {
-        $containsIds[] = $this->getCreativeIDs(trim($term), 'contains');
-    }
-
-    // Find common IDs across all contains arrays
-    $commonContainsIds = call_user_func_array('array_intersect', $containsIds);
-
-    // Prioritize common contains match IDs in the combined array
-    $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
-
-    // Remove common contains match IDs from individual arrays
-    foreach ($containsIds as &$ids) {
-        $ids = array_values(array_diff($ids, $commonContainsIds));
-    }
-
-    // Combine and deduplicate the IDs while preserving the order
-    $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
-
-    // Calculate the ordering mechanism based on the priority of search terms
-    $order = 'CASE ';
-    foreach ($combinedCreativeIds as $index => $id) {
-        $order .= "WHEN id = $id THEN $index ";
-    }
-    $order .= 'ELSE ' . count($combinedCreativeIds) . ' END';
-
-    // Retrieve creative records from the database and order them based on the calculated order
-    $creatives = Creative::with('category')
-        ->whereIn('id', $combinedCreativeIds)
-        ->whereHas('user', function ($query) {
-            $query->where('is_visible', 1)->where('status', 1);
-        })
-        ->orderByRaw($order)
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
-
-    return new LoggedinCreativeCollection($creatives);
+        return new LoggedinCreativeCollection($creatives);
     }
 
 
