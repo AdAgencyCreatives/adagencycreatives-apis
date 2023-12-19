@@ -18,6 +18,7 @@ class SendUnreadMessageEmail extends Command
         $date_range = now()->subDay();
 
         $unreadMessages = Message::where('created_at', '>', $date_range)
+            ->where('type', 'private')
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
