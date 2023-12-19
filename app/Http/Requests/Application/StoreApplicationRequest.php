@@ -15,8 +15,7 @@ class StoreApplicationRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,uuid',
-            'job_id' => 'required|exists:jobs,uuid',
-            'resume_id' => 'required|exists:attachments,uuid',
+            'job_id' => 'required|exists:job_posts,uuid',
         ];
     }
 }

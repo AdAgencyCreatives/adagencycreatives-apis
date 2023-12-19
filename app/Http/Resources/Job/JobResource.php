@@ -18,8 +18,8 @@ class JobResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'description' => $this->description,
-            'category_id' => $category->uuid,
-            'category' => $category->name,
+            'category_id' => $category?->uuid,
+            'category' => $category?->name,
             'employment_type' => $this->employment_type,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
@@ -40,14 +40,12 @@ class JobResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'is_opentoremote' => $this->is_opentoremote,
             'status' => $this->status,
-            'location' => [
-                'state' => $this->state->name,
-                'city' => $this->city->name,
-            ],
+            'location' => $this->get_location(),
             'agency' => [],
             'seo' => $this->generate_seo(),
+            'applications_count' => $this->applications_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
-            'expired_at' => $this->expired_at->format(config('global.datetime_format')),
+            'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
 
@@ -56,19 +54,41 @@ class JobResource extends JsonResource
             if ($this->agency_name == null) {
                 $data['agency'] = [
                     'name' => $agency->name,
-                    'logo' => $agency->attachment ? $agency->attachment->path : null,
+                    'logo' => get_profile_picture($user),
                 ];
 
             } else {
                 $data['agency'] = [
                     'name' => $this->agency_name,
-                    'logo' => $this->attachment ? getAttachmentBasePath().$this->attachment->path : null,
+                    'logo' => get_profile_picture($user),
                 ];
             }
-            $data['agency']['slug'] = $user->username;
+            $data['agency']['slug'] = $agency->slug;
         }
 
         return $data;
+    }
+
+    public function get_location()
+    {
+        $location = [
+            'state_id' => null,
+            'state' => null,
+            'city_id' => null,
+            'city' => null,
+        ];
+
+        if ($this->state) {
+            $location['state_id'] = $this->state->uuid;
+            $location['state'] = $this->state->name;
+        }
+
+        if ($this->city) {
+            $location['city_id'] = $this->city->uuid;
+            $location['city'] = $this->city->name;
+        }
+
+        return $location;
     }
 
     public function generate_seo()
@@ -93,7 +113,7 @@ class JobResource extends JsonResource
 
         return replacePlaceholders($seo_title_format, [
             '%job_title%' => $this->title,
-            '%job_location%' => sprintf('%s, %s', $this->city->name, $this->state->name),
+            '%job_location%' => sprintf('%s, %s', $this->city?->name, $this->state?->name),
             '%job_employment_type%' => $this->employment_type,
             '%site_name%' => $site_name,
             '%separator%' => $separator,

@@ -9,7 +9,7 @@ return [
      */
     'datetime_format' => 'Y-m-d H:i:s',
     'request' => [
-        'pagination_limit' => '10',
+        'pagination_limit' => '9',
     ],
 
     'response' => [

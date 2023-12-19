@@ -2,29 +2,32 @@
 
 namespace App\Http\Resources\Creative;
 
+use App\Http\Resources\Link\LinkCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CreativeResource extends JsonResource
 {
-    private $title;
+    private $creative_category;
 
     private $location;
 
     public function toArray($request)
     {
         $user = $this->user;
-
-        $this->title = isset($this->category) ? $this->category->name : null;
+        $this->creative_category = isset($this->category) ? $this->category->name : null;
 
         $this->location = $this->get_location($user);
 
         return [
             'type' => 'creatives',
+            'test_id' => $this->id,
             'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
-            'name' => $this->user->first_name.' '.$this->user->last_name,
+            'user_id' => $user->uuid,
+            'name' => $user->first_name.' '.$user->last_name,
+            'email' => $this->get_email($user),
             'slug' => $this->slug,
             'title' => $this->title,
+            'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
@@ -42,7 +45,11 @@ class CreativeResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'is_opentorelocation' => $this->is_opentorelocation,
+            'phone_number' => $this->get_phone_number($user),
             'location' => $this->location,
+            'resume' => get_resume($user),
+            'portfolio_website' => $this->get_website_preview($user),
+            'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
@@ -50,19 +57,45 @@ class CreativeResource extends JsonResource
         ];
     }
 
+    public function get_email($user)
+    {
+        return $user->email;
+    }
+
+    public function get_phone_number($user)
+    {
+        return $user->personal_phone ? $user->personal_phone->phone_number : null;
+    }
+
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : null;
+        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
+    }
+
+    public function get_website_preview($user)
+    {
+        return $user->portfolio_website_preview ? getAttachmentBasePath().$user->portfolio_website_preview->path : '';
     }
 
     public function get_location($user)
     {
-        $address = collect($user->addresses)->firstWhere('label', 'personal');
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
 
-        return $address ? [
-            'state' => $address->state->name,
-            'city' => $address->city->name,
-        ] : null;
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
     }
 
     public function generate_seo()
@@ -104,5 +137,36 @@ class CreativeResource extends JsonResource
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
+    }
+
+    public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
+    {
+        // dd($subscription_status);
+        //User is viewing his own profile
+        if ($logged_in_user->id == $user->id) {
+            return $this->get_resume_url($user);
+        }
+
+        if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
+            return null;
+        }
+
+        if ($logged_in_user->role === 'creative' && ! $is_friend) {
+            return null;
+        }
+
+        return $this->get_resume_url($user, $logged_in_user);
+
+    }
+
+    private function get_resume_url($user, $logged_in_user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath().$user->resume->path;
+        } else {
+            $queryParams = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+
+            return route('download.resume', ['uuid1' => $user->uuid, 'uuid2' => $logged_in_user->uuid]);
+        }
     }
 }

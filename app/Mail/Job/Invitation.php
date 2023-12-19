@@ -12,15 +12,19 @@ class Invitation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public $data)
-    {
+    public $data;
 
+    public function __construct($data)
+    {
+        $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['APP_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: 'Job Invitation',
+            subject: sprintf('%s is inviting you to apply!', $this->data['APP_NAME']),
         );
     }
 

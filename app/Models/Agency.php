@@ -10,7 +10,8 @@ use Illuminate\Support\Str;
 
 class Agency extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -29,7 +30,14 @@ class Agency extends Model
         'seo_title',
         'seo_description',
         'seo_keywords',
+        'views',
     ];
+
+    public function getApprovedJobCountAttribute()
+    {
+        // Access the 'open_jobs' relationship through the 'user' relationship
+        return $this->user->open_jobs()->count();
+    }
 
     public function user()
     {
@@ -67,6 +75,19 @@ class Agency extends Model
         $user_ids = User::where('status', $status)->pluck('id');
 
         return $query->whereIn('user_id', $user_ids);
+    }
+
+    public function scopeIsVisible(Builder $query, $is_visible)
+    {
+        $user_id = User::where('is_visible', $is_visible)->pluck('id');
+
+        return $query->whereIn('user_id', $user_id);
+    }
+
+    public function scopeRole(Builder $query, $role)
+    {
+        $users_ids = User::where('role', $role)->pluck('id');
+        return $query->whereIn('user_id', $users_ids);
     }
 
     protected static function booted()

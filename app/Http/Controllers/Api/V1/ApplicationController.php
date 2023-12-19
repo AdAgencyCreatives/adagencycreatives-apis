@@ -8,18 +8,21 @@ use App\Http\Requests\Application\StoreApplicationRequest;
 use App\Http\Requests\Application\UpdateApplicationRequest;
 use App\Http\Resources\Application\ApplicationCollection;
 use App\Http\Resources\Application\ApplicationResource;
+use App\Http\Resources\AppliedJob\AppliedJobCollection;
+use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = QueryBuilder::for(Application::class)
             ->allowedFilters([
@@ -28,26 +31,62 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
-        $applications = $query->paginate(config('global.request.pagination_limit'));
+        $applications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
     }
 
     public function store(StoreApplicationRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
+        $applicant_user = User::where('uuid', $request->user_id)->first();
         $job = Job::where('uuid', $request->job_id)->first();
-        $attachment = Attachment::where('uuid', $request->resume_id)->first();
+        // $attachment = Attachment::where('uuid', $request->resume_id)->first();
+
+        $existingApplication = Application::where('user_id', $applicant_user->id)
+            ->where('job_id', $job->id)
+            ->first();
+
+        if ($existingApplication) {
+            return ApiResponse::error('You have already applied for this job.', 400);
+        }
+
+        $agency_user = $job->user;
 
         $request->merge([
             'uuid' => Str::uuid(),
-            'user_id' => $user->id,
+            'user_id' => $applicant_user->id,
             'job_id' => $job->id,
-            'attachment_id' => $attachment->id,
+            // 'attachment_id' => $attachment->id ?? null,
             'status' => 0,
         ]);
+
         try {
             $application = Application::create($request->all());
+
+            SendEmailJob::dispatch([
+                'receiver' => $applicant_user,
+                'data' => [
+                    'recipient' => $applicant_user->first_name,
+                    'job_title' => $job->title,
+                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                ],
+            ], 'application_submitted');
+
+            $resume_url = get_resume($applicant_user);
+
+            SendEmailJob::dispatch([
+                'receiver' => $agency_user,
+                'data' => [
+                    'receiver_name' => $agency_user->first_name ?? $agency_user->username,
+                    'applicant' => $applicant_user,
+                    'job_title' => $job->title,
+                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                    'resume_url' => $resume_url,
+                    'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
+                    'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
+                    'message' => $request->message,
+                ],
+            ], 'new_candidate_application'); // To the agency
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {
@@ -88,5 +127,16 @@ class ApplicationController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+    public function applied_jobs(Request $request)
+    {
+        $user = $request->user();
+
+        $applications = Application::with('job')
+            ->where('user_id', $user->id)
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new AppliedJobCollection($applications);
     }
 }

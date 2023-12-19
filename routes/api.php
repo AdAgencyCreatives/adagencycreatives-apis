@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Api\V1\ActivityController;
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AgencyController;
 use App\Http\Controllers\Api\V1\ApplicationController;
@@ -10,9 +12,11 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CreativeController;
+use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\FestivalController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\JobAlertController;
@@ -21,10 +25,14 @@ use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\LocationController;
 use App\Http\Controllers\Api\V1\MediaController;
+use App\Http\Controllers\Api\V1\MentorResourceController;
+use App\Http\Controllers\Api\V1\MentorTopicController;
 use App\Http\Controllers\Api\V1\NoteController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\PostReactionController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
@@ -46,51 +54,99 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/login', [UserController::class, 'login']);
-
 Route::post('/users', [UserController::class, 'store']);
 
 // Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
-Route::apiResource('creatives', CreativeController::class)->middleware('check.permissions:creative');
-Route::get('creative_spotlight', [CreativeController::class, 'creative_spotlight']);
-Route::apiResource('agencies', AgencyController::class)->middleware('check.permissions:agency');
-Route::apiResource('jobs', JobController::class)->middleware('check.permissions:job');
+// Public GET routes
+Route::get('agencies', [AgencyController::class, 'index']);
+Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
+// Route::get('creatives', [CreativeController::class, 'index']);
+Route::get('jobs', [JobController::class, 'index']);
+
+Route::get('home/jobs/search', [JobController::class, 'jobs_homepage']);
+
+Route::get('featured_cities', [JobController::class, 'featured_cities']);
+
+Route::get('links', [LinkController::class, 'index'])->name('links.index');
+Route::get('attachments', [AttachmentController::class, 'index']);
+Route::get('experiences', [ExperienceController::class, 'index']);
+Route::get('educations', [EducationController::class, 'index']);
+Route::get('home/creative-spotlights', [CreativeSpotlightController::class, 'homepage_spotlights']);
+Route::resource('creative-spotlights', CreativeSpotlightController::class)->only('index');
 
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 Route::get('employment_types', [JobController::class, 'get_employment_types']);
-Route::apiResource('locations', LocationController::class)->middleware('check.permissions:job');
+Route::get('locations', [LocationController::class, 'index']);
+Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
+Route::apiResource('years-of-experience', YearsOfExperienceController::class);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    /**
+     * Creatives
+     */
+    Route::get('creatives', [CreativeController::class, 'index']);
+    Route::get('creatives/search1', [CreativeController::class, 'search1']);
+    Route::get('creatives/search2', [CreativeController::class, 'search2']);
+    Route::get('creatives/search3', [CreativeController::class, 'search3']);
+    Route::get('creatives/search4', [CreativeController::class, 'search4']);
+    Route::get('creatives/search5', [CreativeController::class, 'search_test']);
+    Route::get('creatives/search6', [CreativeController::class, 'search6']);
+
+    /**
+     * Agency Advance Search
+     */
+    Route::get('agencies/search1', [AgencyController::class, 'search1']); // For agency directory page
+    Route::get('agencies/search2', [AgencyController::class, 'search2']); //For agency Detail page
+
+
+    /**
+     * Recruiters
+     */
+    Route::get('recruiters/search1', [AgencyController::class, 'search1']); //For recruiters directory page
+
     /**
      * Job Board Routes
      */
-    Route::apiResource('applications', ApplicationController::class)->middleware('check.permissions:application');
+    Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
+    Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
+    Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
+    Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
+    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
+
+    Route::get('home/jobs/search/logged_in', [JobController::class, 'jobs_homepage_logged_in']);
+    Route::get('jobs/logged_in', [JobController::class, 'jobs_for_logged_in']);
+    Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');
+
+    Route::apiResource('links', LinkController::class, ['except' => ['index']]);
+    Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
+
+    Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);
+    Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
-    Route::apiResource('educations', EducationController::class)->middleware('check.permissions:education');
-    Route::apiResource('experiences', ExperienceController::class)->middleware('check.permissions:experience');
+    Route::apiResource('educations', EducationController::class, ['except' => ['index', 'update']])->middleware('check.permissions:education');
+    Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience');
+
+    Route::patch('educations', [EducationController::class, 'update'])->middleware('check.permissions:education');
+    Route::patch('experiences', [ExperienceController::class, 'update'])->middleware('check.permissions:education');
 
     Route::apiResource('phone-numbers', PhoneController::class);
     Route::apiResource('addresses', AddressController::class);
-    Route::apiResource('links', LinkController::class);
-    Route::apiResource('notes', NoteController::class);
-    Route::apiResource('attachments', AttachmentController::class);
 
+    Route::apiResource('notes', NoteController::class);
     Route::apiResource('bookmarks', BookmarkController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('strengths', StrengthController::class);
-    Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
-    Route::apiResource('industry-experiences', IndustryController::class);
 
+    Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
 
-    Route::apiResource('years-of-experience', YearsOfExperienceController::class);
-
     Route::apiResource('reviews', ReviewController::class);
-
     Route::apiResource('users', UserController::class)->except(['store']);
 
     Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
@@ -98,24 +154,31 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Filters
      */
+    Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job');
     Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
     Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
+    Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']);
+    Route::get('get_users/spotlights', [UserController::class, 'get_creatives']);
+    Route::get('get_users/festivals', [FestivalController::class, 'get_festival_creatives']); //for getting creatives on festival page
 
     /**
      * Job Alerts
      */
     Route::apiResource('job-alerts', JobAlertController::class);
     Route::apiResource('package-requests', PackageRequestController::class);
-    Route::get('get_assigned_agencies/{uuid}', [PackageRequestController::class, 'get_assigned_agencies']); //Get assigned agencies for advisor
+    Route::get('get_assigned_agencies', [PackageRequestController::class, 'get_assigned_agencies']); //Get assigned agencies for advisor
 
     /**
      * Community Routes
      */
-    Route::apiResource('groups', GroupController::class)->except(['store']);
+    Route::post('groups/update/{group}', [GroupController::class, 'update']);
+    Route::apiResource('groups', GroupController::class);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
+    Route::get('trending_posts', [PostController::class, 'trending_posts']);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);
+    Route::apiResource('post-reactions', PostReactionController::class)->only(['index', 'store']);
 
     /**
      * Stripe Payment Routes
@@ -130,11 +193,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Chat Routes
      */
+    Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
-    Route::get('messages', [ChatController::class, 'fetchMessages']);
     Route::apiResource('messages', ChatController::class);
-
+    Route::get('notifications/count', [NotificationController::class, 'count']);
+    Route::apiResource('notifications', NotificationController::class);
+    Route::get('activities/count', [ActivityController::class, 'count']);
+    Route::apiResource('activities', ActivityController::class);
     /**
      * SEO
      */
@@ -148,5 +214,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/re_login', [UserController::class, 're_login']);
 
+    /**
+     * Dashboard Stats
+     */
+    Route::get('agency_stats', [DashboardController::class, 'agency_dashboard_stats']);
+    Route::get('creative_stats', [DashboardController::class, 'creative_dashboard_stats']);
+    Route::patch('update_password', [UserController::class, 'update_password']);
+
 });
+
 Route::get('stats', [DashboardController::class, 'index']);
+
+Route::apiResource('festivals', FestivalController::class);
+Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
+Route::get('pages', [PageController::class, 'index']);
+
+// Mentorship Topic
+Route::resource('topics', MentorTopicController::class);
+Route::resource('mentor-resources', MentorResourceController::class);

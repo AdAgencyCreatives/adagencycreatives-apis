@@ -1,79 +1,90 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\GroupMember\StoreGroupMemberRequest;
+use App\Http\Requests\GroupMember\UpdateGroupMemberRequest;
+use App\Http\Resources\GroupMember\GroupMemberCollection;
+use App\Http\Resources\GroupMember\GroupMemberResource;
+use App\Models\Group;
 use App\Models\GroupMember;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class GroupMemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = QueryBuilder::for(GroupMember::class)
+            ->allowedFilters([
+                AllowedFilter::scope('group_id'),
+                AllowedFilter::scope('user_id'),
+                'role',
+            ])
+            ->allowedSorts('created_at');
+
+        $group_members = $query
+        ->with('user.creative')
+        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new GroupMemberCollection($group_members);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreGroupMemberRequest $request)
     {
-        //
+        $user = User::where('uuid', $request->user_id)->firstOrFail();
+        $group = Group::where('uuid', $request->group_id)->firstOrFail();
+
+        if ($group->members()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'User is already a member of the group.'], 422);
+        }
+
+        $group_member = GroupMember::create([
+            'uuid' => Str::uuid(),
+            'group_id' => $group->id,
+            'user_id' => $user->id,
+            'role' => $request->role,
+            'joined_at' => now(),
+        ]);
+
+        return new GroupMemberResource($group_member);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(GroupMember $groupMember)
+    public function update(UpdateGroupMemberRequest $request, $uuid)
     {
-        //
+        $group = Group::where('uuid', $request->group_id)->firstOrFail();
+        $user = User::where('uuid', $uuid)->firstOrFail();
+
+        $group_member = GroupMember::where('user_id', $user->id)
+            ->where('group_id', $group->id)->update(
+                $request->only('role')
+            );
+
+        $group_member = GroupMember::where('user_id', $user->id)
+            ->where('group_id', $group->id)->first();
+
+        return new GroupMemberResource($group_member);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GroupMember $groupMember)
+    public function destroy(Request $request, $uuid)
     {
-        //
-    }
+        try {
+            $group_member = GroupMember::where('uuid', $uuid)->firstOrFail();
+            $group_member->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GroupMember $groupMember)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GroupMember $groupMember)
-    {
-        //
+            return ApiResponse::success(new GroupMemberResource($group_member), 200);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
     }
 }

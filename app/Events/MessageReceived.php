@@ -23,15 +23,19 @@ class MessageReceived implements ShouldBroadcast
 
     public function broadcastOn()
     {
-
+        /**
+         * php artisan queue:serve
+         * php artisan websockets:serve
+         */
         $receiver_id = $this->data['receiver_id'];
         $channel2 = 'messanger.'.$receiver_id;
 
-        return new PrivateChannel($channel2);
+        return [$channel2];
+        // return new PrivateChannel($channel2); //Channel Name
     }
 
     public function broadcastAs()
     {
-        return 'private_msg';
+        return 'private_msg'; //Event Name
     }
 }

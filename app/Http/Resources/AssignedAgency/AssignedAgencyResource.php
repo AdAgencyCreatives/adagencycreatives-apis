@@ -8,10 +8,14 @@ class AssignedAgencyResource extends JsonResource
 {
     public function toArray($request)
     {
+        $agency = $this->agency;
+        $user = $this->user;
+
         return [
-            'user_id' => $this->uuid,
-            'agency' => $this->agency->name,
-            'impersonate_url' => route('impersonate', $this->id),
+            'id' => $this->uuid,
+            'agency_name' => $agency->name,
+            'logo' => get_profile_picture($user),
+            'impersonate_url' => route('advisor.impersonate', $user->uuid),
         ];
     }
 }

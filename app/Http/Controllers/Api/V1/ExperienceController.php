@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\ApiException;
-use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Education\UpdateEducationRequest;
@@ -12,7 +10,6 @@ use App\Http\Resources\Experience\ExperienceCollection;
 use App\Http\Resources\Experience\ExperienceResource;
 use App\Models\Experience;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -53,22 +50,43 @@ class ExperienceController extends Controller
 
             return new ExperienceCollection($createdExperiences);
         } catch (\Exception $e) {
-            return ApiResponse::error('ExpS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('ExpS-01 ' . $e->getMessage(), 400);
         }
     }
 
-    public function update(UpdateEducationRequest $request, $uuid)
+    public function update(UpdateEducationRequest $request)
     {
-        try {
-            $education = Experience::where('uuid', $uuid)->firstOrFail();
-            $education->update($request->all());
+        $user = $request->user();
 
-            return new ExperienceResource($education);
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFound($e);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'US-01');
+        foreach ($request->input('experiences') as $experienceData) {
+
+            if ($this->isEmptyEducationData($experienceData)) {
+                continue;
+            }
+
+            $experience = Experience::where('uuid', $experienceData['id'])->first();
+
+            if ($experience) {
+                $experience->update($experienceData);
+
+            } else {
+                Experience::create(array_merge($experienceData, [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                ]));
+            }
         }
+        $experiences = Experience::where('user_id', $user->id)->get();
+
+        return new ExperienceCollection($experiences);
+
+    }
+
+    private function isEmptyEducationData($experienceData)
+    {
+        return empty(array_filter($experienceData, function ($value) {
+            return $value !== null;
+        }));
     }
 
     public function destroy($uuid)

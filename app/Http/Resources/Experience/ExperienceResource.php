@@ -12,10 +12,11 @@ class ExperienceResource extends JsonResource
             'type' => 'experiences',
             'id' => $this->uuid,
             'user_id' => $this->user->uuid,
+            'title' => $this->title,
             'company' => $this->company,
             'description' => $this->description,
-            'started_at' => $this->started_at->format(config('global.datetime_format')),
-            'completed_at' => $this->completed_at ? $this->completed_at->format(config('global.datetime_format')) : null,
+            'started_at' => $this->started_at?->format(config('global.datetime_format')),
+            'completed_at' => $this->completed_at?->format(config('global.datetime_format')),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];

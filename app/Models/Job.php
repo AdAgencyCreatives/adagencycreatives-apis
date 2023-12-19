@@ -15,20 +15,6 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function searchableAs(): string
-    {
-        return 'jobs_index';
-    }
-
-    public function toSearchableArray()
-    {
-        return [
-            'title' => $this->title,
-            'description' => $this->description,
-            'employment_type' => $this->employment_type,
-        ];
-    }
-
     protected $table = 'job_posts';
 
     protected $fillable = [
@@ -56,10 +42,12 @@ class Job extends Model
         'is_urgent',
         'is_opentorelocation',
         'is_opentoremote',
+        'created_at',
         'expired_at',
         'seo_title',
         'seo_description',
         'seo_keywords',
+        'views',
     ];
 
     protected $casts = [
@@ -97,7 +85,7 @@ class Job extends Model
 
     public function agency()
     {
-        return $this->belongsTo(Agency::class, 'user_id');
+        return $this->belongsTo(Agency::class, 'user_id', 'user_id');
     }
 
     public function applications()
@@ -149,6 +137,13 @@ class Job extends Model
         return $query->where('category_id', $category->id);
     }
 
+    public function scopeCategorySlug(Builder $query, $category_slug): Builder
+    {
+        $category = Category::where('slug', $category_slug)->firstOrFail();
+
+        return $query->where('category_id', $category->id);
+    }
+
     public function scopeStateId(Builder $query, $state_id): Builder
     {
         $state = Location::where('uuid', $state_id)->first();
@@ -156,12 +151,26 @@ class Job extends Model
         return $query->where('state_id', $state->id);
     }
 
-    // public function scopeCityId(Builder $query, $city_id): Builder
-    // {
-    //     $city = Location::where('uuid', $city_id)->first();
+    public function scopeStateSlug(Builder $query, $state_slug): Builder
+    {
+        $city = Location::where('slug', $state_slug)->first();
 
-    //     return $query->where('city_id', $city->id);
-    // }
+        return $query->where('state_id', $city->id);
+    }
+
+    public function scopeCityId(Builder $query, $city_id): Builder
+    {
+        $city = Location::where('uuid', $city_id)->first();
+
+        return $query->where('city_id', $city->id);
+    }
+
+    public function scopeCitySlug(Builder $query, $city_slug): Builder
+    {
+        $city = Location::where('slug', $city_slug)->first();
+
+        return $query->where('city_id', $city->id);
+    }
 
     // public function scopeIndustryExperience(Builder $query, $industries): Builder
     // {
@@ -231,55 +240,78 @@ class Job extends Model
         static::created(function ($job) {
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
-
-                /**
-                 * Send Notification to Admin about new job
-                 */
-                $category = Category::find($job->category_id);
-                $author = User::find($job->user_id);
-
-                $data = [
-                    'data' => [
-                        'job' => $job,
-                        'category' => $category->name,
-                        'author' => $author->first_name,
-                    ],
-                    'receiver' => User::find(1),
-                ];
-                SendEmailJob::dispatch($data, 'new_job_added_admin');
+                Cache::forget('featured_cities');
             }
 
-            $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
-            $job->slug = Str::slug($slug);
-            $job->seo_title = settings('job_title');
-            $job->seo_description = settings('job_description');
-            $job->save();
+            if ($job->slug == null) {
+                $agencyName = $job->user?->agency?->name ?? '';
+                $slug = sprintf('%s %s %s %s %s', $agencyName, $job->state?->name, $job->city?->name, $job->employment_type, $job->title);
+                $slug = Str::slug($slug);
+                //if slug already exists, then add 2 to it, if that exists, then add 3 to it and so on
+                $slugCount = count(Job::whereRaw("slug REGEXP '^{$slug}(-[0-9]*)?$'")->get());
+                $slug = $slugCount ? "{$slug}-{$slugCount}" : $slug;
+                $job->slug = $slug;
+                $job->seo_title = settings('job_title');
+                $job->seo_description = settings('job_description');
+                $job->save();
+            }
 
         });
 
         static::updating(function ($job) {
             $oldStatus = $job->getOriginal('status');
-            if ($oldStatus !== 'approved' && $job->status === 'approved') {
+            if ($oldStatus == 'draft' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
                 $category = Category::find($job->category_id);
+                $author = User::find($job->user_id);
+                $agency = $author->agency;
+
+                $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
                 $data = [
                     'email_data' => [
-                        'title' => $job->title,
-                        'url' => env('FRONTEND_JOB_URL'),
-                        'category' => $category->name,
+                        'title' => $job->title ?? '',
+                        'url' => $job_url,
+                        'agency' => $agency->name ?? '',
+                        'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
+
+                create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+
+
+                /**
+                * Send Notification to Admin about new job
+                */
+
+                $data = [
+                    'data' => [
+                        'job' => $job,
+                        'url' => $job_url,
+                        'category' => $category->name,
+                        'author' => $author->first_name,
+                        'agency' => $agency->name ?? '',
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'created_at' => $job->created_at->format('M-d-Y'),
+                        'expired_at' => $job->expired_at->format('M-d-Y'),
+                    ],
+                    'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
+                ];
+                SendEmailJob::dispatch($data, 'new_job_added_admin');
             }
+
         });
 
         static::updated(function () {
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('featured_cities');
         });
 
         static::deleted(function () {
             Cache::forget('dashboard_stats_cache');
+            Cache::forget('featured_cities');
+
         });
     }
 }

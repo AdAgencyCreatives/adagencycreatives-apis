@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('job_id');
-            $table->unsignedBigInteger('attachment_id');
+            $table->unsignedBigInteger('attachment_id')->nullable();
             $table->text('message');
             $table->integer('status')->default(0)->comment('0:pending, 1:accepted, 2:rejected');
             $table->timestamps();

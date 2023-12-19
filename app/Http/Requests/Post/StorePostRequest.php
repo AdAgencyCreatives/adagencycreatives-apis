@@ -14,7 +14,6 @@ class StorePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,uuid',
             'group_id' => 'required|exists:groups,uuid',
             'content' => 'required',
             'attachment_ids' => 'sometimes|array',

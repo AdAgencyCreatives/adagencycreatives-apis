@@ -1,16 +1,28 @@
 <?php
 
+use App\Events\SendNotification;
+use App\Http\Resources\Subscription\SubscriptionResource;
+use App\Models\Address;
+use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Industry;
+use App\Models\Job;
+use App\Models\Link;
+use App\Models\Location;
 use App\Models\Media;
+use App\Models\Notification;
+use App\Models\Phone;
 use App\Models\Strength;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
     {
+
         $ids = explode(',', $commaSeparatedIds);
         $industries = Industry::whereIn('uuid', $ids)->pluck('name')->toArray();
 
@@ -41,7 +53,8 @@ if (! function_exists('getCharacterStrengthNames')) {
 if (! function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
-        return 'https://ad-agency-creatives.s3.amazonaws.com/';
+        $awsBucket = env('AWS_BUCKET');
+        return "https://{$awsBucket}.s3.amazonaws.com/";
     }
 }
 
@@ -127,4 +140,240 @@ if (! function_exists('applyExperienceFilter')) {
         });
     }
 
+}
+
+if (! function_exists('updatePhone')) {
+    function updatePhone($user, $phone_number, $label)
+    {
+        if ($phone_number == null || $phone_number == '') {
+            return;
+        }
+
+        $country_code = '+1';
+
+        if (strpos($phone_number, $country_code) === 0) {
+            $phone_number = substr($phone_number, strlen($country_code));
+            $phone_number = trim($phone_number);
+        }
+
+        $phone = Phone::where('user_id', $user->id)->where('label', $label)->first();
+        if ($phone) {
+            $phone->update(['country_code' => $country_code, 'phone_number' => $phone_number]);
+        } else {
+
+            Phone::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => $label,
+                'country_code' => $country_code,
+                'phone_number' => $phone_number,
+            ]);
+        }
+    }
+
+}
+
+if (! function_exists('updateLink')) {
+    function updateLink($user, $url, $label)
+    {
+        if ($url == null || $url == '') {
+            return;
+        }
+
+        $link = Link::where('user_id', $user->id)->where('label', $label)->first();
+        if ($link) {
+            $link->update(['url' => $url]);
+        } else {
+
+            Link::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'label' => $label,
+                'url' => $url,
+            ]);
+        }
+    }
+}
+
+if (! function_exists('updateLocation')) {
+    function updateLocation($request, $user, $label)
+    {
+        $state = Location::where('uuid', $request->state_id)->first();
+        $city = Location::where('uuid', $request->city_id)->first();
+
+        if ($state && $city) {
+            $address = $user->addresses->first();
+            if (! $address) {
+                $address = new Address();
+                $address->uuid = Str::uuid();
+                $address->user_id = $user->id;
+                $address->label = $label;
+                $address->country_id = 1;
+            }
+            // dump($state, $city);
+            $address->state_id = $state->id;
+            $address->city_id = $city->id;
+            $address->save();
+        }
+    }
+}
+
+if (! function_exists('get_user_slug')) {
+    function get_user_slug($user)
+    {
+        // dd($user->role);
+        $slug = null;
+        if ($user->role == 'creative') {
+            $slug = $user->creative ? $user->creative->slug : $user->username;
+        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
+            $slug = $user->agency ? $user->agency->slug : $user->username;
+        } elseif ($user->role == 'admin') {
+            $slug = $user->username;
+        }
+
+        return $slug;
+    }
+}
+
+if (! function_exists('create_notification')) {
+    function create_notification($user_id, $msg)
+    {
+        $notification = Notification::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user_id,
+            'type' => 'job_board',
+            'body' => '',
+            'message' => $msg,
+        ]);
+
+        $event_data = [
+            'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
+            'body' => $msg,
+        ];
+        event(new SendNotification($event_data));
+
+        return $notification;
+    }
+}
+
+if (! function_exists('get_profile_picture')) {
+    function get_profile_picture($user)
+    {
+        $defaultImage = asset('assets/img/placeholder.png');
+        $attachmentBasePath = getAttachmentBasePath();
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $attachmentBasePath.$user->profile_picture->path;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $attachmentBasePath.$user->agency_logo->path;
+        }
+
+        return $defaultImage;
+    }
+}
+if (! function_exists('get_profile_picture_id')) {
+    function get_profile_picture_id($user)
+    {
+        $defaultImage = 0;
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $user->profile_picture->id;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $user->agency_logo->id;
+        }
+
+        return $defaultImage;
+    }
+}
+
+if (! function_exists('get_resume')) {
+    function get_resume($user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath().$user->resume->path;
+        } else {
+            return route('download.resume', $user->id);
+        }
+    }
+}
+
+if (! function_exists('get_location')) {
+    function get_location($user)
+    {
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
+    }
+}
+
+if (! function_exists('subscription_status')) {
+    function subscription_status($user)
+    {
+        $subscription = $user->active_subscription;
+        if ($subscription) {
+            return new SubscriptionResource($subscription);
+        } else {
+            return response()->json([], 404);
+        }
+    }
+}
+
+if (! function_exists('get_subscription_status_string')) { //either active or expired
+    function get_subscription_status_string($user)
+    {
+        $subscription = $user->active_subscription;
+
+        if ($subscription) {
+            $endsAtDate = Carbon::parse($subscription->ends_at);
+
+            if ($endsAtDate->isPast()) {
+                return 'expired';
+            }
+
+            return 'active';
+        }
+
+        return 'expired';
+    }
+}
+
+if (! function_exists('are_they_friend')) { //either active or expired
+    function are_they_friend($user1Id, $user2Id)
+    {
+        $friendship = DB::table('friendships')
+            ->where(function ($query) use ($user1Id, $user2Id) {
+                $query->where('user1_id', $user1Id)->where('user2_id', $user2Id);
+            })
+            ->orWhere(function ($query) use ($user1Id, $user2Id) {
+                $query->where('user1_id', $user2Id)->where('user2_id', $user1Id);
+            })
+            ->first();
+
+        return $friendship ? true : false;
+    }
+}
+
+if (! function_exists('hasAppliedToAgencyJob')) { //either active or expired
+    function hasAppliedToAgencyJob($creativeUserId, $loggedInAgencyId)
+    {
+        $hasApplied = Application::where('user_id', $creativeUserId)
+            ->whereIn('job_id', function ($query) use ($loggedInAgencyId) {
+                $query->select('id')->from(with(new Job)->getTable())->where('user_id', $loggedInAgencyId);
+            })
+            ->exists();
+
+        return $hasApplied;
+    }
 }

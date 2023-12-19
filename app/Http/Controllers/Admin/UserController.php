@@ -7,10 +7,15 @@ use App\Http\Controllers\Api\V1\PasswordHash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreAdminUserRequest;
 use App\Http\Resources\User\UserResource;
+use App\Jobs\ProcessPortfolioVisuals;
+use App\Jobs\SendEmailJob;
 use App\Models\Agency;
+use App\Models\Attachment;
 use App\Models\Creative;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
@@ -29,19 +34,18 @@ class UserController extends Controller
     public function details(User $user)
     {
         $str = Str::uuid();
-        if (in_array($user->role, ['agency', 'advisor'])) {
-            if (! $user->agency) {
+        if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+            if (!$user->agency) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
                 $agency->save();
             }
-            $user->load(['agency', 'links', 'addresses.city', 'addresses.state',  'attachments' => function ($query) use ($user) {
-                $query->where('resource_id', $user->agency->id)
-                    ->latest()->take(1);
-            }]);
+            $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
+            $subscription = Subscription::where('user_id', $user->id)->latest();
+
         } elseif ($user->role == 'creative') {
-            if (! $user->creative) {
+            if (!$user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
                 $creative->user_id = $user->id;
@@ -51,7 +55,7 @@ class UserController extends Controller
             $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
         }
 
-        // dump($user->addresses[0]->state->name);
+        // dump($user->addresses[0]);
         // dd($user->toArray());
 
         return view('pages.users.profile', compact('user'));
@@ -74,7 +78,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if (in_array($user->role, ['advisor', 'agency'])) {
+            if (in_array($user->role, ['advisor', 'agency', 'recruiter'])) {
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
@@ -95,13 +99,14 @@ class UserController extends Controller
 
             return new UserResource($user);
         } catch (\Exception $e) {
+
             throw new ApiException($e, 'US-01');
         }
     }
 
     public function updatePassword(Request $request)
     {
-        if (! auth()->user()->role == 'admin') {
+        if (!auth()->user()->role == 'admin') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -109,7 +114,6 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
 
         $hashed = $custom_wp_hasher->HashPassword(trim($request->input('password')));
-        dump($hashed);
         User::find($userId)->update([
             'password' => $hashed,
         ]);
@@ -128,8 +132,89 @@ class UserController extends Controller
     public function impersonate(User $user)
     {
         $token = $user->createToken('impersonation_token')->plainTextToken;
-        $url = sprintf('Location: %s?token=%s', env('FRONTEND_IMPERSONATE_URL'), $token);
+        $url = sprintf('Location: %s/%s', env('FRONTEND_IMPERSONATE_URL'), $token);
         header($url);
         exit();
+    }
+
+    public function advisor_impersonate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+        $token = $user->createToken('impersonation_token')->plainTextToken;
+        $url = sprintf('Location: %s/%s?role=advisor', env('FRONTEND_IMPERSONATE_URL'), $token);
+        header($url);
+        exit();
+    }
+
+    public function update_profile_picture(Request $request, $id)
+    {
+        if (!auth()->user()->role == 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $user = User::find($id);
+
+        if ($request->has('file') && is_object($request->file)) {
+
+            //Delete Previous profile picture
+            if ($user->attachments->where('resource_type', 'profile_picture')->count()) {
+                Attachment::where('user_id', $id)->where('resource_type', 'profile_picture')->delete();
+            }
+            storeImage($request, $id, 'profile_picture');
+        }
+
+        Session::flash('success', 'Profile picture updated successfully');
+
+        return redirect()->back();
+    }
+
+    public function activate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            $user->status = 'active';
+            $user->save();
+
+            if ($user->role == 'agency') {
+                SendEmailJob::dispatch([
+                'receiver' => $user, 'data' => $user,
+                ], 'account_approved_agency');
+            }
+
+            /**
+             * Generate portfolio website preview
+             */
+            if ($user->role == 'creative') {
+
+                SendEmailJob::dispatch([
+                       'receiver' => $user, 'data' => $user,
+                   ], 'account_approved');
+
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
+                    ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                }
+            }
+
+            return redirect()->route('users.index');
+        }
+    }
+
+    public function deactivate($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            $user->status = 'inactive';
+            $user->save();
+
+            SendEmailJob::dispatch([
+                'receiver' => $user, 'data' => $user,
+            ], 'account_denied');
+
+            return redirect()->route('users.index');
+        }
     }
 }

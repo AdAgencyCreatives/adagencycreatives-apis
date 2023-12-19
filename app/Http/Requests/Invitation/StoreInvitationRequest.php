@@ -14,7 +14,6 @@ class StoreInvitationRequest extends FormRequest
     public function rules()
     {
         return [
-            'sender_id' => 'required|exists:users,uuid',
             'receiver_id' => 'required|exists:users,uuid',
             'group_id' => 'required|exists:groups,uuid',
         ];

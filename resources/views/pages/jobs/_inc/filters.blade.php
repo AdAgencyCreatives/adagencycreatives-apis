@@ -30,8 +30,8 @@
                                 <select name="employement_type" id="employement_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Type</option>
-                                    @foreach(\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                    <option value="{{$type}}">{{$type}}</option>
+                                    @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
+                                        <option value="{{ $type }}">{{ $type }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -40,9 +40,10 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="status"> Status </label>
-                                <select name="status" id="status" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                <select name="status" id="status"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Status</option>
+                                    <option value="5"> Draft</option>
                                     <option value="0"> Pending</option>
                                     <option value="1"> Approved</option>
                                     <option value="2"> Rejected</option>
@@ -68,8 +69,9 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label class="form-label" for="media"> Media Experience </label>
-                                <select name="media[]" id="media" class="form-control form-select custom-select select2"
-                                    multiple="multiple" data-toggle="select2">
+                                <select name="media[]" id="media"
+                                    class="form-control form-select custom-select select2" multiple="multiple"
+                                    data-toggle="select2">
                                     <option value="-100"> Select Media</option>
 
                                 </select>
@@ -100,7 +102,8 @@
                     <div class="row">
                         <div class="col-sm mt-4">
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Apply</button>
-                            <button type="button" class="btn btn-sm btn-secondary mt-2" id="clear-button">Clear</button>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2"
+                                id="clear-button">Clear</button>
                         </div>
                     </div>
 

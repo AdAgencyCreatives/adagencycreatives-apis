@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Invitation\StoreInvitationRequest;
 use App\Http\Resources\GroupInvitation\InvitationCollection;
 use App\Http\Resources\GroupInvitation\InvitationResource;
 use App\Jobs\SendEmailJob;
@@ -33,16 +32,20 @@ class InvitationController extends Controller
         return new InvitationCollection($invitations);
     }
 
-    public function store(StoreInvitationRequest $request)
+    public function store(Request $request)
     {
-        $invitee = User::where('uuid', $request->receiver_id)->first();
+        $invitee = User::where('uuid', $request->receiver_id)->first(); // To whom email was sent
         $group = Group::where('uuid', $request->group_id)->first();
 
         if ($group->isMember($invitee)) {
             return ApiResponse::error('User is already a member of the group.', 409);
         }
 
-        $inviter = User::where('uuid', $request->sender_id)->first();
+        $inviter = $request->user(); //Sender
+
+        if ($group->isInvitationAlreadySent($inviter)) {
+            return ApiResponse::error(sprintf('You already sent invitation to %s', $invitee->first_name), 409);
+        }
 
         try {
             $request->merge([
@@ -54,11 +57,17 @@ class InvitationController extends Controller
 
             $invitation = GroupInvitation::create($request->all());
 
+            if ($inviter->role == 'creative') {
+                $inviter_profile_url = sprintf('%s/creative/%s', env('FRONTEND_URL'), $inviter->username);
+            } elseif ($inviter->role == 'agency') {
+                $inviter_profile_url = sprintf('%s/agency/%s', env('FRONTEND_URL'), $inviter->agency?->slug);
+            }
             SendEmailJob::dispatch([
                 'receiver' => $invitee,
                 'data' => [
                     'recipient' => $invitee->first_name,
-                    'inviter' => $invitee->first_name.' '.$invitee->last_name,
+                    'inviter' => $inviter->first_name.' '.$inviter->last_name,
+                    'inviter_profile_url' => $inviter_profile_url ?? '#',
                     'group' => $group->name,
                 ],
             ], 'group_invitation');

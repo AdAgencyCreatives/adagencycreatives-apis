@@ -128,7 +128,7 @@
         var user = @json($user);
 
         var address = {!! json_encode($user->addresses->first()) !!};
-        if (user.role === 'agency' || user.role === 'advisor') {
+        if (user.role === 'agency' || user.role === 'advisor' || user.role === 'recruiter') {
             fetchIndustriesForAgency();
             fetchMediasForAgency();
         } else if (user.role === 'creative') {
@@ -142,18 +142,17 @@
         }
 
         if (!address) {
-            fetchStates()
+            fetchStates();
         } else {
             var user_state = address.state.uuid;
             fetchStates(user_state);
-            // console.log(user_state);
         }
-        // debugger;
 
         $('#state').on('change', function() {
             var selectedStateId = $(this).val();
-
-            if (!address) {
+            console.log("state id inside change listner");
+            console.log(selectedStateId);
+            if (!address || !address.city || !address.city.uuid) {
                 getCitiesByState(selectedStateId);
             } else {
                 var city_id = address.city.uuid;

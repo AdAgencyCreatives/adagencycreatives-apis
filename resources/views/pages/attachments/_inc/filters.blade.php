@@ -25,9 +25,11 @@
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Type</option>
                                     <option value="profile_picture"> Profile Picture</option>
-                                    <option value="logo"> Logo</option>
+                                    <option value="agency_logo"> Agency Logo</option>
                                     <option value="creative_spotlight"> Creative Spotlight</option>
+                                    <option value="portfolio_item"> Portfolio Items</option>
                                     <option value="resume"> Resume</option>
+                                    <option value="website_preview"> Portfolio Website</option>
                                 </select>
                             </div>
                         </div>

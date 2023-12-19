@@ -8,7 +8,6 @@ use App\Http\Requests\Like\StoreLikeRequest;
 use App\Http\Resources\Like\LikeCollection;
 use App\Models\Like;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -25,68 +24,44 @@ class LikeController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        $likes = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $likes = $query->get();
+        // $likes = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new LikeCollection($likes);
     }
 
     public function store(StoreLikeRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
+        $user = $request->user();
         $post = Post::where('uuid', $request->post_id)->first();
 
-        $request->merge([
-            'uuid' => Str::uuid(),
-            'user_id' => $user->id,
-            'post_id' => $post->id,
-        ]);
+        $existingLike = Like::where('user_id', $user->id)
+            ->where('post_id', $post->id)
+            ->first();
 
         try {
-            $like = Like::create($request->all());
+            if ($existingLike) {
+                $existingLike->delete();
+                $response = 'Like removed';
+                $statusCode = 200;
+            } else {
+                $like = Like::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'post_id' => $post->id,
+                ]);
+                $response = $like;
+                $statusCode = 200;
+            }
 
-            return ApiResponse::success($like, 200);
+            return ApiResponse::success($response, $statusCode);
         } catch (\Exception $e) {
             return ApiResponse::error('PS-01'.$e->getMessage(), 400);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Like $like)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Like $like)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Like $like)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Like $like)
     {
-        //
+
     }
 }

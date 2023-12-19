@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
-            $table->string('resource_type');
-            $table->unsignedBigInteger('resource_id');
+            $table->morphs('bookmarkable');
             $table->timestamps();
             $table->softDeletes();
+
+            // $table->unique(['user_id', 'bookmarkable_type', 'bookmarkable_id']); // Ensure a user can only bookmark an entity once
         });
     }
 

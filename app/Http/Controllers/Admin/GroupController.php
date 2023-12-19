@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Group;
 use App\Models\GroupMember;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,8 +27,11 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        $user = $request->user();
+
         $group = Group::create([
             'uuid' => Str::uuid(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
@@ -119,5 +124,17 @@ class GroupController extends Controller
         $groupMember->role = $request->new_role;
 
         return ($groupMember->save()) ? true : false;
+    }
+
+    public function get_creatives()
+    {
+        $cacheKey = 'all_creatives';
+        $users = Cache::has('key')::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::select('id', 'uuid', 'first_name', 'last_name', 'email')
+                ->where('role', 4)
+                ->get();
+        });
+
+        return $users;
     }
 }

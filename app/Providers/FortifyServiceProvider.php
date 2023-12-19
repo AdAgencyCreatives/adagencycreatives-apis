@@ -38,17 +38,23 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
-            if ($user->role != 'admin') {
+            if($user) {
+                if ($user->role != 'admin') {
+                    return null;
+                }
+
+                $custom_wp_hasher = new PasswordHash(8, true);
+
+                if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+                    return null;
+                }
+
+                return $user;
+            }
+            else{
                 return null;
             }
 
-            $custom_wp_hasher = new PasswordHash(8, true);
-
-            if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
-                return null;
-            }
-
-            return $user;
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
@@ -57,7 +63,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
