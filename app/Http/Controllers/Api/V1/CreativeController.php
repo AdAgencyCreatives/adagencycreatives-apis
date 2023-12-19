@@ -173,7 +173,7 @@ class CreativeController extends Controller
         foreach ($searchTerms as $term) {
             $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match');
         }
-
+// dump($exactMatchIds);
         // Find common IDs across all exact match arrays
         $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
 
@@ -189,7 +189,10 @@ class CreativeController extends Controller
         foreach ($exactMatchIds as &$ids) {
             $ids = array_values(array_diff($ids, $commonExactMatchIds));
         }
-
+//         $a1 = [1,2,3];
+//         $a2 = array_merge($a1, $exactMatchIds);
+// dd($a2);
+// dd();
         // Iterate through each term for starts-with match
         foreach ($searchTerms as $term) {
             $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
@@ -222,9 +225,9 @@ class CreativeController extends Controller
             $ids = array_values(array_diff($ids, $commonContainsIds));
         }
 
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $exactMatchIds);
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $startsWithIds);
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $containsIds);
+        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($exactMatchIds));
+        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($startsWithIds));
+        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($containsIds));
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
 
         // Combine and deduplicate the IDs while preserving the order
