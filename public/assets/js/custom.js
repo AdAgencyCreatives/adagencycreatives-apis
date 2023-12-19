@@ -250,7 +250,7 @@ function populateUserFilter(users, div_id, count_key_name) {
         var userCount = user[count_key_name];
         var option = $('<option>', {
             value: user.uuid,
-            text: user.first_name + ' ' + user.last_name + ' -' + user.role + ' (' + userCount + ')'
+            text: user.first_name + ' ' + user.last_name + ' - ' + user.email + ' - ' + user.role + ' (' + userCount + ')'
         });
 
         selectElement.append(option);
@@ -329,7 +329,7 @@ function fetchCategories() {
 
 function fetchIndustries() {
     $.ajax({
-        url: '/api/v1/industry-experiences',
+        url: '/api/v1/get_industry-experiences',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -343,7 +343,7 @@ function fetchIndustries() {
 
 function fetchMedias() {
     $.ajax({
-        url: '/api/v1/media-experiences',
+        url: '/api/v1/get_media-experiences',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -399,12 +399,11 @@ function fetchYearsOfExperienceWithSelectedValue(user_experience) {
 
 function fetchStates(selected_id) {
     $.ajax({
-        url: '/api/v1/locations',
+        url: '/api/v1/locations?per_page=-1',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
             populateFilterWithUUID(response.data, '#state', selected_id);
-
         },
         error: function () {
             alert('Failed to fetch states from the API.');
@@ -419,12 +418,19 @@ function getCitiesByState(stateId, selected_id = null) {
     }
     var filterParam = `filter[state_id]=${stateId}&per_page=-1`;
     $.ajax({
-        url: '/api/v1/locations', // Replace with the actual URL for fetching cities
+        url: '/api/v1/locations?per_page=-1', // Replace with the actual URL for fetching cities
         method: 'GET',
         data: filterParam,
         success: function (response) {
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
+
+           if (response.data.length > 0) {
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "Select City"
+            }));
+
             $.each(response.data, function (index, city) {
                 citySelect.append($('<option>', {
                     value: city.uuid,
@@ -432,11 +438,21 @@ function getCitiesByState(stateId, selected_id = null) {
                 }));
             });
 
+               if (selected_id !== null) {
+                   citySelect.val(selected_id);
+               }
+               else {
+                   citySelect.val("-100");
+               }
 
-            if (selected_id !== null) {
-                citySelect.val(selected_id);
-                citySelect.trigger('change');
-            }
+               citySelect.trigger('change');
+        } else {
+            // No cities available
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "No Cities available"
+            }));
+        }
 
         },
         error: function (xhr, textStatus, errorThrown) {

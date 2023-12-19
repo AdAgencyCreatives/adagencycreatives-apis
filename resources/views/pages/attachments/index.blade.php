@@ -4,16 +4,8 @@
 
 @section('scripts')
 
-    {{-- <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script> --}}
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
-        //LightBox
-        // const lightbox = GLightbox({
-        //     touchNavigation: true,
-        //     loop: true,
-        // });
-        //End LightBox
-
         var currentPage = 1;
         var totalPages = 1;
         var perPage = 10;
@@ -80,7 +72,7 @@
 
                 var displayContent = '';
 
-                var imageExtensions = ['jpg', 'png'];
+                var imageExtensions = ['jpg', 'jpeg', 'png'];
                 var videoExtensions = ['mp4'];
                 var docExtensions = ['doc', 'pdf'];
 
@@ -185,7 +177,6 @@
 @endsection
 
 @section('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <style>
         .image-container {
             width: auto;

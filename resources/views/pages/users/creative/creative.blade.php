@@ -159,13 +159,21 @@
                         </div>
                     </div>
 
+                    {{-- <div class="row">
+                        <div class="col-12 col-lg-6">
+                            {{ $user->addresses[0]?->state->name }}
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            {{ $user->addresses[0]?->city->name }}
+                        </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label class="form-label" for="state"> State </label>
                                 <select name="state" id="state"
-                                    class="form-control form-select custom-select select2" data-toggle="select2"
-                                    required>
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select State</option>
                                 </select>
                             </div>
@@ -176,8 +184,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="city"> City </label>
                                 <select name="city" id="city"
-                                    class="form-control form-select custom-select select2" data-toggle="select2"
-                                    required>
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select City</option>
                                 </select>
                             </div>
@@ -215,8 +222,8 @@
                                 <h4>Profile Photo</h4>
                                 @if ($user->profile_picture)
                                     <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ getAttachmentBasePath() . $user->profile_picture['path'] }}"
-                                        alt="" width="300" height="300" />
+                                        src="{{ get_profile_picture($user) }}" alt="" width="300"
+                                        height="300" />
                                 @else
                                     <p>No image uploaded yet</p>
                                 @endif

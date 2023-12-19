@@ -14,7 +14,6 @@ class StoreBookmarkRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,uuid',
             'resource_type' => 'required|in:agencies,creatives,jobs,applications,posts',
             'resource_id' => 'required',
         ];

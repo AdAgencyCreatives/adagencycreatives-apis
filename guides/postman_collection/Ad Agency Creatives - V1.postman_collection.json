@@ -13,60 +13,7 @@
 					"name": "Reset Password",
 					"item": [
 						{
-							"name": "Get Token",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disabledSystemHeaders": {
-									"accept": true
-								}
-							},
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "XSRF-TOKEN",
-										"value": "eyJpdiI6ImJIK3RWLzFPN0NwZFpsWmtJU0ViSlE9PSIsInZhbHVlIjoiMWRibXloMUdHaFRRcjNYSXFaNkY1R0NYZ1dQbnNRRnZ5eXlpZmZ1U1o2amV3RXdmd0I1b2VkVmtvWWV1VVFJWldWNVNibXA1YmtDZTkyUnFWeThwd2RqMVdIZXNsNW9ULzlsc21HcHdVOVNSV0xPMlJwVTBWcW5IWDZmQk5MY2YiLCJtYWMiOiJiODMxZjQxOTIwNGUwNjk4YWZmNWFiZWE2YmEwNjUzZDExODA3ZmM3MTA0MmZlNjQ5MjNjODY2ZGQ5Mjg0OTJkIiwidGFnIjoiIn0%3D; ad_agency_creatives_session=eyJpdiI6IkQ4a1MxeU9BM3VWZ0hnNzZJQjRpcVE9PSIsInZhbHVlIjoiWXc5ajFEZEFqN29SWUc1cGVqMDkrU0FpRjRqaHRlZUpuUHpmeGoxQVdmOHByMzJzNlpGUXorUEtwU1Z1bVpWM1pnTm1oRW9hK1pkMldoU2NjTHB2QUNxYitKbmdmM2o1YnIyckhNQ0sxaS80d0JaQk5MUklGWk9NRlNtT1BqZFYiLCJtYWMiOiI1ZWEwYjNkOTJkMjdjZjYyZGU3Y2NmYzA5OTJkNDg3MzczMGEyOWFmYjEzZDA2N2NmMGY4ZjAyYTYzMGQ2MmRjIiwidGFnIjoiIn0%3D",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "http://127.0.0.1:8000/sanctum/csrf-cookie",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"sanctum",
-										"csrf-cookie"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Reset Link",
+							"name": "Send Reset Link Email Local",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -109,7 +56,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"admin@gmail.com\"\r\n}",
+									"raw": "{\r\n    \"email\": \"creative2@gmail.com\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -126,6 +73,140 @@
 										"1"
 									],
 									"port": "8000",
+									"path": [
+										"forgot-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Reset Link Email Local Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "CSRF-TOKEN",
+										"value": "F9QtLNzB2J2BurHtdVVDmwqjQcGkG7BtFrDKKioP",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "ad_agency_creatives_session",
+										"value": "eyJpdiI6IldxdnZHR1huUWxsWVlTY2gwMFYrdkE9PSIsInZhbHVlIjoiLzBJaXZHVTRrVDVwb1Y5SmxuK3JnWHZOd3hyS1Vob280c21tbzl5RHQ1eFc5LzBHTnBFbzhHdTNKOG1sQkQ4RVpzR1A3MmdXR2xVT0plM3dnQlZGMGVuck0wbUFsb1UwWktjQks0dFJiTmhzaDdYdStpU241c2h3KzFpd2pNcGUiLCJtYWMiOiI0NDM2MzM5NTllZmNmNTFmMzQyMWMwMGY0NjY5MTI2ZTE2Y2JlMjEzM2ViMGM0MTQ1NjU0ZWU5MjUzNGFkZDdkIiwidGFnIjoiIn0%3D",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"creative@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/password-forgot",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"password-forgot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Reset Link Email - Live",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "CSRF-TOKEN",
+										"value": "F9QtLNzB2J2BurHtdVVDmwqjQcGkG7BtFrDKKioP",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "ad_agency_creatives_session",
+										"value": "eyJpdiI6IldxdnZHR1huUWxsWVlTY2gwMFYrdkE9PSIsInZhbHVlIjoiLzBJaXZHVTRrVDVwb1Y5SmxuK3JnWHZOd3hyS1Vob280c21tbzl5RHQ1eFc5LzBHTnBFbzhHdTNKOG1sQkQ4RVpzR1A3MmdXR2xVT0plM3dnQlZGMGVuck0wbUFsb1UwWktjQks0dFJiTmhzaDdYdStpU241c2h3KzFpd2pNcGUiLCJtYWMiOiI0NDM2MzM5NTllZmNmNTFmMzQyMWMwMGY0NjY5MTI2ZTE2Y2JlMjEzM2ViMGM0MTQ1NjU0ZWU5MjUzNGFkZDdkIiwidGFnIjoiIn0%3D",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"creative@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.noorsofttechdev.com/forgot-password",
+									"protocol": "https",
+									"host": [
+										"api",
+										"noorsofttechdev",
+										"com"
+									],
 									"path": [
 										"forgot-password"
 									]
@@ -177,7 +258,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"token\": \"814712d6bd4cb45110e227b307c2e58c369eb0f088538d63e849e09e3eb3504c\",\r\n    \r\n    \"password\": \"PASSWORD\",\r\n    \"password_confirmation\": \"PASSWORD\"\r\n}",
+									"raw": "{\r\n    \"email\": \"creative2@gmail.com\",\r\n    \"token\": \"dd4a00338e4c77a99f8d15cd54cabc9d8dce39dce963c56750a47c6b72da1140\",\r\n    \r\n    \"password\": \"PASSWORD2\",\r\n    \"password_confirmation\": \"PASSWORD2\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -185,17 +266,75 @@
 									}
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/reset-password",
-									"protocol": "http",
+									"raw": "https://api.noorsofttechdev.com/reset-password",
+									"protocol": "https",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"api",
+										"noorsofttechdev",
+										"com"
 									],
-									"port": "8000",
 									"path": [
 										"reset-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "CSRF-TOKEN",
+										"value": "F9QtLNzB2J2BurHtdVVDmwqjQcGkG7BtFrDKKioP",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "ad_agency_creatives_session",
+										"value": "eyJpdiI6IldxdnZHR1huUWxsWVlTY2gwMFYrdkE9PSIsInZhbHVlIjoiLzBJaXZHVTRrVDVwb1Y5SmxuK3JnWHZOd3hyS1Vob280c21tbzl5RHQ1eFc5LzBHTnBFbzhHdTNKOG1sQkQ4RVpzR1A3MmdXR2xVT0plM3dnQlZGMGVuck0wbUFsb1UwWktjQks0dFJiTmhzaDdYdStpU241c2h3KzFpd2pNcGUiLCJtYWMiOiI0NDM2MzM5NTllZmNmNTFmMzQyMWMwMGY0NjY5MTI2ZTE2Y2JlMjEzM2ViMGM0MTQ1NjU0ZWU5MjUzNGFkZDdkIiwidGFnIjoiIn0%3D",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"old_password\": \"password\",\r\n    \"password\": \"password2\",\r\n    \"password_confirmation\": \"password2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/update_password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"update_password"
 									]
 								}
 							},
@@ -204,7 +343,7 @@
 					]
 				},
 				{
-					"name": "users",
+					"name": "Get All Users",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -220,7 +359,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users?filter[role]=2&sort=-created_at",
+							"raw": "{{BASE_URL}}/users?filter[state_id]=b4692fd8-8345-3e68-965c-332b3fe821a9",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -230,7 +369,7 @@
 							"query": [
 								{
 									"key": "filter[first_name]",
-									"value": "Eugene",
+									"value": "Mohsin Ali",
 									"disabled": true
 								},
 								{
@@ -245,13 +384,14 @@
 								},
 								{
 									"key": "filter[email]",
-									"value": "amara.gerlach@example.org",
+									"value": "lennie06@example.net",
 									"disabled": true
 								},
 								{
 									"key": "filter[role]",
-									"value": "2",
-									"description": "1: admin, 2: advisor, 3: agency, 4: creative"
+									"value": "3",
+									"description": "1: admin, 2: advisor, 3: agency, 4: creative",
+									"disabled": true
 								},
 								{
 									"key": "filter[status]",
@@ -266,7 +406,32 @@
 								},
 								{
 									"key": "sort",
-									"value": "-created_at"
+									"value": "-created_at",
+									"disabled": true
+								},
+								{
+									"key": "filter[company_slug]",
+									"value": "burrell-communications",
+									"disabled": true
+								},
+								{
+									"key": "filter[agency_name]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[category_id]",
+									"value": "80bd9db5-4b8c-3eaf-95eb-e091616365df",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_id]",
+									"value": "b4692fd8-8345-3e68-965c-332b3fe821a9"
+								},
+								{
+									"key": "filter[city_id]",
+									"value": "b4692fd8-8345-3e68-965c-332b3fe821a9",
+									"disabled": true
 								}
 							]
 						}
@@ -290,20 +455,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users/682c36b0-6a83-3304-b9c8-3d7bfca59040",
+							"raw": "{{BASE_URL}}/users/434e7b27-6281-3c5a-bef3-14435eb3b603",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"users",
-								"682c36b0-6a83-3304-b9c8-3d7bfca59040"
+								"434e7b27-6281-3c5a-bef3-14435eb3b603"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "users",
+					"name": "Create New User",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -323,7 +488,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "//role: agency, creative\r\n{\r\n    \"first_name\": \"Usman\",\r\n    \"last_name\": \"Arshad\",\r\n    \"email\": \"hamazaaaaa@gaamail.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"creative\",\r\n    //For Agency\r\n    \"agency_name\": \"ABC Agency\"\r\n    // \"linkedin_profile\": \"\",\r\n    //For Creatives\r\n    // \"portfolio_site\": \"\"\r\n}",
+							"raw": "//role: agency, creative\r\n{\r\n    \"first_name\": \"Mohsin\",\r\n    \"last_name\": \"Ali\",\r\n    \"email\": \"da2@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"creative\",\r\n    //For Agency\r\n     \"agency_name\": \"ABC Agency\",\r\n     \"linkedin_profile\": \"linkedin.com\",\r\n    //For Creatives\r\n     \"portfolio_site\": \"abc.com\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -343,7 +508,7 @@
 					"response": []
 				},
 				{
-					"name": "users/{uuid}",
+					"name": "Update",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -400,6 +565,19 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"TOKEN\", jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -419,7 +597,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"email\": \"agency@gmail.com\",\r\n    \"password\": \"password\" \r\n\r\n    //  \"email\": \"hamzasiddique836@gmail.com\",\r\n    // \"password\": \"Pcmupe555\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -433,6 +611,93 @@
 							],
 							"path": [
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "VKn2fPu7ePhVnCiouTVuWtNbqFjyP24JLeWK3e13",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"adeelakhtarit@gmail.com\",\r\n    \"password\": \"aaaaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Session",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mboehm@example.net\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/re_login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"re_login"
 							]
 						}
 					},
@@ -482,12 +747,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/get_users",
+							"raw": "{{BASE_URL}}/get_users/spotlights",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"get_users"
+								"get_users",
+								"spotlights"
 							],
 							"query": [
 								{
@@ -508,6 +774,9 @@
 				{
 					"name": "agencies",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -517,7 +786,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies",
+							"raw": "{{BASE_URL}}/agencies?filter[role]=2",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -527,7 +796,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "3307da5c-0741-4716-baf9-3f175d8fdd47",
+									"value": "2c915d0a-a54b-346f-8e07-0b979acece05",
 									"disabled": true
 								},
 								{
@@ -536,13 +805,8 @@
 									"disabled": true
 								},
 								{
-									"key": "filter[type_of_work]",
-									"value": "Internship",
-									"disabled": true
-								},
-								{
 									"key": "filter[name]",
-									"value": "Erica Bradshaw",
+									"value": "TEST_AGENCY",
 									"disabled": true
 								},
 								{
@@ -557,7 +821,7 @@
 								},
 								{
 									"key": "filter[industry_experience]",
-									"value": "fcd9ca99-952b-3247-90be-01dd308aa6be",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0",
 									"disabled": true
 								},
 								{
@@ -579,6 +843,107 @@
 									"key": "filter[status]",
 									"value": "1",
 									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "frohan",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_visible]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[role]",
+									"value": "2",
+									"description": "2: advisor, 5: recruiter"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agencies advance search 1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/agencies/search1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"agencies",
+								"search1"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "workplace-preference",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "on site",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agencies advance search 2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/agencies/search2?search=Standard Practice",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"agencies",
+								"search2"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Standard Practice"
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
 									"disabled": true
 								}
 							]
@@ -603,13 +968,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies/3307da5c-0741-4716-baf9-3f175d8fdd47",
+							"raw": "{{BASE_URL}}/agencies/47d935a7-2867-4def-a7f5-56cded91922e",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"agencies",
-								"3307da5c-0741-4716-baf9-3f175d8fdd47"
+								"47d935a7-2867-4def-a7f5-56cded91922e"
 							]
 						}
 					},
@@ -633,7 +998,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n{\r\n    \"user_id\": \"b1af451c-eed1-3375-b1aa-a447421931fb\",\r\n    \"name\": \"Ad Agency\",\r\n    \"about\": \"Possimus iste ut quam consequuntur atque rem. Voluptate\",\r\n    \"size\": \"10\",\r\n    \"industry_experience\": [\r\n        \"a699b404-1f42-37e6-b1bb-51cd315e4c2e\"\r\n    ], //Comma separated UUIDs\r\n    \"media_experience\": [\r\n        \"a90503c7-59a6-3218-988b-4c1203cb8325\"\r\n    ],\r\n    \"is_remote\": 1,\r\n    \"is_hybrid\": 0,\r\n    \"is_onsite\": 0,\r\n    \"is_featured\": 1,\r\n    \"is_urgent\": 1\r\n}",
+							"raw": "\r\n{\r\n    \"user_id\": \"b1af451c-eed1-3375-b1aa-a447421931fb\",\r\n    \"name\": \"Ad Agency\",\r\n    \"about\": \"Possimus iste ut quam consequuntur atque rem. Voluptate\",\r\n    \"size\": \"10\",\r\n    \"industry_experience\": [\r\n        \"a699b404-1f42-37e6-b1bb-51cd315e4c2e\"\r\n    ], //Comma separated UUIDs\r\n   \r\n    \"is_remote\": 1,\r\n    \"is_hybrid\": 0,\r\n    \"is_onsite\": 0,\r\n    \"is_featured\": 1,\r\n    \"is_urgent\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -653,13 +1018,19 @@
 					"response": []
 				},
 				{
-					"name": "agencies/{uuid}",
+					"name": "agency_profile/{uuid}",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"name\": \"dasdkdashkj\",\r\n\"type_of_work\": \"dasdkdashkj\",\r\n\"size\": \"10\",\r\n\"about\": \"New about\"\r\n}",
+							"raw": "{\r\n    \"first_name\": \"Usman\",\r\n    \"last_name\": \"Arshad\",\r\n    \"email\": \"usman@gmail.com2\",\r\n    \"show_profile\": true,\r\n    \"company_name\": \"Daigle Creative2\",\r\n    \"slug\": \"daigle-creative\",\r\n    \"size\": \"5-10 \",\r\n    \"about\": \"Daigle Creative is a full-service advertising.\",\r\n    \"phone_number\": \"+55555\",\r\n    \"linkedin\": \"www.linkedin.com\",\r\n    \"website\": \"www.company.com2\",\r\n    \"state_id\": \"bc1e94d1-ae73-3ba7-90f5-9b8b915810b3\",\r\n    \"city_id\": \"58dff4e5-c10f-3c5e-9e0c-92bb387cc533\",\r\n    \"industry_experience\": [\r\n        \"5d602fb7-5e9e-3b87-9ca8-9a0fd71e2dc2\",\r\n        \"a48a1c1c-48f8-33a2-8f10-955ecbe1dbc2\"\r\n    ],\r\n   \r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -667,13 +1038,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/agencies/27106d58-2175-32a0-bcfc-bbe8c0e8f7c8",
+							"raw": "{{BASE_URL}}/agency_profile/658dd542-9fc5-3e16-a3d5-ec2b7bbaef5e",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"agencies",
-								"27106d58-2175-32a0-bcfc-bbe8c0e8f7c8"
+								"agency_profile",
+								"658dd542-9fc5-3e16-a3d5-ec2b7bbaef5e"
 							]
 						}
 					},
@@ -700,11 +1071,398 @@
 			]
 		},
 		{
+			"name": "Recruiters",
+			"item": [
+				{
+					"name": "recruiters advance search 1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/recruiters/search1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"recruiters",
+								"search1"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "workplace-preference",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "on site",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "5",
+									"description": "5: recruiters",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Creatives",
 			"item": [
 				{
+					"name": "creatives home page",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/home/creatives?filter[status]=1&filter[is_visible]=1&page=49",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"home",
+								"creatives"
+							],
+							"query": [
+								{
+									"key": "filter[years_of_experience_id]",
+									"value": "8ea2b763-fb16-3fe7-b46f-22d950a349cd",
+									"description": "uuid",
+									"disabled": true
+								},
+								{
+									"key": "filter[employment_type]",
+									"value": "Internship",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "title",
+									"disabled": true
+								},
+								{
+									"key": "filter[name]",
+									"value": "Adeel2",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_id]",
+									"value": "3a7179b2-acef-3955-b8c5-b645c917547b",
+									"disabled": true
+								},
+								{
+									"key": "filter[city_id]",
+									"value": "bf7abc38-0a5b-3199-84b8-b827f162c61f",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_at",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_featured]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_urgent]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: pending, 1: active, 2: inactive"
+								},
+								{
+									"key": "filter[slug]",
+									"value": "ifogarty",
+									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "0bd6daaf-58ed-4722-9669-7cf2b7bb804a",
+									"disabled": true
+								},
+								{
+									"key": "filter[email]",
+									"value": "mila.ugryn@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_visible]",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "49"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search 1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search1?search=CREATIVE2 TEST2 ",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search1"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "CREATIVE2 TEST2 "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search 2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search2?search=Hamza Siddique",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search2"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Hamza Siddique"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search 6",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search6?search=director 10&match_type=starts-with",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search6"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "director 10"
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "match_type",
+									"value": "starts-with",
+									"description": "starts-with, exact-match, contains"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search TEST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search5?search=Art Director",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search5"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Art Director"
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search 4",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search4?field=industry-title&search=Art Director",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search4"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "industry-title"
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Art Director"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creatives advance search 3",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creatives/search3?search=director%2010%2B%20Years",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creatives",
+								"search3"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "director%2010%2B%20Years"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "creatives",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -723,11 +1481,6 @@
 							],
 							"query": [
 								{
-									"key": "filter[user_id]",
-									"value": "dd9a4e2b-cd70-4e2b-a118-83034ff4ccab",
-									"disabled": true
-								},
-								{
 									"key": "filter[years_of_experience_id]",
 									"value": "8ea2b763-fb16-3fe7-b46f-22d950a349cd",
 									"description": "uuid",
@@ -740,12 +1493,12 @@
 								},
 								{
 									"key": "filter[title]",
-									"value": "Veterinarian",
+									"value": "Creative Director",
 									"disabled": true
 								},
 								{
 									"key": "filter[name]",
-									"value": "Dicki",
+									"value": "Adeel2",
 									"disabled": true
 								},
 								{
@@ -778,6 +1531,26 @@
 									"value": "1",
 									"description": "0: pending, 1: active, 2: inactive",
 									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "craig-miller",
+									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "6e268fca-4d96-437a-837c-b9f9861191f0",
+									"disabled": true
+								},
+								{
+									"key": "filter[email]",
+									"value": "creative@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_visible]",
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -785,11 +1558,8 @@
 					"response": []
 				},
 				{
-					"name": "Creative Spotlight (Homepage)",
+					"name": "creatives Logged in",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [
 							{
@@ -799,19 +1569,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/creative_spotlight",
+							"raw": "{{BASE_URL}}/creatives?sort=-created_at&filter[status]=1&filter[is_visible]=1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"creative_spotlight"
+								"creatives"
 							],
 							"query": [
-								{
-									"key": "filter[user_id]",
-									"value": "dd9a4e2b-cd70-4e2b-a118-83034ff4ccab",
-									"disabled": true
-								},
 								{
 									"key": "filter[years_of_experience_id]",
 									"value": "8ea2b763-fb16-3fe7-b46f-22d950a349cd",
@@ -825,12 +1590,12 @@
 								},
 								{
 									"key": "filter[title]",
-									"value": "Veterinarian",
+									"value": "Art director",
 									"disabled": true
 								},
 								{
 									"key": "filter[name]",
-									"value": "Dicki",
+									"value": "Adeel2",
 									"disabled": true
 								},
 								{
@@ -845,8 +1610,7 @@
 								},
 								{
 									"key": "sort",
-									"value": "created_at",
-									"disabled": true
+									"value": "-created_at"
 								},
 								{
 									"key": "filter[is_featured]",
@@ -861,8 +1625,26 @@
 								{
 									"key": "filter[status]",
 									"value": "1",
-									"description": "0: pending, 1: active, 2: inactive",
+									"description": "0: pending, 1: active, 2: inactive"
+								},
+								{
+									"key": "filter[slug]",
+									"value": "mila-ugryn",
 									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "6e268fca-4d96-437a-837c-b9f9861191f0",
+									"disabled": true
+								},
+								{
+									"key": "filter[email]",
+									"value": "creative@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_visible]",
+									"value": "1"
 								}
 							]
 						}
@@ -952,6 +1734,72 @@
 					"response": []
 				},
 				{
+					"name": "creative_profile/{uuid}",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\r\n//     \"first_name\": \"Usman1\",\r\n//     \"last_name\": \"Arshad1\",\r\n//     \"username\": \"hulda63q\",\r\n//     \"show_profile\": true,\r\n//     \"phone_number\": \"+92123456aa\",\r\n//     \"linkedin\": \"www.linkedin.com_2\",\r\n//     \"website\": \"www.company.com1\"\r\n// }\r\n\r\n{\r\n    \"first_name\": null,\r\n    \"last_name\": null,\r\n    \"username\": null,\r\n    \"show_profile\": 1,\r\n    \"phone_number\": null,\r\n    \"linkedin\": null,\r\n    \"website\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/creative_profile/3033bda6-f82f-387d-a410-ce6795a02ae3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative_profile",
+								"3033bda6-f82f-387d-a410-ce6795a02ae3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creative_resume/{uuid}",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \r\n    \"title\": \"Advisora\",\r\n    \"category_id\": \"be6cf4d0-e001-359d-b91d-d628d1a1149d\",\r\n    \"years_of_experience\": \"Daigle Creativea\",\r\n    \"employment_type\": \"Full-Time2\",\r\n    \"about\": \"bbb\",\r\n    \"state_id\": \"146f7620-6785-3082-89e3-1950fe937cf7\",\r\n    \"city_id\": \"2d5bbbd3-6454-375e-a43d-94d4e0ed98bc\",\r\n    \"industry_experience\": [\r\n        \"92be1470-4c9c-3b14-9dc6-68cf30c7ba76\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"8026da26-bd76-315a-8a8b-552ad41fec51\"\r\n    ],\r\n    \"strength\": [\r\n        \"267e7851-705e-34a0-9170-50dba7ee25c0\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_opentorelocation\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/creative_resume/74bbde86-841f-34bf-a478-92bc7efc3091",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative_resume",
+								"74bbde86-841f-34bf-a478-92bc7efc3091"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "creatives/{uuid}",
 					"request": {
 						"method": "DELETE",
@@ -995,7 +1843,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"receiver_id\": \"3c48e8a3-ebf1-37ec-8734-1c74cd041547\",\r\n    \"job_id\": \"de29a601-964b-39e5-b372-d1f78cea6ae3\"\r\n}",
+									"raw": "{\r\n    \"receiver_id\": \"3033bda6-f82f-387d-a410-ce6795a02ae3\",\r\n    \"job_id\": \"93b23921-5c9d-44e5-90fa-f0781abd534b\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1028,7 +1876,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/jobs",
+							"raw": "{{BASE_URL}}/jobs?filter[user_id]=fb0891ad-88f7-4183-bb55-2996cdbcb698&sort=-created_at",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1038,18 +1886,17 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "0c9dcfc7-d6c3-300a-b91c-0e356801b776",
-									"disabled": true
+									"value": "fb0891ad-88f7-4183-bb55-2996cdbcb698"
 								},
 								{
 									"key": "filter[category_id]",
-									"value": "07449b82-67bb-3e05-889b-3290ecf59387",
+									"value": "be2a287e-81a9-3681-a25e-251e18f0ed7e",
 									"description": "Category ID ",
 									"disabled": true
 								},
 								{
 									"key": "filter[title]",
-									"value": "Ticket Agent",
+									"value": "New Accounts Clerk",
 									"disabled": true
 								},
 								{
@@ -1090,28 +1937,27 @@
 								},
 								{
 									"key": "filter[state_id]",
-									"value": "ca06bf8a-731e-3bd0-b031-f28da84f485e",
+									"value": "235d3d42-fb4a-3072-9fd5-0ad326ac0da8",
 									"disabled": true
 								},
 								{
-									"key": "filter[city]",
-									"value": "",
+									"key": "filter[city_id]",
+									"value": "8e02bf4f-0367-3318-a8f2-d690af2fc51b",
 									"disabled": true
 								},
 								{
 									"key": "filter[industry_experience]",
-									"value": "c2cb0999-cdab-3aa3-ab44-eda3660380da",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0,4d790d7d-5dff-3351-9f52-91526d44a26d",
 									"disabled": true
 								},
 								{
 									"key": "filter[media_experience]",
-									"value": "93f8bc7a-53e6-39b1-830f-3a012335c9aa",
+									"value": "6c7d93c8-2d9d-3706-accc-7ab805f7b7021",
 									"disabled": true
 								},
 								{
 									"key": "sort",
-									"value": "-created_at",
-									"disabled": true
+									"value": "-created_at"
 								},
 								{
 									"key": "page",
@@ -1120,9 +1966,126 @@
 								},
 								{
 									"key": "filter[status]",
-									"value": "3",
+									"value": "1",
 									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that.",
 									"disabled": true
+								},
+								{
+									"key": "filter[slug]",
+									"value": "tpn",
+									"disabled": true
+								},
+								{
+									"key": "filter[city_slug]",
+									"value": "chicago",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_slug]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[category_slug]",
+									"value": "associate-creative-director-copywriter",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs for logged in",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/jobs/logged_in",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"jobs",
+								"logged_in"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "copywriter",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs  - Full Search",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/home/jobs/search?search=designer",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"home",
+								"jobs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "designer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs  - Full Search- Logged_In",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/home/jobs/search/logged_in?search=Weber Shandwick",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"home",
+								"jobs",
+								"search",
+								"logged_in"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Weber Shandwick"
 								}
 							]
 						}
@@ -1165,7 +2128,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"b852a6a2-3428-30ed-9039-dc73bf857ed3\",\r\n    \"category_id\": \"69a64f1d-ae91-3443-b79f-aa45fbf5e4a7\",\r\n    \"state_id\": \"c2b3d89e-d09c-32c1-adbf-0645c6c4f027\",\r\n    \"city_id\": \"fe74c499-0d9f-379b-af4f-b1453ce68df5\",\r\n    \"years_of_experience\": \"4163b4d9-f483-3916-8385-25bafb33e787\",\r\n    \"title\": \"Job Title 2\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Part-Time\",\r\n    \"industry_experience\": [\r\n        \"194cf417-0e28-36a8-be4e-fcfbb3f25320\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"b91cefcd-4cb0-3d13-bdbe-c6a4f6673080\"\r\n    ],\r\n    \r\n    \"salary_range\": \"$200 - $400\",\r\n    \"experience\": \"Experience\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": false,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": false,\r\n    \"expired_at\": \"2023-12-31\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"2c915d0a-a54b-346f-8e07-0b979acece05\",\r\n    \"category_id\": \"6c862bb0-2ca9-3d5e-9ed9-6fb4c8495ce2\",\r\n    \"state_id\": \"e21c67e4-a03d-3534-b35f-224f5baa488d\",\r\n    \"city_id\": \"76475008-238c-3d06-8cf4-7ec02022bfea\",\r\n    \"industry_experience\": [\r\n        \"04e34878-c503-3741-a05d-263692c40c3f\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"c8200d5e-90a0-3b38-98ec-c5d029f0a9ce\"\r\n    ],\r\n    \"strength\": [\r\n        \"b9065974-4121-3929-8ba5-c0e5dd4d112d\"\r\n    ],\r\n\r\n    \"years_of_experience\": \"Director 10+ years\",\r\n    \"title\": \"Job Title\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Freelance\",\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": true,\r\n    \"expired_at\": \"2023-12-31\",\r\n    \"is_opentoremote\": true,\r\n    \"is_opentorelocation\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1202,7 +2165,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// {\r\n//     \"description\": \"Job description goes here 2\",\r\n//     \"category\": \"Category Name\",\r\n//     \"employement_type\": \"Full-time2\",\r\n//     \"industry_experience\": \"Industry Experience2\",\r\n//     \"media_experience\": \"Media Experience2\",\r\n//     \"salary_range\": \"$200 - $4002\",\r\n//     \"experience\": \"Experience\",\r\n//     \"apply_type\": \"Internal2\",\r\n//     \"external_link\": \"https://example.com2\",\r\n//     \"status\": \"\", // pending,approved,rejected,expired,filled\r\n//     \"is_remote\": false,\r\n//     \"is_hybrid\": false,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": false,\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"street_1\": \"\",\r\n//     \"street_2\": \"\",\r\n//     \"city\": \"\",\r\n//     \"state\": \"\",\r\n   \r\n//     \"country\": \"\",\r\n//     \"postal_code\": \"\"\r\n// }\r\n\r\n{\r\n    \"status\": \"published\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n// {\r\n//     \"title\": \"Job Title\",\r\n//     \"description\": \"Job description goes here ddd\",\r\n//     // \"status\": \"\",\r\n//     \"category_id\": \"d8eefbad-2d19-3961-a83b-6c819a29d9a4\",\r\n//     \"employment_type\": \"Freelance\",\r\n//     \"industry_experience\": [\r\n//         \"b11b7cc7-a72f-332e-bbde-3137b634e26e\"\r\n//     ],\r\n//     \"media_experience\": [\r\n//         \"cad0963a-73b4-359c-864b-d024136d618f\"\r\n//     ],\r\n   \r\n//     \"years_of_experience\": \"Director 10+ years\",\r\n//     \"salary_range\": \"$200 - $500\",\r\n//     \"apply_type\": \"External\",\r\n//     \"external_link\": \"https://example.com1\",\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"state_id\": \"ff170360-2195-3fa5-a17a-8f4d0b9fcea0\",\r\n//     \"city_id\": \"e4201cd4-3520-35e7-99cf-a803d4275bdb\",\r\n//     \"is_remote\": true,\r\n//     \"is_hybrid\": true,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": true,\r\n//     \"is_opentoremote\": true,\r\n//     \"is_opentorelocation\": true\r\n// }\r\n\r\n{\r\n    \"status\": \"pending\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1210,13 +2173,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/jobs/da60a9cf-717e-4ff4-a13f-9959cba5610a",
+							"raw": "{{BASE_URL}}/jobs/31376dc6-0ec2-47d4-8fda-850fb50b2365",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"jobs",
-								"da60a9cf-717e-4ff4-a13f-9959cba5610a"
+								"31376dc6-0ec2-47d4-8fda-850fb50b2365"
 							]
 						}
 					},
@@ -1249,9 +2212,15 @@
 					"name": "applications",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/applications?filter[job_id]=689232ed-8377-39d2-bcba-852e5c83088a",
+							"raw": "{{BASE_URL}}/applications?filter[job_id]=3d374f6a-7e84-40f1-85b8-93638f12fe31",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1261,12 +2230,55 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "46fe500f-f656-32e5-9b5d-7fc370c0559d",
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3",
+									"description": "For Creatives",
 									"disabled": true
 								},
 								{
 									"key": "filter[job_id]",
-									"value": "689232ed-8377-39d2-bcba-852e5c83088a"
+									"value": "3d374f6a-7e84-40f1-85b8-93638f12fe31",
+									"description": " For agencies"
+								},
+								{
+									"key": "filter[status]",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applied jobs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/applied_jobs?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"applied_jobs"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3",
+									"description": "For Creatives"
+								},
+								{
+									"key": "filter[job_id]",
+									"value": "d156b76e-9d38-49f2-bba7-8e994ba6d5b9",
+									"description": " For agencies",
+									"disabled": true
 								}
 							]
 						}
@@ -1309,7 +2321,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"ac2f5f14-c5ce-3b1c-8559-e351b7ed8513\",\r\n    \"job_id\": \"689232ed-8377-39d2-bcba-852e5c83088a\",\r\n    \"resume_id\": \"b5919bcb-777e-441e-b5bd-0bb8f4ef444f\",\r\n    \"message\": \"This is message in application\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"fcb55f04-40b0-3dd2-bbf6-ee5062e00514\",\r\n    \"job_id\": \"3d374f6a-7e84-40f1-85b8-93638f12fe31\",\r\n    \"message\": \"This is message in application\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1317,13 +2329,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/applications/",
+							"raw": "{{BASE_URL}}/applications",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"applications",
-								""
+								"applications"
 							]
 						}
 					},
@@ -1333,7 +2344,13 @@
 					"name": "applications/{uuid}",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"message\": \"This is messaeg in application\",\r\n    \"status\": \"accepted\"\r\n}",
@@ -1344,13 +2361,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/applications/bf3b07e1-22e3-44f5-a4f6-7ea45660a808",
+							"raw": "{{BASE_URL}}/applications/0f47f588-a9fb-43e5-98bc-241e1454e6eb",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"applications",
-								"bf3b07e1-22e3-44f5-a4f6-7ea45660a808"
+								"0f47f588-a9fb-43e5-98bc-241e1454e6eb"
 							]
 						}
 					},
@@ -1397,6 +2414,33 @@
 									"key": "filter[user_id]",
 									"value": null
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Resume",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/download-resume",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"download-resume"
 							]
 						}
 					},
@@ -1522,9 +2566,15 @@
 					"name": "links",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/links?filter[user_id]=c2a2392a-9e2f-3c49-a463-cbf525cbefa2&label=website",
+							"raw": "{{BASE_URL}}/links",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1534,11 +2584,13 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "c2a2392a-9e2f-3c49-a463-cbf525cbefa2"
+									"value": "86f85717-0c65-3a85-9203-43db164a7a27",
+									"disabled": true
 								},
 								{
 									"key": "label",
-									"value": "website"
+									"value": "website",
+									"disabled": true
 								}
 							]
 						}
@@ -1651,6 +2703,57 @@
 							"path": [
 								"links",
 								"bcfcc63f-8a3f-4a93-a77a-7defb9176f63"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "agency_stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/agency_stats",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"agency_stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creative_stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creative_stats",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative_stats"
 							]
 						}
 					},
@@ -1983,14 +3086,36 @@
 					"name": "notes",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/notes",
+							"raw": "{{BASE_URL}}/notes?filter[user_id]=2c915d0a-a54b-346f-8e07-0b979acece05&resource_id=36aede9c-9ca6-4178-8a3f-6427aefa01d2",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"notes"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "2c915d0a-a54b-346f-8e07-0b979acece05"
+								},
+								{
+									"key": "resource_type",
+									"value": "creatives",
+									"description": "agencies, creatives, jobs, applications",
+									"disabled": true
+								},
+								{
+									"key": "resource_id",
+									"value": "36aede9c-9ca6-4178-8a3f-6427aefa01d2"
+								}
 							]
 						}
 					},
@@ -2032,7 +3157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"bad344e8-ff65-3ff7-908b-75382339c235\",\r\n    \"application_id\": \"c9efee7e-7d57-4971-8549-034f3ae89b97\",\r\n    \"body\": \"This is my personal note\"\r\n    \r\n}",
+							"raw": "{\r\n    \"resource_type\": \"creatives\",\r\n    \"resource_id\": \"36aede9c-9ca6-4178-8a3f-6427aefa01d2\",\r\n    \"body\": \"This is my personal note on creativee as an agency\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2180,7 +3305,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/attachments?filter[status]=2",
+							"raw": "{{BASE_URL}}/attachments",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2190,23 +3315,29 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "784376e1-dcaf-3240-840b-838c7dec057b",
+									"value": "9af13861-9249-45c8-a784-1c220f52a38e",
 									"disabled": true
 								},
 								{
 									"key": "filter[resource_type]",
-									"value": "profile_picture",
+									"value": "resume",
 									"disabled": true
 								},
 								{
 									"key": "filter[post_id]",
-									"value": "9c04b8ff-224f-4d93-8e14-db789e303542",
+									"value": "c2f1b727-b349-4931-92a6-acc644fbf89b",
 									"disabled": true
 								},
 								{
 									"key": "filter[status]",
-									"value": "2",
-									"description": "0: pending, 1: active, 2: inactive"
+									"value": "1",
+									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-created_at",
+									"disabled": true
 								}
 							]
 						}
@@ -2252,19 +3383,19 @@
 							"formdata": [
 								{
 									"key": "user_id",
-									"value": "69a978f1-6eaa-39ea-878f-4d2bc66117fd",
+									"value": "f2fd0ccb-2484-4a7d-92d1-7f4d9eb8dda9",
 									"type": "text"
 								},
 								{
 									"key": "resource_type",
-									"value": "logo",
-									"description": "profile_picture, logo, resume,creative_spotlight, portfolio_item",
+									"value": "website_preview",
+									"description": "profile_picture, agency_logo, resume,creative_spotlight, portfolio_item, group_posts, website_preview",
 									"type": "text"
 								},
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/E:/C - Downloads/unnamed (2).png"
+									"src": "/E:/C - Downloads/677.png"
 								},
 								{
 									"key": "",
@@ -2314,9 +3445,15 @@
 					"name": "educations",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/educations?filter[user_id]=d1a7d063-6581-3fac-bf91-adc20fa3e87e",
+							"raw": "{{BASE_URL}}/educations?filter[user_id]=b0c0faf9-a1c5-32ab-bea3-08af53a29ab7",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2326,7 +3463,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e"
+									"value": "b0c0faf9-a1c5-32ab-bea3-08af53a29ab7"
 								}
 							]
 						}
@@ -2351,7 +3488,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"d1a7d063-6581-3fac-bf91-adc20fa3e87e\",\r\n    \"educations\": [\r\n        {\r\n            \"degree\": \"Bachelor's Degree 1\",\r\n            \"college\": \"University A\",\r\n            \"completed_at\": \"2012-07-12\" //date\r\n        }\r\n        \r\n    ]\r\n}",
+							"raw": "{\r\n    \"user_id\": \"58b333ff-f41c-3952-b39f-4ba7a68397b8\",\r\n    \"educations\": [\r\n        {\r\n            \"degree\": \"Bachelor's Degree 1\",\r\n            \"college\": \"University A\",\r\n            \"completed_at\": \"2012-07-12\" //date\r\n        }\r\n        \r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2371,7 +3508,7 @@
 					"response": []
 				},
 				{
-					"name": "educations/{uuid}",
+					"name": "educations",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -2388,7 +3525,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "//   Allowed fields:\r\n// 1) degree\r\n// 2) college\r\n// 3) started_at\r\n// 4) completed_at\r\n{\r\n    \"degree\": \"Bachelor's Degree 2\",\r\n    \"college\": \"University b\",\r\n    \"started_at\": \"2011-08-13\", //date\r\n    \"completed_at\": \"2013-07-13\" //date\r\n}",
+							"raw": "//   Allowed fields:\r\n// 1) degree\r\n// 2) college\r\n// 3) started_at\r\n// 4) completed_at\r\n// {\r\n//     \"educations\": [\r\n//         {\r\n//             \"id\": \"\",\r\n//             \"degree\": \"Bachelor's Degree 1 aaa\",\r\n//             \"college\": \"University A up\",\r\n//             \"completed_at\": \"2012-07-12\" \r\n//         }\r\n//         ,{\r\n//             \"id\": \"\",\r\n//             \"degree\": \"Bachelor's Degree\",\r\n//             \"college\": \"University B up as\",\r\n//             \"completed_at\": \"2013-07-12\"\r\n//         }\r\n//         ,{\r\n//             \"id\": \"\",\r\n//             \"degree\": \"Bach New aaa\",\r\n//             \"college\": \"University B up\",\r\n//             \"completed_at\": \"2013-07-12\"\r\n//         }\r\n//     ]\r\n// }\r\n{\r\n    \"educations\": [\r\n        {\r\n            \"id\": null,\r\n            \"degree\": null,\r\n            \"college\": null,\r\n            \"completed_at\": null\r\n        },\r\n        {\r\n            \"id\": null,\r\n            \"degree\": null,\r\n            \"college\": null,\r\n            \"completed_at\": null\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2396,13 +3533,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/educations/a9db75e6-8f8b-4cee-8d06-dafafc0d93f7",
+							"raw": "{{BASE_URL}}/educations",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"educations",
-								"a9db75e6-8f8b-4cee-8d06-dafafc0d93f7"
+								"educations"
 							]
 						}
 					},
@@ -2435,9 +3571,15 @@
 					"name": "experiences",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{BASE_URL}}/experiences?filter[user_id]=d1a7d063-6581-3fac-bf91-adc20fa3e87e",
+							"raw": "{{BASE_URL}}/experiences?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2447,7 +3589,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d1a7d063-6581-3fac-bf91-adc20fa3e87e"
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3"
 								}
 							]
 						}
@@ -2492,7 +3634,7 @@
 					"response": []
 				},
 				{
-					"name": "experiences/{uuid}",
+					"name": "experiences",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -2509,7 +3651,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "//   Allowed fields:\r\n// 1) degree\r\n// 2) college\r\n// 3) started_at\r\n// 4) completed_at\r\n{\r\n    \"company\": \"Butanic Inc\",\r\n    \"description\": \"Working on Abc Product\", //date\r\n    \"started_at\": \"2013-07-12\", //date\r\n    \"completed_at\": \"2014-07-12\" //date\r\n}",
+							"raw": "//   Allowed fields:\r\n// 1) degree\r\n// 2) college\r\n// 3) started_at\r\n// 4) completed_at\r\n{\r\n    \"experiences\": [\r\n        {\r\n            \"id\": \"a1b3597c-5401-4102-acca-b7e33a8f255b\",\r\n            \"title\": \"Abc a aaaaa\",\r\n            \"company\": \"Butanic Inc\",\r\n            \"description\": \"Working on Abc Product\",\r\n            \"started_at\": \"2013-07-12\",\r\n            \"completed_at\": \"2014-07-12\"\r\n        },\r\n        {\r\n            \"id\": \"4ed8d5ae-5bfc-4d6f-ab9c-22f5c3d3fd92\",\r\n            \"title\": \"Abc d assss\",\r\n            \"company\": \"Butanic Inc 2\",\r\n            \"description\": \"Working on Abc Product 2\",\r\n            \"started_at\": \"2013-07-12\",\r\n            \"completed_at\": \"2014-07-12\"\r\n        }\r\n        \r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2517,13 +3659,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/experiences/2e2100c8-9e06-4f16-9f62-a191d116914e",
+							"raw": "{{BASE_URL}}/experiences",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"experiences",
-								"2e2100c8-9e06-4f16-9f62-a191d116914e"
+								"experiences"
 							]
 						}
 					},
@@ -2535,13 +3676,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/experiences/2e2100c8-9e06-4f16-9f62-a191d116914e",
+							"raw": "{{BASE_URL}}/experiences/dd583f91-c17b-437e-a9a4-0fbf34c96493",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"experiences",
-								"2e2100c8-9e06-4f16-9f62-a191d116914e"
+								"dd583f91-c17b-437e-a9a4-0fbf34c96493"
 							]
 						}
 					},
@@ -2556,7 +3697,13 @@
 					"name": "bookmarks",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{BASE_URL}}/bookmarks",
 							"host": [
@@ -2564,6 +3711,24 @@
 							],
 							"path": [
 								"bookmarks"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "2c915d0a-a54b-346f-8e07-0b979acece05",
+									"disabled": true
+								},
+								{
+									"key": "resource_type",
+									"value": "agencies",
+									"description": "agencies, creatives, jobs, applications",
+									"disabled": true
+								},
+								{
+									"key": "resource_id",
+									"value": "130a2f26-6904-4b5c-a8f8-b715690be094",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -2587,7 +3752,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "//Allowed Fields\r\n\r\n// user_id : User who is creating a bookmark\r\n\r\n// resource_type : Allowed Values [ agencies, creatives, jobs, applications,  posts] \r\n\r\n// Please Note: resource_type is plural\r\n// resource_id: id of resource being bookmarked\r\n\r\n\r\n{\r\n    \"user_id\": \"b339beb6-d00c-3ba3-83b6-df91fec0ea9c\",\r\n    \"resource_type\": \"creatives\",\r\n    \"resource_id\": \"4123470e-b085-352c-a7dc-9cf406cb17b3\"\r\n}",
+							"raw": "//Allowed Fields\r\n\r\n// user_id : User who is creating a bookmark\r\n\r\n// resource_type : Allowed Values [ agencies, creatives, jobs, applications,  posts] \r\n\r\n// Please Note: resource_type is plural\r\n// resource_id: id of resource being bookmarked\r\n\r\n\r\n{\r\n    \"resource_type\": \"creatives\",\r\n    \"resource_id\": \"70de0c1a-3a3f-4ff4-96ca-06dc7dbdb4e9\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2686,7 +3851,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/get_categories?",
+							"raw": "{{BASE_URL}}/get_categories",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2695,9 +3860,10 @@
 							],
 							"query": [
 								{
-									"key": null,
+									"key": "",
 									"value": null,
-									"description": "This endpoint will give you all categories from cache"
+									"description": "This endpoint will give you all categories from cache",
+									"disabled": true
 								}
 							]
 						}
@@ -2800,6 +3966,183 @@
 			]
 		},
 		{
+			"name": "Mentors",
+			"item": [
+				{
+					"name": "Topics",
+					"item": [
+						{
+							"name": "topics",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/topics?filter[slug]=freelance",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"topics"
+									],
+									"query": [
+										{
+											"key": "filter[id]",
+											"value": "Copywriter2",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "2",
+											"disabled": true
+										},
+										{
+											"key": "filter[title]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "filter[slug]",
+											"value": "freelance"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "topics",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New Category\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/topics",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"topics"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Resources",
+					"item": [
+						{
+							"name": "resources",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/mentor-resources?filter[topic]=Beatae ex ut adipisc",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"mentor-resources"
+									],
+									"query": [
+										{
+											"key": "filter[topic]",
+											"value": "Beatae ex ut adipisc"
+										},
+										{
+											"key": "page",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "resources",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New Category\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/mentor-resources",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"mentor-resources"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "Strengths",
 			"item": [
 				{
@@ -2810,6 +4153,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -2819,7 +4165,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/strengths?page=2&per_page=3",
+							"raw": "{{BASE_URL}}/strengths",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2834,11 +4180,13 @@
 								},
 								{
 									"key": "page",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "3"
+									"value": "3",
+									"disabled": true
 								}
 							]
 						}
@@ -2853,6 +4201,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -3454,6 +4805,9 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -3463,7 +4817,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/locations?filter[state_id]=b85f97db-bd3d-3995-b0f3-8f8c4578e5b4",
+							"raw": "{{BASE_URL}}/locations?filter[name]=Alabama&per_page=-1",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3473,17 +4827,16 @@
 							"query": [
 								{
 									"key": "filter[state_id]",
-									"value": "b85f97db-bd3d-3995-b0f3-8f8c4578e5b4"
+									"value": "b5ca41ea-7ab3-38eb-8ddb-5c529299134f",
+									"disabled": true
 								},
 								{
 									"key": "filter[name]",
-									"value": "Alabama",
-									"disabled": true
+									"value": "Alabama"
 								},
 								{
 									"key": "per_page",
-									"value": "-1",
-									"disabled": true
+									"value": "-1"
 								}
 							]
 						}
@@ -3508,7 +4861,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Ne\",\r\n    \"parent_id\": \"sfdsf\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Ne\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3516,12 +4869,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/locations",
+							"raw": "{{BASE_URL}}/locations/",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"locations"
+								"locations",
+								""
 							]
 						}
 					},
@@ -3553,13 +4907,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/locations/e0f4c2eb-c7f7-3465-95f0-a07f64166d27",
+							"raw": "{{BASE_URL}}/locations/e4bed140-eaf3-37e9-ab96-4856757f1375",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"locations",
-								"e0f4c2eb-c7f7-3465-95f0-a07f64166d27"
+								"e4bed140-eaf3-37e9-ab96-4856757f1375"
 							]
 						}
 					},
@@ -3571,13 +4925,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/locations/24895f24-aaff-322e-8f88-a45cca7e1f6a",
+							"raw": "{{BASE_URL}}/locations/e4bed140-eaf3-37e9-ab96-4856757f1375",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"locations",
-								"24895f24-aaff-322e-8f88-a45cca7e1f6a"
+								"e4bed140-eaf3-37e9-ab96-4856757f1375"
 							]
 						}
 					},
@@ -3811,7 +5165,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"evt_1Nxqi2B5Ooqa5ycAdp2qVdcy\",\r\n    \"object\": \"event\",\r\n    \"api_version\": \"2023-08-16\",\r\n    \"created\": 1696509077,\r\n    \"data\": {\r\n        \"object\": {\r\n            \"id\": \"cs_test_a1KHendMKwxZ8BA7obRaD2LqUlHMiu8qKlyFYnMPOoUt84U9KfKEDp1P0N\",\r\n            \"object\": \"checkout.session\",\r\n            \"after_expiration\": null,\r\n            \"allow_promotion_codes\": null,\r\n            \"amount_subtotal\": 3000,\r\n            \"amount_total\": 3000,\r\n            \"automatic_tax\": {\r\n                \"enabled\": false,\r\n                \"status\": null\r\n            },\r\n            \"billing_address_collection\": null,\r\n            \"cancel_url\": \"https://httpbin.org/post\",\r\n            \"client_reference_id\": null,\r\n            \"consent\": null,\r\n            \"consent_collection\": null,\r\n            \"created\": 1696509071,\r\n            \"currency\": \"usd\",\r\n            \"currency_conversion\": null,\r\n            \"custom_fields\": [],\r\n            \"custom_text\": {\r\n                \"shipping_address\": null,\r\n                \"submit\": null,\r\n                \"terms_of_service_acceptance\": null\r\n            },\r\n            \"customer\": \"cus_OlNSWWJybJTKaf\",\r\n            \"customer_creation\": \"always\",\r\n            \"customer_details\": {\r\n                \"address\": {\r\n                    \"city\": \"South San Francisco\",\r\n                    \"country\": \"US\",\r\n                    \"line1\": \"354 Oyster Point Blvd\",\r\n                    \"line2\": null,\r\n                    \"postal_code\": \"94080\",\r\n                    \"state\": \"CA\"\r\n                },\r\n                \"email\": \"stripe@example.com\",\r\n                \"name\": \"Jenny Rosen\",\r\n                \"phone\": null,\r\n                \"tax_exempt\": \"none\",\r\n                \"tax_ids\": []\r\n            },\r\n            \"customer_email\": null,\r\n            \"expires_at\": 1696595471,\r\n            \"invoice\": null,\r\n            \"invoice_creation\": {\r\n                \"enabled\": false,\r\n                \"invoice_data\": {\r\n                    \"account_tax_ids\": null,\r\n                    \"custom_fields\": null,\r\n                    \"description\": null,\r\n                    \"footer\": null,\r\n                    \"metadata\": {},\r\n                    \"rendering_options\": null\r\n                }\r\n            },\r\n            \"livemode\": false,\r\n            \"locale\": null,\r\n            \"metadata\": {},\r\n            \"mode\": \"payment\",\r\n            \"payment_intent\": \"pi_3NxqhvB5Ooqa5ycA1uBwpm8y\",\r\n            \"payment_link\": null,\r\n            \"payment_method_collection\": \"always\",\r\n            \"payment_method_configuration_details\": {\r\n                \"id\": \"pmc_1NxbxjB5Ooqa5ycAvV9CE7Oi\",\r\n                \"parent\": null\r\n            },\r\n            \"payment_method_options\": {},\r\n            \"payment_method_types\": [\r\n                \"card\",\r\n                \"link\",\r\n                \"cashapp\"\r\n            ],\r\n            \"payment_status\": \"paid\",\r\n            \"phone_number_collection\": {\r\n                \"enabled\": false\r\n            },\r\n            \"recovered_from\": null,\r\n            \"setup_intent\": null,\r\n            \"shipping_address_collection\": null,\r\n            \"shipping_options\": [],\r\n            \"status\": \"complete\",\r\n            \"submit_type\": null,\r\n            \"subscription\": null,\r\n            \"success_url\": \"https://httpbin.org/post\",\r\n            \"total_details\": {\r\n                \"amount_discount\": 0,\r\n                \"amount_shipping\": 0,\r\n                \"amount_tax\": 0\r\n            },\r\n            \"url\": null,\r\n            \"shipping_cost\": null,\r\n            \"shipping_details\": null\r\n        }\r\n    },\r\n    \"livemode\": false,\r\n    \"pending_webhooks\": 3,\r\n    \"request\": {\r\n        \"id\": null,\r\n        \"idempotency_key\": null\r\n    },\r\n    \"type\": \"checkout.session.completed\"\r\n}",
+							"raw": "{\r\n    \"id\": \"evt_1O3MVTB5Ooqa5ycAhb3PKZxi\",\r\n    \"object\": \"event\",\r\n    \"api_version\": \"2023-10-16\",\r\n    \"created\": 1697822946,\r\n    \"data\": {\r\n        \"object\": {\r\n            \"id\": \"cs_test_b1kLNOFuXTrkRgKJeltoCSsOL3PjpGOGi5u7VEvicqv2UyiOgjuAcEX04N\",\r\n            \"object\": \"checkout.session\",\r\n            \"after_expiration\": null,\r\n            \"allow_promotion_codes\": true,\r\n            \"amount_subtotal\": 34900,\r\n            \"amount_total\": 17900,\r\n            \"automatic_tax\": {\r\n                \"enabled\": false,\r\n                \"status\": null\r\n            },\r\n            \"billing_address_collection\": \"auto\",\r\n            \"cancel_url\": \"https://stripe.com\",\r\n            \"client_reference_id\": null,\r\n            \"client_secret\": null,\r\n            \"consent\": null,\r\n            \"consent_collection\": {\r\n                \"promotions\": \"none\",\r\n                \"terms_of_service\": \"none\"\r\n            },\r\n            \"created\": 1697822682,\r\n            \"currency\": \"usd\",\r\n            \"currency_conversion\": null,\r\n            \"custom_fields\": [],\r\n            \"custom_text\": {\r\n                \"shipping_address\": null,\r\n                \"submit\": null,\r\n                \"terms_of_service_acceptance\": null\r\n            },\r\n            \"customer\": null,\r\n            \"customer_creation\": \"if_required\",\r\n            \"customer_details\": {\r\n                \"address\": {\r\n                    \"city\": null,\r\n                    \"country\": \"PK\",\r\n                    \"line1\": null,\r\n                    \"line2\": null,\r\n                    \"postal_code\": null,\r\n                    \"state\": null\r\n                },\r\n                \"email\": \"admin@gmail.com\",\r\n                \"name\": \"Usadj sdasd\",\r\n                \"phone\": null,\r\n                \"tax_exempt\": \"none\",\r\n                \"tax_ids\": []\r\n            },\r\n            \"customer_email\": null,\r\n            \"expires_at\": 1697909081,\r\n            \"invoice\": null,\r\n            \"invoice_creation\": {\r\n                \"enabled\": false,\r\n                \"invoice_data\": {\r\n                    \"account_tax_ids\": null,\r\n                    \"custom_fields\": null,\r\n                    \"description\": null,\r\n                    \"footer\": null,\r\n                    \"metadata\": [],\r\n                    \"rendering_options\": null\r\n                }\r\n            },\r\n            \"livemode\": false,\r\n            \"locale\": \"auto\",\r\n            \"metadata\": {\r\n                \"plan\": \"post-a-creative-job\"\r\n            },\r\n            \"mode\": \"payment\",\r\n            \"payment_intent\": \"pi_3O3MVQB5Ooqa5ycA12O7lcGL\",\r\n            \"payment_link\": \"plink_1Ny3QwB5Ooqa5ycA0tttc8Ye\",\r\n            \"payment_method_collection\": \"always\",\r\n            \"payment_method_configuration_details\": {\r\n                \"id\": \"pmc_1NxbxjB5Ooqa5ycAvV9CE7Oi\",\r\n                \"parent\": null\r\n            },\r\n            \"payment_method_options\": [],\r\n            \"payment_method_types\": [\r\n                \"card\",\r\n                \"link\",\r\n                \"cashapp\"\r\n            ],\r\n            \"payment_status\": \"paid\",\r\n            \"phone_number_collection\": {\r\n                \"enabled\": false\r\n            },\r\n            \"recovered_from\": null,\r\n            \"setup_intent\": null,\r\n            \"shipping_address_collection\": null,\r\n            \"shipping_options\": [],\r\n            \"status\": \"complete\",\r\n            \"submit_type\": \"auto\",\r\n            \"subscription\": null,\r\n            \"success_url\": \"https://stripe.com\",\r\n            \"total_details\": {\r\n                \"amount_discount\": 0,\r\n                \"amount_shipping\": 0,\r\n                \"amount_tax\": 0\r\n            },\r\n            \"ui_mode\": \"hosted\",\r\n            \"url\": null,\r\n            \"shipping_cost\": null,\r\n            \"shipping_details\": null\r\n        }\r\n    },\r\n    \"livemode\": false,\r\n    \"pending_webhooks\": 1,\r\n    \"request\": {\r\n        \"id\": null,\r\n        \"idempotency_key\": null\r\n    },\r\n    \"type\": \"checkout.session.completed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3819,7 +5173,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/stripe/webhook",
+							"raw": "http://localhost:8000/stripe/webhook2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -3827,14 +5181,14 @@
 							"port": "8000",
 							"path": [
 								"stripe",
-								"webhook"
+								"webhook2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Webhook Charge Success Copy",
+					"name": "Webhook Charge Success production",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -3859,13 +5213,17 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/webhook/stripe-charge-success",
+							"raw": "http://35.173.50.140/stripe/webhook",
+							"protocol": "http",
 							"host": [
-								"{{BASE_URL}}"
+								"35",
+								"173",
+								"50",
+								"140"
 							],
 							"path": [
-								"webhook",
-								"stripe-charge-success"
+								"stripe",
+								"webhook"
 							]
 						}
 					},
@@ -3926,7 +5284,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/groups?filter[status]=1",
+							"raw": "{{BASE_URL}}/groups?filter[name]=Hailey Barton",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3936,13 +5294,33 @@
 							"query": [
 								{
 									"key": "filter[name]",
-									"value": "Gwendolyn Miranda",
-									"disabled": true
+									"value": "Hailey Barton"
 								},
 								{
 									"key": "filter[status]",
-									"value": "1",
-									"description": "0: public, 1: private, 2:hidden"
+									"value": "0",
+									"description": "0: public, 1: private, 2:hidden",
+									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "8d0d6b2e-316d-3a6a-b8a5-256d8f15a785",
+									"disabled": true
+								},
+								{
+									"key": "filter[member_id]",
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-created_at",
+									"disabled": true
+								},
+								{
+									"key": "filter[uuid]",
+									"value": null,
+									"disabled": true
 								}
 							]
 						}
@@ -3950,14 +5328,14 @@
 					"response": []
 				},
 				{
-					"name": "groups/{uuid}",
+					"name": "groups",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
 						}
 					},
 					"request": {
-						"method": "PATCH",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Accept",
@@ -3966,29 +5344,98 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Abc\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Group 1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/E:/C - Downloads/vcc.png"
+								},
+								{
+									"key": "status",
+									"value": "private",
+									"description": "public, private, hidden",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/groups/4df86fdc-1f93-4903-a978-2482644a4880",
+							"raw": "{{BASE_URL}}/groups",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups/update/{uuid}",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Group 2 updated",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description updated",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "private",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "fdsfdsfdsf",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/E:/Installed/laragon/www/SuperemePharma/hupreland/files/images/av_7.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/groups/update/563d2bba-c40c-4faa-976c-0fe20c25a82d",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"groups",
-								"4df86fdc-1f93-4903-a978-2482644a4880"
-							],
-							"query": [
-								{
-									"key": "filter[name]",
-									"value": "Gwendolyn Miranda",
-									"disabled": true
-								}
+								"update",
+								"563d2bba-c40c-4faa-976c-0fe20c25a82d"
 							]
 						}
 					},
@@ -4006,6 +5453,44 @@
 							],
 							"path": [
 								"get_groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "group/{uuid}",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/groups/21f4607f-8ab8-4116-a3d9-7e2bb9d9bc7e",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"groups",
+								"21f4607f-8ab8-4116-a3d9-7e2bb9d9bc7e"
 							]
 						}
 					},
@@ -4062,7 +5547,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sender_id\": \"461dc3cb-e119-3cd6-9933-67bcac592511\", \r\n    \"receiver_id\": \"37d8b49b-f34b-3fd8-b687-331259b9e633\", \r\n    \"group_id\": \"3d314b89-9da0-3eaf-9ff2-218e04eba945\"\r\n}",
+							"raw": "{\r\n    \"receiver_id\": \"124df419-0d85-42af-9877-1909bff4b30f\", \r\n    \"group_id\": \"458d30fb-1596-37dd-bd40-64549d7ab20c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4127,6 +5612,172 @@
 							"path": [
 								"invitations",
 								"38edb096-bfa3-4b95-a85c-427cd1b1d9b1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Group Members",
+			"item": [
+				{
+					"name": "group-members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/group-members",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"group-members"
+							],
+							"query": [
+								{
+									"key": "filter[group_id]",
+									"value": "241c2c15-6b5a-33e5-a5cd-737776c86395",
+									"disabled": true
+								},
+								{
+									"key": "filter[role]",
+									"value": "2",
+									"description": "1 : admin, 2 : moderator, 3 : member",
+									"disabled": true
+								},
+								{
+									"key": "filter[user_id]",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "group-members",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"3033bda6-f82f-387d-a410-ce6795a02ae3\",\r\n    \"group_id\": \"458d30fb-1596-37dd-bd40-64549d7ab20c\",\r\n    \"role\": \"member\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/group-members",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"group-members"
+							],
+							"query": [
+								{
+									"key": "filter[name]",
+									"value": "Gwendolyn Miranda",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: public, 1: private, 2:hidden",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "group-members",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// In params, user_id is used\r\n// 1 : admin, 2 : moderator, 3 : member\r\n\r\n{\r\n    \"group_id\": \"458d30fb-1596-37dd-bd40-64549d7ab20c\",\r\n    \"role\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/group-members/3033bda6-f82f-387d-a410-ce6795a02ae3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"group-members",
+								"3033bda6-f82f-387d-a410-ce6795a02ae3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "group-members",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/group-members/f83db97c-4b3d-402c-bec4-78d788096df9",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"group-members",
+								"f83db97c-4b3d-402c-bec4-78d788096df9"
 							]
 						}
 					},
@@ -4215,12 +5866,12 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "09fc5937-c9d2-3d2b-b85d-f0d3024c75c4",
+									"value": "fcb55f04-40b0-3dd2-bbf6-ee5062e00514",
 									"disabled": true
 								},
 								{
 									"key": "filter[group_id]",
-									"value": "5d670843-78d0-3b19-afb4-1f1d498d442e",
+									"value": "6a10a0e2-e84b-3a17-9c0a-5447e8f60874",
 									"disabled": true
 								},
 								{
@@ -4230,12 +5881,63 @@
 								},
 								{
 									"key": "page",
-									"value": "3",
+									"value": "1",
 									"disabled": true
 								},
 								{
-									"key": "status",
-									"value": "",
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: draft, 1: published, 2: archived",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trending posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/trending_posts",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"trending_posts"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "86be5c67-fa3c-3236-9184-248fe3b09dec",
+									"disabled": true
+								},
+								{
+									"key": "filter[group_id]",
+									"value": "34f5a0e1-36b3-348b-9058-59978979b1e0",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
 									"disabled": true
 								}
 							]
@@ -4279,7 +5981,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"341c58db-5d03-3c33-ac63-157e67efbbd1\",\r\n    \"group_id\": \"48b4a935-4f1c-3a68-9ad1-510ca37b8e6a\",\r\n    \"content\": \"This is my test content for post\",\r\n    \"attachment_ids\": [\r\n        \"3069f80b-5cbb-4b20-ba4b-91ee25473167\",\r\n         \"ce24886e-e910-4519-80c4-ca61017c4b66\",\r\n          \"25b9a657-bc83-4474-bca3-361e66bc0270\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"group_id\": \"e544eae0-59a5-4693-b778-3d1d98d969ed\",\r\n    \"content\": \"This is my test content for post\",\r\n    \"attachment_ids\": [\r\n       \"77930103-d924-4db7-9645-65faaf7feeef\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4316,7 +6018,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"content\": \"New content\",\r\n    \"status\": \"draft\",\r\n     \"attachment_ids\": [\r\n        \"5da211e9-0d05-3cfd-bae7-e28e8f57b605\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"content\": \"New content\",\r\n    // \"status\": \"draft\",\r\n    \"attachment_ids\": [\r\n       \"a881d56a-0e3d-4c03-af26-a626eb1e04f5\",\r\n       \"89630cad-880b-4bb1-9181-c615b10182b1\",\r\n       \"fe950303-83a9-4309-a7e3-377a7bea15a7\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4324,13 +6026,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/posts/d8613ce3-3666-4278-a559-7584e1829ba5",
+							"raw": "{{BASE_URL}}/posts/84289f88-b0d9-4bfe-b03e-5a5e19b3d72c",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"posts",
-								"d8613ce3-3666-4278-a559-7584e1829ba5"
+								"84289f88-b0d9-4bfe-b03e-5a5e19b3d72c"
 							]
 						}
 					},
@@ -4371,7 +6073,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/comments?filter[post_id]=17fe7afe-e32a-352b-b9fa-90a43fbde937",
+							"raw": "{{BASE_URL}}/comments?filter[user_id]=8cb455f9-a9fe-4165-89cd-58c3c73c2580&sort=-created_at",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4381,17 +6083,16 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "3df6e8d9-9233-3395-a72f-7080777a0bc1",
-									"disabled": true
+									"value": "8cb455f9-a9fe-4165-89cd-58c3c73c2580"
 								},
 								{
 									"key": "filter[post_id]",
-									"value": "17fe7afe-e32a-352b-b9fa-90a43fbde937"
+									"value": "d5b6c76b-0866-367b-83b8-ba7350d207da",
+									"disabled": true
 								},
 								{
 									"key": "sort",
-									"value": "-created_at",
-									"disabled": true
+									"value": "-created_at"
 								},
 								{
 									"key": "page",
@@ -4426,7 +6127,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"341c58db-5d03-3c33-ac63-157e67efbbd1\",\r\n    \"post_id\": \"9c04b8ff-224f-4d93-8e14-db789e303542\",\r\n    \"parent_id\": \"f4d5c0ab-6158-407a-b71e-794a377b9869\", //(optional)\r\n    \"content\": \"This is comment\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"ed6383f5-93a0-4da8-94bb-da7b3d7bd301\",\r\n    \"post_id\": \"e1e4e753-1a67-30c8-8686-e77662a83327\",\r\n    \r\n    \"content\": \"This is comment\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4518,7 +6219,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/likes?filter[post_id]=17fe7afe-e32a-352b-b9fa-90a43fbde937",
+							"raw": "{{BASE_URL}}/likes?filter[user_id]=4f269334-1ed3-3674-a92b-e5fbb187be8d",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4528,12 +6229,12 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "3df6e8d9-9233-3395-a72f-7080777a0bc1",
-									"disabled": true
+									"value": "4f269334-1ed3-3674-a92b-e5fbb187be8d"
 								},
 								{
 									"key": "filter[post_id]",
-									"value": "17fe7afe-e32a-352b-b9fa-90a43fbde937"
+									"value": "b141f9df-c1a3-3a00-b966-fb1010c245c4",
+									"disabled": true
 								},
 								{
 									"key": "sort",
@@ -4573,7 +6274,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"341c58db-5d03-3c33-ac63-157e67efbbd1\",\r\n    \"post_id\": \"17fe7afe-e32a-352b-b9fa-90a43fbde937\"\r\n}",
+							"raw": "{\r\n    \"post_id\": \"92384a88-13ad-3c39-b0fb-f9f2d8eb70d3\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4591,9 +6292,222 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post Reactions",
+			"item": [
+				{
+					"name": "post-reactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/post-reactions",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post-reactions"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "795abe5b-57ca-43f1-bffb-34c7b6eadaac",
+									"disabled": true
+								},
+								{
+									"key": "filter[post_id]",
+									"value": "c9497338-bc30-3f92-906b-a56cd0ed3522",
+									"disabled": true
+								},
+								{
+									"key": "filter[type]",
+									"value": "heart",
+									"description": " like, laugh, heart",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-created_at",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "-1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "comments/{uuid}",
+					"name": "post-reactions",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"ed6383f5-93a0-4da8-94bb-da7b3d7bd301\",\r\n    \"post_id\": \"e1e4e753-1a67-30c8-8686-e77662a83327\",\r\n    \"type\": \"like\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/post-reactions",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post-reactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Friend Request",
+			"item": [
+				{
+					"name": "Friend Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/friendships?filter[receiver_id]=fcb55f04-40b0-3dd2-bbf6-ee5062e00514",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"friendships"
+							],
+							"query": [
+								{
+									"key": "filter[sender_id]",
+									"value": "e4d3fe53-b69f-3d0f-befc-0dedade4f278",
+									"disabled": true
+								},
+								{
+									"key": "filter[receiver_id]",
+									"value": "fcb55f04-40b0-3dd2-bbf6-ee5062e00514"
+								},
+								{
+									"key": "sort",
+									"value": "-created_at",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "pending",
+									"description": "pending, accepted, rejected, cancelled",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my-friends",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/my-friends",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"my-friends"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendships",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiver_id\": \"3033bda6-f82f-387d-a410-ce6795a02ae3\"\r\n}\r\n\r\n//  c122fc89-424a-3b74-973a-c3ba55aa518a \r\n//4",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/friendships",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"friendships"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendships",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
@@ -4610,7 +6524,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"content\": \"Updated comment 2\",\r\n    \"status\": \"dasda\"\r\n}",
+							"raw": "{\r\n    \"request_id\": \"70097565-139e-4f68-a5a5-014e7d1d8c37\",\r\n    \"response\": \"accepted\" // accepted, declined, cancelled, unfriended\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4618,31 +6532,50 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/comments/867d66e7-692b-3c2a-91d9-47458dc52e34",
+							"raw": "{{BASE_URL}}/friendships",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"comments",
-								"867d66e7-692b-3c2a-91d9-47458dc52e34"
+								"friendships"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "comments/{uuid}",
+					"name": "un friend",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
 					"request": {
-						"method": "DELETE",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"friend_id\": \"c073dcd4-d8d2-472e-9073-0d3d5458d70d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{BASE_URL}}/comments/ff197f32-f350-36d7-be21-07dee738ed4f",
+							"raw": "{{BASE_URL}}/friendships/terminate",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"comments",
-								"ff197f32-f350-36d7-be21-07dee738ed4f"
+								"friendships",
+								"terminate"
 							]
 						}
 					},
@@ -4665,7 +6598,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/reviews?filter[target_id]=20105168-aea6-3825-8bb9-2bf82b6186eb&sort=-created_at&per_page=2&page=2",
+							"raw": "{{BASE_URL}}/reviews",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4675,19 +6608,23 @@
 							"query": [
 								{
 									"key": "filter[target_id]",
-									"value": "20105168-aea6-3825-8bb9-2bf82b6186eb"
+									"value": "124df419-0d85-42af-9877-1909bff4b30f",
+									"disabled": true
 								},
 								{
 									"key": "sort",
-									"value": "-created_at"
+									"value": "-created_at",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								},
 								{
 									"key": "page",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								}
 							]
 						}
@@ -4712,7 +6649,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// target_id : uuid of target user(agency|creative)\r\n{\r\n    \"user_id\": \"10b447ad-9412-3c89-9b84-ba4879e0cfdd\",\r\n    \"target_id\": \"20105168-aea6-3825-8bb9-2bf82b6186eb\",\r\n    \"rating\": 5,\r\n    \"comment\": \"This is comment\"\r\n}",
+							"raw": "// target_id : uuid of target user(agency|creative)\r\n{\r\n    \"target_id\": \"3ab187a0-ba89-42da-a824-1ba7bc827ae4\",\r\n    \"rating\": 3,\r\n    \"comment\": \"This is comment for creative w e r\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4726,6 +6663,82 @@
 							],
 							"path": [
 								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reviews",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// target_id : uuid of target user(agency|creative)\r\n{\r\n    \"rating\": 4,\r\n    \"comment\": \"This is comment \"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/reviews/6570c47c-5645-4a01-9db3-cae991935e4a",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"reviews",
+								"6570c47c-5645-4a01-9db3-cae991935e4a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reviews",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/reviews/6570c47c-5645-4a01-9db3-cae991935e4a",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"reviews",
+								"6570c47c-5645-4a01-9db3-cae991935e4a"
 							]
 						}
 					},
@@ -4748,7 +6761,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/my-contacts",
+							"raw": "{{BASE_URL}}/my-contacts?type=private",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4756,11 +6769,6 @@
 								"my-contacts"
 							],
 							"query": [
-								{
-									"key": "filter[sender_id]",
-									"value": "b21bc96a-b379-3f11-af6c-69b95506d866",
-									"disabled": true
-								},
 								{
 									"key": "sort",
 									"value": "-created_at",
@@ -4777,9 +6785,8 @@
 									"disabled": true
 								},
 								{
-									"key": "filter[receiver_id]",
-									"value": "",
-									"disabled": true
+									"key": "type",
+									"value": "private"
 								}
 							]
 						}
@@ -4798,13 +6805,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/messages/8750d5b5-aa27-3622-9b51-2337317fee87",
+							"raw": "{{BASE_URL}}/messages/cc7c9c9e-1148-3ee5-bcf2-8c20634998c6?type=job",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"messages",
-								"8750d5b5-aa27-3622-9b51-2337317fee87"
+								"cc7c9c9e-1148-3ee5-bcf2-8c20634998c6"
 							],
 							"query": [
 								{
@@ -4813,19 +6820,13 @@
 									"disabled": true
 								},
 								{
-									"key": "per_page",
-									"value": "3",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "2",
-									"disabled": true
-								},
-								{
 									"key": "filter[receiver_id]",
 									"value": "",
 									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "job"
 								}
 							]
 						}
@@ -4850,7 +6851,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sender_id\": \"3d8016f5-ffa9-33fe-b429-bd05ac0c486f\",\r\n    \"receiver_id\": \"cbd6f0ce-081d-3a1e-9484-3f869f3e27be\",\r\n    \"message\": \"This is message from \"\r\n}\r\n\r\n",
+							"raw": "{\r\n    \"receiver_id\": \"3033bda6-f82f-387d-a410-ce6795a02ae3\",\r\n    \"sender_id\": \"cc7c9c9e-1148-3ee5-bcf2-8c20634998c6\", //creative\r\n    \"message\": \"Reply 2\",\r\n    \"type\": \"job\"\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4864,6 +6865,85 @@
 							],
 							"path": [
 								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"job\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/messages/fcb55f04-40b0-3dd2-bbf6-ee5062e00514",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"messages",
+								"fcb55f04-40b0-3dd2-bbf6-ee5062e00514"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Request for Auth",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"socket_id\": \"892927675.753911150\",\r\n    \"channel_name\": \"private-messanger.c9ebcafc-34e2-33ce-bfaa-d6baa148d5f6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.noorsofttechdev.com/broadcasting/auth",
+							"protocol": "https",
+							"host": [
+								"api",
+								"noorsofttechdev",
+								"com"
+							],
+							"path": [
+								"broadcasting",
+								"auth"
 							]
 						}
 					},
@@ -4886,7 +6966,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/job-alerts",
+							"raw": "{{BASE_URL}}/job-alerts?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4895,9 +6975,8 @@
 							],
 							"query": [
 								{
-									"key": "filter[sender_id]",
-									"value": "b21bc96a-b379-3f11-af6c-69b95506d866",
-									"disabled": true
+									"key": "filter[user_id]",
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3"
 								},
 								{
 									"key": "sort",
@@ -4942,7 +7021,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"2baaa516-de9b-397d-b6cd-6ad9a486d2a7\",\r\n    \"category_id\": \"a2f54234-3458-3351-a84a-8c645b7f94bf\",\r\n    \"status\": 1\r\n}\r\n\r\n",
+							"raw": "{\r\n    \"user_id\": \"3033bda6-f82f-387d-a410-ce6795a02ae3\",\r\n    \"category_id\": \"ba82405d-38c8-3268-bcec-ed88fdf3498c\",\r\n    \"status\": 0\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4956,6 +7035,413 @@
 							],
 							"path": [
 								"job-alerts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "19665af3-6e36-3b51-b87b-a33436410c26",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "0",
+									"description": "0: unread , 1: read",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_at",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "filter[type]",
+									"value": "job_board",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/count",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications",
+								"count"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "d6ece031-e047-4b87-bfc8-86fd6dd93d15",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "0",
+									"description": "0: unread , 1: read",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"3ab187a0-ba89-42da-a824-1ba7bc827ae4\",\r\n    \"type\": \"abc\",\r\n    \"message\": \"This is message from production \",\r\n    \"body\": \"fdfsdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/notifications",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications/uuid",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/34234324324324",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications",
+								"34234324324324"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications/uuid",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/34234324324324",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications",
+								"34234324324324"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activities",
+			"item": [
+				{
+					"name": "activities",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/activities",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "b3dc0ad6-c47e-38a1-9569-0a55e4d3835d",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "0: unread , 1: read",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_at",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activities",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/activities/count",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"activities",
+								"count"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "d6ece031-e047-4b87-bfc8-86fd6dd93d15",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "0: unread , 1: read",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activities",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"3756b58e-72c5-39b3-85b4-cd520e1b96a9\",\r\n    \"type\": \"abc\",\r\n    \"message\": \"This is message from production \",\r\n    \"body\": \"fdfsdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/activities",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activities/uuid",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/activities/08266114-8ec5-4ccb-81ce-483c139fd4c2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"activities",
+								"08266114-8ec5-4ccb-81ce-483c139fd4c2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activities/uuid",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/activities/08266114-8ec5-4ccb-81ce-483c139fd4c2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"activities",
+								"08266114-8ec5-4ccb-81ce-483c139fd4c2"
 							]
 						}
 					},
@@ -4978,7 +7464,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/package-requests",
+							"raw": "{{BASE_URL}}/package-requests?filter[assigned_to]=6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -4987,8 +7473,18 @@
 							],
 							"query": [
 								{
-									"key": "filter[sender_id]",
-									"value": "b21bc96a-b379-3f11-af6c-69b95506d866",
+									"key": "filter[uuid]",
+									"value": "7e50f50b-2e3b-4ca0-9968-aa3e21e1dd9a",
+									"disabled": true
+								},
+								{
+									"key": "filter[assigned_to]",
+									"value": "6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4"
+								},
+								{
+									"key": "filter[status]",
+									"value": "0",
+									"description": "0: pending, 1: approved, 2: rejected",
 									"disabled": true
 								},
 								{
@@ -5004,17 +7500,6 @@
 								{
 									"key": "page",
 									"value": "2",
-									"disabled": true
-								},
-								{
-									"key": "filter[receiver_id]",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "filter[status]",
-									"value": "2",
-									"description": "0: pending, 1: approved, 2: rejected",
 									"disabled": true
 								}
 							]
@@ -5034,20 +7519,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/get_assigned_agencies/330ee737-59eb-3336-87e8-163cca1e57ff",
+							"raw": "{{BASE_URL}}/get_assigned_agencies",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"get_assigned_agencies",
-								"330ee737-59eb-3336-87e8-163cca1e57ff"
+								"get_assigned_agencies"
 							],
 							"query": [
-								{
-									"key": "filter[sender_id]",
-									"value": "b21bc96a-b379-3f11-af6c-69b95506d866",
-									"disabled": true
-								},
 								{
 									"key": "sort",
 									"value": "-created_at",
@@ -5091,7 +7570,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"330ee737-59eb-3336-87e8-163cca1e57ff\",\r\n    \"category_id\": \"51e70674-6a88-35bc-8b2f-ec3c2f5dc8f8\", //title\r\n    \"start_date\": \"ASAP\", // ['ASAP', 'In 2 days', 'In 1 week' , 'In 1 Month']\r\n    \"employment_type\": \"Part-Time\",\r\n    \"state_id\": \"4f4fbcea-ebc6-3d94-99f5-42b46de08938\",\r\n    \"city_id\": \"e8922484-9851-35e6-be30-c37d692bafb6\",\r\n    \"industry_experience\": [\r\n        \"f2ef6f36-8463-3edb-8038-78872ff4d12e\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"4147b2e6-8d16-3492-b106-e36a30160dd1\"\r\n    ],\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"is_opentoremote\": 0,\r\n    \"is_opentorelocation\": 0,\r\n    \"comments\": \"This is just comment\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"2c915d0a-a54b-346f-8e07-0b979acece05\",\r\n    \"category_id\": \"6c862bb0-2ca9-3d5e-9ed9-6fb4c8495ce2\",\r\n    \"state_id\": \"e21c67e4-a03d-3534-b35f-224f5baa488d\",\r\n    \"city_id\": \"76475008-238c-3d06-8cf4-7ec02022bfea\",\r\n    \"industry_experience\": [\r\n        \"04e34878-c503-3741-a05d-263692c40c3f\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"c8200d5e-90a0-3b38-98ec-c5d029f0a9ce\"\r\n    ],\r\n    \"strength\": [\r\n        \"b9065974-4121-3929-8ba5-c0e5dd4d112d\"\r\n    ],\r\n\r\n  \r\n    \"start_date\": \"ASAP\", // ['ASAP', 'In 2 days', 'In 1 week' , 'In 1 Month']\r\n    \"employment_type\": \"Part-Time\",\r\n \r\n   \r\n    \"salary_range\": \"$200 - $400\",\r\n    \"is_opentoremote\": 0,\r\n    \"is_opentorelocation\": 0,\r\n    \"comments\": \"This is just comment\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5145,6 +7624,626 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Creative Spotlights",
+			"item": [
+				{
+					"name": "creative-spotlights",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/creative-spotlights",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative-spotlights"
+							],
+							"query": [
+								{
+									"key": "filter[slug]",
+									"value": "junior-art-director-willi",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: pending, 1: approved, 2 rejected",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_at",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creative-spotlights",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "bb5f22cf-382d-47fc-a4d8-26cf52ba585a",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/E:/C - Downloads/Website Images/sidebar img 3.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/creative-spotlights",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative-spotlights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activities/uuid",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/creative-spotlights/795e7523-b070-4e14-8886-a8e82db757bc",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"creative-spotlights",
+								"795e7523-b070-4e14-8886-a8e82db757bc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Featured Cities",
+			"item": [
+				{
+					"name": "Featured Cities",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/featured_cities",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"featured_cities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lounge",
+			"item": [
+				{
+					"name": "Stats Count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/lounge/counts",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"lounge",
+								"counts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Film Festivals",
+			"item": [
+				{
+					"name": "Filters",
+					"item": [
+						{
+							"name": "festivals creatives",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/get_users/festivals",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"get_users",
+										"festivals"
+									],
+									"query": [
+										{
+											"key": "filter[first_name]",
+											"value": "Usman",
+											"disabled": true
+										},
+										{
+											"key": "filter[last_name]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "filter[email]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "filter[title]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "filter[category]",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "first_name",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "festivals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/festivals?page=2&per_page=2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"festivals"
+							],
+							"query": [
+								{
+									"key": "filter[first_name]",
+									"value": "Usman",
+									"disabled": true
+								},
+								{
+									"key": "filter[last_name]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[email]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[category]",
+									"value": "humour",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "first_name",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "per_page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "festivals",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "THE BEST",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Storytelling",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/E:/C - Downloads/Brant-Herzer-CD-AD-Chicago.mp4"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/festivals",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"festivals"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Contact US",
+			"item": [
+				{
+					"name": "contact-us",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "123132123123",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Mumbai",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "I was just testing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/contact-us",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"contact-us"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Pages",
+			"item": [
+				{
+					"name": "Capture Screenshot",
+					"item": [
+						{
+							"name": "Screenshot",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.apiflash.com/v1/urltoimage?access_key=53a6c5861c68480e92d7e31a081b1162&url=https://www.linkedin.com&format=png&width=1366&height=768&fresh=true&quality=100&delay=3&no_cookie_banners=true&no_ads=true&no_tracking=true",
+									"protocol": "https",
+									"host": [
+										"api",
+										"apiflash",
+										"com"
+									],
+									"path": [
+										"v1",
+										"urltoimage"
+									],
+									"query": [
+										{
+											"key": "access_key",
+											"value": "53a6c5861c68480e92d7e31a081b1162"
+										},
+										{
+											"key": "url",
+											"value": "https://www.linkedin.com"
+										},
+										{
+											"key": "format",
+											"value": "png"
+										},
+										{
+											"key": "width",
+											"value": "1366"
+										},
+										{
+											"key": "height",
+											"value": "768"
+										},
+										{
+											"key": "fresh",
+											"value": "true"
+										},
+										{
+											"key": "quality",
+											"value": "100"
+										},
+										{
+											"key": "delay",
+											"value": "3"
+										},
+										{
+											"key": "no_cookie_banners",
+											"value": "true"
+										},
+										{
+											"key": "no_ads",
+											"value": "true"
+										},
+										{
+											"key": "no_tracking",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "pages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/pages?filter[page]=home",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"pages"
+							],
+							"query": [
+								{
+									"key": "filter[page]",
+									"value": "home"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"auth": {
@@ -5152,7 +8251,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "1|0BOggonFypGI6GS0CDHKPeLmPUo8OOfmZzsci0UI1731c974",
+				"value": "{{TOKEN}}",
 				"type": "string"
 			}
 		]
@@ -5185,9 +8284,20 @@
 		},
 		{
 			"key": "BASE_URL",
-			"value": "http://35.173.50.140/api/v1",
+			"value": "https://staging-api.adagencycreatives.com/api/v1",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "BASE_URL",
+			"value": "https://api.adagencycreatives.com/api/v1",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "TOKEN",
+			"value": "592|c6zegjgikmbqfidbdFswm9z93sTylWZuV4ruUssGd279debe",
+			"type": "string"
 		}
 	]
 }

@@ -67,8 +67,8 @@
                 var statusDropdown =
                     '<select class="status-dropdown form-control form-select select2" data-job-id="' +
                     job.id + '">' +
-                    '<option value="published" ' + (job.status === 'published' ? 'selected' : '') +
-                    '>Published</option>' +
+                    '<option value="draft" ' + (job.status === 'draft' ? 'selected' : '') +
+                    '>Draft</option>' +
                     '<option value="pending" ' + (job.status === 'pending' ? 'selected' : '') +
                     '>Pending</option>' +
                     '<option value="approved" ' + (job.status === 'approved' ? 'selected' : '') +
@@ -77,8 +77,8 @@
                     '>Rejected</option>' +
                     '<option value="expired" ' + (job.status === 'expired' ? 'selected' : '') +
                     '>Expired</option>' +
-                    '<option value="filled" ' + (job.status === 'filled' ? 'selected' : '') + '>Filled</option>' +
-                    '>Inactive</option>' +
+                    '<option value="filled" ' + (job.status === 'filled' ? 'selected' : '') +
+                    '>Filled</option>' +
                     '</select>';
 
                 var row = '<tr>' +

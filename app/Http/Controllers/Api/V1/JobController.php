@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Job\StoreJobInvitationRequest;
 use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
 use App\Http\Resources\Job\JobCollection;
+use App\Http\Resources\Job\JobLoggedInCollection;
 use App\Http\Resources\Job\JobResource;
-use App\Jobs\SendEmailJob;
+use App\Models\Application;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Job;
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Subscription;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -38,8 +39,56 @@ class JobController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('category_slug'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('state_slug'),
+                AllowedFilter::scope('city_slug'),
+                'title',
+                'slug',
+                'employment_type',
+                'apply_type',
+                'salary_range',
+                'is_remote',
+                'is_hybrid',
+                'is_onsite',
+                'is_featured',
+                'is_urgent',
+                'status',
+            ])
+            ->allowedSorts('created_at', 'updated_at');
+
+        if ($industries !== null) {
+            applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
+        }
+
+        if ($medias !== null) {
+            applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
+        }
+
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->withCount('applications')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new JobCollection($jobs);
+    }
+
+    public function jobs_for_logged_in(Request $request)
+    {
+        $filters = $request->all();
+
+        $industries = processIndustryExperience($request, $filters);
+        $medias = processMediaExperience($request, $filters);
+
+        $query = QueryBuilder::for(Job::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('category_slug'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('state_slug'),
+                AllowedFilter::scope('city_slug'),
                 'title',
                 'slug',
                 'employment_type',
@@ -62,11 +111,149 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->withCount('applications')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        $job_collection = new JobCollection($jobs);
+        $loggedInUserId = $request->user()->id;
+        $userApplications = Application::where('user_id', $loggedInUserId)->pluck('job_id')->toArray();
 
-        return $job_collection;
+        $jobs->getCollection()->transform(function ($job) use ($userApplications) {
+            $job['user_has_applied'] = in_array($job->id, $userApplications);
+
+            return $job;
+        });
+
+        return new JobLoggedInCollection($jobs);
+    }
+
+    public function jobs_homepage(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        // Search via City Name
+        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via State Name
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via Job Title
+        $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+        }
+
+        // $sql .= "UNION DISTINCT" . "\n";
+
+        // Search via Agency Name
+        // $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id" . "\n";
+        // for ($i = 0; $i < count($terms); $i++) {
+        //     $term = $terms[$i];
+        //     $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ag.name LIKE '%" . trim($term) . "%')" . "\n";
+        // }
+
+        $res = DB::select($sql);
+        $jobIds = collect($res)->pluck('id')->toArray();
+
+        $jobs = Job::whereIn('id', $jobIds)
+            ->where('status', 1)
+            ->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new JobCollection($jobs);
+    }
+
+    public function jobs_homepage_logged_in(Request $request)
+    {
+        $search = $request->search;
+        $terms = explode(',', $search);
+
+        // Search via City Name
+        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via State Name
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via Job Title
+        $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+        }
+
+        $sql .= 'UNION DISTINCT'."\n";
+
+        // Search via Agency Name
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id'."\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ag.name LIKE '%".trim($term)."%')"."\n";
+        }
+
+        $res = DB::select($sql);
+        $jobIds = collect($res)->pluck('id')->toArray();
+
+        $jobs = Job::whereIn('id', $jobIds)
+            ->where('status', 1)
+            ->with('user.agency', 'category', 'state', 'city', 'attachment')
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        $loggedInUserId = $request->user()->id;
+        $userApplications = Application::where('user_id', $loggedInUserId)->pluck('job_id')->toArray();
+
+        $jobs->getCollection()->transform(function ($job) use ($userApplications) {
+            $job['user_has_applied'] = in_array($job->id, $userApplications);
+
+            return $job;
+        });
+
+        return new JobLoggedInCollection($jobs);
     }
 
     public function store(StoreJobRequest $request)
@@ -83,12 +270,24 @@ class JobController extends Controller
             'state_id' => $state->id ?? null,
             'city_id' => $city->id ?? null,
             'status' => 'draft',
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
+            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
+            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
         ]);
 
         try {
             $job = Job::create($request->all());
+
+            if ($request->hasFile('file')) {
+                $attachment = storeImage($request, $user->id, 'sub_agency_logo');
+                if (isset($attachment) && is_object($attachment)) {
+                    Attachment::whereId($attachment->id)->update([
+                        'resource_id' => $job->id,
+                    ]);
+                }
+            }
+
+            create_notification($user->id, 'Job submitted successfully.');
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
@@ -136,24 +335,65 @@ class JobController extends Controller
             $oldStatus = $job->status;
             $newStatus = $request->input('status');
 
-            if ($newStatus === 'published' && $oldStatus === 'draft') {
+            if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
                 if (! $user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
                 }
 
                 $subscription = Subscription::where('user_id', $user->id)
-                    ->where('stripe_status', 'active')
                     ->where('quota_left', '>', 0)
-                    ->first();
+                    ->latest();
 
                 if (! $subscription) {
                     return ApiResponse::error("You don't have enough quota for this job", 402);
                 }
 
                 $subscription->decrement('quota_left', 1);
-                $newStatus = 'pending';
+                $request->merge([
+                    'status' => 'approved',
+                ]);
             }
+
+            if ($request->has('category_id')) {
+                $category = Category::where('uuid', $request->category_id)->first();
+                $request->merge([
+                    'category_id' => $category->id ?? null,
+                ]);
+            }
+
+            if ($request->has('state_id')) {
+                $state = Location::where('uuid', $request->state_id)->first();
+                $request->merge([
+                    'state_id' => $state->id ?? null,
+                ]);
+            }
+
+            if ($request->has('city_id')) {
+                $city = Location::where('uuid', $request->city_id)->first();
+                $request->merge([
+                    'city_id' => $city->id ?? null,
+                ]);
+            }
+
+            if ($request->has('industry_experience')) {
+                $request->merge([
+                    'industry_experience' => implode(',', array_slice($request->industry_experience ?? [], 0, 10)),
+                ]);
+            }
+
+            if ($request->has('media_experience')) {
+                $request->merge([
+                    'media_experience' => implode(',', array_slice($request->media_experience ?? [], 0, 10)),
+                ]);
+            }
+
+            if ($request->has('strengths')) {
+                $request->merge([
+                    'strengths' => implode(',', array_slice($request->strengths ?? [], 0, 10)),
+                ]);
+            }
+
             $job->update($request->all());
 
             return new JobResource($job);
@@ -203,27 +443,23 @@ class JobController extends Controller
         return $users;
     }
 
-    public function job_invitation(StoreJobInvitationRequest $request)
+    public function featured_cities()
     {
-        $invitee = User::where('uuid', $request->receiver_id)->first();
-        $job = Job::with('user.agency')->where('uuid', $request->job_id)->first();
+        return Cache::remember('featured_cities', now()->addMinutes(120), function () {
+            $locations = Location::whereIn('slug', ['dallas', 'new-york', 'los-angeles', 'miami', 'chicago'])->get();
 
-        try {
-            SendEmailJob::dispatch([
-                'receiver' => $invitee,
-                'data' => [
-                    'receiver_name' => $invitee->first_name,
-                    'agency_name' => $job->user->agency->name,
-                    'job_title' => $job->title,
-                    'job_url' => $job->slug,
-                ],
-            ], 'job_invitation');
+            $locationData = [];
+            foreach ($locations as $location) {
+                $jobs = Job::where('city_id', $location->id)->where('status', 1)->get(); //Approved jobs only
+                $locationData[] = [
+                    'name' => $location->name,
+                    'uuid' => $location->uuid,
+                    'count' => $jobs->count(),
+                ];
+            }
 
-            return response()->json([
-                'message' => 'Job invitation sent successfully',
-            ]);
-        } catch (\Exception $e) {
-            throw new ApiException($e, 'CS-01');
-        }
+            return $locationData;
+        });
+
     }
 }

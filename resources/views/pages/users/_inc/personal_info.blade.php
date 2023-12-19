@@ -83,6 +83,8 @@
                                         </option>
                                         <option value="creative" @if ($user->role == 'creative') selected @endif>
                                             Creative</option>
+                                        <option value="recruiter" @if ($user->role == 'recruiter') selected @endif>
+                                            Recruiter</option>
                                         <option value="admin" @if ($user->role == 'admin') selected @endif>
                                             Admin</option>
 
@@ -99,3 +101,7 @@
         </div>
     </div>
 </div>
+
+@if ($user->role == 'admin')
+    @include('pages.users.admin.profile_picture')
+@endif

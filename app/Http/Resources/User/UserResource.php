@@ -24,6 +24,8 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'status' => $this->status,
             'is_visible' => $this->is_visible,
+            'image' => get_profile_picture($this),
+            'image_id' => get_profile_picture_id($this),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 

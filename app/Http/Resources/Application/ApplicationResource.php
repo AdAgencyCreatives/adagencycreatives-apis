@@ -8,16 +8,20 @@ class ApplicationResource extends JsonResource
 {
     public function toArray($request)
     {
+        $logged_in_user = request()->user();
         $user = $this->user;
+        $job = $this->job;;
 
         return [
             'type' => 'applications',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'user' => $user->first_name.' '.$user->last_name,
+            'slug' => $user->username,
             'user_profile_id' => $user->id,
-            'job_id' => $this->job->uuid,
-            'resume_url' => isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
+            'job_id' => $job->uuid,
+            'job_title' => $job->title,
+            'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -32,5 +36,16 @@ class ApplicationResource extends JsonResource
             ],
 
         ];
+    }
+
+    private function get_resume_url($user, $logged_in_user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath().$user->resume->path;
+        } else {
+            $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
+        }
     }
 }

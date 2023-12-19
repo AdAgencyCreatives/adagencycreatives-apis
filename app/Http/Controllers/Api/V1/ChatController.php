@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Resources\Message\MessageCollection;
 use App\Http\Resources\Message\MessageResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,10 +18,11 @@ class ChatController extends Controller
 {
     public function index(Request $request, $contactId)
     {
-
         $contact = User::where('uuid', $contactId)->firstOrFail();
         $contact_id = $contact->id;
+
         $userId = request()->user()->id;
+        $type = $request->type ?? 'private';
 
         $messages = Message::where(function ($query) use ($userId, $contact_id) {
             $query->where('sender_id', $userId)
@@ -30,12 +32,20 @@ class ChatController extends Controller
                 $query->where('sender_id', $contact_id)
                     ->where('receiver_id', $userId);
             })
-            ->latest()
+            ->where('type', $type)
+            ->oldest()
                         //    ->toSql();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
+            // Read all messages between these two users
+            Message::where('sender_id', $contact_id)
+            ->where('receiver_id', $userId)
+            ->where('type', $type)
+            ->whereNull('read_at')
+            ->touch('read_at');
+
         //    dd($messages);
-        return new MessageCollection($messages, $userId);
+        return new MessageCollection($messages);
     }
 
     public function store(StoreMessageRequest $request)
@@ -43,6 +53,8 @@ class ChatController extends Controller
         try {
             $sender = User::where('uuid', $request->sender_id)->first();
             $receiver = User::where('uuid', $request->receiver_id)->first();
+            $type = $request->type ?? 'private';
+
             $event_data = [
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
@@ -56,8 +68,15 @@ class ChatController extends Controller
                 'message' => $request->message,
             ]);
 
+            //Mark previous messages as read
+            Message::where('type', $type)
+                ->where('receiver_id', $sender->id) // Only those messages in which I am receiver,
+                ->where('sender_id', $receiver->id)
+                ->whereNull('read_at')
+                ->update(['read_at' => now()]);
+
             $message = Message::create($request->all());
-            $msg_resource = new MessageResource($message);
+            $msg_resource = new MessageResource($message, $sender->uuid);
             event(new MessageReceived($event_data));
 
             return $msg_resource;
@@ -66,40 +85,87 @@ class ChatController extends Controller
         }
     }
 
-    public function getAllMessageContacts()
+    public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
 
-        $contacts = Message::select('sender_id', 'receiver_id', 'message')
-            ->where(function ($query) use ($userId) {
-                $query->where('sender_id', $userId)
-                    ->orWhere('receiver_id', $userId);
-            })
-            ->distinct()
-            ->select(
-                \DB::raw('IF(sender_id = '.$userId.', receiver_id, sender_id) AS id'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT uuid FROM users WHERE id = receiver_id), (SELECT uuid FROM users WHERE id = sender_id)) AS uuid'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT first_name FROM users WHERE id = receiver_id), (SELECT first_name FROM users WHERE id = sender_id)) AS first_name'),
-                \DB::raw('IF(sender_id = '.$userId.', (SELECT last_name FROM users WHERE id = receiver_id), (SELECT last_name FROM users WHERE id = sender_id)) AS last_name'),
-            )
-            ->get();
+        $contacts = Message::with('sender', 'receiver');
 
-        return response()->json(['contacts' => $contacts]);
+        if ($request->has('type')) {
+            $type = $request->input('type');
+            $contacts->where('type', $type);
+        }
+
+        $contacts = $contacts->where(function ($query) use ($userId) {
+            $query->where('sender_id', $userId)
+                ->orWhere('receiver_id', $userId);
+        });
+
+        $contacts = $contacts->latest()->get();
+
+        $uniqueContacts = [];
+        $uniquePairs = []; // To store unique pairs
+
+        try {
+            foreach ($contacts as $contact) {
+                $senderId = $contact->sender_id;
+                $receiverId = $contact->receiver_id;
+
+                $sortedPair = [$senderId, $receiverId];
+                sort($sortedPair);
+
+                // Check if the reverse pair is already added
+                if (! in_array($sortedPair, $uniquePairs)) {
+
+                    if (! isset($contact->receiver)) {
+                        continue;
+                    }
+                    if (! isset($contact->sender)) {
+                        continue;
+                    }
+
+                    if ($senderId == $userId) {
+                        $contact->message_type = 'sent';
+                        unset($contact['sender']);
+                        $contact->contact = new UserResource($contact->receiver);
+                        unset($contact['receiver']);
+
+                    } elseif ($receiverId == $userId) {
+                        $contact->message_type = 'received';
+                        unset($contact['receiver']);
+                        $contact->contact = new UserResource($contact->sender);
+                        unset($contact['sender']);
+
+                    }
+
+                    $uniquePairs[] = $sortedPair;
+                    $uniqueContacts[] = $contact;
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+
+        return response()->json(['contacts' => $uniqueContacts]);
     }
 
-    public function fetchMessages($contactId)
+    private function getMessageType($sender1, $current_user)
     {
-        $loggedInUserId = 2;
-        dd($loggedInUserId);
-        $messages = Message::where(function ($query) use ($loggedInUserId, $receiverId) {
-            $query->where('sender_id', $loggedInUserId)
-                ->where('receiver_id', $receiverId);
-        })->orWhere(function ($query) use ($loggedInUserId, $receiverId) {
-            $query->where('sender_id', $receiverId)
-                ->where('receiver_id', $loggedInUserId);
-        })->orderBy('created_at', 'asc')->get();
+        return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
+    }
 
-        return MessageResource::collection($messages);
+    public function mark_as_read(Request $request, $sender_id)
+    {
+        $user = $request->user();
+        $sender = User::where('uuid', $sender_id)->first();
+        $msg_type = $request->type;
 
+        Message::where('sender_id', $sender->id)
+            ->where('receiver_id', $user->id)
+            ->where('type', $msg_type)
+            ->whereNull('read_at')
+            ->touch('read_at');
+
+        return response()->json(['success' => true], 200);
     }
 }

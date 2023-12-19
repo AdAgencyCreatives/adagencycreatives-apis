@@ -4,6 +4,8 @@
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
         function populateApplications(applications) {
 
@@ -85,7 +87,7 @@
                 dataType: 'json',
                 success: function(response) {
                     populateFilter(response.data, '#category');
-                    var job_category = "{{ $job->category->uuid }}";
+                    var job_category = "{{ $job->category?->uuid }}";
                     $('#category').val(job_category);
                     $('#category').trigger('change');
                 },
@@ -113,7 +115,7 @@
         function fetchIndustries() {
 
             $.ajax({
-                url: '/api/v1/industry-experiences',
+                url: '/api/v1/get_industry-experiences',
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -135,7 +137,7 @@
 
         function fetchMedias() {
             $.ajax({
-                url: '/api/v1/media-experiences',
+                url: '/api/v1/get_media-experiences',
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -212,7 +214,9 @@
             fetchMedias();
             fetchStrengthsForJobs();
 
-            var job_state = "{{ $job->state->uuid }}";
+
+            var job_state = "{{ $job->state?->uuid }}";
+            console.log(job_state);
             fetchStates(job_state);
 
             var years_of_experience = "{{ $job->years_of_experience }}";
@@ -275,8 +279,15 @@
 
             $('#state').on('change', function() {
                 var selectedStateId = $(this).val();
-                var city_id = "{{ $job->city->uuid }}";
+                var city_id = "{{ $job->city?->uuid }}";
                 getCitiesByState(selectedStateId, city_id);
+            });
+
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                plugins: 'anchor autolink codesample emoticons link lists visualblocks',
+                toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             });
 
         });
@@ -379,8 +390,11 @@
                                         <label class="form-label" for="status"> Status </label>
                                         <select name="status" id="status"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="published" @if ($job->status == 'published') selected @endif>
-                                                Published
+                                            <option value="draft" @if ($job->status == 'draft') selected @endif>
+                                                Draft
+                                            </option>
+                                            <option value="pending" @if ($job->status == 'pending') selected @endif>
+                                                Pending
                                             </option>
                                             <option value="approved" @if ($job->status == 'approved') selected @endif>
                                                 Approved
@@ -505,7 +519,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="external_link"> Expernal Link </label>
                                     <a>
-                                        <input id="external_link" class="form-control" type="url"
+                                        <input id="external_link" class="form-control" type="text"
                                             name="external_link" value="{{ $job->external_link }}" />
                                     </a>
                                 </div>
@@ -517,8 +531,8 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label"> Created At </label>
-                                    <input class="form-control" type="text" value="{{ $job->created_at }}"
-                                        disabled />
+                                    <input class="form-control daterange" type="text" name="created_at"
+                                        value="{{ $job->created_at }}" />
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">

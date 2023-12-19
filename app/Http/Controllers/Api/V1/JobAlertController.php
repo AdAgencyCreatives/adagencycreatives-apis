@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobAlert\StoreJobAlertRequest;
-use App\Http\Resources\Address\AddressCollection;
 use App\Http\Resources\JobAlert\JobAlertResource;
-use App\Models\Address;
 use App\Models\Category;
 use App\Models\JobAlert;
 use App\Models\User;
@@ -19,23 +17,19 @@ class JobAlertController extends Controller
 {
     public function index()
     {
-        $query = QueryBuilder::for(Address::class)
+        $query = QueryBuilder::for(JobAlert::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                'label',
-                'street_1',
-                'street_2',
-                'city',
-                'state',
-                'country',
-                'postal_code',
+                'status',
             ]
-
             );
 
-        $addresses = $query->paginate(config('global.request.pagination_limit'));
+        $alerts = $query->first();
+        if (!$alerts) {
+            return ApiResponse::error('Job alert not found', 404);
+        }
 
-        return new AddressCollection($addresses);
+        return new JobAlertResource($alerts);
     }
 
     public function store(StoreJobAlertRequest $request)
@@ -43,20 +37,21 @@ class JobAlertController extends Controller
         $user = User::where('uuid', $request->user_id)->first();
         $category = Category::where('uuid', $request->category_id)->first();
 
-        $data = [
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-        ];
 
         try {
-            if ($existingJobAlert = JobAlert::where($data)->first()) {
-                $existingJobAlert->update(['status' => $request->status]);
+            if ($existingJobAlert = JobAlert::where('user_id', $user->id)->first()) {
+                $existingJobAlert->update([
+                    'category_id' => $category->id,
+                    'status' => $request->status,
+                ]);
 
                 return ApiResponse::success(new JobAlertResource($existingJobAlert), 200);
             }
 
             $data['uuid'] = Str::uuid();
+            $data['user_id'] = $user->id;
             $data['status'] = $request->status;
+            $data['category_id'] = $category->id;
 
             $alert = JobAlert::create($data);
 

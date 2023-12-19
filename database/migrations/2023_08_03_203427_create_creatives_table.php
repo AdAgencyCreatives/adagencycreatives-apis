@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('years_of_experience')->nullable()->index();
             $table->text('about')->nullable();
             $table->string('employment_type')->nullable()->index();
-            $table->text('industry_experience')->nullable();
-            $table->text('media_experience')->nullable();
+            $table->string('industry_experience', 650)->nullable()->index();
+            $table->string('media_experience', 650)->nullable()->index();
             $table->string('strengths', 505)->nullable()->index();
             $table->boolean('is_featured')->default(0)->index();
             $table->boolean('is_urgent')->default(0)->index();
@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('seo_title')->nullable();
             $table->string('seo_description')->nullable();
             $table->text('seo_keywords')->nullable();
+            $table->integer('views')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

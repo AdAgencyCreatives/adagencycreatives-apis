@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class Group extends Model
 {
@@ -12,7 +14,9 @@ class Group extends Model
 
     protected $fillable = [
         'uuid',
+        'user_id',
         'name',
+        'slug',
         'description',
         'status',
     ];
@@ -22,6 +26,11 @@ class Group extends Model
         'PRIVATE' => 1,
         'HIDDEN' => 2,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function attachment()
     {
@@ -46,6 +55,25 @@ class Group extends Model
     public function isMember(User $user)
     {
         return $this->members()->where('user_id', $user->id)->exists();
+    }
+
+    public function isInvitationAlreadySent(User $user)
+    {
+        return $this->invitations()->where('inviter_user_id', $user->id)->where('status', GroupInvitation::STATUSES['PENDING'])->exists();
+    }
+
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        $user = User::where('uuid', $user_id)->firstOrFail();
+        return $query->where('user_id', $user->id);
+    }
+
+    public function scopeMemberId(Builder $query, $user_id)
+    {
+        $user_id = User::where('uuid', $user_id)->pluck('id');
+        $group_id = GroupMember::where('user_id', $user_id)->where('role', '!=', 1)->pluck('group_id');
+
+        return $query->whereIn('id', $group_id);
     }
 
     public function getStatusAttribute($value)
@@ -80,16 +108,21 @@ class Group extends Model
 
     protected static function booted()
     {
-        static::created(function () {
+        static::created(function ($group) {
             Cache::forget('all_groups');
+            if ($group->slug == null) {
+                $group->slug = Str::slug($group->name);
+                $group->save();
+            }
         });
 
         static::updated(function () {
             Cache::forget('all_groups');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($group) {
             Cache::forget('all_groups');
+            Post::where('group_id', $group->id)->delete();
         });
     }
 }

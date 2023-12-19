@@ -13,6 +13,7 @@ class Experience extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'title',
         'company',
         'description',
         'started_at',

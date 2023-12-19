@@ -6,11 +6,14 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resume\StoreResumeRequest;
 use App\Http\Requests\Resume\UpdateResumeRequest;
+use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Resume\ResumeCollection;
 use App\Http\Resources\Resume\ResumeResource;
+use App\Models\Creative;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -79,5 +82,86 @@ class ResumeController extends Controller
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
+    }
+
+    public function download_resume(Request $request)
+    {
+        $creative_user = User::where('uuid', $request->u1)->firstOrFail();
+        $auth_user = User::where('uuid', $request->u2)->firstOrFail();
+
+        $creative = Creative::with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+            'user',
+        ])
+            ->where('user_id', $creative_user->id)
+            ->first();
+
+        $educations = $creative_user->educations;
+        $experiences = $creative_user->experiences;
+        $portfolio_items = $creative_user->portfolio_items;
+        if ($creative_user->portfolio_website_preview) {
+            $portfolio_website_preview_img = getAttachmentBasePath().$creative_user->portfolio_website_preview->path;
+        } else {
+            $portfolio_website_preview_img = null;
+        }
+        $data = (new CreativeResource($creative))->toArray([]);
+
+        //If user role is creative, then hide phone number from resume
+        if ($auth_user->role == 'creative') {
+            if ($auth_user->id != $creative_user->id) {
+                $data['phone_number'] = '';
+            }
+        }
+        elseif($auth_user->role == 'agency' && ! hasAppliedToAgencyJob($creative_user->id, $auth_user->id)){
+              $data['phone_number'] = '';
+        }
+
+        $user = $creative_user;
+        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items', 'portfolio_website_preview_img')); // Render the HTML view
+
+        return $html;
+    }
+
+    public function download_resume2($uuid)
+    {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+
+        $creative = Creative::with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+            'user',
+        ])
+            ->where('user_id', $user->id)
+            ->first();
+
+        $educations = $user->educations;
+        $experiences = $user->experiences;
+        $portfolio_items = $user->portfolio_items;
+        $data = (new CreativeResource($creative))->toArray([]);
+
+        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
+
+        $dompdf = new \Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4');
+
+        $options = $dompdf->getOptions();
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+
+        $dompdf->render();
+
+        $fileName = sprintf('%s-%s', Str::slug($data['name']), Str::slug($data['title']));
+        $dompdf->stream($fileName, ['Attachment' => 1]);
+
+        return 'File downloaded.';
+
     }
 }

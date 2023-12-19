@@ -15,8 +15,13 @@ class CheckPermission
             return $next($request);
         }
 
+        // Check for authentication
+        if (! Auth::check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         // Check for admin role
-        if (Auth::user() && Auth::user()->role == 'admin') {
+        if (Auth::user()->role == 'admin') {
             return $next($request);
         }
 
@@ -34,7 +39,7 @@ class CheckPermission
 
         $permissionName = $resourceType.'.'.$action;
 
-        if (! Auth::user() || ! Auth::user()->hasPermissionTo($permissionName)) {
+        if (! Auth::user()->hasPermissionTo($permissionName)) {
             return response()->json(['message' => 'Permission denied'], 403);
         }
 

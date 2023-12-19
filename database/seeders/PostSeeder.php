@@ -19,10 +19,10 @@ class PostSeeder extends Seeder
 
         $posts = Post::select(['id', 'user_id'])->get();
         foreach ($posts as $post) {
-            \App\Models\Attachment::factory(3)->create([
-                'user_id' => $post->user_id,
-                'resource_id' => $post->id,
-            ]);
+            // \App\Models\Attachment::factory(1)->create([
+            //     'user_id' => $post->user_id,
+            //     'resource_id' => $post->id,
+            // ]);
         }
     }
 }

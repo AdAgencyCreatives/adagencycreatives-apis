@@ -15,9 +15,6 @@ class StoreGroupRequest extends FormRequest
     {
         return [
             'name' => 'required',
-
-            'resource_type' => 'required|in:agencies,creatives,jobs,applications,posts',
-            'resource_id' => 'required',
         ];
     }
 }

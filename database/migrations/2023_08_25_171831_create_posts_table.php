@@ -14,7 +14,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('group_id');
             $table->text('content');
-            $table->integer('status')->default(0)->comment('0:draft, 1:published');
+            $table->integer('status')->default(0)->comment('0:draft, 1:published, 2:archived');
             $table->timestamps();
             $table->softDeletes();
         });

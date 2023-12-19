@@ -17,12 +17,14 @@ class Invitation extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['FRONTEND_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('[%s] You have an invitation to the group: “%s”', env('APP_NAME'), $this->data['group']),
+            subject: sprintf('%s on {%s} would like you to join their group', $this->data['group'], env('APP_NAME')),
         );
     }
 

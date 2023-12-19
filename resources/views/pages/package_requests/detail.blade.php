@@ -176,7 +176,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="agency_name"> Agency Name</label>
                                         <input id="agency_name" class="form-control" type="text" name="agency_name"
-                                            placeholder="Agency Name" value="{{ $package_request->agency?->name }}"
+                                            placeholder="Agency Name" value="{{ $package_request->user->agency?->name }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -271,10 +271,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-12 col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label"> Created At </label>
+                                    <input class="form-control" type="text"
+                                        value="{{ $package_request->created_at }}" disabled />
+                                </div>
+                            </div>
                         </div>
 
                          <div class="row">
-                            <div class="col-12 col-lg-12">
+                            <div class="col-6 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="industry"> Industry Experience </label>
                                     <select name="industry_experience[]" id="industry" required
@@ -284,10 +292,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-12 col-lg-12">
+                            <div class="col-6 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="media"> Media Experience </label>
                                     <select name="media_experience[]" id="media" required
@@ -297,10 +303,12 @@
                                     </select>
                                 </div>
                             </div>
+
                         </div>
 
+
                         <div class="row">
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-12">
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <label class="form-label" for="status"> Status </label>
@@ -320,13 +328,23 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-lg-6">
+                            {{-- <div class="col-12 col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label"> Created At </label>
-                                    <input class="form-control" type="text"
-                                        value="{{ $package_request->created_at }}" disabled />
+                                    <label class="form-label"> Package/Plan </label>
+                                    <select name="plan_id" id="plan_id"
+                                        class="form-control form-select custom-select select2" data-toggle="select2">
+                                        <option value="-1">Select Plan</option>
+                                        @foreach (\App\Models\Plan::all() as $plan)
+                                            <option value="{{ $plan->id }}"
+                                                @if ($plan->id == $package_request->plan_id) selected @endif>
+                                                {{ $plan->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
+                            </div> --}}
+
+
 
                         </div>
 
@@ -349,25 +367,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label"> Package/Plan </label>
-                                    <select name="plan_id" id="plan_id"
-                                        class="form-control form-select custom-select select2" data-toggle="select2">
-                                        <option value="-1">Select Plan</option>
-                                        @foreach (\App\Models\Plan::all() as $plan)
-                                            <option value="{{ $plan->id }}"
-                                                @if ($plan->id == $package_request->plan_id) selected @endif>
-                                                {{ $plan->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
 
-                        </div>
-
-                        <div class="row">
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label"> Attached User </label>
@@ -377,7 +377,11 @@
                                     </a>
                                 </div>
                             </div>
+
+
+
                         </div>
+
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>

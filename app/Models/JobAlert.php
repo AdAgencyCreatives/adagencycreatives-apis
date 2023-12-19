@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,5 +25,13 @@ class JobAlert extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function scopeUserId(Builder $query, $user_id): Builder
+    {
+        $user = User::where('uuid', $user_id)->first();
+
+        if($user) return $query->where('user_id', $user->id);
+        return $query->where('user_id', 0);
     }
 }

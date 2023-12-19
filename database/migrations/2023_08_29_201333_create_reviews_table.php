@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('target_id');
             $table->text('comment');
             $table->integer('rating');
+            $table->string('status')->default('pending')->comment('0:pending, 1:approved, 2:rejected');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -105,11 +105,11 @@ class CreativeController extends Controller
 
         $category = Category::where('uuid', $request->category)->first();
         $creative->update([
-            'category_id' => $category->id,
-            'title' => $request->title,
-            'industry_experience' => ''.implode(',', $request->industry_experience ?? []).'',
-            'media_experience' => ''.implode(',', $request->media_experience ?? []).'',
-            'strengths' => ''.implode(',', $request->strengths ? $request->strengths : []).'',
+            'category_id' => $category->id ?? null,
+            'title' => $request->title ?? '',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
         ]);
 
         Session::flash('success', 'Creative updated successfully');
@@ -200,19 +200,28 @@ class CreativeController extends Controller
     {
         $state = Location::where('uuid', $request->state)->first();
         $city = Location::where('uuid', $request->city)->first();
-        if ($state && $city) {
-            $address = $user->addresses->first();
-            if (! $address) {
-                $address = new Address();
-                $address->uuid = Str::uuid();
-                $address->user_id = $user->id;
-                $address->label = 'personal';
-                $address->country_id = 1;
-            }
-            $address->state_id = $state->id;
-            $address->city_id = $city->id;
-            $address->save();
+        $address = $user->addresses->first();
+
+        if (!$address) {
+            $address = new Address();
+            $address->uuid = Str::uuid();
+            $address->user_id = $user->id;
+            $address->label = 'personal';
+            $address->country_id = 1;
         }
+
+        if ($state) {
+            $address->state_id = $state->id;
+        }
+
+        if ($city) {
+            $address->city_id = $city->id;
+        } else {
+            // If only the state is available, set the city to 0
+            $address->city_id = 0;
+        }
+
+        $address->save();
     }
 
     public function update_seo(Request $request, $uuid)
