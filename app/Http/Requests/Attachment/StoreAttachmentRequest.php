@@ -19,7 +19,6 @@ class StoreAttachmentRequest extends FormRequest
             'file' => [
                 'required',
                 'file',
-                'max:10240',
                 function ($attribute, $value, $fail) {
                     $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'mp4', 'avi', 'json']; // Add video file extensions here
                     $fileExtension = strtolower($value->getClientOriginalExtension());
