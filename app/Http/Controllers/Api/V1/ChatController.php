@@ -27,7 +27,7 @@ class ChatController extends Controller
         $messages = Message::where(function ($query) use ($userId, $contact_id) {
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $contact_id);
-        })
+        })->where('type', $type)
             ->orWhere(function ($query) use ($userId, $contact_id) {
                 $query->where('sender_id', $contact_id)
                     ->where('receiver_id', $userId);
