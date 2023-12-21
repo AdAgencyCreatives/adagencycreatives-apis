@@ -146,7 +146,7 @@ class User extends Authenticatable
 
     public function resume()
     {
-        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latestOfMany();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latest();
     }
 
     public function educations()
