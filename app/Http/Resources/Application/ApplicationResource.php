@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Application;
 
+use App\Http\Resources\Job\JobResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicationResource extends JsonResource
@@ -10,13 +11,13 @@ class ApplicationResource extends JsonResource
     {
         $logged_in_user = request()->user();
         $user = $this->user;
-        $job = $this->job;;
+        $job = $this->job;
 
         return [
             'type' => 'applications',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'user' => $user->first_name.' '.$user->last_name,
+            'user' => $user->first_name . ' ' . $user->last_name,
             'slug' => $user->username,
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
@@ -30,9 +31,10 @@ class ApplicationResource extends JsonResource
             'relationships' => [
                 'notes' => [
                     'links' => [
-                        'related' => route('notes.index').'?filter[application_id]='.$this->uuid,
+                        'related' => route('notes.index') . '?filter[application_id]=' . $this->uuid,
                     ],
                 ],
+                'job' => new JobResource($this->job),
             ],
 
         ];
@@ -41,7 +43,7 @@ class ApplicationResource extends JsonResource
     private function get_resume_url($user, $logged_in_user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath().$user->resume->path;
+            return getAttachmentBasePath() . $user->resume->path;
         } else {
             $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
 
