@@ -19,7 +19,7 @@ class StoreAttachmentRequest extends FormRequest
             'file' => [
                 'required',
                 'file',
-                'max:11240'
+                'max:20240'
             ],
         ];
     }
