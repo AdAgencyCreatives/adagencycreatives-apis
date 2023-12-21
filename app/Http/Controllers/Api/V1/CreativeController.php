@@ -594,7 +594,7 @@ class CreativeController extends Controller
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->paginate(25)
             ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
