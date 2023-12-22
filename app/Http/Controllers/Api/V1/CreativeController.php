@@ -161,6 +161,15 @@ class CreativeController extends Controller
 
     public function search3(Request $request)
     {
+        /**
+         * SEARCH CRITERIA
+         *
+         * 1. Exact 1+2+3: Art Director in Chicago with CPG experience
+         * 2. Exact 1+2: Art Director in Chicago with no CPG experience
+         * 3. Contains 1 + Exact 2: All creatives with "contains" Art Director in their title (because sometimes we can go up and down a level for the right person) in Chicago. So this search would provide me Jr Art Directors and Senior Art Directors in Chicago. So Contains part of the first search, but the exact second
+         * 4. Exact 1:  All creatives with the exact title "Art Director" in any location even in Canada (some jobs will allow remote if they are a perfect fit otherwise in emergencies)
+         */
+
         // Split the search terms into an array
         $searchTerms = explode(',', $request->search);
 
@@ -175,13 +184,13 @@ class CreativeController extends Controller
         }
 
         // Find common IDs across all exact match arrays
-        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
+        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds); // Point 1
         // Initialize the combined array with common exact match IDs
 
         if (isset($exactMatchIds[0]) && isset($exactMatchIds[1])) {
             // Find common IDs across first two arrays
-            $commonExactMatchIds = array_merge($commonExactMatchIds, array_intersect($exactMatchIds[0], $exactMatchIds[1]));
-            $commonExactMatchIds = array_merge($commonExactMatchIds, $exactMatchIds[0]);
+            $commonExactMatchIds = array_merge($commonExactMatchIds, array_intersect($exactMatchIds[0], $exactMatchIds[1])); // Point 2
+            // $commonExactMatchIds = array_merge($commonExactMatchIds, $exactMatchIds[0]);
         }
 
         $combinedCreativeIds = $commonExactMatchIds;
@@ -206,39 +215,39 @@ class CreativeController extends Controller
 // dump($combinedCreativeIds);
 
 
-        // Iterate through each term for starts-with match
-        foreach ($searchTerms as $term) {
-            $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
-        }
-        // dump($startsWithIds);
+        // // Iterate through each term for starts-with match
+        // foreach ($searchTerms as $term) {
+        //     $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with');
+        // }
+        // // dump($startsWithIds);
 
-        // Find common IDs across all starts-with arrays
-        $commonStartsWithIds = call_user_func_array('array_intersect', $startsWithIds);
+        // // Find common IDs across all starts-with arrays
+        // $commonStartsWithIds = call_user_func_array('array_intersect', $startsWithIds);
 
-        if (isset($startsWithIds[0]) && isset($startsWithIds[1])) {
-            // Find common IDs across first two arrays
-            $commonStartsWithIds = array_merge($commonStartsWithIds, array_intersect($startsWithIds[0], $startsWithIds[1]));
-        }
+        // if (isset($startsWithIds[0]) && isset($startsWithIds[1])) {
+        //     // Find common IDs across first two arrays
+        //     $commonStartsWithIds = array_merge($commonStartsWithIds, array_intersect($startsWithIds[0], $startsWithIds[1]));
+        // }
 
-        if (isset($startsWithIds[0]) && isset($startsWithIds[2])) {
-            // Find common IDs across first two arrays
-            $commonStartsWithIds = array_merge($commonStartsWithIds, array_intersect($startsWithIds[0], $startsWithIds[2]));
-        }
+        // if (isset($startsWithIds[0]) && isset($startsWithIds[2])) {
+        //     // Find common IDs across first two arrays
+        //     $commonStartsWithIds = array_merge($commonStartsWithIds, array_intersect($startsWithIds[0], $startsWithIds[2]));
+        // }
 
-        // dump($commonStartsWithIds);
-        // Prioritize common starts-with match IDs in the combined array
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $commonStartsWithIds);
+        // // dump($commonStartsWithIds);
+        // // Prioritize common starts-with match IDs in the combined array
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, $commonStartsWithIds);
 
 
-        // dump($combinedCreativeIds);
-        // Remove common starts-with match IDs from individual arrays
-        foreach ($startsWithIds as &$ids) {
-            $ids = array_values(array_diff($ids, $commonStartsWithIds));
-        }
-        //iterate over $startsWithIds nested array and then flatten the nested array and then merge into $combinedCreativeIds
-        foreach ($startsWithIds as $key => $value) {
-            // $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($value));
-        }
+        // // dump($combinedCreativeIds);
+        // // Remove common starts-with match IDs from individual arrays
+        // foreach ($startsWithIds as &$ids) {
+        //     $ids = array_values(array_diff($ids, $commonStartsWithIds));
+        // }
+        // //iterate over $startsWithIds nested array and then flatten the nested array and then merge into $combinedCreativeIds
+        // foreach ($startsWithIds as $key => $value) {
+        //     // $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($value));
+        // }
         //
 // dump('combined creative IDs after starts-with');
 // dump($combinedCreativeIds);
@@ -249,15 +258,28 @@ class CreativeController extends Controller
         // dump($combinedCreativeIds);
         // Find common IDs across all contains arrays
         $commonContainsIds = call_user_func_array('array_intersect', $containsIds);
-
+// dump("just before if");
+// dump($combinedCreativeIds);
         if (isset($containsIds[0]) && isset($containsIds[1])) {
             // Find common IDs across first two arrays
-            $commonContainsIds = array_merge($commonContainsIds, array_intersect($containsIds[0], $containsIds[1]));
-            $commonContainsIds = array_merge($commonContainsIds, $containsIds[0]);
+            // $commonContainsIds = array_merge($commonContainsIds, array_intersect($containsIds[0], $containsIds[1]));
+
+            $ids_for_point_3 = array_intersect($containsIds[0], $exactMatchIds[1]); // Point 3 City is exact, Title is with % LIKE %
+// dd($ids_for_point_3);
+            $combinedCreativeIds = array_merge($combinedCreativeIds, $ids_for_point_3); // Point 3
+            // $combinedCreativeIds = array_merge($combinedCreativeIds, $containsIds[0]); // Point 3
+
+            // dump("After p[oint 3");
+            // dump($combinedCreativeIds);
+            // dump($exactMatchIds[0]);
+            // dd($combinedCreativeIds);
+            $combinedCreativeIds = array_merge($combinedCreativeIds, $exactMatchIds[0]); // Point 4
+            // dump("After p[oint 4");
+            // dump($combinedCreativeIds);
         }
 
         // Prioritize common contains match IDs in the combined array
-        $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, $commonContainsIds);
 
         // Remove common contains match IDs from individual arrays
         foreach ($containsIds as &$ids) {
@@ -274,16 +296,16 @@ class CreativeController extends Controller
 
         $combinedCreativeIds = array_unique($combinedCreativeIds, SORT_NUMERIC);
 
-        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($exactMatchIds));
-        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($startsWithIds));
-        $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($containsIds));
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($exactMatchIds));
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($startsWithIds));
+        // $combinedCreativeIds = array_merge($combinedCreativeIds, Arr::flatten($containsIds));
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
 
         // Combine and deduplicate the IDs while preserving the order
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
 
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
-
+        // dd($combinedCreativeIds);
 
         // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
