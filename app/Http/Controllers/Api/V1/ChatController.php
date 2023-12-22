@@ -22,17 +22,24 @@ class ChatController extends Controller
         $contact_id = $contact->id;
 
         $userId = request()->user()->id;
-        $type = $request->type ?? 'private';
+
+        if ($request->has('type')) {
+            $type = $request->type;
+            $type = explode(',', $type);
+            $type = array_map('trim', $type);
+        } else {
+            $type = ['private'];
+        }
 
         $messages = Message::where(function ($query) use ($userId, $contact_id) {
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $contact_id);
-        })->where('type', $type)
+        })->whereIn('type', $type)
             ->orWhere(function ($query) use ($userId, $contact_id) {
                 $query->where('sender_id', $contact_id)
                     ->where('receiver_id', $userId);
             })
-            ->where('type', $type)
+            ->whereIn('type', $type)
             ->oldest()
                         //    ->toSql();
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
@@ -93,7 +100,9 @@ class ChatController extends Controller
 
         if ($request->has('type')) {
             $type = $request->input('type');
-            $contacts->where('type', $type);
+            $type = explode(',', $type);
+            $type = array_map('trim', $type);
+            $contacts->whereIn('type', $type);
         }
 
         $contacts = $contacts->where(function ($query) use ($userId) {
