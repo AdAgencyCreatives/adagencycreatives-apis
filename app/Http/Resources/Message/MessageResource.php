@@ -14,7 +14,7 @@ class MessageResource extends JsonResource
         return [
             'sender_id' => $sender1->uuid,
             'receiver_id' => $this->receiver->uuid,
-            'sender_user' => $this->getUserName($sender1),
+            'sender_name' => $sender1->full_name,
             'message' => $this->message,
             'type' => $this->type,
             'message_type' => $this->getMessageType($sender1, $current_user),
@@ -26,15 +26,5 @@ class MessageResource extends JsonResource
     private function getMessageType($sender1, $current_user)
     {
         return $sender1->uuid === $current_user->uuid ? 'sent' : 'received';
-    }
-
-    private function getUserName($user)
-    {
-        if ($user->role != 'agency') {
-            return $user->full_name;
-        }
-
-        return $user->agency ? ($user->agency->name ?? $user->full_name) : $user->full_name;
-
     }
 }
