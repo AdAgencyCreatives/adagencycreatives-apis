@@ -70,6 +70,7 @@ class ChatController extends Controller
                 'message' => $request->message,
                 'type' => $type,
                 'message_type' => 'received',
+                'user_name' => $this->getUserName($sender)
             ];
             $request->merge([
                 'uuid' => Str::uuid(),
@@ -179,5 +180,14 @@ class ChatController extends Controller
             ->touch('read_at');
 
         return response()->json(['success' => true], 200);
+    }
+
+    private function getUserName($user)
+    {
+        if ($user->role != 'agency') {
+            return $user->full_name;
+        }
+
+        return $user->agency ? ($user->agency->name ?? $user->full_name) : $user->full_name;
     }
 }
