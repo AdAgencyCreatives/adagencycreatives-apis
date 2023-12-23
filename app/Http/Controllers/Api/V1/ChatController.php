@@ -13,6 +13,7 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ChatController extends Controller
 {
@@ -43,8 +44,6 @@ class ChatController extends Controller
         $messages = $messages->latest()
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-
-
         // Read all messages between these two users
         Message::where('sender_id', $contactId)
         ->where('receiver_id', $userId)
@@ -52,7 +51,10 @@ class ChatController extends Controller
         ->whereNull('read_at')
         ->touch('read_at');
 
-    return new MessageCollection($messages);
+        // Reverse the order of items in the resource collection
+        $reversedMessages = new MessageCollection($messages->reverse());
+
+        return $reversedMessages;
     }
 
     public function store(StoreMessageRequest $request)
@@ -98,7 +100,7 @@ class ChatController extends Controller
 
         $contacts = Message::with('sender', 'receiver');
 
-         $types = [];
+        $types = [];
         // Add the dynamic type condition if provided in the request
         if ($request->has('type')) {
             $types = explode(',', $request->type);
