@@ -68,7 +68,8 @@ class ChatController extends Controller
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
                 'message' => $request->message,
-                'type' => 'received',
+                'type' => $type,
+                'message_type' => 'received',
             ];
             $request->merge([
                 'uuid' => Str::uuid(),
