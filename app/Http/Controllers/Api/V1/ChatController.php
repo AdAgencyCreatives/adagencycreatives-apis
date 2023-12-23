@@ -51,7 +51,7 @@ class ChatController extends Controller
         ->touch('read_at');
 
         //    dd($messages);
-        return new MessageCollection($messages);
+        return new MessageCollection(array_reverse($messages) );
     }
 
     public function store(StoreMessageRequest $request)
@@ -154,7 +154,7 @@ class ChatController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
 
-        return response()->json(['contacts' => array_reverse($uniqueContacts)]);
+        return response()->json(['contacts' => $uniqueContacts]);
     }
 
     private function getMessageType($sender1, $current_user)
