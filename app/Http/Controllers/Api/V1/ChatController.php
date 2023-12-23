@@ -154,7 +154,7 @@ class ChatController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
 
-        return response()->json(['contacts' => $uniqueContacts]);
+        return response()->json(['contacts' => array_reverse($uniqueContacts)]);
     }
 
     private function getMessageType($sender1, $current_user)
