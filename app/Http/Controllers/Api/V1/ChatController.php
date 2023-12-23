@@ -13,46 +13,48 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ChatController extends Controller
 {
     public function index(Request $request, $contactId)
     {
         $contact = User::where('uuid', $contactId)->firstOrFail();
-        $contact_id = $contact->id;
+        $contactId = $contact->id;
 
         $userId = request()->user()->id;
 
+        $messages = Message::where(function ($query) use ($userId, $contactId) {
+            $query->where(function ($query) use ($userId, $contactId) {
+                $query->where('sender_id', $userId)
+                    ->where('receiver_id', $contactId);
+            })->orWhere(function ($query) use ($userId, $contactId) {
+                $query->where('sender_id', $contactId)
+                    ->where('receiver_id', $userId);
+            });
+        });
+
+        $types = [];
+        // Add the dynamic type condition if provided in the request
         if ($request->has('type')) {
-            $type = $request->type;
-            $type = explode(',', $type);
-            $type = array_map('trim', $type);
-        } else {
-            $type = ['private'];
+            $types = explode(',', $request->type);
+            $messages->whereIn('type', $types);
         }
 
-        $messages = Message::where(function ($query) use ($userId, $contact_id) {
-            $query->where('sender_id', $userId)
-                ->where('receiver_id', $contact_id);
-        })->whereIn('type', $type)
-            ->orWhere(function ($query) use ($userId, $contact_id) {
-                $query->where('sender_id', $contact_id)
-                    ->where('receiver_id', $userId);
-            })
-            ->whereIn('type', $type)
-            ->oldest()
-                        //    ->toSql();
+        $messages = $messages->latest()
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-            // Read all messages between these two users
-            Message::where('sender_id', $contact_id)
-            ->where('receiver_id', $userId)
-            ->where('type', $type)
-            ->whereNull('read_at')
-            ->touch('read_at');
+        // Read all messages between these two users
+        Message::where('sender_id', $contactId)
+        ->where('receiver_id', $userId)
+        ->whereIn('type', $types)
+        ->whereNull('read_at')
+        ->touch('read_at');
 
-        //    dd($messages);
-        return new MessageCollection($messages);
+        // Reverse the order of items in the resource collection
+        $reversedMessages = new MessageCollection($messages->reverse());
+
+        return $reversedMessages;
     }
 
     public function store(StoreMessageRequest $request)
@@ -66,7 +68,9 @@ class ChatController extends Controller
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
                 'message' => $request->message,
-                'type' => 'received',
+                'type' => $type,
+                'message_type' => 'received',
+                'user_name' => $sender->full_name
             ];
             $request->merge([
                 'uuid' => Str::uuid(),
@@ -98,11 +102,11 @@ class ChatController extends Controller
 
         $contacts = Message::with('sender', 'receiver');
 
+        $types = [];
+        // Add the dynamic type condition if provided in the request
         if ($request->has('type')) {
-            $type = $request->input('type');
-            $type = explode(',', $type);
-            $type = array_map('trim', $type);
-            $contacts->whereIn('type', $type);
+            $types = explode(',', $request->type);
+            $contacts->whereIn('type', $types);
         }
 
         $contacts = $contacts->where(function ($query) use ($userId) {
@@ -124,12 +128,12 @@ class ChatController extends Controller
                 sort($sortedPair);
 
                 // Check if the reverse pair is already added
-                if (! in_array($sortedPair, $uniquePairs)) {
+                if (!in_array($sortedPair, $uniquePairs)) {
 
-                    if (! isset($contact->receiver)) {
+                    if (!isset($contact->receiver)) {
                         continue;
                     }
-                    if (! isset($contact->sender)) {
+                    if (!isset($contact->sender)) {
                         continue;
                     }
 
@@ -177,4 +181,5 @@ class ChatController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
 }

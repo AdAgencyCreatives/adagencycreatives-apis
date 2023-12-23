@@ -14,6 +14,7 @@ class MessageResource extends JsonResource
         return [
             'sender_id' => $sender1->uuid,
             'receiver_id' => $this->receiver->uuid,
+            'sender_name' => $sender1->full_name,
             'message' => $this->message,
             'type' => $this->type,
             'message_type' => $this->getMessageType($sender1, $current_user),
