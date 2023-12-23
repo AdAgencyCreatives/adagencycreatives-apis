@@ -43,6 +43,8 @@ class ChatController extends Controller
         $messages = $messages->latest()
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
+
+
         // Read all messages between these two users
         Message::where('sender_id', $contactId)
         ->where('receiver_id', $userId)
@@ -50,8 +52,7 @@ class ChatController extends Controller
         ->whereNull('read_at')
         ->touch('read_at');
 
-        //    dd($messages);
-        return new MessageCollection(array_reverse($messages) );
+    return new MessageCollection($messages);
     }
 
     public function store(StoreMessageRequest $request)
