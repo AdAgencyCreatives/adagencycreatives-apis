@@ -30,4 +30,16 @@ class Phone extends Model
 
         return $query->where('user_id', $user->id);
     }
+
+    public function setPhoneNumberAttribute($value)
+    {
+        // Remove non-numeric characters from the phone number
+        $cleanedNumber = preg_replace('/[^0-9]/', '', $value);
+
+        // Format the phone number as xxx-xxx-xxxx
+        $formattedNumber = substr($cleanedNumber, 0, 3) . '-' . substr($cleanedNumber, 3, 3) . '-' . substr($cleanedNumber, 6);
+
+        // Set the formatted phone number attribute
+        $this->attributes['phone_number'] = $formattedNumber;
+    }
 }
