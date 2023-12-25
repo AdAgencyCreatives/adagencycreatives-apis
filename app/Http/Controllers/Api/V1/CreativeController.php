@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Creative\StoreCreativeRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeResource;
-use App\Http\Resources\Creative\CreativeSpotlightCollection;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
-use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
@@ -23,61 +21,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
 {
-    public function search1(Request $request)
+    public function search1(Request $request) //Agency with No package
     {
         $search = $request->search;
-        $terms = explode(',', $search);
 
-        // Search via First or Last Name
-        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = trim($terms[$i]);
-            // Check if the term contains a space or underscore (full name or both names)
-            if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
-                $separator = strpos($term, ' ') !== false ? ' ' : '_';
-                $names = explode($separator, $term);
-                $firstName = trim($names[0]);
-                $lastName = trim($names[1]);
+        $exact_search_ids = $this->getSearch1CreativeIDs($search, 'exact-match');
+        $contains_search_ids = $this->getSearch1CreativeIDs($search, 'contains');
 
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$firstName% $lastName%'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$lastName% $firstName%'" . "\n";
+        $combinedCreativeIds = array_merge($exact_search_ids, $contains_search_ids);
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+        $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
-                // Additional check for reverse order
-                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'" . "\n";
-            } else {
-                // Search by individual terms
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '%$term%'" . "\n";
-                $sql .= " OR ur.last_name LIKE '%$term%'" . "\n";
-            }
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via City Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via State Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
-        }
-
-        $res = DB::select($sql);
-        $creativeIds = collect($res)->pluck('id')->toArray();
-
-        $creatives = Creative::whereIn('id', $creativeIds)
+        $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
+            ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
@@ -86,70 +46,23 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-    public function search2(Request $request)
+    public function search2(Request $request) //Agency with active package
     {
         $search = $request->search;
-        $terms = explode(',', $search);
 
-        // Search via First or Last Name
-        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = trim($terms[$i]);
-            // Check if the term contains a space or underscore (full name or both names)
-            if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
-                $separator = strpos($term, ' ') !== false ? ' ' : '_';
-                $names = explode($separator, $term);
-                $firstName = trim($names[0]);
-                $lastName = trim($names[1]);
+        $exact_search_ids = $this->getSearch2CreativeIDs($search, 'exact-match');
+        $contains_search_ids = $this->getSearch2CreativeIDs($search, 'contains');
 
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$firstName% $lastName%'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$lastName% $firstName%'" . "\n";
+        $combinedCreativeIds = array_merge($exact_search_ids, $contains_search_ids);
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+        $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
-                // Additional check for reverse order
-                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$lastName% $firstName%'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$firstName% $lastName%'" . "\n";
-            } else {
-                // Search by individual terms
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '%$term%'" . "\n";
-                $sql .= " OR ur.last_name LIKE '%$term%'" . "\n";
-            }
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via City Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via State Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
-        }
-
-        $res = DB::select($sql);
-        $creativeIds = collect($res)->pluck('id')->toArray();
-
-        $creatives = Creative::whereIn('id', $creativeIds)
+        $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
+            ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
@@ -192,6 +105,8 @@ class CreativeController extends Controller
                 $query->where('is_visible', 1)->where('status', 1);
             })
             ->orderByRaw($rawOrder)
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -853,5 +768,160 @@ class CreativeController extends Controller
             ], 500);
         }
 
+    }
+
+    public function getSearch1CreativeIDs($search, $match_type = 'contains')
+    {
+        if(!isset($match_type) || strlen($match_type) == 0) {
+            $match_type = 'contains';
+        }
+
+        $wildCardStart = '%';
+        $wildCardEnd = '%';
+
+        if ($match_type == 'starts-with') {
+            $wildCardStart = '';
+        } elseif ($match_type == 'exact-match') {
+            $wildCardStart = '';
+            $wildCardEnd = '';
+        }
+
+
+        $terms = explode(',', $search);
+
+        // Search via First or Last Name
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = trim($terms[$i]);
+            // Check if the term contains a space or underscore (full name or both names)
+            if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
+                $separator = strpos($term, ' ') !== false ? ' ' : '_';
+                $names = explode($separator, $term);
+                $firstName = trim($names[0]);
+                $lastName = trim($names[1]);
+
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+
+                // Additional check for reverse order
+                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
+            } else {
+                // Search by individual terms
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            }
+
+            break; //Because we only allow single term search
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        // Search via City Name
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            break; //Because we only allow single term search
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        // Search via State Name
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            break; //Because we only allow single term search
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)
+            ->pluck('id')
+            ->toArray();
+        return $creativeIds;
+    }
+
+        public function getSearch2CreativeIDs($search, $match_type = 'contains')
+    {
+        if(!isset($match_type) || strlen($match_type) == 0) {
+            $match_type = 'contains';
+        }
+
+        $wildCardStart = '%';
+        $wildCardEnd = '%';
+
+        if ($match_type == 'starts-with') {
+            $wildCardStart = '';
+        } elseif ($match_type == 'exact-match') {
+            $wildCardStart = '';
+            $wildCardEnd = '';
+        }
+
+
+        $terms = explode(',', $search);
+
+        // Search via First or Last Name
+        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = trim($terms[$i]);
+            // Check if the term contains a space or underscore (full name or both names)
+            if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
+                $separator = strpos($term, ' ') !== false ? ' ' : '_';
+                $names = explode($separator, $term);
+                $firstName = trim($names[0]);
+                $lastName = trim($names[1]);
+
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+
+                // Additional check for reverse order
+                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
+            } else {
+                // Search by individual terms
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+                $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            }
+
+            break; //Because we only allow single term search
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        // Search via City Name
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            break; //Because we only allow single term search
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        // Search via State Name
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            break; //Because we only allow single term search
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+
+            break; //Because we only allow single term search
+        }
+
+        $res = DB::select($sql);
+        $creativeIds = collect($res)
+            ->pluck('id')
+            ->toArray();
+        return $creativeIds;
     }
 }
