@@ -15,11 +15,11 @@ class SendUnreadMessageEmail240Hours extends Command
 
     public function handle()
     {
-        $date_range = [
-            now()->subDays(10), now()->subDays(3)
-        ];
-        $unreadMessages = Message::whereBetween('created_at', $date_range)
+        $date_range = now()->subDays(10);
+
+        $unreadMessages = Message::whereDate('created_at', $date_range)
             ->whereNull('read_at')
+            ->whereIn('type', ['private', 'job'])
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
             ->get();
@@ -33,7 +33,8 @@ class SendUnreadMessageEmail240Hours extends Command
             $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereNull('read_at')
-                ->whereBetween('created_at', $date_range)
+                ->whereIn('type', ['private', 'job'])
+                ->whereDate('created_at', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')
