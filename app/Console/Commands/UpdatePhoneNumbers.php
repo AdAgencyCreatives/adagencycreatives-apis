@@ -20,8 +20,9 @@ class UpdatePhoneNumbers extends Command
 
         // Iterate through each record and update the phone number
         foreach ($records as $record) {
-            $record->country_code = $record->phone_number;
-            $record->phone_number = $this->formatPhoneNumber($record->phone_number);
+            $record->phone_number = $record->country_code;
+            $record->country_code = "+1";
+
             $record->save();
         }
 
