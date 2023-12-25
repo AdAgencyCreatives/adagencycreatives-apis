@@ -223,7 +223,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('agency_stats', [DashboardController::class, 'agency_dashboard_stats']);
     Route::get('creative_stats', [DashboardController::class, 'creative_dashboard_stats']);
     Route::patch('update_password', [UserController::class, 'update_password']);
-
+    Route::patch('confirm_password', [UserController::class, 'confirm_password']);
 });
 
 Route::get('stats', [DashboardController::class, 'index']);

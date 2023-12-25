@@ -98,7 +98,6 @@ class UserController extends Controller
                         'url' => $request->linkedin_profile ?? '',
                     ],
                 ], 'new_user_registration_agency_role');
-
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = $str;
@@ -134,7 +133,6 @@ class UserController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
 
             return new UserResource($user);
-
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -154,8 +152,8 @@ class UserController extends Controller
 
                 if ($user->role == 'agency') {
                     SendEmailJob::dispatch([
-                    'receiver' => $user, 'data' => $user,
-                ], 'account_approved_agency');
+                        'receiver' => $user, 'data' => $user,
+                    ], 'account_approved_agency');
                 }
 
 
@@ -164,7 +162,7 @@ class UserController extends Controller
                  */
                 if ($user->role == 'creative') {
 
-                     SendEmailJob::dispatch([
+                    SendEmailJob::dispatch([
                         'receiver' => $user, 'data' => $user,
                     ], 'account_approved');
 
@@ -213,7 +211,7 @@ class UserController extends Controller
 
         $user = User::where('username', $username)->first();
         if ($user) {
-            $username = $username.'-'.Str::random(5);
+            $username = $username . '-' . Str::random(5);
         }
 
         return $username;
@@ -227,13 +225,13 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
         }
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -276,7 +274,7 @@ class UserController extends Controller
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
+        if (!$custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
             return response()->json(['message' => 'Incorrect old password'], 401);
         }
 
@@ -285,7 +283,23 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Password updated successfully'], 200);
+    }
 
+    public function confirm_password(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        $user = auth()->user();
+
+        $custom_wp_hasher = new PasswordHash(8, true);
+
+        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        return response()->json(['message' => 'Password confirmed successfully'], 200);
     }
 
     public function logout(Request $request)
@@ -336,9 +350,9 @@ class UserController extends Controller
     {
         $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
-         SendEmailJob::dispatch([
-                'receiver' => $admin,
-                'data' => $request->all(),
-            ], 'contact_us_inquiry');
+        SendEmailJob::dispatch([
+            'receiver' => $admin,
+            'data' => $request->all(),
+        ], 'contact_us_inquiry');
     }
 }
