@@ -193,7 +193,7 @@ class DashboardController extends Controller
             $jobs = Job::where('status', 1)->pluck('id');
             $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
 
-            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->where('type', 'job')->count();
+            $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->where('type', ['job', 'private'])->count();
             $creative = Creative::where('user_id', $user->id)->first();
             $profile_views_count = $creative->views;
             $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
