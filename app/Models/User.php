@@ -255,7 +255,9 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        $fullName = trim($this->first_name . ' ' . $this->last_name);
+
+        return $fullName !== '' ? $fullName : $this->username;
     }
 
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
@@ -284,12 +286,12 @@ class User extends Authenticatable
         //if name is only one, then search in first name, if two then search seocnd term into last_name
 
         if(count($name) == 1) {
-            return $query->where('first_name',  $name[0] )->orWhere('last_name', $name[0]);
+            return $query->where('first_name', $name[0])->orWhere('last_name', $name[0]);
         } else {
-            return $query->where('first_name', $name[0] )
-                ->Where('last_name',  $name[1] )
-                ->orWhere('first_name',  $name[1] )
-                ->Where('last_name',  $name[0] );
+            return $query->where('first_name', $name[0])
+                ->Where('last_name', $name[1])
+                ->orWhere('first_name', $name[1])
+                ->Where('last_name', $name[0]);
         }
     }
 

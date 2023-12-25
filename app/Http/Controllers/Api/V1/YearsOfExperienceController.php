@@ -6,7 +6,10 @@ use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Media\UpdateMediaRequest;
+use App\Http\Requests\YearsOfExperience\StoreYearsOfExperienceRequest;
+use App\Http\Requests\YearsOfExperience\UpdateYearsOfExperienceRequest;
 use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\YearsOfExperience;
@@ -27,7 +30,7 @@ class YearsOfExperienceController extends Controller
         return $yearsOfExperience;
     }
 
-    public function store(Request $request)
+    public function store(StoreYearsOfExperienceRequest $request)
     {
         try {
             $request->merge([
@@ -42,7 +45,7 @@ class YearsOfExperienceController extends Controller
         }
     }
 
-    public function update(UpdateMediaRequest $request, $uuid)
+    public function update(UpdateYearsOfExperienceRequest $request, $uuid)
     {
         try {
             $yearsOfExperience = YearsOfExperience::where('uuid', $uuid)->first();
