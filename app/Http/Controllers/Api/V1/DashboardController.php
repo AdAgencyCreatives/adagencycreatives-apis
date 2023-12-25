@@ -154,7 +154,7 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'agency_dashboard_stats_'.$user->id;
 
-        $stats = Cache::remember($cacheKey, 60, function () use ($user) {
+        //$stats = Cache::remember($cacheKey, 60, function () use ($user) {
             $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
             $jobs_count = $jobs->count();
 
@@ -174,8 +174,8 @@ class DashboardController extends Controller
                 'views' => $profile_views_count,
             ];
 
-            return $stats;
-        });
+        //     return $stats;
+        // });
 
         return response()->json([
             'stats' => $stats,
@@ -189,7 +189,7 @@ class DashboardController extends Controller
         $user = request()->user();
         $cacheKey = 'creative_dashboard_stats_'.$user->id;
 
-        $stats = Cache::remember($cacheKey, 60, function () use ($user) {
+        //$stats = Cache::remember($cacheKey, 60, function () use ($user) {
             $jobs = Job::where('status', 1)->pluck('id');
             $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
 
@@ -205,8 +205,8 @@ class DashboardController extends Controller
                 'shortlisted' => $shortlisted_count,
             ];
 
-            return $stats;
-        });
+        //     return $stats;
+        // });
 
         return response()->json([
             'stats' => $stats,
