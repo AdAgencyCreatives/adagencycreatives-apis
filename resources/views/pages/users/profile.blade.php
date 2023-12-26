@@ -114,7 +114,7 @@
 
 
 
-                    @if ($user->role == 'agency')
+                    @if (in_array($user->role, ['agency', 'advisor', 'recruiter']))
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#package" role="tab"
                             aria-selected="false" tabindex="-1">
                             Package
