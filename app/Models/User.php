@@ -174,6 +174,11 @@ class User extends Authenticatable
         return $this->hasOne(JobAlert::class);
     }
 
+    public function alert_categories()
+    {
+        return $this->belongsToMany(Category::class, 'job_alerts', 'user_id', 'category_id')->withTimestamps();
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);
@@ -285,7 +290,7 @@ class User extends Authenticatable
         $name = explode(' ', $name);
         //if name is only one, then search in first name, if two then search seocnd term into last_name
 
-        if(count($name) == 1) {
+        if (count($name) == 1) {
             return $query->where('first_name', $name[0])->orWhere('last_name', $name[0]);
         } else {
             return $query->where('first_name', $name[0])
@@ -437,12 +442,12 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
 
-                if($user->role == 'creative') {
+                if ($user->role == 'creative') {
                     Creative::where('user_id', $user->id)->delete();
                     Education::where('user_id', $user->id)->delete();
                     Experience::where('user_id', $user->id)->delete();
                     PostReaction::where('user_id', $user->id)->delete();
-                } elseif($user->role == 'agency') {
+                } elseif ($user->role == 'agency') {
                     Agency::where('user_id', $user->id)->delete();
                 }
 
@@ -457,6 +462,5 @@ class User extends Authenticatable
                 Group::where('user_id', $user->id)->delete();
             });
         }
-
     }
 }
