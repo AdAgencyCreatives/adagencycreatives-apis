@@ -121,7 +121,7 @@
 
             $('#state').on('change', function() {
                 var selectedStateId = $(this).val();
-                var city_id = "{{ $package_request->city->uuid }}";
+                var city_id = "{{ $package_request->city?->uuid }}";
                 getCitiesByState(selectedStateId, city_id);
             });
 
