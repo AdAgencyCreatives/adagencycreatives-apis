@@ -924,4 +924,11 @@ class CreativeController extends Controller
             ->toArray();
         return $creativeIds;
     }
+
+    public function get_tag_creatives(Request $request)
+    {
+       $name = $request->name;
+       $creatives = User::where('role', 4)->whereRaw("CONCAT(first_name,' ',last_name) LIKE '$name%'")->take(5)->get();
+       return response()->json($creatives);
+    }
 }
