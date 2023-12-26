@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Phone extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -33,13 +34,10 @@ class Phone extends Model
 
     public function setPhoneNumberAttribute($value)
     {
-        // Remove non-numeric characters from the phone number
         $cleanedNumber = preg_replace('/[^0-9]/', '', $value);
-
-        // Format the phone number as xxx-xxx-xxxx
+        $cleanedNumber = str_pad($cleanedNumber, 10, '0', STR_PAD_RIGHT);
+        $cleanedNumber = substr($cleanedNumber, 0, 10);
         $formattedNumber = substr($cleanedNumber, 0, 3) . '-' . substr($cleanedNumber, 3, 3) . '-' . substr($cleanedNumber, 6, 4);
-
-        // Set the formatted phone number attribute
         $this->attributes['phone_number'] = $formattedNumber;
     }
 }
