@@ -48,12 +48,10 @@ class CreativeController extends Controller
 
     public function search2(Request $request) //Agency with active package
     {
-        $search = $request->search;
-
-        $exact_search_ids = $this->getSearch2CreativeIDs($search, 'exact-match');
-        $contains_search_ids = $this->getSearch2CreativeIDs($search, 'contains');
-
-        $combinedCreativeIds = array_merge($exact_search_ids, $contains_search_ids);
+        $searchTerms = explode(',', $request->search);
+        $combinedCreativeIds = $this->process_three_terms_search($searchTerms);
+        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        // Combine and deduplicate the IDs while preserving the order
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
