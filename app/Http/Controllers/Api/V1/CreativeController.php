@@ -842,7 +842,7 @@ class CreativeController extends Controller
         return $creativeIds;
     }
 
-        public function getSearch2CreativeIDs($search, $match_type = 'contains')
+    public function getSearch2CreativeIDs($search, $match_type = 'contains')
     {
         if(!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
@@ -861,6 +861,7 @@ class CreativeController extends Controller
 
         $terms = explode(',', $search);
 
+        $iterationCount = 0;
         // Search via First or Last Name
         $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
@@ -884,38 +885,56 @@ class CreativeController extends Controller
                 $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
             }
 
-            break; //Because we only allow single term search
+            $iterationCount++;
+            if ($iterationCount >= 2) {
+                break; //Because we only allow single term search
+            }
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
 
+        $iterationCount = 0;
         // Search via City Name
         $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
+        for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            break; //Because we only allow single term search
+
+            $iterationCount++;
+            if ($iterationCount >= 2) {
+                break; //Because we only allow single term search
+            }
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
 
+        $iterationCount = 0;
         // Search via State Name
         $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
+        for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            break; //Because we only allow single term search
+
+            $iterationCount++;
+            if ($iterationCount >= 2) {
+                break; //Because we only allow single term search
+            }
+
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
 
+        $iterationCount = 0;
         // Search via Industry Title (a.k.a Category)
         $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
+        for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
 
-            break; //Because we only allow single term search
+            $iterationCount++;
+            if ($iterationCount >= 2) {
+                break; //Because we only allow single term search
+            }
         }
 
         $res = DB::select($sql);
