@@ -263,11 +263,10 @@
                             <div class="col-12 col-lg-6">
                                 <div class="mb-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="category"> Category </label>
-                                        <select name="category_id" id="category"
-                                            class="form-control form-select custom-select select2" data-toggle="select2" disabled>
-
-                                        </select>
+                                        <label class="form-label" for="category"> Comment </label>
+                                        <input id="comment" class="form-control" type="text" name="comment"
+                                            placeholder="Comment" value="{{ $package_request->comment }}"
+                                            disabled />
                                     </div>
                                 </div>
                             </div>
