@@ -8,6 +8,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MentorResource\MentorResource;
 use App\Http\Resources\MentorResource\MentorResourceCollection;
+use App\Models\Attachment;
 use App\Models\Resource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -35,6 +36,17 @@ class MentorResourceController extends Controller
         try {
 
             $resource= Resource::create($request->all());
+
+            if ($request->has('file') && is_object($request->file)) {
+
+            $attachment = storeImage($request, auth()->id(), 'mentor_resource_website_preview');
+
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $resource->id,
+                ]);
+            }
+        }
 
             return new MentorResource($resource);
         } catch (\Exception $e) {

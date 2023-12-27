@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('topic_id')->constrained();
             $table->string('description');
             $table->string('link');
+            $table->string('preview_link')->nullable();
             $table->timestamps();
         });
 

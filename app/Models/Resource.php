@@ -11,10 +11,11 @@ class Resource extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
         'topic_id',
+        'title',
         'description',
         'link',
+        'preview_link',
     ];
 
     protected $casts = [

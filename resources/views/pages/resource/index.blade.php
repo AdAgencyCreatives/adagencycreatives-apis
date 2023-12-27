@@ -95,6 +95,7 @@
 
                 var row = '<tr>' +
                     '<td>' + topic.id + '</td>' +
+                    '<td>' + topic.preview_link + '</td>' +
                     '<td class="editable-field" data-id="' + topic.id + '" data-column="title">' + topic.title +
                     '</td>' +
                     '<td data-id="' + topic.id + '" data-column="title">' + topic.topic +
@@ -217,6 +218,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Preview</th>
                                             <th>Title</th>
                                             <th>Topic</th>
                                             <th>Link</th>
