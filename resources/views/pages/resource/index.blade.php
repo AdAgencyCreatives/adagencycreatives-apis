@@ -95,7 +95,8 @@
 
                 var row = '<tr>' +
                     '<td>' + topic.id + '</td>' +
-                    '<td>' + topic.preview_link + '</td>' +
+                    '<td><img src="' + topic.preview_link +
+                    '" alt="Preview Image" style="max-width: 100px; max-height: 100px;"></td>' +
                     '<td class="editable-field" data-id="' + topic.id + '" data-column="title">' + topic.title +
                     '</td>' +
                     '<td data-id="' + topic.id + '" data-column="title">' + topic.topic +
