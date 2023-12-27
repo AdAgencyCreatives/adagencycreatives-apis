@@ -99,6 +99,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search6', [CreativeController::class, 'search6']);
 
     Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
+    Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
 
 
     /**
