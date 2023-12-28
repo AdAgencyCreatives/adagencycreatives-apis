@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\ProcessMentorVisuals;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,5 +35,18 @@ class Resource extends Model
         if($topic) return $query->where('topic_id', $topic->id);
 
         return $query->where('topic_id', 0);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($resource) {
+            $data = [
+                'id' => $resource->id,
+                'url' => $resource->link,
+                'resource_type' => 'mentor_resource',
+            ];
+            ProcessMentorVisuals::dispatch($data);
+        });
+
     }
 }
