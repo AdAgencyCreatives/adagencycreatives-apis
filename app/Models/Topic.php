@@ -30,7 +30,7 @@ class Topic extends Model
     protected static function booted()
     {
         static::created(function ($topic) {
-            $topic->slug = $topic->slug ?? Str::slug($topic->title);
+            $topic->slug = $topic->slug = Str::slug($topic->slug ?? $topic->title);
             $topic->save();
             Cache::forget('homepage_mentor_topics');
         });
