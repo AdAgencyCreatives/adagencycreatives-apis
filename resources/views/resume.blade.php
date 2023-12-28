@@ -97,6 +97,19 @@
             position: absolute;
             top: 55px;
         }
+
+        .portfolio {
+            align-items: center;
+            display: flex;
+            gap: 30px;
+            flex-direction: row-reverse;
+            justify-content: start;
+        }
+
+        .portfolio img {
+            max-width: 200px !important;
+            height: auto !important;
+        }
     </style>
 
 </head>
@@ -209,7 +222,7 @@
     @if (count($portfolio_items))
         <section>
             <h1>Portfolio</h1>
-            <div style="display: flex; gap: 5px;">
+            <div style="display: flex; gap: 5px;" class="portfolio">
                 @foreach ($portfolio_items as $item)
                     <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 800px;" />
                 @endforeach
