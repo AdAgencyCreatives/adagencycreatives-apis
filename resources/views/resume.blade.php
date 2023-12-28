@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Resume Download</title>
     <style>
+        @font-face {
+            font-family: 'Jost';
+            src: url('{{ asset("assets/fonts/Jost/Jost-VariableFont_wght.ttf") }}') format('truetype');
+        }
+        body {
+            font-family: 'Jost';
+        }
+        h1 {
+            font-size: 2.3rem;
+            font-weight: 400;
+            margin: 30px 0;
+        }
         a {
             color: #000;
             text-decoration: none;
@@ -85,12 +97,25 @@
             position: absolute;
             top: 55px;
         }
+
+        .portfolio {
+            align-items: center;
+            display: flex;
+            gap: 30px;
+            flex-direction: row-reverse;
+            justify-content: start;
+        }
+
+        .portfolio img {
+            max-width: 200px !important;
+            height: auto !important;
+        }
     </style>
 
 </head>
 
 <body>
-    <section style="display: flex; gap: 30px;">
+    <section style="display: flex; gap: 30px; align-items: center;">
         <div>
             <img src="{{ $data['profile_image'] }}" style="max-width: 200px; max-height: 200px;" />
         </div>
@@ -102,13 +127,13 @@
         </div>
     </section>
     <section>
-        <h2>About</h2>
+        <h1>About</h1>
         <p>{{ strip_tags($data['about']) ?? '' }}</p>
     </section>
 
     @if (!is_null($portfolio_website_preview_img))
         <section>
-            <h2>Portfolio site</h2>
+            <h1>Portfolio site</h1>
             <img src="{{ $portfolio_website_preview_img }}" />
         </section>
     @endif
@@ -153,7 +178,7 @@
     </section>
     <section>
         <div id="job-candidate-education" class="candidate-detail-education my_resume_eduarea">
-            <h2 class="title">Education</h2>
+            <h1 class="title">Education</h1>
             @foreach ($educations as $education)
                 <div class="content">
                     @if ($education->degree)
@@ -168,9 +193,9 @@
         </div>
     </section>
     <section>
+        @if (count($experiences))
         <div id="job-candidate-experience" class="candidate-detail-experience my_resume_eduarea color-blue">
-            <h4 class="title">Work &amp; Experience</h4>
-
+            <h1 class="title">Work &amp; Experience</h1>
             @foreach ($experiences as $experience)
                 <div class="content">
                     <div class="circle">
@@ -191,13 +216,13 @@
                     </p>
                 </div>
             @endforeach
-
+        @endif
         </div>
     </section>
     @if (count($portfolio_items))
         <section>
-            <h2>Portfolio</h2>
-            <div style="display: grid; gap: 5px;">
+            <h1>Portfolio</h1>
+            <div class="portfolio">
                 @foreach ($portfolio_items as $item)
                     <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 800px;" />
                 @endforeach
