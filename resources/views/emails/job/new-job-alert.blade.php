@@ -15,7 +15,7 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $user->first_name ?? '' }},</span>
 
-                        <p>We have a good news. You have been requested notification for job category
+                        <p>We have a good news. You have requested job alert notifications for category
                             "{{ $data['category'] }}".</p>
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">Job Details</h4>
                         <div><b>Job Title: </b>{{ $data['title'] }}</div>
