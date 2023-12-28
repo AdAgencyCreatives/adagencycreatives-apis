@@ -115,7 +115,7 @@
 </head>
 
 <body>
-    <section style="display: flex; gap: 30px;">
+    <section style="display: flex; gap: 30px; align-items: center;">
         <div>
             <img src="{{ $data['profile_image'] }}" style="max-width: 200px; max-height: 200px;" />
         </div>
