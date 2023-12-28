@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\PostReactionController;
+use App\Http\Controllers\Api\V1\PublicationResourceController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
@@ -77,6 +78,7 @@ Route::resource('creative-spotlights', CreativeSpotlightController::class)->only
 
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
+Route::get('get_categories/creative_count', [CategoryController::class, 'get_categories_with_creatives_count']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 Route::get('employment_types', [JobController::class, 'get_employment_types']);
@@ -236,3 +238,4 @@ Route::get('pages', [PageController::class, 'index']);
 // Mentorship Topic
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
+Route::resource('publication-resources', PublicationResourceController::class);
