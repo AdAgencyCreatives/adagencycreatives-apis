@@ -179,7 +179,7 @@ class PostController extends Controller
                 ->allowedSorts('created_at')
                 ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups));
 
-            return array_merge([$feed_group->id], $joined_groups);
+            return $query->toSql();
 
             $posts = $query->with(['reactions' => function ($query) {
                 // You can further customize the reactions query if needed
