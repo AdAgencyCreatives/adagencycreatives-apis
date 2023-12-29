@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\StoreGroupRequest;
 use App\Http\Resources\Group\GroupCollection;
 use App\Http\Resources\Group\GroupResource;
+use App\Http\Resources\Post\PostCollection;
 use App\Models\Attachment;
 use App\Models\Friendship;
 use App\Models\Group;
 use App\Models\GroupMember;
 use App\Models\Message;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -156,4 +158,6 @@ class GroupController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
 }
