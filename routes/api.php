@@ -199,7 +199,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Chat Routes
      */
-    Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
+    //Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::apiResource('messages', ChatController::class);
