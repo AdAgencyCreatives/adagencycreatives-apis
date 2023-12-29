@@ -33,9 +33,16 @@ class CreativeController extends Controller
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
+            ->whereHas('user', function ($query) use ($request) {
+                if ($request->has('is_visible'))
+                    $query->where('is_visible', $request->is_visible);
+                else
+                    $query->where('is_visible', 1);
+
+                if ($request->has('is_featured'))
+                    $query->where('is_featured', $request->is_featured);
+
+                $query->where('status', 1);
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
@@ -56,9 +63,16 @@ class CreativeController extends Controller
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
+            ->whereHas('user', function ($query) use ($request) {
+                if ($request->has('is_visible'))
+                    $query->where('is_visible', $request->is_visible);
+                else
+                    $query->where('is_visible', 1);
+
+                if ($request->has('is_featured'))
+                    $query->where('is_featured', $request->is_featured);
+
+                $query->where('status', 1);
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
@@ -99,8 +113,16 @@ class CreativeController extends Controller
         // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)->where('status', 1);
+            ->whereHas('user', function ($query) use ($request) {
+                if ($request->has('is_visible'))
+                    $query->where('is_visible', $request->is_visible);
+                else
+                    $query->where('is_visible', 1);
+
+                if ($request->has('is_featured'))
+                    $query->where('is_featured', $request->is_featured);
+
+                $query->where('status', 1);
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
