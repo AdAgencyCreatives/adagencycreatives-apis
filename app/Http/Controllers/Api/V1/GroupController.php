@@ -159,30 +159,5 @@ class GroupController extends Controller
         }
     }
 
-    public function main_feed(Request $request)
-    {
-        try {
-            $user = request()->user();
-            $feed_group = Group::where('slug', 'feed')->first();
-            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('id')->toArray();
-            $posts = Post::whereIn('group_id', array_merge([$feed_group->id], $joined_groups));
 
-            $posts = $posts->with(['reactions' => function ($query) {
-            // You can further customize the reactions query if needed
-        }])
-            ->whereHas('user') // If the user is deleted, don't show the attachment
-            ->withCount('reactions')
-            ->withCount('comments')
-            ->withCount('likes')
-            ->with('comments')
-            // ->with('user.likes')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
-
-        return new PostCollection($posts);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
 }

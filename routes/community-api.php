@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\GroupMemberController;
@@ -43,5 +44,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Lounge sidebar stats
      */
     Route::get('lounge/counts', [GroupController::class, 'sidebar_count']);
-    Route::get('lounge/main_feed', [GroupController::class, 'main_feed']);
+    Route::get('lounge/main_feed', [PostController::class, 'main_feed']);
 });

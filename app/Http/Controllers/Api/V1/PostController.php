@@ -11,6 +11,7 @@ use App\Http\Resources\Post\PostResource;
 use App\Http\Resources\Post\TrendingPostCollection;
 use App\Models\Attachment;
 use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -158,6 +159,42 @@ class PostController extends Controller
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    public function main_feed(Request $request)
+    {
+        try {
+            $user = request()->user();
+            $feed_group = Group::where('slug', 'feed')->first();
+            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('id')->toArray();
+
+            $query = QueryBuilder::for(Post::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('group_id'),
+                    'status',
+                ])
+                ->defaultSort('-created_at')
+                ->allowedSorts('created_at')
+                ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups));
+
+            $posts = $query->with(['reactions' => function ($query) {
+            // You can further customize the reactions query if needed
+        }])
+            ->whereHas('user') // If the user is deleted, don't show the attachment
+            ->withCount('reactions')
+            ->withCount('comments')
+            ->withCount('likes')
+            ->with('comments')
+            // ->with('user.likes')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        return new PostCollection($posts);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
