@@ -580,6 +580,33 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('publication-resource*') ? 'active' : '' }} ">
+                    <a data-target="#publications" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="anchor"></i>
+                        <span class="align-middle">Publications</span>
+                    </a>
+                    <ul id="publications"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('publication-resource*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('publication-resource') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('publication-resource.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Resources</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('publication-resource/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('publication-resource.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Resource</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
 
                 <li class="sidebar-header">
                     Reports

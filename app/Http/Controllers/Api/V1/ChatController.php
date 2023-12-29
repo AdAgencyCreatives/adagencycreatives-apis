@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\MessageReceived;
 use App\Exceptions\ApiException;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Resources\Message\MessageCollection;
@@ -96,6 +97,31 @@ class ChatController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try {
+            $message = Message::findOrFail($id);
+            // Only update the message content
+            $message->update(['message' => $request->message]);
+
+            return new MessageResource($message);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'MS-02');
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $message = Message::where('id', $id)->firstOrFail();
+            $message->delete();
+
+            return new MessageResource($message);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
     public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
@@ -181,5 +207,7 @@ class ChatController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
+
 
 }
