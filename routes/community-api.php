@@ -43,4 +43,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Lounge sidebar stats
      */
     Route::get('lounge/counts', [GroupController::class, 'sidebar_count']);
+    Route::get('lounge/main_feed', [GroupController::class, 'main_feed']);
 });
