@@ -13,20 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
-
-        Schema::create('resources', function (Blueprint $table) {
+        Schema::create('publication_resources', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->foreignId('topic_id')->constrained();
-            $table->string('description');
             $table->string('link');
             $table->string('preview_link')->nullable();
             $table->unsignedInteger('sort_order')->nullable();
             $table->timestamps();
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -36,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('resources');
+        Schema::dropIfExists('publication_resources');
     }
 };

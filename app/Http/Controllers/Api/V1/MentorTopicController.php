@@ -26,8 +26,8 @@ class MentorTopicController extends Controller
                 'title',
                 'slug',
             ])
-            ->defaultSort('created_at')
-            ->allowedSorts('title', 'created_at', 'updated_at');
+            ->defaultSort('sort_order')
+            ->allowedSorts('title', 'created_at', 'updated_at', 'sort_order');
 
         $topics = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
         return new TopicCollection($topics);

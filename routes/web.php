@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\MentorResourceController;
 use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PublicationResourceController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -35,6 +36,7 @@ use App\Models\Group;
 use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
+use App\Models\PublicationResource;
 use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -350,6 +352,10 @@ Route::view('resume', 'resume');
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
 Route::resource('resource', MentorResourceController::class)->except('edit', 'show');
+Route::resource('publication-resource', PublicationResourceController::class)->except('edit', 'show');
+Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
+Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
+Route::post('/update-resource-order', [MentorResourceController::class, 'updateOrder'])->name('update-resource-order');
 
 //Get job invitation uuid from email
 Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');

@@ -39,13 +39,9 @@ class Resource extends Model
 
     protected static function booted()
     {
-        static::created(function ($resource) {
-            $data = [
-                'id' => $resource->id,
-                'url' => $resource->link,
-                'resource_type' => 'mentor_resource',
-            ];
-            ProcessMentorVisuals::dispatch($data);
+        static::creating(function ($model) {
+            $maxSortOrder = static::max('sort_order') ?? 0;
+            $model->sort_order = $maxSortOrder + 1;
         });
 
     }
