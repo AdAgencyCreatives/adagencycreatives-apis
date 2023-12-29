@@ -134,26 +134,26 @@
     @if (!is_null($portfolio_website_preview_img))
         <section>
             <h1>Portfolio site</h1>
-            <img src="{{ $portfolio_website_preview_img }}" />
+            <img src="{{ $portfolio_website_preview_img }}" style="width:100%" />
         </section>
     @endif
 
     <section class="creative-details"
         style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 20px; margin-top: 15px;">
         <div>
-            <p>Years of Experience</p>
+            <p><strong>Years of Experience</strong></p>
             <p>{{ $data['years_of_experience'] ?? '' }}</p>
         </div>
         <div>
-            <p>Email</p>
+            <p><strong>Email</strong></p>
             <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
         </div>
         <div>
-            <p>Phone Number</p>
+            <p><strong>Phone Number</strong></p>
             <p><a href="tel:949-903-6732">{{ $data['phone_number'] ?? '' }}</a></p>
         </div>
         <div>
-            <p>Industry Experience</p>
+            <p><strong>Industry Experience</strong></p>
             <p>
                 @foreach ($data['industry_experience'] as $index => $ie)
                     {{ $ie }}@if (!$loop->last)
@@ -164,7 +164,7 @@
             </p>
         </div>
         <div>
-            <p>Media Experience</p>
+            <p><strong>Media Experience</strong></p>
             @foreach ($data['media_experience'] as $index => $ie)
                 {{ $ie }}@if (!$loop->last)
                     ,
@@ -172,7 +172,7 @@
             @endforeach
         </div>
         <div>
-            <p>Type of Work</p>
+            <p><strong>Type of Work</strong></p>
             <p> {{ $data['employment_type'] ?? '' }}</p>
         </div>
     </section>
