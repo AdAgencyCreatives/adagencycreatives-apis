@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\Category\CategoryCreativeCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -95,5 +96,11 @@ class CategoryController extends Controller
         });
 
         return $categories;
+    }
+
+    public function get_categories_with_creatives_count(Request $request)
+    {
+        $categoriesWithCount = Category::withCount('creatives')->get();
+        return new CategoryCreativeCollection($categoriesWithCount);
     }
 }

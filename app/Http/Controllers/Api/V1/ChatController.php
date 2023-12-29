@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\MessageReceived;
 use App\Exceptions\ApiException;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Resources\Message\MessageCollection;
@@ -13,39 +14,48 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ChatController extends Controller
 {
     public function index(Request $request, $contactId)
     {
         $contact = User::where('uuid', $contactId)->firstOrFail();
-        $contact_id = $contact->id;
+        $contactId = $contact->id;
 
         $userId = request()->user()->id;
-        $type = $request->type ?? 'private';
 
-        $messages = Message::where(function ($query) use ($userId, $contact_id) {
-            $query->where('sender_id', $userId)
-                ->where('receiver_id', $contact_id);
-        })
-            ->orWhere(function ($query) use ($userId, $contact_id) {
-                $query->where('sender_id', $contact_id)
+        $messages = Message::where(function ($query) use ($userId, $contactId) {
+            $query->where(function ($query) use ($userId, $contactId) {
+                $query->where('sender_id', $userId)
+                    ->where('receiver_id', $contactId);
+            })->orWhere(function ($query) use ($userId, $contactId) {
+                $query->where('sender_id', $contactId)
                     ->where('receiver_id', $userId);
-            })
-            ->where('type', $type)
-            ->oldest()
-                        //    ->toSql();
+            });
+        });
+
+        $types = [];
+        // Add the dynamic type condition if provided in the request
+        if ($request->has('type')) {
+            $types = explode(',', $request->type);
+            $messages->whereIn('type', $types);
+        }
+
+        $messages = $messages->latest()
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-            // Read all messages between these two users
-            Message::where('sender_id', $contact_id)
-            ->where('receiver_id', $userId)
-            ->where('type', $type)
-            ->whereNull('read_at')
-            ->touch('read_at');
+        // Read all messages between these two users
+        Message::where('sender_id', $contactId)
+        ->where('receiver_id', $userId)
+        ->whereIn('type', $types)
+        ->whereNull('read_at')
+        ->touch('read_at');
 
-        //    dd($messages);
-        return new MessageCollection($messages);
+        // Reverse the order of items in the resource collection
+        $reversedMessages = new MessageCollection($messages->reverse());
+
+        return $reversedMessages;
     }
 
     public function store(StoreMessageRequest $request)
@@ -59,7 +69,9 @@ class ChatController extends Controller
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
                 'message' => $request->message,
-                'type' => 'received',
+                'type' => $type,
+                'message_type' => 'received',
+                'user_name' => $sender->full_name
             ];
             $request->merge([
                 'uuid' => Str::uuid(),
@@ -85,15 +97,42 @@ class ChatController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try {
+            $message = Message::findOrFail($id);
+            // Only update the message content
+            $message->update(['message' => $request->message]);
+
+            return new MessageResource($message);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'MS-02');
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $message = Message::where('id', $id)->firstOrFail();
+            $message->delete();
+
+            return new MessageResource($message);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
     public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
 
         $contacts = Message::with('sender', 'receiver');
 
+        $types = [];
+        // Add the dynamic type condition if provided in the request
         if ($request->has('type')) {
-            $type = $request->input('type');
-            $contacts->where('type', $type);
+            $types = explode(',', $request->type);
+            $contacts->whereIn('type', $types);
         }
 
         $contacts = $contacts->where(function ($query) use ($userId) {
@@ -115,12 +154,12 @@ class ChatController extends Controller
                 sort($sortedPair);
 
                 // Check if the reverse pair is already added
-                if (! in_array($sortedPair, $uniquePairs)) {
+                if (!in_array($sortedPair, $uniquePairs)) {
 
-                    if (! isset($contact->receiver)) {
+                    if (!isset($contact->receiver)) {
                         continue;
                     }
-                    if (! isset($contact->sender)) {
+                    if (!isset($contact->sender)) {
                         continue;
                     }
 
@@ -168,4 +207,7 @@ class ChatController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
+
+
 }

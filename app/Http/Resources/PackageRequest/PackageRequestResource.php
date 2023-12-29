@@ -23,8 +23,8 @@ class PackageRequestResource extends JsonResource
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
             'location' => [
-                'state' => $this->state->name,
-                'city' => $this->city->name,
+                'state' => $this->state?->name,
+                'city' => $this->city?->name,
             ],
             'comment' => $this->comment,
             'impersonate_url' => route('advisor.impersonate', $user->uuid),

@@ -15,6 +15,11 @@ class Category extends Model
         'name',
     ];
 
+    public function creatives()
+    {
+        return $this->hasMany(Creative::class, 'category_id');
+    }
+
     protected static function booted()
     {
         static::created(function () {

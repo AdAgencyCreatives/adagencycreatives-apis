@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\ProcessMentorVisuals;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,10 +12,11 @@ class Resource extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
         'topic_id',
+        'title',
         'description',
         'link',
+        'preview_link',
     ];
 
     protected $casts = [
@@ -33,5 +35,14 @@ class Resource extends Model
         if($topic) return $query->where('topic_id', $topic->id);
 
         return $query->where('topic_id', 0);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $maxSortOrder = static::max('sort_order') ?? 0;
+            $model->sort_order = $maxSortOrder + 1;
+        });
+
     }
 }
