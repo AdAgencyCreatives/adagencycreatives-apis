@@ -158,16 +158,16 @@
                         </div>
 
                         <div class="mb-3">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <div class="mb-3 error-placeholder">
-                                        <label class="form-label">Website Preview (optional)</label>
-                                        <div>
-                                            <input type="file" class="validation-file" name="file">
-                                        </div>
+
+                            <div class="mb-3">
+                                <div class="mb-3 error-placeholder">
+                                    <label class="form-label">Website Preview (optional)</label>
+                                    <div>
+                                        <input type="file" class="validation-file" name="file">
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
 

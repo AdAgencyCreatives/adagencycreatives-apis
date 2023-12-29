@@ -4,6 +4,11 @@
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
+
+    <!-- Include jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script>
         var currentPage = 1;
         var totalPages = 1;
@@ -91,7 +96,7 @@
                 roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
                     topic.id + '">Delete</a>';
 
-                var row = '<tr>' +
+                var row = '<tr class="sortable-item" id="' + topic.id + '">' +
                     '<td>' + topic.id + '</td>' +
                     '<td class="editable-field" data-id="' + topic.id + '" data-column="title">' + topic.title +
                     '</td>' +
@@ -178,6 +183,35 @@
                 });
             });
 
+            $("#sortable-list").sortable({
+                update: function(event, ui) {
+                    // Get the updated order
+                    var order = $(this).sortable('toArray');
+                    console.log(order);
+                    var url = $("#sortable-list").data('url');
+                    // Send an AJAX request to update the order in the backend
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                order: order
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+
+                }
+            });
+            $("#sortable-list").disableSelection();
+
         });
     </script>
 @endsection
@@ -221,7 +255,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
+                                    <tbody id="sortable-list" data-url="{{ route('update-topic-order') }}">
                                     </tbody>
 
                                 </table>

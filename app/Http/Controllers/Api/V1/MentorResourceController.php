@@ -23,8 +23,8 @@ class MentorResourceController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('topic'),
             ])
-            ->defaultSort('created_at')
-            ->allowedSorts('title', 'created_at', 'updated_at');
+            ->defaultSort('sort_order')
+            ->allowedSorts('title', 'created_at', 'updated_at', 'sort_order');
 
         $topics = $query->with('topic')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -35,18 +35,18 @@ class MentorResourceController extends Controller
     {
         try {
 
-            $resource= Resource::create($request->all());
+            $resource = Resource::create($request->all());
 
             if ($request->has('file') && is_object($request->file)) {
 
-            $attachment = storeImage($request, auth()->id(), 'mentor_resource_website_preview');
+                $attachment = storeImage($request, auth()->id(), 'mentor_resource_website_preview');
 
-            if (isset($attachment) && is_object($attachment)) {
-                Attachment::whereId($attachment->id)->update([
-                    'resource_id' => $resource->id,
-                ]);
+                if (isset($attachment) && is_object($attachment)) {
+                    Attachment::whereId($attachment->id)->update([
+                        'resource_id' => $resource->id,
+                    ]);
+                }
             }
-        }
 
             return new MentorResource($resource);
         } catch (\Exception $e) {

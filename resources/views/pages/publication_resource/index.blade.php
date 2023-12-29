@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
-@section('title', __('Mentor Resource'))
+@section('title', __('Publication Resource'))
+
+
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
-
     <!-- Include jQuery UI -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -14,35 +15,6 @@
         var totalPages = 1;
         var perPage = 10;
         var filters = {};
-
-        function fetchTopicsForFilter() {
-
-            $.ajax({
-                url: 'api/v1/topics',
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    populateTopicFilter(response.data, '#topic');
-                },
-                error: function() {
-                    alert('Failed to fetch topics from the API.');
-                }
-            });
-        }
-
-        function populateTopicFilter(topics, div_id) {
-            var selectElement = $(div_id);
-
-            $.each(topics, function(index, topic) {
-                console.log('d');
-                var option = $('<option>', {
-                    value: topic.slug,
-                    text: topic.title
-                });
-
-                selectElement.append(option);
-            });
-        }
 
         function fetchData(page, filters = []) {
             var requestData = {
@@ -65,7 +37,7 @@
             });
 
             $.ajax({
-                url: 'api/v1/mentor-resources',
+                url: 'api/v1/publication-resources',
                 method: 'GET',
                 data: requestData,
                 dataType: 'json',
@@ -102,14 +74,10 @@
                     '<td>' + topic.id + '</td>' +
                     '<td><img src="' + topic.preview_link +
                     '" alt="Preview Image" style="max-width: 100px; max-height: 100px;"></td>' +
-                    '<td class="editable-field" data-id="' + topic.id + '" data-column="title">' + topic.title +
-                    '</td>' +
-                    '<td data-id="' + topic.id + '" data-column="title">' + topic.topic +
-                    '</td>' +
+
                     '<td class="editable-field" data-id="' + topic.id + '" data-column="link">' + topic.link +
                     '</td>' +
-                    '<td class="editable-field" data-id="' + topic.id + '" data-column="description">' + topic
-                    .description + '</td>' +
+
                     '<td>' + topic.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
@@ -121,13 +89,12 @@
         $(document).ready(function() {
 
             fetchData();
-            fetchTopicsForFilter();
 
             $(document).on('click', '.delete-category-btn', function() {
                 var resourceId = $(this).data('id');
                 var csrfToken = '{{ csrf_token() }}';
                 console.log(csrfToken);
-                deleteConfirmation(resourceId, 'resource', 'mentor-resources', csrfToken);
+                deleteConfirmation(resourceId, 'resource', 'publication-resources', csrfToken);
             });
 
 
@@ -136,57 +103,6 @@
 
                 currentPage = 1;
                 fetchData(currentPage);
-            });
-
-            $('table').on('dblclick', '.editable-field', function() {
-                var currentText = $(this).text();
-                var id = $(this).data('id');
-                var column = $(this).data('column');
-
-                var inputField = $('<input>', {
-                    type: 'text',
-                    value: currentText
-                });
-
-                $(this).html(inputField);
-
-                inputField.focus();
-                inputField.on('blur', function() {
-                    var newText = $(this).val();
-                    $(this).parent().text(
-                        newText);
-
-                    console.log(id);
-                    console.log(newText);
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                        }
-                    });
-                    $.ajax({
-                        url: '/api/v1/mentor-resources/' + id,
-                        method: 'PUT',
-                        data: {
-                            column: column,
-                            value: newText
-                        },
-                        success: function(response) {
-                            if (response.data) {
-                                Swal.fire({
-                                    title: 'Success',
-                                    text: "Succesfully updated",
-                                    icon: 'success'
-                                });
-                            }
-
-
-                        },
-                        error: function(error) {
-                            console.error('Error updating category:', error);
-                        }
-                    });
-                });
             });
 
             $("#sortable-list").sortable({
@@ -217,15 +133,14 @@
                 }
             });
             $("#sortable-list").disableSelection();
-
         });
     </script>
+
+
+
 @endsection
 
 @section('content')
-
-
-    @include('pages.topic.filters')
 
     <div class="row">
         <div class="col-12">
@@ -254,16 +169,13 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Preview</th>
-                                            <th>Title</th>
-                                            <th>Topic</th>
                                             <th>Link</th>
-                                            <th>Description</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
 
-                                    <tbody id="sortable-list" data-url="{{ route('update-resource-order') }}">
+                                    <tbody id="sortable-list" data-url="{{ route('update-publication-resource-order') }}">
                                     </tbody>
 
                                 </table>
@@ -286,4 +198,5 @@
             </div>
         </div>
     </div>
+
 @endsection
