@@ -167,7 +167,7 @@ class PostController extends Controller
         try {
             $user = request()->user();
             $feed_group = Group::where('slug', 'feed')->first();
-            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('id')->toArray();
+            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
 
             $query = QueryBuilder::for(Post::class)
                 ->allowedFilters([
