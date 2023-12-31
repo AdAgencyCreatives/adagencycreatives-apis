@@ -160,7 +160,7 @@ class CreativeController extends Controller
 
     public function getCreativeIDs($search, $match_type = 'contains') // match_type => contains | starts-with | exact-match
     {
-        if(!isset($match_type) || strlen($match_type) == 0) {
+        if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
         }
 
@@ -300,15 +300,15 @@ class CreativeController extends Controller
         $creativeIds =  $this->getCreativeIDs($request->search, 'exact-match');
 
         $creatives = Creative::with('category')
-                ->whereIn('id', $creativeIds)
-                ->whereHas('user', function ($query) {
-                    $query->where('is_visible', 1)
-                        ->where('status', 1);
-                })
-                ->orderByDesc('is_featured')
-                ->orderBy('created_at')
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-                ->withQueryString();
+            ->whereIn('id', $creativeIds)
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->orderByDesc('is_featured')
+            ->orderBy('created_at')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
 
@@ -398,14 +398,14 @@ class CreativeController extends Controller
                     $sql .= "WHERE exp.company = " . DB::raw('"' . trim($term) . '"') . "\n";
                     break;
             }
-            if($bindings != '') {
+            if ($bindings != '') {
                 $res = DB::select($sql, $bindings);
             } else {
                 $res = DB::select($sql);
             }
 
             $creativeIds = collect($res)->pluck('id')->toArray();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $creativeIds = [];
         }
 
@@ -567,7 +567,7 @@ class CreativeController extends Controller
             'user.personal_phone',
             'category',
         ])->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
+            ->withQueryString();
 
         return new HomepageCreativeCollection($creatives);
     }
@@ -712,7 +712,6 @@ class CreativeController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     public function update_resume(Request $request, $uuid)
@@ -765,12 +764,11 @@ class CreativeController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     public function getSearch1CreativeIDs($search, $match_type = 'contains')
     {
-        if(!isset($match_type) || strlen($match_type) == 0) {
+        if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
         }
 
@@ -842,7 +840,7 @@ class CreativeController extends Controller
 
     public function getSearch2CreativeIDs($search, $match_type = 'contains')
     {
-        if(!isset($match_type) || strlen($match_type) == 0) {
+        if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
         }
 
@@ -917,7 +915,6 @@ class CreativeController extends Controller
             if ($iterationCount >= 2) {
                 break; //Because we only allow single term search
             }
-
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
@@ -944,8 +941,12 @@ class CreativeController extends Controller
 
     public function get_tag_creatives(Request $request)
     {
-       $name = $request->name;
-       $creatives = User::where('role', 4)->whereRaw("CONCAT(first_name,' ',last_name) LIKE '$name%'")->take(5)->get();
-       return response()->json($creatives);
+        $name = $request->name;
+        $creatives = User::where('role', 4)
+            ->whereRaw("CONCAT(first_name,' ',last_name) LIKE '$name%'")
+            ->orderByRaw("CONCAT(first_name,' ',last_name)")
+            ->take(5)
+            ->get();
+        return response()->json($creatives);
     }
 }
