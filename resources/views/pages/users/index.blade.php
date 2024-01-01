@@ -58,6 +58,10 @@
             var lastname = $('#last_name').val();
             var username = $('#username').val();
             var email = $('#email').val();
+
+            var visibility = $('#is_visible').val();
+            var featured = $('#is_featured').val();
+
             //Agency filters
             var company_slug = $('#agency_slug').val();
             var agency_name = $('#agency_name').val();
@@ -66,6 +70,18 @@
             var category = $('#category').val();
             var state = $('#state').val();
             var city = $('#city').val();
+
+
+            if (featured === '0' || featured === '1') {
+                if (currentUrl.includes('role=2') || currentUrl.includes('role=3') || currentUrl.includes('role=5')) {
+                    featured = 'agency_' + featured;
+                }
+                if (currentUrl.includes('role=4')) {
+                    featured = 'creative_' + featured;
+                }
+            }
+
+
 
             filters = {
                 role: selectedRole,
@@ -79,6 +95,9 @@
                 category_id: category,
                 state_id: state,
                 city_id: city,
+
+                is_visible: visibility,
+                is_featured: featured,
             };
 
             Object.keys(filters).forEach(function(key) {
