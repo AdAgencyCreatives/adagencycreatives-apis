@@ -35,7 +35,7 @@ class UserController extends Controller
                 'last_name',
                 'username',
                 'email',
-                'role',
+                AllowedFilter::exact('role'),
                 'status',
                 'is_visible',
 
@@ -48,6 +48,8 @@ class UserController extends Controller
                 AllowedFilter::scope('category_id'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
+
+                AllowedFilter::scope('is_featured'),
             ])
 
             ->defaultSort('-created_at')

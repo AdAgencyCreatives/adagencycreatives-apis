@@ -336,6 +336,19 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeIsFeatured(Builder $query, $value): Builder
+    {
+        $value = explode('_', $value);
+        if($value[0] == 'creative'){
+            $creative_ids = Creative::where('is_featured', $value[1])->pluck('user_id');
+            return $query->whereIn('id', $creative_ids);
+        }
+        else{
+            $creative_ids = Agency::where('is_featured', $value[1])->pluck('user_id');
+            return $query->whereIn('id', $creative_ids);
+        }
+    }
+
     public function getRoleAttribute($value)
     {
         switch ($value) {
