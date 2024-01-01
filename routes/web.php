@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\FeaturedLocationController;
 use App\Http\Controllers\Admin\FestivalController;
 use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
@@ -356,6 +357,10 @@ Route::resource('publication-resource', PublicationResourceController::class)->e
 Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
 Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
 Route::post('/update-resource-order', [MentorResourceController::class, 'updateOrder'])->name('update-resource-order');
+
+//Featured Locations
+Route::resource('featured-cities', FeaturedLocationController::class)->except('edit', 'show');
+Route::post('/update-featured-city-order', [FeaturedLocationController::class, 'updateOrder'])->name('update-featured-city-order');
 
 //Get job invitation uuid from email
 Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\FeaturedLocationController;
 use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Api\V1\ActivityController;
@@ -67,7 +68,6 @@ Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('home/jobs/search', [JobController::class, 'jobs_homepage']);
 
-Route::get('featured_cities', [JobController::class, 'featured_cities']);
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
 Route::get('attachments', [AttachmentController::class, 'index']);
@@ -83,6 +83,7 @@ Route::get('get_industry-experiences', [IndustryController::class, 'get_industri
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 Route::get('employment_types', [JobController::class, 'get_employment_types']);
 Route::get('locations', [LocationController::class, 'index']);
+Route::get('cities', [LocationController::class, 'cities']); //For Fetching Only Cities
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 Route::apiResource('years-of-experience', YearsOfExperienceController::class);
@@ -239,3 +240,4 @@ Route::get('pages', [PageController::class, 'index']);
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
 Route::resource('publication-resources', PublicationResourceController::class);
+Route::resource('featured_cities', FeaturedLocationController::class);
