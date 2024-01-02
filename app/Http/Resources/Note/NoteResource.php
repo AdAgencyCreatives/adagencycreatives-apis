@@ -5,6 +5,7 @@ namespace App\Http\Resources\Note;
 use App\Http\Resources\Agency\AgencyResource;
 use App\Http\Resources\Application\ApplicationResource;
 use App\Http\Resources\Creative\CreativeResource;
+use App\Http\Resources\Creative\ShortCreativeResource;
 use App\Http\Resources\Job\JobResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +31,7 @@ class NoteResource extends JsonResource
         $model = $this->notable_type::where('id', $this->notable_id)->firstOrFail();
         switch ($this->notable_type) {
             case 'App\Models\Creative':
-                return new CreativeResource($model);
+                return new ShortCreativeResource($model);
 
             case 'App\Models\Agency':
                 return new AgencyResource($model);
