@@ -20,6 +20,8 @@ use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
+use App\Mail\JobPostExpiring\JobPostExpiringAdmin;
+use App\Mail\JobPostExpiring\JobPostExpiringAgency;
 use App\Mail\Message\UnreadMessage;
 use App\Mail\Order\ConfirmationAdmin;
 use App\Models\User;
@@ -165,6 +167,18 @@ class SendEmailJob implements ShouldQueue
             case 'contact_us_inquiry':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ContactFormMail($this->data['data']));
                 break;
+
+            /**
+             * Job Post Expiring Soon
+             */
+            case 'job_expiring_soon_admin':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAdmin($this->data['data']));
+                break;
+
+            case 'job_expiring_soon_agency':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAgency($this->data['data']));
+                break;
+
 
             default:
                 // Handle unknown email types or fallback logic
