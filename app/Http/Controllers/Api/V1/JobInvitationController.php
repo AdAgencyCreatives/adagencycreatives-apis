@@ -8,6 +8,7 @@ use App\Http\Requests\Job\StoreJobInvitationRequest;
 use App\Jobs\SendEmailJob;
 use App\Models\Api\V1\JobInvitation;
 use App\Models\Job;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -53,6 +54,15 @@ class JobInvitationController extends Controller
                     'job_url' => route('job.inviatation.status.update', ['uuid' => $job_invitation->uuid]),
                 ],
             ], 'job_invitation');
+
+            //Also send this as a message in Job Messages, so that both can send/receive messages
+            Message::create([
+                'uuid' => Str::uuid(),
+                'sender_id' => $agency_user->id,
+                'receiver_id' => $invitee_user->id,
+                'message' => "Job Invitation",
+                'type' => "job",
+            ]);
 
             return response()->json([
                 'message' => 'Job invitation sent successfully',
