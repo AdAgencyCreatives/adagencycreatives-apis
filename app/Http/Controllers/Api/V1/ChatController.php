@@ -71,7 +71,8 @@ class ChatController extends Controller
                 'message' => $request->message,
                 'type' => $type,
                 'message_type' => 'received',
-                'user_name' => $sender->full_name
+                'user_name' => $sender->full_name,
+                'human_readable_date' => now()->diffForHumans(),
             ];
             $request->merge([
                 'uuid' => Str::uuid(),
