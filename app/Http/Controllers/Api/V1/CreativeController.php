@@ -8,6 +8,7 @@ use App\Http\Requests\Creative\UpdateCreativeRequest;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
+use App\Http\Resources\User\UserCollection;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
@@ -947,6 +948,7 @@ class CreativeController extends Controller
             ->orderByRaw("CONCAT(first_name,' ',last_name)")
             ->take(5)
             ->get();
-        return response()->json($creatives);
+
+        return new UserCollection($creatives);
     }
 }
