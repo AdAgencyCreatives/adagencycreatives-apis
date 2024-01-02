@@ -24,7 +24,8 @@ class NoteController extends Controller
         $query = QueryBuilder::for(Note::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-            ]);
+            ])->defaultSort('-created_at')
+              ->allowedSorts('created_at');
 
         if ($request->has('resource_type')) {
             $resourceType = $request->resource_type;
