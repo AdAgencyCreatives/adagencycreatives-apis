@@ -3,25 +3,22 @@
 @section('title', Str::ucfirst($page))
 
 @section('scripts')
-    {{-- @include('pages.ckEditor') --}}
-    {{-- <script src="/assets/vendor/ckeditor5/build/ckeditor.js"></script> --}}
-    <script>
-        $(document).ready(function() {});
-    </script>
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
 
     <script>
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var editorElements = document.querySelectorAll('.editor-textarea');
+        $(document).ready(function() {
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                plugins: 'anchor autolink codesample emoticons link lists visualblocks image preview',
+                toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
 
-        //     editorElements.forEach(function(element) {
-        //         ClassicEditor
-        //             .create(element)
-        //             .catch(error => {
-        //                 console.error(error);
-        //             });
-        //     });
-        // });
+        });
     </script>
+
+
 @endsection
 
 @section('styles')
