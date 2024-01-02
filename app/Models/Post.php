@@ -111,6 +111,11 @@ class Post extends Model
         else return $query->where('group_id', 0);
     }
 
+    public function scopeMention(Builder $query, $value)
+    {
+        return $query->orWhere('content', 'like', '%' . $value . '%');
+    }
+
     protected static function booted()
     {
         static::updated(function () {

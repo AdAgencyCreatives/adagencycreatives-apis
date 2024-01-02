@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PostController extends Controller
@@ -173,11 +174,25 @@ class PostController extends Controller
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     AllowedFilter::scope('group_id'),
+                    AllowedFilter::scope('mention'),
                     'status',
                 ])
                 ->defaultSort('-created_at')
                 ->allowedSorts('created_at')
-                ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups));
+                ->orWhereIn('group_id', array_merge([$feed_group->id], $joined_groups));
+
+            // if($request->has('mention')) {
+            //     $mention = $request->mention;
+
+            //     $sql = "SELECT id FROM posts WHERE content LIKE ?;";
+            //     $postsResult = DB::select($sql, ["%$mention%"]);
+
+            //     $posts_ids = array_map(function ($post) {
+            //         return $post->id;
+            //     }, $postsResult);
+
+            //     $query->orWhereIn('id', $posts_ids);
+            // }
 
             $posts = $query->with(['reactions' => function ($query) {
                 // You can further customize the reactions query if needed
