@@ -167,6 +167,8 @@ class PostController extends Controller
     {
         try {
             $user = request()->user();
+            $mention = sprintf("@%s %s",$user->first_name, $user->last_name);
+
             $feed_group = Group::where('slug', 'feed')->first();
             $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
 
@@ -174,12 +176,12 @@ class PostController extends Controller
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     AllowedFilter::scope('group_id'),
-                    AllowedFilter::scope('mention'),
                     'status',
                 ])
                 ->defaultSort('-created_at')
                 ->allowedSorts('created_at')
-                ->orWhereIn('group_id', array_merge([$feed_group->id], $joined_groups));
+                ->orWhereIn('group_id', array_merge([$feed_group->id], $joined_groups))
+                ->orWhere('content', 'like', '%' . $mention . '%');
 
             // if($request->has('mention')) {
             //     $mention = $request->mention;
