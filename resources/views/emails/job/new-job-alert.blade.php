@@ -13,7 +13,7 @@
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
-                            {{ $user->first_name ?? '' }},</span>
+                            {{ $user->full_name }},</span>
 
                         <p>We have a good news. You have requested job alert notifications for category
                             "{{ $data['category'] }}".</p>
@@ -22,6 +22,8 @@
                         <div><b>Job URL: </b>
                             <a href="{{ $data['url'] }}" target="_blank">Click here to open job</a>
                         </div>
-                        <div><b>Agency: </b>{{ $data['agency'] }}</div>
+                        <div><b>Agency: </b>
+                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                        </div>
 
                         @include('emails.includes.jobboard_footer')

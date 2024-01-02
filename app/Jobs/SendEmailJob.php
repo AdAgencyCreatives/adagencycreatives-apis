@@ -107,11 +107,8 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'job_approved_alert_all_subscribers':
                 $email_data = $this->data['email_data'];
-                $subscribers = $this->data['subscribers'];
-                foreach ($subscribers as $subscriber) {
-                    // Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
-                    Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
-                }
+                $subscriber = $this->data['subscribers'];
+                Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
                 break;
 
                 /**
