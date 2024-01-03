@@ -535,7 +535,7 @@
                                                                                                                                                             <a href="https://aacstagingsite.wpengine.com/product/post-a-creative-job-single-job-post/"
                                                                                                                                                                 style="text-decoration: none; word-break: break-word;"><img
                                                                                                                                                                     width="150"
-                                                                                                                                                                    src="https://aacstagingsite.wpengine.com/wp-content/uploads/2022/04/Single-Job-2-300x300.png"
+                                                                                                                                                                    src="{{ $data['image'] }}"
                                                                                                                                                                     style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; vertical-align: middle; background-color: transparent; max-width: 100%;"
                                                                                                                                                                     border="0"
                                                                                                                                                                     bgcolor="transparent">
@@ -568,10 +568,7 @@
                                                                                                                                                                 style="text-decoration: none; word-break: break-word;">
                                                                                                                                                                 <span
                                                                                                                                                                     class="viwec-responsive-center"
-                                                                                                                                                                    style="margin: 0; padding: 0; font-size: 16px; font-weight: 400; color: #ffffff; line-height: 30px;">Post
-                                                                                                                                                                    a
-                                                                                                                                                                    Creative
-                                                                                                                                                                    Job
+                                                                                                                                                                    style="margin: 0; padding: 0; font-size: 16px; font-weight: 400; color: #ffffff; line-height: 30px;">{{ $data['plan_name'] }}
                                                                                                                                                                 </span>
                                                                                                                                                             </a>
                                                                                                                                                             <p
@@ -713,8 +710,7 @@
                                                                                                                     <p
                                                                                                                         style="display: block; margin: 0; line-height: inherit; font-size: 15px;">
                                                                                                                         <span
-                                                                                                                            style="font-size: 20px; color: #ffffff;">Payment
-                                                                                                                            Method</span>
+                                                                                                                            style="font-size: 20px; color: #ffffff;"></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
@@ -747,9 +743,7 @@
                                                                                                                     <p
                                                                                                                         style="display: block; margin: 0; line-height: inherit;">
                                                                                                                         <span
-                                                                                                                            style="font-size: 15px; color: #ffffff;">Cash
-                                                                                                                            on
-                                                                                                                            delivery</span>
+                                                                                                                            style="font-size: 15px; color: #ffffff;"></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
