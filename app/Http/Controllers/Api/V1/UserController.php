@@ -14,6 +14,7 @@ use App\Jobs\SendEmailJob;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
+use App\Models\Job;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -174,6 +175,9 @@ class UserController extends Controller
                         Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
                         ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
                     }
+
+                    $this->send_notification_to_agency($user);
+
                 }
             }
 
@@ -356,5 +360,20 @@ class UserController extends Controller
             'receiver' => $admin,
             'data' => $request->all(),
         ], 'contact_us_inquiry');
+    }
+
+    public function send_notification_to_agency($user) //send notifications to all agency users about new creative user joined the site, those agency users who have active jobs with similar industry title.
+    {
+        try{
+            $category_id = $user->creative->category_id;
+            $creative_url = sprintf('%s/creative/%s', env('FRONTEND_URL'), $user->username);
+            $agencies = Job::where('category_id', $category_id)->where('status', 1)->pluck('user_id');
+            foreach($agencies as $agency_id){
+                create_notification($agency_id, sprintf("New creative user <a href='%s'>%s</a> has joined the website.", $creative_url, $user->full_name));
+            }
+        }
+        catch(\Exception $e){
+        }
+
     }
 }

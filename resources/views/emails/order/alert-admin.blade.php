@@ -152,7 +152,7 @@
                                                                                                                     bgcolor="transparent">
                                                                                                                     <img alt=""
                                                                                                                         width="200"
-                                                                                                                        src="https://aacstagingsite.wpengine.com/wp-content/uploads/2023/04/AAC-LOGO-dark.png"
+                                                                                                                        src="{{ $data['image'] }}"
                                                                                                                         max-width="100%"
                                                                                                                         style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 200px;"
                                                                                                                         border="0"
@@ -413,7 +413,7 @@
                                                                                                                                 style="border-radius: 0px; background-color: #d3a11f; width: 172px; border: 0 hidden;"
                                                                                                                                 bgcolor="#d3a11f"
                                                                                                                                 width="172">
-                                                                                                                                <a href="https://aacstagingsite.wpengine.com"
+                                                                                                                                <a href="https://api.adagencycreatives.com/reports"
                                                                                                                                     target="_blank"
                                                                                                                                     style="word-break: break-word; font-weight: 400; display: block; text-decoration: none; text-transform: none; margin: 0; text-align: center; max-width: 100%; background-color: #d3a11f; line-height: 30px; height: 30px; color: #eeeeee;"
                                                                                                                                     bgcolor="#d3a11f"
@@ -1502,8 +1502,8 @@
                                                                                                                             :
                                                                                                                             <span
                                                                                                                                 style="color: #ffffff;"><a
-                                                                                                                                    href="help@aacstagingsite.wpengine.com"
-                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">help@aacstagingsite.wpengine.com</a></span></span>
+                                                                                                                                    href="info@adagencycreatives.com"
+                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">info@adagencycreatives.com</a></span></span>
                                                                                                                     </p>
                                                                                                                     <p style="display: block; margin: 0; line-height: inherit; text-align: center;"
                                                                                                                         align="center">
@@ -1518,8 +1518,8 @@
                                                                                                                             to
                                                                                                                             <span
                                                                                                                                 style="color: #ffffff;"><a
-                                                                                                                                    href="help@aacstagingsite.wpengine.com"
-                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">help@aacstagingsite.wpengine.com</a></span></span>
+                                                                                                                                    href="info@adagencycreatives.com"
+                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">info@adagencycreatives.com</a></span></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
