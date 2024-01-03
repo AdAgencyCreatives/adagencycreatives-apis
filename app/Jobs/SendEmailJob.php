@@ -12,6 +12,7 @@ use App\Mail\Application\Interested;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\ContactFormMail;
+use App\Mail\ContentUpdated\EmailUpdated;
 use App\Mail\CustomPkg\RequestAdminAlert;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
@@ -176,6 +177,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAgency($this->data['data']));
                 break;
 
+            case 'email_updated':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new EmailUpdated($this->data['data']));
+                break;
 
             default:
                 // Handle unknown email types or fallback logic
