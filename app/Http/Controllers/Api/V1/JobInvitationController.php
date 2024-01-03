@@ -55,12 +55,14 @@ class JobInvitationController extends Controller
                 ],
             ], 'job_invitation');
 
+            $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
+
             //Also send this as a message in Job Messages, so that both can send/receive messages
             Message::create([
                 'uuid' => Str::uuid(),
                 'sender_id' => $agency_user->id,
                 'receiver_id' => $invitee_user->id,
-                'message' => "Job Invitation",
+                'message' => sprintf("Job Invitation for <a href='%s'>%s</a>", $job_url, $job->title),
                 'type' => "job",
             ]);
 
