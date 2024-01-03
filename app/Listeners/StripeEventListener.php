@@ -53,6 +53,7 @@ class StripeEventListener
                 'email' => $user->email,
                 'total' => $current_paid_amount,
                 'pm_type' => '',
+                'image' => $plan->preview,
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];
 

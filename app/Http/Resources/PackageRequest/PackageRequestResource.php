@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\PackageRequest;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PackageRequestResource extends JsonResource
@@ -17,6 +18,7 @@ class PackageRequestResource extends JsonResource
             'category' => $this->category->name,
             'agency_name' => $user->agency->name,
             'contact_name' => $user->full_name,
+            'advisor' => $this->get_advisor_name(),
             'email' => $user->email,
             'phone_number' => $user->phones()->where('label', 'business')->first()?->phone_number,
             'status' => $this->status,
@@ -31,5 +33,14 @@ class PackageRequestResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];
+    }
+
+    public function get_advisor_name()
+    {
+        if($this->assigned_to > 0){
+            $advisor = sprintf("<a href='users/%d/details'>%s</a>", $this->assigned_to, User::where('id', $this->assigned_to)->pluck('first_name')->first() ?? ''); //;
+            return $advisor;
+        }
+        return "";
     }
 }
