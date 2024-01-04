@@ -74,6 +74,9 @@ class ChatController extends Controller
                 'type' => $type,
                 'message_type' => 'received',
                 'user_name' => $sender->full_name,
+                'read_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
                 'human_readable_date' => now()->diffForHumans(),
             ];
             $request->merge([
