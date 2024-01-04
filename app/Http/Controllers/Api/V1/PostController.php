@@ -167,7 +167,7 @@ class PostController extends Controller
     {
         try {
             $user = request()->user();
-            $mention = sprintf("@%s %s",$user->first_name, $user->last_name);
+            $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
 
             $feed_group = Group::where('slug', 'feed')->first();
             $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
@@ -176,25 +176,16 @@ class PostController extends Controller
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     AllowedFilter::scope('group_id'),
-                    'status',
+                    AllowedFilter::exact('status'),
                 ])
                 ->defaultSort('-created_at')
                 ->allowedSorts('created_at')
-                ->orWhereIn('group_id', array_merge([$feed_group->id], $joined_groups))
-                ->orWhere('content', 'like', '%' . $mention . '%');
+                 ->where(function ($query) use ($feed_group, $joined_groups, $mention) {
+                     $query
+                     ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups))
+                     ->orWhere('content', 'like', '%' . $mention . '%');
+                 });
 
-            // if($request->has('mention')) {
-            //     $mention = $request->mention;
-
-            //     $sql = "SELECT id FROM posts WHERE content LIKE ?;";
-            //     $postsResult = DB::select($sql, ["%$mention%"]);
-
-            //     $posts_ids = array_map(function ($post) {
-            //         return $post->id;
-            //     }, $postsResult);
-
-            //     $query->orWhereIn('id', $posts_ids);
-            // }
 
             $posts = $query->with(['reactions' => function ($query) {
                 // You can further customize the reactions query if needed
