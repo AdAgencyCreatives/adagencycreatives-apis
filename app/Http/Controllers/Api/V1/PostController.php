@@ -176,7 +176,7 @@ class PostController extends Controller
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
                     AllowedFilter::scope('group_id'),
-                    'status',
+                    AllowedFilter::exact('status'),
                 ])
                 ->defaultSort('-created_at')
                 ->allowedSorts('created_at')
