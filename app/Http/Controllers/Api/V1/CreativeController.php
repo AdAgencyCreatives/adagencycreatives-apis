@@ -670,6 +670,11 @@ class CreativeController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            $request->validate([
+                'email' => 'unique:users,email,' . $user->id,
+                'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
+            ]);
+
             // Update User
             $userData = [];
 

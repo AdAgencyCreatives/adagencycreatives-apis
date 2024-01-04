@@ -168,7 +168,7 @@ class JobController extends Controller
         $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
         }
 
         // $sql .= "UNION DISTINCT" . "\n";
