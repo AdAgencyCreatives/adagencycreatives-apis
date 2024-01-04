@@ -705,7 +705,7 @@ class CreativeController extends Controller
                 updateLink($user, $request->input('linkedin_profile'), 'linkedin');
             }
             if ($request->input('portfolio_site')) {
-                updateLink($user, $request->input('portfolio_site'), 'portfolio_website');
+                updateLink($user, $request->input('portfolio_site'), 'portfolio');
             }
 
             return response()->json([
