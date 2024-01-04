@@ -12,6 +12,7 @@ use App\Mail\Application\Interested;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\ContactFormMail;
+use App\Mail\ContentUpdated\EmailUpdated;
 use App\Mail\CustomPkg\RequestAdminAlert;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
@@ -20,6 +21,8 @@ use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
+use App\Mail\JobPostExpiring\JobPostExpiringAdmin;
+use App\Mail\JobPostExpiring\JobPostExpiringAgency;
 use App\Mail\Message\UnreadMessage;
 use App\Mail\Order\ConfirmationAdmin;
 use App\Models\User;
@@ -105,11 +108,8 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'job_approved_alert_all_subscribers':
                 $email_data = $this->data['email_data'];
-                $subscribers = $this->data['subscribers'];
-                foreach ($subscribers as $subscriber) {
-                    // Mail::to($subscriber->user->email)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
-                    Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber->user));
-                }
+                $subscriber = $this->data['subscribers'];
+                Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
                 break;
 
                 /**
@@ -164,6 +164,21 @@ class SendEmailJob implements ShouldQueue
 
             case 'contact_us_inquiry':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ContactFormMail($this->data['data']));
+                break;
+
+            /**
+             * Job Post Expiring Soon
+             */
+            case 'job_expiring_soon_admin':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAdmin($this->data['data']));
+                break;
+
+            case 'job_expiring_soon_agency':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAgency($this->data['data']));
+                break;
+
+            case 'email_updated':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new EmailUpdated($this->data['data']));
                 break;
 
             default:

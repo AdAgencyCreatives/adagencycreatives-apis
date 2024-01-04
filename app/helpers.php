@@ -236,13 +236,13 @@ if (! function_exists('get_user_slug')) {
 }
 
 if (! function_exists('create_notification')) {
-    function create_notification($user_id, $msg)
+    function create_notification($user_id, $msg, $type = 'job_board', $body = [])
     {
         $notification = Notification::create([
             'uuid' => Str::uuid(),
             'user_id' => $user_id,
-            'type' => 'job_board',
-            'body' => '',
+            'type' => $type,
+            'body' => $body,
             'message' => $msg,
         ]);
 
@@ -250,7 +250,7 @@ if (! function_exists('create_notification')) {
             'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
             'body' => $msg,
         ];
-        event(new SendNotification($event_data));
+        // event(new SendNotification($event_data));
 
         return $notification;
     }

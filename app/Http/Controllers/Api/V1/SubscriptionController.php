@@ -68,6 +68,7 @@ class SubscriptionController extends Controller
                 'email' => $user->email,
                 'total' => $plan->price,
                 'pm_type' => $subscription->owner->pm_type,
+                'image' => $subscription->owner->pm_type,
                 'created_at' => \Carbon\Carbon::parse($subscription->created_at)->format('F d, Y'),
             ];
 

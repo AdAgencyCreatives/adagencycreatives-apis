@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Job;
+namespace App\Mail\ContentUpdated;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -8,31 +8,42 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class JobPostedApprovedAlertAllSubscribers extends Mailable
+class EmailUpdated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public $data, public $user)
+    public $data;
+
+    public function __construct($data)
     {
         $this->data = $data;
         $this->data['APP_NAME'] = env('APP_NAME');
-        $this->data['APP_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('New Job Posted in "%s" category', $this->data['category'], $this->data['APP_NAME']),
+            subject: sprintf(' Your %s email address has been updated.', $this->data['APP_NAME']),
         );
     }
 
+    /**
+     * Get the message content definition.
+     *
+     * @return \Illuminate\Mail\Mailables\Content
+     */
     public function content()
     {
         return new Content(
-            view: 'emails.job.new-job-alert',
+            view: 'emails.content-updated.email',
         );
     }
 
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array
+     */
     public function attachments()
     {
         return [];

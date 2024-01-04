@@ -278,7 +278,11 @@ class Job extends Model
                 ];
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
-                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+
+                foreach($categorySubscribers as $creative){
+                    create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
+                }
+                // SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
 
 
                 /**
@@ -296,7 +300,7 @@ class Job extends Model
                         'created_at' => $job->created_at->format('M-d-Y'),
                         'expired_at' => $job->expired_at->format('M-d-Y'),
                     ],
-                    'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
+                    'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
             }

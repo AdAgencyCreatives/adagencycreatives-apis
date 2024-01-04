@@ -364,6 +364,10 @@ class AgencyController extends Controller
                 $userData['username'] = $request->username;
             }
 
+            if ($request->filled('email')) {
+                $userData['email'] = $request->email;
+            }
+
             if ($request->filled('show_profile')) {
                 $userData['is_visible'] = $request->show_profile ? 1 : 0;
             }

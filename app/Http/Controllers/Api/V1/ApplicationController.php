@@ -13,6 +13,7 @@ use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Job;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -87,6 +88,17 @@ class ApplicationController extends Controller
                     'message' => $request->message,
                 ],
             ], 'new_candidate_application'); // To the agency
+
+            //Also send this as a message in Job Messages, so that both can send/receive messages
+            $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
+            $creative_url = sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username);
+            Message::create([
+                'uuid' => Str::uuid(),
+                'sender_id' => $applicant_user->id,
+                'receiver_id' => $agency_user->id,
+                'message' => sprintf("<b><a href='%s'>%s</a> applied on the job <a href='%s'>%s</a></b>", $creative_url, $applicant_user->full_name,  $job_url, $job->title),
+                'type' => "job",
+            ]);
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {

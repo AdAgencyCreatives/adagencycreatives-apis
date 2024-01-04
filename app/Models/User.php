@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use App\Jobs\SendResetPasswordJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -339,11 +340,10 @@ class User extends Authenticatable
     public function scopeIsFeatured(Builder $query, $value): Builder
     {
         $value = explode('_', $value);
-        if($value[0] == 'creative'){
+        if($value[0] == 'creative') {
             $creative_ids = Creative::where('is_featured', $value[1])->pluck('user_id');
             return $query->whereIn('id', $creative_ids);
-        }
-        else{
+        } else {
             $creative_ids = Agency::where('is_featured', $value[1])->pluck('user_id');
             return $query->whereIn('id', $creative_ids);
         }
@@ -428,6 +428,23 @@ class User extends Authenticatable
                 Cache::forget('all_creatives');
             });
 
+            static::updating(function ($user) {
+                if ($user->isDirty('email')) {
+                    // Email address is being updated
+                    $oldEmail = $user->getOriginal('email');
+                    $newEmail = $user->email;
+                    $data = [
+                        'receiver' => $oldEmail,
+                        'data' => [
+                            'recipient' => $user->first_name,
+                            'old_email' => $oldEmail,
+                            'new_email' => $newEmail,
+                    ]
+                    ];
+                    SendEmailJob::dispatch($data, 'email_updated');
+
+                }
+            });
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');

@@ -22,7 +22,7 @@ class NotificationController extends Controller
         $query = QueryBuilder::for(Notification::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                'type',
+                AllowedFilter::exact('type'),
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
