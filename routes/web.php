@@ -79,10 +79,21 @@ Route::get('/show-email', function () {
             'plan_name' => "Single Job Post",
             'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
-
     ];
 
     return view('emails.order.alert-admin', compact('data'));
+});
+
+Route::get('/show-email2', function () {
+    $data = [
+            "username" => 'John',
+            "recipient" => 'Kale',
+            "member" => 'John',
+            'FRONTEND_URL' => "abc.com",
+            'APP_NAME' => env('APP_NAME'),
+    ];
+
+    return view('emails.friendship.request_accepted', compact('data'));
 });
 
 
