@@ -46,6 +46,48 @@ class PublicationResourceController extends Controller
 
     }
 
+    public function edit(Request $request, PublicationResource $publicationResource)
+    {
+        return view('pages.publication_resource.edit', compact('publicationResource'));
+    }
+
+    public function update(Request $request, PublicationResource $publicationResource)
+    {
+
+        if ($request->has('file') && is_object($request->file)) {
+
+            $attachment = storeImage($request, auth()->id(), 'publication_resource_website_preview');
+
+            if (isset($attachment) && is_object($attachment)) {
+
+                if ($publicationResource->preview_link) {
+                    $this->deleteImage($publicationResource);
+                }
+
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $publicationResource->id,
+                ]);
+
+                $publicationResource->update([
+                    'link' => $request->input('link'),
+                    'preview_link' => $attachment->path,
+                ]);
+            }
+        } else {
+            $publicationResource->update($request->except('file'));
+        }
+
+        Session::flash('success', 'Resource updated successfully');
+        return back();
+    }
+
+    private function deleteImage($resource)
+    {
+        Attachment::where("resource_id" , $resource->id)
+            ->where('resource_type', 'publication_resource_website_preview')
+            ->delete();
+    }
+
     public function updateOrder(Request $request)
     {
         $order = $request->input('order');
