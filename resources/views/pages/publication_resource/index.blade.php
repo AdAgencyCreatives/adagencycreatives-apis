@@ -65,9 +65,10 @@
             $.each(categories, function(index, topic) {
                 var roleBasedActions = '';
 
-                var editUrl = "/resource/" + topic.id + "/details";
+                var editUrl = "/publication-resource/" + topic.id + "/edit";
 
-                roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
+                roleBasedActions = '<a href="' + editUrl +
+                    '" target="_blank">Edit</a> | <a href="#" class="delete-category-btn" data-id="' +
                     topic.id + '">Delete</a>';
 
                 var row = '<tr class="sortable-item" id="' + topic.id + '">' +

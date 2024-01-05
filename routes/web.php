@@ -352,8 +352,8 @@ Route::view('resume', 'resume');
 
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
-Route::resource('resource', MentorResourceController::class)->except('edit', 'show');
-Route::resource('publication-resource', PublicationResourceController::class)->except('edit', 'show');
+Route::resource('resource', MentorResourceController::class);
+Route::resource('publication-resource', PublicationResourceController::class);
 Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
 Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
 Route::post('/update-resource-order', [MentorResourceController::class, 'updateOrder'])->name('update-resource-order');
