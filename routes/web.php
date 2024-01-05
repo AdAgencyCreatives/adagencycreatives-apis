@@ -69,10 +69,21 @@ Route::get('/users2', function () {
     }
 });
 
-Route::get('/timezone', function () {
-    dd(now());
-});
 
+Route::get('/show-email', function () {
+    $data = [
+           'email' => "test@gmail.com",
+            "username" => 'John',
+            "order_no" => '123',
+            "total" => '$500',
+            'plan_name' => "Single Job Post",
+            'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
+            "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
+
+    ];
+
+    return view('emails.order.alert-admin', compact('data'));
+});
 
 
 Route::get('/email', function () {
