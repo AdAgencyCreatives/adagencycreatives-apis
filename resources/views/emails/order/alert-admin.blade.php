@@ -151,10 +151,10 @@
                                                                                                                     align="center"
                                                                                                                     bgcolor="transparent">
                                                                                                                     <img alt=""
-                                                                                                                        width="200"
+                                                                                                                        width="360"
                                                                                                                         src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/AAC-LOGO-500-%C3%97-100-px-1.png"
                                                                                                                         max-width="100%"
-                                                                                                                        style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 200px;"
+                                                                                                                        style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 60%;"
                                                                                                                         border="0"
                                                                                                                         bgcolor="transparent">
                                                                                                                 </td>
