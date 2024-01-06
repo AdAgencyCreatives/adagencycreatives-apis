@@ -670,6 +670,11 @@ class CreativeController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            $request->validate([
+                'email' => 'unique:users,email,' . $user->id,
+                'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
+            ]);
+
             // Update User
             $userData = [];
 
@@ -705,7 +710,7 @@ class CreativeController extends Controller
                 updateLink($user, $request->input('linkedin_profile'), 'linkedin');
             }
             if ($request->input('portfolio_site')) {
-                updateLink($user, $request->input('portfolio_site'), 'portfolio_website');
+                updateLink($user, $request->input('portfolio_site'), 'portfolio');
             }
 
             return response()->json([

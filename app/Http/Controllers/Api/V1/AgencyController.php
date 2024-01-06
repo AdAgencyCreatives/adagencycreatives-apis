@@ -338,10 +338,15 @@ class AgencyController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            $request->validate([
+                'email' => 'unique:users,email,' . $user->id,
+                'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
+            ]);
+
             $agency->name = $request->company_name;
             $agency->size = $request->size;
             $agency->about = $request->about;
-            $agency->slug = $request->slug;
+            // $agency->slug = $request->slug;
             $agency->is_remote = $request->is_remote;
             $agency->is_hybrid = $request->is_hybrid;
             $agency->is_onsite = $request->is_onsite;
@@ -360,8 +365,8 @@ class AgencyController extends Controller
                 $userData['last_name'] = $request->last_name;
             }
 
-            if ($request->filled('username')) {
-                $userData['username'] = $request->username;
+            if ($request->filled('slug')) {
+                $userData['username'] = $request->slug;
             }
 
             if ($request->filled('email')) {

@@ -451,19 +451,19 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_attachments');
                 Cache::forget('all_creatives');
 
-                //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
-                if ($user->creative) {
-                    $creative = $user->creative;
-                    $creative->slug = Str::slug($user->username);
-                    $creative->save();
+                if ($user->isDirty('username')) {
+                    //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
+                    tap($user, function ($user) {
+                        if ($user->creative) {
+                            $user->creative->update(['slug' => Str::slug($user->username)]);
+                        }
+
+                        if ($user->agency) {
+                            $user->agency->update(['slug' => Str::slug($user->username)]);
+                        }
+                    });
                 }
 
-                //Update slug in agencies table when username is changes, slug in agencies table fallbacks to username
-                if ($user->agency) {
-                    $agency = $user->agency;
-                    $agency->slug = Str::slug($user->username);
-                    $agency->save();
-                }
             });
 
             static::deleted(function ($user) {

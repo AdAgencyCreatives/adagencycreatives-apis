@@ -67,8 +67,13 @@ class JobController extends Controller
         }
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
-            ->withCount('applications')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->withCount('applications');
+
+        if ($request->applications_count) {
+            $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
+        }
+
+        $jobs = $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
@@ -163,7 +168,7 @@ class JobController extends Controller
         $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
         }
 
         // $sql .= "UNION DISTINCT" . "\n";

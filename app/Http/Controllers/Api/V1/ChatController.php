@@ -15,6 +15,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ChatController extends Controller
 {
@@ -72,6 +74,9 @@ class ChatController extends Controller
                 'type' => $type,
                 'message_type' => 'received',
                 'user_name' => $sender->full_name,
+                'read_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
                 'human_readable_date' => now()->diffForHumans(),
             ];
             $request->merge([
@@ -209,6 +214,27 @@ class ChatController extends Controller
         return response()->json(['success' => true], 200);
     }
 
+    public function count(Request $request)
+    {
+        $query = QueryBuilder::for(Message::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::exact('type'),
+            ])
+            ;
+
+        if ($request->has('status')) {
+            if ($request->status == 0) {
+                $query->whereNull('read_at');
+            } elseif ($request->status == 1) {
+                $query->whereNotNull('read_at');
+            }
+        }
+
+        return response()->json([
+            'count' => $query->count(),
+        ]);
+    }
 
 
 }

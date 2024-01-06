@@ -33,7 +33,7 @@ class StoreJobRequest extends FormRequest
             'is_onsite' => 'required|boolean',
             'is_featured' => 'required|boolean',
             'is_urgent' => 'required|boolean',
-            'expired_at' => 'required|date',
+            'expired_at' => 'nullable|date',
         ];
     }
 }
