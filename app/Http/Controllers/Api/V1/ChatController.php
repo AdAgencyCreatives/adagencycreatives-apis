@@ -239,6 +239,6 @@ class ChatController extends Controller
 
         $query->whereRaw("type IN (?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [explode(",", $request->message_type), $request->user1, $request->user2, $request->user2, $request->user1]);
 
-        return response()->json($query->get());
+        return response()->json($query->delete());
     }
 }
