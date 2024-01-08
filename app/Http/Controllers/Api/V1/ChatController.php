@@ -49,10 +49,10 @@ class ChatController extends Controller
 
         // Read all messages between these two users
         Message::where('sender_id', $contactId)
-        ->where('receiver_id', $userId)
-        ->whereIn('type', $types)
-        ->whereNull('read_at')
-        ->touch('read_at');
+            ->where('receiver_id', $userId)
+            ->whereIn('type', $types)
+            ->whereNull('read_at')
+            ->touch('read_at');
 
         // Reverse the order of items in the resource collection
         $reversedMessages = new MessageCollection($messages->reverse());
@@ -174,13 +174,11 @@ class ChatController extends Controller
                         unset($contact['sender']);
                         $contact->contact = new UserResource($contact->receiver);
                         unset($contact['receiver']);
-
                     } elseif ($receiverId == $userId) {
                         $contact->message_type = 'received';
                         unset($contact['receiver']);
                         $contact->contact = new UserResource($contact->sender);
                         unset($contact['sender']);
-
                     }
 
                     $uniquePairs[] = $sortedPair;
@@ -220,8 +218,7 @@ class ChatController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::exact('type'),
-            ])
-            ;
+            ]);
 
         if ($request->has('status')) {
             if ($request->status == 0) {
@@ -240,9 +237,8 @@ class ChatController extends Controller
     {
         $query = QueryBuilder::for(Message::class);
 
-        $query->whereRaw("type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [$request->message_type, $request->user1,$request->user2,$request->user2,$request->user1]);
+        $query->whereRaw("type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [("'" . implode("','", explode(",", $request->message_type)) . "'"), $request->user1, $request->user2, $request->user2, $request->user1]);
 
         return response()->json($query->delete());
     }
-
 }
