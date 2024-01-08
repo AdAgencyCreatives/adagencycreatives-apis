@@ -237,8 +237,8 @@ class ChatController extends Controller
     {
         $query = QueryBuilder::for(Message::class);
 
-        $query->whereRaw("type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [("'" . implode("','", explode(",", $request->message_type)) . "'"), $request->user1, $request->user2, $request->user2, $request->user1]);
+        $query->whereRaw("type IN (?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [("'" . implode("','", explode(",", $request->message_type)) . "'"), $request->user1, $request->user2, $request->user2, $request->user1]);
 
-        return response()->json($query->delete());
+        return response()->json($query->get());
     }
 }
