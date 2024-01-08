@@ -444,7 +444,28 @@ class User extends Authenticatable
                     SendEmailJob::dispatch($data, 'email_updated');
 
                 }
+
+                if ($user->isDirty('role')) {
+                    $newRole = $user->role;
+                    if($newRole == 'creative' ){
+                        Agency::where('user_id', $user->id)->delete();
+                        Creative::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
+                    }
+                    elseif(in_array($newRole, ['agency', 'advisor', 'recruiter'])){
+                        Creative::where('user_id', $user->id)->delete();
+                        Agency::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+                    }
+                }
             });
+
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
@@ -493,4 +514,6 @@ class User extends Authenticatable
             });
         }
     }
+
+
 }

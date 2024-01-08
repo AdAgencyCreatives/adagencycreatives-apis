@@ -242,7 +242,9 @@
 @endsection
 @section('content')
 
-
+    @if (session('success'))
+        <x-alert-deleted type="success"></x-alert-deleted>
+    @endif
     @include('pages.users._inc.filters')
 
     <div class="row">
