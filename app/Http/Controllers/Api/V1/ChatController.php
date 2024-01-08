@@ -240,11 +240,12 @@ class ChatController extends Controller
     {
         $query = QueryBuilder::for(Message::class)
             ->allowedFilters([
-                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('sender_id'),
+                AllowedFilter::scope('receiver_id'),
                 AllowedFilter::exact('type'),
             ]);
 
-            $query->whereRaw(`(sender_id=$request->user1 and receiver_id=$request->user2) OR (sender_id=$request->user2 and receiver_id=$request->user1)`);
+            $query->whereRaw("(sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?)', [$request->user1,$request->user2,$request->user2,$request->user1]);
 
         return response()->json($query->toSql());
     }
