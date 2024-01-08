@@ -245,7 +245,7 @@ class ChatController extends Controller
                 AllowedFilter::exact('type'),
             ]);
 
-            $query->whereRaw("(sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?)", [$request->user1,$request->user2,$request->user2,$request->user1]);
+            $query->whereRaw("type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [$request->type, $request->user1,$request->user2,$request->user2,$request->user1]);
 
         return response()->json($query->get());
     }
