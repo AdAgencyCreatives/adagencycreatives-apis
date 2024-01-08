@@ -247,7 +247,7 @@ class ChatController extends Controller
 
             $query->whereRaw("(sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?)", [$request->user1,$request->user2,$request->user2,$request->user1]);
 
-        return response()->json($query->toSql());
+        return response()->json($query->get());
     }
 
 }
