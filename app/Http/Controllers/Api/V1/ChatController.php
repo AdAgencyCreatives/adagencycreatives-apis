@@ -240,8 +240,6 @@ class ChatController extends Controller
     {
         $query = QueryBuilder::for(Message::class)
             ->allowedFilters([
-                AllowedFilter::scope('sender_id'),
-                AllowedFilter::scope('receiver_id'),
                 AllowedFilter::exact('type'),
             ]);
 
