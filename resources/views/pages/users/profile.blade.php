@@ -147,6 +147,11 @@
                         <a class="list-group-item list-group-item-action" href="{{ route('impersonate', $user->id) }}">
                             Impersonate
                         </a>
+
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#permanently_delete"
+                            role="tab" aria-selected="false" tabindex="-1">
+                            Permanently Delete
+                        </a>
                     @endif
 
                 </div>
@@ -178,6 +183,10 @@
                 </div>
                 <div class="tab-pane fade" id="password" role="tabpanel">
                     @include('pages.users._inc.password')
+                </div>
+
+                <div class="tab-pane fade" id="permanently_delete" role="tabpanel">
+                    @include('pages.users._inc.permanently_delete')
                 </div>
                 @if ($user->role == 'creative')
                     <div class="tab-pane fade" id="experiences" role="tabpanel">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Job;
 
+use App\Http\Resources\Application\ApplicationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
@@ -44,6 +45,7 @@ class JobResource extends JsonResource
             'agency' => [],
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
+            'applications' => new ApplicationCollection($this->applications),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),

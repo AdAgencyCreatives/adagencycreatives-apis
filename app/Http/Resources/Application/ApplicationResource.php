@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Application;
 
-use App\Http\Resources\Job\JobResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicationResource extends JsonResource
@@ -35,7 +34,7 @@ class ApplicationResource extends JsonResource
                         'related' => route('notes.index') . '?filter[application_id]=' . $this->uuid,
                     ],
                 ],
-                'job' => new JobResource($this->job),
+                // 'job' => new JobResource($this->job),
             ],
 
         ];
@@ -48,7 +47,7 @@ class ApplicationResource extends JsonResource
         } else {
             $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
 
-            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user->uuid]);
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user?->uuid]);
         }
     }
 }
