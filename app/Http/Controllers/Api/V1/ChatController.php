@@ -238,10 +238,7 @@ class ChatController extends Controller
 
     public function deleteConversation(Request $request)
     {
-        $query = QueryBuilder::for(Message::class)
-            ->allowedFilters([
-                AllowedFilter::exact('type'),
-            ]);
+        $query = QueryBuilder::for(Message::class);
 
             $query->whereRaw("type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [$request->type, $request->user1,$request->user2,$request->user2,$request->user1]);
 
