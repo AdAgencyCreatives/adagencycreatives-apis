@@ -209,6 +209,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::get('activities/count', [ActivityController::class, 'count']);
     Route::apiResource('activities', ActivityController::class);
+    Route::post('delete-conversation', [ChatController::class, 'deleteConversation']);
     /**
      * SEO
      */

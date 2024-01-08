@@ -236,5 +236,16 @@ class ChatController extends Controller
         ]);
     }
 
+    public function deleteConversation(Request $request)
+    {
+        $query = QueryBuilder::for(Message::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::exact('type'),
+            ]);
+
+        return response()->json($query->get());
+    }
+
 
 }
