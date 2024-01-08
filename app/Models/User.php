@@ -454,12 +454,20 @@ class User extends Authenticatable
                         Address::where('user_id', $user->id)->where('label', 'business')->update([
                             'label' => 'personal'
                         ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
                     }
                     elseif(in_array($newRole, ['agency', 'advisor', 'recruiter'])){
                         Creative::where('user_id', $user->id)->delete();
                         Agency::onlyTrashed()->where('user_id', $user->id)->restore();
 
                         Address::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'personal')->update([
                             'label' => 'business'
                         ]);
                     }
