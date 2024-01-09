@@ -400,6 +400,75 @@ class AgencyController extends Controller
 
     }
 
+        public function update_profile_advisor(Request $request, $uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->first();
+            $agency = Agency::where('user_id', $user->id)->first();
+
+            if (!$agency) {
+                return response()->json([
+                    'message' => 'No user found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            $request->validate([
+                'email' => 'unique:users,email,' . $user->id,
+                'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
+            ]);
+
+            $agency->name = $request->company_name;
+
+            $agency->is_remote = 0;
+            $agency->is_hybrid = 0;
+            $agency->is_onsite = 0;
+            $agency->save();
+
+            // Update User
+            $userData = [];
+
+            if ($request->filled('first_name')) {
+                $userData['first_name'] = $request->first_name;
+            }
+
+            if ($request->filled('last_name')) {
+                $userData['last_name'] = $request->last_name;
+            }
+
+            if ($request->filled('slug')) {
+                $userData['username'] = $request->slug;
+            }
+
+            if ($request->filled('email')) {
+                $userData['email'] = $request->email;
+            }
+
+            if ($request->filled('show_profile')) {
+                $userData['is_visible'] = $request->show_profile ? 1 : 0;
+            }
+
+            $user->fill($userData);
+            $user->save();
+
+            updateLocation($request, $user, 'business');
+            if ($request->has('phone_number')) {
+                updatePhone($user, $request->phone_number, 'business');
+            }
+
+            updateLink($user, $request->linkedin, 'linkedin');
+
+            return response()->json([
+                'message' => 'Profile updated successfully.',
+                'data' => new AgencyResource($agency),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+    }
+
     public function destroy($uuid)
     {
         $deleted = Agency::where('uuid', $uuid)->delete();
