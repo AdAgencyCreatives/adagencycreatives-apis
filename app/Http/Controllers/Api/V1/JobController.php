@@ -228,17 +228,17 @@ class JobController extends Controller
         $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        // $sql .= "UNION DISTINCT" . "\n";
 
         // Search via Agency Name
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id'."\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ag.name LIKE '%".trim($term)."%')"."\n";
-        }
+        // $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id" . "\n";
+        // for ($i = 0; $i < count($terms); $i++) {
+        //     $term = $terms[$i];
+        //     $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ag.name LIKE '%" . trim($term) . "%')" . "\n";
+        // }
 
         $res = DB::select($sql);
         $jobIds = collect($res)->pluck('id')->toArray();
