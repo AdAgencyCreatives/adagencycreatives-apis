@@ -56,16 +56,16 @@ class JobResource extends JsonResource
             if ($this->agency_name == null) {
                 $data['agency'] = [
                     'name' => $agency->name,
-                    'logo' => get_profile_picture($user),
                 ];
 
             } else {
                 $data['agency'] = [
                     'name' => $this->agency_name,
-                    'logo' => get_profile_picture($user),
                 ];
             }
+            $data['agency']['logo'] = get_profile_picture($user);
             $data['agency']['slug'] = $agency->slug;
+            $data['agency']['id'] = $user->uuid;
         }
 
         return $data;
