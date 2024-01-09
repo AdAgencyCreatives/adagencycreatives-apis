@@ -314,7 +314,10 @@ Route::group(['middleware' => ['auth']], function () {
         //     Artisan::call('migrate:fresh --seed');
         // });
 
-
+        /**
+         * Delete user data permanently
+         */
+        Route::delete('permanently_delete/{user}', [UserController::class, 'deleteRelatedRecordsPermanently'])->name('permanently_delete');
 
     });
 
