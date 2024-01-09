@@ -36,7 +36,7 @@ class GeneratePortfolioVisual extends Command
         $api_url = sprintf("%s&url=%s%s", env('API_FLASH_BASE_URL'), $url, "&format=png&width=1366&height=768&fresh=true&quality=100&delay=10&no_cookie_banners=true&no_ads=true&no_tracking=true") ;
 
 
-        $apiflashResponse = Http::get($api_url);
+        $apiflashResponse = Http::timeout(60)->get($api_url);
         // Check if the request was successful
         if ($apiflashResponse->successful()) {
             // Store the image in AWS
