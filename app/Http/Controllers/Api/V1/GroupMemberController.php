@@ -103,6 +103,8 @@ class GroupMemberController extends Controller
                 }
             }
 
+            return response()->json($group_invitation);
+
             $group_member = GroupMember::where('user_id', $user->id)->where('group_id', $group->id)->first();
             if ($group_member) {
                 $group_member->delete();
