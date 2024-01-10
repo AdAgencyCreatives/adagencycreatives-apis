@@ -9,6 +9,7 @@ use App\Http\Requests\Notification\StoreNotificationRequest;
 use App\Http\Resources\Notification\NotificationCollection;
 use App\Http\Resources\Notification\NotificationResource;
 use App\Models\Notification;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -35,7 +36,8 @@ class NotificationController extends Controller
             }
         }
 
-        $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'))
+        ->withQueryString();
 
         return new NotificationCollection($notifications);
     }
@@ -49,6 +51,16 @@ class NotificationController extends Controller
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
             ]);
+
+            if ($request->has('body')) {
+                $body = $request->input('body');
+                if (isset($body['post_id'])) {
+
+                    $post= Post::where('uuid', $body['post_id'])->first();
+                    $request->merge(['body' => $post->id]);
+                }
+            }
+
             $notification = Notification::create($request->all());
 
             return new NotificationResource($notification);
