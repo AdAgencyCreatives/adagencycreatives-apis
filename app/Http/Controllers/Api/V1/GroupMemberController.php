@@ -97,13 +97,9 @@ class GroupMemberController extends Controller
         try {
             $group_invitation = GroupInvitation::where('group_id', $group->id)->where('invitee_user_id', $user->id)->first();
             if ($group_invitation) {
-                if ($group_invitation->status == 1) {
-                    $group_invitation->delete();
-                    $deleted_1 = true;
-                }
+                $group_invitation->delete();
+                $deleted_1 = true;
             }
-
-            return response()->json($group_invitation);
 
             $group_member = GroupMember::where('user_id', $user->id)->where('group_id', $group->id)->first();
             if ($group_member) {
