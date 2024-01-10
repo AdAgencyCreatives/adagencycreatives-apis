@@ -22,10 +22,13 @@ class ReviewController extends Controller
         $user = $request->user();
         $query = QueryBuilder::for(Review::class)
             ->allowedFilters([
-                AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('target_id'),
             ])
             ->allowedSorts('created_at');
+
+        if(!$request->is_own_profile){
+            $query = $query->where('user_id', $user->id);
+        }
 
         $reviews = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
