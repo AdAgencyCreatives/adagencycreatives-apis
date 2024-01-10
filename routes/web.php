@@ -305,6 +305,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::get('import/creative-websites', function () {
+
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);
@@ -314,7 +315,10 @@ Route::group(['middleware' => ['auth']], function () {
         //     Artisan::call('migrate:fresh --seed');
         // });
 
-
+        /**
+         * Delete user data permanently
+         */
+        Route::delete('permanently_delete/{user}', [UserController::class, 'deleteRelatedRecordsPermanently'])->name('permanently_delete');
 
     });
 

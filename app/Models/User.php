@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -444,6 +445,37 @@ class User extends Authenticatable
                     SendEmailJob::dispatch($data, 'email_updated');
 
                 }
+
+                 if ($user->isDirty('role')) {
+                    $newRole = $user->role;
+                    if($newRole == 'creative' ){
+                        Agency::where('user_id', $user->id)->delete();
+                        Creative::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
+                    }
+                    elseif(in_array($newRole, ['agency', 'advisor', 'recruiter'])){
+                        Creative::where('user_id', $user->id)->delete();
+                        Agency::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+                    }
+
+                    Artisan::call('optimize:clear');
+                }
+
             });
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
