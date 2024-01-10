@@ -6,9 +6,11 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupMember\StoreGroupMemberRequest;
 use App\Http\Requests\GroupMember\UpdateGroupMemberRequest;
+use App\Http\Resources\GroupInvitation\InvitationResource;
 use App\Http\Resources\GroupMember\GroupMemberCollection;
 use App\Http\Resources\GroupMember\GroupMemberResource;
 use App\Models\Group;
+use App\Models\GroupInvitation;
 use App\Models\GroupMember;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,15 +51,30 @@ class GroupMemberController extends Controller
             return response()->json(['message' => 'User is already a member of the group.'], 422);
         }
 
-        $group_member = GroupMember::create([
+        if($group->status == 'private'){
+
+            if(GroupInvitation::where('invitee_user_id', $user->id)->where('group_id', $group->id)->exists()){
+                return response()->json(['message' => 'Group invitation already sent.'], 422);
+            }
+            $group_invitation = GroupInvitation::create([
+                'uuid' => Str::uuid(),
+                'inviter_user_id' => $user->id,
+                'invitee_user_id' => $user->id,
+                'group_id' => $group->id,
+        ]);
+
+        return new InvitationResource($group_invitation);
+        }
+        else{
+            $group_member = GroupMember::create([
             'uuid' => Str::uuid(),
             'group_id' => $group->id,
             'user_id' => $user->id,
             'role' => $request->role,
             'joined_at' => now(),
         ]);
-
         return new GroupMemberResource($group_member);
+        }
     }
 
     public function update(UpdateGroupMemberRequest $request, $uuid)
