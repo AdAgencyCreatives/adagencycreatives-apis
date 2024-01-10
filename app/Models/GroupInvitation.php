@@ -98,6 +98,7 @@ class GroupInvitation extends Model
                         'uuid' => Str::uuid(),
                         'group_id' => $invitation->group_id,
                         'user_id' => $invitation->invitee_user_id,
+                        'role' => 3,
                         'joined_at' => now(),
                     ]);
                 }

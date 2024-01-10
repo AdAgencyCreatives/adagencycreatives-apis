@@ -86,6 +86,8 @@ class GroupInvitationController extends Controller
             $invitation = GroupInvitation::where('uuid', $uuid)->first();
             $invitation->update($request->only('status'));
 
+            $invitation->touch('accepted_at');
+
             return new InvitationResource($invitation);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);

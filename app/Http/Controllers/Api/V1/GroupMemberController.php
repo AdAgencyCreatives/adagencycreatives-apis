@@ -37,11 +37,6 @@ class GroupMemberController extends Controller
         return new GroupMemberCollection($group_members);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(StoreGroupMemberRequest $request)
     {
         $user = User::where('uuid', $request->user_id)->firstOrFail();
@@ -51,9 +46,9 @@ class GroupMemberController extends Controller
             return response()->json(['message' => 'User is already a member of the group.'], 422);
         }
 
-        if($group->status == 'private'){
+        if($group->status == 'private') {
 
-            if(GroupInvitation::where('invitee_user_id', $user->id)->where('group_id', $group->id)->exists()){
+            if(GroupInvitation::where('invitee_user_id', $user->id)->where('group_id', $group->id)->exists()) {
                 return response()->json(['message' => 'Group invitation already sent.'], 422);
             }
             $group_invitation = GroupInvitation::create([
@@ -63,9 +58,8 @@ class GroupMemberController extends Controller
                 'group_id' => $group->id,
         ]);
 
-        return new InvitationResource($group_invitation);
-        }
-        else{
+            return new InvitationResource($group_invitation);
+        } else {
             $group_member = GroupMember::create([
             'uuid' => Str::uuid(),
             'group_id' => $group->id,
@@ -73,7 +67,7 @@ class GroupMemberController extends Controller
             'role' => $request->role,
             'joined_at' => now(),
         ]);
-        return new GroupMemberResource($group_member);
+            return new GroupMemberResource($group_member);
         }
     }
 
@@ -93,14 +87,21 @@ class GroupMemberController extends Controller
         return new GroupMemberResource($group_member);
     }
 
-    public function destroy(Request $request, $uuid)
+    public function leave_membership(Request $request)
     {
+        $group = Group::where('uuid', $request->group_id)->first();
+        $user = User::where('uuid', $request->receiver_id)->first();
+
         try {
-            $group_member = GroupMember::where('uuid', $uuid)->firstOrFail();
+            if($group->status != 0) { //if group in private then delete its invitation also
+                GroupInvitation::where('group_id', $group->id)->where('invitee_user_id', $user->id)->delete();
+            }
+
+            $group_member = GroupMember::where('user_id', $user->id)->where('group_id', $group->id)->firstOrFail();
             $group_member->delete();
 
             return ApiResponse::success(new GroupMemberResource($group_member), 200);
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
