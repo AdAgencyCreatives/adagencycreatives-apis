@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Group Members
      */
+    Route::post('leave/membership', [GroupMemberController::class, 'leave_membership']);
     Route::resource('group-members', GroupMemberController::class);
 
     /**
