@@ -22,7 +22,6 @@ class ReviewController extends Controller
         $user = $request->user();
         $query = QueryBuilder::for(Review::class)
             ->allowedFilters([
-                AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('target_id'),
             ])
             ->allowedSorts('created_at');

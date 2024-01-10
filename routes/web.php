@@ -305,6 +305,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::get('import/creative-websites', function () {
+
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);

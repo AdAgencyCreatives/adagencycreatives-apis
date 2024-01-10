@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -446,7 +446,7 @@ class User extends Authenticatable
 
                 }
 
-                if ($user->isDirty('role')) {
+                 if ($user->isDirty('role')) {
                     $newRole = $user->role;
                     if($newRole == 'creative' ){
                         Agency::where('user_id', $user->id)->delete();
@@ -475,8 +475,8 @@ class User extends Authenticatable
 
                     Artisan::call('optimize:clear');
                 }
-            });
 
+            });
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
@@ -525,6 +525,4 @@ class User extends Authenticatable
             });
         }
     }
-
-
 }

@@ -32,7 +32,9 @@ class Review extends Model
     public function scopeTargetId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
+
         return $query->where('target_id', $user->id);
+
     }
 
     public function scopeUserId(Builder $query, $user_id)

@@ -17,8 +17,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -219,7 +219,7 @@ class UserController extends Controller
         }
     }
 
-    public function deleteRelatedRecordsPermanently($user_id)
+     public function deleteRelatedRecordsPermanently($user_id)
     {
         $tables = DB::select('SHOW TABLES');
         $db = "Tables_in_".env('DB_DATABASE');
