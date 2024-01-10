@@ -20,6 +20,7 @@ class Job extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'advisor_id',
         'state_id',
         'city_id',
         'category_id',
@@ -125,8 +126,14 @@ class Job extends Model
 
     public function scopeUserId(Builder $query, $user_id): Builder
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
+        $user = User::where('uuid', $user_id)->first();
+        if( !$user ){
+            return $query->where('user_id', 0);
+        }
 
+        if(in_array($user->role, ['advisor', 'recruiter'])){
+            return $query->where('advisor_id', $user->id);
+        }
         return $query->where('user_id', $user->id);
     }
 
