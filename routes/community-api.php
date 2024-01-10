@@ -3,8 +3,8 @@
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\GroupController;
+use App\Http\Controllers\Api\V1\GroupInvitationController;
 use App\Http\Controllers\Api\V1\GroupMemberController;
-use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\JobInvitationController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Groups Invitation
      */
-    Route::resource('invitations', InvitationController::class);
+    Route::resource('group-invitations', GroupInvitationController::class);
 
     /**
      * Job Invitation
