@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class GroupInvitation extends Model
 {
@@ -85,5 +86,24 @@ class GroupInvitation extends Model
     {
         $group = Group::where('uuid', $group_id)->first();
         return $query->where('group_id', $group->id);
+    }
+
+    protected static function booted()
+    {
+        static::updating(function ($invitation) {
+            if ($invitation->isDirty('status')) {
+                $newStatus = $invitation->status;
+                if($newStatus == 'accepted') {
+                    GroupMember::create([
+                        'uuid' => Str::uuid(),
+                        'group_id' => $invitation->group_id,
+                        'user_id' => $invitation->invitee_user_id,
+                        'joined_at' => now(),
+                    ]);
+                }
+            }
+        });
+
+
     }
 }
