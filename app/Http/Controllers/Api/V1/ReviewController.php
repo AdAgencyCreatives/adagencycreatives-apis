@@ -26,10 +26,6 @@ class ReviewController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        if(!$request->is_own_profile){
-            $query = $query->where('user_id', $user->id);
-        }
-
         $reviews = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ReviewCollection($reviews);
