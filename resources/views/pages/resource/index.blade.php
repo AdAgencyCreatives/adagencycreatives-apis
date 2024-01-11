@@ -140,7 +140,7 @@
             });
 
             $('table').on('dblclick', '.editable-field', function() {
-                var currentText = $(this).text();
+                var currentText = $(this).html();
                 var id = $(this).data('id');
                 var column = $(this).data('column');
 

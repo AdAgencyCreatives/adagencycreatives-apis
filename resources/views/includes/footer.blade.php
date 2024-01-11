@@ -6,7 +6,8 @@
             </div>
             <div class="col-6 text-end">
                 <p class="mb-0">
-                    © 2023 - <a class="text-muted" href="/">All Rights Reserved for {{ env('APP_NAME') }}</a>
+                    © {{ date('Y') }} - <a class="text-muted" href="/">All Rights Reserved for
+                        {{ env('APP_NAME') }}</a>
                 </p>
             </div>
         </div>

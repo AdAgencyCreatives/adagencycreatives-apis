@@ -133,13 +133,17 @@
             });
 
             $('table').on('dblclick', '.editable-field', function() {
-                var currentText = $(this).text();
+                var currentText = $(this).html();
                 var id = $(this).data('id');
                 var column = $(this).data('column');
-
+                console.log(currentText);
                 var inputField = $('<input>', {
                     type: 'text',
-                    value: currentText
+                    value: currentText,
+                    css: {
+                        width: $(this).width() +
+                            'px' // Set the width of the input field to match the cell
+                    }
                 });
 
                 $(this).html(inputField);
