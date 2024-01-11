@@ -96,4 +96,18 @@ class LocationController extends Controller
             throw new ApiException($e, 'US-01');
         }
     }
+
+    public function cities(Request $request)
+    {
+       $query = QueryBuilder::for(Location::class);
+       $query = $query->whereNotNull('parent_id');
+       if ($request->per_page == -1) {
+
+            $cities = $query->get();
+        } else {
+            $cities = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        }
+
+       return new LocationCollection($cities);
+    }
 }

@@ -20,6 +20,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:unread-message-count')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count72')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count240')->dailyAt($daily_time);
+
+        $schedule->command('email:unread-mention-notification')->dailyAt($daily_time);
+
+        $schedule->command('job-post-expiring')->dailyAt($daily_time);
     }
 
     /**

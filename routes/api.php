@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\FeaturedLocationController;
 use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Api\V1\ActivityController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Api\V1\PackageRequestController;
 use App\Http\Controllers\Api\V1\PhoneController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\PostReactionController;
+use App\Http\Controllers\Api\V1\PublicationResourceController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
@@ -66,7 +68,6 @@ Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('home/jobs/search', [JobController::class, 'jobs_homepage']);
 
-Route::get('featured_cities', [JobController::class, 'featured_cities']);
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
 Route::get('attachments', [AttachmentController::class, 'index']);
@@ -77,10 +78,12 @@ Route::resource('creative-spotlights', CreativeSpotlightController::class)->only
 
 //Filters
 Route::get('get_categories', [CategoryController::class, 'get_categories']);
+Route::get('get_categories/creative_count', [CategoryController::class, 'get_categories_with_creatives_count']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 Route::get('employment_types', [JobController::class, 'get_employment_types']);
 Route::get('locations', [LocationController::class, 'index']);
+Route::get('cities', [LocationController::class, 'cities']); //For Fetching Only Cities
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 Route::apiResource('years-of-experience', YearsOfExperienceController::class);
@@ -99,6 +102,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search6', [CreativeController::class, 'search6']);
 
     Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
+    Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
+    Route::get('resume/system-generated', [CreativeController::class, 'get_system_resume_url']);
 
 
     /**
@@ -117,6 +122,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Board Routes
      */
     Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
+    Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
@@ -196,7 +202,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Chat Routes
      */
-    Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
+    //Route::patch('messages/{senderId}', [ChatController::class, 'mark_as_read']);
+    Route::get('messages/count', [ChatController::class, 'count']);
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::apiResource('messages', ChatController::class);
@@ -204,6 +211,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::get('activities/count', [ActivityController::class, 'count']);
     Route::apiResource('activities', ActivityController::class);
+    Route::post('delete-conversation', [ChatController::class, 'deleteConversation']);
     /**
      * SEO
      */
@@ -223,7 +231,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('agency_stats', [DashboardController::class, 'agency_dashboard_stats']);
     Route::get('creative_stats', [DashboardController::class, 'creative_dashboard_stats']);
     Route::patch('update_password', [UserController::class, 'update_password']);
-
+    Route::patch('confirm_password', [UserController::class, 'confirm_password']);
 });
 
 Route::get('stats', [DashboardController::class, 'index']);
@@ -235,3 +243,5 @@ Route::get('pages', [PageController::class, 'index']);
 // Mentorship Topic
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
+Route::resource('publication-resources', PublicationResourceController::class);
+Route::resource('featured_cities', FeaturedLocationController::class);

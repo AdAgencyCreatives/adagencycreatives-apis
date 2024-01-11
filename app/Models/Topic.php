@@ -29,8 +29,13 @@ class Topic extends Model
 
     protected static function booted()
     {
+        static::creating(function ($model) {
+            $maxSortOrder = static::max('sort_order') ?? 0;
+            $model->sort_order = $maxSortOrder + 1;
+        });
+
         static::created(function ($topic) {
-            $topic->slug = $topic->slug ?? Str::slug($topic->title);
+            $topic->slug = Str::slug($topic->slug ?? $topic->title);
             $topic->save();
             Cache::forget('homepage_mentor_topics');
         });

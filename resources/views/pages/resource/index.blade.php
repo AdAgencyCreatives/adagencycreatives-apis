@@ -1,9 +1,14 @@
 @extends('layouts.app')
 
-@section('title', __('Topics'))
+@section('title', __('Mentor Resource'))
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
+
+    <!-- Include jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script>
         var currentPage = 1;
         var totalPages = 1;
@@ -88,13 +93,16 @@
             $.each(categories, function(index, topic) {
                 var roleBasedActions = '';
 
-                var editUrl = "/resource/" + topic.id + "/details";
+                var editUrl = "/resource/" + topic.id + "/edit";
 
-                roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
+                roleBasedActions = '<a href="' + editUrl +
+                    '" target="_blank">Edit</a> | <a href="#" class="delete-category-btn" data-id="' +
                     topic.id + '">Delete</a>';
 
-                var row = '<tr>' +
+                var row = '<tr class="sortable-item" id="' + topic.id + '">' +
                     '<td>' + topic.id + '</td>' +
+                    '<td><img src="' + topic.preview_link +
+                    '" alt="Preview Image" style="max-width: 100px; max-height: 100px;"></td>' +
                     '<td class="editable-field" data-id="' + topic.id + '" data-column="title">' + topic.title +
                     '</td>' +
                     '<td data-id="' + topic.id + '" data-column="title">' + topic.topic +
@@ -182,6 +190,35 @@
                 });
             });
 
+            $("#sortable-list").sortable({
+                update: function(event, ui) {
+                    // Get the updated order
+                    var order = $(this).sortable('toArray');
+                    console.log(order);
+                    var url = $("#sortable-list").data('url');
+                    // Send an AJAX request to update the order in the backend
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                order: order
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+
+                }
+            });
+            $("#sortable-list").disableSelection();
+
         });
     </script>
 @endsection
@@ -217,6 +254,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Preview</th>
                                             <th>Title</th>
                                             <th>Topic</th>
                                             <th>Link</th>
@@ -226,7 +264,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
+                                    <tbody id="sortable-list" data-url="{{ route('update-resource-order') }}">
                                     </tbody>
 
                                 </table>

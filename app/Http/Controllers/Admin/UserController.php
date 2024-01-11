@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -216,5 +217,31 @@ class UserController extends Controller
 
             return redirect()->route('users.index');
         }
+    }
+
+     public function deleteRelatedRecordsPermanently($user_id)
+    {
+        $tables = DB::select('SHOW TABLES');
+        $db = "Tables_in_".env('DB_DATABASE');
+
+        foreach ($tables as $table) {
+
+            $table = $table->$db;
+
+                try{
+                    $sql = "DELETE FROM {$table} WHERE user_id = ? OR deleted_at IS NOT NULL";
+                    DB::statement($sql, [$user_id]);
+                }
+                catch(\Exception $e){
+                    continue;
+                }
+        }
+
+        $sql = "DELETE FROM users WHERE id = ? OR deleted_at IS NOT NULL";
+        DB::statement($sql, [$user_id]);
+
+        Session::flash('success', 'Profile picture updated successfully');
+
+        return redirect()->route('users.index');
     }
 }

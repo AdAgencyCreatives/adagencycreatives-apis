@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\FeaturedLocationController;
 use App\Http\Controllers\Admin\FestivalController;
 use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Admin\MentorResourceController;
 use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PublicationResourceController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -35,6 +37,7 @@ use App\Models\Group;
 use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
+use App\Models\PublicationResource;
 use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -66,10 +69,32 @@ Route::get('/users2', function () {
     }
 });
 
-Route::get('/timezone', function () {
-    dd(now());
+
+Route::get('/show-email', function () {
+    $data = [
+           'email' => "test@gmail.com",
+            "username" => 'John',
+            "order_no" => '123',
+            "total" => '$500',
+            'plan_name' => "Single Job Post",
+            'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
+            "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
+    ];
+
+    return view('emails.order.alert-admin', compact('data'));
 });
 
+Route::get('/show-email2', function () {
+    $data = [
+            "username" => 'John',
+            "recipient" => 'Kale',
+            "member" => 'John',
+            'FRONTEND_URL' => "abc.com",
+            'APP_NAME' => env('APP_NAME'),
+    ];
+
+    return view('emails.friendship.request_accepted', compact('data'));
+});
 
 
 Route::get('/email', function () {
@@ -280,6 +305,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::get('import/creative-websites', function () {
+
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);
@@ -289,7 +315,10 @@ Route::group(['middleware' => ['auth']], function () {
         //     Artisan::call('migrate:fresh --seed');
         // });
 
-
+        /**
+         * Delete user data permanently
+         */
+        Route::delete('permanently_delete/{user}', [UserController::class, 'deleteRelatedRecordsPermanently'])->name('permanently_delete');
 
     });
 
@@ -349,7 +378,15 @@ Route::view('resume', 'resume');
 
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
-Route::resource('resource', MentorResourceController::class)->except('edit', 'show');
+Route::resource('resource', MentorResourceController::class);
+Route::resource('publication-resource', PublicationResourceController::class);
+Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
+Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
+Route::post('/update-resource-order', [MentorResourceController::class, 'updateOrder'])->name('update-resource-order');
+
+//Featured Locations
+Route::resource('featured-cities', FeaturedLocationController::class)->except('edit', 'show');
+Route::post('/update-featured-city-order', [FeaturedLocationController::class, 'updateOrder'])->name('update-featured-city-order');
 
 //Get job invitation uuid from email
 Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');

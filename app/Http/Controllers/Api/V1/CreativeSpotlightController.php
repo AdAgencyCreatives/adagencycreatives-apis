@@ -23,6 +23,7 @@ class CreativeSpotlightController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('slug'),
                 'status',
+                'title',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');

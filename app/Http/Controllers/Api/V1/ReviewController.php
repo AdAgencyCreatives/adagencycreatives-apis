@@ -26,8 +26,7 @@ class ReviewController extends Controller
             ])
             ->allowedSorts('created_at');
 
-        $reviews = $query->where('user_id', $user->id)
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $reviews = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ReviewCollection($reviews);
     }

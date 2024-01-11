@@ -67,8 +67,13 @@ class JobController extends Controller
         }
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
-            ->withCount('applications')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->withCount('applications');
+
+        if ($request->applications_count) {
+            $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
+        }
+
+        $jobs = $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
@@ -163,7 +168,7 @@ class JobController extends Controller
         $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
         }
 
         // $sql .= "UNION DISTINCT" . "\n";
@@ -223,17 +228,17 @@ class JobController extends Controller
         $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title ='".trim($term)."')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        // $sql .= "UNION DISTINCT" . "\n";
 
         // Search via Agency Name
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id'."\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ag.name LIKE '%".trim($term)."%')"."\n";
-        }
+        // $sql .= "SELECT jp.id FROM job_posts jp INNER JOIN agencies ag ON jp.user_id = ag.user_id" . "\n";
+        // for ($i = 0; $i < count($terms); $i++) {
+        //     $term = $terms[$i];
+        //     $sql .= ($i == 0 ? " WHERE " : " OR ") . "(ag.name LIKE '%" . trim($term) . "%')" . "\n";
+        // }
 
         $res = DB::select($sql);
         $jobIds = collect($res)->pluck('id')->toArray();
@@ -258,7 +263,25 @@ class JobController extends Controller
 
     public function store(StoreJobRequest $request)
     {
-        $user = User::where('uuid', $request->user_id)->first();
+        $user = request()->user();
+
+        /**
+         * Store advisor id in separate column and in user_id ,
+         * keep putting agency id becasue advisor is also working
+         * on behalf of agency
+         */
+        if(in_array($user->role, ['advisor', 'recruiter'])){
+            if ($request->has('agency_id')){
+                $advisor = $user;
+                $request->merge([
+                    'advisor_id' => $advisor->id,
+                ]);
+
+                $user = User::where('uuid', $request->agency_id)->first();
+            }
+
+        }
+
         $category = Category::where('uuid', $request->category_id)->first();
         $state = Location::where('uuid', $request->state_id)->first();
         $city = Location::where('uuid', $request->city_id)->first();
@@ -288,6 +311,9 @@ class JobController extends Controller
             }
 
             create_notification($user->id, 'Job submitted successfully.');
+            if ($request->has('agency_id')){ // Sending notification to advisor user also
+                create_notification($advisor->id, 'Job submitted successfully.');
+            }
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {

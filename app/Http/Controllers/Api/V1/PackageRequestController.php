@@ -35,7 +35,9 @@ class PackageRequestController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $package_requests = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $package_requests = $query
+         ->whereHas('user.agency')
+         ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new PackageRequestCollection($package_requests);
     }

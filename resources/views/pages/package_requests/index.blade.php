@@ -76,6 +76,7 @@
                     '<td>' + (index + 1) + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.agency_name + '</td>' +
+                    '<td>' + job.advisor + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
                     '<td><span class="badge bg-primary me-2">' + job.created_at +
                     '<td>' + roleBasedActions + '</td>' +
@@ -150,6 +151,7 @@
                                             <th>ID</th>
                                             <th>Title</th>
                                             <th>Agency</th>
+                                            <th>Advisor</th>
                                             <th>State</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
