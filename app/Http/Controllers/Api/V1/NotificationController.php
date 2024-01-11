@@ -96,6 +96,7 @@ class NotificationController extends Controller
         $query = QueryBuilder::for(Notification::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::exact('type'),
             ]);
 
         if ($request->has('status')) {

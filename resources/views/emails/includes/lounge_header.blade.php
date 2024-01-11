@@ -24,7 +24,7 @@
         a {
             color: black !important;
             /* Set anchor text color to black */
-            text-decoration: none !important;
+            text-decoration: underline !important;
             /* Remove underline */
         }
 

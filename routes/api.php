@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\PublicationResourceController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\ReviewController;
+use App\Http\Controllers\Api\V1\ScheduleNotificationController;
 use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -103,7 +104,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
     Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
-    Route::get('resume/system-generated', [CreativeController::class, 'get_system_resume_url']);
 
 
     /**
@@ -122,7 +122,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Board Routes
      */
     Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
-    Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
@@ -188,7 +187,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);
     Route::apiResource('post-reactions', PostReactionController::class)->only(['index', 'store']);
-
+    Route::apiResource('schedule-notifications', ScheduleNotificationController::class);
     /**
      * Stripe Payment Routes
      */
