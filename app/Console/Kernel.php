@@ -20,10 +20,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:unread-message-count')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count72')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count240')->dailyAt($daily_time);
-
-        $schedule->command('email:unread-mention-notification')->dailyAt($daily_time);
-
         $schedule->command('job-post-expiring')->dailyAt($daily_time);
+        $schedule->command('adagencycreatives:schedule-notifications')->everyFifteenMinutes();
     }
 
     /**
@@ -33,14 +31,14 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
 
     /**
-    * Get the timezone that should be used by default for scheduled events.
-    */
+     * Get the timezone that should be used by default for scheduled events.
+     */
     protected function scheduleTimezone(): DateTimeZone|string|null
     {
         return 'America/Chicago';
