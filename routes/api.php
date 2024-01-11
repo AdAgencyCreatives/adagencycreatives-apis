@@ -104,6 +104,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
     Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
+    Route::get('resume/system-generated', [CreativeController::class, 'get_system_resume_url']);
 
 
     /**

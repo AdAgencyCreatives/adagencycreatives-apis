@@ -236,4 +236,24 @@ class CreativeController extends Controller
 
         return redirect()->back();
     }
+
+    public function update_website_preview(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
+
+        if ($request->has('file') && is_object($request->file)) {
+            //Delete Previous picture
+            Attachment::where('user_id', $creative->user_id)->where('resource_type', 'website_preview')->delete();
+            $attachment = storeImage($request, $creative->user_id, 'website_preview');
+
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
+                    'resource_id' => $creative->id,
+                ]);
+            }
+        }
+        Session::flash('success', 'Updated successfully');
+        return redirect()->back();
+
+    }
 }

@@ -63,5 +63,33 @@
 
             </div>
         </div>
+
+
+        <div class="card">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <form id="creative-form2"
+                                action="{{ route('creative.website_preview.update', $user->creative?->uuid) }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf()
+                                @method('PUT')
+                                <div class="mb-3 error-placeholder">
+                                    <label class="form-label">Add Portfolio Website Preview (manually)</label>
+                                    <div>
+                                        <input type="file" class="validation-file" name="file">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

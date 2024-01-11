@@ -41,7 +41,12 @@
                                     placeholder="Portfolio Website"
                                     value="{{ $user->links->where('label', 'portfolio')->first()?->url }}">
                                 </select>
+                                <small class="form-text text-muted">Script will run again in background and fetch new
+                                    preview image if this field is
+                                    updated.</small>
+
                             </div>
+
 
                         </div>
                     </div>
