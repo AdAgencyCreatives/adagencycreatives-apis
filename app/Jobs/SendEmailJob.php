@@ -65,7 +65,15 @@ class SendEmailJob implements ShouldQueue
             'friendship_request_sent',
             'friendship_request_accepted',
 
-            'unread_message'
+            'unread_message',
+
+            'job_expiring_soon_admin',
+            'job_expiring_soon_agency',
+
+            'email_updated',
+
+            'user_mentioned_in_post'
+
         ];
 
         // Check if the current email type is in the array and update the receiver's email
