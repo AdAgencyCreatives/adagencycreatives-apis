@@ -25,6 +25,7 @@ use App\Mail\JobPostExpiring\JobPostExpiringAdmin;
 use App\Mail\JobPostExpiring\JobPostExpiringAgency;
 use App\Mail\Message\UnreadMessage;
 use App\Mail\Order\ConfirmationAdmin;
+use App\Mail\Post\LoungeMention;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -179,6 +180,14 @@ class SendEmailJob implements ShouldQueue
 
             case 'email_updated':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new EmailUpdated($this->data['data']));
+                break;
+
+
+             /**
+             * Group Post
+             */
+            case 'user_mentioned_in_post':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new LoungeMention($this->data['data']));
                 break;
 
             default:

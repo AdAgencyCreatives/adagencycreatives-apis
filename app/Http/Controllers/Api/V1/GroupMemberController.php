@@ -31,15 +31,10 @@ class GroupMemberController extends Controller
             ->allowedSorts('created_at');
 
         $group_members = $query
-        ->with('user.creative')
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->with('user.creative')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new GroupMemberCollection($group_members);
-    }
-
-    public function create()
-    {
-        //
     }
 
     public function store(StoreGroupMemberRequest $request)
@@ -51,9 +46,9 @@ class GroupMemberController extends Controller
             return response()->json(['message' => 'User is already a member of the group.'], 422);
         }
 
-        if($group->status == 'private'){
+        if ($group->status == 'private') {
 
-            if(GroupInvitation::where('invitee_user_id', $user->id)->where('group_id', $group->id)->exists()){
+            if (GroupInvitation::where('invitee_user_id', $user->id)->where('group_id', $group->id)->exists()) {
                 return response()->json(['message' => 'Group invitation already sent.'], 422);
             }
             $group_invitation = GroupInvitation::create([
@@ -61,19 +56,18 @@ class GroupMemberController extends Controller
                 'inviter_user_id' => $user->id,
                 'invitee_user_id' => $user->id,
                 'group_id' => $group->id,
-        ]);
+            ]);
 
-        return new InvitationResource($group_invitation);
-        }
-        else{
+            return new InvitationResource($group_invitation);
+        } else {
             $group_member = GroupMember::create([
-            'uuid' => Str::uuid(),
-            'group_id' => $group->id,
-            'user_id' => $user->id,
-            'role' => $request->role,
-            'joined_at' => now(),
-        ]);
-        return new GroupMemberResource($group_member);
+                'uuid' => Str::uuid(),
+                'group_id' => $group->id,
+                'user_id' => $user->id,
+                'role' => $request->role,
+                'joined_at' => now(),
+            ]);
+            return new GroupMemberResource($group_member);
         }
     }
 
@@ -93,14 +87,32 @@ class GroupMemberController extends Controller
         return new GroupMemberResource($group_member);
     }
 
-    public function destroy(Request $request, $uuid)
+    public function leave_membership(Request $request)
     {
-        try {
-            $group_member = GroupMember::where('uuid', $uuid)->firstOrFail();
-            $group_member->delete();
+        $group = Group::where('uuid', $request->group_id)->first();
+        $user = User::where('uuid', $request->receiver_id)->first();
 
-            return ApiResponse::success(new GroupMemberResource($group_member), 200);
-        } catch (\Exception $exception) {
+        $deleted_1 = false;
+        $deleted_2 = false;
+        try {
+            $group_invitation = GroupInvitation::where('group_id', $group->id)->where('invitee_user_id', $user->id)->first();
+            if ($group_invitation) {
+                $group_invitation->delete();
+                $deleted_1 = true;
+            }
+
+            $group_member = GroupMember::where('user_id', $user->id)->where('group_id', $group->id)->first();
+            if ($group_member) {
+                $group_member->delete();
+                $deleted_2 = true;
+            }
+
+            if ($deleted_1 || $deleted_2) {
+                return "true";
+            }
+
+            return "false";
+        } catch (\Exception $e) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
