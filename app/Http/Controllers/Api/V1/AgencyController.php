@@ -338,10 +338,17 @@ class AgencyController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            $customMessages = [
+                'email.unique' => 'The email address has already been taken',
+                'slug.required' => 'The slug field is required',
+                'slug.alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores',
+                'slug.unique' => 'The slug has already been taken',
+        ];
+
             $request->validate([
                 'email' => 'unique:users,email,' . $user->id,
                 'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
-            ]);
+            ], $customMessages);
 
             $agency->name = $request->company_name;
             $agency->size = $request->size;
@@ -400,7 +407,7 @@ class AgencyController extends Controller
 
     }
 
-        public function update_profile_advisor(Request $request, $uuid)
+    public function update_profile_advisor(Request $request, $uuid)
     {
         try {
             $user = User::where('uuid', $uuid)->first();
@@ -411,11 +418,17 @@ class AgencyController extends Controller
                     'message' => 'No user found.',
                 ], Response::HTTP_NOT_FOUND);
             }
+            $customMessages = [
+                'email.unique' => 'The email address has already been taken',
+                'slug.required' => 'The slug field is required',
+                'slug.alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores',
+                'slug.unique' => 'The slug has already been taken',
+        ];
 
             $request->validate([
                 'email' => 'unique:users,email,' . $user->id,
                 'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
-            ]);
+            ], $customMessages);
 
             $agency->name = $request->company_name;
 

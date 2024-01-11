@@ -670,10 +670,18 @@ class CreativeController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
+            $customMessages = [
+                'email.unique' => 'The email address has already been taken',
+                'slug.required' => 'The slug field is required',
+                'slug.alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores',
+                'slug.unique' => 'The slug has already been taken',
+        ];
+
             $request->validate([
                 'email' => 'unique:users,email,' . $user->id,
                 'slug' => 'required|alpha_dash|unique:users,username,' . $user->id,
-            ]);
+            ], $customMessages);
+
 
             // Update User
             $userData = [];
