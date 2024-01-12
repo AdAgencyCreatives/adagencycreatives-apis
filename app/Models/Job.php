@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class Job extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $table = 'job_posts';
 
@@ -285,6 +287,9 @@ class Job extends Model
                 ];
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
+                if($job->advisor_id){
+                    create_notification($job->advisor_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
+                }
 
                 foreach($categorySubscribers as $creative){
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates

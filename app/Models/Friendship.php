@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ActivityLoggerTrait;
 
 class Friendship extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'user1_id',

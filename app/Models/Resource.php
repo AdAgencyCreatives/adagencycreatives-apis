@@ -6,10 +6,12 @@ use App\Jobs\ProcessMentorVisuals;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ActivityLoggerTrait;
 
 class Resource extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'topic_id',

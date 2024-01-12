@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ActivityLoggerTrait;
 
 
 class User extends Authenticatable
@@ -24,6 +25,7 @@ class User extends Authenticatable
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+    use ActivityLoggerTrait;
 
     // protected $primaryKey = 'uuid';
 

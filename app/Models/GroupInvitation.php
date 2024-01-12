@@ -6,10 +6,12 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class GroupInvitation extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',

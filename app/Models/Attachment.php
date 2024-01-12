@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\ActivityLoggerTrait;
 
 class Attachment extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',

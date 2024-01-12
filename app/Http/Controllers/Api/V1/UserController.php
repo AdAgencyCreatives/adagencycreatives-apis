@@ -11,6 +11,7 @@ use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Jobs\ProcessPortfolioVisuals;
 use App\Jobs\SendEmailJob;
+use App\Models\Activity;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
@@ -247,6 +248,20 @@ class UserController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        $activityData = [
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'type' => 'login',
+            'message' => "Logged In",
+            'body' => [
+                'model' => 'User',
+                'action' => 'Logged in',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ],
+        ];
+        Activity::create($activityData);
+
         return response()->json([
             'token' => $token,
             'subscription_status' => get_subscription_status_string($user),
@@ -312,6 +327,18 @@ class UserController extends Controller
     {
         $request->user()->tokens()->delete();
 
+        $activityData = [
+            'uuid' => Str::uuid(),
+            'user_id' => $request->user()->id,
+            'type' => 'logout',
+            'message' => "Logged Out",
+            'body' => [
+                'model' => 'User',
+                'action' => 'Logged in'
+            ],
+        ];
+        Activity::create($activityData);
+
         return response()->json(['message' => 'Logged out'], 200);
     }
 
@@ -346,6 +373,17 @@ class UserController extends Controller
         $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
             return User::select('id', 'uuid', 'first_name', 'last_name', 'email')
                 ->where('role', 4)
+                ->get();
+        });
+
+        return $users;
+    }
+
+    public function get_all_users()
+    {
+        $cacheKey = 'all_users';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::toBase()->select('id', 'uuid', 'first_name', 'last_name', 'email')
                 ->get();
         });
 
