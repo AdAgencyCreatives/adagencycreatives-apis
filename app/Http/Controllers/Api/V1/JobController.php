@@ -270,6 +270,8 @@ class JobController extends Controller
          * keep putting agency id becasue advisor is also working
          * on behalf of agency
          */
+
+        $advisor = null;
         if(in_array($user->role, ['advisor', 'recruiter'])){
             if ($request->has('agency_id')){
                 $advisor = $user;
