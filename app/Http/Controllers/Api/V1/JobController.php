@@ -38,6 +38,7 @@ class JobController extends Controller
         $query = QueryBuilder::for(Job::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('advisor_id'),
                 AllowedFilter::scope('category_id'),
                 AllowedFilter::scope('category_slug'),
                 AllowedFilter::scope('state_id'),
@@ -365,6 +366,10 @@ class JobController extends Controller
 
             if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
+                if($job->advisor_id){
+                    $user = User::find($job->user_id);
+                }
+
                 if (! $user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
                 }
