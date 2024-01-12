@@ -638,6 +638,13 @@
                     Reports
                 </li>
 
+                <li class="sidebar-item {{ request()->is('activity/log*') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('activity.index') }}" target="_blank">
+                        <i class="align-middle" data-feather="activity"></i>
+                        <span class="align-middle">Activity Log</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('reports') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('reports.index') }}">
                         <i class="align-middle" data-feather="trending-up"></i>
@@ -648,9 +655,11 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/telescope" target="_blank">
                         <i class="align-middle" data-feather="activity"></i>
-                        <span class="align-middle">Activity</span>
+                        <span class="align-middle">Telescope</span>
                     </a>
                 </li>
+
+
 
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="https://dashboard.stripe.com/test/coupons/create" target="_blank">

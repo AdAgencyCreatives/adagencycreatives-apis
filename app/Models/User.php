@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ActivityLoggerTrait;
+
 
 class User extends Authenticatable
 {
@@ -23,6 +25,7 @@ class User extends Authenticatable
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+    use ActivityLoggerTrait;
 
     // protected $primaryKey = 'uuid';
 
@@ -427,6 +430,7 @@ class User extends Authenticatable
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_creatives');
+                Cache::forget('get_users');
             });
 
             static::updating(function ($user) {
@@ -482,6 +486,7 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_users_with_attachments');
                 Cache::forget('all_creatives');
+                Cache::forget('get_users');
 
                 if ($user->isDirty('username')) {
                     //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
@@ -503,6 +508,7 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
+                Cache::forget('get_users'); //cache for displaying list of creatives Add Creative Spotlight page
 
                 if ($user->role == 'creative') {
                     Creative::where('user_id', $user->id)->delete();

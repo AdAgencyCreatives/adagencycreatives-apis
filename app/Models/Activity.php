@@ -22,6 +22,7 @@ class Activity extends Model
 
     protected $casts = [
         'read_at' => 'datetime',
+        'body' => 'json',
     ];
 
     public function user()

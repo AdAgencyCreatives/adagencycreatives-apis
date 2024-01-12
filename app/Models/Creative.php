@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class Creative extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',

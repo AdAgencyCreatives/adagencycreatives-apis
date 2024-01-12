@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\JobInvitationController;
 use App\Http\Controllers\Api\V1\ResumeController;
@@ -277,6 +278,13 @@ Route::group(['middleware' => ['auth']], function () {
          */
         Route::post('image/store', [PageController::class, 'store_img'])->name('image.store');
         Route::resource('pages', PageController::class);
+
+        /**
+         * Activity Log
+         */
+
+        Route::get('activity/log', [ActivityController::class, 'index'])->name('activity.index');
+        Route::get('activity/log/{user}/details', [ActivityController::class, 'details']);
 
         /**
          * Import Attachments from WP

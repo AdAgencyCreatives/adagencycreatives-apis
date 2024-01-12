@@ -170,6 +170,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']);
     Route::get('get_users/spotlights', [UserController::class, 'get_creatives']);
     Route::get('get_users/festivals', [FestivalController::class, 'get_festival_creatives']); //for getting creatives on festival page
+    Route::get('get_users', [UserController::class, 'get_all_users']); //for getting creatives on festival page
 
     /**
      * Job Alerts

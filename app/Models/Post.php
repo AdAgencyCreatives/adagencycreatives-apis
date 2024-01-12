@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\ActivityLoggerTrait;
 
 class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',

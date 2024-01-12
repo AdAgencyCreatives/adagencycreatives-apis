@@ -6,10 +6,12 @@ use App\Jobs\SendEmailJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ActivityLoggerTrait;
 
 class PackageRequest extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',

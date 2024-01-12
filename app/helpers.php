@@ -68,7 +68,7 @@ if (! function_exists('storeImage')) {
         $file = $request->file;
 
         $extension = $file->getClientOriginalExtension();
-        $folder = $resource_type.'/'.$uuid;
+        $folder = $resource_type . '/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
@@ -262,9 +262,9 @@ if (! function_exists('get_profile_picture')) {
         $defaultImage = asset('assets/img/placeholder.png');
         $attachmentBasePath = getAttachmentBasePath();
         if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
-            return $attachmentBasePath.$user->profile_picture->path;
+            return $attachmentBasePath . $user->profile_picture->path;
         } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
-            return $attachmentBasePath.$user->agency_logo->path;
+            return $attachmentBasePath . $user->agency_logo->path;
         }
 
         return $defaultImage;
@@ -288,7 +288,7 @@ if (! function_exists('get_resume')) {
     function get_resume($user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath().$user->resume->path;
+            return getAttachmentBasePath() . $user->resume->path;
         } else {
             return route('download.resume', $user->id);
         }
@@ -370,7 +370,7 @@ if (! function_exists('hasAppliedToAgencyJob')) { //either active or expired
     {
         $hasApplied = Application::where('user_id', $creativeUserId)
             ->whereIn('job_id', function ($query) use ($loggedInAgencyId) {
-                $query->select('id')->from(with(new Job)->getTable())->where('user_id', $loggedInAgencyId);
+                $query->select('id')->from(with(new Job())->getTable())->where('user_id', $loggedInAgencyId);
             })
             ->exists();
 

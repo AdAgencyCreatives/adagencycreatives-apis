@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class Group extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
