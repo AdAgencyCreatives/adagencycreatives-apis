@@ -43,6 +43,7 @@ class JobResource extends JsonResource
             'status' => $this->status,
             'location' => $this->get_location(),
             'agency' => [],
+            'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'applications' => new ApplicationCollection($this->applications),

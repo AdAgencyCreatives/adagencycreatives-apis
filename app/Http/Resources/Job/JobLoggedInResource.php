@@ -42,6 +42,7 @@ class JobLoggedInResource extends JsonResource
             'status' => $this->status,
             'location' => $this->get_location(),
             'agency' => [],
+            'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
