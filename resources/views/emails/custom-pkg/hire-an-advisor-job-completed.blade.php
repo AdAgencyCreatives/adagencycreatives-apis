@@ -35,4 +35,12 @@
                             </b>{{ sprintf('%s', $data['advisor']) }}
                         </div>
 
+                        <p>Next Steps:</p>
+                        <p>Follow up with your Ad Agency Creatives administrative support with the new hires name,
+                            start date, and a copy of the offer letter terms and conditions, or the final status of
+                            the opportunity.</p>
+
+
+
+
                         @include('emails.includes.jobboard_footer')
