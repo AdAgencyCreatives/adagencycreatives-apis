@@ -640,7 +640,7 @@
 
                 <li class="sidebar-item {{ request()->is('activity/log*') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('activity.index') }}" target="_blank">
-                        <i class="align-middle" data-feather="activity"></i>
+                        <i class="align-middle" data-feather="book-open"></i>
                         <span class="align-middle">Activity Log</span>
                     </a>
                 </li>
