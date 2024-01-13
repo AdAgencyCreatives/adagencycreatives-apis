@@ -36,7 +36,8 @@ trait ActivityLoggerTrait
 
     protected static function create_activity($user_id, $type, $msg, $model, $action, $oldData, $newData)
     {
-        $changedAttributes = [];
+        try{
+            $changedAttributes = [];
 
         // Compare old and new data to find changed attributes
         foreach ($newData as $attribute => $value) {
@@ -67,5 +68,18 @@ trait ActivityLoggerTrait
         ];
 
         Activity::create($activityData);
+        }
+        catch(\Exception $e){
+            $activityData = [
+            'uuid' => Str::uuid(),
+            'user_id' => $user_id,
+            'type' => $type,
+            'message' => sprintf("Something went wrong while performing action %s-%s", $model, $action ),
+            'body' => $e->getMessage(),
+        ];
+
+        Activity::create($activityData);
+        }
+
     }
 }
