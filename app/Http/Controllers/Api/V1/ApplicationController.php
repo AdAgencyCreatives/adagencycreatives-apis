@@ -92,7 +92,8 @@ class ApplicationController extends Controller
             if($job->advisor_id) {
                 $advisor_user = User::find($job->advisor_id);
 
-                $resume_url = get_resume($applicant_user);
+                $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
+
                 SendEmailJob::dispatch([
                     'receiver' => $advisor_user,
                     'data' => [
@@ -164,5 +165,16 @@ class ApplicationController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AppliedJobCollection($applications);
+    }
+
+    public function get_resume_url($user, $logged_in_user)
+    {
+        if (isset($user->resume)) {
+            return getAttachmentBasePath() . $user->resume->path;
+        } else {
+            $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user?->uuid]);
+        }
     }
 }

@@ -28,6 +28,7 @@ class Job extends Model
         'category_id',
         'title',
         'agency_name',
+        'attachment_id',
         'description',
         'employment_type',
         'industry_experience',
@@ -128,13 +129,13 @@ class Job extends Model
 
     public function scopeUserId(Builder $query, $user_id): Builder
     {
-        $user = User::where('uuid', $user_id)->first();
+        $user = User::where('uuid', $user_id)->first(); //this is user_id of logged_in user
         if( !$user ){
             return $query->where('user_id', 0);
         }
 
         if(in_array($user->role, ['agency'])){
-            return $query->where('user_id', $user->id);
+            return  $query->whereNull('advisor_id')->where('user_id', $user->id);
         }
 
         if(in_array($user->role, ['advisor', 'recruiter'])){

@@ -72,7 +72,9 @@ class SendEmailJob implements ShouldQueue
 
             'email_updated',
 
-            'user_mentioned_in_post'
+            'user_mentioned_in_post',
+
+            'application_submitted'
 
         ];
 

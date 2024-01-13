@@ -55,18 +55,18 @@ class JobLoggedInResource extends JsonResource
         $agency = $user->agency;
         if ($agency) {
             if ($this->agency_name == null) {
-                $data['agency'] = [
-                    'name' => $agency->name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $agency->name;
 
             } else {
-                $data['agency'] = [
-                    'name' => $this->agency_name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $this->agency_name;
             }
+
             $data['agency']['slug'] = $agency->slug;
+            if($this->attachment_id == null) {
+                $data['agency']['logo'] = get_profile_picture($user);
+            } else {
+                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
+            }
         }
 
         return $data;

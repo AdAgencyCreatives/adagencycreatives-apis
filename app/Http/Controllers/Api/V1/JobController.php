@@ -310,6 +310,10 @@ class JobController extends Controller
                     Attachment::whereId($attachment->id)->update([
                         'resource_id' => $job->id,
                     ]);
+
+                    $request->merge([
+                        'attachment_id' => $attachment->id
+                    ]);
                 }
             }
 
