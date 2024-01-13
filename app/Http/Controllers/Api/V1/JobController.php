@@ -370,9 +370,6 @@ class JobController extends Controller
 
             if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
-                if($job->advisor_id){
-                    $user = User::find($job->user_id);
-                }
 
                 if (! $user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
@@ -387,6 +384,23 @@ class JobController extends Controller
                 }
 
                 $subscription->decrement('quota_left', 1);
+
+                //Also decrement quota for agency for whom this job as created
+                if($job->advisor_id){
+                    $agency_user = User::find($job->user_id);
+
+                    $subscription = Subscription::where('user_id', $agency_user->id)
+                    ->where('quota_left', '>', 0)
+                    ->latest();
+
+                    if (! $subscription) {
+                        return ApiResponse::error("You don't have enough quota for this job", 402);
+                    }
+
+                    $subscription->decrement('quota_left', 1);
+                }
+
+
                 $request->merge([
                     'status' => 'approved',
                 ]);

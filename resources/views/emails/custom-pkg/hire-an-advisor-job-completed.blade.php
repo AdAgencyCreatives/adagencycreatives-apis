@@ -9,16 +9,16 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        Custom Package Request</h1>
+                        HIRE AN ADVISOR JOB COMPLETED</h1>
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
-                        <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello Member
-                            Support,</span>
-
+                        <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello
+                            {{ $data['recipient'] }},</span>
 
                         <p>Great news!</p>
-                        <p><strong><a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['author'] }}</a>
-                            </strong> has submitted a request to Hire an Advisor.</p>
+                        <p><strong><a href="{{ $data['agency_profile'] }}"
+                                    target="_blank">{{ $data['agency_name'] }}</a>
+                            </strong> job has been marked closed.</p>
 
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">
                             Request Information</h4>
@@ -31,11 +31,8 @@
                             </b>{{ $data['state'] . ', ' . $data['city'] }}
                         </div>
 
-                        <div><b>Posted by:
-                            </b>{{ sprintf('%s (%s)', $data['author'], $data['agency']) }}
+                        <div><b>Advisor:
+                            </b>{{ sprintf('%s', $data['advisor']) }}
                         </div>
 
-                        <div><b>Comment:
-                            </b>{{ $data['comment'] }}
-                        </div>
                         @include('emails.includes.jobboard_footer')

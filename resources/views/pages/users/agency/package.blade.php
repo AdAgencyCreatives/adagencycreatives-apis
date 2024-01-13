@@ -37,6 +37,11 @@
                                         Premium Creative Jobs
                                     </option>
 
+                                    <option value="premium-hire-an-advisor"
+                                        @if ($subscription?->name == 'premium-hire-an-advisor') selected @endif>
+                                        Premium Hire an Advisor
+                                    </option>
+
                                 </select>
                             </div>
                         </div>
