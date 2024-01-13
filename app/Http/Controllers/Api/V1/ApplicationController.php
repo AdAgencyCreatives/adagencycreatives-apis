@@ -32,6 +32,7 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
+        $query = $query->with('job');
         $applications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);

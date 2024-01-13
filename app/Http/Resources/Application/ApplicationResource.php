@@ -17,6 +17,7 @@ class ApplicationResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'creative_id' => $user->creative ? $user->creative->uuid : '',
+            'advisor_id' => $job->advisor_id ?? null,
             'user' => $user->first_name . ' ' . $user->last_name,
             'slug' => $user->username,
             'user_profile_id' => $user->id,
