@@ -134,9 +134,10 @@ class Job extends Model
             return $query->where('user_id', 0);
         }
 
-        if(in_array($user->role, ['agency'])){
-            return  $query->whereNull('advisor_id')->where('user_id', $user->id);
-        }
+        //Uncomment this to disallow agencies to view the job(which is posted by advisor on their bahlf)
+        // if(in_array($user->role, ['agency'])){
+        //     return  $query->whereNull('advisor_id')->where('user_id', $user->id);
+        // }
 
         if(in_array($user->role, ['advisor', 'recruiter'])){
             return $query->where('advisor_id', $user->id);
