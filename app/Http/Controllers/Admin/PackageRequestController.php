@@ -54,6 +54,10 @@ class PackageRequestController extends Controller
             }
 
             $package_request->status = $request->input('status');
+            if ($request->input('assigned_to') == '-1') {
+                $package_request->assigned_to = null;
+            }
+
             $package_request->save();
 
             Session::flash('success', 'Job updated successfully');
