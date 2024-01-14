@@ -31,7 +31,7 @@ class PackageRequestController extends Controller
     {
         try {
             $package_request = PackageRequest::where('uuid', $uuid)->firstOrFail();
-            $agency = Agency::where('user_id', $package_request->user_id);
+            $agency = Agency::where('user_id', $package_request->user_id)->firstOrFail();
 
             if ($request->input('assigned_to') !== '-1') {
                 $advisor_id = $request->input('assigned_to');
