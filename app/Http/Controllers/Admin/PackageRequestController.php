@@ -43,7 +43,7 @@ class PackageRequestController extends Controller
                     'uuid' => Str::uuid(),
                     'sender_id' => $agency->user_id,
                     'receiver_id' => $advisor_id ?? null,
-                    'message' => sprintf("<b><a href='%s'>%s</a> has been assigned to %s</b>", $agency_url, $agency->name, $advisor->full_name),
+                    'message' => sprintf("<a style='text-decoration:underline; href='%s'>%s</a> has been assigned to %s", $agency_url, $agency->name, $advisor->full_name),
                     'type' => "job",
                 ];
                 Message::create($msg_data);
