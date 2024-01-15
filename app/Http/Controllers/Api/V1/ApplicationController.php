@@ -81,7 +81,13 @@ class ApplicationController extends Controller
                 'uuid' => Str::uuid(),
                 'sender_id' => $applicant_user->id,
                 'receiver_id' => $agency_user->id,
-                'message' => sprintf("<a style='text-decoration:underline; href='%s'>%s</a> applied on the job <a href='%s'>%s</a>", $creative_url, $applicant_user->full_name, $job_url, $job->title),
+                'message' => sprintf(
+                    "<a style='text-decoration:underline;' href='%s'>%s</a> applied on the job <a style='text-decoration:underline;' href='%s'>%s</a>",
+                    $creative_url,
+                    $applicant_user->full_name,
+                    $job_url,
+                    $job->title
+                ),
                 'type' => "job",
             ];
 

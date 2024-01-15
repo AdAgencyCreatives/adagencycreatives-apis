@@ -11,6 +11,12 @@ class JobResource extends JsonResource
     {
         $user = $this->user;
         $category = $this->category;
+        $applications = $this->applications;
+
+        // If application_status is provided, filter applications by status
+        if ($request->has('application_status')) {
+            $applications = $applications->where('status', $request->application_status);
+        }
 
         $data = [
             'type' => 'jobs',
@@ -46,7 +52,7 @@ class JobResource extends JsonResource
             'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
-            'applications' => new ApplicationCollection($this->applications),
+            'applications' => new ApplicationCollection($applications),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
