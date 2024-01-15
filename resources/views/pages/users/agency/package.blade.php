@@ -1,5 +1,6 @@
 @php
     $subscription = $user->latest_subscription;
+    $plans = \App\Models\Plan::all();
 @endphp
 <div class="row">
 
@@ -18,29 +19,20 @@
                             <div class="form-group">
                                 <label class="form-label" for="is_visible"> Package </label>
                                 <select name="name" class="form-control form-select custom-select select2"
-                                    data-toggle="select2">
+                                    data-toggle="select2" id="subscriptionDuration">
                                     <option value="-1">
                                         Select Package
                                     </option>
 
-                                    <option value="post-a-creative-job"
-                                        @if ($subscription?->name == 'post-a-creative-job') selected @endif>
-                                        Post a Creative Job
-                                    </option>
-                                    <option value="multiple-creative-jobs"
-                                        @if ($subscription?->name == 'multiple-creative-jobs') selected @endif>
-                                        Multiple Creative Jobs
-                                    </option>
-
-                                    <option value="premium-creative-jobs"
-                                        @if ($subscription?->name == 'premium-creative-jobs') selected @endif>
-                                        Premium Creative Jobs
-                                    </option>
-
-                                    <option value="premium-hire-an-advisor"
-                                        @if ($subscription?->name == 'premium-hire-an-advisor') selected @endif>
-                                        Premium Hire an Advisor
-                                    </option>
+                                    @foreach ($plans as $plan)
+                                        @php
+                                            $selected = $subscription && $subscription->name == $plan->slug ? 'selected' : '';
+                                        @endphp
+                                        <option value="{{ $plan->slug }}" data-days="{{ $plan->days }}"
+                                            data-quota="{{ $plan->quota }}" {{ $selected }}>
+                                            {{ $plan->name }}
+                                        </option>
+                                    @endforeach
 
                                 </select>
                             </div>

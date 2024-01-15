@@ -38,6 +38,31 @@
             });
         }
 
+        $("#subscriptionDuration").on("change", function() {
+
+            var datepicker = $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false, // Disable auto-update to allow manual updates
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+
+            var selectedOption = $(this).find(":selected");
+            var days = selectedOption.data("days");
+            var quota = selectedOption.data("quota");
+
+            $("input[name='quota_left']").val(quota);
+
+            // Use a library like moment.js to manipulate dates
+            var newDate = moment().add(days, 'days').format("YYYY-MM-DD");
+
+            // Update the datepicker
+            datepicker.data('daterangepicker').setStartDate(newDate);
+            datepicker.val(newDate);
+        });
+
         // tinymce.init({
         //     selector: 'textarea',
         //     menubar: false,
