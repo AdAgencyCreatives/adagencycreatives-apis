@@ -121,7 +121,7 @@
                 e.preventDefault();
                 var selectedCategory = $('#category').val();
                 var selectedLabels = $('#labels').val();
-                var emp_type = $('#employement_type').val();
+                var emp_type = $('#employment_type').val();
                 var selectedStatus = $('#status').val();
                 var title = $('#title').val();
 
@@ -157,6 +157,30 @@
                 var jobId = $(this).data('job-id');
                 var csrfToken = '{{ csrf_token() }}';
                 updateStatus(jobId, 'job', 'jobs', csrfToken, selectedStatus);
+            });
+
+            $.ajax({
+                url: '/api/v1/employment_types',
+                type: "GET",
+                success: function(data) {
+                    // Clear existing options
+                    $("#employment_type").empty();
+
+                    // Add the default option
+                    $("#employment_type").append('<option value="-100"> Select Type</option>');
+
+                    // Populate the dropdown with options from the API
+                    $.each(data, function(index, type) {
+                        $("#employment_type").append('<option value="' + type + '" ' + '>' +
+                            type + '</option>');
+                    });
+
+                    // Refresh the Select2 plugin
+                    $("#employment_type").select2("destroy").select2();
+                },
+                error: function(error) {
+                    console.error("Error fetching employment types:", error);
+                }
             });
         });
     </script>

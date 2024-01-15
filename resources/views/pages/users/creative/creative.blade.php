@@ -42,22 +42,6 @@
                                 <select name="employment_type[]" id="employment_type"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
-                                    <option value="-100"> Select Type</option>
-
-                                    @php
-                                        // Split the stored employment types into an array
-                                        $userEmploymentTypes = explode(',', $user->creative?->employment_type ?? '');
-                                    @endphp
-
-                                    @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                        @php
-                                            $isSelected = in_array($type, $userEmploymentTypes);
-                                        @endphp
-                                        <option value="{{ $type }}" {{ $isSelected ? 'selected' : '' }}>
-                                            {{ $type }}
-                                        </option>
-                                    @endforeach
-
                                 </select>
                             </div>
 
