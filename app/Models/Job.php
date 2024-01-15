@@ -14,7 +14,8 @@ use App\Traits\ActivityLoggerTrait;
 
 class Job extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
     use ActivityLoggerTrait;
 
     protected $table = 'job_posts';
@@ -28,6 +29,7 @@ class Job extends Model
         'category_id',
         'title',
         'agency_name',
+        'attachment_id',
         'description',
         'employment_type',
         'industry_experience',
@@ -128,14 +130,20 @@ class Job extends Model
 
     public function scopeUserId(Builder $query, $user_id): Builder
     {
-        $user = User::where('uuid', $user_id)->first();
-        if( !$user ){
+        $user = User::where('uuid', $user_id)->first(); //this is user_id of logged_in user
+        if(!$user) {
             return $query->where('user_id', 0);
         }
 
-        if(in_array($user->role, ['advisor', 'recruiter'])){
+        //Uncomment this to disallow agencies to view the job(which is posted by advisor on their bahlf)
+        // if(in_array($user->role, ['agency'])){
+        //     return  $query->whereNull('advisor_id')->where('user_id', $user->id);
+        // }
+
+        if(in_array($user->role, ['advisor', 'recruiter'])) {
             return $query->where('advisor_id', $user->id);
         }
+
         return $query->where('user_id', $user->id);
     }
 
@@ -268,12 +276,13 @@ class Job extends Model
         });
 
         static::updating(function ($job) {
+            $category = Category::find($job->category_id);
+            $author = User::find($job->user_id);
+            $agency = $author->agency;
+
             $oldStatus = $job->getOriginal('status');
             if ($oldStatus == 'draft' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
-                $category = Category::find($job->category_id);
-                $author = User::find($job->user_id);
-                $agency = $author->agency;
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
                 $data = [
@@ -287,11 +296,11 @@ class Job extends Model
                 ];
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
-                if($job->advisor_id){
+                if($job->advisor_id) {
                     create_notification($job->advisor_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
                 }
 
-                foreach($categorySubscribers as $creative){
+                foreach($categorySubscribers as $creative) {
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
                 // SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
@@ -315,6 +324,30 @@ class Job extends Model
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
+            }
+
+            if ($job->status === 'filled' && $job->advisor_id != null) {
+
+                $state = Location::where('uuid', $job->state_id)->first();
+                $city = Location::where('uuid', $job->city_id)->first();
+                $advisor = User::find($job->advisor_id);
+                $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+
+                foreach([$advisor, $admin] as $receiver_user) {
+                    $data = [
+                    'data' => [
+                        'category' => $category->name,
+                        'agency_name' => $agency->name ?? '',
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'state' => $state?->name,
+                        'city' => $city?->name,
+                        'advisor' => $advisor->full_name,
+                        'recipient' => $receiver_user->full_name,
+                    ],
+                    'receiver' => $receiver_user
+                    ];
+                    SendEmailJob::dispatch($data, 'hire-an-advisor-job-completed');
+                }
             }
 
         });

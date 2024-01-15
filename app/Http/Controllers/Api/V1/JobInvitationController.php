@@ -62,7 +62,7 @@ class JobInvitationController extends Controller
                 'uuid' => Str::uuid(),
                 'sender_id' => $agency_user->id,
                 'receiver_id' => $invitee_user->id,
-                'message' => sprintf("<b>Job Invitation for <a href='%s'>%s</a></b>", $job_url, $job->title),
+                'message' => sprintf("Job Invitation for <a style='text-decoration:underline; href='%s'>%s</a></b>", $job_url, $job->title),
                 'type' => "job",
             ]);
 

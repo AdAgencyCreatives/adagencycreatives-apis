@@ -163,16 +163,17 @@ class SubscriptionController extends Controller
 
         $subscription = Subscription::where('user_id', $user_id)->latest()->first(); // Retrieve the latest subscription
 
+        $plan = Plan::where('slug', $request->name)->first();
+
         $data = [
             'name' => $request->name, // Plan Name
-            'quota_left' => $request->quota_left,
+            'quota_left' => $request->quota_left ?: $plan->quota,
             'ends_at' => $request->ends_at,
         ];
 
         if ($subscription) {
             $subscription->update($data);
         } else {
-            $plan = Plan::where('slug', $request->name)->first();
 
             $newSubscriptionData = array_merge($data, [
                 'user_id' => $user_id,

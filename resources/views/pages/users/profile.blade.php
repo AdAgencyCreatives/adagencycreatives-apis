@@ -38,6 +38,60 @@
             });
         }
 
+        $("#subscriptionDuration").on("change", function() {
+
+            var datepicker = $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false, // Disable auto-update to allow manual updates
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+
+            var selectedOption = $(this).find(":selected");
+            var days = selectedOption.data("days");
+            var quota = selectedOption.data("quota");
+
+            $("input[name='quota_left']").val(quota);
+
+            // Use a library like moment.js to manipulate dates
+            var newDate = moment().add(days, 'days').format("YYYY-MM-DD");
+
+            // Update the datepicker
+            datepicker.data('daterangepicker').setStartDate(newDate);
+            datepicker.val(newDate);
+        });
+
+
+        var employmentTypeString = "{{ $user->creative?->employment_type ?? '' }}";
+        var userEmploymentTypes = employmentTypeString ? employmentTypeString.split(',') : [];
+
+        $.ajax({
+            url: '/api/v1/employment_types',
+            type: "GET",
+            success: function(data) {
+                // Clear existing options
+                $("#employment_type").empty();
+
+                // Add the default option
+                $("#employment_type").append('<option value="-100"> Select Type</option>');
+
+                // Populate the dropdown with options from the API
+                $.each(data, function(index, type) {
+                    var isSelected = userEmploymentTypes.includes(type);
+                    $("#employment_type").append('<option value="' + type + '" ' + (isSelected ?
+                        'selected' : '') + '>' + type + '</option>');
+                });
+
+                // Refresh the Select2 plugin
+                $("#employment_type").select2("destroy").select2();
+            },
+            error: function(error) {
+                console.error("Error fetching employment types:", error);
+            }
+        });
+
         // tinymce.init({
         //     selector: 'textarea',
         //     menubar: false,

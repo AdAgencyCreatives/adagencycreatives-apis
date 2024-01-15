@@ -203,6 +203,33 @@
             });
         }
 
+        var employmentTypeString = "{{ $job?->employment_type ?? '' }}";
+        var userEmploymentTypes = employmentTypeString ? @json(explode(',', $job?->employment_type)) : [];
+
+        $.ajax({
+            url: '/api/v1/employment_types',
+            type: "GET",
+            success: function(data) {
+                // Clear existing options
+                $("#employment_type").empty();
+
+                // Add the default option
+                $("#employment_type").append('<option value="-100"> Select Type</option>');
+
+                // Populate the dropdown with options from the API
+                $.each(data, function(index, type) {
+                    var isSelected = userEmploymentTypes.includes(type);
+                    $("#employment_type").append('<option value="' + type + '" ' + (isSelected ?
+                        'selected' : '') + '>' + type + '</option>');
+                });
+
+                // Refresh the Select2 plugin
+                $("#employment_type").select2("destroy").select2();
+            },
+            error: function(error) {
+                console.error("Error fetching employment types:", error);
+            }
+        });
 
         $(document).ready(function() {
 
@@ -447,12 +474,6 @@
                                         <label class="form-label" for="employment_type"> Employment Type </label>
                                         <select name="employment_type" id="employment_type"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="-100">Select Type</option>
-                                            @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                                <option value="{{ $type }}"
-                                                    @if ($job->employment_type == $type) selected @endif>{{ $type }}
-                                                </option>
-                                            @endforeach
                                         </select>
 
                                     </div>

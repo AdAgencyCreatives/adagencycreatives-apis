@@ -74,7 +74,7 @@ class JobController extends Controller
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
         }
 
-        $jobs = $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
@@ -139,37 +139,37 @@ class JobController extends Controller
         $terms = explode(',', $search);
 
         // Search via City Name
-        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id'."\n";
+        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via State Name
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Job Title
-        $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(jp.title LIKE '%" . trim($term) . "%')" . "\n";
         }
 
         // $sql .= "UNION DISTINCT" . "\n";
@@ -199,37 +199,37 @@ class JobController extends Controller
         $terms = explode(',', $search);
 
         // Search via City Name
-        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id'."\n";
+        $sql = 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.city_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NOT NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via State Name
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN locations lc ON lc.id = jp.state_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(lc.parent_id IS NULL AND lc.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp INNER JOIN categories ca ON jp.category_id = ca.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(ca.name LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '%" . trim($term) . "%')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT'."\n";
+        $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Job Title
-        $sql .= 'SELECT jp.id FROM job_posts jp'."\n";
+        $sql .= 'SELECT jp.id FROM job_posts jp' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ')."(jp.title LIKE '%".trim($term)."%')"."\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(jp.title LIKE '%" . trim($term) . "%')" . "\n";
         }
 
         // $sql .= "UNION DISTINCT" . "\n";
@@ -273,8 +273,8 @@ class JobController extends Controller
          */
 
         $advisor = null;
-        if(in_array($user->role, ['advisor', 'recruiter'])){
-            if ($request->has('agency_id')){
+        if(in_array($user->role, ['advisor', 'recruiter'])) {
+            if ($request->has('agency_id')) {
                 $advisor = $user;
                 $request->merge([
                     'advisor_id' => $advisor->id,
@@ -296,9 +296,9 @@ class JobController extends Controller
             'state_id' => $state->id ?? null,
             'city_id' => $city->id ?? null,
             'status' => 'draft',
-            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
-            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 5)).'',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
         ]);
 
         try {
@@ -310,17 +310,21 @@ class JobController extends Controller
                     Attachment::whereId($attachment->id)->update([
                         'resource_id' => $job->id,
                     ]);
+
+                    $request->merge([
+                        'attachment_id' => $attachment->id
+                    ]);
                 }
             }
 
             create_notification($user->id, 'Job submitted successfully.');
-            if ($request->has('agency_id')){ // Sending notification to advisor user also
+            if ($request->has('agency_id')) { // Sending notification to advisor user also
                 create_notification($advisor->id, 'Job submitted successfully.');
             }
 
             return ApiResponse::success(new JobResource($job), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('JS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('JS-01' . $e->getMessage(), 400);
         }
     }
 
@@ -344,8 +348,8 @@ class JobController extends Controller
             $category = Category::where('uuid', $request->category_id)->first();
             $request->merge([
                 'category_id' => $category->id,
-                'industry_experience' => ''.implode(',', $request->industry_experience).'',
-                'media_experience' => ''.implode(',', $request->media_experience).'',
+                'industry_experience' => '' . implode(',', $request->industry_experience) . '',
+                'media_experience' => '' . implode(',', $request->media_experience) . '',
             ]);
 
             $job->update($request->all());
@@ -366,9 +370,6 @@ class JobController extends Controller
 
             if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
-                if($job->advisor_id){
-                    $user = User::find($job->user_id);
-                }
 
                 if (! $user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
@@ -383,6 +384,23 @@ class JobController extends Controller
                 }
 
                 $subscription->decrement('quota_left', 1);
+
+                //Also decrement quota for agency for whom this job as created
+                if($job->advisor_id) {
+                    $agency_user = User::find($job->user_id);
+
+                    $subscription = Subscription::where('user_id', $agency_user->id)
+                    ->where('quota_left', '>', 0)
+                    ->latest();
+
+                    if (! $subscription) {
+                        return ApiResponse::error("You don't have enough quota for this job", 402);
+                    }
+
+                    $subscription->decrement('quota_left', 1);
+                }
+
+
                 $request->merge([
                     'status' => 'approved',
                 ]);

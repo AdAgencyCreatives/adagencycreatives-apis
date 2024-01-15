@@ -42,6 +42,7 @@ class JobLoggedInResource extends JsonResource
             'status' => $this->status,
             'location' => $this->get_location(),
             'agency' => [],
+            'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -55,18 +56,18 @@ class JobLoggedInResource extends JsonResource
         $agency = $user->agency;
         if ($agency) {
             if ($this->agency_name == null) {
-                $data['agency'] = [
-                    'name' => $agency->name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $agency->name;
 
             } else {
-                $data['agency'] = [
-                    'name' => $this->agency_name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $this->agency_name;
             }
+
             $data['agency']['slug'] = $agency->slug;
+            if($this->attachment_id == null) {
+                $data['agency']['logo'] = get_profile_picture($user);
+            } else {
+                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
+            }
         }
 
         return $data;

@@ -210,9 +210,11 @@ class CreativeController extends Controller
             $address->country_id = 1;
         }
 
-        if ($state) {
-            $address->state_id = $state->id;
+        if (!$state) {
+            return;
         }
+
+        $address->state_id = $state->id;
 
         if ($city) {
             $address->city_id = $city->id;

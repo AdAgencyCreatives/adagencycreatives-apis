@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RequestAdminAlert extends Mailable
+class HireAnAdvisorJobCompleted extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -21,14 +21,14 @@ class RequestAdminAlert extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf("%s HIRE AN ADVISOR request received", $this->data['agency'],)
+            subject: sprintf("%s HIRE AN ADVISOR JOB COMPLETED", $this->data['agency_name'],)
         );
     }
 
     public function content()
     {
         return new Content(
-            view: 'emails.custom-pkg.admin-alert',
+            view: 'emails.custom-pkg.hire-an-advisor-job-completed',
         );
     }
 

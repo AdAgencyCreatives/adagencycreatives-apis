@@ -13,6 +13,7 @@ use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\ContactFormMail;
 use App\Mail\ContentUpdated\EmailUpdated;
+use App\Mail\CustomPkg\HireAnAdvisorJobCompleted;
 use App\Mail\CustomPkg\RequestAdminAlert;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
@@ -72,7 +73,11 @@ class SendEmailJob implements ShouldQueue
 
             'email_updated',
 
-            'user_mentioned_in_post'
+            'user_mentioned_in_post',
+
+            'application_submitted',
+
+            'hire-an-advisor-job-completed'
 
         ];
 
@@ -136,6 +141,9 @@ class SendEmailJob implements ShouldQueue
 
             case 'custom_pkg_request_admin_alert':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new RequestAdminAlert($this->data['data']));
+                break;
+            case 'hire-an-advisor-job-completed':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new HireAnAdvisorJobCompleted($this->data['data']));
                 break;
 
                 /**

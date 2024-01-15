@@ -382,6 +382,32 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('employments*') ? 'active' : '' }} ">
+                    <a data-target="#employment_types_sidebar" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="command"></i>
+                        <span class="align-middle">Employment Types</span>
+                    </a>
+                    <ul id="employment_types_sidebar"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('employments*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('employments') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('employments.index') }}">
+                                <i class="align-middle" data-feather="command"></i>
+                                <span class="align-middle">All Employments</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('employments/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('employments.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Type</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('strengths*') ? 'active' : '' }} ">
                     <a data-target="#strengths_menu" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="anchor"></i>

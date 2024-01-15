@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\CreativeController;
 use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
+use App\Http\Controllers\Api\V1\EmploymentTypeController;
 use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\FestivalController;
 use App\Http\Controllers\Api\V1\GroupController;
@@ -82,12 +83,14 @@ Route::get('get_categories', [CategoryController::class, 'get_categories']);
 Route::get('get_categories/creative_count', [CategoryController::class, 'get_categories_with_creatives_count']);
 Route::get('get_industry-experiences', [IndustryController::class, 'get_industries']);
 Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
-Route::get('employment_types', [JobController::class, 'get_employment_types']);
+// Route::get('employment_types', [JobController::class, 'get_employment_types']);
+Route::get('employment_types', [EmploymentTypeController::class, 'get_employment_types']);
 Route::get('locations', [LocationController::class, 'index']);
 Route::get('cities', [LocationController::class, 'cities']); //For Fetching Only Cities
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 Route::apiResource('years-of-experience', YearsOfExperienceController::class);
+Route::apiResource('employments', EmploymentTypeController::class);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
 
