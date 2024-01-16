@@ -67,6 +67,7 @@ class JobLoggedInResource extends JsonResource
                 $data['agency']['logo'] = get_profile_picture($user);
             } else {
                 $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
+                $data['agency']['logo_id'] = $this->attachment?->uuid;
             }
         }
 
