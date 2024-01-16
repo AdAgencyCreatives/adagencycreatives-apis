@@ -273,7 +273,7 @@ class JobController extends Controller
          */
 
         $advisor = null;
-        if(in_array($user->role, ['advisor', 'recruiter'])) {
+        if (in_array($user->role, ['advisor', 'recruiter'])) {
             if ($request->has('agency_id')) {
                 $advisor = $user;
                 $request->merge([
@@ -282,7 +282,6 @@ class JobController extends Controller
 
                 $user = User::where('uuid', $request->agency_id)->first();
             }
-
         }
 
         $category = Category::where('uuid', $request->category_id)->first();
@@ -304,15 +303,14 @@ class JobController extends Controller
         try {
             $job = Job::create($request->all());
 
-            if ($request->hasFile('file')) {
-                $attachment = storeImage($request, $user->id, 'sub_agency_logo');
-                if (isset($attachment) && is_object($attachment)) {
-                    Attachment::whereId($attachment->id)->update([
+            if ($request->attachment_id) {
+                $attachment = Attachment::where("uuid", $request->attachment_id)->first();
+                if (!empty($attachment)) {
+                    $attachment->update([
                         'resource_id' => $job->id,
                     ]);
-
-                    $request->merge([
-                        'attachment_id' => $attachment->id
+                    $job->update([
+                        'attachment_id' => $attachment->id,
                     ]);
                 }
             }
@@ -336,7 +334,7 @@ class JobController extends Controller
             return ApiResponse::error(trans('response.not_found'), 404);
         }
 
-            // return $job;
+        // return $job;
         return new JobResource($job);
     }
 
@@ -371,7 +369,7 @@ class JobController extends Controller
             if ($newStatus === 'pending' && $oldStatus === 'draft') {
                 $user = Auth::user();
 
-                if (! $user) {
+                if (!$user) {
                     return ApiResponse::error(trans('response.unauthorized'), 401);
                 }
 
@@ -379,21 +377,21 @@ class JobController extends Controller
                     ->where('quota_left', '>', 0)
                     ->latest();
 
-                if (! $subscription) {
+                if (!$subscription) {
                     return ApiResponse::error("You don't have enough quota for this job", 402);
                 }
 
                 $subscription->decrement('quota_left', 1);
 
                 //Also decrement quota for agency for whom this job as created
-                if($job->advisor_id) {
+                if ($job->advisor_id) {
                     $agency_user = User::find($job->user_id);
 
                     $subscription = Subscription::where('user_id', $agency_user->id)
-                    ->where('quota_left', '>', 0)
-                    ->latest();
+                        ->where('quota_left', '>', 0)
+                        ->latest();
 
-                    if (! $subscription) {
+                    if (!$subscription) {
                         return ApiResponse::error("You don't have enough quota for this job", 402);
                     }
 
@@ -443,6 +441,18 @@ class JobController extends Controller
                 $request->merge([
                     'strengths' => implode(',', array_slice($request->strengths ?? [], 0, 10)),
                 ]);
+            }
+
+            if ($request->has('attachment_id')) {
+                $attachment = Attachment::where("uuid", $request->attachment_id)->first();
+                if (!empty($attachment)) {
+                    $attachment->update([
+                        'resource_id' => $job->id,
+                    ]);
+                    $request->merge([
+                        'attachment_id' => $attachment->id,
+                    ]);
+                }
             }
 
             $job->update($request->all());
@@ -511,6 +521,5 @@ class JobController extends Controller
 
             return $locationData;
         });
-
     }
 }
