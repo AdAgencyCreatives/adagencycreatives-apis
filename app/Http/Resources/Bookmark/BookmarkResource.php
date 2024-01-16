@@ -12,12 +12,12 @@ class BookmarkResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => $this->uuid,
-            'user_id' => $this->user->uuid,
-            'resource_type' => $this->bookmarkable_type,
-            'resource' => $this->mapResourcePath(),
-            'created_at' => $this->created_at->format(config('global.datetime_format')),
-            'updated_at' => $this->updated_at->format(config('global.datetime_format')),
+            'id' => $this?->uuid,
+            'user_id' => $this?->user?->uuid,
+            'resource_type' => $this?->bookmarkable_type,
+            'resource' => $this?->mapResourcePath(),
+            'created_at' => $this?->created_at?->format(config('global.datetime_format')),
+            'updated_at' => $this?->updated_at?->format(config('global.datetime_format')),
         ];
 
         return $data;
@@ -26,18 +26,20 @@ class BookmarkResource extends JsonResource
     public function mapResourcePath()
     {
         $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
-        switch ($this->bookmarkable_type) {
-            case 'App\Models\Creative':
-                return new CreativeResource($model);
+        if ($model->user) {
+            switch ($this->bookmarkable_type) {
+                case 'App\Models\Creative':
+                    return new CreativeResource($model);
 
-            case 'App\Models\Agency':
-                return new AgencyResource($model);
+                case 'App\Models\Agency':
+                    return new AgencyResource($model);
 
-            case 'App\Models\Job':
-                return new JobResource($model);
+                case 'App\Models\Job':
+                    return new JobResource($model);
 
-            default:
-                return null;
+                default:
+                    return null;
+            }
         }
     }
 }
