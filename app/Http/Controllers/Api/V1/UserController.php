@@ -216,7 +216,7 @@ class UserController extends Controller
         $username = Str::before($email, '@');
         $username = Str::slug($username);
 
-        $user = User::where('username', $username)->first();
+        $user = User::withTrashed()->where('username', $username)->first();
         if ($user) {
             $username = $username . '-' . Str::random(5);
         }
