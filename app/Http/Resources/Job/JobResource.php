@@ -70,7 +70,7 @@ class JobResource extends JsonResource
             if($this->attachment_id == null) {
                 $data['agency']['logo'] = get_profile_picture($user);
             } else {
-                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
+                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment?->path;
             }
 
             $data['agency']['slug'] = $agency->slug;
