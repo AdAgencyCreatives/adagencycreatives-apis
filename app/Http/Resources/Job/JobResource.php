@@ -12,7 +12,6 @@ class JobResource extends JsonResource
         $user = $this->user;
         $category = $this->category;
         $applications = $this->applications;
-
         // If application_status is provided, filter applications by status
         if ($request->has('application_status')) {
             $applications = $applications->where('status', $request->application_status);
@@ -70,7 +69,7 @@ class JobResource extends JsonResource
             if($this->attachment_id == null) {
                 $data['agency']['logo'] = get_profile_picture($user);
             } else {
-                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
+                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment?->path;
             }
 
             $data['agency']['slug'] = $agency->slug;

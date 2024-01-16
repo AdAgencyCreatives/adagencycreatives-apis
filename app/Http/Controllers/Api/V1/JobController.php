@@ -302,20 +302,29 @@ class JobController extends Controller
         ]);
 
         try {
+            if ($request->has('attachment_id')) {
+                $attachment_sub_agency = Attachment::where('uuid', $request->attachment_id)->first();
+
+                if($attachment_sub_agency) {
+                    $request->merge([
+                        'attachment_id' => $attachment_sub_agency->id
+                    ]);
+
+                }
+
+            }
+
             $job = Job::create($request->all());
 
-            if ($request->hasFile('file')) {
-                $attachment = storeImage($request, $user->id, 'sub_agency_logo');
-                if (isset($attachment) && is_object($attachment)) {
-                    Attachment::whereId($attachment->id)->update([
-                        'resource_id' => $job->id,
-                    ]);
-
-                    $request->merge([
-                        'attachment_id' => $attachment->id
-                    ]);
+            //Also put resource id in attachemnts table
+            if ($request->has('attachment_id')) {
+                if($attachment_sub_agency) {
+                    $attachment_sub_agency->resource_id = $job->id;
+                    $attachment_sub_agency->save();
                 }
             }
+
+
 
             create_notification($user->id, 'Job submitted successfully.');
             if ($request->has('agency_id')) { // Sending notification to advisor user also
