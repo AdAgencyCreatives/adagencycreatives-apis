@@ -36,7 +36,7 @@ class LoggedinCreativeResource extends JsonResource
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
-            'employment_type' => $this->employment_type,
+            'employment_type' => getEmploymentTypes($this->employment_type) ,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
             'character_strengths' => getCharacterStrengthNames($this->strengths),
