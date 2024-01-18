@@ -57,7 +57,9 @@ class AttachmentController extends Controller
             }
 
             $attachment = storeImage($request, $user->id, $resource_type);
-
+            if (is_array($attachment)) {
+                return new AttachmentCollection($attachment);
+            }
             return new AttachmentResource($attachment);
         } catch (\Exception $e) {
             throw new ApiException($e, 'ATS-001');

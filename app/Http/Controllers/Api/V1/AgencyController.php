@@ -469,6 +469,7 @@ class AgencyController extends Controller
             }
 
             updateLink($user, $request->linkedin, 'linkedin');
+            updateLink($user, $request->website, 'website');
 
             return response()->json([
                 'message' => 'Profile updated successfully.',
