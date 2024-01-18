@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-if (! function_exists('getIndustryNames')) {
+if (!function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
     {
 
@@ -30,7 +30,7 @@ if (! function_exists('getIndustryNames')) {
     }
 }
 
-if (! function_exists('getMediaNames')) {
+if (!function_exists('getMediaNames')) {
     function getMediaNames($commaSeparatedIds)
     {
         $ids = explode(',', $commaSeparatedIds);
@@ -40,7 +40,7 @@ if (! function_exists('getMediaNames')) {
     }
 }
 
-if (! function_exists('getCharacterStrengthNames')) {
+if (!function_exists('getCharacterStrengthNames')) {
     function getCharacterStrengthNames($commaSeparatedIds)
     {
         $ids = explode(',', $commaSeparatedIds);
@@ -50,51 +50,67 @@ if (! function_exists('getCharacterStrengthNames')) {
     }
 }
 
-if (! function_exists('getAttachmentBasePath')) {
+if (!function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
         $awsBucket = env('AWS_BUCKET');
-        return "https://{$awsBucket}.s3.amazonaws.com/";
+        return "https://{$awsBucket}/storage/";
     }
 }
 
 /**
  * This method is called from Admin Controllers
  */
-if (! function_exists('storeImage')) {
+if (!function_exists('storeImage')) {
     function storeImage($request, $user_id, $resource_type)
     {
         $uuid = Str::uuid();
         $file = $request->file;
+        if (is_array($file) && count($file) > 0) {
+            $files = $file;
+            foreach ($files as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $folder = $resource_type . '/' . $uuid;
+                $filePath = Storage::disk('s3')->put($folder, $file);
+                $attachments[] = Attachment::create([
+                    'uuid' => $uuid,
+                    'user_id' => $user_id,
+                    'resource_type' => $resource_type,
+                    'path' => $filePath,
+                    'name' => $file->getClientOriginalName(),
+                    'extension' => $extension,
+                ]);
+            }
+            return $attachments;
+        } else {
+            $extension = $file->getClientOriginalExtension();
+            $folder = $resource_type . '/' . $uuid;
+            $filePath = Storage::disk('s3')->put($folder, $file);
 
-        $extension = $file->getClientOriginalExtension();
-        $folder = $resource_type . '/' . $uuid;
-        $filePath = Storage::disk('s3')->put($folder, $file);
-
-        $attachment = Attachment::create([
-            'uuid' => $uuid,
-            'user_id' => $user_id,
-            'resource_type' => $resource_type,
-            'path' => $filePath,
-            'name' => $file->getClientOriginalName(),
-            'extension' => $extension,
-        ]);
-
-        return $attachment;
+            $attachment = Attachment::create([
+                'uuid' => $uuid,
+                'user_id' => $user_id,
+                'resource_type' => $resource_type,
+                'path' => $filePath,
+                'name' => $file->getClientOriginalName(),
+                'extension' => $extension,
+            ]);
+            return $attachment;
+        }
     }
 }
 
-if (! function_exists('replacePlaceholders')) {
+if (!function_exists('replacePlaceholders')) {
     function replacePlaceholders($format, $replacements)
     {
         return str_replace(array_keys($replacements), array_values($replacements), $format);
     }
 }
 
-if (! function_exists('processIndustryExperience')) {
+if (!function_exists('processIndustryExperience')) {
     function processIndustryExperience(Request $request, &$filters, $experienceKey = 'industry_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
@@ -108,10 +124,10 @@ if (! function_exists('processIndustryExperience')) {
     }
 }
 
-if (! function_exists('processMediaExperience')) {
+if (!function_exists('processMediaExperience')) {
     function processMediaExperience(Request $request, &$filters, $experienceKey = 'media_experience')
     {
-        if (! isset($filters['filter'][$experienceKey])) {
+        if (!isset($filters['filter'][$experienceKey])) {
             return null;
         }
 
@@ -123,10 +139,9 @@ if (! function_exists('processMediaExperience')) {
 
         return Media::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
     }
-
 }
 
-if (! function_exists('applyExperienceFilter')) {
+if (!function_exists('applyExperienceFilter')) {
     function applyExperienceFilter($query, $experience, $experienceType, $tableName)
     {
         $query->whereIn('id', function ($query) use ($experience, $experienceType, $tableName) {
@@ -139,10 +154,9 @@ if (! function_exists('applyExperienceFilter')) {
                 });
         });
     }
-
 }
 
-if (! function_exists('updatePhone')) {
+if (!function_exists('updatePhone')) {
     function updatePhone($user, $phone_number, $label)
     {
         if ($phone_number == null || $phone_number == '') {
@@ -170,10 +184,9 @@ if (! function_exists('updatePhone')) {
             ]);
         }
     }
-
 }
 
-if (! function_exists('updateLink')) {
+if (!function_exists('updateLink')) {
     function updateLink($user, $url, $label)
     {
         if ($url == null || $url == '') {
@@ -195,7 +208,7 @@ if (! function_exists('updateLink')) {
     }
 }
 
-if (! function_exists('updateLocation')) {
+if (!function_exists('updateLocation')) {
     function updateLocation($request, $user, $label)
     {
         $state = Location::where('uuid', $request->state_id)->first();
@@ -203,7 +216,7 @@ if (! function_exists('updateLocation')) {
 
         if ($state && $city) {
             $address = $user->addresses->first();
-            if (! $address) {
+            if (!$address) {
                 $address = new Address();
                 $address->uuid = Str::uuid();
                 $address->user_id = $user->id;
@@ -218,7 +231,7 @@ if (! function_exists('updateLocation')) {
     }
 }
 
-if (! function_exists('get_user_slug')) {
+if (!function_exists('get_user_slug')) {
     function get_user_slug($user)
     {
         // dd($user->role);
@@ -235,7 +248,7 @@ if (! function_exists('get_user_slug')) {
     }
 }
 
-if (! function_exists('create_notification')) {
+if (!function_exists('create_notification')) {
     function create_notification($user_id, $msg, $type = 'job_board', $body = [])
     {
         $notification = Notification::create([
@@ -256,7 +269,7 @@ if (! function_exists('create_notification')) {
     }
 }
 
-if (! function_exists('get_profile_picture')) {
+if (!function_exists('get_profile_picture')) {
     function get_profile_picture($user)
     {
         $defaultImage = asset('assets/img/placeholder.png');
@@ -270,7 +283,7 @@ if (! function_exists('get_profile_picture')) {
         return $defaultImage;
     }
 }
-if (! function_exists('get_profile_picture_id')) {
+if (!function_exists('get_profile_picture_id')) {
     function get_profile_picture_id($user)
     {
         $defaultImage = 0;
@@ -284,7 +297,7 @@ if (! function_exists('get_profile_picture_id')) {
     }
 }
 
-if (! function_exists('get_resume')) {
+if (!function_exists('get_resume')) {
     function get_resume($user)
     {
         if (isset($user->resume)) {
@@ -295,7 +308,7 @@ if (! function_exists('get_resume')) {
     }
 }
 
-if (! function_exists('get_location')) {
+if (!function_exists('get_location')) {
     function get_location($user)
     {
         $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
@@ -318,7 +331,7 @@ if (! function_exists('get_location')) {
     }
 }
 
-if (! function_exists('subscription_status')) {
+if (!function_exists('subscription_status')) {
     function subscription_status($user)
     {
         $subscription = $user->active_subscription;
@@ -330,7 +343,7 @@ if (! function_exists('subscription_status')) {
     }
 }
 
-if (! function_exists('get_subscription_status_string')) { //either active or expired
+if (!function_exists('get_subscription_status_string')) { //either active or expired
     function get_subscription_status_string($user)
     {
         $subscription = $user->active_subscription;
@@ -349,7 +362,7 @@ if (! function_exists('get_subscription_status_string')) { //either active or ex
     }
 }
 
-if (! function_exists('are_they_friend')) { //either active or expired
+if (!function_exists('are_they_friend')) { //either active or expired
     function are_they_friend($user1Id, $user2Id)
     {
         $friendship = DB::table('friendships')
@@ -365,7 +378,7 @@ if (! function_exists('are_they_friend')) { //either active or expired
     }
 }
 
-if (! function_exists('hasAppliedToAgencyJob')) { //either active or expired
+if (!function_exists('hasAppliedToAgencyJob')) { //either active or expired
     function hasAppliedToAgencyJob($creativeUserId, $loggedInAgencyId)
     {
         $hasApplied = Application::where('user_id', $creativeUserId)
