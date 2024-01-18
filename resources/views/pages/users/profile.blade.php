@@ -92,12 +92,12 @@
             }
         });
 
-        // tinymce.init({
-        //     selector: 'textarea',
-        //     menubar: false,
-        //     plugins: 'anchor autolink codesample emoticons link lists visualblocks',
-        //     toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        // });
+        tinymce.init({
+            selector: 'textarea',
+            menubar: false,
+            plugins: 'anchor autolink codesample emoticons link lists visualblocks',
+            toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
     </script>
 @endsection
 
