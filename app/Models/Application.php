@@ -30,6 +30,7 @@ class Application extends Model
         'REJECTED' => 2,
         'ARCHIVED' => 3, // Application will remove from agency frontend, but it will still exist in the database, so that candidate can't submit the application again.
         'SHORTLISTED' => 4,
+        'RECOMMENDED' => 5,
     ];
 
     public function user()
@@ -65,6 +66,8 @@ class Application extends Model
                 return 'archived';
             case Application::STATUSES['SHORTLISTED']:
                 return 'shortlisted';
+            case Application::STATUSES['RECOMMENDED']:
+                return 'recommended';
 
             default:
                 return null;
@@ -86,6 +89,8 @@ class Application extends Model
             case 'shortlisted':
                 $this->attributes['status'] = Application::STATUSES['SHORTLISTED'];
                 break;
+            case 'recommended':
+                $this->attributes['status'] = Application::STATUSES['RECOMMENDED'];
             default:
                 $this->attributes['status'] = Application::STATUSES['PENDING'];
                 break;
