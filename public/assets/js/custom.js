@@ -403,7 +403,6 @@ function fetchStates(selected_id) {
         method: 'GET',
         dataType: 'json',
         success: function (response) {
-            console.log(response.data);
             populateFilterWithUUID(response.data, '#state', selected_id);
         },
         error: function () {
@@ -417,7 +416,6 @@ function getCitiesByState(stateId, selected_id = null) {
     if (stateId === '-100') {
         return;
     }
-    console.log(stateId);
     var filterParam = `filter[state_id]=${stateId}&per_page=-1`;
     $.ajax({
         url: '/api/v1/locations?per_page=-1', // Replace with the actual URL for fetching cities
@@ -426,6 +424,13 @@ function getCitiesByState(stateId, selected_id = null) {
         success: function (response) {
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
+
+           if (response.data.length > 0) {
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "Select City"
+            }));
+
             $.each(response.data, function (index, city) {
                 citySelect.append($('<option>', {
                     value: city.uuid,
@@ -433,11 +438,21 @@ function getCitiesByState(stateId, selected_id = null) {
                 }));
             });
 
+               if (selected_id !== null) {
+                   citySelect.val(selected_id);
+               }
+               else {
+                   citySelect.val("-100");
+               }
 
-            if (selected_id !== null) {
-                citySelect.val(selected_id);
-                citySelect.trigger('change');
-            }
+               citySelect.trigger('change');
+        } else {
+            // No cities available
+            citySelect.append($('<option>', {
+                value: "-100",
+                text: "No Cities available"
+            }));
+        }
 
         },
         error: function (xhr, textStatus, errorThrown) {

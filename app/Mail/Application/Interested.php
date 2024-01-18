@@ -24,7 +24,7 @@ class Interested extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s application status update', $this->data['APP_NAME']),
+            subject: sprintf('Your job application on %s is being reviewed!', $this->data['APP_NAME']),
         );
     }
 
@@ -36,7 +36,7 @@ class Interested extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.application.interested',
+            view: 'emails.application.they-are-looking',
         );
     }
 

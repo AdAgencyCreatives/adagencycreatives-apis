@@ -6,10 +6,14 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+    use App\Traits\ActivityLoggerTrait;
+
 
 class Comment extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -51,5 +55,20 @@ class Comment extends Model
         $post = Post::where('uuid', $post_id)->firstOrFail();
 
         return $query->where('post_id', $post->id);
+    }
+
+    protected static function booted()
+    {
+        static::created(function () {
+            Cache::forget('trending_posts');
+        });
+
+        static::updated(function () {
+            Cache::forget('trending_posts');
+        });
+
+        static::deleted(function () {
+            Cache::forget('trending_posts');
+        });
     }
 }

@@ -68,10 +68,11 @@ class SubscriptionController extends Controller
                 'email' => $user->email,
                 'total' => $plan->price,
                 'pm_type' => $subscription->owner->pm_type,
+                'image' => $subscription->owner->pm_type,
                 'created_at' => \Carbon\Carbon::parse($subscription->created_at)->format('F d, Y'),
             ];
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
             SendEmailJob::dispatch([
                 'receiver' => $admin,
                 'data' => $data,
@@ -146,7 +147,7 @@ class SubscriptionController extends Controller
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
             SendEmailJob::dispatch([
                 'receiver' => $admin,
                 'data' => $data,
@@ -162,16 +163,17 @@ class SubscriptionController extends Controller
 
         $subscription = Subscription::where('user_id', $user_id)->latest()->first(); // Retrieve the latest subscription
 
+        $plan = Plan::where('slug', $request->name)->first();
+
         $data = [
             'name' => $request->name, // Plan Name
-            'quota_left' => $request->quota_left,
+            'quota_left' => $request->quota_left ?: $plan->quota,
             'ends_at' => $request->ends_at,
         ];
 
         if ($subscription) {
             $subscription->update($data);
         } else {
-            $plan = Plan::where('slug', $request->name)->first();
 
             $newSubscriptionData = array_merge($data, [
                 'user_id' => $user_id,

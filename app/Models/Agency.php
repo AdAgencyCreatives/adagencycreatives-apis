@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class Agency extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -82,6 +84,12 @@ class Agency extends Model
         $user_id = User::where('is_visible', $is_visible)->pluck('id');
 
         return $query->whereIn('user_id', $user_id);
+    }
+
+    public function scopeRole(Builder $query, $role)
+    {
+        $users_ids = User::where('role', $role)->pluck('id');
+        return $query->whereIn('user_id', $users_ids);
     }
 
     protected static function booted()

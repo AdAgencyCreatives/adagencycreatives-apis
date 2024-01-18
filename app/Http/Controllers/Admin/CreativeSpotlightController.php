@@ -39,7 +39,6 @@ class CreativeSpotlightController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $spotlight = CreativeSpotlight::find($id);
 
         if ($request->has('file')) {
@@ -49,6 +48,7 @@ class CreativeSpotlightController extends Controller
             $spotlight->update([
                 'title' => $request->title,
                 'slug' => $request->slug,
+                'created_at' => $request->created_at,
             ]);
         }
 

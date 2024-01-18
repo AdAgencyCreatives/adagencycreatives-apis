@@ -6,10 +6,12 @@ use App\Jobs\SendEmailJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ActivityLoggerTrait;
 
 class PackageRequest extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -51,7 +53,7 @@ class PackageRequest extends Model
 
     public function agency()
     {
-        return $this->belongsTo(Agency::class, 'user_id');
+        return $this->belongsTo(Agency::class, 'user_id', 'user_id');
     }
 
     public function plan()

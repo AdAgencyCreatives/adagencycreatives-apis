@@ -26,9 +26,8 @@
                         <div style="margin-top: 20px;">Once you’ve got your profile popping, take a moment to adjust
                             your preferences. After that,
                             you’re ready to get out there and start making some new connections!</div>
-                        <div style="margin-top: 20px;">If you forget your password, no problem. You can <a
-                                href="{{ $data['FRONTEND_URL'] }}/reset-password" target="_blank">reset it
-                                here.</a>
+                        <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
+                                href="{{ $data['FRONTEND_URL'] }}/reset-password" target="_blank">here</a>.
 
                         </div>
 

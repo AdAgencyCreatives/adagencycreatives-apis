@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ActivityLoggerTrait;
 
 class Friendship extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'user1_id',
@@ -35,8 +37,8 @@ class Friendship extends Model
         static::deleted(function ($friendship) {
             $friendship = FriendRequest::where('sender_id', $friendship->user1_id)
                 ->where('receiver_id', $friendship->user2_id)->update([
-                'status' => 'unfriended',
-            ]);
+                    'status' => 'unfriended',
+                ]);
         });
 
     }

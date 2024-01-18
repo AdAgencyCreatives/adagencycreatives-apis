@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\ActivityLoggerTrait;
 
 class CreativeSpotlight extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -17,6 +19,7 @@ class CreativeSpotlight extends Model
         'name',
         'slug',
         'status',
+        'created_at',
     ];
 
     public const STATUSES = [

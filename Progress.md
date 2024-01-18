@@ -719,3 +719,23 @@ Admin can
 -   Resume url changed and bug fixed
 -   Tested the app flow and comiled the bug list.
 -   Redirected all emails to admin email.
+
+## 22/11/2023 Resume fix | Email fixes
+
+-   Change the resume download url with some extra security feature.
+-   Hide phone number when creative downloads resume of other creative.
+-   Email Fixes.
+
+## 23/11/2023 Production | Staging
+
+-   Setup separate environments for staging and production
+-   Fixing all issues that came after deployment.
+-   Stripe Setup on staging and production
+
+## 24/11/2023 Search Fix | Emails
+
+-   Creatives page search fix
+-   EMails tested.
+-   Post attachments issue fixed
+-   Agency URL bug fix
+-   Setup separate storage for staging

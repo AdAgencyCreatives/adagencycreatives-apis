@@ -4,6 +4,8 @@
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
         function populateApplications(applications) {
 
@@ -201,6 +203,33 @@
             });
         }
 
+        var employmentTypeString = "{{ $job?->employment_type ?? '' }}";
+        var userEmploymentTypes = employmentTypeString ? @json(explode(',', $job?->employment_type)) : [];
+
+        $.ajax({
+            url: '/api/v1/employment_types',
+            type: "GET",
+            success: function(data) {
+                // Clear existing options
+                $("#employment_type").empty();
+
+                // Add the default option
+                $("#employment_type").append('<option value="-100"> Select Type</option>');
+
+                // Populate the dropdown with options from the API
+                $.each(data, function(index, type) {
+                    var isSelected = userEmploymentTypes.includes(type);
+                    $("#employment_type").append('<option value="' + type + '" ' + (isSelected ?
+                        'selected' : '') + '>' + type + '</option>');
+                });
+
+                // Refresh the Select2 plugin
+                $("#employment_type").select2("destroy").select2();
+            },
+            error: function(error) {
+                console.error("Error fetching employment types:", error);
+            }
+        });
 
         $(document).ready(function() {
 
@@ -281,6 +310,13 @@
                 getCitiesByState(selectedStateId, city_id);
             });
 
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                plugins: 'anchor autolink codesample emoticons link lists visualblocks',
+                toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+
         });
     </script>
 @endsection
@@ -327,7 +363,7 @@
                         <h5 class="card-title mb-0">Description</h5>
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control" name="description" rows="10" placeholder="Textarea" spellcheck="false">{{ strip_tags($job->description) }}</textarea>
+                        <textarea class="form-control" name="description" rows="10" placeholder="Textarea" spellcheck="false">{{ $job->description }}</textarea>
                     </div>
                 </div>
 
@@ -438,12 +474,6 @@
                                         <label class="form-label" for="employment_type"> Employment Type </label>
                                         <select name="employment_type" id="employment_type"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="-100">Select Type</option>
-                                            @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                                <option value="{{ $type }}"
-                                                    @if ($job->employment_type == $type) selected @endif>{{ $type }}
-                                                </option>
-                                            @endforeach
                                         </select>
 
                                     </div>
@@ -508,7 +538,7 @@
                             </div>
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="external_link"> Expernal Link </label>
+                                    <label class="form-label" for="external_link"> External Link </label>
                                     <a>
                                         <input id="external_link" class="form-control" type="text"
                                             name="external_link" value="{{ $job->external_link }}" />
@@ -522,8 +552,8 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label"> Created At </label>
-                                    <input class="form-control" type="text" value="{{ $job->created_at }}"
-                                        disabled />
+                                    <input class="form-control daterange" type="text" name="created_at"
+                                        value="{{ $job->created_at }}" />
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">

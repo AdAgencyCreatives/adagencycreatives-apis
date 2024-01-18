@@ -20,12 +20,12 @@ class StoreJobRequest extends FormRequest
             'city_id' => 'nullable|exists:locations,uuid',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'employment_type' => 'required|string|max:255',
+            'employment_type' => 'string|max:255',
             'industry_experience' => 'required|array',
             'industry_experience.*' => 'exists:industries,uuid',
             'media_experience' => 'required|array',
             'media_experience.*' => 'exists:medias,uuid',
-            'salary_range' => 'required|string|max:255',
+            'salary_range' => 'nullable',
             'apply_type' => 'required|string|max:255',
             'external_link' => 'nullable',
             'is_remote' => 'required|boolean',
@@ -33,7 +33,7 @@ class StoreJobRequest extends FormRequest
             'is_onsite' => 'required|boolean',
             'is_featured' => 'required|boolean',
             'is_urgent' => 'required|boolean',
-            'expired_at' => 'required|date',
+            'expired_at' => 'nullable|date',
         ];
     }
 }

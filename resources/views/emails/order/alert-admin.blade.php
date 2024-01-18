@@ -151,10 +151,10 @@
                                                                                                                     align="center"
                                                                                                                     bgcolor="transparent">
                                                                                                                     <img alt=""
-                                                                                                                        width="200"
-                                                                                                                        src="https://aacstagingsite.wpengine.com/wp-content/uploads/2023/04/AAC-LOGO-dark.png"
+                                                                                                                        width="360"
+                                                                                                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/AAC-LOGO-500-%C3%97-100-px-1.png"
                                                                                                                         max-width="100%"
-                                                                                                                        style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 200px;"
+                                                                                                                        style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 68%;"
                                                                                                                         border="0"
                                                                                                                         bgcolor="transparent">
                                                                                                                 </td>
@@ -413,7 +413,7 @@
                                                                                                                                 style="border-radius: 0px; background-color: #d3a11f; width: 172px; border: 0 hidden;"
                                                                                                                                 bgcolor="#d3a11f"
                                                                                                                                 width="172">
-                                                                                                                                <a href="https://aacstagingsite.wpengine.com"
+                                                                                                                                <a href="https://api.adagencycreatives.com/reports"
                                                                                                                                     target="_blank"
                                                                                                                                     style="word-break: break-word; font-weight: 400; display: block; text-decoration: none; text-transform: none; margin: 0; text-align: center; max-width: 100%; background-color: #d3a11f; line-height: 30px; height: 30px; color: #eeeeee;"
                                                                                                                                     bgcolor="#d3a11f"
@@ -535,7 +535,7 @@
                                                                                                                                                             <a href="https://aacstagingsite.wpengine.com/product/post-a-creative-job-single-job-post/"
                                                                                                                                                                 style="text-decoration: none; word-break: break-word;"><img
                                                                                                                                                                     width="150"
-                                                                                                                                                                    src="https://aacstagingsite.wpengine.com/wp-content/uploads/2022/04/Single-Job-2-300x300.png"
+                                                                                                                                                                    src="{{ $data['image'] }}"
                                                                                                                                                                     style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; vertical-align: middle; background-color: transparent; max-width: 100%;"
                                                                                                                                                                     border="0"
                                                                                                                                                                     bgcolor="transparent">
@@ -568,10 +568,7 @@
                                                                                                                                                                 style="text-decoration: none; word-break: break-word;">
                                                                                                                                                                 <span
                                                                                                                                                                     class="viwec-responsive-center"
-                                                                                                                                                                    style="margin: 0; padding: 0; font-size: 16px; font-weight: 400; color: #ffffff; line-height: 30px;">Post
-                                                                                                                                                                    a
-                                                                                                                                                                    Creative
-                                                                                                                                                                    Job
+                                                                                                                                                                    style="margin: 0; padding: 0; font-size: 16px; font-weight: 400; color: #ffffff; line-height: 30px;">{{ $data['plan_name'] }}
                                                                                                                                                                 </span>
                                                                                                                                                             </a>
                                                                                                                                                             <p
@@ -713,8 +710,7 @@
                                                                                                                     <p
                                                                                                                         style="display: block; margin: 0; line-height: inherit; font-size: 15px;">
                                                                                                                         <span
-                                                                                                                            style="font-size: 20px; color: #ffffff;">Payment
-                                                                                                                            Method</span>
+                                                                                                                            style="font-size: 20px; color: #ffffff;"></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
@@ -747,9 +743,7 @@
                                                                                                                     <p
                                                                                                                         style="display: block; margin: 0; line-height: inherit;">
                                                                                                                         <span
-                                                                                                                            style="font-size: 15px; color: #ffffff;">Cash
-                                                                                                                            on
-                                                                                                                            delivery</span>
+                                                                                                                            style="font-size: 15px; color: #ffffff;"></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
@@ -1502,8 +1496,8 @@
                                                                                                                             :
                                                                                                                             <span
                                                                                                                                 style="color: #ffffff;"><a
-                                                                                                                                    href="help@aacstagingsite.wpengine.com"
-                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">help@aacstagingsite.wpengine.com</a></span></span>
+                                                                                                                                    href="info@adagencycreatives.com"
+                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">info@adagencycreatives.com</a></span></span>
                                                                                                                     </p>
                                                                                                                     <p style="display: block; margin: 0; line-height: inherit; text-align: center;"
                                                                                                                         align="center">
@@ -1518,8 +1512,8 @@
                                                                                                                             to
                                                                                                                             <span
                                                                                                                                 style="color: #ffffff;"><a
-                                                                                                                                    href="help@aacstagingsite.wpengine.com"
-                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">help@aacstagingsite.wpengine.com</a></span></span>
+                                                                                                                                    href="info@adagencycreatives.com"
+                                                                                                                                    style="text-decoration: none; word-break: break-word; color: #ffffff;">info@adagencycreatives.com</a></span></span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>

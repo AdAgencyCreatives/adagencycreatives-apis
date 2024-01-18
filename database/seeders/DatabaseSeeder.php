@@ -148,7 +148,7 @@ class DatabaseSeeder extends Seeder
         //Generate some more users
         // \App\Models\User::factory(15)->create();
         // \App\Models\Order::factory(15)->create();
-        \App\Models\Group::factory(3)->create();
+        // \App\Models\Group::factory(3)->create();
 
         \App\Models\Group::factory(1)->create(
             [
@@ -160,8 +160,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $this->call(PostSeeder::class);
-        $this->call(CommentSeeder::class);
+        // $this->call(PostSeeder::class);
+        // $this->call(CommentSeeder::class);
         // $this->call(JobAlertSeeder::class);
 
         /**
@@ -181,12 +181,12 @@ class DatabaseSeeder extends Seeder
             'creative_spotlight_title' => 'Site Name (%site_name%) %separator% %post_name% %separator% %post_date%',
         ]);
 
-        $this->call(TestUserSeeder::class);
+        // $this->call(TestUserSeeder::class);
 
-        Artisan::call('import:users');
-        Artisan::call('import:agencies');
-        Artisan::call('import:creatives');
-        Artisan::call('import:jobs');
+        // Artisan::call('import:users');
+        // Artisan::call('import:agencies');
+        // Artisan::call('import:creatives');
+        // Artisan::call('import:jobs');
         // Artisan::call('import:creative-spotlights');
 
         Artisan::call('optimize:clear');

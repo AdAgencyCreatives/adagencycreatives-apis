@@ -3,10 +3,22 @@
 @section('title', Str::ucfirst($page))
 
 @section('scripts')
-    @include('pages.ckEditor')
+    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
     <script>
-        $(document).ready(function() {});
+        $(document).ready(function() {
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                plugins: 'anchor autolink codesample emoticons link lists visualblocks image preview',
+                toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+
+        });
     </script>
+
+
 @endsection
 
 @section('styles')
@@ -43,26 +55,30 @@
             <div class="card">
 
                 <div class="card-body">
-                    <form action="{{ route('pages.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('pages.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="page" value="{{ $page }}">
                         <div class="row">
 
                             <div class="col-md-12">
-                                <div class="mb-3">
-                                    @foreach ($data as $item)
-                                        <textarea class="form-control text-area-description" id="editor" name="{{ $item->key }}"
-                                            placeholder="Put your card info and also paste image here">{{ $item->value }}
-                                    </textarea>
-                                    @endforeach
-                                </div>
-                                {{-- @foreach ($data as $item)
+
+                                @foreach ($data as $item)
                                     <div class="mb-3">
-                                        <label for="name" class="form-label"> {{ Str::ucfirst($item->key) }}</label>
-                                        <input type="text" class="form-control" name="{{ $item->key }}"
-                                            value="{{ $item->value }}">
+                                        <label for="name" class="form-label">{{ Str::ucfirst($item->key) }}</label>
+                                        <textarea class="form-control editor-textarea" name="{{ $item->key }}"
+                                            placeholder="Enter {{ Str::ucfirst($item->key) }}">{{ $item->value }}</textarea>
                                     </div>
-                                @endforeach --}}
+                                @endforeach
+
+                                {{-- @foreach ($data as $item)
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label"> {{ Str::ucfirst($item->key) }}</label>
+                                            <input type="text" class="form-control" name="{{ $item->key }}"
+                                                value="{{ $item->value }}">
+                                        </div>
+                                    @endforeach --}}
+
+
                             </div>
 
                         </div>

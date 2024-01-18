@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class GroupInvitation extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -72,7 +75,38 @@ class GroupInvitation extends Model
     public function scopeReceiverId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-
         return $query->where('invitee_user_id', $user->id);
+    }
+
+    public function scopeSenderId(Builder $query, $user_id)
+    {
+        $user = User::where('uuid', $user_id)->first();
+        return $query->where('inviter_user_id', $user->id);
+    }
+
+    public function scopeGroupId(Builder $query, $group_id)
+    {
+        $group = Group::where('uuid', $group_id)->first();
+        return $query->where('group_id', $group->id);
+    }
+
+    protected static function booted()
+    {
+        static::updating(function ($invitation) {
+            if ($invitation->isDirty('status')) {
+                $newStatus = $invitation->status;
+                if($newStatus == 'accepted') {
+                    GroupMember::create([
+                        'uuid' => Str::uuid(),
+                        'group_id' => $invitation->group_id,
+                        'user_id' => $invitation->invitee_user_id,
+                        'role' => 3,
+                        'joined_at' => now(),
+                    ]);
+                }
+            }
+        });
+
+
     }
 }

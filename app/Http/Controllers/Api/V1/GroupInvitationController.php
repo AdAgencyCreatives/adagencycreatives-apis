@@ -17,12 +17,14 @@ use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class InvitationController extends Controller
+class GroupInvitationController extends Controller
 {
     public function index()
     {
         $query = QueryBuilder::for(GroupInvitation::class)
             ->allowedFilters([
+                AllowedFilter::scope('group_id'),
+                AllowedFilter::scope('sender_id'),
                 AllowedFilter::scope('receiver_id'),
                 'status',
             ]);
@@ -83,6 +85,8 @@ class InvitationController extends Controller
         try {
             $invitation = GroupInvitation::where('uuid', $uuid)->first();
             $invitation->update($request->only('status'));
+
+            $invitation->touch('accepted_at');
 
             return new InvitationResource($invitation);
         } catch (ModelNotFoundException $exception) {

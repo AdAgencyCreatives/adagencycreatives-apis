@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\ActivityLoggerTrait;
 
 class Attachment extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -45,10 +47,9 @@ class Attachment extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if($user){
+        if ($user) {
             return $query->where('user_id', $user->id);
-        }
-        else{
+        } else {
             return $query->where('user_id', 0);
         }
     }
@@ -56,10 +57,9 @@ class Attachment extends Model
     public function scopePostId(Builder $query, $post_id)
     {
         $post = Post::where('uuid', $post_id)->first();
-        if($post){
+        if ($post) {
             return $query->where('resource_id', $post->id);
-        }
-        else{
+        } else {
             return $query->where('resource_id', 0);
         }
 

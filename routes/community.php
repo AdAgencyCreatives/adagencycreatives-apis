@@ -11,3 +11,4 @@ Route::post('groups/update-member', [GroupController::class, 'update_member_role
 
 Route::resource('posts', PostController::class);
 Route::get('posts/{post}/details', [PostController::class, 'details']);
+Route::patch('posts/{post}', [PostController::class, 'update'])->name('posts.update');

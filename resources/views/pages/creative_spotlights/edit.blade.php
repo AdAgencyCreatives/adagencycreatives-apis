@@ -38,6 +38,14 @@
                 selectElement.append(option);
             });
         }
+
+        $(".daterange").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            locale: {
+                format: "Y-MM-DD"
+            }
+        });
     </script>
 @endsection
 
@@ -80,12 +88,23 @@
                         </div>
 
                         <div class="mb-3">
+                            <div class="form-group">
+                                <label class="form-label"> Created At </label>
+                                <input class="form-control daterange" type="text" name="created_at"
+                                    value="{{ $spotlight->created_at }}" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <div class="mb-3 error-placeholder">
                                 <label class="form-label">Spotlight Video</label>
                                 <div>
                                     <input type="file" class="validation-file" name="file">
                                 </div>
                             </div>
+
+
+
+
                             <div>
                                 <h1>
                                     <a href="{{ getAttachmentBasePath() . $spotlight->path }}" target="_blank">Spotlight

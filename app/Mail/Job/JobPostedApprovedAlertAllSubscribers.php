@@ -14,13 +14,15 @@ class JobPostedApprovedAlertAllSubscribers extends Mailable
 
     public function __construct(public $data, public $user)
     {
-
+        $this->data = $data;
+        $this->data['APP_NAME'] = env('APP_NAME');
+        $this->data['APP_URL'] = env('FRONTEND_URL');
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('New Job Posted in "%s" category', $this->data['category']),
+            subject: sprintf('New Job Posted in "%s" category', $this->data['category'], $this->data['APP_NAME']),
         );
     }
 

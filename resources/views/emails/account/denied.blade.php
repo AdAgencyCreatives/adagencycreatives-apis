@@ -22,7 +22,7 @@
                         </p>
 
                         <h4 style="text-decoration: underline;">Details:</h4>
-                        <div><b>Name: </b>{{ $data['user']->username ?? '' }}</div>
+                        <div><b>User name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
 
 

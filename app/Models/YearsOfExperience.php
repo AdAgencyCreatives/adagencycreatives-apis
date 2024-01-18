@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\ActivityLoggerTrait;
 
 class YearsOfExperience extends Model
 {
     use HasFactory;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -21,8 +23,13 @@ class YearsOfExperience extends Model
             Cache::forget('years_of_experience');
         });
 
-        static::updated(function () {
+        static::updated(function ($experience) {
             Cache::forget('years_of_experience');
+            $oldExperience = $experience->getOriginal('name');
+            $newExperience = $experience->name;
+            Creative::where('years_of_experience', $oldExperience)->update([
+                'years_of_experience' => $newExperience
+            ]);
         });
 
         static::deleted(function () {

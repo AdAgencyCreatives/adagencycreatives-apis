@@ -7,28 +7,39 @@ use App\Http\Controllers\Admin\CreativeController;
 use App\Http\Controllers\Admin\CreativeSpotlightController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\FeaturedLocationController;
+use App\Http\Controllers\Admin\FestivalController;
 use App\Http\Controllers\Admin\IndustryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MentorResourceController;
+use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PublicationResourceController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Admin\EmploymentController;
 use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\JobInvitationController;
 use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
+use App\Http\Resources\MentorResource\MentorResource;
 use App\Jobs\SendEmailJob;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Group;
 use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
+use App\Models\PublicationResource;
 use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -47,6 +58,7 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
  */
 
+//test commit
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -59,9 +71,33 @@ Route::get('/users2', function () {
     }
 });
 
-Route::get('/test_env', function () {
-    dump(env('APP_URL'));
+
+Route::get('/show-email', function () {
+    $data = [
+           'email' => "test@gmail.com",
+            "username" => 'John',
+            "order_no" => '123',
+            "total" => '$500',
+            'plan_name' => "Single Job Post",
+            'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
+            "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
+    ];
+
+    return view('emails.order.alert-admin', compact('data'));
 });
+
+Route::get('/show-email2', function () {
+    $data = [
+            "username" => 'John',
+            "recipient" => 'Kale',
+            "member" => 'John',
+            'FRONTEND_URL' => "abc.com",
+            'APP_NAME' => env('APP_NAME'),
+    ];
+
+    return view('emails.friendship.request_accepted', compact('data'));
+});
+
 
 Route::get('/email', function () {
 
@@ -77,10 +113,10 @@ Route::get('/email', function () {
         'member' => 'Ad agency',
         'user' => User::find(2),
         'APPROVE_URL' => '',
-        'DENY_URL' => ''
+        'DENY_URL' => '',
+        'unread_message_count' => 6,
     ];
 
-    return view('emails.account.new_user_registration_creative', compact('data'));
     $recipient = User::find(2);
     $sender = User::find(4);
 
@@ -89,19 +125,20 @@ Route::get('/email', function () {
         'message' => 'Custom MEssage',
         'message_sender_name' => $sender->first_name,
         'message_sender_profile_url' => get_profile_picture($sender),
-        'message_count' => 6,
-        'profile_url' => env('FRONTEND_URL').'/profile/',
+        'unread_message_count' => 6,
+        'profile_url' => env('FRONTEND_URL') . '/profile/',
     ];
 
-    SendEmailJob::dispatch([
-        'receiver' => $recipient,
-        'data' => $data,
-    ], 'unread_message');
+    // SendEmailJob::dispatch([
+    //     'receiver' => $recipient,
+    //     'data' => $data,
+    // ], 'unread_message');
 });
 
-Route::get('/reset-messages', function () {
-    DB::table('messages')->truncate();
-    echo 'Messages Cleared';
+
+
+Route::get('/check-missing-locations', function () {
+    Artisan::call('check:missing-locations');
 
 });
 
@@ -117,6 +154,22 @@ Route::get('advisor/impersonate/{uuid}', [UserController::class, 'advisor_impers
 Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['admin']], function () {
+
+         // Get those users whose portfolio preview image is not present
+        Route::get('/find_missing_portfolios', function () {
+            $creatives = User::where('role', 4)->where('status', 1)->get();
+            foreach($creatives as $user) {
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
+                    if(!$existing_preview) {
+                        dump($user->email . " " . $user->id . " missing.");
+                    }
+
+                }
+            }
+        });
+
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
@@ -125,7 +178,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
-        Route::resource('experiences', ExperienceController::class);
+        Route::resource('experiences', ExperienceController::class); // Years of experience
+        Route::resource('employments', EmploymentController::class); // Employment-Type
+
         Route::resource('strengths', StrengthController::class);
 
         Route::resource('reports', ReportController::class);
@@ -141,6 +196,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('users', UserController::class);
         Route::get('advisor/create', [UserController::class, 'create'])->name('advisor.create');
+        Route::get('recruiter/create', [UserController::class, 'create'])->name('recruiter.create');
         Route::get('agency/create', [UserController::class, 'create'])->name('agency.create');
         Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
 
@@ -160,6 +216,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/creative-educaiton/{user}', [CreativeController::class, 'update_education'])->name('creative.education.update');
         Route::put('/creative-experience/{user}', [CreativeController::class, 'update_experience'])->name('creative.experience.update');
         Route::put('/creative/seo/{user}', [CreativeController::class, 'update_seo'])->name('creative.seo.update');
+        Route::put('/creative/website-preview/{user}', [CreativeController::class, 'update_website_preview'])->name('creative.website_preview.update');
 
         /**
          * SEO
@@ -187,6 +244,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('advisors', UserController::class)->parameters([
             'advisors' => 'user',
         ]);
+        Route::resource('recruiters', UserController::class)->parameters([
+            'recruiters' => 'user',
+        ]);
 
         Route::resource('users', UserController::class)->only('index', 'details');
         Route::get('users/{user}/details', [UserController::class, 'details']);
@@ -205,16 +265,29 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
 
         /**
+        * Download Festivals
+        */
+        Route::get('festivals/download', [FestivalController::class, 'downloadFestivals'])->name('festivals.download');
+
+        /**
          * Attachment Media
          */
         Route::resource('attachments', AttachmentController::class);
         Route::resource('creative_spotlights', CreativeSpotlightController::class);
+        Route::resource('festivals', FestivalController::class);
 
         /**
          * Pages Management
          */
         Route::post('image/store', [PageController::class, 'store_img'])->name('image.store');
         Route::resource('pages', PageController::class);
+
+        /**
+         * Activity Log
+         */
+
+        Route::get('activity/log', [ActivityController::class, 'index'])->name('activity.index');
+        Route::get('activity/log/{user}/details', [ActivityController::class, 'details']);
 
         /**
          * Import Attachments from WP
@@ -244,14 +317,20 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::get('import/creative-websites', function () {
+
             $startIndex = isset($_GET['start']) ? intval($_GET['start']) : 0;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             Artisan::call('import:creative-portfolio-websites-image', ['startIndex' => $startIndex, 'limit' => $limit]);
         });
 
-        Route::get('migrate-fresh-seed', function () {
-            Artisan::call('migrate:fresh --seed');
-        });
+        // Route::get('migrate-fresh-seed', function () {
+        //     Artisan::call('migrate:fresh --seed');
+        // });
+
+        /**
+         * Delete user data permanently
+         */
+        Route::delete('permanently_delete/{user}', [UserController::class, 'deleteRelatedRecordsPermanently'])->name('permanently_delete');
 
     });
 
@@ -308,3 +387,18 @@ Route::get('get_uuids', function () {
 });
 
 Route::view('resume', 'resume');
+
+
+Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
+Route::resource('resource', MentorResourceController::class);
+Route::resource('publication-resource', PublicationResourceController::class);
+Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
+Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
+Route::post('/update-resource-order', [MentorResourceController::class, 'updateOrder'])->name('update-resource-order');
+
+//Featured Locations
+Route::resource('featured-cities', FeaturedLocationController::class)->except('edit', 'show');
+Route::post('/update-featured-city-order', [FeaturedLocationController::class, 'updateOrder'])->name('update-featured-city-order');
+
+//Get job invitation uuid from email
+Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');

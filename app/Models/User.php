@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use App\Jobs\SendResetPasswordJob;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,10 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ActivityLoggerTrait;
+
 
 class User extends Authenticatable
 {
@@ -21,6 +25,7 @@ class User extends Authenticatable
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+    use ActivityLoggerTrait;
 
     // protected $primaryKey = 'uuid';
 
@@ -55,6 +60,7 @@ class User extends Authenticatable
         'ADVISOR' => 2,
         'AGENCY' => 3,
         'CREATIVE' => 4,
+        'RECRUITER' => 5,
     ];
 
     public const STATUSES = [
@@ -95,7 +101,7 @@ class User extends Authenticatable
 
     public function portfolio_website_preview()
     {
-        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview');
+        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview')->latest();
     }
 
     public function agency()
@@ -145,7 +151,7 @@ class User extends Authenticatable
 
     public function resume()
     {
-        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latestOfMany();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latest();
     }
 
     public function educations()
@@ -171,6 +177,11 @@ class User extends Authenticatable
     public function alert()
     {
         return $this->hasOne(JobAlert::class);
+    }
+
+    public function alert_categories()
+    {
+        return $this->belongsToMany(Category::class, 'job_alerts', 'user_id', 'category_id')->withTimestamps();
     }
 
     public function orders()
@@ -254,7 +265,9 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name.' '.$this->last_name;
+        $fullName = trim($this->first_name . ' ' . $this->last_name);
+
+        return $fullName !== '' ? $fullName : $this->username;
     }
 
     public function scopeCompanySlug(Builder $query, $company_slug): Builder
@@ -264,6 +277,79 @@ class User extends Authenticatable
             return $query->where('id', $agency->user_id);
         } else {
             return $query->where('id', 0);
+        }
+    }
+
+    public function scopeAgencyName(Builder $query, $name): Builder
+    {
+        $agency = Agency::where('name', 'LIKE', "%$name%")->first();
+        if ($agency) {
+            return $query->where('id', $agency->user_id);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
+    public function scopeFirstName(Builder $query, $name): Builder
+    {
+        $name = explode(' ', $name);
+        //if name is only one, then search in first name, if two then search seocnd term into last_name
+
+        if (count($name) == 1) {
+            return $query->where('first_name', $name[0])->orWhere('last_name', $name[0]);
+        } else {
+            return $query->where('first_name', $name[0])
+                ->Where('last_name', $name[1])
+                ->orWhere('first_name', $name[1])
+                ->Where('last_name', $name[0]);
+        }
+    }
+
+    public function scopeCategoryId(Builder $query, $uuid): Builder
+    {
+        $category = Category::where('uuid', $uuid)->first();
+        $creative_ids = Creative::where('category_id', $category->id)->pluck('user_id');
+
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
+    public function scopeStateId(Builder $query, $id): Builder
+    {
+        $state = Location::where('uuid', $id)->first();
+        $creative_ids = Address::where('state_id', $state->id)->pluck('user_id');
+
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
+    public function scopeCityId(Builder $query, $id): Builder
+    {
+        $city = Location::where('uuid', $id)->first();
+        $creative_ids = Address::where('city_id', $city->id)->pluck('user_id');
+
+        if ($creative_ids) {
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            return $query->where('id', 0);
+        }
+    }
+
+    public function scopeIsFeatured(Builder $query, $value): Builder
+    {
+        $value = explode('_', $value);
+        if($value[0] == 'creative') {
+            $creative_ids = Creative::where('is_featured', $value[1])->pluck('user_id');
+            return $query->whereIn('id', $creative_ids);
+        } else {
+            $creative_ids = Agency::where('is_featured', $value[1])->pluck('user_id');
+            return $query->whereIn('id', $creative_ids);
         }
     }
 
@@ -278,6 +364,8 @@ class User extends Authenticatable
                 return 'agency';
             case User::ROLES['CREATIVE']:
                 return 'creative';
+            case User::ROLES['RECRUITER']:
+                return 'recruiter';
             default:
                 return null;
         }
@@ -294,6 +382,9 @@ class User extends Authenticatable
                 break;
             case 'agency':
                 $this->attributes['role'] = User::ROLES['AGENCY'];
+                break;
+            case 'recruiter':
+                $this->attributes['role'] = User::ROLES['RECRUITER'];
                 break;
             default:
                 $this->attributes['role'] = User::ROLES['CREATIVE'];
@@ -333,26 +424,83 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        if (! App::runningInConsole()) {
+        if (!App::runningInConsole()) {
             static::created(function () {
                 Cache::forget('users');
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_creatives');
+                Cache::forget('get_users');
             });
 
+            static::updating(function ($user) {
+                if ($user->isDirty('email')) {
+                    // Email address is being updated
+                    $oldEmail = $user->getOriginal('email');
+                    $newEmail = $user->email;
+                    $data = [
+                        'receiver' => $oldEmail,
+                        'data' => [
+                            'recipient' => $user->first_name,
+                            'old_email' => $oldEmail,
+                            'new_email' => $newEmail,
+                    ]
+                    ];
+                    SendEmailJob::dispatch($data, 'email_updated');
+
+                }
+
+                 if ($user->isDirty('role')) {
+                    $newRole = $user->role;
+                    if($newRole == 'creative' ){
+                        Agency::where('user_id', $user->id)->delete();
+                        Creative::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'business')->update([
+                            'label' => 'personal'
+                        ]);
+                    }
+                    elseif(in_array($newRole, ['agency', 'advisor', 'recruiter'])){
+                        Creative::where('user_id', $user->id)->delete();
+                        Agency::onlyTrashed()->where('user_id', $user->id)->restore();
+
+                        Address::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+
+                        Phone::where('user_id', $user->id)->where('label', 'personal')->update([
+                            'label' => 'business'
+                        ]);
+                    }
+
+                    Artisan::call('optimize:clear');
+                }
+
+            });
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts');
                 Cache::forget('all_users_with_attachments');
                 Cache::forget('all_creatives');
+                Cache::forget('get_users');
 
-                //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
-                if ($user->creative) {
-                    $creative = $user->creative;
-                    $creative->slug = Str::slug($user->username);
-                    $creative->save();
+                if ($user->isDirty('username')) {
+                    //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
+                    tap($user, function ($user) {
+                        if ($user->creative) {
+                            $user->creative->update(['slug' => Str::slug($user->username)]);
+                        }
+
+                        if ($user->agency) {
+                            $user->agency->update(['slug' => Str::slug($user->username)]);
+                        }
+                    });
                 }
+
             });
 
             static::deleted(function ($user) {
@@ -360,11 +508,27 @@ class User extends Authenticatable
                 Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
+                Cache::forget('get_users'); //cache for displaying list of creatives Add Creative Spotlight page
+
+                if ($user->role == 'creative') {
+                    Creative::where('user_id', $user->id)->delete();
+                    Education::where('user_id', $user->id)->delete();
+                    Experience::where('user_id', $user->id)->delete();
+                    PostReaction::where('user_id', $user->id)->delete();
+                } elseif ($user->role == 'agency') {
+                    Agency::where('user_id', $user->id)->delete();
+                }
+
+                Link::where('user_id', $user->id)->delete();
+                Attachment::where('user_id', $user->id)->delete();
+                Address::where('user_id', $user->id)->delete();
+                Phone::where('user_id', $user->id)->delete();
+                Bookmark::where('user_id', $user->id)->delete();
+                Review::where('user_id', $user->id)->delete();
 
                 // Delete all the user Groups, when group is deleted, all posts will be deleted
                 Group::where('user_id', $user->id)->delete();
             });
         }
-
     }
 }

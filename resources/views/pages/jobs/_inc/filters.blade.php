@@ -26,13 +26,9 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="employement_type"> Employment Type </label>
-                                <select name="employement_type" id="employement_type"
+                                <label class="form-label" for="employment_type"> Employment Type </label>
+                                <select name="employment_type" id="employment_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select Type</option>
-                                    @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                        <option value="{{ $type }}">{{ $type }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>

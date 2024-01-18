@@ -5,7 +5,7 @@
     <td>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-                <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
+                <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 1.5; color: #000000; font-size: 14px; position: relative;"
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
@@ -17,20 +17,17 @@
 
 
                         <p>Great news!</p>
-                        <p>A New Job <strong>"{{ $data['job']->title }}"</strong> has been
+                        <p>A New Job <strong><a href="{{ $data['url'] }}"
+                                    target="_blank">{{ $data['job']->title }}</a></strong> has been
                             posted
-                            by <strong>{{ $data['author'] }}</strong>. It's time to review
-                            this job. After reviewing you can approve or reach out for
-                            additional details if
-                            needed.</p>
+                            by <strong><a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['author'] }}</a>
+                            </strong>.</p>
 
-                        <p>After approval, welcome them to the community. At Ad Agency
-                            Creatives, it is the little thoughtful and helpful interactions
-                            that matter.</p>
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">
                             Posted Job Information</h4>
                         <div><b>Title:
-                            </b>{{ $data['job']->title }}
+                            </b>
+                            <a href="{{ $data['url'] }}" target="_blank">{{ $data['job']->title }}</a>
                         </div>
 
                         <div><b>Type:
@@ -42,11 +39,11 @@
                         </div>
 
                         <div><b>Posted at:
-                            </b>{{ $data['job']->created_at }}
+                            </b>{{ $data['created_at'] }}
                         </div>
 
                         <div><b>Expires at:
-                            </b>{{ $data['job']->expired_at }}
+                            </b>{{ $data['expired_at'] }}
                         </div>
 
                         <div><b>Posted by:

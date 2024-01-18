@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+// This file is not being used
 class ResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
@@ -30,7 +31,7 @@ class ResetPassword extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('Your %s password reset request', env('APP_NAME')),
+            subject: sprintf('Your %s password reset request --- ', env('APP_NAME')),
         );
     }
 

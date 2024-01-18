@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Job;
 
+use App\Http\Resources\Application\ApplicationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
@@ -10,6 +11,11 @@ class JobResource extends JsonResource
     {
         $user = $this->user;
         $category = $this->category;
+        $applications = $this->applications;
+        // If application_status is provided, filter applications by status
+        if ($request->has('application_status')) {
+            $applications = $applications->where('status', $request->application_status);
+        }
 
         $data = [
             'type' => 'jobs',
@@ -42,8 +48,10 @@ class JobResource extends JsonResource
             'status' => $this->status,
             'location' => $this->get_location(),
             'agency' => [],
+            'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
+            'applications' => new ApplicationCollection($applications),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
@@ -52,18 +60,21 @@ class JobResource extends JsonResource
         $agency = $user->agency;
         if ($agency) {
             if ($this->agency_name == null) {
-                $data['agency'] = [
-                    'name' => $agency->name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $agency->name;
 
             } else {
-                $data['agency'] = [
-                    'name' => $this->agency_name,
-                    'logo' => get_profile_picture($user),
-                ];
+                $data['agency']['name'] = $this->agency_name;
             }
+
+            if($this->attachment_id == null) {
+                $data['agency']['logo'] = get_profile_picture($user);
+            } else {
+                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment?->path;
+                $data['agency']['logo_id'] = $this->attachment?->uuid;
+            }
+
             $data['agency']['slug'] = $agency->slug;
+            $data['agency']['id'] = $user->uuid;
         }
 
         return $data;

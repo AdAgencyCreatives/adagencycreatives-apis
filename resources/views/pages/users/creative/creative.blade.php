@@ -42,22 +42,6 @@
                                 <select name="employment_type[]" id="employment_type"
                                     class="form-control form-select custom-select select2" multiple="multiple"
                                     data-toggle="select2">
-                                    <option value="-100"> Select Type</option>
-
-                                    @php
-                                        // Split the stored employment types into an array
-                                        $userEmploymentTypes = explode(',', $user->creative?->employment_type ?? '');
-                                    @endphp
-
-                                    @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
-                                        @php
-                                            $isSelected = in_array($type, $userEmploymentTypes);
-                                        @endphp
-                                        <option value="{{ $type }}" {{ $isSelected ? 'selected' : '' }}>
-                                            {{ $type }}
-                                        </option>
-                                    @endforeach
-
                                 </select>
                             </div>
 
@@ -222,8 +206,8 @@
                                 <h4>Profile Photo</h4>
                                 @if ($user->profile_picture)
                                     <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ getAttachmentBasePath() . $user->profile_picture['path'] }}"
-                                        alt="" width="300" height="300" />
+                                        src="{{ get_profile_picture($user) }}" alt="" width="300"
+                                        height="300" />
                                 @else
                                     <p>No image uploaded yet</p>
                                 @endif

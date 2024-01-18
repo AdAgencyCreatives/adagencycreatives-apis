@@ -27,11 +27,27 @@
                 $('#role').trigger('change');
                 $('#role').prop('disabled', true);
 
-                //Enable agency slug filter
+                //Enable agency slug/Name filter
                 $('#agency_slug_filter').removeClass('d-none');
+                $('#agency_name_filter').removeClass('d-none');
+
+
+                $('#first_name_div').hide();
+                $('#username_div').hide();
+
+
             }
             if (currentUrl.includes('role=4')) {
                 $('#role').val('4');
+                $('#role').trigger('change');
+                $('#role').prop('disabled', true);
+
+                //Enable Category, Location filter
+                $('#creative-category').removeClass('d-none');
+                $('#creative-location').removeClass('d-none');
+            }
+            if (currentUrl.includes('role=5')) {
+                $('#role').val('5');
                 $('#role').trigger('change');
                 $('#role').prop('disabled', true);
             }
@@ -42,7 +58,30 @@
             var lastname = $('#last_name').val();
             var username = $('#username').val();
             var email = $('#email').val();
+
+            var visibility = $('#is_visible').val();
+            var featured = $('#is_featured').val();
+
+            //Agency filters
             var company_slug = $('#agency_slug').val();
+            var agency_name = $('#agency_name').val();
+
+            //Creative filters
+            var category = $('#category').val();
+            var state = $('#state').val();
+            var city = $('#city').val();
+
+
+            if (featured === '0' || featured === '1') {
+                if (currentUrl.includes('role=2') || currentUrl.includes('role=3') || currentUrl.includes('role=5')) {
+                    featured = 'agency_' + featured;
+                }
+                if (currentUrl.includes('role=4')) {
+                    featured = 'creative_' + featured;
+                }
+            }
+
+
 
             filters = {
                 role: selectedRole,
@@ -51,7 +90,14 @@
                 email: email,
                 first_name: firstname,
                 last_name: lastname,
-                company_slug: company_slug
+                company_slug: company_slug,
+                agency_name: agency_name,
+                category_id: category,
+                state_id: state,
+                city_id: city,
+
+                is_visible: visibility,
+                is_featured: featured,
             };
 
             Object.keys(filters).forEach(function(key) {
@@ -60,7 +106,6 @@
                 }
             });
             console.log(requestData);
-
 
             $.ajax({
                 url: 'api/v1/users',
@@ -96,10 +141,10 @@
 
                 if (current_logged_in_userid == user.id) {
                     roleBasedActions = '<a href="' + editUrl +
-                        '">Details</a>';
+                        '" target="_blank">Details</a>';
                 } else {
                     roleBasedActions = '<a href="' + editUrl +
-                        '">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
+                        '" target="_blank">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
                         user.uuid + '">Delete</a>';
                 }
 
@@ -134,9 +179,10 @@
         }
 
 
-
         $(document).ready(function() {
 
+            fetchCategories();
+            fetchStates();
             fetchData(currentPage);
 
             $(document).on('click', '.delete-user-btn', function() {
@@ -159,6 +205,11 @@
                 var userId = $(this).data('user-id');
                 var csrfToken = '{{ csrf_token() }}';
                 updateStatus(userId, 'user', 'users', csrfToken, selectedStatus);
+            });
+
+            $('#state').on('change', function() {
+                var selectedStateId = $(this).val();
+                getCitiesByState(selectedStateId);
             });
 
         });
@@ -191,7 +242,9 @@
 @endsection
 @section('content')
 
-
+    @if (session('success'))
+        <x-alert-deleted type="success"></x-alert-deleted>
+    @endif
     @include('pages.users._inc.filters')
 
     <div class="row">

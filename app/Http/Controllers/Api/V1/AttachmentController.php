@@ -30,7 +30,8 @@ class AttachmentController extends Controller
                 'status',
             ])
             ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->allowedSorts('created_at')
+            ->whereHas('user'); // If the user is deleted, don't show the attachment
 
         $attachments = $query->with('user')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -43,7 +44,7 @@ class AttachmentController extends Controller
             $user = User::where('uuid', $request->user_id)->first();
             $resource_type = $request->resource_type;
 
-            if (in_array($resource_type, ['resume', 'profile_picture'])) {
+            if (in_array($resource_type, ['resume', 'profile_picture', 'agency_logo', 'sub_agency_logo'])) {
                 // Check if there's an existing attachment of the same type and delete it
                 $existingAttachment = $user->attachments()
                     ->where('resource_type', $resource_type)

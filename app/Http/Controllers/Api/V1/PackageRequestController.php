@@ -10,6 +10,7 @@ use App\Http\Requests\PackageRequest\StorePackageRequest;
 use App\Http\Resources\AssignedAgency\AssignedAgencyCollection;
 use App\Http\Resources\PackageRequest\PackageRequestCollection;
 use App\Http\Resources\PackageRequest\PackageRequestResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\PackageRequest;
@@ -29,11 +30,14 @@ class PackageRequestController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('assigned_to'),
                 'status',
+                'uuid',
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $package_requests = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $package_requests = $query
+         ->whereHas('user.agency')
+         ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new PackageRequestCollection($package_requests);
     }
@@ -54,9 +58,25 @@ class PackageRequestController extends Controller
             'city_id' => $city->id ?? null,
             'industry_experience' => ''.implode(',', $request->industry_experience).'',
             'media_experience' => ''.implode(',', $request->media_experience).'',
+            'comment' => $request->comments
         ]);
 
         $package_request = PackageRequest::create($request->all());
+
+        $agency = $user->agency;
+        $data = [
+            'data' => [
+                'category' => $category->name,
+                'author' => $user->first_name,
+                'agency' => $agency->name ?? '',
+                'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                'state' => $state?->name,
+                'city' => $city?->name,
+                'comment' => $request->comments
+            ],
+            'receiver' => User::where('email', 'erika@adagencycreatives.com')->first()
+        ];
+        SendEmailJob::dispatch($data, 'custom_pkg_request_admin_alert');
 
         return ApiResponse::success(new PackageRequestResource($package_request), 200);
     }

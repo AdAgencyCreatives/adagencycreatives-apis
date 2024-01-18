@@ -11,9 +11,11 @@ use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Jobs\ProcessPortfolioVisuals;
 use App\Jobs\SendEmailJob;
+use App\Models\Activity;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
+use App\Models\Job;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -32,14 +34,24 @@ class UserController extends Controller
     {
         $query = QueryBuilder::for(User::class)
             ->allowedFilters([
-                'first_name',
                 'last_name',
                 'username',
                 'email',
-                'role',
+                AllowedFilter::exact('role'),
                 'status',
                 'is_visible',
+
+                //Agency Filters
                 AllowedFilter::scope('company_slug'),
+                AllowedFilter::scope('agency_name'),
+                AllowedFilter::scope('first_name'),
+
+                //Creative Filters
+                AllowedFilter::scope('category_id'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+
+                AllowedFilter::scope('is_featured'),
             ])
 
             ->defaultSort('-created_at')
@@ -66,7 +78,7 @@ class UserController extends Controller
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            $admin = User::find(1);
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
             $str = Str::uuid();
             if (in_array($user->role, ['agency'])) {
@@ -90,7 +102,6 @@ class UserController extends Controller
                         'url' => $request->linkedin_profile ?? '',
                     ],
                 ], 'new_user_registration_agency_role');
-
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = $str;
@@ -126,7 +137,6 @@ class UserController extends Controller
             $user = User::where('uuid', $uuid)->firstOrFail();
 
             return new UserResource($user);
-
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFound($e);
         } catch (\Exception $e) {
@@ -142,19 +152,33 @@ class UserController extends Controller
             $newStatus = $request->input('status');
 
             if ($newStatus === 'active' && $oldStatus === 'pending') {
-                SendEmailJob::dispatch([
-                    'receiver' => $user, 'data' => $user,
-                ], 'account_approved');
+
+
+                if ($user->role == 'agency') {
+                    SendEmailJob::dispatch([
+                        'receiver' => $user, 'data' => $user,
+                    ], 'account_approved_agency');
+                }
+
 
                 /**
                  * Generate portfolio website preview
                  */
                 if ($user->role == 'creative') {
+
+                    SendEmailJob::dispatch([
+                        'receiver' => $user, 'data' => $user,
+                    ], 'account_approved');
+
+
                     $portfolio_website = $user->portfolio_website_link()->first();
                     if ($portfolio_website) {
                         Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
                         ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
                     }
+
+                    $this->send_notification_to_agency($user);
+
                 }
             }
 
@@ -192,7 +216,7 @@ class UserController extends Controller
         $username = Str::before($email, '@');
         $username = Str::slug($username);
 
-        $user = User::where('username', $username)->first();
+        $user = User::withTrashed()->where('username', $username)->first();
         if ($user) {
             $username = $username . '-' . Str::random(5);
         }
@@ -208,13 +232,13 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
         }
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -223,6 +247,20 @@ class UserController extends Controller
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        $activityData = [
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'type' => 'login',
+            'message' => "Logged In",
+            'body' => [
+                'model' => 'User',
+                'action' => 'Logged in',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ],
+        ];
+        Activity::create($activityData);
 
         return response()->json([
             'token' => $token,
@@ -257,7 +295,7 @@ class UserController extends Controller
 
         $custom_wp_hasher = new PasswordHash(8, true);
 
-        if (! $custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
+        if (!$custom_wp_hasher->CheckPassword($request->input('old_password'), $user->password)) {
             return response()->json(['message' => 'Incorrect old password'], 401);
         }
 
@@ -266,12 +304,40 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Password updated successfully'], 200);
+    }
 
+    public function confirm_password(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        $user = auth()->user();
+
+        $custom_wp_hasher = new PasswordHash(8, true);
+
+        if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        return response()->json(['message' => 'Password confirmed successfully'], 200);
     }
 
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+
+        $activityData = [
+            'uuid' => Str::uuid(),
+            'user_id' => $request->user()->id,
+            'type' => 'logout',
+            'message' => "Logged Out",
+            'body' => [
+                'model' => 'User',
+                'action' => 'Logged in'
+            ],
+        ];
+        Activity::create($activityData);
 
         return response()->json(['message' => 'Logged out'], 200);
     }
@@ -311,5 +377,41 @@ class UserController extends Controller
         });
 
         return $users;
+    }
+
+    public function get_all_users()
+    {
+        $cacheKey = 'all_users';
+        $users = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return User::toBase()->select('id', 'uuid', 'first_name', 'last_name', 'email')
+                ->get();
+        });
+
+        return $users;
+    }
+
+    public function contact_us_form_info(Request $request)
+    {
+        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+
+        SendEmailJob::dispatch([
+            'receiver' => $admin,
+            'data' => $request->all(),
+        ], 'contact_us_inquiry');
+    }
+
+    public function send_notification_to_agency($user) //send notifications to all agency users about new creative user joined the site, those agency users who have active jobs with similar industry title.
+    {
+        try{
+            $category_id = $user->creative->category_id;
+            $creative_url = sprintf('%s/creative/%s', env('FRONTEND_URL'), $user->username);
+            $agencies = Job::where('category_id', $category_id)->where('status', 1)->pluck('user_id');
+            foreach($agencies as $agency_id){
+                create_notification($agency_id, sprintf("New creative user <a href='%s'>%s</a> has joined the website.", $creative_url, $user->full_name));
+            }
+        }
+        catch(\Exception $e){
+        }
+
     }
 }

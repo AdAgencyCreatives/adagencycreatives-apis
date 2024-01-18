@@ -60,7 +60,8 @@ if (! function_exists('getCharacterStrengthNames')) {
 if (! function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
-        return 'https://ad-agency-creatives.s3.amazonaws.com/';
+        $awsBucket = env('AWS_BUCKET');
+        return "https://{$awsBucket}.s3.amazonaws.com/";
     }
 }
 
@@ -74,7 +75,7 @@ if (! function_exists('storeImage')) {
         $file = $request->file;
 
         $extension = $file->getClientOriginalExtension();
-        $folder = $resource_type.'/'.$uuid;
+        $folder = $resource_type . '/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
@@ -242,13 +243,13 @@ if (! function_exists('get_user_slug')) {
 }
 
 if (! function_exists('create_notification')) {
-    function create_notification($user_id, $msg)
+    function create_notification($user_id, $msg, $type = 'job_board', $body = [])
     {
         $notification = Notification::create([
             'uuid' => Str::uuid(),
             'user_id' => $user_id,
-            'type' => 'job_board',
-            'body' => '',
+            'type' => $type,
+            'body' => $body,
             'message' => $msg,
         ]);
 
@@ -256,7 +257,7 @@ if (! function_exists('create_notification')) {
             'receiver_id' => '697c1e7d-015a-3ff1-9a6e-9d3c4c6454c3',
             'body' => $msg,
         ];
-        event(new SendNotification($event_data));
+        // event(new SendNotification($event_data));
 
         return $notification;
     }
@@ -265,14 +266,28 @@ if (! function_exists('create_notification')) {
 if (! function_exists('get_profile_picture')) {
     function get_profile_picture($user)
     {
-        $image = asset('assets/img/placeholder.png');
-        if ($user->role == 'creative') {
-            $image = $user->profile_picture ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
-        } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            $image = $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : asset('assets/img/placeholder.png');
+        $defaultImage = asset('assets/img/placeholder.png');
+        $attachmentBasePath = getAttachmentBasePath();
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $attachmentBasePath . $user->profile_picture->path;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $attachmentBasePath . $user->agency_logo->path;
         }
 
-        return $image;
+        return $defaultImage;
+    }
+}
+if (! function_exists('get_profile_picture_id')) {
+    function get_profile_picture_id($user)
+    {
+        $defaultImage = 0;
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $user->profile_picture->id;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $user->agency_logo->id;
+        }
+
+        return $defaultImage;
     }
 }
 
@@ -280,7 +295,7 @@ if (! function_exists('get_resume')) {
     function get_resume($user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath().$user->resume->path;
+            return getAttachmentBasePath() . $user->resume->path;
         } else {
             return route('download.resume', $user->id);
         }
@@ -362,7 +377,7 @@ if (! function_exists('hasAppliedToAgencyJob')) { //either active or expired
     {
         $hasApplied = Application::where('user_id', $creativeUserId)
             ->whereIn('job_id', function ($query) use ($loggedInAgencyId) {
-                $query->select('id')->from(with(new Job)->getTable())->where('user_id', $loggedInAgencyId);
+                $query->select('id')->from(with(new Job())->getTable())->where('user_id', $loggedInAgencyId);
             })
             ->exists();
 

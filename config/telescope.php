@@ -130,7 +130,7 @@ return [
         ],
 
         Watchers\DumpWatcher::class => [
-            'enabled' => env('TELESCOPE_DUMP_WATCHER', true),
+            'enabled' => env('TELESCOPE_DUMP_WATCHER', false),
             'always' => env('TELESCOPE_DUMP_WATCHER_ALWAYS', false),
         ],
 
@@ -151,14 +151,14 @@ return [
         Watchers\JobWatcher::class => env('TELESCOPE_JOB_WATCHER', true),
 
         Watchers\LogWatcher::class => [
-            'enabled' => env('TELESCOPE_LOG_WATCHER', true),
+            'enabled' => env('TELESCOPE_LOG_WATCHER', false),
             'level' => 'error',
         ],
 
         Watchers\MailWatcher::class => env('TELESCOPE_MAIL_WATCHER', true),
 
         Watchers\ModelWatcher::class => [
-            'enabled' => env('TELESCOPE_MODEL_WATCHER', true),
+            'enabled' => env('TELESCOPE_MODEL_WATCHER', false),
             'events' => ['eloquent.*'],
             'hydrations' => true,
         ],
@@ -178,10 +178,10 @@ return [
             'enabled' => env('TELESCOPE_REQUEST_WATCHER', true),
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
             'ignore_http_methods' => [],
-            'ignore_status_codes' => [],
+            'ignore_status_codes' => [404],
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),
-        Watchers\ViewWatcher::class => env('TELESCOPE_VIEW_WATCHER', true),
+        Watchers\ViewWatcher::class => env('TELESCOPE_VIEW_WATCHER', false),
     ],
 ];

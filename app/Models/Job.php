@@ -10,35 +10,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Traits\ActivityLoggerTrait;
 
 class Job extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    // public function searchableAs(): string
-    // {
-    //     return 'jobs_index';
-    // }
-
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'title' => $this->title,
-    //         'description' => $this->description,
-    //         'employment_type' => $this->employment_type,
-    //     ];
-    // }
+    use HasFactory;
+    use SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $table = 'job_posts';
 
     protected $fillable = [
         'uuid',
         'user_id',
+        'advisor_id',
         'state_id',
         'city_id',
         'category_id',
         'title',
         'agency_name',
+        'attachment_id',
         'description',
         'employment_type',
         'industry_experience',
@@ -56,6 +47,7 @@ class Job extends Model
         'is_urgent',
         'is_opentorelocation',
         'is_opentoremote',
+        'created_at',
         'expired_at',
         'seo_title',
         'seo_description',
@@ -138,8 +130,23 @@ class Job extends Model
 
     public function scopeUserId(Builder $query, $user_id): Builder
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
+        $user = User::where('uuid', $user_id)->first(); //this is user_id of logged_in user
+        if(!$user) {
+            return $query->where('user_id', 0);
+        }
 
+        //Uncomment this to disallow agencies to view the job(which is posted by advisor on their bahlf)
+        // if(in_array($user->role, ['agency'])){
+        //     return  $query->whereNull('advisor_id')->where('user_id', $user->id);
+        // }
+
+        if(in_array($user->role, ['advisor', 'recruiter'])) {
+            return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id);
+        }
+
+        if(in_array($user->role, ['advisor', 'recruiter'])){
+            return $query->where('advisor_id', $user->id);
+        }
         return $query->where('user_id', $user->id);
     }
 
@@ -254,29 +261,16 @@ class Job extends Model
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('featured_cities');
-
-                /**
-                 * Send Notification to Admin about new job
-                 */
-                $category = Category::find($job->category_id);
-                $author = User::find($job->user_id);
-
-                $data = [
-                    'data' => [
-                        'job' => $job,
-                        'category' => $category->name,
-                        'author' => $author->first_name,
-                        'agency' => $author->agency?->name,
-                    ],
-                    'receiver' => User::find(1),
-                ];
-                SendEmailJob::dispatch($data, 'new_job_added_admin');
-
             }
 
             if ($job->slug == null) {
-                $slug = sprintf('%s %s %s %s %s', $job->user->username, $job->state->name, $job->city->name, $job->employment_type, $job->title);
-                $job->slug = Str::slug($slug);
+                $agencyName = $job->user?->agency?->name ?? '';
+                $slug = sprintf('%s %s %s %s %s', $agencyName, $job->state?->name, $job->city?->name, $job->employment_type, $job->title);
+                $slug = Str::slug($slug);
+                //if slug already exists, then add 2 to it, if that exists, then add 3 to it and so on
+                $slugCount = count(Job::whereRaw("slug REGEXP '^{$slug}(-[0-9]*)?$'")->get());
+                $slug = $slugCount ? "{$slug}-{$slugCount}" : $slug;
+                $job->slug = $slug;
                 $job->seo_title = settings('job_title');
                 $job->seo_description = settings('job_description');
                 $job->save();
@@ -285,22 +279,78 @@ class Job extends Model
         });
 
         static::updating(function ($job) {
+            $category = Category::find($job->category_id);
+            $author = User::find($job->user_id);
+            $agency = $author->agency;
+
             $oldStatus = $job->getOriginal('status');
-            if ($oldStatus !== 'approved' && $job->status === 'approved') {
+            if ($oldStatus == 'draft' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
-                $category = Category::find($job->category_id);
+
+                $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
                 $data = [
                     'email_data' => [
                         'title' => $job->title ?? '',
-                        'url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                        'agency' => $job->user?->agency?->name,
+                        'url' => $job_url,
+                        'agency' => $agency->name ?? '',
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
-                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+                if($job->advisor_id) {
+                    create_notification($job->advisor_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
+                }
+
+                foreach($categorySubscribers as $creative) {
+                    create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
+                }
+                // SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+
+
+                /**
+                * Send Notification to Admin about new job
+                */
+
+                $data = [
+                    'data' => [
+                        'job' => $job,
+                        'url' => $job_url,
+                        'category' => $category->name,
+                        'author' => $author->first_name,
+                        'agency' => $agency->name ?? '',
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'created_at' => $job->created_at->format('M-d-Y'),
+                        'expired_at' => $job->expired_at->format('M-d-Y'),
+                    ],
+                    'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
+                ];
+                SendEmailJob::dispatch($data, 'new_job_added_admin');
+            }
+
+            if ($job->status === 'filled' && $job->advisor_id != null) {
+
+                $state = Location::where('uuid', $job->state_id)->first();
+                $city = Location::where('uuid', $job->city_id)->first();
+                $advisor = User::find($job->advisor_id);
+                $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+
+                foreach([$advisor, $admin] as $receiver_user) {
+                    $data = [
+                    'data' => [
+                        'category' => $category->name,
+                        'agency_name' => $agency->name ?? '',
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'state' => $state?->name,
+                        'city' => $city?->name,
+                        'advisor' => $advisor->full_name,
+                        'recipient' => $receiver_user->full_name,
+                    ],
+                    'receiver' => $receiver_user
+                    ];
+                    SendEmailJob::dispatch($data, 'hire-an-advisor-job-completed');
+                }
             }
 
         });

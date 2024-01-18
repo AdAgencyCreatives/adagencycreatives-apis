@@ -8,13 +8,17 @@ use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
+use App\Http\Resources\Post\TrendingPostCollection;
 use App\Models\Attachment;
 use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PostController extends Controller
@@ -33,6 +37,7 @@ class PostController extends Controller
         $posts = $query->with(['reactions' => function ($query) {
             // You can further customize the reactions query if needed
         }])
+            ->whereHas('user') // If the user is deleted, don't show the attachment
             ->withCount('reactions')
             ->withCount('comments')
             ->withCount('likes')
@@ -46,20 +51,28 @@ class PostController extends Controller
 
     public function trending_posts(Request $request)
     {
-        $query = QueryBuilder::for(Post::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('group_id'),
-            ]);
+        $cacheKey = 'trending_posts';
+        // Attempt to retrieve the data from the cache
+        $trendingPosts = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($request) {
+            $query = QueryBuilder::for(Post::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('group_id'),
+                ]);
 
-        $trendingPosts = $query->withCount('likes')
-            ->orderBy('likes_count', 'desc')
-            // ->where('status', 1)
-            ->withCount('comments')
-            ->with('comments')
-            ->withCount('likes')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
+            return $query
+                ->whereHas('user')
+                ->whereHas('group')
+                ->withCount('reactions')
+                ->withCount('comments')
+                ->orderBy('reactions_count', 'desc')
+                ->orderBy('comments_count', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->with('comments')
+                ->withCount('reactions')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        });
 
         $authenticatedUserId = auth()->id();
 
@@ -69,7 +82,7 @@ class PostController extends Controller
             return $post;
         });
 
-        return new PostCollection($trendingPosts);
+        return new TrendingPostCollection($trendingPosts);
     }
 
     public function store(StorePostRequest $request)
@@ -95,7 +108,7 @@ class PostController extends Controller
 
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
         }
     }
 
@@ -122,7 +135,7 @@ class PostController extends Controller
 
                 // delete those attachments which are not in new_attachments
                 foreach ($post_existing_attachments as $post_existing_attachment) {
-                    if (! $new_attachments->contains('uuid', $post_existing_attachment->uuid)) {
+                    if (!$new_attachments->contains('uuid', $post_existing_attachment->uuid)) {
                         $post_existing_attachment->delete();
                     }
                 }
@@ -147,6 +160,48 @@ class PostController extends Controller
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    public function main_feed(Request $request)
+    {
+        try {
+            $user = request()->user();
+            $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
+
+            $feed_group = Group::where('slug', 'feed')->first();
+            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
+
+            $query = QueryBuilder::for(Post::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('group_id'),
+                    AllowedFilter::exact('status'),
+                ])
+                ->defaultSort('-created_at')
+                ->allowedSorts('created_at')
+                 ->where(function ($query) use ($feed_group, $joined_groups, $mention) {
+                     $query
+                     ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups))
+                     ->orWhere('content', 'like', '%' . $mention . '%');
+                 });
+
+
+            $posts = $query->with(['reactions' => function ($query) {
+                // You can further customize the reactions query if needed
+            }])
+                ->whereHas('user') // If the user is deleted, don't show the attachment
+                ->withCount('reactions')
+                ->withCount('comments')
+                ->withCount('likes')
+                ->with('comments')
+                // ->with('user.likes')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+
+            return new PostCollection($posts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

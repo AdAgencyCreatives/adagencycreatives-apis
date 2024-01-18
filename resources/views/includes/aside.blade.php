@@ -20,6 +20,7 @@
             <li class="sidebar-header">
                 Manage
             </li>
+
             <li
                 class="sidebar-item {{ !request()->is('users/*/details') && request()->is('users*') ? 'active' : '' }} ">
                 <a data-target="#users" data-toggle="collapse" class="sidebar-link collapsed">
@@ -66,6 +67,34 @@
                         <a class="sidebar-link" href="{{ route('advisor.create') }}">
                             <i class="align-middle" data-feather="user-plus"></i>
                             <span class="align-middle">Add New Advisor</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+            <li
+                class="sidebar-item {{ request()->is('recruiters*') || request()->is('advisor/create') ? 'active' : '' }} ">
+                <a data-target="#recruiters" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="feather"></i>
+                    <span class="align-middle">Recruiter</span>
+                </a>
+                <ul id="recruiters"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('recruiters*') || request()->is('recruiter/create') ? 'show' : '' }}"
+                    data-parent="#sidebar">
+
+                    <li class="sidebar-item {{ request()->is('recruiters') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/recruiters?role=5">
+                            <i class="align-middle" data-feather="feather"></i>
+                            <span class="align-middle">All Recruiter</span>
+                        </a>
+                    </li>
+                    <li
+                        class="sidebar-item {{ request()->is('users/create') || request()->is('recruiter/create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('recruiter.create') }}">
+                            <i class="align-middle" data-feather="user-plus"></i>
+                            <span class="align-middle">Add New Recruiter</span>
                         </a>
                     </li>
 
@@ -353,6 +382,32 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('employments*') ? 'active' : '' }} ">
+                    <a data-target="#employment_types_sidebar" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="command"></i>
+                        <span class="align-middle">Employment Types</span>
+                    </a>
+                    <ul id="employment_types_sidebar"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('employments*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('employments') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('employments.index') }}">
+                                <i class="align-middle" data-feather="command"></i>
+                                <span class="align-middle">All Employments</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('employments/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('employments.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Type</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('strengths*') ? 'active' : '' }} ">
                     <a data-target="#strengths_menu" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="anchor"></i>
@@ -447,6 +502,25 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{ request()->is('festivals*') ? 'active' : '' }} ">
+                    <a data-target="#festival" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="camera"></i>
+                        <span class="align-middle">Festivals</span>
+                    </a>
+                    <ul id="festival"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('festivals*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('festivals') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('festivals.index') }}">
+                                <i class="align-middle" data-feather="camera"></i>
+                                <span class="align-middle">All Festivals</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="sidebar-item {{ request()->is('pages/create*') ? 'active' : '' }} ">
                     <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="image"></i>
@@ -490,8 +564,111 @@
                     </ul>
                 </li>
 
+
+                <li
+                    class="sidebar-item {{ request()->is('resource*') || request()->is('topic*') ? 'active' : '' }} ">
+                    <a data-target="#mentors" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="anchor"></i>
+                        <span class="align-middle">Mentors</span>
+                    </a>
+                    <ul id="mentors"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('resource*') || request()->is('topic*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('resource') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('resource.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Resources</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('resource/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('resource.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Resource</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('topic') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('topic.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Topics</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('topic/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('topic.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Topic</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="sidebar-item {{ request()->is('publication-resource*') ? 'active' : '' }} ">
+                    <a data-target="#publications" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="anchor"></i>
+                        <span class="align-middle">Publications</span>
+                    </a>
+                    <ul id="publications"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('publication-resource*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('publication-resource') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('publication-resource.index') }}">
+                                <i class="align-middle" data-feather="anchor"></i>
+                                <span class="align-middle">All Resources</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('publication-resource/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('publication-resource.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New Resource</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="sidebar-item {{ request()->is('featured-cities*') ? 'active' : '' }} ">
+                    <a data-target="#featured_cities" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="map-pin"></i>
+                        <span class="align-middle">Featured Cities</span>
+                    </a>
+                    <ul id="featured_cities"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('featured-cities*') ? 'show' : '' }}"
+                        data-parent="#sidebar">
+
+                        <li class="sidebar-item {{ request()->is('featured-cities') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('featured-cities.index') }}">
+                                <i class="align-middle" data-feather="map-pin"></i>
+                                <span class="align-middle">All Cities</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->is('featured-cities/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('featured-cities.create') }}">
+                                <i class="align-middle" data-feather="plus-circle"></i>
+                                <span class="align-middle">Add New City</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+
                 <li class="sidebar-header">
                     Reports
+                </li>
+
+                <li class="sidebar-item {{ request()->is('activity/log*') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('activity.index') }}" target="_blank">
+                        <i class="align-middle" data-feather="book-open"></i>
+                        <span class="align-middle">Activity Log</span>
+                    </a>
                 </li>
 
                 <li class="sidebar-item {{ request()->is('reports') ? 'active' : '' }}">
@@ -504,9 +681,11 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/telescope" target="_blank">
                         <i class="align-middle" data-feather="activity"></i>
-                        <span class="align-middle">Activity</span>
+                        <span class="align-middle">Telescope</span>
                     </a>
                 </li>
+
+
 
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="https://dashboard.stripe.com/test/coupons/create" target="_blank">

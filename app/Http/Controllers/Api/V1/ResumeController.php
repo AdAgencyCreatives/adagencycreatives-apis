@@ -86,7 +86,6 @@ class ResumeController extends Controller
 
     public function download_resume(Request $request)
     {
-
         $creative_user = User::where('uuid', $request->u1)->firstOrFail();
         $auth_user = User::where('uuid', $request->u2)->firstOrFail();
 
@@ -116,7 +115,9 @@ class ResumeController extends Controller
             if ($auth_user->id != $creative_user->id) {
                 $data['phone_number'] = '';
             }
-
+        }
+        elseif($auth_user->role == 'agency' && ! hasAppliedToAgencyJob($creative_user->id, $auth_user->id)){
+              $data['phone_number'] = '';
         }
 
         $user = $creative_user;

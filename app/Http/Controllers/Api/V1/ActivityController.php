@@ -6,6 +6,8 @@ use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\StoreActivityRequest;
+use App\Http\Resources\Activity\ActivityCollection;
+use App\Http\Resources\Activity\ActivityResource;
 use App\Http\Resources\Notification\NotificationCollection;
 use App\Http\Resources\Notification\NotificationResource;
 use App\Models\Activity;
@@ -21,7 +23,8 @@ class ActivityController extends Controller
     {
         $query = QueryBuilder::for(Activity::class)
             ->allowedFilters([
-                AllowedFilter::scope('user_id'),
+                'user_id',
+                'type'
             ])
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
@@ -34,9 +37,9 @@ class ActivityController extends Controller
             }
         }
 
-        $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $activities = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return new NotificationCollection($notifications);
+        return new ActivityCollection($activities);
     }
 
     public function store(StoreActivityRequest $request)

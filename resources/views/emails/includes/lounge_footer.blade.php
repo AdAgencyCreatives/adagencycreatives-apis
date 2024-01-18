@@ -29,7 +29,7 @@
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/terms-and-conditions/">User
                         Agreement</a>
-                    <a style="color: #ffffff;" href="https://adagencycreatives.com/contact-us/">Contact Us</a>
+                    <a style="color: #ffffff;" href="https://adagencycreatives.com/contact">Contact Us</a>
                 </div>
             </div>
         </td>
