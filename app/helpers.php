@@ -19,6 +19,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+if (! function_exists('getEmploymentTypes')) {
+    function getEmploymentTypes($commaSeparatedNames)
+    {
+        return explode(',', $commaSeparatedNames);
+    }
+}
+
 if (! function_exists('getIndustryNames')) {
     function getIndustryNames($commaSeparatedIds)
     {
