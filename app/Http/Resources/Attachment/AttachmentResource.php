@@ -12,7 +12,6 @@ class AttachmentResource extends JsonResource
         $user = $this->user;
 
         return [
-
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'user_name' => $user->first_name.' '.$user->last_name,
