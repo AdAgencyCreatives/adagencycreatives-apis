@@ -63,7 +63,7 @@ if (!function_exists('getAttachmentBasePath')) {
     function getAttachmentBasePath()
     {
         $awsBucket = env('AWS_BUCKET');
-        return "https://{$awsBucket}/storage/";
+        return "https://{$awsBucket}.s3.amazonaws.com/";
     }
 }
 
