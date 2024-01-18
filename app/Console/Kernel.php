@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $daily_time = "10:00";
-        $schedule->command('telescope:prune --hours=720')->daily();
+        $schedule->command('telescope:prune --hours=480')->daily();
         $schedule->command('email:unread-message-count')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count72')->dailyAt($daily_time);
         $schedule->command('email:unread-message-count240')->dailyAt($daily_time);
