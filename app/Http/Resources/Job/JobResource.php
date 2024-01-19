@@ -12,10 +12,14 @@ class JobResource extends JsonResource
         $user = $this->user;
         $category = $this->category;
         $applications = $this->applications;
-        // If application_status is provided, filter applications by status
-        if ($request->has('application_status')) {
-            $applications = $applications->where('status', $request->application_status);
+
+        if($this->advisor_id != null){
+            // If application_status is provided, filter applications by status
+            if ($request->has('application_status')) {
+                $applications = $applications->where('status', $request->application_status);
+            }
         }
+
 
         $data = [
             'type' => 'jobs',
