@@ -73,4 +73,15 @@ class EmploymentTypeController extends Controller
 
         return response()->json($employmentTypes);
     }
+
+    //for frontend
+    public function get_resume_employment_types()
+    {
+        $cacheKey = 'resume_employment_types';
+        $resume_employment_types = Cache::remember($cacheKey, now()->addMinutes(60), function () {
+            return new CategoryCollection(EmploymentTypes::all());
+        });
+
+        return $resume_employment_types;
+    }
 }
