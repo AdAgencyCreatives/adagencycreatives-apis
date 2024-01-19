@@ -355,6 +355,18 @@ class Job extends Model
                 }
             }
 
+            /**
+             * If user updates the expiration date, then we are updating its status to approved,
+             * (if it is already expired)
+             */
+            if ($job->isDirty('expired_at')) {
+                // Check if the current status is 'expired'
+                if ($job->status === 'expired') {
+                    // Update the status to 'approved'
+                    $job->status = 'approved';
+                }
+            }
+
         });
 
         static::updated(function () {
