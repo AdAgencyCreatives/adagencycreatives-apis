@@ -142,11 +142,11 @@ class Job extends Model
 
         if(in_array($user->role, ['advisor', 'recruiter'])) {
 
-            return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id );
+            return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id);
 
         }
 
-        if(in_array($user->role, ['advisor', 'recruiter'])){
+        if(in_array($user->role, ['advisor', 'recruiter'])) {
             return $query->where('advisor_id', $user->id);
         }
         return $query->where('user_id', $user->id);
@@ -360,9 +360,11 @@ class Job extends Model
              * (if it is already expired)
              */
             if ($job->isDirty('expired_at')) {
-                // Check if the current status is 'expired'
-                if ($job->status === 'expired') {
-                    // Update the status to 'approved'
+
+                $newExpirationDate = $job->getAttribute('expired_at');
+                $currentDate = now();
+
+                if ($newExpirationDate > $currentDate && $job->status === 'expired') {
                     $job->status = 'approved';
                 }
             }
