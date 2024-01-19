@@ -142,11 +142,11 @@ class Job extends Model
 
         if(in_array($user->role, ['advisor', 'recruiter'])) {
 
-            return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id );
+            return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id);
 
         }
 
-        if(in_array($user->role, ['advisor', 'recruiter'])){
+        if(in_array($user->role, ['advisor', 'recruiter'])) {
             return $query->where('advisor_id', $user->id);
         }
         return $query->where('user_id', $user->id);
@@ -352,6 +352,20 @@ class Job extends Model
                     'receiver' => $receiver_user
                     ];
                     SendEmailJob::dispatch($data, 'hire-an-advisor-job-completed');
+                }
+            }
+
+            /**
+             * If user updates the expiration date, then we are updating its status to approved,
+             * (if it is already expired)
+             */
+            if ($job->isDirty('expired_at')) {
+
+                $newExpirationDate = $job->getAttribute('expired_at');
+                $currentDate = now();
+
+                if ($newExpirationDate > $currentDate && $job->status === 'expired') {
+                    $job->status = 'approved';
                 }
             }
 
