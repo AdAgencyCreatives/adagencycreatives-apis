@@ -259,6 +259,11 @@ class Job extends Model
 
     protected static function booted()
     {
+        static::creating(function ($job) {
+            $job = $job->getDefaultExpirationDate($job);
+        });
+
+
         static::created(function ($job) {
             if (! App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
@@ -355,17 +360,10 @@ class Job extends Model
                 }
             }
 
-            /**
-             * If user updates the expiration date, then we are updating its status to approved,
-             * (if it is already expired)
-             */
             if ($job->isDirty('expired_at')) {
 
-                $newExpirationDate = $job->getAttribute('expired_at');
-                $currentDate = now();
-
-                if ($newExpirationDate > $currentDate && $job->status === 'expired') {
-                    $job->status = 'approved';
+                if(auth()->user()->role != 'admin') {
+                    $job = $job->getDefaultExpirationDate($job);
                 }
             }
 
@@ -381,5 +379,36 @@ class Job extends Model
             Cache::forget('featured_cities');
 
         });
+    }
+
+    public function getDefaultExpirationDate($job)
+    {
+        /**
+         * Set default expiration date for job posts
+         * ---------------------------------------------
+         * Only allow admin to update expired_at date to any future date other than default expired date for current active subscription package,
+         * All other users can only set the max expired_at date according to current subscription default date
+         * --------------------------------------------------------
+         * Client Message Date: 20 January 2024 3:13 AM
+        */
+
+        $post_author_id = $job->advisor_id ?? $job->user_id;
+
+        $user = User::find($post_author_id);
+        if (!$user) {
+            return now()->addDays(30);
+        }
+        $subscription = $user->active_subscription;
+
+        $default_plan = Plan::where('slug', $subscription->name)->first();
+        $default_expiration_date = now()->addDays($default_plan->days);
+
+        $newExpirationDate = $job->getAttribute('expired_at');
+
+        if ($newExpirationDate > $default_expiration_date) {
+            $job->expired_at = $default_expiration_date;
+        }
+
+        return $job;
     }
 }
