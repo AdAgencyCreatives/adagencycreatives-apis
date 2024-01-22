@@ -334,7 +334,7 @@ class Job extends Model
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
 
-                if($job->advisor_id){
+                if(in_array($author->role, ['advisor', 'recruiter'])){
                     $data['data']['agency_profile'] .= "/" . $author->role;
                 }
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
