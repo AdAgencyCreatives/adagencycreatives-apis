@@ -116,8 +116,10 @@ class ApplicationController extends Controller
                 ], 'new_candidate_application'); // To the agency
 
                 $msg_data['receiver_id'] = $advisor_user->id;
-                Message::create($msg_data);
+
             }
+
+            Message::create($msg_data);
 
 
 
