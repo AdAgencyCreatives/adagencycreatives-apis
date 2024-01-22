@@ -287,7 +287,7 @@ class Job extends Model
 
         static::updating(function ($job) {
             $category = Category::find($job->category_id);
-            $author = User::find($job->user_id);
+            $author = User::find($job->advisor_id ?? $job->user_id);
             $agency = $author->agency;
 
             $oldStatus = $job->getOriginal('status');
@@ -333,6 +333,10 @@ class Job extends Model
                     ],
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
+
+                if($job->advisor_id){
+                    $data['data']['agency_profile'] .= "/" . $author->role;
+                }
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
             }
 
