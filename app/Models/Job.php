@@ -313,7 +313,7 @@ class Job extends Model
                 foreach($categorySubscribers as $creative) {
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
-                // SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+                //SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
 
 
                 /**
@@ -378,9 +378,11 @@ class Job extends Model
             Cache::forget('featured_cities');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($job) {
             Cache::forget('dashboard_stats_cache');
             Cache::forget('featured_cities');
+
+            Application::where('job_id', $job->id)->delete();
 
         });
     }

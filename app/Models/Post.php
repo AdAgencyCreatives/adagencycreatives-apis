@@ -119,8 +119,11 @@ class Post extends Model
             Cache::forget('trending_posts');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($post) {
             Cache::forget('trending_posts');
+
+            PostReaction::where('post_id', $post->id)->delete();
+            Comment::where('post_id', $post->id)->delete();
         });
     }
 }

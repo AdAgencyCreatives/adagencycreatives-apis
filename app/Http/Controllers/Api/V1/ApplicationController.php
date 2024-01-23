@@ -89,6 +89,7 @@ class ApplicationController extends Controller
                     $job->title
                 ),
                 'type' => "job",
+                'created_at' => now(),
             ];
 
 
@@ -120,6 +121,14 @@ class ApplicationController extends Controller
             }
 
             Message::create($msg_data);
+            if($request->message != ''){
+                $seconds = now()->addSecond();
+                $msg_data['created_at'] = $seconds;
+                $msg_data['updated_at'] = $seconds;
+                $msg_data['message'] = $request->message ;
+                Message::create($msg_data);
+            }
+
 
 
 
