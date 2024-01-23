@@ -378,9 +378,11 @@ class Job extends Model
             Cache::forget('featured_cities');
         });
 
-        static::deleted(function () {
+        static::deleted(function ($job) {
             Cache::forget('dashboard_stats_cache');
             Cache::forget('featured_cities');
+
+            Application::where('job_id', $job->id)->delete();
 
         });
     }
