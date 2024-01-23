@@ -89,6 +89,7 @@ class ApplicationController extends Controller
                     $job->title
                 ),
                 'type' => "job",
+                'created_at' => now(),
             ];
 
 
