@@ -313,7 +313,7 @@ class Job extends Model
                 foreach($categorySubscribers as $creative) {
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
-                SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+                //SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
 
 
                 /**
