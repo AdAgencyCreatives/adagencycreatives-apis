@@ -120,6 +120,11 @@ class ApplicationController extends Controller
             }
 
             Message::create($msg_data);
+            if($request->message != ''){
+                $msg_data['message'] = $request->message ;
+                Message::create($msg_data);
+            }
+
 
 
 
