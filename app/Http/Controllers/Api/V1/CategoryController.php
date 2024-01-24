@@ -92,7 +92,7 @@ class CategoryController extends Controller
     {
         $cacheKey = 'all_categories';
         $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new CategoryCollection(Category::all());
+            return new CategoryCollection(Category::all()->orderBy('name', 'asc')->get());
         });
 
         return $categories;
