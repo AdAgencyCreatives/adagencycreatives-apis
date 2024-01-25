@@ -105,6 +105,32 @@ class PackageRequest extends Model
         }
     }
 
+    public static function assignSubscription($user_id, $plan_name)
+    {
+        $subscription = Subscription::where('user_id', $user_id)->latest()->first(); // Retrieve the latest subscription
+
+        $plan = Plan::where('slug', $plan_name)->first();
+
+        $data = [
+            'name' => $plan->slug, // Plan Name
+            'quota_left' => $plan->quota,
+            'ends_at' => now()->addDays($plan->days) ,
+        ];
+
+        if ($subscription) {
+            $subscription->update($data);
+        } else {
+
+            $newSubscriptionData = array_merge($data, [
+                'user_id' => $user_id,
+                'price' => $plan->price,
+                'quantity' => $plan->quota,
+            ]);
+
+            Subscription::create($newSubscriptionData);
+        }
+    }
+
     protected static function booted()
     {
         static::updating(function ($package_request) {
@@ -120,6 +146,15 @@ class PackageRequest extends Model
                         'receiver' => $user, 'data' => $user,
                     ], 'custom_job_request_rejected');
                 }
+            }
+        });
+
+        static::updated(function ($package_request) {
+            $newStatus = $package_request->status;
+
+            if ($newStatus == 'approved') {
+                PackageRequest::assignSubscription($package_request->user_id, 'premium-hire-an-advisor');
+                PackageRequest::assignSubscription($package_request->assigned_to, 'premium-hire-an-advisor');
             }
         });
 
