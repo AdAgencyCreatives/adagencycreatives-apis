@@ -116,7 +116,7 @@
                 <div class="card">
                     <div class="card-body px-4 pt-2">
                         <h5>Content</h5>
-                        <p> {{ $post->content }} </p>
+                        <p> {!! $post->content !!} </p>
                         <div class="badge bg-warning my-2">{{ ucfirst($post->status) }}</div>
                         <p class="mb-2 fw-bold">Author: <span style="float:right">Created At:</span></p>
                         <p class="mb-2 fw-bold">

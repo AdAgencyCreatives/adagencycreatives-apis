@@ -8,12 +8,16 @@ class AttachmentResource extends JsonResource
 {
     public function toArray($request)
     {
-        $url = $this->isPlaceholderUrl($this->path) ? $this->path : getAttachmentBasePath().$this->path;
         $user = $this->user;
+        if(!$user){
+            return [];
+        }
+
+        $url = $this->isPlaceholderUrl($this->path) ? $this->path : getAttachmentBasePath().$this->path;
 
         return [
             'id' => $this->uuid,
-            'user_id' => $user->uuid,
+            'user_id' => $user?->uuid,
             'user_name' => $user->first_name.' '.$user->last_name,
             'resource_type' => $this->resource_type,
             'url' => $url,
