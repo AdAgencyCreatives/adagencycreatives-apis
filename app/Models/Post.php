@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use App\Traits\ActivityLoggerTrait;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -115,6 +116,37 @@ class Post extends Model
 
     protected static function booted()
     {
+        static::created(function ($post) {
+
+            $pattern = '/creative\/(\w+)/';
+
+            // Match user slugs in the post content
+            preg_match_all($pattern, $post->content, $matches);
+
+            // Extract unique user slugs
+            $user_slugs = array_unique($matches[1]);
+            $author = $post->user;
+            $group = Group::find($post->group_id); //it gives us group id as integer because this function triggers after post is created and it gives us newly created post object
+
+            foreach($user_slugs as $slug){
+                $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
+
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
+                $message = "{$author->first_name} commented you in his <a href='{$group_url}/post'>post</a>";
+                $data = [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'body' => $post->id,
+                    'type' => 'lounge_mention',
+                    'message' => $message
+                ];
+
+                Notification::create($data);
+            }
+
+
+        });
+
         static::updated(function () {
             Cache::forget('trending_posts');
         });

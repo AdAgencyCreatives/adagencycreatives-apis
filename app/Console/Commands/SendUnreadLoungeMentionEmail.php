@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class SendUnreadLoungeMentionEmail extends Command
 {
+    /**
+     * We had changed it to send 24 hours if unread - since its tagging. I think it's on a loom. When tagged in The Lounge,
+     * person being tagged gets a notification on the right side of the dashboard and the notifications in The Lounge.
+     * If they do not read the notification 24 hours later they get an email. What we changed, I think and could be wrong,
+     * we stopped the 3 days and 10 days. Just one email 24 hours or 10a whichever.
+     */
     protected $signature = 'email:unread-mention-notification';
 
     protected $description = 'Send email with unread lounge mention notification';
@@ -19,10 +25,9 @@ class SendUnreadLoungeMentionEmail extends Command
         $date_range = now()->subDay();
 
         $unreadNotifications = Notification::whereDate('created_at', $date_range)
-            ->where('type', 'lounge_menion')
+            ->where('type', 'lounge_mention')
             ->whereNull('read_at')
             ->get();
-
 
         foreach ($unreadNotifications as $notification) {
 
@@ -30,6 +35,8 @@ class SendUnreadLoungeMentionEmail extends Command
             $group = $post->group;
             $receiver = User::find($notification->user_id);
             $author = $post->user;
+
+            $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
 
             $data = [
                 'data' => [
@@ -39,7 +46,7 @@ class SendUnreadLoungeMentionEmail extends Command
                     'inviter_profile_url' =>sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
                     'profile_picture' => get_profile_picture($author),
                     'user' => $author,
-                    'group_url' => sprintf("%s/groups/%s", env('FRONTEND_URL'), $group?->uuid),
+                    'group_url' => $group_url,
                     'group' => $group->name,
                     'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
                 ],
