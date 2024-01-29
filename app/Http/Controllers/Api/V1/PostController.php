@@ -108,7 +108,7 @@ class PostController extends Controller
 
             return ApiResponse::success(new PostResource($post), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
+            return ApiResponse::error('PS-01 ' . $e->getMessage() . $e->getLine(), 400);
         }
     }
 
