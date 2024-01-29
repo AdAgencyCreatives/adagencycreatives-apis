@@ -118,7 +118,7 @@ class Post extends Model
     {
         static::created(function ($post) {
 
-            $pattern = '/creative\/(\w+)/';
+            $pattern = '/creative\/([-\w]+)/';
 
             // Match user slugs in the post content
             preg_match_all($pattern, $post->content, $matches);
