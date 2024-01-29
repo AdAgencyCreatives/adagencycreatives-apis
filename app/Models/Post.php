@@ -132,7 +132,7 @@ class Post extends Model
                 $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
 
                 $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
-                $message = "{$author->first_name} commented you in his <a href='{$group_url}/post'>post</a>";
+                $message = "{$author->first_name} commented you in his <a href='{$group_url}'>post</a>";
                 $data = [
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
