@@ -44,6 +44,10 @@ class ScheduleNotificationController extends Controller
 
     public function store(StoreScheduleNotificationRequest $request)
     {
+        return 0;
+        /**
+         * We dont need this controller, we will do lounge notifications with NotifcationController class
+         */
         try {
             $sender = User::where('uuid', $request->sender_id)->first();
             $recipients = User::whereIn('uuid', $request->recipient_id)->get();

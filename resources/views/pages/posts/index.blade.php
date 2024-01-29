@@ -76,16 +76,29 @@
                     '>Archived</option>' +
                     '</select>';
 
+                var truncatedContent = extractTextFromHTML(post.content, 60);
+
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
                     '<td>' + post.author + '</td>' +
-                    '<td>' + post.content.substring(0, 60) + '...</td>' +
+                    '<td>' + truncatedContent + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
                     '<td><span class="badge bg-primary me-2">' + post.created_at +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
                 tbody.append(row);
             });
+        }
+
+        function extractTextFromHTML(htmlString, maxLength) {
+            // Create a new DOMParser
+            var parser = new DOMParser();
+            // Parse the HTML string
+            var doc = parser.parseFromString(htmlString, 'text/html');
+            // Extract text content from the parsed document
+            var textContent = doc.body.textContent || doc.body.innerText || '';
+            // Limit the text content to maxLength characters
+            return textContent.trim().substring(0, maxLength);
         }
 
         function fetchUsers() {
