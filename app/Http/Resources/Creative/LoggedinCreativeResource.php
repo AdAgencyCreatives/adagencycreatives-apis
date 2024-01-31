@@ -112,7 +112,7 @@ class LoggedinCreativeResource extends JsonResource
             return $this->get_resume_url($user, $logged_in_user);
         }
 
-        if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
+        if (in_array($logged_in_user->role, get_similar_roles() ) && $subscription_status !== 'active') {
             return null;
         }
 

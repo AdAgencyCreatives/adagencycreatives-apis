@@ -399,3 +399,10 @@ if (!function_exists('hasAppliedToAgencyJob')) { //either active or expired
         return $hasApplied;
     }
 }
+
+if (!function_exists('get_similar_roles')) { //We will use this funtion where we need to check for all three agency related roles
+    function get_similar_roles()
+    {
+        return ['agency', 'advisor', 'recruiter'];
+    }
+}
