@@ -5,8 +5,8 @@
         <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
-            <p><a href="{{ $data['inviter_profile_url'] }}" target="_blank">{{ $data['inviter'] }}</a> mentioned you in
-                "{{ $data['group'] }}".</p>
+            <p><a href="{{ $data['inviter_profile_url'] }}" target="_blank">{{ $data['inviter'] }}</a> mentioned you in a
+                post.</p>
 
 
             <div class="candidate-top-wrapper flex-middle-sm" style="display: flex; gap: 15px; ">
@@ -26,8 +26,7 @@
                 </div>
             </div>
 
-            <p style="margin-top: -10px;">Click to see the
-                <a href="{{ $data['group_url'] }}" target="_blank"
+            <p style="margin-top: -10px;">Click to see the &nbsp; <a href="{{ $data['group_url'] }}" target="_blank"
                     style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
                     Post</a>
             </p>

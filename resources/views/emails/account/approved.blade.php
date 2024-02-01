@@ -16,7 +16,7 @@
                             {{ $data['user']->first_name ?? '' }},</span>
 
                         <p>Welcome to the <a href="{{ $data['FRONTEND_URL'] }}"
-                                target="_blank">{{ $data['APP_NAME'] }}</a> community!
+                                target="_blank">{{ $data['APP_NAME'] }}</a> community.
                         </p>
 
                         <div style="">To help you get the most out of your account, you’ll want to
@@ -25,7 +25,7 @@
                             You can start by telling everyone a bit about yourself, your skills, and your goals.</div>
                         <div style="margin-top: 20px;">Once you’ve got your profile popping, take a moment to adjust
                             your preferences. After that,
-                            you’re ready to get out there and start making some new connections!</div>
+                            you’re ready to get out there and start making some new connections.</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
                                 href="{{ $data['FRONTEND_URL'] }}/reset-password" target="_blank">here</a>.
 
