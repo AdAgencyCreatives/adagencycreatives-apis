@@ -15,7 +15,7 @@ class UpdateEmploymentTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:255', new UniqueEmploymentTypeName],
+            'name' => ['required', 'max:255'],
         ];
     }
 }

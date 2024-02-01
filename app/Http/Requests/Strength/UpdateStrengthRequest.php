@@ -15,7 +15,7 @@ class UpdateStrengthRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:255', new UniqueStrengthName],
+            'name' => ['required', 'max:255'],
         ];
     }
 }
