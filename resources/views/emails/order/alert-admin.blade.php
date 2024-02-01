@@ -360,9 +360,7 @@
                                                                                                                                 class="woocommerce-Price-amount amount"><span
                                                                                                                                     class="woocommerce-Price-currencySymbol">$</span>{{ $data['total'] }}</span>
                                                                                                                             -
-                                                                                                                            September
-                                                                                                                            22,
-                                                                                                                            2023</span>
+                                                                                                                            {{ $data['created_at'] }}</span>
                                                                                                                     </p>
                                                                                                                 </td>
                                                                                                             </tr>
