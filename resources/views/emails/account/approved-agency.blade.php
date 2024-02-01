@@ -16,7 +16,7 @@
                             {{ $data['user']->first_name ?? '' }},</span>
 
                         <p>Welcome to the <a href="{{ $data['FRONTEND_URL'] }}"
-                                target="_blank">{{ $data['APP_NAME'] }}</a> community!
+                                target="_blank">{{ $data['APP_NAME'] }}</a> community.
                         </p>
 
                         <div style="">To help you get the most out of your account, you’ll want to
