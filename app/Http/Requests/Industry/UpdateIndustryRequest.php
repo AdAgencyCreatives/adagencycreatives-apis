@@ -15,7 +15,7 @@ class UpdateIndustryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:255', new UniqueIndustryName],
+            'name' => ['required', 'max:255'],
         ];
     }
 }
