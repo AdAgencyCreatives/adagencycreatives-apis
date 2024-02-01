@@ -103,15 +103,21 @@ class Post extends Model
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
-        if($user) return $query->where('user_id', $user->id);
-        else return $query->where('user_id', 0);
+        if($user) {
+            return $query->where('user_id', $user->id);
+        } else {
+            return $query->where('user_id', 0);
+        }
     }
 
     public function scopeGroupId(Builder $query, $group_id)
     {
         $group = Group::where('uuid', $group_id)->first();
-        if($group) return $query->where('group_id', $group->id);
-        else return $query->where('group_id', 0);
+        if($group) {
+            return $query->where('group_id', $group->id);
+        } else {
+            return $query->where('group_id', 0);
+        }
     }
 
     protected static function booted()
@@ -128,7 +134,7 @@ class Post extends Model
             $author = $post->user;
             $group = Group::find($post->group_id); //it gives us group id as integer because this function triggers after post is created and it gives us newly created post object
 
-            foreach($user_slugs as $slug){
+            foreach($user_slugs as $slug) {
                 $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
 
                 $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
@@ -147,8 +153,48 @@ class Post extends Model
 
         });
 
-        static::updated(function () {
+        static::updated(function ($post) {
             Cache::forget('trending_posts');
+
+            $pattern = '/creative\/([-\w]+)/';
+
+            // Match user slugs in the post content
+            preg_match_all($pattern, $post->content, $matches);
+
+            // Extract unique user slugs
+            $user_slugs = array_unique($matches[1]);
+            $author = $post->user;
+            $group = Group::find($post->group_id); //it gives us group id as integer because this function triggers after post is created and it gives us newly created post object
+
+            foreach($user_slugs as $slug) {
+                $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
+
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
+                $message = "{$author->first_name} commented you in his <a href='{$group_url}'>post</a>";
+                $data = [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'body' => $post->id,
+                    'type' => 'lounge_mention',
+                    'message' => $message
+                ];
+
+                $notification = Notification::where([
+                        'user_id' => $user->id,
+                        'body' => $post->id,
+                        'type' => 'lounge_mention'
+                    ])->first();
+
+                if($notification){
+                    $notification->update([
+                        'read_at' => null,
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Notification::create($data);
+                }
+            }
         });
 
         static::deleted(function ($post) {
