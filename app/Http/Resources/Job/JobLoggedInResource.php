@@ -67,6 +67,7 @@ class JobLoggedInResource extends JsonResource
             $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
 
             $data['agency']['logo_id'] = $this->attachment_id ? $sub_agency_logo?->uuid : null;
+            $data['agency']['fallback_image'] = $user->agency_logo;
 
         }
 
