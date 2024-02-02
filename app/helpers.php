@@ -406,3 +406,18 @@ if (!function_exists('get_similar_roles')) { //We will use this funtion where we
         return ['agency', 'advisor', 'recruiter'];
     }
 }
+
+if (!function_exists('get_agency_logo')) { //We will use this funtion where we need to check for all three agency related roles
+    function get_agency_logo($job, $user)
+    {
+
+        if($job->attachment_id != null ){
+            return Attachment::find($job->attachment_id);
+
+        }
+        else{
+            // dd($user->agency_logo);
+            return $user->agency_logo;
+        }
+    }
+}

@@ -63,12 +63,13 @@ class JobLoggedInResource extends JsonResource
             }
 
             $data['agency']['slug'] = $agency->slug;
-            if($this->attachment_id == null) {
-                $data['agency']['logo'] = get_profile_picture($user);
-            } else {
-                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment->path;
-                $data['agency']['logo_id'] = $this->attachment?->uuid;
-            }
+            $sub_agency_logo = get_agency_logo($this, $user);
+            $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
+
+            $data['agency']['logo_id'] = $this->attachment_id ? $sub_agency_logo?->uuid : null;
+            $data['agency']['fallback_image'] = get_profile_picture($user);
+            $data['agency']['role'] = $user->role;
+
         }
 
         return $data;

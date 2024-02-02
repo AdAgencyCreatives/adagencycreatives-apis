@@ -27,9 +27,9 @@ class JobController extends Controller
     public function details($id)
     {
         $job = Job::with('applications', 'attachment')->where('uuid', $id)->first();
-
+        $agency_logo = get_agency_logo($job, $job->user);
         // dd($job->toArray());
-        return view('pages.jobs.detail.detail', compact('job'));
+        return view('pages.jobs.detail.detail', compact('job', 'agency_logo'));
     }
 
     public function store(Request $request)

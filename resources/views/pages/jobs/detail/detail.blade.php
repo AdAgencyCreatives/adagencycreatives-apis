@@ -397,10 +397,10 @@
                             <div class="col-12 col-lg-6">
                                 <div class="text-center">
                                     <h4>Agency Logo</h4>
-                                    @if (isset($job->attachment))
+                                    @if (isset($agency_logo))
                                         <img class="rounded-circle img-responsive mt-2 lazy"
-                                            src="{{ isset($job->attachment) ? getAttachmentBasePath() . $job->attachment->path : asset('images/default.png') }}"
-                                            alt="{{ $job->attachment->resource_type }}" width="100" height="100"
+                                            src="{{ getAttachmentBasePath() . $agency_logo->path }}"
+                                            alt="{{ $agency_logo->resource_type }}" width="100" height="100"
                                             style="border-radius: 50%;" />
                                     @else
                                         <p>No logo uploaded yet</p>
