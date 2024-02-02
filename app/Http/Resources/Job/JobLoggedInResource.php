@@ -62,7 +62,7 @@ class JobLoggedInResource extends JsonResource
                 $data['agency']['name'] = $this->agency_name;
             }
 
-            $data['agency']['slug'] = $this->get_user_profile_url($user, $agency);
+            $data['agency']['slug'] = $agency->slug;
             if($this->attachment_id == null) {
                 $data['agency']['logo'] = get_profile_picture($user);
             } else {

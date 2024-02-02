@@ -77,7 +77,7 @@ class JobResource extends JsonResource
                 $data['agency']['logo_id'] = $this->attachment?->uuid;
             }
 
-            $data['agency']['slug'] = $this->get_user_profile_url($user, $agency);
+            $data['agency']['slug'] = $agency->slug;
             $data['agency']['id'] = $user->uuid;
         }
 
