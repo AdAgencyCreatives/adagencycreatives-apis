@@ -145,4 +145,18 @@ class JobResource extends JsonResource
             '%separator%' => $separator,
         ]);
     }
+
+    private function get_user_profile_url($user, $agency)
+    {
+        $role = $user->role;
+
+        switch ($role) {
+            case 'recruiter':
+                return  $agency->slug . "/recruiter";
+            case 'advidsor':
+                return  $agency->slug . "/advisor";
+            default:
+                return $agency->slug;
+        }
+    }
 }
