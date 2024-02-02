@@ -138,6 +138,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');
 
     Route::apiResource('links', LinkController::class, ['except' => ['index']]);
+    Route::post('delete_job_logo', [AttachmentController::class, 'delete_job_logo']);
     Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
 
     Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);

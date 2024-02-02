@@ -9,6 +9,7 @@ class JobResource extends JsonResource
 {
     public function toArray($request)
     {
+
         $user = $this->user;
         $category = $this->category;
         $applications = $this->applications;
@@ -70,12 +71,19 @@ class JobResource extends JsonResource
                 $data['agency']['name'] = $this->agency_name;
             }
 
-            if($this->attachment_id == null) {
-                $data['agency']['logo'] = get_profile_picture($user);
-            } else {
-                $data['agency']['logo'] = getAttachmentBasePath() . $this->attachment?->path;
-                $data['agency']['logo_id'] = $this->attachment?->uuid;
-            }
+            $sub_agency_logo = get_agency_logo($this, $user);
+            $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
+            $data['agency']['logo_id'] = $sub_agency_logo?->uuid;
+
+
+
+            // if($this->attachment_id == null) {
+            //     $data['agency']['logo'] = get_profile_picture($user);
+            // } else {
+            //     $sub_agency_logo = get_sub_agency_logo($this, $user);
+            //     $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
+            //     $data['agency']['logo_id'] = $sub_agency_logo?->uuid;
+            // }
 
             $data['agency']['slug'] = $agency->slug;
             $data['agency']['id'] = $user->uuid;

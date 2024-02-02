@@ -10,6 +10,7 @@ use App\Http\Requests\Attachment\StoreAttachmentRequest;
 use App\Http\Resources\Attachment\AttachmentCollection;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Models\Attachment;
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -99,6 +100,24 @@ class AttachmentController extends Controller
          */
         try {
             $attachment = Attachment::where('uuid', $uuid)->firstOrFail();
+            $attachment->delete();
+
+            return new AttachmentResource($attachment);
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFound($e);
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'ATD-01');
+        }
+    }
+
+    public function delete_job_logo(Request $request)
+    {
+        try {
+            $job = Job::where('uuid', $request->job_id)->first();
+            $job->attachment_id = null;
+            $job->save();
+
+            $attachment = Attachment::where('uuid', $request->attachment_id)->firstOrFail();
             $attachment->delete();
 
             return new AttachmentResource($attachment);
