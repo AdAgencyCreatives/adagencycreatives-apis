@@ -125,7 +125,7 @@ class Job extends Model
 
     public function attachment()
     {
-        return $this->hasOne(Attachment::class, 'resource_id');
+        return $this->hasOne(Attachment::class, 'resource_id')->latestOfMany();
     }
 
     public function scopeUserId(Builder $query, $user_id): Builder
