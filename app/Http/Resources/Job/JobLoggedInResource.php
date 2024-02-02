@@ -62,7 +62,7 @@ class JobLoggedInResource extends JsonResource
                 $data['agency']['name'] = $this->agency_name;
             }
 
-            $data['agency']['slug'] = $agency->slug;
+            $data['agency']['slug'] = $this->get_user_profile_url($user, $agency);
             if($this->attachment_id == null) {
                 $data['agency']['logo'] = get_profile_picture($user);
             } else {
@@ -134,5 +134,20 @@ class JobLoggedInResource extends JsonResource
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
+    }
+
+    private function get_user_profile_url($user, $agency)
+    {
+
+        $role = $user->role;
+
+        switch ($role) {
+            case 'recruiter':
+                return  $agency->slug . "/recruiter";
+            case 'advidsor':
+                return  $agency->slug . "/advisor";
+            default:
+                return $agency->slug;
+        }
     }
 }
