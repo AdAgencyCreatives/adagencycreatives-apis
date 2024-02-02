@@ -92,7 +92,7 @@ class StrengthController extends Controller
     {
         $cacheKey = 'all_strengths';
         $strengths = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new CategoryCollection(Strength::all());
+            return new CategoryCollection(Strength::orderBy('name', 'asc')->get());
         });
 
         return $strengths;

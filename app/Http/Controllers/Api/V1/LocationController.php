@@ -34,6 +34,9 @@ class LocationController extends Controller
         } else {
             $query->whereNull('parent_id');
         }
+
+        $query = $query->defaultSort('name')->allowedSorts('name');
+
         if ($request->per_page == -1) {
             $locations = $query->get();
         } else {

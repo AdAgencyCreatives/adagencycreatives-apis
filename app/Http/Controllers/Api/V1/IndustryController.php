@@ -91,7 +91,7 @@ class IndustryController extends Controller
     {
         $cacheKey = 'all_industries';
         $industries = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new CategoryCollection(Industry::all());
+            return new CategoryCollection(Industry::orderBy('name', 'asc')->get());
         });
 
         return $industries;

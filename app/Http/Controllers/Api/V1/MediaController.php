@@ -91,7 +91,7 @@ class MediaController extends Controller
     {
         $cacheKey = 'all_medias';
         $medias = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new CategoryCollection(Media::all());
+            return new CategoryCollection(Media::orderBy('name', 'asc')->get());
         });
 
         return $medias;
