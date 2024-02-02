@@ -68,6 +68,7 @@ class JobLoggedInResource extends JsonResource
 
             $data['agency']['logo_id'] = $this->attachment_id ? $sub_agency_logo?->uuid : null;
             $data['agency']['fallback_image'] = get_profile_picture($user);
+            $data['agency']['role'] = $user->role;
 
         }
 

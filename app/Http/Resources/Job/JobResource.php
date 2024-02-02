@@ -87,6 +87,7 @@ class JobResource extends JsonResource
 
             $data['agency']['slug'] = $agency->slug;
             $data['agency']['id'] = $user->uuid;
+            $data['agency']['role'] = $user->role;
         }
 
         return $data;
