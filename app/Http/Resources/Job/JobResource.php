@@ -9,7 +9,6 @@ class JobResource extends JsonResource
 {
     public function toArray($request)
     {
-
         $user = $this->user;
         $category = $this->category;
         $applications = $this->applications;
@@ -70,6 +69,8 @@ class JobResource extends JsonResource
             } else {
                 $data['agency']['name'] = $this->agency_name;
             }
+
+            $data['agency']['website'] = $this->agency_website;
 
             $sub_agency_logo = get_agency_logo($this, $user);
             $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
