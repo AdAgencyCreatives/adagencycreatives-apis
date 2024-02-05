@@ -99,11 +99,14 @@ class JobController extends Controller
         $job->update($request->all());
 
         if ($request->hasFile('file')) {
-            $attachment = storeImage($request, $job->user_id, 'agency_logo');
+            $attachment = storeImage($request, $job->user_id, 'sub_agency_logo');
             if (isset($attachment) && is_object($attachment)) {
                 Attachment::whereId($attachment->id)->update([
                     'resource_id' => $job->id,
                 ]);
+
+                $job->attachment_id = $attachment->id;
+                $job->save();
             }
         }
 

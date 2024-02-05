@@ -62,6 +62,7 @@ class JobLoggedInResource extends JsonResource
                 $data['agency']['name'] = $this->agency_name;
             }
 
+            $data['agency']['website'] = $this->agency_website;
             $data['agency']['slug'] = $agency->slug;
             $sub_agency_logo = get_agency_logo($this, $user);
             $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;

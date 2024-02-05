@@ -29,6 +29,7 @@ class Job extends Model
         'category_id',
         'title',
         'agency_name',
+        'agency_website',
         'attachment_id',
         'description',
         'employment_type',

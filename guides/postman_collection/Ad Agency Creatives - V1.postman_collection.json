@@ -359,7 +359,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/users?filter[is_visible]=0",
+							"raw": "{{BASE_URL}}/users?filter[trashed]=with",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -401,7 +401,8 @@
 								},
 								{
 									"key": "filter[is_visible]",
-									"value": "0"
+									"value": "0",
+									"disabled": true
 								},
 								{
 									"key": "sort",
@@ -432,6 +433,10 @@
 									"key": "filter[city_id]",
 									"value": "b4692fd8-8345-3e68-965c-332b3fe821a9",
 									"disabled": true
+								},
+								{
+									"key": "filter[trashed]",
+									"value": "with"
 								}
 							]
 						}
@@ -597,7 +602,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"creative@gmail.com\",\r\n    \"password\": \"password\" \r\n\r\n    //  \"email\": \"hamzasiddique836@gmail.com\",\r\n    // \"password\": \"Pcmupe555\"\r\n\r\n    //  \"email\": \"advisor@gmail.com\",\r\n    // \"password\": \"password\"\r\n\r\n}",
+							"raw": " {\r\n\r\n    // \"email\": \"creative@gmail.com\",\r\n    // \"password\": \"Pa$$w0rd!\" \r\n    \r\n//  \"email\": \"hamzasiddique836@gmail.com\",\r\n// \"password\": \"Pcmupe555\"\r\n\r\n\r\n\"email\": \"agency@gmail.com\",\r\n\"password\": \"password\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -711,16 +716,6 @@
 						}
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "3|KXrMKWgp6LUcPSU0xwjnvBCIzLnq2YH7wkVWkroP",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -765,6 +760,30 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/get_users",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"get_users"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -786,7 +805,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/agencies?filter[status]=1&filter[slug]=paul&filter[is_visible]=1&filter[role]=5",
+							"raw": "{{BASE_URL}}/agencies?filter[slug]=agency-new",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -842,20 +861,23 @@
 								{
 									"key": "filter[status]",
 									"value": "1",
-									"description": "0: pending, 1: active, 2: inactive"
+									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
 								},
 								{
 									"key": "filter[slug]",
-									"value": "paul"
+									"value": "agency-new"
 								},
 								{
 									"key": "filter[is_visible]",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "filter[role]",
 									"value": "5",
-									"description": "2: advisor, 5: recruiter"
+									"description": "2: advisor, 5: recruiter",
+									"disabled": true
 								}
 							]
 						}
@@ -1253,6 +1275,35 @@
 		{
 			"name": "Creatives",
 			"item": [
+				{
+					"name": "System Generated Resume",
+					"item": [
+						{
+							"name": "get resume",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/resume/system-generated",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"resume",
+										"system-generated"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "creatives home page",
 					"request": {
@@ -1661,7 +1712,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/creatives",
+							"raw": "{{BASE_URL}}/creatives?filter[slug]=daaad2a",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1723,8 +1774,7 @@
 								},
 								{
 									"key": "filter[slug]",
-									"value": "craig-miller",
-									"disabled": true
+									"value": "daaad2a"
 								},
 								{
 									"key": "filter[user_id]",
@@ -1758,7 +1808,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/creatives?sort=-created_at&filter[status]=1&filter[slug]=ryan-hash&filter[is_visible]=1",
+							"raw": "{{BASE_URL}}/creatives?filter[slug]=daaad2a",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1799,7 +1849,8 @@
 								},
 								{
 									"key": "sort",
-									"value": "-created_at"
+									"value": "-created_at",
+									"disabled": true
 								},
 								{
 									"key": "filter[is_featured]",
@@ -1814,11 +1865,12 @@
 								{
 									"key": "filter[status]",
 									"value": "1",
-									"description": "0: pending, 1: active, 2: inactive"
+									"description": "0: pending, 1: active, 2: inactive",
+									"disabled": true
 								},
 								{
 									"key": "filter[slug]",
-									"value": "ryan-hash"
+									"value": "daaad2a"
 								},
 								{
 									"key": "filter[user_id]",
@@ -1832,7 +1884,8 @@
 								},
 								{
 									"key": "filter[is_visible]",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -1851,17 +1904,12 @@
 							}
 						],
 						"url": {
-							"raw": "https://staging-api.adagencycreatives.com/api/v1/jobs?filter[status]=1&filter[user_id]=cc7c9c9e-1148-3ee5-bcf2-8c20634998c6&applications_count=1",
-							"protocol": "https",
+							"raw": "{{BASE_URL}}/creatives?filter[status]=1&filter[slug]=creative&filter[is_visible]=1",
 							"host": [
-								"staging-api",
-								"adagencycreatives",
-								"com"
+								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
-								"jobs"
+								"creatives"
 							],
 							"query": [
 								{
@@ -1896,6 +1944,11 @@
 									"disabled": true
 								},
 								{
+									"key": "sort",
+									"value": "-created_at",
+									"disabled": true
+								},
+								{
 									"key": "filter[is_featured]",
 									"value": "1",
 									"disabled": true
@@ -1904,6 +1957,15 @@
 									"key": "filter[is_urgent]",
 									"value": "1",
 									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: pending, 1: active, 2: inactive"
+								},
+								{
+									"key": "filter[slug]",
+									"value": "creative"
 								},
 								{
 									"key": "filter[user_id]",
@@ -1916,15 +1978,7 @@
 									"disabled": true
 								},
 								{
-									"key": "filter[status]",
-									"value": "1"
-								},
-								{
-									"key": "filter[user_id]",
-									"value": "cc7c9c9e-1148-3ee5-bcf2-8c20634998c6"
-								},
-								{
-									"key": "applications_count",
+									"key": "filter[is_visible]",
 									"value": "1"
 								}
 							]
@@ -2094,7 +2148,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// {\r\n//     \"first_name\": \"Usman1\",\r\n//     \"last_name\": \"Arshad1\",\r\n//     \"username\": \"hulda63q\",\r\n//     \"show_profile\": true,\r\n//     \"phone_number\": \"+92123456aa\",\r\n//     \"linkedin\": \"www.linkedin.com_2\",\r\n//     \"website\": \"www.company.com1\"\r\n// }\r\n\r\n{\r\n    \"first_name\": null,\r\n    \"last_name\": null,\r\n    \"username\": null,\r\n    \"show_profile\": 1,\r\n    \"phone_number\": null,\r\n    \"linkedin\": null,\r\n    \"website\": null\r\n}",
+							"raw": "{\r\n    \"first_name\": \"Usman1\",\r\n    \"last_name\": \"Arshad1\",\r\n    \"username\": \"hulda63q\",\r\n      \"email\": \"agency@gmail.com\",\r\n    \"show_profile\": true,\r\n    \"phone_number\": \"+92123456aa\",\r\n    \"linkedin\": \"www.linkedin.com_2\",\r\n    \"website\": \"www.company.com1\"\r\n}\r\n\r\n// {\r\n//     \"first_name\": null,\r\n//     \"last_name\": null,\r\n//     \"username\": null,\r\n//     \"show_profile\": 1,\r\n//     \"phone_number\": null,\r\n//     \"linkedin\": null,\r\n//     \"website\": null\r\n// }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2102,13 +2156,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/creative_profile/3033bda6-f82f-387d-a410-ce6795a02ae3",
+							"raw": "{{BASE_URL}}/creative_profile/39e1506a-1551-4e53-91bd-b81e372cc3bf",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"creative_profile",
-								"3033bda6-f82f-387d-a410-ce6795a02ae3"
+								"39e1506a-1551-4e53-91bd-b81e372cc3bf"
 							]
 						}
 					},
@@ -2127,7 +2181,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \r\n    \"title\": \"Advisora\",\r\n    \"category_id\": \"be6cf4d0-e001-359d-b91d-d628d1a1149d\",\r\n    \"years_of_experience\": \"Daigle Creativea\",\r\n    \"employment_type\": \"Full-Time2\",\r\n    \"about\": \"bbb\",\r\n    \"state_id\": \"146f7620-6785-3082-89e3-1950fe937cf7\",\r\n    \"city_id\": \"2d5bbbd3-6454-375e-a43d-94d4e0ed98bc\",\r\n    \"industry_experience\": [\r\n        \"92be1470-4c9c-3b14-9dc6-68cf30c7ba76\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"8026da26-bd76-315a-8a8b-552ad41fec51\"\r\n    ],\r\n    \"strength\": [\r\n        \"267e7851-705e-34a0-9170-50dba7ee25c0\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_opentorelocation\": false\r\n}",
+							"raw": "{\r\n   \r\n    \"title\": \"Advisora\",\r\n    \"category_id\": \"be6cf4d0-e001-359d-b91d-d628d1a1149d\",\r\n    \"years_of_experience\": \"Daigle Creativea\",\r\n    \"employment_type\": \"Part-Time\",\r\n    \"about\": \"bbb\",\r\n    \"state_id\": \"146f7620-6785-3082-89e3-1950fe937cf7\",\r\n    \"city_id\": \"2d5bbbd3-6454-375e-a43d-94d4e0ed98bc\",\r\n    \"industry_experience\": [\r\n        \"92be1470-4c9c-3b14-9dc6-68cf30c7ba76\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"8026da26-bd76-315a-8a8b-552ad41fec51\"\r\n    ],\r\n    \"strength\": [\r\n        \"267e7851-705e-34a0-9170-50dba7ee25c0\"\r\n    ],\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_opentorelocation\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2135,13 +2189,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/creative_resume/74bbde86-841f-34bf-a478-92bc7efc3091",
+							"raw": "{{BASE_URL}}/creative_resume/4efcfa19-3ca2-494a-88dc-3fb113338aa6",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"creative_resume",
-								"74bbde86-841f-34bf-a478-92bc7efc3091"
+								"4efcfa19-3ca2-494a-88dc-3fb113338aa6"
 							]
 						}
 					},
@@ -2224,7 +2278,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/jobs?filter[user_id]=2c915d0a-a54b-346f-8e07-0b979acece05&sort=-created_at",
+							"raw": "{{BASE_URL}}/jobs?filter[title]=Job By Agency (local)&sort=-created_at&filter[status]=1",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2234,7 +2288,8 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "2c915d0a-a54b-346f-8e07-0b979acece05"
+									"value": "2c915d0a-a54b-346f-8e07-0b979acece05",
+									"disabled": true
 								},
 								{
 									"key": "filter[category_id]",
@@ -2244,7 +2299,147 @@
 								},
 								{
 									"key": "filter[title]",
-									"value": "New Accounts Clerk",
+									"value": "Job By Agency (local)"
+								},
+								{
+									"key": "filter[employement_type]",
+									"value": "Full-Time",
+									"description": "Internship, Freelance, Contract 1099, Full-Time, Part-Time",
+									"disabled": true
+								},
+								{
+									"key": "filter[apply_type]",
+									"value": "Internal",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_remote]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_hybrid]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_onsite]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_featured]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[is_urgent]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_id]",
+									"value": "b33d8518-380c-31aa-b351-8cdf8b18a058",
+									"disabled": true
+								},
+								{
+									"key": "filter[city_id]",
+									"value": "4ef1dee7-59d7-3bb9-931f-a6d98471750e",
+									"disabled": true
+								},
+								{
+									"key": "filter[industry_experience]",
+									"value": "9dd80055-a402-3dcc-b4e7-e8a53da38dc0,4d790d7d-5dff-3351-9f52-91526d44a26d",
+									"disabled": true
+								},
+								{
+									"key": "filter[media_experience]",
+									"value": "6c7d93c8-2d9d-3706-accc-7ab805f7b7021",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-created_at"
+								},
+								{
+									"key": "page",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "filter[status]",
+									"value": "1",
+									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that."
+								},
+								{
+									"key": "filter[slug]",
+									"value": "tpn",
+									"disabled": true
+								},
+								{
+									"key": "filter[city_slug]",
+									"value": "chicago",
+									"disabled": true
+								},
+								{
+									"key": "filter[state_slug]",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filter[category_slug]",
+									"value": "associate-creative-director-copywriter",
+									"disabled": true
+								},
+								{
+									"key": "filter[advisor_id]",
+									"value": "6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4",
+									"disabled": true
+								},
+								{
+									"key": "application_status",
+									"value": "pending",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs for logged in",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/jobs/logged_in?filter[user_id]=cc7c9c9e-1148-3ee5-bcf2-8c20634998c6&sort=-created_at&filter[status]=1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"jobs",
+								"logged_in"
+							],
+							"query": [
+								{
+									"key": "filter[user_id]",
+									"value": "cc7c9c9e-1148-3ee5-bcf2-8c20634998c6"
+								},
+								{
+									"key": "filter[category_id]",
+									"value": "be2a287e-81a9-3681-a25e-251e18f0ed7e",
+									"description": "Category ID ",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "Job By Agency_3_FEB for someone else",
 									"disabled": true
 								},
 								{
@@ -2315,8 +2510,7 @@
 								{
 									"key": "filter[status]",
 									"value": "1",
-									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that.",
-									"disabled": true
+									"description": "0: pending, 1: approved, 2: rejected, 3: expired, 4: filled, 6: published, Please Note: 5 is set for draft status. Don't use that."
 								},
 								{
 									"key": "filter[slug]",
@@ -2340,7 +2534,7 @@
 								},
 								{
 									"key": "filter[advisor_id]",
-									"value": "",
+									"value": "6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4",
 									"disabled": true
 								}
 							]
@@ -2481,37 +2675,6 @@
 					"response": []
 				},
 				{
-					"name": "jobs for logged in",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{BASE_URL}}/jobs/logged_in",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"jobs",
-								"logged_in"
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "copywriter",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "jobs  - Full Search",
 					"request": {
 						"auth": {
@@ -2584,13 +2747,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/jobs/7a950d48-36a6-3cd9-899c-51ff0eccbec2",
+							"raw": "{{BASE_URL}}/jobs/085b44a1-701d-4aeb-80e7-bde380a97b91",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"jobs",
-								"7a950d48-36a6-3cd9-899c-51ff0eccbec2"
+								"085b44a1-701d-4aeb-80e7-bde380a97b91"
 							]
 						}
 					},
@@ -2614,7 +2777,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"2c915d0a-a54b-346f-8e07-0b979acece05\",\r\n    \"category_id\": \"6c862bb0-2ca9-3d5e-9ed9-6fb4c8495ce2\",\r\n    \"state_id\": \"e21c67e4-a03d-3534-b35f-224f5baa488d\",\r\n    \"city_id\": \"76475008-238c-3d06-8cf4-7ec02022bfea\",\r\n    \"industry_experience\": [\r\n        \"04e34878-c503-3741-a05d-263692c40c3f\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"c8200d5e-90a0-3b38-98ec-c5d029f0a9ce\"\r\n    ],\r\n    \"strength\": [\r\n        \"b9065974-4121-3929-8ba5-c0e5dd4d112d\"\r\n    ],\r\n\r\n    \"years_of_experience\": \"Director 10+ years\",\r\n    \"title\": \"Job Title\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Freelance\",\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": true,\r\n    \"expired_at\": \"2023-12-31\",\r\n    \"is_opentoremote\": true,\r\n    \"is_opentorelocation\": true\r\n    ,\"agency_id\": \"2c915d0a-a54b-346f-8e07-0b979acece05\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n{\r\n    \"user_id\": \"e8e1541a-56f8-474f-8a9a-d1ff0c17d61e\",\r\n    \"category_id\": \"6c862bb0-2ca9-3d5e-9ed9-6fb4c8495ce2\",\r\n    \"state_id\": \"e21c67e4-a03d-3534-b35f-224f5baa488d\",\r\n    \"city_id\": \"76475008-238c-3d06-8cf4-7ec02022bfea\",\r\n    \"industry_experience\": [\r\n        \"04e34878-c503-3741-a05d-263692c40c3f\"\r\n    ],\r\n    \"media_experience\": [\r\n        \"c8200d5e-90a0-3b38-98ec-c5d029f0a9ce\"\r\n    ],\r\n    \"strength\": [\r\n        \"b9065974-4121-3929-8ba5-c0e5dd4d112d\"\r\n    ],\r\n    \"years_of_experience\": \"Director 10+ years\",\r\n    \"title\": \"Job Title\",\r\n    \"description\": \"Job description goes here\",\r\n    \"employment_type\": \"Freelance\",\r\n    \"salary_range\": \"$200 - $400\",\r\n    \"apply_type\": \"Internal\",\r\n    \"external_link\": \"https://example.com\",\r\n    \"is_remote\": true,\r\n    \"is_hybrid\": true,\r\n    \"is_onsite\": true,\r\n    \"is_featured\": true,\r\n    \"is_urgent\": true,\r\n    \"expired_at\": \"2024-05-25\",\r\n    \"is_opentoremote\": true,\r\n    \"is_opentorelocation\": true\r\n    ,\"agency_id\": \"2c915d0a-a54b-346f-8e07-0b979acece05\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2651,7 +2814,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n// {\r\n//     \"title\": \"Job Title\",\r\n//     \"description\": \"Job description goes here ddd\",\r\n//     // \"status\": \"\",\r\n//     \"category_id\": \"d8eefbad-2d19-3961-a83b-6c819a29d9a4\",\r\n//     \"employment_type\": \"Freelance\",\r\n//     \"industry_experience\": [\r\n//         \"b11b7cc7-a72f-332e-bbde-3137b634e26e\"\r\n//     ],\r\n//     \"media_experience\": [\r\n//         \"cad0963a-73b4-359c-864b-d024136d618f\"\r\n//     ],\r\n   \r\n//     \"years_of_experience\": \"Director 10+ years\",\r\n//     \"salary_range\": \"$200 - $500\",\r\n//     \"apply_type\": \"External\",\r\n//     \"external_link\": \"https://example.com1\",\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"state_id\": \"ff170360-2195-3fa5-a17a-8f4d0b9fcea0\",\r\n//     \"city_id\": \"e4201cd4-3520-35e7-99cf-a803d4275bdb\",\r\n//     \"is_remote\": true,\r\n//     \"is_hybrid\": true,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": true,\r\n//     \"is_opentoremote\": true,\r\n//     \"is_opentorelocation\": true\r\n// }\r\n\r\n{\r\n    \"status\": \"pending\"\r\n}",
+							"raw": "// industry_experience and media_experience must be UUID from respective table not the int IDs\r\n// {\r\n//     \"title\": \"Job Title\",\r\n//     \"description\": \"Job description goes here ddd\",\r\n//     // \"status\": \"\",\r\n//     \"category_id\": \"d8eefbad-2d19-3961-a83b-6c819a29d9a4\",\r\n//     \"employment_type\": \"Freelance\",\r\n//     \"industry_experience\": [\r\n//         \"b11b7cc7-a72f-332e-bbde-3137b634e26e\"\r\n//     ],\r\n//     \"media_experience\": [\r\n//         \"cad0963a-73b4-359c-864b-d024136d618f\"\r\n//     ],\r\n   \r\n//     \"years_of_experience\": \"Director 10+ years\",\r\n//     \"salary_range\": \"$200 - $500\",\r\n//     \"apply_type\": \"External\",\r\n//     \"external_link\": \"https://example.com1\",\r\n//     \"expired_at\": \"2023-12-31\",\r\n//     \"state_id\": \"ff170360-2195-3fa5-a17a-8f4d0b9fcea0\",\r\n//     \"city_id\": \"e4201cd4-3520-35e7-99cf-a803d4275bdb\",\r\n//     \"is_remote\": true,\r\n//     \"is_hybrid\": true,\r\n//     \"is_onsite\": true,\r\n//     \"is_featured\": true,\r\n//     \"is_urgent\": true,\r\n//     \"is_opentoremote\": true,\r\n//     \"is_opentorelocation\": true\r\n// }\r\n\r\n{\r\n    \"status\": \"filled\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2659,13 +2822,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/jobs/31376dc6-0ec2-47d4-8fda-850fb50b2365",
+							"raw": "{{BASE_URL}}/jobs/d48f1fdf-d99b-409d-8216-bc8e16573432",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"jobs",
-								"31376dc6-0ec2-47d4-8fda-850fb50b2365"
+								"d48f1fdf-d99b-409d-8216-bc8e16573432"
 							]
 						}
 					},
@@ -2706,7 +2869,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/applications?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3",
+							"raw": "{{BASE_URL}}/applications",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2717,11 +2880,12 @@
 								{
 									"key": "filter[user_id]",
 									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3",
-									"description": "For Creatives"
+									"description": "For Creatives",
+									"disabled": true
 								},
 								{
 									"key": "filter[job_id]",
-									"value": "3d374f6a-7e84-40f1-85b8-93638f12fe31",
+									"value": "4b3a40f3-9838-4b47-9422-a79e085ed9de",
 									"description": " For agencies",
 									"disabled": true
 								},
@@ -2880,7 +3044,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"message\": \"This is messaeg in application\",\r\n    \"status\": \"accepted\"\r\n}",
+							"raw": "{\r\n    \"message\": \"This is messaeg in application\",\r\n    \"status\": \"shortlisted\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2888,13 +3052,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/applications/0f47f588-a9fb-43e5-98bc-241e1454e6eb",
+							"raw": "{{BASE_URL}}/applications/73478d47-d591-4320-9344-68d695829ba8",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"applications",
-								"0f47f588-a9fb-43e5-98bc-241e1454e6eb"
+								"73478d47-d591-4320-9344-68d695829ba8"
 							]
 						}
 					},
@@ -3621,7 +3785,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/notes?filter[user_id]=2c915d0a-a54b-346f-8e07-0b979acece05&resource_id=36aede9c-9ca6-4178-8a3f-6427aefa01d2",
+							"raw": "{{BASE_URL}}/notes?filter[user_id]=e8e1541a-56f8-474f-8a9a-d1ff0c17d61e",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3631,7 +3795,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "2c915d0a-a54b-346f-8e07-0b979acece05"
+									"value": "e8e1541a-56f8-474f-8a9a-d1ff0c17d61e"
 								},
 								{
 									"key": "resource_type",
@@ -3641,7 +3805,8 @@
 								},
 								{
 									"key": "resource_id",
-									"value": "36aede9c-9ca6-4178-8a3f-6427aefa01d2"
+									"value": "36aede9c-9ca6-4178-8a3f-6427aefa01d2",
+									"disabled": true
 								}
 							]
 						}
@@ -3684,7 +3849,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"resource_type\": \"creatives\",\r\n    \"resource_id\": \"36aede9c-9ca6-4178-8a3f-6427aefa01d2\",\r\n    \"body\": \"This is my personal note on creativee as an agency\"\r\n}",
+							"raw": "{\r\n    \"resource_type\": \"creatives\",\r\n    \"resource_id\": \"9254af74-8e8d-473d-b1e3-037b1f824dc2\",\r\n    \"body\": \"This is my personal note on creativee as an agency\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3729,13 +3894,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/notes/64df65b3-f640-4f16-b2db-7c01db198e843",
+							"raw": "{{BASE_URL}}/notes/29e4ebfd-c6b6-4924-9d89-63f7e40f8694",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"notes",
-								"64df65b3-f640-4f16-b2db-7c01db198e843"
+								"29e4ebfd-c6b6-4924-9d89-63f7e40f8694"
 							]
 						}
 					},
@@ -3832,7 +3997,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/attachments?filter[user_id]=93a65adf-c976-4178-b807-fc57e468eb04",
+							"raw": "{{BASE_URL}}/attachments?filter[user_id]=39e1506a-1551-4e53-91bd-b81e372cc3bf",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3842,7 +4007,7 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "93a65adf-c976-4178-b807-fc57e468eb04"
+									"value": "39e1506a-1551-4e53-91bd-b81e372cc3bf"
 								},
 								{
 									"key": "filter[resource_type]",
@@ -3909,7 +4074,7 @@
 							"formdata": [
 								{
 									"key": "user_id",
-									"value": "f2fd0ccb-2484-4a7d-92d1-7f4d9eb8dda9",
+									"value": "97b055e1-99cb-43b1-ba9a-ebc16fcb4f92",
 									"type": "text"
 								},
 								{
@@ -3950,13 +4115,39 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/attachments/1bc413b6-3576-4c5b-933e-f9e7aa8a60391",
+							"raw": "{{BASE_URL}}/attachments/f7fad305-65c1-4e1e-a3ab-64d73274256a",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"attachments",
-								"1bc413b6-3576-4c5b-933e-f9e7aa8a60391"
+								"f7fad305-65c1-4e1e-a3ab-64d73274256a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "job logo delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attachment_id\": \"8d5b26ff-ea8f-46d4-92a5-f9cf09cee18b\",\r\n    \"job_id\": \"98f5a644-1b34-4871-8735-5001e1a677fa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/delete_job_logo",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"delete_job_logo"
 							]
 						}
 					},
@@ -5499,7 +5690,7 @@
 			"name": "Employment Types",
 			"item": [
 				{
-					"name": "employment_types",
+					"name": "employment_types (for frontend)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -5510,6 +5701,98 @@
 							],
 							"path": [
 								"employment_types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employment_types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/employments",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"employments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employment types",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"370 Activatio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/employments",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"employments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employment_types",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"370 Activation2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/employments/df70aa1b-7661-43a7-aff3-a76d641b4fc5",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"employments",
+								"df70aa1b-7661-43a7-aff3-a76d641b4fc5"
 							]
 						}
 					},
@@ -6274,7 +6557,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/group-invitations",
+							"raw": "{{BASE_URL}}/group-invitations?filter[receiver_id]=6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4&filter[group_id]=6dffce04-d8f8-4dfd-a20b-322ceeab5212",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -6284,8 +6567,7 @@
 							"query": [
 								{
 									"key": "filter[receiver_id]",
-									"value": "39e1506a-1551-4e53-91bd-b81e372cc3bf",
-									"disabled": true
+									"value": "6dead3e6-c17f-4f63-b5d4-f04f8ba49cd4"
 								},
 								{
 									"key": "filter[status]",
@@ -6294,8 +6576,7 @@
 								},
 								{
 									"key": "filter[group_id]",
-									"value": "df0e6960-abd7-4574-9560-90d7648f7029",
-									"disabled": true
+									"value": "6dffce04-d8f8-4dfd-a20b-322ceeab5212"
 								},
 								{
 									"key": "filter[sender_id]",
@@ -6325,7 +6606,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"receiver_id\": \"124df419-0d85-42af-9877-1909bff4b30f\", \r\n    \"group_id\": \"458d30fb-1596-37dd-bd40-64549d7ab20c\"\r\n}",
+							"raw": "// {\r\n//     \"receiver_id\": \"7764d207-c4ac-4c58-bd08-b40342fad735\", \r\n//     \"group_id\": \"df0e6960-abd7-4574-9560-90d7648f7029\"\r\n// }\r\n\r\n\r\n{\r\n\t\"group_id\": \"ff6eb3f7-6d87-45d4-8b76-32297bacda83\",\r\n\t\"receiver_id\": \"2d6f52bb-a6f7-4c60-820a-db765d2622cb\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -6375,7 +6656,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"rejected\"\r\n}",
+							"raw": "{\r\n    \"status\": \"accepted\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -6383,13 +6664,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/group-invitations/7e82d905-d716-4e7d-be93-9be876b72d2d",
+							"raw": "{{BASE_URL}}/group-invitations/4acd5def-ba69-4f79-86c1-6d499b2e793a",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"group-invitations",
-								"7e82d905-d716-4e7d-be93-9be876b72d2d"
+								"4acd5def-ba69-4f79-86c1-6d499b2e793a"
 							]
 						}
 					},
@@ -6453,7 +6734,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"39e1506a-1551-4e53-91bd-b81e372cc3bf\",\r\n    \"group_id\": \"df0e6960-abd7-4574-9560-90d7648f7029\",\r\n    \"role\": \"member\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"fcb55f04-40b0-3dd2-bbf6-ee5062e00514\",\r\n    \"group_id\": \"1a6e972d-c2be-4cd4-8dfd-623cecb2f572\",\r\n    \"role\": \"member\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -6524,14 +6805,14 @@
 					"response": []
 				},
 				{
-					"name": "group-members",
+					"name": "leave membership",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {
 							"accept": true
 						}
 					},
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Accept",
@@ -6541,7 +6822,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "// {\r\n//     \"receiver_id\": \"7764d207-c4ac-4c58-bd08-b40342fad735a\", \r\n//     \"group_id\": \"df0e6960-abd7-4574-9560-90d7648f7029\"\r\n// }\r\n\r\n{\r\n\t\"group_id\": \"ff6eb3f7-6d87-45d4-8b76-32297bacda83\",\r\n\t\"receiver_id\": \"2d6f52bb-a6f7-4c60-820a-db765d2622cb\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -6549,13 +6830,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/group-members/f83db97c-4b3d-402c-bec4-78d788096df9",
+							"raw": "{{BASE_URL}}/leave/membership",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"group-members",
-								"f83db97c-4b3d-402c-bec4-78d788096df9"
+								"leave",
+								"membership"
 							]
 						}
 					},
@@ -6759,7 +7040,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"group_id\": \"e544eae0-59a5-4693-b778-3d1d98d969ed\",\r\n    \"content\": \"This is my test content for post\",\r\n    \"attachment_ids\": [\r\n       \"77930103-d924-4db7-9645-65faaf7feeef\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"group_id\": \"715bfe90-833e-3459-9700-036ac28d3fd4\",\r\n    \"content\": \"<p>Hi <a href=\\\"creative/qasim-nadeem\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">@Fulton Pate</a>, <a href=\\\"creative/susiev34\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">@Susie Fagan</a></p>\",\r\n    \"attachment_ids\": []\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7376,7 +7657,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/reviews?filter[user_id]=2c915d0a-a54b-346f-8e07-0b979acece05",
+							"raw": "{{BASE_URL}}/reviews?filter[target_id]=3033bda6-f82f-387d-a410-ce6795a02ae3",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -7386,8 +7667,7 @@
 							"query": [
 								{
 									"key": "filter[target_id]",
-									"value": "39e1506a-1551-4e53-91bd-b81e372cc3bf",
-									"disabled": true
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3"
 								},
 								{
 									"key": "sort",
@@ -7406,7 +7686,8 @@
 								},
 								{
 									"key": "filter[user_id]",
-									"value": "2c915d0a-a54b-346f-8e07-0b979acece05"
+									"value": "2c915d0a-a54b-346f-8e07-0b979acece05",
+									"disabled": true
 								}
 							]
 						}
@@ -7933,7 +8214,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/notifications?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3&filter[type]=job_alert,friendship_requested",
+							"raw": "{{BASE_URL}}/notifications?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3&status=0&filter[type]=job_alert,job_board",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -7948,8 +8229,7 @@
 								{
 									"key": "status",
 									"value": "0",
-									"description": "0: unread , 1: read",
-									"disabled": true
+									"description": "0: unread , 1: read"
 								},
 								{
 									"key": "sort",
@@ -7963,7 +8243,57 @@
 								},
 								{
 									"key": "filter[type]",
-									"value": "job_alert,friendship_requested"
+									"value": "job_alert,job_board"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications?sort=-created_at&status=0&filter[type]=lounge_friendship_requested,lounge_friendship_responded,lounge_group_request_responded,lounge_mention&filter[user_id]=fcb55f04-40b0-3dd2-bbf6-ee5062e00514&page=2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "-created_at"
+								},
+								{
+									"key": "status",
+									"value": "0"
+								},
+								{
+									"key": "filter[type]",
+									"value": "lounge_friendship_requested,lounge_friendship_responded,lounge_group_request_responded,lounge_mention"
+								},
+								{
+									"key": "filter[user_id]",
+									"value": "fcb55f04-40b0-3dd2-bbf6-ee5062e00514"
+								},
+								{
+									"key": "per_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2"
 								}
 							]
 						}
@@ -7982,7 +8312,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/notifications/count",
+							"raw": "{{BASE_URL}}/notifications/count?filter[user_id]=3033bda6-f82f-387d-a410-ce6795a02ae3&status=0&filter[type]=lounge_friends_activity,lounge_group_activity,lounge_mention",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -7993,14 +8323,16 @@
 							"query": [
 								{
 									"key": "filter[user_id]",
-									"value": "d6ece031-e047-4b87-bfc8-86fd6dd93d15",
-									"disabled": true
+									"value": "3033bda6-f82f-387d-a410-ce6795a02ae3"
 								},
 								{
 									"key": "status",
 									"value": "0",
-									"description": "0: unread , 1: read",
-									"disabled": true
+									"description": "0: unread , 1: read"
+								},
+								{
+									"key": "filter[type]",
+									"value": "lounge_friends_activity,lounge_group_activity,lounge_mention"
 								}
 							]
 						}
@@ -8025,7 +8357,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"3ab187a0-ba89-42da-a824-1ba7bc827ae4\",\r\n    \"type\": \"abc\",\r\n    \"message\": \"This is message from production \",\r\n    \"body\": \"fdfsdf\"\r\n}",
+							"raw": "{\r\n    \"user_id\": \"f97dd697-d620-4627-90ea-ad59b44b7cfc\",\r\n    \"type\": \"lounge_menion\",\r\n    \"message\": \"Abc has mentioned you in post \"\r\n    ,\"body\": {\r\n        \"post_id\" : \"faa43118-660a-4d9d-ac3d-f558c2d50a50\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -8070,13 +8402,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/notifications/34234324324324",
+							"raw": "{{BASE_URL}}/notifications/1b238c9c-fa74-4ffe-b4ac-7358af1adb5e",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"notifications",
-								"34234324324324"
+								"1b238c9c-fa74-4ffe-b4ac-7358af1adb5e"
 							]
 						}
 					},
@@ -9201,13 +9533,13 @@
 		{
 			"key": "BASE_URL",
 			"value": "http://127.0.0.1:8000/api/v1",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "BASE_URL",
 			"value": "https://staging-api.adagencycreatives.com/api/v1",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "BASE_URL",

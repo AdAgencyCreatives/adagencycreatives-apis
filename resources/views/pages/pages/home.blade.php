@@ -13,6 +13,7 @@
                 menubar: false,
                 plugins: 'anchor autolink codesample emoticons link lists visualblocks image preview',
                 toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                font_family_formats: 'JOST=JOST;ALTA=ALTA'
             });
 
         });
