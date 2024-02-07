@@ -56,6 +56,7 @@ class JobController extends Controller
                 'is_featured',
                 'is_urgent',
                 'status',
+                AllowedFilter::trashed(),
             ])
             ->allowedSorts('created_at', 'updated_at');
 
@@ -106,6 +107,7 @@ class JobController extends Controller
                 'is_featured',
                 'is_urgent',
                 'status',
+                AllowedFilter::trashed(),
             ])
             ->allowedSorts('created_at');
 
