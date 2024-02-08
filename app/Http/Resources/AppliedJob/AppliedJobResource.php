@@ -10,6 +10,8 @@ class AppliedJobResource extends JsonResource
     public function toArray($request)
     {
         $user = $this->user;
+        $job = $this->job;
+        if( !$job ) return [];
 
         return [
             'type' => 'applications',
@@ -18,11 +20,11 @@ class AppliedJobResource extends JsonResource
             'user' => $user->first_name.' '.$user->last_name,
             'slug' => $user->username,
             'user_profile_id' => $user->id,
-            'job_id' => $this->job->uuid,
+            'job_id' => $job->uuid,
             'resume_url' => isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
-            'job' => new JobResource($this->job),
+            'job' => new JobResource($job),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
 
