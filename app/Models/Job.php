@@ -176,7 +176,7 @@ class Job extends Model
 
     public function scopeStateSlug(Builder $query, $state_slug): Builder
     {
-        $city = Location::where('slug', $state_slug)->first();
+        $city = Location::where('slug', $state_slug)->whereNull('parent_id')->first();
 
         return $query->where('state_id', $city->id);
     }
@@ -190,7 +190,7 @@ class Job extends Model
 
     public function scopeCitySlug(Builder $query, $city_slug): Builder
     {
-        $city = Location::where('slug', $city_slug)->first();
+        $city = Location::where('slug', $city_slug)->whereNotNull('parent_id')->first();
 
         return $query->where('city_id', $city->id);
     }
