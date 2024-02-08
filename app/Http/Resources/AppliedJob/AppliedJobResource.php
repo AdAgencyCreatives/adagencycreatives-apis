@@ -11,7 +11,7 @@ class AppliedJobResource extends JsonResource
     {
         $user = $this->user;
         $job = $this->job;
-        if( !$job ) return [];
+        // if( !$job ) return [];
 
         return [
             'type' => 'applications',
