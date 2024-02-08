@@ -40,7 +40,7 @@ class Application extends Model
 
     public function job()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Job::class)->withTrashed();
     }
 
     public function notes()
