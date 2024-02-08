@@ -30,9 +30,7 @@ class ApplicationController extends Controller
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('job_id'),
                 'status',
-            ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');;
+            ]);
 
         $query = $query->with('job');
         $applications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
