@@ -180,6 +180,7 @@ class ApplicationController extends Controller
 
         $applications = Application::with('job')
             ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new AppliedJobCollection($applications);
