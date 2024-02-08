@@ -18,7 +18,7 @@ class AppliedJobResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'user' => $user->first_name.' '.$user->last_name,
-            'slug' => $user->username,
+            'slug' => $user?->username,
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
             'resume_url' => isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
