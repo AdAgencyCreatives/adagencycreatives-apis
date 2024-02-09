@@ -24,7 +24,7 @@
         <td style="padding: 15px; width: 100%; font-size: 14px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; text-align: left; color: #ffffff; word-break: break-all;"
             class="footer_text_color footer_text_size">
             <div style="text-align:center;">
-                <div>© 2023 Ad Agency Creatives. All Rights Reserved.</div>
+                <div>© {{ date('Y') }} Ad Agency Creatives. All Rights Reserved.</div>
                 <div style="display:flex; gap:15px; justify-content:center; margin-top:5px;" id="footer">
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/terms-and-conditions/">User
