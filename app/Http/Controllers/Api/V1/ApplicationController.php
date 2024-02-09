@@ -65,7 +65,14 @@ class ApplicationController extends Controller
         try {
             $application = Application::create($request->all());
 
-            SendEmailJob::dispatch([
+            /**
+             * only send email to creative user if they apply on internal jobs,
+             * and if they aply on external jobs then we will not know whether
+             * they really appplied or not
+             */
+
+            if($job->apply_type == 'Internal'){
+                SendEmailJob::dispatch([
                 'receiver' => $applicant_user,
                 'data' => [
                     'recipient' => $applicant_user->first_name,
@@ -73,6 +80,8 @@ class ApplicationController extends Controller
                     'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
                 ],
             ], 'application_submitted');
+            }
+
 
             //Also send this as a message in Job Messages, so that both can send/receive messages
             $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
@@ -92,6 +101,15 @@ class ApplicationController extends Controller
                 'created_at' => now(),
             ];
 
+            if($job->apply_type == 'External'){
+                $msg_data['message'] = sprintf(
+                    "<a style='text-decoration:underline;' href='%s'>%s</a> is interested in the job <a style='text-decoration:underline;' href='%s'>%s</a>",
+                    $creative_url,
+                    $applicant_user->full_name,
+                    $job_url,
+                    $job->title
+                );
+            }
 
             /**
              * If job is submitted by advisor, then send email only to advisor and do not
