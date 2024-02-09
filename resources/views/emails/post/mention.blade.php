@@ -5,8 +5,8 @@
         <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
-            <p><a href="{{ $data['inviter_profile_url'] }}" target="_blank">{{ $data['inviter'] }}</a> mentioned you in a
-                post.</p>
+            <p><a href="{{ $data['inviter_profile_url'] }}" target="_blank">{{ $data['inviter'] }}</a> mentioned you in
+                The Lounge</p>
 
 
             <div class="candidate-top-wrapper flex-middle-sm" style="display: flex; gap: 15px; ">
