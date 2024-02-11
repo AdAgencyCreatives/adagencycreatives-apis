@@ -220,11 +220,11 @@ class AgencyController extends Controller
             }
 
             $res = DB::select($sql);
-            $creativeIds = collect($res)->pluck('id')->toArray();
+            $agencyIds = collect($res)->pluck('id')->toArray();
         } catch(\Exception $e) {
-            $creativeIds = [];
+            $agencyIds = [];
         }
-        $agencies = Agency::whereIn('id', $creativeIds)
+        $agencies = Agency::whereIn('id', $agencyIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
