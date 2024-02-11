@@ -70,6 +70,11 @@ Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('home/jobs/search', [JobController::class, 'jobs_homepage']);
 
+/**
+ * Agency Search
+ */
+Route::get('agencies/search1', [AgencyController::class, 'search1']); // For agency directory page
+Route::get('agencies/search2', [AgencyController::class, 'search2']); //For agency Detail page
 
 Route::get('links', [LinkController::class, 'index'])->name('links.index');
 Route::get('attachments', [AttachmentController::class, 'index']);
@@ -109,14 +114,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/related', [CreativeController::class, 'related_creatives']);
     Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
     Route::get('resume/system-generated', [CreativeController::class, 'get_system_resume_url']);
-
-
-    /**
-     * Agency Advance Search
-     */
-    Route::get('agencies/search1', [AgencyController::class, 'search1']); // For agency directory page
-    Route::get('agencies/search2', [AgencyController::class, 'search2']); //For agency Detail page
-
 
     /**
      * Recruiters
