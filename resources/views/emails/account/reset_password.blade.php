@@ -28,8 +28,7 @@
                             information confidential.
                         </p>
 
-                        <p>If link is not clickable, copy and paste the folowing URL into the browser.
-                        </p>
-                        <p style="overflow-wrap: break-word; word-wrap: break-word;"> {{ $url }}</p>
+                        <!-- <p>If link is not clickable, copy and paste the folowing URL into the browser.</p>
+                        <p style="overflow-wrap: break-word; word-wrap: break-word;"> {{ $url }}</p> -->
 
                         @include('emails.includes.jobboard_footer')
