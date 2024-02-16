@@ -27,7 +27,7 @@
                             your preferences. After that,
                             you’re ready to get out there and start making some new connections.</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
-                                href="{{ $data['FRONTEND_URL'] }}/reset-password" target="_blank">here</a>.
+                                href="{{ $data['FRONTEND_URL'] }}/forgot-password?email={{ $data['user']->email }}" target="_blank">here</a>.
 
                         </div>
 
