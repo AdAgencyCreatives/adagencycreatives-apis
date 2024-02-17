@@ -26,9 +26,9 @@
             class="footer_text_color footer_text_size">
             <div style="text-align:center;">
                 <div>© {{ date('Y') }} Ad Agency Creatives. All Rights Reserved.</div>
-                <div style="display:flex; gap:15px; justify-content:center; margin-top:5px;" id="footer">
-                    <a style="color: #ffffff;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
-                    <a style="color: #ffffff;" href="https://adagencycreatives.com/terms-and-conditions/">User
+                <div style="display:inline-block; margin-top:5px;" id="footer">
+                    <a style="color: #ffffff; margin-right: 15px;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
+                    <a style="color: #ffffff; margin-right: 15px;" href="https://adagencycreatives.com/terms-and-conditions/">User
                         Agreement</a>
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/contact">Contact Us</a>
                 </div>
