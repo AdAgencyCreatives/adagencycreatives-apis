@@ -245,9 +245,8 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function capturePortfolioSnapshot(Request $request)
+    public function capturePortfolioSnapshot(Request $request, $uuid)
     {
-        $uuid = $request->uuid;
         $user = User::where('uuid', $uuid)->first();
 
         if ($user) {
