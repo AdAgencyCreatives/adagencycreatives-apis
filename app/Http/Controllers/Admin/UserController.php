@@ -244,4 +244,26 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function capturePortfolioSnapshot(Request $request)
+    {
+        $uuid = $request->uuid;
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            /**
+             * Generate portfolio website preview
+             */
+            if ($user->role == 'creative') {
+
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
+                    ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                }
+            }
+
+            return response()->json(['message' => 'Portfolio Capture Started ...'], 200);
+        }
+    }
 }
