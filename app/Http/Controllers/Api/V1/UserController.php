@@ -18,6 +18,7 @@ use App\Models\Creative;
 use App\Models\Job;
 use App\Models\Link;
 use App\Models\User;
+use App\Models\PortfolioCaptureLog;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -429,6 +430,13 @@ class UserController extends Controller
                 if ($portfolio_website) {
                     Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
                     ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                    PortfolioCaptureLog::create([
+                        'user_id' => $user->id,
+                        'url' => $portfolio_website->url,
+                        'capture' => '',
+                        'status' => 0,
+                        'initiated_at' => date('Y-m-d H:i:s', time())
+                    ]);
                 }
             }
 
