@@ -415,6 +415,7 @@ class UserController extends Controller
 
     public function capturePortfolioSnapshot(Request $request, $uuid)
     {
+        $log = [];
         $user = User::where('uuid', $uuid)->first();
 
         if ($user) {
@@ -441,7 +442,7 @@ class UserController extends Controller
                         }
 
                         ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
-                        PortfolioCaptureLog::create([
+                        $log = PortfolioCaptureLog::create([
                             'user_id' => $user->id,
                             'url' => $portfolio_website->url,
                             'capture' => '',
@@ -452,7 +453,7 @@ class UserController extends Controller
                 }
             }
 
-            return response()->json(['message' => 'Portfolio Capture Started ...'], 200);
+            return response()->json($log, 200);
         }
     }
 }
