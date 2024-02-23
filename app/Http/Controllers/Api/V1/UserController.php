@@ -429,18 +429,23 @@ class UserController extends Controller
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
                     $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
-                    $att = $att_query->first();
-                    $capture = $att ? getAttachmentBasePath() . $att->path : '';
+                    $att_rec = $att_query->first();
+
+                    $capture = $att_rec ? getAttachmentBasePath() . $att_rec->path : '';
+                    $checked_at = date('Y-m-d H:i:s', time());
+                    $initiated_at = strtotime($log->intiated_at);
+                    $time_diff = $checked_at - $initiated_at;
+
+                    $status = strlen($capture) > 0 ? "success" : ($time_diff > 60000 ? "failed" : "pending");
 
                     if ($log) {
 
                         $log->update([
                             'capture' => $capture,
-                            'status' => strlen($capture) > 0 ? "success" : "pending",
-                            'checked_at' => date('Y-m-d H:i:s', time())
+                            'status' => $status,
+                            'checked_at' => $checked_at
                         ]);
                         $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
-
                     } else {
                         $att_query->delete();
 
@@ -459,7 +464,7 @@ class UserController extends Controller
                 }
             }
 
-            return response()->json($log, 200);
+            return response()->json(['time_diff' => $time_diff, 'data' => $log], 200);
         }
     }
 }
