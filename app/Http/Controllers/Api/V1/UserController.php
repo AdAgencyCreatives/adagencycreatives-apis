@@ -440,7 +440,7 @@ class UserController extends Controller
 
                         $time_diff = strtotime($checked_at) - strtotime($initiated_at); // in seconds
 
-                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 15 ? "failed" : "pending");
+                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 60 ? "failed" : "pending");
 
                         $log->update([
                             'capture' => $capture,
