@@ -449,7 +449,7 @@ class UserController extends Controller
                             'user_id' => $user->id,
                             'url' => $portfolio_website->url,
                             'capture' => '',
-                            'status' => 0,
+                            'status' => 'pending',
                             'initiated_at' => date('Y-m-d H:i:s', time()),
                             'checked_at' => date('Y-m-d H:i:s', time())
                         ]);
