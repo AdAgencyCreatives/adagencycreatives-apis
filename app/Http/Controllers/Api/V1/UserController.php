@@ -415,7 +415,7 @@ class UserController extends Controller
 
     public function capturePortfolioSnapshot(Request $request, $uuid)
     {
-        $log = [];
+        $log = null;
         $user = User::where('uuid', $uuid)->first();
 
         if ($user) {
@@ -430,33 +430,31 @@ class UserController extends Controller
                 if ($portfolio_website) {
                     $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
                     $att = $att_query->first();
-                    $capture = $att ? getAttachmentBasePath().$att->path : '';
-
-                    $upd = ['capture' => $capture];
-                    if(strlen($capture)>0) {
-                        $upd['status'] = 1;
-                    }
-                    $upd['checked_at'] = date('Y-m-d H:i:s', time());
+                    $capture = $att ? getAttachmentBasePath() . $att->path : '';
 
                     if ($log) {
 
-                        if($capture) {
-                            $log->update($upd);
-                            $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
-                        }
+                        $log->update([
+                            'capture' => $capture,
+                            'status' => strlen($capture) > 0 ? "success" : "pending",
+                            'checked_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                        $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
 
-                        return response()->json($log, 200);
                     } else {
                         $att_query->delete();
 
                         ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
-                        $log = PortfolioCaptureLog::create([
+                        PortfolioCaptureLog::create([
                             'user_id' => $user->id,
                             'url' => $portfolio_website->url,
                             'capture' => '',
                             'status' => 0,
-                            'initiated_at' => date('Y-m-d H:i:s', time())
+                            'initiated_at' => date('Y-m-d H:i:s', time()),
+                            'checked_at' => date('Y-m-d H:i:s', time())
                         ]);
+
+                        $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
                     }
                 }
             }
