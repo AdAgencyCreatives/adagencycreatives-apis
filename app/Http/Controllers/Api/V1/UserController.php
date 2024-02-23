@@ -467,6 +467,24 @@ class UserController extends Controller
             }
 
             return response()->json(['time_diff' => $time_diff, 'data' => $log], 200);
+        } else {
+            return response()->json(['message' => 'User not found.'], 401);
+        }
+    }
+
+    public function removePortfolioCaptureLog(Request $request, $uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user && $user->role == 'creative') {
+            /**
+             * Remove Portfolio Capture Log for User
+             */
+                $log = PortfolioCaptureLog::where('user_id', $user->id)->delete();
+
+            return response()->json(['message' => 'Porfolio Capture Log deleted.', 'data' => $log], 200);
+        } else {
+            return response()->json(['message' => 'Invalid User.'], 401);
         }
     }
 }
