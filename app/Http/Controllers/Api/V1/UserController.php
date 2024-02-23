@@ -438,9 +438,9 @@ class UserController extends Controller
                         $checked_at = date('Y-m-d H:i:s', time());
                         $initiated_at = $log->initiated_at ? $log->initiated_at : $checked_at;
 
-                        $time_diff = strtotime($checked_at) - strtotime($initiated_at);
+                        $time_diff = strtotime($checked_at) - strtotime($initiated_at); // in seconds
 
-                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 20000 ? "failed" : "pending");
+                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 15 ? "failed" : "pending");
 
                         $log->update([
                             'capture' => $capture,
