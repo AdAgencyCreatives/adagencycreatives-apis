@@ -428,7 +428,7 @@ class UserController extends Controller
 
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
-                    $att = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
+                    $att = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->get();
 
                     if ($log) {
 
