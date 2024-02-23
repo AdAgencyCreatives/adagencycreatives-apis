@@ -480,6 +480,9 @@ class UserController extends Controller
             /**
              * Remove Portfolio Capture Log for User
              */
+
+             return response()->json(PortfolioCaptureLog::where('user_id', $user->id)->get(), 200);
+
             $ids = PortfolioCaptureLog::where('user_id', $user->id)->pluck('id');
 
             foreach ($ids as $id) {
