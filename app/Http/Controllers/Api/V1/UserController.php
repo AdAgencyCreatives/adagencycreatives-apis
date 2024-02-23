@@ -428,18 +428,16 @@ class UserController extends Controller
 
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
-                    $att = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->get();
+                    $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
 
                     if ($log) {
 
-                        return response()->json($att, 200);
+                        return response()->json($att_query->get(), 200);
                         $log->update([
                             'capture' => $att
                         ]);
                     } else {
-                        if($att) {
-                            $att->delete();
-                        }
+                        $att_query->delete();
 
                         ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
                         $log = PortfolioCaptureLog::create([
