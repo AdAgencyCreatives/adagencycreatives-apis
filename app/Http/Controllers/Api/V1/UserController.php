@@ -434,8 +434,9 @@ class UserController extends Controller
 
                     $upd = ['capture' => $capture];
                     if(strlen($capture)>0) {
-                        $upd['checked_at'] = date('Y-m-d H:i:s', time());
+                        $upd['status'] = 1;
                     }
+                    $upd['checked_at'] = date('Y-m-d H:i:s', time());
 
                     if ($log) {
 
