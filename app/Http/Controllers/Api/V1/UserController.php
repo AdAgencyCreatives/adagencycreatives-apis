@@ -481,7 +481,7 @@ class UserController extends Controller
              * Remove Portfolio Capture Log for User
              */
             PortfolioCaptureLog::where('user_id', $user->id)->delete();
-            return response()->json(['message' => 'Porfolio Capture Log deleted.'], 200);
+            return response()->json(['message' => 'Portfolio Capture Log deleted.'], 200);
         } else {
             return response()->json(['message' => 'Invalid User.'], 401);
         }
