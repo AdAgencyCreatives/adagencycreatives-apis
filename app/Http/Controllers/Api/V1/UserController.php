@@ -429,13 +429,15 @@ class UserController extends Controller
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
                     $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
+                    $att = $att_query->first();
 
                     if ($log) {
 
-                        return response()->json($att_query->get(), 200);
                         $log->update([
-                            'capture' => $att
+                            'capture' => ($att ? getAttachmentBasePath().$att->path : '')
                         ]);
+
+                        return response()->json($log, 200);
                     } else {
                         $att_query->delete();
 
