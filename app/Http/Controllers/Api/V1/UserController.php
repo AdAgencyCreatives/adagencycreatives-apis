@@ -431,14 +431,14 @@ class UserController extends Controller
                     $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
                     $att_rec = $att_query->first();
 
-                    $capture = $att_rec ? getAttachmentBasePath() . $att_rec->path : '';
-                    $checked_at = date('Y-m-d H:i:s', time());
-                    $initiated_at = strtotime($log->intiated_at ? $log->intiated_at : $checked_at);
-                    $time_diff = $checked_at - $initiated_at;
-
-                    $status = strlen($capture) > 0 ? "success" : ($time_diff > 60000 ? "failed" : "pending");
-
                     if ($log) {
+
+                        $capture = $att_rec ? getAttachmentBasePath() . $att_rec->path : '';
+                        $checked_at = date('Y-m-d H:i:s', time());
+                        $initiated_at = strtotime($log->intiated_at);
+                        $time_diff = $checked_at - $initiated_at;
+
+                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 60000 ? "failed" : "pending");
 
                         $log->update([
                             'capture' => $capture,
