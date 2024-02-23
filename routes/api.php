@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('creatives/search/tag', [CreativeController::class, 'get_tag_creatives']);
     Route::get('resume/system-generated', [CreativeController::class, 'get_system_resume_url']);
     Route::get('creatives/capture-portfolio-snapshot/{uuid}', [UserController::class, 'capturePortfolioSnapshot']);
+    Route::get('creatives/remove-portfolio-capture-log/{uuid}', [UserController::class, 'removePortfolioCaptureLog']);
 
     /**
      * Recruiters
