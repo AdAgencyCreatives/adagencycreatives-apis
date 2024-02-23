@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('initiated_at')->nullable();
             $table->timestamp('checked_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

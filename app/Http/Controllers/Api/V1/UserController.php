@@ -179,7 +179,6 @@ class UserController extends Controller
                     }
 
                     $this->send_notification_to_agency($user);
-
                 }
             }
 
@@ -403,17 +402,15 @@ class UserController extends Controller
 
     public function send_notification_to_agency($user) //send notifications to all agency users about new creative user joined the site, those agency users who have active jobs with similar industry title.
     {
-        try{
+        try {
             $category_id = $user->creative->category_id;
             $creative_url = sprintf('%s/creative/%s', env('FRONTEND_URL'), $user->username);
             $agencies = Job::where('category_id', $category_id)->where('status', 1)->pluck('user_id');
-            foreach($agencies as $agency_id){
+            foreach ($agencies as $agency_id) {
                 create_notification($agency_id, sprintf("New creative user <a href='%s'>%s</a> has joined the website.", $creative_url, $user->full_name));
             }
+        } catch (\Exception $e) {
         }
-        catch(\Exception $e){
-        }
-
     }
 
     public function capturePortfolioSnapshot(Request $request, $uuid)
@@ -426,17 +423,32 @@ class UserController extends Controller
              */
             if ($user->role == 'creative') {
 
+                $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
+
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
-                    Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->delete();
-                    ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
-                    PortfolioCaptureLog::create([
-                        'user_id' => $user->id,
-                        'url' => $portfolio_website->url,
-                        'capture' => '',
-                        'status' => 0,
-                        'initiated_at' => date('Y-m-d H:i:s', time())
-                    ]);
+                    $att = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
+
+                    if ($log) {
+
+                        return response()->json($portfolio_website, 200);
+                        $log->update([
+                            'capture' => $att
+                        ]);
+                    } else {
+                        if($att) {
+                            $att->delete();
+                        }
+
+                        ProcessPortfolioVisuals::dispatch($user->id, $portfolio_website->url);
+                        PortfolioCaptureLog::create([
+                            'user_id' => $user->id,
+                            'url' => $portfolio_website->url,
+                            'capture' => '',
+                            'status' => 0,
+                            'initiated_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                    }
                 }
             }
 
