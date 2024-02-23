@@ -433,7 +433,7 @@ class UserController extends Controller
 
                     $capture = $att_rec ? getAttachmentBasePath() . $att_rec->path : '';
                     $checked_at = date('Y-m-d H:i:s', time());
-                    $initiated_at = strtotime($log->intiated_at);
+                    $initiated_at = strtotime($log->intiated_at ? $log->intiated_at : $checked_at);
                     $time_diff = $checked_at - $initiated_at;
 
                     $status = strlen($capture) > 0 ? "success" : ($time_diff > 60000 ? "failed" : "pending");
