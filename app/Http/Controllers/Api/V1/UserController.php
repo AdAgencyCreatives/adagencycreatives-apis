@@ -416,6 +416,7 @@ class UserController extends Controller
     public function capturePortfolioSnapshot(Request $request, $uuid)
     {
         $log = null;
+        $time_diff = 0;
         $user = User::where('uuid', $uuid)->first();
 
         if ($user) {
@@ -438,7 +439,7 @@ class UserController extends Controller
                         $initiated_at = strtotime($log->intiated_at);
                         $time_diff = $checked_at - $initiated_at;
 
-                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 60000 ? "failed" : "pending");
+                        $status = strlen($capture) > 0 ? "success" : ($time_diff > 20000 ? "failed" : "pending");
 
                         $log->update([
                             'capture' => $capture,
