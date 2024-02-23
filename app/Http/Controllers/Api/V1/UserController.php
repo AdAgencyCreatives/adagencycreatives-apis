@@ -430,12 +430,19 @@ class UserController extends Controller
                 if ($portfolio_website) {
                     $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview');
                     $att = $att_query->first();
+                    $capture = $att ? getAttachmentBasePath().$att->path : '';
+
+                    $upd = ['capture' => $capture];
+                    if(strlen($capture)>0) {
+                        $upd['checked_at'] = date('Y-m-d H:i:s', time());
+                    }
 
                     if ($log) {
 
-                        $log->update([
-                            'capture' => ($att ? getAttachmentBasePath().$att->path : '')
-                        ]);
+                        if($capture) {
+                            $log->update($upd);
+                            $log = PortfolioCaptureLog::where('user_id', $user->id)->first();
+                        }
 
                         return response()->json($log, 200);
                     } else {
