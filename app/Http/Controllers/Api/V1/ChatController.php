@@ -236,8 +236,13 @@ class ChatController extends Controller
     public function deleteConversation(Request $request)
     {
         $query = QueryBuilder::for(Message::class);
+        $message_type = explode(',', $request->message_type);
+        $message_type = join(',', array_fill(0, count($message_type), '?'));
 
-        $query->whereRaw("type IN (?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", [explode(",", $request->message_type), $request->user1, $request->user2, $request->user2, $request->user1]);
+        $query->whereRaw(
+            "type IN (?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))", 
+            [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
+        );
 
         return response()->json($query->delete());
     }
