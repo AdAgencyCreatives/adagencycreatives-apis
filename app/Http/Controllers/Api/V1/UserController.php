@@ -10,6 +10,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Jobs\ProcessPortfolioVisuals;
+use App\Jobs\ProcessPortfolioVisualsLatest;
 use App\Jobs\SendEmailJob;
 use App\Models\Activity;
 use App\Models\Agency;
@@ -19,6 +20,7 @@ use App\Models\Job;
 use App\Models\Link;
 use App\Models\User;
 use App\Models\PortfolioCaptureLog;
+use App\Models\PortfolioCaptureQueue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -488,6 +490,66 @@ class UserController extends Controller
             return response()->json(['message' => 'Portfolio Capture Log deleted.'], 200);
         } else {
             return response()->json(['message' => 'Invalid User.'], 401);
+        }
+    }
+
+    public function capturePortfolioSnapshotLatest(Request $request, $uuid)
+    {
+        $wait_seconds = $request->wait_seconds ? $request->wait_seconds : 60;
+        $log = null;
+        $time_diff = 0;
+        $user = User::where('uuid', $uuid)->first();
+
+        if ($user) {
+            /**
+             * Generate portfolio website preview
+             */
+            if ($user->role == 'creative') {
+
+                $log = PortfolioCaptureQueue::where('user_id', $user->id)->first();
+
+                $portfolio_website = $user->portfolio_website_link()->first();
+                if ($portfolio_website) {
+                    $att_query = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview_latest');
+                    $att_rec = $att_query->first();
+
+                    if ($log) {
+
+                        $capture = $att_rec ? getAttachmentBasePath() . $att_rec->path : '';
+                        $checked_at = date('Y-m-d H:i:s', time());
+                        $initiated_at = $log->initiated_at ? $log->initiated_at : $checked_at;
+
+                        $time_diff = strtotime($checked_at) - strtotime($initiated_at); // in seconds
+
+                        $status = strlen($capture) > 0 ? "success" : ($time_diff > $wait_seconds ? "failed" : "pending");
+
+                        $log->update([
+                            'capture' => $capture,
+                            'status' => $status,
+                            'checked_at' => $checked_at
+                        ]);
+                        $log = PortfolioCaptureQueue::where('user_id', $user->id)->first();
+                    } else {
+                        $att_query->delete();
+
+                        ProcessPortfolioVisualsLatest::dispatch($user->id, $portfolio_website->url);
+                        PortfolioCaptureQueue::create([
+                            'user_id' => $user->id,
+                            'url' => $portfolio_website->url,
+                            'capture' => '',
+                            'status' => 'pending',
+                            'initiated_at' => date('Y-m-d H:i:s', time()),
+                            'checked_at' => date('Y-m-d H:i:s', time())
+                        ]);
+
+                        $log = PortfolioCaptureQueue::where('user_id', $user->id)->first();
+                    }
+                }
+            }
+
+            return response()->json(['time_diff' => $time_diff, 'data' => $log], 200);
+        } else {
+            return response()->json(['message' => 'User not found.'], 401);
         }
     }
 }
