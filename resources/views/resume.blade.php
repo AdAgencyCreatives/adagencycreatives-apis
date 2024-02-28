@@ -173,7 +173,7 @@
         </div>
         <div>
             <p><strong>Type of Work</strong></p>
-            <p> {{ $data['employment_type'] ?? '' }}</p>
+            <p> {{ implode(",", $data['employment_type']) ?? '' }}</p>
         </div>
     </section>
     <section>
