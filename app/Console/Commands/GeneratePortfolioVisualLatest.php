@@ -22,12 +22,13 @@ class GeneratePortfolioVisualLatest extends Command
 
     protected function configure()
     {
-        $this->addArgument('user_id', InputArgument::OPTIONAL, 'Description of user_id argument');
-        $this->addArgument('url', InputArgument::OPTIONAL, 'Description of url argument');
+        // $this->addArgument('user_id', InputArgument::OPTIONAL, 'Description of user_id argument');
+        // $this->addArgument('url', InputArgument::OPTIONAL, 'Description of url argument');
     }
 
     public function handle()
     {
+
         $user_id = $this->argument('user_id');
         $url = $this->argument('url');
 
