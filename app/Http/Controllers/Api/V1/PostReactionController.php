@@ -16,8 +16,6 @@ class PostReactionController extends Controller
 {
     public function index(Request $request)
     {
-        $single = $request->single;
-
         $query = QueryBuilder::for(PostReaction::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
@@ -26,16 +24,12 @@ class PostReactionController extends Controller
             ])
             ->allowedSorts('created_at', 'updated_at');
 
-        if (isset($single) && $single == "yes") {
-            $reactions = $query->orderByDesc('updated_at')->groupBy('user_id')->distinct()->get();
+        if ($request->per_page == -1) {
+            // Fetch all records
+            $reactions = $query->orderByDesc('updated_at')->get();
         } else {
-            if ($request->per_page == -1) {
-                // Fetch all records
-                $reactions = $query->get();
-            } else {
-                // Paginate the results
-                $reactions = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
-            }
+            // Paginate the results
+            $reactions = $query->orderByDesc('updated_at')->paginate($request->per_page ?? config('global.request.pagination_limit'));
         }
 
         return new PostReactionCollection($reactions);
