@@ -233,18 +233,29 @@ class ChatController extends Controller
         ]);
     }
 
+    public function getSql($query)
+    {
+        $sql = $query->toSql();
+        foreach ($query->getBindings() as $binding) {
+            $value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+        return $sql;
+    }
+
     public function deleteConversation(Request $request)
     {
         $query = QueryBuilder::for(Message::class);
         $message_type = explode(',', $request->message_type);
         // $message_type = join(',', array_fill(0, count($message_type), '?'));
-        $message_type = "'". join("','", $message_type) . "'";
+        $message_type = "'" . join("','", $message_type) . "'";
 
         $query->whereRaw(
             "type IN (?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
             [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
         );
 
-        return response()->json($query->toSQL());
+        return response()->json($this->getSql($query));
     }
+
 }
