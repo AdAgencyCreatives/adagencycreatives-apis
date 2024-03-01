@@ -24,10 +24,10 @@ class PostReactionController extends Controller
                 AllowedFilter::scope('post_id'),
                 'type',
             ])
-            ->allowedSorts('created_at');
+            ->allowedSorts('created_at', 'updated_at');
 
         if (isset($single) && $single == "yes") {
-            $reactions = $query->orderByDesc('updated_at')->take(1)->get();
+            $reactions = $query->orderByDesc('updated_at')->distinct('user_id')->get();
         } else {
             if ($request->per_page == -1) {
                 // Fetch all records
