@@ -27,7 +27,7 @@ class PostReactionController extends Controller
             ->allowedSorts('created_at', 'updated_at');
 
         if (isset($single) && $single == "yes") {
-            $reactions = $query->groupBy('user_id')->orderByDesc('updated_at')->distinct()->get();
+            $reactions = $query->orderByDesc('updated_at')->groupBy('user_id')->distinct()->get();
         } else {
             if ($request->per_page == -1) {
                 // Fetch all records
