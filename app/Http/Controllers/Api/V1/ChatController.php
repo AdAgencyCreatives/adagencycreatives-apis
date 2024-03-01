@@ -245,6 +245,6 @@ class ChatController extends Controller
             [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
         );
 
-        return response()->json($query->delete());
+        return response()->json($query->get());
     }
 }
