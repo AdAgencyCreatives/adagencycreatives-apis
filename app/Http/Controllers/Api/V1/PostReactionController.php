@@ -41,14 +41,28 @@ class PostReactionController extends Controller
         $post = Post::where('uuid', $request->post_id)->first();
         $type = $request->type;
 
-        // Delete all existing reactions of the user on the same post
-        PostReaction::withTrashed()
+        // Find all existing reactions of the user on the same post
+        $existingReaction = PostReaction::withTrashed()
             ->where('user_id', $user->id)
             ->where('post_id', $post->id)
             ->where('type', $type)
-            ->forceDelete();
+            ->first();
 
-        // Create a new reaction
+        if ($existingReaction) {
+            // User has already reacted
+
+            if ($existingReaction->trashed()) {
+                // If the reaction is soft-deleted, restore it
+                $existingReaction->restore();
+            } else {
+                // If the user is clicking the same reaction type again, soft delete it
+                $existingReaction->delete();
+            }
+
+            return response()->json(['message' => 'Reaction updated successfully']);
+        }
+
+        // User has not reacted yet, create a new reaction
         PostReaction::create([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
