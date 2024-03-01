@@ -248,10 +248,10 @@ class ChatController extends Controller
         $query = QueryBuilder::for(Message::class);
         $message_type = explode(',', $request->message_type);
         // $message_type = join(',', array_fill(0, count($message_type), '?'));
-        $message_type = "(type='" . join("' OR type='", $message_type) . ")";
+        $message_type = join("' OR type='", $message_type);
 
         $query->whereRaw(
-            "? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
+            "(type=?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
             [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
         );
 
