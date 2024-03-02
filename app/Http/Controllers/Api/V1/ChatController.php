@@ -17,7 +17,6 @@ use Illuminate\Support\Str;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -246,21 +245,20 @@ class ChatController extends Controller
 
     public function deleteConversation(Request $request)
     {
-        // $query = QueryBuilder::for(Message::class);
-        $message_type = explode(',', $request->message_type);
-        // $message_type = join(',', array_fill(0, count($message_type), '?'));
-        $message_type = join("' OR type='", $message_type);
+        $message_types = explode(',', $request->message_type);
+        $counts = 0;
 
-        // $query->whereRaw(
-        //     "(type=?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
-        //     [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
-        // );
+        foreach($message_types as $message_type) {
+            $query = QueryBuilder::for(Message::class);
+            $query->whereRaw(
+                "type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
+                [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
+            );
+            $counts = $counts + $query->delete();
+        }
 
         // return response()->json($this->getSql($query));
-        return response()->json(DB::delete(
-            "DELETE FROM messages WHERE (type=?) AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
-            [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
-        ));
+        return response()->json($counts);
     }
 
 }
