@@ -16,7 +16,8 @@ class Message extends Model
         'message',
         'type',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'edited_at'
     ];
 
     public function sender()
