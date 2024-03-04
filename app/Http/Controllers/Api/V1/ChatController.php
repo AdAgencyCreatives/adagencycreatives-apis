@@ -108,7 +108,10 @@ class ChatController extends Controller
         try {
             $message = Message::findOrFail($id);
             // Only update the message content
-            $message->update(['message' => $request->message]);
+            $message->update([
+                'message' => $request->message,
+                'edited_at' => now()
+            ]);
 
             return new MessageResource($message);
         } catch (\Exception $e) {
