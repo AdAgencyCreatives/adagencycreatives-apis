@@ -79,6 +79,7 @@ class ChatController extends Controller
                 'updated_at' => now(),
                 'human_readable_date' => now()->diffForHumans(),
             ];
+
             $request->merge([
                 'uuid' => Str::uuid(),
                 'sender_id' => $sender->id,
@@ -86,12 +87,20 @@ class ChatController extends Controller
                 'message' => $request->message,
             ]);
 
+            $update_data = ['read_at' => now()];
+
+            $edited_at = now();
+            if(isset($request->edited) && $request->edited) {
+                $event_data['edited_at'] = $edited_at;
+                $update_data['edited_at'] = $edited_at;
+            }
+
             //Mark previous messages as read
             Message::where('type', $type)
                 ->where('receiver_id', $sender->id) // Only those messages in which I am receiver,
                 ->where('sender_id', $receiver->id)
                 ->whereNull('read_at')
-                ->update(['read_at' => now()]);
+                ->update($update_data);
 
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message, $sender->uuid);
