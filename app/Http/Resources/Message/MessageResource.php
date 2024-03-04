@@ -23,6 +23,7 @@ class MessageResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'human_readable_date' => $this->created_at->diffForHumans(),
+            'edited_at' => $this->edited_at
         ];
     }
 
