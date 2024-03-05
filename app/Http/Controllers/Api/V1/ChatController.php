@@ -68,6 +68,19 @@ class ChatController extends Controller
             $receiver = User::where('uuid', $request->receiver_id)->first();
             $type = $request->type ?? 'private';
 
+            $event_data = [
+                'sender_id' => $request->sender_id,
+                'receiver_id' => $request->receiver_id,
+                'message' => $sender->full_name . ' sent a message',
+                'type' => $type,
+                'message_type' => 'conversation_updated',
+                'user_name' => $sender->full_name,
+                'read_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'human_readable_date' => now()->diffForHumans(),
+            ];
+
             $request->merge([
                 'uuid' => Str::uuid(),
                 'sender_id' => $sender->id,
@@ -76,6 +89,7 @@ class ChatController extends Controller
             ]);
 
             $update_data = ['read_at' => now()];
+
 
             //Mark previous messages as read
             Message::where('type', $type)
@@ -87,13 +101,7 @@ class ChatController extends Controller
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message, $sender->uuid);
 
-            event(new MessageReceived([
-                'sender_id' => $request->sender_id,
-                'receiver_id' => $request->receiver_id,
-                'message' => $sender->full_name . ' sent a message to you',
-                'message_type' => 'conversation_updated',
-                'message_action' => 'message-sent'
-            ]));
+            event(new MessageReceived($event_data));
 
             return $msg_resource;
         } catch (\Exception $e) {
