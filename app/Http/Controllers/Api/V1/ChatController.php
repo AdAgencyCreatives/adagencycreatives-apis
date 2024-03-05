@@ -100,7 +100,7 @@ class ChatController extends Controller
 
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message, $sender->uuid);
-            event(new MessageReceived($event_data));
+            //event(new MessageReceived($event_data));
             event(new ConversationUpdated("New Message"));
 
             return $msg_resource;
