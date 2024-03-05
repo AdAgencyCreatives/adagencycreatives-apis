@@ -78,7 +78,7 @@ class ChatController extends Controller
                 'read_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'human_readable_date' => now()->diffForHumans(),
+                'human_readable_date' => now()->diffForHumans()
             ];
 
             $request->merge([
