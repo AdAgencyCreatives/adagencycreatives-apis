@@ -28,7 +28,7 @@ class ConversationUpdated implements ShouldBroadcast
          * php artisan websockets:serve
          */
         $receiver_id = $this->data['receiver_id'];
-        $channel2 = 'boradcast.'.$receiver_id;
+        $channel2 = 'messanger.'.$receiver_id;
 
         return [$channel2];
         // return new PrivateChannel($channel2); //Channel Name
