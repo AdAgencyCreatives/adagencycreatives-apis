@@ -27,8 +27,8 @@ class MessageReceived implements ShouldBroadcast
          * php artisan queue:serve
          * php artisan websockets:serve
          */
-        $destination_id = $this->data['destination_id'];
-        $channel2 = 'messanger.'.$destination_id;
+        $receiver_id = $this->data['receiver_id'];
+        $channel2 = 'messanger.'.$receiver_id;
 
         return [$channel2];
         // return new PrivateChannel($channel2); //Channel Name

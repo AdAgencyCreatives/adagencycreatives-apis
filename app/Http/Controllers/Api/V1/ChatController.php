@@ -88,21 +88,11 @@ class ChatController extends Controller
             $msg_resource = new MessageResource($message, $sender->uuid);
 
             event(new MessageReceived([
-                'destination_id' => $request->sender_id,
-                'sender_id' => $request->sender_id,
-                'receiver_id' => $request->receiver_id,
-                'message' => 'You sent a message to ' . $receiver->full_name,
-                'message_type' => 'conversation_updated',
-                'message_action' => 'message-sent'
-            ]));
-
-            event(new MessageReceived([
-                'destination_id' => $request->receiver_id,
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
                 'message' => $sender->full_name . ' sent a message to you',
                 'message_type' => 'conversation_updated',
-                'message_action' => 'message-received'
+                'message_action' => 'message-sent'
             ]));
 
             return $msg_resource;
