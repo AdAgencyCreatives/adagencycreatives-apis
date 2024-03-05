@@ -76,6 +76,15 @@ class ChatController extends Controller
                 'message_action' => 'message-received'
             ];
 
+            $event_data2 = [
+                'sender_id' => $request->receiver_id,
+                'receiver_id' => $request->sender_id,
+                'message' => 'You sent a message to ' . $receiver->full_name,
+                'message_type' => 'conversation_updated',
+                'message_action' => 'message-sent'
+            ];
+
+
             $request->merge([
                 'uuid' => Str::uuid(),
                 'sender_id' => $sender->id,
@@ -97,6 +106,7 @@ class ChatController extends Controller
             $msg_resource = new MessageResource($message, $sender->uuid);
 
             event(new MessageReceived($event_data1));
+            event(new MessageReceived($event_data2));
 
             return $msg_resource;
         } catch (\Exception $e) {
