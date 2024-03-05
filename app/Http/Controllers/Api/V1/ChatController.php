@@ -103,7 +103,7 @@ class ChatController extends Controller
             event(new MessageReceived([
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
-                'message' => $request->message,
+                'message' => 'You have received a message from ' . $sender->full_name,
                 'type' => $type,
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-received',
@@ -113,7 +113,7 @@ class ChatController extends Controller
             event(new MessageReceived([
                 'sender_id' => $request->receiver_id,
                 'receiver_id' => $request->sender_id,
-                'message' => $request->message,
+                'message' => 'You have sent a message to ' . $receiver->full_name,
                 'type' => $type,
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-sent',
