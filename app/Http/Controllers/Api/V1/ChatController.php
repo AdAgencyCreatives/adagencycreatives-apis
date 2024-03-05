@@ -100,10 +100,7 @@ class ChatController extends Controller
 
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message, $sender->uuid);
-            // event(new MessageReceived($event_data));
-            // event(new ConversationUpdated(['receiver_id' => $request->sender_id, 'message' => "New Message Sent"]));
-            event(new ConversationUpdated(['receiver_id' => $request->receiver_id, 'message' => "New Message Received"]));
-
+            event(new MessageReceived($event_data));
 
             return $msg_resource;
         } catch (\Exception $e) {
@@ -115,15 +112,17 @@ class ChatController extends Controller
     {
         try {
             $message = Message::findOrFail($id);
-            $sender = User::where('id', $message->sender_id)->firstOrFail();
             $receiver = User::where('id', $message->receiver_id)->firstOrFail();
             // Only update the message content
             $message->update([
                 'message' => $request->message,
                 'edited_at' => now()
             ]);
-            event(new ConversationUpdated(['receiver_id' => $sender->uuid, 'message' => "Message Edited"]));
-            event(new ConversationUpdated(['receiver_id' => $receiver->uuid, 'message' => "Message Updated"]));
+            event(new MessageReceived([
+                'receiver_id' => $receiver->uuid,
+                'message' => "Message Updated",
+                'message_type' => 'conversation_updated'
+            ]));
 
             return new MessageResource($message);
         } catch (\Exception $e) {
@@ -135,12 +134,14 @@ class ChatController extends Controller
     {
         try {
             $message = Message::where('id', $id)->firstOrFail();
-            $sender = User::where('id', $message->sender_id)->firstOrFail();
             $receiver = User::where('id', $message->receiver_id)->firstOrFail();
             $message->delete();
 
-            event(new ConversationUpdated(['receiver_id' => $sender->uuid, 'message' => "Message Deleted"]));
-            event(new ConversationUpdated(['receiver_id' => $receiver->uuid, 'message' => "Message Deleted"]));
+            event(new MessageReceived([
+                'receiver_id' => $receiver->uuid,
+                'message' => "Message Deleted",
+                'message_type' => 'conversation_updated'
+            ]));
 
             return new MessageResource($message);
         } catch (\Exception $exception) {
@@ -265,6 +266,7 @@ class ChatController extends Controller
 
     public function deleteConversation(Request $request)
     {
+        $user = $request->user();
         $message_types = explode(',', $request->message_type);
         $counts = 0;
 
@@ -278,8 +280,11 @@ class ChatController extends Controller
         }
 
         if ($counts > 0) {
-            event(new ConversationUpdated(['receiver_id' => $request->user1, 'message' => "Conversation Deleted"]));
-            event(new ConversationUpdated(['receiver_id' => $request->user2, 'message' => "Conversation Deleted"]));
+            event(new MessageReceived([
+                'receiver_id' => $user->uuid == $request->user1 ? $request->user2 : $request->user1,
+                'message' => "Conversation Deleted",
+                'message_type' => 'conversation_updated'
+            ]));
         }
 
         // return response()->json($this->getSql($query));
