@@ -303,9 +303,27 @@ class ChatController extends Controller
 
     public function deleteConversation(Request $request)
     {
-        $user = $request->user();
         $message_types = explode(',', $request->message_type);
         $counts = 0;
+
+        $sender = User::where('id', $request->user1)->firstOrFail();
+        $receiver = User::where('id', $request->user2)->firstOrFail();
+
+        $event_data1 = [
+            'sender_id' => $sender->uuid,
+            'receiver_id' => $receiver->uuid,
+            'message' => 'Conversation with ' . $sender->full_name . ' is deleted',
+            'message_type' => 'conversation_updated',
+            'message_action' => 'conversation-deleted'
+        ];
+
+        $event_data2 = [
+            'sender_id' => $receiver->uuid,
+            'receiver_id' => $sender->uuid,
+            'message' => 'Conversation with ' . $receiver->full_name . ' is deleted',
+            'message_type' => 'conversation_updated',
+            'message_action' => 'conversation-deleted'
+        ];
 
         foreach ($message_types as $message_type) {
             $query = QueryBuilder::for(Message::class);
@@ -317,11 +335,8 @@ class ChatController extends Controller
         }
 
         if ($counts > 0) {
-            event(new MessageReceived([
-                'receiver_id' => $user->uuid == $request->user1 ? $request->user2 : $request->user1,
-                'message' => "Conversation Deleted",
-                'message_type' => 'conversation_updated'
-            ]));
+            event(new MessageReceived($event_data1));
+            event(new MessageReceived($event_data2));
         }
 
         // return response()->json($this->getSql($query));
