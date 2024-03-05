@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Events\MessageReceived;
+use App\Events\ConversationUpdated;
 use App\Exceptions\ApiException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
@@ -89,11 +90,6 @@ class ChatController extends Controller
 
             $update_data = ['read_at' => now()];
 
-            $edited_at = now();
-            if(isset($request->edited) && $request->edited) {
-                $event_data['edited_at'] = $edited_at;
-                $update_data['edited_at'] = $edited_at;
-            }
 
             //Mark previous messages as read
             Message::where('type', $type)
@@ -105,6 +101,7 @@ class ChatController extends Controller
             $message = Message::create($request->all());
             $msg_resource = new MessageResource($message, $sender->uuid);
             event(new MessageReceived($event_data));
+            event(new ConversationUpdated("New Message"));
 
             return $msg_resource;
         } catch (\Exception $e) {
@@ -121,6 +118,7 @@ class ChatController extends Controller
                 'message' => $request->message,
                 'edited_at' => now()
             ]);
+            event(new ConversationUpdated("Message Edited"));
 
             return new MessageResource($message);
         } catch (\Exception $e) {
@@ -133,6 +131,7 @@ class ChatController extends Controller
         try {
             $message = Message::where('id', $id)->firstOrFail();
             $message->delete();
+            event(new ConversationUpdated("Message Deleted"));
 
             return new MessageResource($message);
         } catch (\Exception $exception) {
@@ -267,6 +266,10 @@ class ChatController extends Controller
                 [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
             );
             $counts = $counts + $query->delete();
+        }
+
+        if($counts > 0) {
+            event(new ConversationUpdated("Conversation Deleted"));
         }
 
         // return response()->json($this->getSql($query));
