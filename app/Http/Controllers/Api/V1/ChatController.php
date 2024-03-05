@@ -73,7 +73,7 @@ class ChatController extends Controller
                 'receiver_id' => $request->receiver_id,
                 'message' => $sender->full_name . ' sent a message to you',
                 'message_type' => 'conversation_updated',
-                'message_action'=>'message-received'
+                'message_action' => 'message-received'
             ];
 
             $request->merge([
