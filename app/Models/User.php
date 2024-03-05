@@ -41,6 +41,9 @@ class User extends Authenticatable
         'is_visible',
     ];
 
+    protected $appends = array('full_name');
+
+
     // public function getRouteKeyName()
     // {
     //     return 'uuid';
