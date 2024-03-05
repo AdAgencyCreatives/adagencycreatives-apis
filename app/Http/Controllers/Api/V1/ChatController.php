@@ -71,9 +71,9 @@ class ChatController extends Controller
             $event_data = [
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
-                'message' => $sender->full_name . ' sent a message' . $request->message,
+                'message' => $sender->full_name . ' sent a message: <br />' . $request->message,
                 'type' => $type,
-                'message_type' => 'received',
+                'message_type' => 'conversation_updated',
                 'user_name' => $sender->full_name,
                 'read_at' => null,
                 'created_at' => now(),
