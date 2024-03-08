@@ -22,8 +22,7 @@ class PostReactionController extends Controller
                 AllowedFilter::scope('post_id'),
                 'type',
             ])
-            ->allowedSorts('created_at', 'updated_at')
-            ->has('user');
+            ->allowedSorts('created_at', 'updated_at');
 
         if ($request->per_page == -1) {
             // Fetch all records
