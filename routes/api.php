@@ -218,6 +218,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('activities/count', [ActivityController::class, 'count']);
     Route::apiResource('activities', ActivityController::class);
     Route::post('delete-conversation', [ChatController::class, 'deleteConversation']);
+    Route::post('delete-single', [ChatController::class, 'deleteSingle']);
     /**
      * SEO
      */

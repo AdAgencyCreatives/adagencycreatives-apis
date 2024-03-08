@@ -186,6 +186,44 @@ class ChatController extends Controller
         }
     }
 
+    public function deleteSingle(Request $request)
+    {
+        return response()->json($request->user());
+
+        $id = $request->id;
+        try {
+            $message = Message::where('id', $id)->firstOrFail();
+            $sender = User::where('id', $message->sender_id)->firstOrFail();
+            $receiver = User::where('id', $message->receiver_id)->firstOrFail();
+
+            $event_data1 = [
+                'sender_id' => $sender->uuid,
+                'receiver_id' => $receiver->uuid,
+                'message' => $sender->full_name . ' deleted a message sent to you',
+                'message_type' => 'conversation_updated',
+                'message_action' => 'message-deleted'
+            ];
+
+            $event_data2 = [
+                'sender_id' => $receiver->uuid,
+                'receiver_id' => $sender->uuid,
+                'message' => 'You deleted a message sent to ' . $receiver->full_name,
+                'message_type' => 'conversation_updated',
+                'message_action' => 'message-deleted'
+            ];
+
+            $message->update([
+            ]);
+
+            event(new MessageReceived($event_data1));
+            event(new MessageReceived($event_data2));
+
+            return new MessageResource($message);
+        } catch (\Exception $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
     public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
         $userId = request()->user()->id;
