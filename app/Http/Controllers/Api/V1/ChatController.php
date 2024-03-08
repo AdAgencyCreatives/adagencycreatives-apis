@@ -186,11 +186,10 @@ class ChatController extends Controller
         }
     }
 
-    public function deleteSingle(Request $request)
+    public function deleteSingleMessage(Request $request, $id)
     {
-        return response()->json($request->user());
+        return response()->json($id);
 
-        $id = $request->id;
         try {
             $message = Message::where('id', $id)->firstOrFail();
             $sender = User::where('id', $message->sender_id)->firstOrFail();
