@@ -17,13 +17,13 @@ class PostReactionController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(PostReaction::class)
-            ->with('user')
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
                 'type',
             ])
-            ->allowedSorts('created_at', 'updated_at');
+            ->allowedSorts('created_at', 'updated_at')
+            ->has('user');
 
         if ($request->per_page == -1) {
             // Fetch all records
