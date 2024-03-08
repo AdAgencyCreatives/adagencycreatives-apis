@@ -25,11 +25,6 @@ class PostReaction extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function username() {
-        return "custom-username";
-    }
-
     public function post()
     {
         return $this->belongsTo(Post::class);
