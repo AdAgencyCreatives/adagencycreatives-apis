@@ -17,6 +17,7 @@ class PostReactionController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(PostReaction::class)
+            ->with('user')
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
                 AllowedFilter::scope('post_id'),
