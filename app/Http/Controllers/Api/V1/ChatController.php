@@ -387,17 +387,32 @@ class ChatController extends Controller
         ];
 
         foreach ($message_types as $message_type) {
-            $query1 = QueryBuilder::for(Message::class);
-            $query1->whereRaw(
-                "type=? AND (sender_id=? and receiver_id=?)",
-                [$message_type, $request->user1, $request->user2]
-            );
+            if ($is_user1) {
+                $query1 = QueryBuilder::for(Message::class);
+                $query1->whereRaw(
+                    "type=? AND (sender_id=? and receiver_id=?)",
+                    [$message_type, $request->user1, $request->user2]
+                );
 
-            $query2 = QueryBuilder::for(Message::class);
-            $query2->whereRaw(
-                "type=? AND (sender_id=? and receiver_id=?)",
-                [$message_type, $request->user2, $request->user1]
-            );
+                $query2 = QueryBuilder::for(Message::class);
+                $query2->whereRaw(
+                    "type=? AND (sender_id=? and receiver_id=?)",
+                    [$message_type, $request->user2, $request->user1]
+                );
+            } else {
+                $query2 = QueryBuilder::for(Message::class);
+                $query2->whereRaw(
+                    "type=? AND (sender_id=? and receiver_id=?)",
+                    [$message_type, $request->user1, $request->user2]
+                );
+
+                $query1 = QueryBuilder::for(Message::class);
+                $query1->whereRaw(
+                    "type=? AND (sender_id=? and receiver_id=?)",
+                    [$message_type, $request->user2, $request->user1]
+                );
+            }
+
 
             $counts = $counts + $query1->update([
                 'sender_conversation_deleted_at' => now()
