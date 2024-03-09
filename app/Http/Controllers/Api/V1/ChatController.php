@@ -362,57 +362,56 @@ class ChatController extends Controller
         $message_types = explode(',', $request->message_type);
         $counts = 0;
 
-        $sender = User::where('id', $request->user1)->firstOrFail();
-        $receiver = User::where('id', $request->user2)->firstOrFail();
+        $user1 = User::where('id', $request->user1)->firstOrFail();
+        $user2 = User::where('id', $request->user2)->firstOrFail();
 
-        $is_sender = $auth_user->id == $sender->id;
-        $is_receiver = $auth_user->id == $receiver->id;
+        $is_user1 = $auth_user->id == $user1->id;
+        $is_user2 = $auth_user->id == $user2->id;
 
         $event_data1 = [
-            'receiver_id' => $sender->uuid,
-            'message_sender_id' => $sender->uuid,
-            'message_receiver_id' => $receiver->uuid,
+            'receiver_id' => $user1->uuid,
+            'message_sender_id' => $user1->uuid,
+            'message_receiver_id' => $user2->uuid,
             'message' => 'You deleted a conversation',
             'message_type' => 'conversation_updated',
             'message_action' => 'conversation-deleted'
         ];
 
         $event_data2 = [
-            'receiver_id' => $receiver->uuid,
-            'message_sender_id' => $sender->uuid,
-            'message_receiver_id' => $receiver->uuid,
+            'receiver_id' => $user2->uuid,
+            'message_sender_id' => $user1->uuid,
+            'message_receiver_id' => $user2->uuid,
             'message' => 'You deleted a conversation',
             'message_type' => 'conversation_updated',
             'message_action' => 'conversation-deleted'
         ];
 
         foreach ($message_types as $message_type) {
-            $query = QueryBuilder::for(Message::class);
-            $query->whereRaw(
-                "type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
-                [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
+            $query1 = QueryBuilder::for(Message::class);
+            $query1->whereRaw(
+                "type=? AND (sender_id=? and receiver_id=?)",
+                [$message_type, $request->user1, $request->user2]
             );
 
-            if ($is_sender) {
-                $counts = $counts + $query->update([
-                    'sender_conversation_deleted_at' => now()
-                ]);
-            }
+            $query2 = QueryBuilder::for(Message::class);
+            $query2->whereRaw(
+                "type=? AND (sender_id=? and receiver_id=?)",
+                [$message_type, $request->user2, $request->user1]
+            );
 
-            if ($is_receiver) {
-                $counts = $counts + $query->update([
-                    'receiver_conversation_deleted_at' => now()
-                ]);
-            }
-
-            $counts = $counts + $query->update([]);
+            $counts = $counts + $query1->update([
+                'sender_conversation_deleted_at' => now()
+            ]);
+            $counts = $counts + $query2->update([
+                'receiver_conversation_deleted_at' => now()
+            ]);
         }
 
         if ($counts > 0) {
-            if ($is_sender) {
+            if ($is_user1) {
                 event(new MessageReceived($event_data1));
             }
-            if ($is_receiver) {
+            if ($is_user2) {
                 event(new MessageReceived($event_data2));
             }
         }
