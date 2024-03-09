@@ -23,7 +23,11 @@ class MessageResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'human_readable_date' => $this->created_at->diffForHumans(),
-            'edited_at' => $this->edited_at
+            'edited_at' => $this->edited_at,
+            'sender_deleted_at' => $this->sender_deleted_at,
+            'receiver_deleted_at' => $this->receiver_deleted_at,
+            'sender_conversation_deleted_at' => $this->sender_conversation_deleted_at,
+            'receiver_conversation_deleted_at' => $this->receiver_conversation_deleted_at,
         ];
     }
 
