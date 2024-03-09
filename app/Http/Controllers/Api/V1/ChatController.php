@@ -202,16 +202,18 @@ class ChatController extends Controller
             $is_receiver = $auth_user->id == $receiver->id;
 
             $event_data1 = [
-                'sender_id' => $sender->uuid,
-                'receiver_id' => $receiver->uuid,
+                'receiver_id' => $sender->uuid,
+                'message_sender_id' => $sender->uuid,
+                'message_receiver_id' => $receiver->uuid,
                 'message' => 'You deleted a message',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
 
             $event_data2 = [
-                'sender_id' => $receiver->uuid,
-                'receiver_id' => $sender->uuid,
+                'receiver_id' => $receiver->uuid,
+                'message_sender_id' => $sender->uuid,
+                'message_receiver_id' => $receiver->uuid,
                 'message' => 'You deleted a message',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
