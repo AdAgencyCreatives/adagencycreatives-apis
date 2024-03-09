@@ -255,6 +255,7 @@ class ChatController extends Controller
                 $query->where('receiver_id', $userId)
                     ->whereNull('receiver_conversation_deleted_at');
             });
+        });
 
         $types = [];
         // Add the dynamic type condition if provided in the request
