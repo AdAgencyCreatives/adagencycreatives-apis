@@ -31,10 +31,12 @@ class ChatController extends Controller
         $messages = Message::where(function ($query) use ($userId, $contactId) {
             $query->where(function ($query) use ($userId, $contactId) {
                 $query->where('sender_id', $userId)
-                    ->where('receiver_id', $contactId);
+                    ->where('receiver_id', $contactId)
+                    ->whereNull('sender_conversation_deleted_at');
             })->orWhere(function ($query) use ($userId, $contactId) {
                 $query->where('sender_id', $contactId)
-                    ->where('receiver_id', $userId);
+                    ->where('receiver_id', $userId)
+                    ->whereNull('receiver_conversation_deleted_at');
             });
         });
 
