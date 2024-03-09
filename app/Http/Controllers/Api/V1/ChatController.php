@@ -358,24 +358,30 @@ class ChatController extends Controller
 
     public function deleteConversation(Request $request)
     {
+        $auth_user = $request->user();
         $message_types = explode(',', $request->message_type);
         $counts = 0;
 
         $sender = User::where('id', $request->user1)->firstOrFail();
         $receiver = User::where('id', $request->user2)->firstOrFail();
 
+        $is_sender = $auth_user->id == $sender->id;
+        $is_receiver = $auth_user->id == $receiver->id;
+
         $event_data1 = [
-            'sender_id' => $sender->uuid,
-            'receiver_id' => $receiver->uuid,
-            'message' => 'Conversation with ' . $sender->full_name . ' is deleted',
+            'receiver_id' => $sender->uuid,
+            'message_sender_id' => $sender->uuid,
+            'message_receiver_id' => $receiver->uuid,
+            'message' => 'You deleted a conversation',
             'message_type' => 'conversation_updated',
             'message_action' => 'conversation-deleted'
         ];
 
         $event_data2 = [
-            'sender_id' => $receiver->uuid,
-            'receiver_id' => $sender->uuid,
-            'message' => 'Conversation with ' . $receiver->full_name . ' is deleted',
+            'receiver_id' => $receiver->uuid,
+            'message_sender_id' => $sender->uuid,
+            'message_receiver_id' => $receiver->uuid,
+            'message' => 'You deleted a conversation',
             'message_type' => 'conversation_updated',
             'message_action' => 'conversation-deleted'
         ];
@@ -386,12 +392,29 @@ class ChatController extends Controller
                 "type=? AND ((sender_id=? and receiver_id=?) OR (sender_id=? and receiver_id=?))",
                 [$message_type, $request->user1, $request->user2, $request->user2, $request->user1]
             );
-            $counts = $counts + $query->delete();
+
+            if ($is_sender) {
+                $counts = $counts + $query->update([
+                    'sender_conversation_deleted_at' => now()
+                ]);
+            }
+
+            if ($is_receiver) {
+                $counts = $counts + $query->update([
+                    'receiver_conversation_deleted_at' => now()
+                ]);
+            }
+
+            $counts = $counts + $query->update([]);
         }
 
         if ($counts > 0) {
-            event(new MessageReceived($event_data1));
-            event(new MessageReceived($event_data2));
+            if ($is_sender) {
+                event(new MessageReceived($event_data1));
+            }
+            if ($is_receiver) {
+                event(new MessageReceived($event_data2));
+            }
         }
 
         // return response()->json($this->getSql($query));
