@@ -247,7 +247,7 @@ class ChatController extends Controller
     {
         $userId = request()->user()->id;
 
-        $contacts = Message::with('sender', 'receiver');
+        $contacts = Message::with('sender', 'receiver')->whereNull('sender_conversation_deleted_at')->whereNull('receiver_conversation_deleted_at');
 
         $types = [];
         // Add the dynamic type condition if provided in the request
