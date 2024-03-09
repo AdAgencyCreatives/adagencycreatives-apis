@@ -69,17 +69,19 @@ class ChatController extends Controller
             $type = $request->type ?? 'private';
 
             $event_data1 = [
-                'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
-                'message' => $sender->full_name . ' sent a message to you',
+                'message_sender_id' => $request->sender_id,
+                'message_receiver_id' => $request->receiver_id,
+                'message' => $sender->username . ' sent a message to you',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-received'
             ];
 
             $event_data2 = [
-                'sender_id' => $request->receiver_id,
                 'receiver_id' => $request->sender_id,
-                'message' => 'You sent a message to ' . $receiver->full_name,
+                'message_sender_id' => $request->sender_id,
+                'message_receiver_id' => $request->receiver_id,
+                'message' => 'You sent a message to ' . $receiver->username,
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-sent'
             ];
@@ -122,17 +124,19 @@ class ChatController extends Controller
             $receiver = User::where('id', $message->receiver_id)->firstOrFail();
 
             $event_data1 = [
-                'sender_id' => $sender->uuid,
                 'receiver_id' => $receiver->uuid,
-                'message' => $sender->full_name . ' updated a message sent to you',
+                'message_sender_id' => $sender->uuid,
+                'message_receiver_id' => $receiver->uuid,
+                'message' => $sender->username . ' updated a message sent to you',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-updated'
             ];
 
             $event_data2 = [
-                'sender_id' => $receiver->uuid,
                 'receiver_id' => $sender->uuid,
-                'message' => 'You edited a message sent to ' . $receiver->full_name,
+                'message_sender_id' => $sender->uuid,
+                'message_receiver_id' => $receiver->uuid,
+                'message' => 'You edited a message sent to ' . $receiver->username,
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-edited'
             ];
@@ -162,7 +166,7 @@ class ChatController extends Controller
             $event_data1 = [
                 'sender_id' => $sender->uuid,
                 'receiver_id' => $receiver->uuid,
-                'message' => $sender->full_name . ' deleted a message sent to you',
+                'message' => $sender->username . ' deleted a message sent to you',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
@@ -170,7 +174,7 @@ class ChatController extends Controller
             $event_data2 = [
                 'sender_id' => $receiver->uuid,
                 'receiver_id' => $sender->uuid,
-                'message' => 'You deleted a message sent to ' . $receiver->full_name,
+                'message' => 'You deleted a message sent to ' . $receiver->username,
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
@@ -188,17 +192,19 @@ class ChatController extends Controller
 
     public function deleteSingleMessage(Request $request, $id)
     {
-        return response()->json($id);
-
         try {
+            $auth_user = $request->user();
             $message = Message::where('id', $id)->firstOrFail();
             $sender = User::where('id', $message->sender_id)->firstOrFail();
             $receiver = User::where('id', $message->receiver_id)->firstOrFail();
 
+            $is_sender = $auth_user->id == $sender->id;
+            $is_receiver = $auth_user->id == $receiver->id;
+
             $event_data1 = [
                 'sender_id' => $sender->uuid,
                 'receiver_id' => $receiver->uuid,
-                'message' => $sender->full_name . ' deleted a message sent to you',
+                'message' => 'You deleted a message',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
@@ -206,16 +212,26 @@ class ChatController extends Controller
             $event_data2 = [
                 'sender_id' => $receiver->uuid,
                 'receiver_id' => $sender->uuid,
-                'message' => 'You deleted a message sent to ' . $receiver->full_name,
+                'message' => 'You deleted a message',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
 
-            $message->update([
-            ]);
+            if ($is_sender) {
+                $message->update([
+                    'sender_deleted_at' => now()
+                ]);
+                event(new MessageReceived($event_data1));
+            }
 
-            event(new MessageReceived($event_data1));
-            event(new MessageReceived($event_data2));
+            if ($is_receiver) {
+                $message->update([
+                    'receiver_deleted_at' => now()
+                ]);
+                event(new MessageReceived($event_data2));
+            }
+
+            $message = Message::where('id', $id)->firstOrFail();
 
             return new MessageResource($message);
         } catch (\Exception $exception) {
