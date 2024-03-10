@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Attachment;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -26,7 +27,13 @@ class GeneratePortfolioVisualLatest extends Command
         // $this->addArgument('url', InputArgument::OPTIONAL, 'Description of url argument');
     }
 
-    public function handle()
+    public function handle() {
+        $rawSQL = "INSERT INTO portfolio_capture_queue (user_id, url) SELECT u.id, l.url FROM users u INNER JOIN links l ON l.user_id = u.id WHERE u.role = 4 AND l.label = 'portfolio' AND u.id NOT IN (SELECT pcq.user_id FROM portfolio_capture_queue pcq);";
+        DB::statement($rawSQL);
+        $this->info("Latest Visual Request Executed: " . now());
+    }
+
+    public function handleOld()
     {
 
         $user_id = $this->argument('user_id');
