@@ -26,7 +26,7 @@ class JobAlertController extends Controller
                 ]
             );
 
-        $alerts = $query->get();
+        $alerts = $query->get()->sortBy('category.name');
 
         if (!empty($alerts) &&  $alerts->count() > 0) {
             return new JobAlertCollection($alerts);
