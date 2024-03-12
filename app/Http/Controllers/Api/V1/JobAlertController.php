@@ -50,7 +50,7 @@ class JobAlertController extends Controller
 
             $sync = $user->alert_categories()->sync($sync ?? []);
 
-            $alerts = JobAlert::whereUserId($user->id)->whereIn('category_id', $category_ids)->get();
+            $alerts = JobAlert::whereUserId($user->id)->whereIn('category_id', $category_ids)->get()->sortBy('category.name');
 
             return ApiResponse::success(new JobAlertCollection($alerts), 200);
         } catch (\Exception $e) {
@@ -63,7 +63,7 @@ class JobAlertController extends Controller
         try {
             $alert = JobAlert::where('uuid', $uuid)->first();
             $alert->update(['status' => $request->status]);
-            $alerts = JobAlert::whereUserId($alert->user_id)->get();
+            $alerts = JobAlert::whereUserId($alert->user_id)->get()->sortBy('category.name');
             return new JobAlertCollection($alerts);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
