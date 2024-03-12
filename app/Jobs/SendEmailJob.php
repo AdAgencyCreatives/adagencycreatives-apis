@@ -77,7 +77,9 @@ class SendEmailJob implements ShouldQueue
 
             'application_submitted',
 
-            'hire-an-advisor-job-completed'
+            'hire-an-advisor-job-completed',
+
+            'job_approved_alert_all_subscribers'
 
         ];
 
