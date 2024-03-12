@@ -15,8 +15,10 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $user->full_name }},</span>
 
-                        <p>We have a good news. You have requested job alert notifications for category
-                            "{{ $data['category'] }}".</p>
+                        <p>We are writing to keep you informed of opportunities you might find interesting for yourself
+                            or a friend.</p>
+                        <p>If you want to update this feature, simply go to your Dashboard and Job Alerts.</p>
+                        
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">Job Details</h4>
                         <div><b>Job Title: </b>{{ $data['title'] }}</div>
                         <div><b>Job URL: </b>

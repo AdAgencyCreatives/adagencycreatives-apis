@@ -22,7 +22,8 @@ class JobPostedApprovedAlertAllSubscribers extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('New Job Posted in "%s" category', $this->data['category'], $this->data['APP_NAME']),
+            // subject: sprintf('New Job Posted in "%s" category', $this->data['category'], $this->data['APP_NAME']),
+            subject: sprintf('New Job Opportunity'),
         );
     }
 
