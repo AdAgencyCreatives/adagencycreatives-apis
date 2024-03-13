@@ -36,6 +36,6 @@ class MessageReceived implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'private_msg'; //Event Name
+        return 'private_msg4'; //Event Name
     }
 }
