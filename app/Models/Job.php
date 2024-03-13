@@ -132,7 +132,7 @@ class Job extends Model
     public function scopeUserId(Builder $query, $user_id): Builder
     {
         $user = User::where('uuid', $user_id)->first(); //this is user_id of logged_in user
-        if(!$user) {
+        if (!$user) {
             return $query->where('user_id', 0);
         }
 
@@ -141,13 +141,12 @@ class Job extends Model
         //     return  $query->whereNull('advisor_id')->where('user_id', $user->id);
         // }
 
-        if(in_array($user->role, ['advisor', 'recruiter'])) {
+        if (in_array($user->role, ['advisor', 'recruiter'])) {
 
             return $query->where('advisor_id', $user->id)->orWhere('user_id', $user->id);
-
         }
 
-        if(in_array($user->role, ['advisor', 'recruiter'])) {
+        if (in_array($user->role, ['advisor', 'recruiter'])) {
             return $query->where('advisor_id', $user->id);
         }
         return $query->where('user_id', $user->id);
@@ -266,7 +265,7 @@ class Job extends Model
 
 
         static::created(function ($job) {
-            if (! App::runningInConsole()) {
+            if (!App::runningInConsole()) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('featured_cities');
             }
@@ -283,7 +282,6 @@ class Job extends Model
                 $job->seo_description = settings('job_description');
                 $job->save();
             }
-
         });
 
         static::updating(function ($job) {
@@ -301,26 +299,26 @@ class Job extends Model
                         'title' => $job->title ?? '',
                         'url' => $job_url,
                         'agency' => $agency->name ?? '',
-                       'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
                 ];
 
                 create_notification($job->user_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
-                if($job->advisor_id) {
+                if ($job->advisor_id) {
                     create_notification($job->advisor_id, sprintf('Job: %s approved.', $job->title)); //Send notification to agency about job approval
                 }
 
-                foreach($categorySubscribers as $creative) {
+                foreach ($categorySubscribers as $creative) {
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
 
 
                 /**
-                * Send Notification to Admin about new job
-                */
+                 * Send Notification to Admin about new job
+                 */
 
                 $data = [
                     'data' => [
@@ -336,7 +334,7 @@ class Job extends Model
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
 
-                if(in_array($author->role, ['advisor', 'recruiter'])){
+                if (in_array($author->role, ['advisor', 'recruiter'])) {
                     $data['data']['agency_profile'] .= "/" . $author->role;
                 }
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
@@ -349,18 +347,18 @@ class Job extends Model
                 $advisor = User::find($job->advisor_id);
                 $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
-                foreach([$advisor, $admin] as $receiver_user) {
+                foreach ([$advisor, $admin] as $receiver_user) {
                     $data = [
-                    'data' => [
-                        'category' => $category->name,
-                        'agency_name' => $agency->name ?? '',
-                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
-                        'state' => $state?->name,
-                        'city' => $city?->name,
-                        'advisor' => $advisor->full_name,
-                        'recipient' => $receiver_user->full_name,
-                    ],
-                    'receiver' => $receiver_user
+                        'data' => [
+                            'category' => $category->name,
+                            'agency_name' => $agency->name ?? '',
+                            'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                            'state' => $state?->name,
+                            'city' => $city?->name,
+                            'advisor' => $advisor->full_name,
+                            'recipient' => $receiver_user->full_name,
+                        ],
+                        'receiver' => $receiver_user
                     ];
                     SendEmailJob::dispatch($data, 'hire-an-advisor-job-completed');
                 }
@@ -368,11 +366,10 @@ class Job extends Model
 
             if ($job->isDirty('expired_at')) {
 
-                if(auth()->user()->role != 'admin') {
+                if (auth()->user()->role != 'admin') {
                     $job = $job->getDefaultExpirationDate($job);
                 }
             }
-
         });
 
         static::updated(function () {
@@ -398,7 +395,7 @@ class Job extends Model
          * All other users can only set the max expired_at date according to current subscription default date
          * --------------------------------------------------------
          * Client Message Date: 20 January 2024 3:13 AM
-        */
+         */
 
         $post_author_id = $job->advisor_id ?? $job->user_id;
 
