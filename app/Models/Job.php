@@ -301,6 +301,7 @@ class Job extends Model
                         'title' => $job->title ?? '',
                         'url' => $job_url,
                         'agency' => $agency->name ?? '',
+                       'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
