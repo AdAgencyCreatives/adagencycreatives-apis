@@ -221,14 +221,14 @@ class ChatController extends Controller
                 'message_action' => 'message-deleted'
             ];
 
-            if ($is_sender) {
+            if (true || $is_sender) {
                 $message->update([
                     'sender_deleted_at' => now()
                 ]);
                 event(new MessageReceived($event_data1));
             }
 
-            if ($is_receiver) {
+            if (true || $is_receiver) {
                 $message->update([
                     'receiver_deleted_at' => now()
                 ]);
