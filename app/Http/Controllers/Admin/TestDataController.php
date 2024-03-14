@@ -11,7 +11,7 @@ class TestDataController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Job::where('status', 'approved'); //->whereDate('expired_at', now()->addDays(3));
+        $query = Job::where('status', 1); //->whereDate('expired_at', now()->addDays(3));
         return view('pages.test_data.index', ['data' => $query->get()]);
     }
 }
