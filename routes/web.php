@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\ResumeController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\Admin\TestDataController;
 use App\Http\Resources\MentorResource\MentorResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Attachment;
@@ -74,13 +75,13 @@ Route::get('/users2', function () {
 
 Route::get('/show-email', function () {
     $data = [
-           'email' => "test@gmail.com",
-            "username" => 'John',
-            "order_no" => '123',
-            "total" => '$500',
-            'plan_name' => "Single Job Post",
-            'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
-            "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
+        'email' => "test@gmail.com",
+        "username" => 'John',
+        "order_no" => '123',
+        "total" => '$500',
+        'plan_name' => "Single Job Post",
+        'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
+        "image" => 'https://ad-agency-creatives.s3.amazonaws.com/job_package_preview/473fa861-b924-47d8-b4ad-6e20f4f3466e/soNVvHI11aX8CSoEBotrSjKf1jh7so70MfmIeAUa.jpg',
     ];
 
     return view('emails.order.alert-admin', compact('data'));
@@ -88,11 +89,11 @@ Route::get('/show-email', function () {
 
 Route::get('/show-email2', function () {
     $data = [
-            "username" => 'John',
-            "recipient" => 'Kale',
-            "member" => 'John',
-            'FRONTEND_URL' => "abc.com",
-            'APP_NAME' => env('APP_NAME'),
+        "username" => 'John',
+        "recipient" => 'Kale',
+        "member" => 'John',
+        'FRONTEND_URL' => "abc.com",
+        'APP_NAME' => env('APP_NAME'),
     ];
 
     return view('emails.friendship.request_accepted', compact('data'));
@@ -139,7 +140,6 @@ Route::get('/email', function () {
 
 Route::get('/check-missing-locations', function () {
     Artisan::call('check:missing-locations');
-
 });
 
 // Download Resume
@@ -155,17 +155,16 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['admin']], function () {
 
-         // Get those users whose portfolio preview image is not present
+        // Get those users whose portfolio preview image is not present
         Route::get('/find_missing_portfolios', function () {
             $creatives = User::where('role', 4)->where('status', 1)->get();
-            foreach($creatives as $user) {
+            foreach ($creatives as $user) {
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
                     $existing_preview = Attachment::where('user_id', $user->id)->where('resource_type', 'website_preview')->first();
-                    if(!$existing_preview) {
+                    if (!$existing_preview) {
                         dump($user->email . " " . $user->id . " missing.");
                     }
-
                 }
             }
         });
@@ -265,8 +264,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/jobs/seo/{job}', [JobController::class, 'update_seo'])->name('jobs.seo.update');
 
         /**
-        * Download Festivals
-        */
+         * Download Festivals
+         */
         Route::get('festivals/download', [FestivalController::class, 'downloadFestivals'])->name('festivals.download');
 
         /**
@@ -331,9 +330,7 @@ Route::group(['middleware' => ['auth']], function () {
          * Delete user data permanently
          */
         Route::delete('permanently_delete/{user}', [UserController::class, 'deleteRelatedRecordsPermanently'])->name('permanently_delete');
-
     });
-
 });
 
 Route::resource('plans', PlanController::class);
@@ -402,3 +399,6 @@ Route::post('/update-featured-city-order', [FeaturedLocationController::class, '
 
 //Get job invitation uuid from email
 Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');
+
+//Get Test Data
+Route::get('/test-data', [TestDataController::class, 'index'])->name('test-data');
