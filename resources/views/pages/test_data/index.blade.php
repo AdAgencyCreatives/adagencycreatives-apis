@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    {{ $data }}
+                    {{ dd($data) }}
                 </div>
             </div>
         </div>
