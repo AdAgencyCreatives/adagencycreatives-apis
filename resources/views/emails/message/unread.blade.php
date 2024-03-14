@@ -16,7 +16,8 @@
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
                         <div class="candidate-thumbnail">
                             <div class="candidate-logo">
-                                <img width="50" style="border-radius: 50%;" src="{{ $user['profile_picture'] }}">
+                                <img width="50" height="50" style="border-radius: 100%;"
+                                    src="{{ $user['profile_picture'] }}">
                             </div>
                         </div>
 
