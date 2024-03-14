@@ -56,7 +56,7 @@ class JobPostExpiring extends Command
          */
         $tomorrow = now()->addDays(3);
 
-        $expiringTomorrowJobs = Job::where('status', 'approved')->whereDate('expired_at', $tomorrow)->get();
+        $expiringTomorrowJobs = Job::where('status', 1)->whereDate('expired_at', $tomorrow)->get(); // only approved jobs which are not yet filled or closed.
 
         foreach ($expiringTomorrowJobs as $job) {
 
