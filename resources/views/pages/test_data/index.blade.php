@@ -3,7 +3,7 @@
 @section('title', __('Test Data'))
 
 @section('scripts')
- 
+
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    Test Data
+                    {{ data }}
                 </div>
             </div>
         </div>
