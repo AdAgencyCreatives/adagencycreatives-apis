@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\MessageReceived;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Application\StoreApplicationRequest;
@@ -62,6 +63,24 @@ class ApplicationController extends Controller
             'status' => 0,
         ]);
 
+        $event_data1 = [
+            'receiver_id' => $applicant_user->uuid,
+            'message_sender_id' => $applicant_user->uuid,
+            'message_receiver_id' => $agency_user->uuid,
+            'message' => 'You applied on a job posted by ' . $agency_user->full_name,
+            'message_type' => 'conversation_updated',
+            'message_action' => 'message-received'
+        ];
+
+        $event_data2 = [
+            'receiver_id' => $agency_user->uuid,
+            'message_sender_id' => $applicant_user->uuid,
+            'message_receiver_id' => $agency_user->uuid,
+            'message' => $applicant_user->full_name . ' applied on a job posted by you',
+            'message_type' => 'conversation_updated',
+            'message_action' => 'message-sent'
+        ];
+
         try {
             $application = Application::create($request->all());
 
@@ -71,15 +90,15 @@ class ApplicationController extends Controller
              * they really appplied or not
              */
 
-            if($job->apply_type == 'Internal'){
+            if ($job->apply_type == 'Internal') {
                 SendEmailJob::dispatch([
-                'receiver' => $applicant_user,
-                'data' => [
-                    'recipient' => $applicant_user->first_name,
-                    'job_title' => $job->title,
-                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                ],
-            ], 'application_submitted');
+                    'receiver' => $applicant_user,
+                    'data' => [
+                        'recipient' => $applicant_user->first_name,
+                        'job_title' => $job->title,
+                        'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                    ],
+                ], 'application_submitted');
             }
 
 
@@ -101,7 +120,7 @@ class ApplicationController extends Controller
                 'created_at' => now(),
             ];
 
-            if($job->apply_type == 'External'){
+            if ($job->apply_type == 'External') {
                 $msg_data['message'] = sprintf(
                     "<a style='text-decoration:underline;' href='%s'>%s</a> is interested in the job <a style='text-decoration:underline;' href='%s'>%s</a>",
                     $creative_url,
@@ -115,7 +134,7 @@ class ApplicationController extends Controller
              * If job is submitted by advisor, then send email only to advisor and do not
              * bother agency member with bunch of emails
              */
-            if($job->advisor_id) {
+            if ($job->advisor_id) {
                 $advisor_user = User::find($job->advisor_id);
 
                 $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
@@ -135,21 +154,20 @@ class ApplicationController extends Controller
                 ], 'new_candidate_application'); // To the agency
 
                 $msg_data['receiver_id'] = $advisor_user->id;
-
+                $event_data2["receiver_id"] = $advisor_user->uuid;
             }
 
             Message::create($msg_data);
-            if($request->message != ''){
+            if ($request->message != '') {
                 $seconds = now()->addSecond();
                 $msg_data['created_at'] = $seconds;
                 $msg_data['updated_at'] = $seconds;
-                $msg_data['message'] = $request->message ;
+                $msg_data['message'] = $request->message;
                 Message::create($msg_data);
             }
 
-
-
-
+            event(new MessageReceived($event_data1));
+            event(new MessageReceived($event_data2));
 
             return ApiResponse::success(new ApplicationResource($application), 200);
         } catch (\Exception $e) {
