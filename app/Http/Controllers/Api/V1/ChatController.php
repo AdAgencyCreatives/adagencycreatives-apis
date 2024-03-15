@@ -216,7 +216,7 @@ class ChatController extends Controller
                 'receiver_id' => $receiver->uuid,
                 'message_sender_id' => $sender->uuid,
                 'message_receiver_id' => $receiver->uuid,
-                'message' => 'You deleted a message',
+                'message' => $sender->full_name . ' deleted a message',
                 'message_type' => 'conversation_updated',
                 'message_action' => 'message-deleted'
             ];
