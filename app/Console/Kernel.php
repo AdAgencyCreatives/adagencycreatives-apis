@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('job-post-expiring')->dailyAt($daily_time);
         $schedule->command('email:unread-mention-notification')->dailyAt($daily_time);
         $schedule->command('adagencycreatives:schedule-notifications')->everyFifteenMinutes();
-        $schedule->command('portfolio_latest:generate')->everyThreeMinutes();
+        // $schedule->command('portfolio_latest:generate')->everyThreeMinutes();
     }
 
     /**
