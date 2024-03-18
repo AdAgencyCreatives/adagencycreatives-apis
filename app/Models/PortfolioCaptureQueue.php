@@ -14,6 +14,8 @@ class PortfolioCaptureQueue extends Model
     use HasFactory, SoftDeletes;
     use ActivityLoggerTrait;
 
+    protected $table = 'portfolio_capture_queue';
+
     protected $fillable = [
         'user_id',
         'url',
@@ -38,7 +40,6 @@ class PortfolioCaptureQueue extends Model
     protected static function booted()
     {
         static::created(function ($portfolio_capture_log) {
-
         });
     }
 }
