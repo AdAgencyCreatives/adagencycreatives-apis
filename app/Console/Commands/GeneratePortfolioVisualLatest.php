@@ -36,9 +36,9 @@ class GeneratePortfolioVisualLatest extends Command
         }
 
         DB::statement("INSERT INTO portfolio_capture_queue (user_id, url, capture, status, initiated_at, checked_at, created_at, updated_at) SELECT u.id, l.url, '', 0, null, null, now(), now() FROM users u INNER JOIN links l ON l.user_id = u.id WHERE u.role = 4 AND l.label = 'portfolio' AND u.id NOT IN (SELECT pcq.user_id FROM portfolio_capture_queue pcq);"); // Adds any user who is not already added to the queue
-        DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.capture IS NULL OR TRIM(pcq.capture) = ''"); // if capture url missing schedule to queue
+        DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.status<>2 AND pcq.capture IS NULL OR TRIM(pcq.capture) = ''"); // if capture url missing schedule to queue
         DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.status<>2 AND pcq.user_id IN (SELECT u.id FROM users u WHERE u.deleted_at IS NULL AND u.id NOT IN (SELECT att.user_id FROM `attachments` att WHERE att.`resource_type` LIKE 'website_preview_latest'));"); // if preview missing schedule to queue
-        DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.user_id IN (SELECT att.user_id FROM `attachments` att WHERE att.`resource_type` LIKE 'website_preview_latest' AND FLOOR(DATEDIFF(NOW(), att.updated_at)/7) > 6);"); // if 6 weeks passed after latest visual was captured, schedule to queue
+        DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.status<>2 AND pcq.user_id IN (SELECT att.user_id FROM `attachments` att WHERE att.`resource_type` LIKE 'website_preview_latest' AND FLOOR(DATEDIFF(NOW(), att.updated_at)/7) > 6);"); // if 6 weeks passed after latest visual was captured, schedule to queue
 
         $item = PortfolioCaptureQueue::where('status', 0)
             ->orderBy('status')->orderBy('created_at')->orderBy('id')
