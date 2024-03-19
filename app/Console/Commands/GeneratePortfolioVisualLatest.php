@@ -71,7 +71,8 @@ class GeneratePortfolioVisualLatest extends Command
             }
         } else {
             $this->info(now() . " -- Nothing to process, adding failed captures to queue again");
-            DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.status=2"); // if capture url missing schedule to queue
+            // DB::statement("UPDATE `portfolio_capture_queue` pcq SET pcq.status=0, pcq.initiated_at=NULL, pcq.checked_at=NULL WHERE pcq.status=2"); // if capture url missing schedule to queue
+            // Uncomment only when you want to reset and re-try only for failed captures
         }
 
         $this->info(now() . " -- Latest Visual Request Executed");
