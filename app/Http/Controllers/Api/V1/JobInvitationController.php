@@ -49,7 +49,7 @@ class JobInvitationController extends Controller
                 'receiver' => $invitee_user,
                 'data' => [
                     'receiver_name' => $invitee_user->first_name,
-                    'agency_name' => $agency_user?->agency?->name ?? '',
+                    'agency_name' => $job?->agency_name ?? ($agency_user?->agency?->name ?? ''),
                     'job_title' => $job->title,
                     'job_url' => route('job.inviatation.status.update', ['uuid' => $job_invitation->uuid]),
                 ],
