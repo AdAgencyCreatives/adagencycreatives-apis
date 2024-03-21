@@ -94,7 +94,7 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
         switch ($this->emailType) {
-            /**
+                /**
              * Account
              */
             case 'new_user_registration_creative_role':
@@ -126,10 +126,10 @@ class SendEmailJob implements ShouldQueue
                 $email_data = $this->data['email_data'];
                 $subscribers = $this->data['subscribers'];
 
-                foreach($subscribers as $subscriber){
+                foreach ($subscribers as $subscriber) {
                     // dd($subscriber->user?->full_name);
                     $subscriber = $subscriber->user;
-                    Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
+                    Mail::to($subscriber->email)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
                 }
 
                 break;
@@ -143,9 +143,9 @@ class SendEmailJob implements ShouldQueue
             case 'job_invitation':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobInvitation($this->data['data']));
                 break;
-            // case 'custom_job_request_rejected':
-            //     Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
-            //     break;
+                // case 'custom_job_request_rejected':
+                //     Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
+                //     break;
 
             case 'custom_pkg_request_admin_alert':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new RequestAdminAlert($this->data['data']));
@@ -191,9 +191,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ContactFormMail($this->data['data']));
                 break;
 
-            /**
-             * Job Post Expiring Soon
-             */
+                /**
+                 * Job Post Expiring Soon
+                 */
             case 'job_expiring_soon_admin':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAdmin($this->data['data']));
                 break;
@@ -207,9 +207,9 @@ class SendEmailJob implements ShouldQueue
                 break;
 
 
-             /**
-             * Group Post
-             */
+                /**
+                 * Group Post
+                 */
             case 'user_mentioned_in_post':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new LoungeMention($this->data['data']));
                 break;
