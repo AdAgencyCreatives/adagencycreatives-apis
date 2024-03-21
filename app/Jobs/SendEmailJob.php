@@ -129,7 +129,8 @@ class SendEmailJob implements ShouldQueue
                 foreach ($subscribers as $subscriber) {
                     // dd($subscriber->user?->full_name);
                     $subscriber = $subscriber->user;
-                    Mail::to($subscriber->email)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
+                    $recipient = env('APP_ENV') == 'production' ? $subscriber->email : $this->adminEmail; //only on production emails goes to real users otherwise admin email
+                    Mail::to($recipient)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
                 }
 
                 break;
