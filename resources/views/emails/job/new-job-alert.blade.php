@@ -13,7 +13,7 @@
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
-                            {{ $user->full_name ?? '-' }},</span>
+                            {{ $user->first_name ?? '-' }},</span>
 
                         <p>We are writing to keep you informed of opportunities you might find interesting for yourself
                             or a friend.</p>
