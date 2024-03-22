@@ -289,17 +289,21 @@ class Job extends Model
             $author = User::find($job->advisor_id ?? $job->user_id);
             $agency = $author->agency;
 
+            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+            $agency_profile = $job?->agency_website ?? ($agency?->slug ?? '');
+
             $oldStatus = $job->getOriginal('status');
             if ($oldStatus == 'draft' && $job->status === 'approved') {
                 $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
+
                 $data = [
                     'email_data' => [
                         'title' => $job->title ?? '',
                         'url' => $job_url,
-                        'agency' => $agency->name ?? '',
-                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'agency' => $agency_name,
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile),
                         'category' => $category?->name,
                     ],
                     'subscribers' => $categorySubscribers,
@@ -326,8 +330,8 @@ class Job extends Model
                         'url' => $job_url,
                         'category' => $category->name,
                         'author' => $author->first_name,
-                        'agency' => $agency->name ?? '',
-                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                        'agency' => $agency_name,
+                        'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile),
                         'created_at' => $job->created_at->format('M-d-Y'),
                         'expired_at' => $job->expired_at->format('M-d-Y'),
                     ],
@@ -351,8 +355,8 @@ class Job extends Model
                     $data = [
                         'data' => [
                             'category' => $category->name,
-                            'agency_name' => $agency->name ?? '',
-                            'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                            'agency_name' => $agency_name,
+                            'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile),
                             'state' => $state?->name,
                             'city' => $city?->name,
                             'advisor' => $advisor->full_name,

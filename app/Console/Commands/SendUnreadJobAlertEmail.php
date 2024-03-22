@@ -33,15 +33,18 @@ class SendUnreadJobAlertEmail extends Command
             $author = User::find($job->user_id);
             $agency = $author->agency;
 
+            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+            $agency_profile = $job?->agency_website ?? ($agency?->slug ?? '');
+
             $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
             $data = [
                 'email_data' => [
                     'title' => $job->title ?? '',
                     'url' => $job_url,
-                    'agency' => $agency->name ?? '',
+                    'agency' => $agency_name,
                     'category' => $category?->name,
                     'user' => $author,
-                    'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug),
+                    'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile),
                 ],
                 'subscribers' => $author,
             ];
