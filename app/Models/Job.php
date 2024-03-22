@@ -290,12 +290,12 @@ class Job extends Model
             $author = User::find($job->user_id);
             $agency =  $author->agency; // fetch original agency for which we are posting
 
+            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
+
             if ($job->advisor_id) {
                 $author = User::find($job->advisor_id); // author override only after original agency is fetched
             }
-
-            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
-            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
 
             $oldStatus = $job->getOriginal('status');
             if ($oldStatus == 'draft' && $job->status === 'approved') {
@@ -342,10 +342,6 @@ class Job extends Model
                     ],
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
-
-                if (!$job?->agency_website && in_array($author->role, ['recruiter'])) {
-                    $data['data']['agency_profile'] .= "/" . $author->role;
-                }
 
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
             }
