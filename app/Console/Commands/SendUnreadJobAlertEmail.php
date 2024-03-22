@@ -44,7 +44,7 @@ class SendUnreadJobAlertEmail extends Command
                     'agency' => $agency_name,
                     'category' => $category?->name,
                     'user' => $author,
-                    'agency_profile' => sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile),
+                    'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
                 ],
                 'subscribers' => $author,
             ];
