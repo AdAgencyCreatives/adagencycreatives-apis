@@ -286,8 +286,13 @@ class Job extends Model
 
         static::updating(function ($job) {
             $category = Category::find($job->category_id);
-            $author = User::find($job->advisor_id ?? $job->user_id);
-            $agency = $author->agency;
+
+            $author = User::find($job->user_id);
+            $agency =  $author->agency; // fetch original agency for which we are posting
+
+            if ($job->advisor_id) {
+                $author = User::find($job->advisor_id); // author override only after original agency is fetched
+            }
 
             $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
             $agency_profile = $job?->agency_website ?? ($agency?->slug ?? '');
@@ -338,9 +343,10 @@ class Job extends Model
                     'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
                 ];
 
-                if (in_array($author->role, ['advisor', 'recruiter'])) {
+                if (!$job?->agency_website && in_array($author->role, ['recruiter'])) {
                     $data['data']['agency_profile'] .= "/" . $author->role;
                 }
+
                 SendEmailJob::dispatch($data, 'new_job_added_admin');
             }
 
