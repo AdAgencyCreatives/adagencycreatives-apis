@@ -25,7 +25,12 @@
                             <a href="{{ $data['url'] }}" target="_blank">Click here to open job</a>
                         </div>
                         <div><b>Agency: </b>
-                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                            @if (strlen($data['agency_profile']) > 0)
+                                <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                            @else
+                                {{ $data['agency'] }}
+                            @endif
+
                         </div>
 
                         @include('emails.includes.jobboard_footer')

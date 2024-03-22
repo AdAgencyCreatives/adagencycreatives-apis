@@ -20,7 +20,12 @@
                         <p>A New Job <strong><a href="{{ $data['url'] }}"
                                     target="_blank">{{ $data['job']->title }}</a></strong> has been
                             posted
-                            by <strong><a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['author'] }}</a>
+                            by <strong>
+                                @if (strlen($data['agency_profile']) > 0)
+                                    <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['author'] }}</a>
+                                @else
+                                    {{ $data['author'] }}
+                                @endif
                             </strong>.</p>
 
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">
