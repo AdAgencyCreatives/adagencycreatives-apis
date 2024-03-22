@@ -16,8 +16,9 @@
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
                         <div class="candidate-thumbnail">
                             <div class="candidate-logo">
-                                <img width="50" height="50" style="border-radius: 100%;"
-                                    src="{{ $user['profile_picture'] }}">
+                                <img width="50" height="50"
+                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px;"
+                                    src="{{ $user['profile_picture'] }}" />
                             </div>
                         </div>
 
@@ -25,7 +26,7 @@
                         <div class="candidate-information">
                             <div class="title-wrapper">
                                 <h1 class="candidate-title"
-                                    style="font-size: 16px; font-weight: normal; margin-bottom: 0;">
+                                    style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
                                     {{ $user['name'] }}
                                 </h1>
                                 <span style="color: #ccc;">{{ $user['message_time'] }}</span>
