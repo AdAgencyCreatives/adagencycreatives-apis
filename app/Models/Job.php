@@ -295,7 +295,7 @@ class Job extends Model
             }
 
             $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
-            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency'] ? $agency?->slug : ''));
+            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
 
             $oldStatus = $job->getOriginal('status');
             if ($oldStatus == 'draft' && $job->status === 'approved') {
