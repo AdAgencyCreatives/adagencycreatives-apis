@@ -63,7 +63,6 @@ class PostController extends Controller
             return $query
                 ->whereHas('user')
                 ->whereHas('group')
-                ->where('group.status', 'public')
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->orderBy('reactions_count', 'desc')
