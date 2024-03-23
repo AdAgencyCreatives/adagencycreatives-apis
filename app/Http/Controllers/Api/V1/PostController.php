@@ -63,6 +63,7 @@ class PostController extends Controller
             return $query
                 ->whereHas('user')
                 ->whereHas('group')
+                ->where('group.status', 0)
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->orderBy('reactions_count', 'desc')
@@ -180,11 +181,11 @@ class PostController extends Controller
                 ])
                 ->defaultSort('-created_at')
                 ->allowedSorts('created_at')
-                 ->where(function ($query) use ($feed_group, $joined_groups, $mention) {
-                     $query
-                     ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups))
-                     ->orWhere('content', 'like', '%' . $mention . '%');
-                 });
+                ->where(function ($query) use ($feed_group, $joined_groups, $mention) {
+                    $query
+                        ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups))
+                        ->orWhere('content', 'like', '%' . $mention . '%');
+                });
 
 
             $posts = $query->with(['reactions' => function ($query) {
