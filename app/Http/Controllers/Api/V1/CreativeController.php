@@ -972,7 +972,7 @@ class CreativeController extends Controller
     public function get_system_resume_url()
     {
         $user = request()->user();
-        $resume_filename = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y-m-d-h-i-s-A'));
+        $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d-h-i-s-A'));
         return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $user->uuid]);
     }
 }

@@ -23,7 +23,7 @@ class CreativeResource extends JsonResource
             'test_id' => $this->id,
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'name' => $user->first_name.' '.$user->last_name,
+            'name' => $user->first_name . ' ' . $user->last_name,
             'email' => $this->get_email($user),
             'slug' => $this->slug,
             'title' => $this->title,
@@ -31,7 +31,7 @@ class CreativeResource extends JsonResource
             'profile_image' => $this->get_profile_image($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
-            'employment_type' => getEmploymentTypes($this->employment_type) ,
+            'employment_type' => getEmploymentTypes($this->employment_type),
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
             'character_strengths' => getCharacterStrengthNames($this->strengths),
@@ -69,12 +69,12 @@ class CreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
     public function get_website_preview($user)
     {
-        return $user->portfolio_website_preview ? getAttachmentBasePath().$user->portfolio_website_preview->path : '';
+        return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
     }
 
     public function get_location($user)
@@ -111,7 +111,6 @@ class CreativeResource extends JsonResource
             'description' => $seo_description,
             'tags' => $this->seo_keywords,
         ];
-
     }
 
     private function generateSeoTitle($site_name, $separator)
@@ -151,22 +150,21 @@ class CreativeResource extends JsonResource
             return null;
         }
 
-        if ($logged_in_user->role === 'creative' && ! $is_friend) {
+        if ($logged_in_user->role === 'creative' && !$is_friend) {
             return null;
         }
 
         return $this->get_resume_url($user, $logged_in_user);
-
     }
 
     private function get_resume_url($user, $logged_in_user)
     {
         if (isset($user->resume)) {
-            return getAttachmentBasePath().$user->resume->path;
+            return getAttachmentBasePath() . $user->resume->path;
         } else {
-            $queryParams = sprintf('%s_%s_Ad_Agency_Creatives_%s', $user->first_name, $user->last_name, date('Y'));
+            $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d-h-i-s-A'));
 
-            return route('download.resume', ['uuid1' => $user->uuid, 'uuid2' => $logged_in_user->uuid]);
+            return route('download.resume', ['name' => $resume_filename, 'uuid1' => $user->uuid, 'uuid2' => $logged_in_user->uuid]);
         }
     }
 }
