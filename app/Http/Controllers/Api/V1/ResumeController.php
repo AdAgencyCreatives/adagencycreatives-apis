@@ -45,7 +45,7 @@ class ResumeController extends Controller
 
             return ApiResponse::success(new ResumeResource($resume), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('RS-01 '.$e->getMessage(), 400);
+            return ApiResponse::error('RS-01 ' . $e->getMessage(), 400);
         }
     }
 
@@ -88,6 +88,7 @@ class ResumeController extends Controller
     {
         $creative_user = User::where('uuid', $request->u1)->firstOrFail();
         $auth_user = User::where('uuid', $request->u2)->firstOrFail();
+        $resume_name = $request->name;
 
         $creative = Creative::with([
             'user.profile_picture',
@@ -104,7 +105,7 @@ class ResumeController extends Controller
         $experiences = $creative_user->experiences;
         $portfolio_items = $creative_user->portfolio_items;
         if ($creative_user->portfolio_website_preview) {
-            $portfolio_website_preview_img = getAttachmentBasePath().$creative_user->portfolio_website_preview->path;
+            $portfolio_website_preview_img = getAttachmentBasePath() . $creative_user->portfolio_website_preview->path;
         } else {
             $portfolio_website_preview_img = null;
         }
@@ -115,13 +116,12 @@ class ResumeController extends Controller
             if ($auth_user->id != $creative_user->id) {
                 $data['phone_number'] = '';
             }
-        }
-        elseif($auth_user->role == 'agency' && ! hasAppliedToAgencyJob($creative_user->id, $auth_user->id)){
-              $data['phone_number'] = '';
+        } elseif ($auth_user->role == 'agency' && !hasAppliedToAgencyJob($creative_user->id, $auth_user->id)) {
+            $data['phone_number'] = '';
         }
 
         $user = $creative_user;
-        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items', 'portfolio_website_preview_img')); // Render the HTML view
+        $html = view('resume', compact('resume_name', 'data', 'user', 'educations', 'experiences', 'portfolio_items', 'portfolio_website_preview_img')); // Render the HTML view
 
         return $html;
     }
@@ -162,6 +162,5 @@ class ResumeController extends Controller
         $dompdf->stream($fileName, ['Attachment' => 1]);
 
         return 'File downloaded.';
-
     }
 }

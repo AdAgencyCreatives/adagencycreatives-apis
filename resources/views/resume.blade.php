@@ -4,20 +4,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Resume Download</title>
+    <title>{{ resume_name }}</title>
     <style>
         @font-face {
             font-family: 'Jost';
-            src: url('{{ asset("assets/fonts/Jost/Jost-VariableFont_wght.ttf") }}') format('truetype');
+            src: url('{{ asset('assets/fonts/Jost/Jost-VariableFont_wght.ttf') }}') format('truetype');
         }
+
         body {
             font-family: 'Jost';
         }
+
         h1 {
             font-size: 2.3rem;
             font-weight: 400;
             margin: 30px 0;
         }
+
         a {
             color: #000;
             text-decoration: none;
@@ -173,7 +176,7 @@
         </div>
         <div>
             <p><strong>Type of Work</strong></p>
-            <p> {{ implode(",", $data['employment_type']) ?? '' }}</p>
+            <p> {{ implode(',', $data['employment_type']) ?? '' }}</p>
         </div>
     </section>
     <section>
@@ -194,28 +197,28 @@
     </section>
     <section>
         @if (count($experiences))
-        <div id="job-candidate-experience" class="candidate-detail-experience my_resume_eduarea color-blue">
-            <h1 class="title">Work &amp; Experience</h1>
-            @foreach ($experiences as $experience)
-                <div class="content">
-                    <div class="circle">
-                        {{ substr($experience->title ?? ($experience->company ?? 'ABC'), 0, 1) }} </div>
-                    <div class="top-info">
-                        <span class="edu_stats">{{ $experience->title ?? '' }}</span>
+            <div id="job-candidate-experience" class="candidate-detail-experience my_resume_eduarea color-blue">
+                <h1 class="title">Work &amp; Experience</h1>
+                @foreach ($experiences as $experience)
+                    <div class="content">
+                        <div class="circle">
+                            {{ substr($experience->title ?? ($experience->company ?? 'ABC'), 0, 1) }} </div>
+                        <div class="top-info">
+                            <span class="edu_stats">{{ $experience->title ?? '' }}</span>
 
-                        <span class="year">
-                            {{ $experience->started_at?->format('Y/m/d') ?? '' }} -
-                            {{ $experience->completed_at?->format('Y/m/d') ?? '' }} </span>
+                            <span class="year">
+                                {{ $experience->started_at?->format('Y/m/d') ?? '' }} -
+                                {{ $experience->completed_at?->format('Y/m/d') ?? '' }} </span>
 
+                        </div>
+                        <div class="edu_center">
+                            <span class="university">{{ $experience->company ?? '' }}</span>
+                        </div>
+                        <p class="mb0">
+                            {{ $experience->description ?? '' }}
+                        </p>
                     </div>
-                    <div class="edu_center">
-                        <span class="university">{{ $experience->company ?? '' }}</span>
-                    </div>
-                    <p class="mb0">
-                        {{ $experience->description ?? '' }}
-                    </p>
-                </div>
-            @endforeach
+                @endforeach
         @endif
         </div>
     </section>
