@@ -162,7 +162,7 @@ class CreativeResource extends JsonResource
         if (isset($user->resume)) {
             return getAttachmentBasePath() . $user->resume->path;
         } else {
-            $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d-h-i-s-A'));
+            $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d'));
 
             return route('download.resume', ['name' => $resume_filename, 'uuid1' => $user->uuid, 'uuid2' => $logged_in_user->uuid]);
         }
