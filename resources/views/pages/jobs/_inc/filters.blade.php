@@ -8,17 +8,17 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="title">Title</label>
-                                <input id="title" class="form-control" type="text" name="title"
-                                    placeholder="Enter Title" />
+                                <label class="form-label" for="agency">Agency</label>
+                                <input id="agency" class="form-control" type="text" name="agency"
+                                    placeholder="Enter Agency" />
                             </div>
                         </div>
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="agency">Agency</label>
-                                <input id="agency" class="form-control" type="text" name="agency"
-                                    placeholder="Enter Agency" />
+                                <label class="form-label" for="title">Title</label>
+                                <input id="title" class="form-control" type="text" name="title"
+                                    placeholder="Enter Title" />
                             </div>
                         </div>
 
