@@ -221,7 +221,7 @@
             <div class="card">
                 <div class="card-body">
                     <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="row double-scroll">
+                        <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="table_length" id="table_length"><label>Show <select
                                             name="datatables-reponsive_length" id="per-page-select"
@@ -237,7 +237,7 @@
                         </div>
                         <div class="row dt-row">
                             <div class="col-sm-12">
-                                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline"
+                                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline double-scroll"
                                     style="width: 100%;">
                                     <thead>
                                         <tr>
