@@ -8,17 +8,17 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="agency">Agency</label>
-                                <input id="agency" class="form-control" type="text" name="agency"
-                                    placeholder="Enter Agency" />
+                                <label class="form-label" for="title">Title</label>
+                                <input id="title" class="form-control" type="text" name="title"
+                                    placeholder="Enter Title" />
                             </div>
                         </div>
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="title">Title</label>
-                                <input id="title" class="form-control" type="text" name="title"
-                                    placeholder="Enter Title" />
+                                <label class="form-label" for="agency">Agency</label>
+                                <input id="agency" class="form-control" type="text" name="agency"
+                                    placeholder="Enter Agency" />
                             </div>
                         </div>
 
@@ -29,6 +29,18 @@
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Category</option>
 
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="apply_type"> Apply Type </label>
+                                <select name="apply_type" id="apply_type"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Apply Type</option>
+                                    <option value="Internal"> Internal</option>
+                                    <option value="External"> External</option>
                                 </select>
                             </div>
                         </div>
