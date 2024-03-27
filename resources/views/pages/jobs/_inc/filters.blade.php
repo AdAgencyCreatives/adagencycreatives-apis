@@ -24,23 +24,23 @@
 
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="category"> Category </label>
-                                <select name="category" id="category"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select Category</option>
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm">
-                            <div class="form-group">
                                 <label class="form-label" for="apply_type"> Apply Type </label>
                                 <select name="apply_type" id="apply_type"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100"> Select Apply Type</option>
                                     <option value="Internal"> Internal</option>
                                     <option value="External"> External</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="form-label" for="category"> Category </label>
+                                <select name="category" id="category"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Category</option>
+
                                 </select>
                             </div>
                         </div>
