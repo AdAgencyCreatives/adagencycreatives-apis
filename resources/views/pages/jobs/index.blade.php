@@ -97,8 +97,7 @@
                     '<td>' + (index + 1) + '</td>' +
                     '<td>\
                             <div class="user-details">\
-                                <div><a href="{{ $site_url }}agency/' + job.agency.slug + '" target="_blank">' + job
-                    .agency.name + '</a></div>\
+                                <div>' + (job?.agency_name || job?.agency?.name) + '</div>\
                             </div>\
                         </td>' +
                     '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
