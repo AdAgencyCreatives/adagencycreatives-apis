@@ -139,6 +139,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                 e.preventDefault();
                 var selectedCategory = $('#category').val();
                 var selectedLabels = $('#labels').val();
+                var apply_type = $('#apply_type').val();
                 var emp_type = $('#employment_type').val();
                 var selectedStatus = $('#status').val();
                 var title = $('#title').val();
@@ -148,6 +149,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
 
                 filters = {
                     category_id: selectedCategory,
+                    apply_type: apply_type,
                     employment_type: emp_type,
                     title: title,
                     status: selectedStatus,
