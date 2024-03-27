@@ -187,6 +187,15 @@ class Job extends Model
         return $query->where('city_id', $city->id);
     }
 
+    public function scopeAgency(Builder $query, $agency): Builder
+    {
+        $escapedAgencyName = str_replace('%', '\\%', $agency);
+
+        return $query->whereHas('user.agency', function($q) use($escapedAgencyName) {
+            $q->where('name', 'LIKE', "%" . $escapedAgencyName . "%");
+        });
+    }
+
     public function scopeCitySlug(Builder $query, $city_slug): Builder
     {
         $city = Location::where('slug', $city_slug)->whereNotNull('parent_id')->first();
