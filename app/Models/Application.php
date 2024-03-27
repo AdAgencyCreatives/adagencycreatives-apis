@@ -117,16 +117,31 @@ class Application extends Model
         static::updating(function ($application) {
 
             $oldStatus = $application->getOriginal('status');
+
+            $job = Job::where('id', $application->job_id)->first();
+
+                $author = User::find($job->user_id);
+                $agency =  $author->agency; // fetch original agency for which we are posting
+                $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+                $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
+    
+                if ($job->advisor_id) {
+                    $author = User::find($job->advisor_id); // author override only after original agency is fetched
+                }
+
+                $applicant = $application->user;
+
             if ($oldStatus == 'pending' && in_array($application->status, ['archived', 'rejected'])) {
 
-                $job = Job::where('id', $application->job_id)->first();
-                $applicant = $application->user;
+                
                 $data = [
                     'receiver' => $applicant,
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
                         'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                        'agency_name' => $agency_name ?? '',
+                        'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
                     ],
 
                 ];
@@ -136,17 +151,14 @@ class Application extends Model
 
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
-                $job = Job::where('id', $application->job_id)->first();
-                $agency = $job->agency;
-                $applicant = $application->user;
-
                 $data = [
                     'receiver' => $applicant,
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
                         'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                        'agency_name' => $agency->name ?? '',
+                        'agency_name' => $agency_name ?? '',
+                        'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
                     ],
 
                 ];
