@@ -2,15 +2,15 @@
 
 @section('title', __('Jobs'))
 
-@php 
+@php
 
-$url_map = [
-    '127.0.0.1:8000' => 'http://localhost:3000/',
-    'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
-    'api.adagencycreatives.com' => 'https://adagencycreatives.com/'
-];
+    $url_map = [
+        '127.0.0.1:8000' => 'http://localhost:3000/',
+        'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
+        'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
+    ];
 
-$site_url = $url_map[$_SERVER['HTTP_HOST']];
+    $site_url = $url_map[$_SERVER['HTTP_HOST']];
 
 @endphp
 
@@ -96,12 +96,15 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
                     '<td>\
-                        <div class="user-details">\
-                            <div><a href="{{ $site_url }}agency/'+ job.agency.slug +'" target="_blank">'+ job.agency.name +'</a></div>\
-                        </div>\
-                    </td>' +
-                    '<td><a href="{{ $site_url }}job/'+ job.slug +'" target="_blank">' + job.title + '</a></td>' +
-                    '<td style="text-align:center">' + job.apply_type + (job.apply_type == "External" ? '<br><a href="' + job.external_link + '" target="_blank">Apply Now</a>' : "") + '</td>' +
+                            <div class="user-details">\
+                                <div><a href="{{ $site_url }}agency/' + job.agency.slug + '" target="_blank">' + job
+                    .agency.name + '</a></div>\
+                            </div>\
+                        </td>' +
+                    '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
+                    '</a></td>' +
+                    '<td style="text-align:center">' + job.apply_type + (job.apply_type == "External" ?
+                        '<br><a href="' + job.external_link + '" target="_blank">Apply Now</a>' : "") + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
@@ -202,6 +205,8 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                     console.error("Error fetching employment types:", error);
                 }
             });
+
+            $('.double-scroll').doubleScroll();
         });
     </script>
 @endsection
@@ -216,7 +221,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
             <div class="card">
                 <div class="card-body">
                     <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="row">
+                        <div class="row double-scroll">
                             <div class="col-sm-12 col-md-6">
                                 <div class="table_length" id="table_length"><label>Show <select
                                             name="datatables-reponsive_length" id="per-page-select"
