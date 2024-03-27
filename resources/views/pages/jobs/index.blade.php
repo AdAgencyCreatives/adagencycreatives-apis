@@ -146,6 +146,7 @@
                 var emp_type = $('#employment_type').val();
                 var selectedStatus = $('#status').val();
                 var title = $('#title').val();
+                var agency = $('#agency').val();
 
                 var selectedIndustry = $('#industry').val();
                 var selectedMedia = $('#media').val();
@@ -155,6 +156,7 @@
                     apply_type: apply_type,
                     employment_type: emp_type,
                     title: title,
+                    agency: agency,
                     status: selectedStatus,
                 };
 
