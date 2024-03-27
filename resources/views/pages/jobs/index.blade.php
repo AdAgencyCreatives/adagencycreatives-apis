@@ -46,7 +46,7 @@
                     populateTable(response.data);
                     updatePaginationButtons(response.links, response.meta.links);
                     updateTableInfo(response.meta);
-
+                    $('.double-scroll').doubleScroll();
                 },
                 error: function() {
                     alert('Failed to fetch jobs from the API.');
@@ -205,7 +205,6 @@
                     console.error("Error fetching employment types:", error);
                 }
             });
-
             $('.double-scroll').doubleScroll();
         });
     </script>
