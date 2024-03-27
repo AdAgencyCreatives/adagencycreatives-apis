@@ -103,7 +103,7 @@
                         </td>' +
                     '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
                     '</a></td>' +
-                    '<td style="text-align:center">' + job.apply_type + (job.apply_type == "External" ?
+                    '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type == "External" ?
                         '<br><a class="btn btn-dark" href="' + job.external_link + '" target="_blank">Apply Now</a>' : "") + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
