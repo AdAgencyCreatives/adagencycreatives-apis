@@ -78,8 +78,6 @@ class JobController extends Controller
 
         $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        dump($jobs);
-        
         return new JobCollection($jobs);
     }
 
