@@ -101,6 +101,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                         </div>\
                     </td>' +
                     '<td><a href="{{ $site_url }}job/'+ job.slug +'" target="_blank">' + job.title + '</a></td>' +
+                    '<td>' + job.apply_type + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
@@ -236,6 +237,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                                             <th>ID</th>
                                             <th>Agency</th>
                                             <th>Title</th>
+                                            <th>Apply Type</th>
                                             <!-- <th>Job Post</th> -->
                                             <th>Category</th>
                                             <th>Employment Type</th>
