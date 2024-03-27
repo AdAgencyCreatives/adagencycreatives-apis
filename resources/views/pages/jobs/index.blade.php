@@ -2,6 +2,18 @@
 
 @section('title', __('Jobs'))
 
+@php 
+
+$url_map = [
+    '127.0.0.1:8000' => 'http://localhost:3000/',
+    'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
+    'api.adagencycreatives.com' => 'https://adagencycreatives.com/'
+];
+
+$site_url = $url_map[$_SERVER['HTTP_HOST']];
+
+@endphp
+
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
@@ -83,7 +95,12 @@
 
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
-                    '<td>' + job.title + '</td>' +
+                    '<td>\
+                        <div class="user-details">\
+                            <div><a href="{{ $site_url }}agency/'+ job.agency.slug +'" target="_blank">'+ job.agency.name +'</a></div>\
+                        </div>\
+                    </td>' +
+                    '<td><a href="{{ $site_url }}job/'+ job.slug +'" target="_blank">' + job.title + '</a></td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
@@ -217,7 +234,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Agency</th>
                                             <th>Title</th>
+                                            <!-- <th>Job Post</th> -->
                                             <th>Category</th>
                                             <th>Employment Type</th>
                                             <th>Workplace Preference</th>
