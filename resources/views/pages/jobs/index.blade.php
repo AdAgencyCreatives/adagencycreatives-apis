@@ -101,7 +101,7 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                         </div>\
                     </td>' +
                     '<td><a href="{{ $site_url }}job/'+ job.slug +'" target="_blank">' + job.title + '</a></td>' +
-                    '<td>' + job.apply_type + '</td>' +
+                    '<td>' + job.apply_type + (job.apply_type == "External" ? '<br><a href="' + job.external_link + '" target="_blank"></a>' : "") + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
