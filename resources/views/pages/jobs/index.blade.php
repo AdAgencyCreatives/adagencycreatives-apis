@@ -236,8 +236,8 @@
 
                         </div>
                         <div class="row dt-row">
-                            <div class="col-sm-12">
-                                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline double-scroll"
+                            <div class="col-sm-12 double-scroll">
+                                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline"
                                     style="width: 100%;">
                                     <thead>
                                         <tr>
