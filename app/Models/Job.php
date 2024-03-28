@@ -195,8 +195,8 @@ class Job extends Model
             $q->where(function ($q1) use ($escapedAgencyName) {
                 $q1->where('agency_name', 'LIKE', "%" . $escapedAgencyName . "%");
             })->orWhere(function ($q2) use ($escapedAgencyName) {
-                $q2->whereHas('user', function ($q21) use ($escapedAgencyName) {
-                    $q21->where('role', 'IN', '(2,3)');
+                $q2->whereHas('user', function ($q21) {
+                    $q21->where('role', '=', 3);
                 })->whereHas('user.agency', function ($q22) use ($escapedAgencyName) {
                     $q22->where('name', 'LIKE', "%" . $escapedAgencyName . "%");
                 });
