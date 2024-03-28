@@ -17,9 +17,9 @@
                             {{ $data['applicant'] }},</span>
 
                         <p>@if (strlen($data['agency_profile']) > 0)
-                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency_name'] }}</a>
                         @else
-                            {{ $data['agency'] }}
+                            {{ $data['agency_name'] }}
                         @endif is currently reviewing your application for their <a
                                 href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> role.
                             Just thought we’d keep you in the loop.

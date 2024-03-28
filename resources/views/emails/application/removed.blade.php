@@ -17,9 +17,9 @@
                         </p>
 
                         <p>@if (strlen($data['agency_profile']) > 0)
-                                <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                                <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency_name'] }}</a>
                             @else
-                                {{ $data['agency'] }}
+                                {{ $data['agency_name'] }}
                             @endif
                             reviewed your application and is not moving forward at this time for the
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> opportunity. There are a variety of reason candidates for this, such as; chose
