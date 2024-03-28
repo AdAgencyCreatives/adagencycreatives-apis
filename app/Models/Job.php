@@ -191,9 +191,21 @@ class Job extends Model
     {
         $escapedAgencyName = str_replace('%', '\\%', $agency);
 
-        return $query->whereHas('user.agency', function($q) use($escapedAgencyName) {
-            $q->where('name', 'LIKE', "%" . $escapedAgencyName . "%");
+        return $query->where(function ($q) use ($escapedAgencyName) {
+            $q->where(function ($q1) use ($escapedAgencyName) {
+                $q1->where('agency_name', 'LIKE', "%" . $escapedAgencyName . "%");
+            })->orWhere(function ($q2) use ($escapedAgencyName) {
+                $q2->whereHas('user', function ($q21) use ($escapedAgencyName) {
+                    $q21->where('role', 'IN', '(2,3)');
+                })->whereHas('user.agency', function ($q22) use ($escapedAgencyName) {
+                    $q22->where('name', 'LIKE', "%" . $escapedAgencyName . "%");
+                });
+            });
         });
+
+        // return $query->whereHas('user.agency', function ($q) use ($escapedAgencyName) {
+        //     $q->where('name', 'LIKE', "%" . $escapedAgencyName . "%");
+        // });
     }
 
     public function scopeCitySlug(Builder $query, $city_slug): Builder
