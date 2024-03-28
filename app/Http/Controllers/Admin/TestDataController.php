@@ -13,6 +13,8 @@ class TestDataController extends Controller
 {
     public function index(Request $request)
     {
+
+        $data = [];
         
         $date_range = now()->subDay();
 
@@ -51,7 +53,7 @@ class TestDataController extends Controller
                 ];
             }
 
-            $data = [
+            $data[] = [
                 'recipient' => $recipient->first_name,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
