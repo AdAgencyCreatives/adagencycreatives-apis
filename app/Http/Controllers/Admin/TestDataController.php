@@ -53,11 +53,11 @@ class TestDataController extends Controller
                 ];
             }
 
-            $data[] = [
+            array_push($data, [
                 'recipient' => $recipient,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
-            ];
+            ]);
 
         }
         return view('pages.test_data.index', ['data' => $data]);
