@@ -54,12 +54,12 @@ class TestDataController extends Controller
             }
 
             $data[] = [
-                'recipient' => $recipient->first_name,
+                'recipient' => $recipient,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
             ];
 
         }
-        return view('pages.test_data.index', ['data' => $data, 'receiver'=>$recipient]);
+        return view('pages.test_data.index', ['data' => $data]);
     }
 }
