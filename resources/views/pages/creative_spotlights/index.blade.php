@@ -23,7 +23,7 @@
                 }
             });
 
-            requestData['sort'] = '-created_at';
+            requestData['sort'] = '-updated_at';
 
             console.log(requestData);
 
@@ -91,7 +91,7 @@
                     '<td>' + attachment.title + '</td>' +
                     '<td>' + attachment.slug + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
-                    '<td><span class="badge bg-primary me-2">' + attachment.created_at +
+                    '<td><span class="badge bg-primary me-2">' + attachment.updated_at +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
                 tbody.append(row);

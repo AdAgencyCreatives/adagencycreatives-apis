@@ -48,14 +48,13 @@ class CreativeSpotlightController extends Controller
             $spotlight->update([
                 'title' => $request->title,
                 'slug' => $request->slug,
-                'created_at' => $request->created_at,
+                'updated_at' => $request->updated_at,
             ]);
         }
 
         Session::flash('success', 'Creative updated successfully');
 
         return redirect()->route('creative_spotlights.index');
-
     }
 
     public function storeVideo($request, $status)
@@ -63,7 +62,7 @@ class CreativeSpotlightController extends Controller
         $uuid = Str::uuid();
         $file = $request->file;
 
-        $folder = 'creative_spotlight/'.$uuid;
+        $folder = 'creative_spotlight/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $filename = $file->getClientOriginalName();
