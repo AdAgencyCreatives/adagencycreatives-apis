@@ -13,6 +13,8 @@ class TestDataController extends Controller
 {
     public function index(Request $request)
     {
+
+        $data = [];
         
         $date_range = now()->subDay();
 
@@ -51,13 +53,13 @@ class TestDataController extends Controller
                 ];
             }
 
-            $data = [
-                'recipient' => $recipient->first_name,
+            array_push($data, [
+                'recipient' => $recipient,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
-            ];
+            ]);
 
         }
-        return view('pages.test_data.index', ['data' => $data, 'receiver'=>$recipient]);
+        return view('pages.test_data.index', ['data' => $data]);
     }
 }
