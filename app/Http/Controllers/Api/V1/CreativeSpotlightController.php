@@ -25,16 +25,15 @@ class CreativeSpotlightController extends Controller
                 'status',
                 'title',
             ])
-            ->defaultSort('-created_at')
-            ->allowedSorts('created_at');
+            ->defaultSort('-updated_at')
+            ->allowedSorts('created_at')
+            ->allowedSorts('updated_at');
 
-            if ($request->per_page == -1) {
-                $creatives = $query->get();
-            }
-            else{
-                 $creatives = $query->with([
-        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
-            }
+        if ($request->per_page == -1) {
+            $creatives = $query->get();
+        } else {
+            $creatives = $query->with([])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        }
 
         return new CreativeSpotlightCollection($creatives);
     }
@@ -77,7 +76,7 @@ class CreativeSpotlightController extends Controller
         $uuid = Str::uuid();
         $file = $request->file;
 
-        $folder = 'creative_spotlight/'.$uuid;
+        $folder = 'creative_spotlight/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $filename = $file->getClientOriginalName();
