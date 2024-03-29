@@ -9,7 +9,8 @@ class CreativeSpotlightResource extends JsonResource
 {
     public function toArray($request)
     {
-        $carbonDate = Carbon::parse($this->created_at);
+        $created_at = Carbon::parse($this->created_at);
+        $updated_at = Carbon::parse($this?->updated_at ? $this->updated_at : $this->created_at);
 
         return [
             'id' => $this->uuid,
@@ -17,8 +18,8 @@ class CreativeSpotlightResource extends JsonResource
             'slug' => $this->slug,
             'url' => getAttachmentBasePath() . $this->path,
             'status' => $this->status,
-            'created_at' => $carbonDate->format('M d, Y'),
-            'updated_at' => $this?->updated_at ? $this->updated_at->format(config('global.datetime_format')) : $carbonDate->format('M d, Y'),
+            'created_at' => $created_at->format('M d, Y'),
+            'updated_at' => $updated_at->format('M d, Y'),
         ];
     }
 }
