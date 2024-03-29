@@ -2,6 +2,18 @@
 
 @section('title', __('Jobs'))
 
+@php
+
+    $url_map = [
+        '127.0.0.1:8000' => 'http://localhost:3000/',
+        'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
+        'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
+    ];
+
+    $site_url = $url_map[$_SERVER['HTTP_HOST']];
+
+@endphp
+
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
@@ -34,7 +46,7 @@
                     populateTable(response.data);
                     updatePaginationButtons(response.links, response.meta.links);
                     updateTableInfo(response.meta);
-
+                    $('.double-scroll').doubleScroll();
                 },
                 error: function() {
                     alert('Failed to fetch jobs from the API.');
@@ -83,7 +95,15 @@
 
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
-                    '<td>' + job.title + '</td>' +
+                    '<td>\
+                            <div class="user-details">\
+                                <div>' + (job?.agency_name || job?.agency?.name) + '</div>\
+                            </div>\
+                        </td>' +
+                    '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
+                    '</a></td>' +
+                    '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type == "External" ?
+                        '<br><a class="btn btn-dark" href="' + job.external_link + '" target="_blank">Apply Now</a>' : "") + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
@@ -121,17 +141,21 @@
                 e.preventDefault();
                 var selectedCategory = $('#category').val();
                 var selectedLabels = $('#labels').val();
+                var apply_type = $('#apply_type').val();
                 var emp_type = $('#employment_type').val();
                 var selectedStatus = $('#status').val();
                 var title = $('#title').val();
+                var agency = $('#agency').val();
 
                 var selectedIndustry = $('#industry').val();
                 var selectedMedia = $('#media').val();
 
                 filters = {
                     category_id: selectedCategory,
+                    apply_type: apply_type,
                     employment_type: emp_type,
                     title: title,
+                    agency: agency,
                     status: selectedStatus,
                 };
 
@@ -182,6 +206,7 @@
                     console.error("Error fetching employment types:", error);
                 }
             });
+            $('.double-scroll').doubleScroll();
         });
     </script>
 @endsection
@@ -211,13 +236,16 @@
 
                         </div>
                         <div class="row dt-row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 double-scroll">
                                 <table id="users-table" class="table table-striped dataTable no-footer dtr-inline"
                                     style="width: 100%;">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Agency</th>
                                             <th>Title</th>
+                                            <th>Apply Type</th>
+                                            <!-- <th>Job Post</th> -->
                                             <th>Category</th>
                                             <th>Employment Type</th>
                                             <th>Workplace Preference</th>

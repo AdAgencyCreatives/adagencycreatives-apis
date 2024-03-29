@@ -16,7 +16,11 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['applicant'] }},</span>
 
-                        <p>{{ $data['agency_name'] }} is currently reviewing your application for their <a
+                        <p>@if (strlen($data['agency_profile']) > 0)
+                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency_name'] }}</a>
+                        @else
+                            {{ $data['agency_name'] }}
+                        @endif is currently reviewing your application for their <a
                                 href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> role.
                             Just thought we’d keep you in the loop.
 

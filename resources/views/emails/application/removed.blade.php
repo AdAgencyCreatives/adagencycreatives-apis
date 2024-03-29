@@ -16,7 +16,12 @@
                         <p>The status of one of your job applications on <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a> has changed.
                         </p>
 
-                        <p><a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>, reviewed your application and is not moving forward at this time for the
+                        <p>@if (strlen($data['agency_profile']) > 0)
+                                <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency_name'] }}</a>
+                            @else
+                                {{ $data['agency_name'] }}
+                            @endif
+                            reviewed your application and is not moving forward at this time for the
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> opportunity. There are a variety of reason candidates for this, such as; chose
                             another candidate, an internal move was made, or the job was closed without a hire.
                         </p>
