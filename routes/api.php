@@ -81,6 +81,7 @@ Route::get('attachments', [AttachmentController::class, 'index']);
 Route::get('experiences', [ExperienceController::class, 'index']);
 Route::get('educations', [EducationController::class, 'index']);
 Route::get('home/creative-spotlights', [CreativeSpotlightController::class, 'homepage_spotlights']);
+Route::put('creative-spotlights/{uuid}', [CreativeSpotlightController::class, 'update']);
 Route::resource('creative-spotlights', CreativeSpotlightController::class)->only('index');
 
 //Filters
