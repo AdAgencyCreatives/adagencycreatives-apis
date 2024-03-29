@@ -48,7 +48,6 @@ class CreativeSpotlightController extends Controller
             $spotlight->update([
                 'title' => $request->title,
                 'slug' => $request->slug,
-                'updated_at' => $request->updated_at,
             ]);
         }
 
