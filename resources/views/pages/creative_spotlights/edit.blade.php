@@ -88,13 +88,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <div class="form-group">
-                                <label class="form-label"> Created At </label>
-                                <input class="form-control daterange" type="text" name="created_at"
-                                    value="{{ $spotlight->created_at }}" />
-                            </div>
-                        </div>
-                        <div class="mb-3">
                             <div class="mb-3 error-placeholder">
                                 <label class="form-label">Spotlight Video</label>
                                 <div>
