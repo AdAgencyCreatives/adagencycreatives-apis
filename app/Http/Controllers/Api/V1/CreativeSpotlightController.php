@@ -26,7 +26,6 @@ class CreativeSpotlightController extends Controller
                 'title',
             ])
             ->defaultSort('-updated_at')
-            ->allowedSorts('created_at')
             ->allowedSorts('updated_at');
 
         if ($request->per_page == -1) {
