@@ -211,7 +211,7 @@
                                             <th>Title</th>
                                             <th>Slug</th>
                                             <th>Status</th>
-                                            <th>Created At</th>
+                                            <th>Updated At</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
