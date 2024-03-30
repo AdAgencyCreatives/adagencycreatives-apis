@@ -14,8 +14,8 @@ class TestDataController extends Controller
     public function index(Request $request)
     {
 
-        $data = [];
-        
+        $data = ['wtf'];
+
         $date_range = now()->subDay();
 
         $unreadMessages = Message::whereDate('created_at', $date_range)
@@ -47,7 +47,7 @@ class TestDataController extends Controller
             foreach ($oldestmessages as $msg) {
                 $recent_messages[] = [
                     'name' => $msg->sender->first_name,
-                    'profile_url' => env('FRONTEND_URL').'/profile/'.$msg->sender->id,
+                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
                 ];
@@ -58,7 +58,6 @@ class TestDataController extends Controller
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
             ]);
-
         }
         return view('pages.test_data.index', ['data' => $data]);
     }
