@@ -16,7 +16,7 @@ class TestDataController extends Controller
 
         $data = [];
 
-        $date_range = now()->subDay();
+        $date_range = date(now()->subDay());
 
         $unreadQuery = Message::whereDate('created_at', $date_range)
             ->whereIn('type', ['private', 'job'])
@@ -25,8 +25,6 @@ class TestDataController extends Controller
             ->groupBy('receiver_id');
 
         $unreadMessages = $unreadQuery->get();
-
-        $data = $date_range;
 
         foreach ($unreadMessages as $unreadMessage) {
 
