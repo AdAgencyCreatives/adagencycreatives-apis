@@ -28,6 +28,10 @@ class TestDataController extends Controller
 
         foreach ($unreadMessages as $unreadMessage) {
 
+            if (!$unreadMessage?->receiver) {
+                continue;
+            }
+
             $recipient = $unreadMessage->receiver;
             $unreadMessageCount = $unreadMessage->message_count;
 
