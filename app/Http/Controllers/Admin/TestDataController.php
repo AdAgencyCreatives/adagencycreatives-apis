@@ -18,7 +18,7 @@ class TestDataController extends Controller
 
         $date_range = date(now()->subDay());
 
-        $unreadQuery = Message::whereDate('created_at', $date_range)
+        $unreadQuery = Message::whereDate('created_at', '<=', $date_range)
             ->whereIn('type', ['private', 'job'])
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
