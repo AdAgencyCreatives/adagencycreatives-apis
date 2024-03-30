@@ -18,14 +18,15 @@ class TestDataController extends Controller
 
         $date_range = now()->subDay();
 
-        $unreadMessages = Message::whereDate('created_at', $date_range)
+        $unreadQuery = Message::whereDate('created_at', $date_range)
             ->whereIn('type', ['private', 'job'])
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
-            ->groupBy('receiver_id')
-            ->get();
+            ->groupBy('receiver_id');
 
-        $data = $unreadMessages;
+        $unreadMessages = $unreadQuery->get();
+
+        $data = $unreadQuery->toSql();
 
         foreach ($unreadMessages as $unreadMessage) {
 
