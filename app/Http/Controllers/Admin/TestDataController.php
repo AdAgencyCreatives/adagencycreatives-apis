@@ -40,7 +40,7 @@ class TestDataController extends Controller
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereIn('type', ['private', 'job'])
                 ->whereNull('read_at')
-                ->whereDate('created_at', $date_range)
+                ->whereDate('created_at', '<=', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')
