@@ -64,6 +64,17 @@ class TestDataController extends Controller
                 'recent_messages' => $recent_messages,
             ]);
         }
+
+        $data = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
+            ->where('receiver_id', $unreadMessage->receiver_id)
+            ->whereIn('type', ['private', 'job'])
+            ->whereNull('read_at')
+            ->whereDate('created_at', '<=', $date_range)
+            ->groupBy('sender_id')
+            ->take(5)
+            ->orderBy('max_created_at', 'desc')
+            ->with('sender')->toSql();
+
         return view('pages.test_data.index', ['data' => $data]);
     }
 }
