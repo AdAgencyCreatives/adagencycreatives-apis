@@ -26,7 +26,7 @@ class TestDataController extends Controller
 
         $unreadMessages = $unreadQuery->get();
 
-        $data = $unreadQuery->toSql();
+        $data = $date_range;
 
         foreach ($unreadMessages as $unreadMessage) {
 
