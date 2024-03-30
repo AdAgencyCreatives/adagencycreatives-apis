@@ -14,7 +14,7 @@ class TestDataController extends Controller
     public function index(Request $request)
     {
 
-        $data = ['wtf'];
+        $data = [];
 
         $date_range = now()->subDay();
 
@@ -24,6 +24,8 @@ class TestDataController extends Controller
             ->select('receiver_id', DB::raw('count(*) as message_count'))
             ->groupBy('receiver_id')
             ->get();
+
+        $data = $unreadMessages;
 
         foreach ($unreadMessages as $unreadMessage) {
 
