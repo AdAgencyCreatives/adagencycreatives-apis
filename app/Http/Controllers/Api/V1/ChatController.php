@@ -247,14 +247,19 @@ class ChatController extends Controller
     {
         $userId = request()->user()->id;
 
+        // $contacts = Message::with('sender', 'receiver')->where(function ($query) use ($userId) {
+        //     $query->where(function ($query) use ($userId) {
+        //         $query->where('sender_id', $userId)
+        //             ->whereNull('sender_conversation_deleted_at');
+        //     })->orWhere(function ($query) use ($userId) {
+        //         $query->where('receiver_id', $userId)
+        //             ->whereNull('receiver_conversation_deleted_at');
+        //     });
+        // });
+
         $contacts = Message::with('sender', 'receiver')->where(function ($query) use ($userId) {
-            $query->where(function ($query) use ($userId) {
-                $query->where('sender_id', $userId)
-                    ->whereNull('sender_conversation_deleted_at');
-            })->orWhere(function ($query) use ($userId) {
-                $query->where('receiver_id', $userId)
-                    ->whereNull('receiver_conversation_deleted_at');
-            });
+            $query->whereNull('sender_conversation_deleted_at')
+                ->WhereNull('receiver_conversation_deleted_at');
         });
 
         $types = [];
