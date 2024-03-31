@@ -58,6 +58,7 @@ class TestDataController extends Controller
                     'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
+                    'message' => $msg->message
                 ];
             }
 
@@ -65,6 +66,7 @@ class TestDataController extends Controller
                 'recipient' => $recipient->first_name,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
+
             ]);
         }
 
