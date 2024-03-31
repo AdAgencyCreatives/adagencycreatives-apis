@@ -17,7 +17,7 @@ class SendUnreadMessageEmail extends Command
     {
         $date_range = now()->subDay();
 
-        $unreadMessages = Message::whereDate('created_at', $date_range)
+        $unreadMessages = Message::whereDate('created_at', '<=', $date_range)
             ->whereIn('type', ['private', 'job'])
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
@@ -34,7 +34,7 @@ class SendUnreadMessageEmail extends Command
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereIn('type', ['private', 'job'])
                 ->whereNull('read_at')
-                ->whereDate('created_at', $date_range)
+                ->whereDate('created_at', '<=', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')
@@ -46,7 +46,7 @@ class SendUnreadMessageEmail extends Command
             foreach ($oldestmessages as $msg) {
                 $recent_messages[] = [
                     'name' => $msg->sender->first_name,
-                    'profile_url' => env('FRONTEND_URL').'/profile/'.$msg->sender->id,
+                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
                 ];
@@ -56,13 +56,13 @@ class SendUnreadMessageEmail extends Command
                 'recipient' => $recipient->first_name,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
+                'date_range' => $date_range,
             ];
 
             SendEmailJob::dispatch([
                 'receiver' => $recipient,
                 'data' => $data,
             ], 'unread_message');
-
         }
     }
 }
