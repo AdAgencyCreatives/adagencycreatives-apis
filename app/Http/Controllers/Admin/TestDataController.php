@@ -60,7 +60,7 @@ class TestDataController extends Controller
             }
 
             array_push($data, [
-                'recipient' => $recipient,
+                'recipient' => $recipient->first_name,
                 'unread_message_count' => $unreadMessageCount,
                 'recent_messages' => $recent_messages,
             ]);
