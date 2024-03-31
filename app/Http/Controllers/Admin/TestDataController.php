@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Message\UnreadMessage;
 use App\Models\Job;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -65,6 +66,7 @@ class TestDataController extends Controller
             ]);
         }
 
-        return view('pages.test_data.index', ['data' => $data]);
+        return new UnreadMessage($data[10]);
+        // return view('pages.test_data.index', ['data' => $data]);
     }
 }
