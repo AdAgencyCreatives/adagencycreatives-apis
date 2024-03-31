@@ -15,6 +15,8 @@ class TestDataController extends Controller
     public function index(Request $request)
     {
 
+        $view = $request?->view ?? '';
+
         $data = [];
 
         $date_range = date(now()->subDay());
@@ -66,7 +68,10 @@ class TestDataController extends Controller
             ]);
         }
 
-        return new UnreadMessage($data[10]);
-        // return view('pages.test_data.index', ['data' => $data]);
+        if ($view) {
+            return new UnreadMessage($data[$view]);
+        }
+
+        return view('pages.test_data.index', ['data' => $data]);
     }
 }
