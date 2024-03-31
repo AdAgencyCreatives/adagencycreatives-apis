@@ -259,7 +259,7 @@ class ChatController extends Controller
 
         $contacts = Message::with('sender', 'receiver')->where(function ($query) use ($userId) {
             $query->whereNull('sender_conversation_deleted_at')
-                ->WhereNull('receiver_conversation_deleted_at');
+                ->orWhereNull('receiver_conversation_deleted_at');
         });
 
         $types = [];
