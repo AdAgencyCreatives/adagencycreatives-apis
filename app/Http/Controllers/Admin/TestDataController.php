@@ -39,7 +39,7 @@ class TestDataController extends Controller
             $unreadMessageCount = $unreadMessage->message_count;
 
             // Get the oldest contacts who sent messages to the user
-            $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
+            $oldestmessages = Message::select('sender_id', DB::raw('MAX(created_at) as max_created_at'))
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereIn('type', ['private', 'job'])
                 ->whereNull('read_at')
