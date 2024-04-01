@@ -17,7 +17,7 @@ class SendUnreadMessageEmail extends Command
     {
         $date_range = now()->subDay();
 
-        $unreadMessages = Message::whereDate('created_at', '<=', $date_range)
+        $unreadMessages = Message::whereDate('created_at', $date_range)
             ->whereIn('type', ['private', 'job'])
             ->whereNull('read_at')
             ->select('receiver_id', DB::raw('count(*) as message_count'))
@@ -34,7 +34,7 @@ class SendUnreadMessageEmail extends Command
                 ->where('receiver_id', $unreadMessage->receiver_id)
                 ->whereIn('type', ['private', 'job'])
                 ->whereNull('read_at')
-                ->whereDate('created_at', '<=', $date_range)
+                ->whereDate('created_at', $date_range)
                 ->groupBy('sender_id')
                 ->take(5)
                 ->orderBy('max_created_at', 'desc')
