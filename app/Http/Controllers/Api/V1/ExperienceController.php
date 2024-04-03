@@ -26,6 +26,8 @@ class ExperienceController extends Controller
 
         $experiences = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
+        $experiences = $experiences->sortByDesc('started_at');
+
         return new ExperienceCollection($experiences);
     }
 
