@@ -22,7 +22,7 @@ class ExperienceController extends Controller
         $query = QueryBuilder::for(Experience::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-            ])->sortByDesc('started_at');
+            ]);
 
         $experiences = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
