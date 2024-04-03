@@ -24,9 +24,7 @@ class ExperienceController extends Controller
                 AllowedFilter::scope('user_id'),
             ]);
 
-        $experiences = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
-
-        $experiences = $experiences->sortByDesc('started_at');
+        $experiences = $query->sortByDesc('started_at')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ExperienceCollection($experiences);
     }
