@@ -22,7 +22,7 @@ class ExperienceController extends Controller
         $query = QueryBuilder::for(Experience::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-            ]);
+            ])->sortByDesc('started_at');
 
         $experiences = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -68,7 +68,6 @@ class ExperienceController extends Controller
 
             if ($experience) {
                 $experience->update($experienceData);
-
             } else {
                 Experience::create(array_merge($experienceData, [
                     'uuid' => Str::uuid(),
@@ -79,7 +78,6 @@ class ExperienceController extends Controller
         $experiences = Experience::where('user_id', $user->id)->get();
 
         return new ExperienceCollection($experiences);
-
     }
 
     private function isEmptyEducationData($experienceData)
