@@ -26,6 +26,8 @@ class EducationController extends Controller
 
         $educations = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
+        $educations = $educations->sortByDesc('completed_at');
+
         return new EducationCollection($educations);
     }
 
@@ -68,7 +70,6 @@ class EducationController extends Controller
 
             if ($education) {
                 $education->update($educationData);
-
             } else {
                 Education::create(array_merge($educationData, [
                     'uuid' => Str::uuid(),
@@ -79,7 +80,6 @@ class EducationController extends Controller
         $educations = Education::where('user_id', $user->id)->get();
 
         return new EducationCollection($educations);
-
     }
 
     private function isEmptyExperienceData($experienceData)
