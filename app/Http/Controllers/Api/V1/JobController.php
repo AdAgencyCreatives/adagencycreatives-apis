@@ -76,11 +76,7 @@ class JobController extends Controller
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
         }
 
-        if (true) {
-            return $jobs->having('applications_count', '>=', $request->applications_count)->paginate($request->per_page ?? config('global.request.pagination_limit'));
-        }
-
-        $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $jobs = $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
