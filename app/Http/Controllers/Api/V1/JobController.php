@@ -30,11 +30,6 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
-
-        if (true) {
-            return "ok";
-        }
-
         $filters = $request->all();
 
         $industries = processIndustryExperience($request, $filters);
@@ -72,6 +67,10 @@ class JobController extends Controller
 
         if ($medias !== null) {
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
+        }
+
+        if (true) {
+            return "ok here";
         }
 
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
