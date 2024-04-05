@@ -45,7 +45,7 @@ class JobController extends Controller
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('state_slug'),
                 AllowedFilter::scope('city_slug'),
-                // AllowedFilter::scope('agency'),
+                AllowedFilter::scope('agency'),
                 'title',
                 'slug',
                 'employment_type',
@@ -76,7 +76,9 @@ class JobController extends Controller
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
         }
 
-        $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        // $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        $jobs = $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
     }
