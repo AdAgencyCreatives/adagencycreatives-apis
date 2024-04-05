@@ -15,7 +15,7 @@ class ApplicationResource extends JsonResource
         return [
             'type' => 'applications',
             'id' => $this->uuid,
-            'user_id' => $user->uuid ?? '',
+            'user_id' => $user->uuid,
             'creative_id' => $user->creative ? $user->creative->uuid : '',
             'advisor_id' => $job->advisor_id ?? null,
             'user' => $user->first_name . ' ' . $user->last_name,
