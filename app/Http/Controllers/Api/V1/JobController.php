@@ -69,15 +69,15 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        if (true) {
-            return $query->with('user.agency', 'category', 'state', 'city', 'attachment')->withCount('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
-        }
-
         $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->withCount('applications');
 
         if ($request->applications_count) {
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
+        }
+
+        if (true) {
+            return $jobs->having('applications_count', '>=', $request->applications_count)->paginate($request->per_page ?? config('global.request.pagination_limit'));
         }
 
         $jobs = $jobs->with('applications')->paginate($request->per_page ?? config('global.request.pagination_limit'));
