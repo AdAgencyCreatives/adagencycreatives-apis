@@ -30,6 +30,11 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
+
+        if (true) {
+            return "ok";
+        }
+
         $filters = $request->all();
 
         $industries = processIndustryExperience($request, $filters);
