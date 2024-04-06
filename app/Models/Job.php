@@ -131,7 +131,7 @@ class Job extends Model
 
     public function scopeUserId(Builder $query, $user_id): Builder
     {
-        $user = User::where('uuid', $user_id)->first(); //this is user_id of logged_in user
+        $user = User::withTrashed()->where('uuid', $user_id)->first(); //this is user_id of logged_in user
         if (!$user) {
             return $query->where('user_id', 0);
         }
