@@ -99,7 +99,7 @@ class Application extends Model
 
     public function scopeUserId(Builder $query, $user_id)
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
+        $user = User::where('uuid', $user_id)->whereNull('deleted_at')->firstOrFail();
 
         return $query->where('user_id', $user->id);
     }
@@ -120,20 +120,20 @@ class Application extends Model
 
             $job = Job::where('id', $application->job_id)->first();
 
-                $author = User::find($job->user_id);
-                $agency =  $author->agency; // fetch original agency for which we are posting
-                $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
-                $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
-    
-                if ($job->advisor_id) {
-                    $author = User::find($job->advisor_id); // author override only after original agency is fetched
-                }
+            $author = User::find($job->user_id);
+            $agency =  $author->agency; // fetch original agency for which we are posting
+            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
 
-                $applicant = $application->user;
+            if ($job->advisor_id) {
+                $author = User::find($job->advisor_id); // author override only after original agency is fetched
+            }
+
+            $applicant = $application->user;
 
             if ($oldStatus == 'pending' && in_array($application->status, ['archived', 'rejected'])) {
 
-                
+
                 $data = [
                     'receiver' => $applicant,
                     'data' => [
@@ -165,7 +165,6 @@ class Application extends Model
                 create_notification($applicant->id, sprintf('Application accepted on "%s" job.', $job->title));
                 SendEmailJob::dispatch($data, 'agency_is_interested');
             }
-
         });
     }
 }
