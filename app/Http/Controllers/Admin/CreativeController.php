@@ -52,6 +52,14 @@ class CreativeController extends Controller
             'about',
         ]);
 
+        if ($request?->is_featured && !$creative?->is_featured) {
+            $creative->featured_at = now();
+        }
+
+        if ($creative?->is_featured && !$request?->is_featured) {
+            $creative->featured_at = null;
+        }
+
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
@@ -86,7 +94,6 @@ class CreativeController extends Controller
         Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
-
     }
 
     public function update_qualification(Request $request, $uuid)
@@ -115,7 +122,6 @@ class CreativeController extends Controller
         Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
-
     }
 
     public function update_experience(Request $request, $uuid)
@@ -256,6 +262,5 @@ class CreativeController extends Controller
         }
         Session::flash('success', 'Updated successfully');
         return redirect()->back();
-
     }
 }

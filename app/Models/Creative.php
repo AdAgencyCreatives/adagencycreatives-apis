@@ -36,6 +36,7 @@ class Creative extends Model
         'seo_description',
         'seo_keywords',
         'views',
+        'featured_at',
     ];
 
     public function user()
@@ -93,7 +94,6 @@ class Creative extends Model
         $experience = YearsOfExperience::where('uuid', $exp_id)->first();
 
         return $query->where('years_of_experience', $experience->name);
-
     }
 
     public function scopeStatus(Builder $query, $status)
