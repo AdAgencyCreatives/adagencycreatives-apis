@@ -559,7 +559,7 @@ class CreativeController extends Controller
                 'is_urgent',
             ])
             ->defaultSort('-featured_at')
-            ->allowedSorts('featured_at');
+            ->allowedSorts('featured_at', 'created_at', 'updated_at');
 
         $creatives = $query->with([
             'user.profile_picture',
