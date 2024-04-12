@@ -41,8 +41,6 @@ class BookmarkController extends Controller
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return $bookmarks;
-
         return new BookmarkCollection($bookmarks);
     }
 
