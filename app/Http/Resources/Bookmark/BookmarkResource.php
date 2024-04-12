@@ -45,10 +45,10 @@ class BookmarkResource extends JsonResource
         //     }
         // }
 
+        return $this->bookmarkable_id;
         switch ($this->bookmarkable_type) {
             case 'App\Models\Creative':
                 $model = Creative::where('id', $this->bookmarkable_id)->firstOrFail();
-                return $model;
                 if ($model->user) {
                     return new CreativeResource($model);
                 }
