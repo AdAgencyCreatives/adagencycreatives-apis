@@ -34,6 +34,9 @@ class BookmarkController extends Controller
                 if ($request->has('resource_id')) {
                     $resource = $modelClass::where('uuid', $request->resource_id)->first();
                     $query->where('bookmarkable_id', $resource->id);
+                } else {
+                    $resource = $modelClass::where('uuid', $request->user_id)->first();
+                    $query->where('bookmarkable_id', $resource->id);
                 }
             }
         }
