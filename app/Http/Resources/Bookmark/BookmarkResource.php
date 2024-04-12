@@ -57,7 +57,7 @@ class BookmarkResource extends JsonResource
                     return new AgencyResource($model);
                 }
             case 'App\Models\Job':
-                $model = Job::where('id', $this->bookmarkable_id)->firstOrFail();
+                $model = Job::where('user_id', $this->bookmarkable_id)->firstOrFail();
                 if ($model->user) {
                     return new JobResource($model);
                 }
