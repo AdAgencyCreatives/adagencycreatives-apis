@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources\Bookmark;
 
+use App\Models\Creative;
+use App\Models\Agency;
+use App\Models\Job;
 use App\Http\Resources\Agency\AgencyResource;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Job\JobResource;
@@ -25,21 +28,42 @@ class BookmarkResource extends JsonResource
 
     public function mapResourcePath()
     {
-        $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
-        if ($model->user) {
-            switch ($this->bookmarkable_type) {
-                case 'App\Models\Creative':
+        // $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
+        // if ($model->user) {
+        //     switch ($this->bookmarkable_type) {
+        //         case 'App\Models\Creative':
+        //             return new CreativeResource($model);
+
+        //         case 'App\Models\Agency':
+        //             return new AgencyResource($model);
+
+        //         case 'App\Models\Job':
+        //             return new JobResource($model);
+
+        //         default:
+        //             return null;
+        //     }
+        // }
+
+        switch ($this->bookmarkable_type) {
+            case 'App\Models\Creative':
+                $model = Creative::where('id', $this->bookmarkable_id)->firstOrFail();
+                if ($model->user) {
                     return new CreativeResource($model);
-
-                case 'App\Models\Agency':
+                }
+            case 'App\Models\Agency':
+                $model = Agency::where('id', $this->bookmarkable_id)->firstOrFail();
+                if ($model->user) {
                     return new AgencyResource($model);
-
-                case 'App\Models\Job':
+                }
+            case 'App\Models\Job':
+                $model = Job::where('id', $this->bookmarkable_id)->firstOrFail();
+                if ($model->user) {
                     return new JobResource($model);
-
-                default:
-                    return null;
-            }
+                }
+            default:
+                return null;
         }
+        return null;
     }
 }
