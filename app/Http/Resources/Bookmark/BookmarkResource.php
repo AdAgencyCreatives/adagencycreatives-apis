@@ -28,42 +28,42 @@ class BookmarkResource extends JsonResource
 
     public function mapResourcePath()
     {
-        // $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
-        // if ($model->user) {
-        //     switch ($this->bookmarkable_type) {
-        //         case 'App\Models\Creative':
-        //             return new CreativeResource($model);
-
-        //         case 'App\Models\Agency':
-        //             return new AgencyResource($model);
-
-        //         case 'App\Models\Job':
-        //             return new JobResource($model);
-
-        //         default:
-        //             return null;
-        //     }
-        // }
-
-        switch ($this->bookmarkable_type) {
-            case 'App\Models\Creative':
-                $model = Creative::where('user_id', $this->bookmarkable_id)->firstOrFail();
-                if ($model->user) {
+        $model = $this->bookmarkable_type::where('user_id', $this->bookmarkable_id)->firstOrFail();
+        if ($model->user) {
+            switch ($this->bookmarkable_type) {
+                case 'App\Models\Creative':
                     return new CreativeResource($model);
-                }
-            case 'App\Models\Agency':
-                $model = Agency::where('user_id', $this->bookmarkable_id)->firstOrFail();
-                if ($model->user) {
+
+                case 'App\Models\Agency':
                     return new AgencyResource($model);
-                }
-            case 'App\Models\Job':
-                $model = Job::where('user_id', $this->bookmarkable_id)->firstOrFail();
-                if ($model->user) {
+
+                case 'App\Models\Job':
                     return new JobResource($model);
-                }
-            default:
-                return null;
+
+                default:
+                    return null;
+            }
         }
-        return null;
-    }
+
+    //     switch ($this->bookmarkable_type) {
+    //         case 'App\Models\Creative':
+    //             $model = Creative::where('user_id', $this->bookmarkable_id)->firstOrFail();
+    //             if ($model->user) {
+    //                 return new CreativeResource($model);
+    //             }
+    //         case 'App\Models\Agency':
+    //             $model = Agency::where('user_id', $this->bookmarkable_id)->firstOrFail();
+    //             if ($model->user) {
+    //                 return new AgencyResource($model);
+    //             }
+    //         case 'App\Models\Job':
+    //             $model = Job::where('user_id', $this->bookmarkable_id)->firstOrFail();
+    //             if ($model->user) {
+    //                 return new JobResource($model);
+    //             }
+    //         default:
+    //             return null;
+    //     }
+    //     return null;
+    // }
 }
