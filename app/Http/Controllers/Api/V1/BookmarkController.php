@@ -30,8 +30,6 @@ class BookmarkController extends Controller
 
             if ($modelClass) {
 
-                return $modelClass;
-
                 $query = $query->where('bookmarkable_type', $modelClass);
 
                 if ($request->has('resource_id')) {
