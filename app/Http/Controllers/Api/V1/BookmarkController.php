@@ -28,9 +28,8 @@ class BookmarkController extends Controller
             $resourceType = $request->resource_type;
             $modelClass = $this->getResourceModelClass($resourceType);
 
-            return "ATF";
             if ($modelClass) {
-                $query->where('bookmarkable_type', $modelClass);
+                $query = $query->where('bookmarkable_type', $modelClass);
 
                 if ($request->has('resource_id')) {
                     $resource = $modelClass::where('uuid', $request->resource_id)->first();
