@@ -18,7 +18,7 @@ class BookmarkResource extends JsonResource
             'id' => $this?->uuid,
             'user_id' => $this?->user?->uuid,
             'resource_type' => $this?->bookmarkable_type,
-            // 'resource' => $this?->mapResourcePath(),
+            'resource' => $this?->mapResourcePath(),
             'created_at' => $this?->created_at?->format(config('global.datetime_format')),
             'updated_at' => $this?->updated_at?->format(config('global.datetime_format')),
         ];
@@ -48,6 +48,7 @@ class BookmarkResource extends JsonResource
         switch ($this->bookmarkable_type) {
             case 'App\Models\Creative':
                 $model = Creative::where('id', $this->bookmarkable_id)->firstOrFail();
+                return $model;
                 if ($model->user) {
                     return new CreativeResource($model);
                 }
