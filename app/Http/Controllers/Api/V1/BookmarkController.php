@@ -23,6 +23,8 @@ class BookmarkController extends Controller
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
             ]);
+
+        return "WTF";
         if ($request->has('resource_type')) {
             $resourceType = $request->resource_type;
             $modelClass = $this->getResourceModelClass($resourceType);
