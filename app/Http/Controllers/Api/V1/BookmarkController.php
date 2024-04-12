@@ -29,7 +29,6 @@ class BookmarkController extends Controller
             $modelClass = $this->getResourceModelClass($resourceType);
 
             if ($modelClass) {
-                return "WTF";
                 $query = $query->where('bookmarkable_type', $modelClass);
 
                 if ($request->has('resource_id')) {
@@ -38,6 +37,8 @@ class BookmarkController extends Controller
                 }
             }
         }
+
+        return $query->toSql();
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
