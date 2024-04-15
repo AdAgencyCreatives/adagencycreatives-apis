@@ -257,11 +257,24 @@ class ChatController extends Controller
         //     });
         // });
 
+        // $contacts = Message::with('sender', 'receiver')
+        //     ->whereNull('sender_deleted_at')
+        //     ->WhereNull('receiver_deleted_at')
+        //     ->whereNull('sender_conversation_deleted_at')
+        //     ->WhereNull('receiver_conversation_deleted_at');
+
         $contacts = Message::with('sender', 'receiver')
-            ->whereNull('sender_deleted_at')
-            ->WhereNull('receiver_deleted_at')
-            ->whereNull('sender_conversation_deleted_at')
-            ->WhereNull('receiver_conversation_deleted_at');
+            ->where(function ($query) use ($userId) {
+                $query->where(function ($query) use ($userId) {
+                    $query->where('sender_id', $userId)
+                        ->whereNull('sender_deleted_at')
+                        ->whereNull('sender_conversation_deleted_at');
+                })->orWhere(function ($query) use ($userId) {
+                    $query->where('receiver_id', $userId)
+                        ->whereNull('receiver_deleted_at')
+                        ->whereNull('receiver_conversation_deleted_at');
+                });
+            });
 
         $types = [];
         // Add the dynamic type condition if provided in the request
