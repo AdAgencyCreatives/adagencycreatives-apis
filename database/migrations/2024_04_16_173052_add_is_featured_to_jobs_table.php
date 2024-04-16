@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('job_posts', function (Blueprint $table) {
             //
-            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_featured')->nullable()->default(false);
         });
     }
 
