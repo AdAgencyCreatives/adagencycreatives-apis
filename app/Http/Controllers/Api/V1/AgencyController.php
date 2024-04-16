@@ -42,8 +42,8 @@ class AgencyController extends Controller
                 'is_featured',
                 'is_urgent',
             ])
-            ->defaultSort('-is_featured', '-created_at')
-            ->allowedSorts('created_at', 'is_featured');
+            ->defaultSort('-featured_at', '-updated_at', "-created_at")
+            ->allowedSorts('featured_at', 'updated_at', 'created_at');
 
         if ($industries !== null) {
             $this->applyExperienceFilter($query, $industries, 'industry_experience');
@@ -158,9 +158,8 @@ class AgencyController extends Controller
 
                 // This will only work for
                 if (request()->is('api/v1/recruiters/search1')) {
-                    $query->whereIn('role', [2,5]); // 2 = advisor, 5 = recruiter
+                    $query->whereIn('role', [2, 5]); // 2 = advisor, 5 = recruiter
                 }
-
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
@@ -207,21 +206,20 @@ class AgencyController extends Controller
                 case 'workplace-preference':
                     // Search via Workplace Preference
                     $workplace_preferences = [
-                    'remote' => 'is_remote',
-                    'hybrid' => 'is_hybrid',
-                    'on site' => 'is_onsite',
+                        'remote' => 'is_remote',
+                        'hybrid' => 'is_hybrid',
+                        'on site' => 'is_onsite',
                     ];
 
                     if (isset($workplace_preferences[$term])) {
                         $sql = 'SELECT agn.id FROM agencies agn WHERE ' . $workplace_preferences[$term] . '=1';
                     }
                     break;
-
             }
 
             $res = DB::select($sql);
             $agencyIds = collect($res)->pluck('id')->toArray();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $agencyIds = [];
         }
         $agencies = Agency::whereIn('id', $agencyIds)
@@ -343,7 +341,7 @@ class AgencyController extends Controller
                 'slug.required' => 'The slug field is required',
                 'slug.alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores',
                 'slug.unique' => 'The slug has already been taken',
-        ];
+            ];
 
             $request->validate([
                 'email' => 'unique:users,email,' . $user->id,
@@ -404,7 +402,6 @@ class AgencyController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     public function update_profile_advisor(Request $request, $uuid)
@@ -423,7 +420,7 @@ class AgencyController extends Controller
                 'slug.required' => 'The slug field is required',
                 'slug.alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores',
                 'slug.unique' => 'The slug has already been taken',
-        ];
+            ];
 
             $request->validate([
                 'email' => 'unique:users,email,' . $user->id,
@@ -480,7 +477,6 @@ class AgencyController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     public function destroy($uuid)

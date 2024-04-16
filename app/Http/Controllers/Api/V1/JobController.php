@@ -59,7 +59,8 @@ class JobController extends Controller
                 'status',
                 AllowedFilter::trashed(),
             ])
-            ->allowedSorts('created_at', 'updated_at');
+            ->defaultSort('-featured_at', '-updated_at', "-created_at")
+            ->allowedSorts('featured_at', 'updated_at', 'created_at');
 
         if ($industries !== null) {
             applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');
