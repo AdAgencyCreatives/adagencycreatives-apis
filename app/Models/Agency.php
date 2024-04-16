@@ -33,6 +33,7 @@ class Agency extends Model
         'seo_description',
         'seo_keywords',
         'views',
+        'featured_at',
     ];
 
     public function getApprovedJobCountAttribute()
@@ -100,8 +101,6 @@ class Agency extends Model
                 $agency->slug = Str::slug($agency->user->username);
                 $agency->save();
             }
-
         });
-
     }
 }

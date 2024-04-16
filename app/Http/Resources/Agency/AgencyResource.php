@@ -23,7 +23,7 @@ class AgencyResource extends JsonResource
             'role' => $user->role,
             'industry_experience' => getIndustryNames($this->industry_experience),
             'media_experience' => getMediaNames($this->media_experience),
-            'logo' => $user->agency_logo ? getAttachmentBasePath().$user->agency_logo->path : null,
+            'logo' => $user->agency_logo ? getAttachmentBasePath() . $user->agency_logo->path : null,
             'logo_id' => $user->agency_logo ? $user->agency_logo->uuid : null,
             'is_remote' => $this->is_remote,
             'is_hybrid' => $this->is_hybrid,
@@ -44,6 +44,7 @@ class AgencyResource extends JsonResource
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+            'featured_at' => $this->featured_at ? $this->featured_at->format(config('global.datetime_format')) : null,
         ];
     }
 
@@ -81,7 +82,6 @@ class AgencyResource extends JsonResource
             'description' => $seo_description,
             'tags' => $this->seo_keywords,
         ];
-
     }
 
     private function generateSeoTitle($site_name, $separator)

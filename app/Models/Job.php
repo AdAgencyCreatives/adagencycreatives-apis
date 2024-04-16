@@ -54,6 +54,7 @@ class Job extends Model
         'seo_description',
         'seo_keywords',
         'views',
+        'featured_at',
     ];
 
     protected $casts = [

@@ -37,12 +37,22 @@ class AgencyController extends Controller
         }
 
         $request->merge([
-            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
         ]);
 
         $this->appendWorkplacePreference($request);
+
         $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite']);
+
+        if ($request?->is_featured && !$agency?->is_featured) {
+            $agency->featured_at = now();
+        }
+
+        if ($agency?->is_featured && !$request?->is_featured) {
+            $agency->featured_at = null;
+        }
+
         foreach ($data as $key => $value) {
             $agency->$key = $value;
         }
@@ -72,7 +82,6 @@ class AgencyController extends Controller
         Session::flash('success', 'Agency updated successfully');
 
         return redirect()->back();
-
     }
 
     private function updateLink($user, $label, $url)
@@ -114,7 +123,7 @@ class AgencyController extends Controller
         $city = Location::where('uuid', $request->city)->first();
         if ($state && $city) {
             $address = $user->addresses->first();
-            if (! $address) {
+            if (!$address) {
                 $address = new Address();
                 $address->uuid = Str::uuid();
                 $address->user_id = $user->id;

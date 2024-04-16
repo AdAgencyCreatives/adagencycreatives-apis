@@ -13,7 +13,7 @@ class JobResource extends JsonResource
         $category = $this->category;
         $applications = $this->applications;
 
-        if($this->advisor_id != null){
+        if ($this->advisor_id != null) {
             // If application_status is provided, filter applications by status
             if ($request->has('application_status')) {
                 $applications = $applications->where('status', $request->application_status);
@@ -60,13 +60,13 @@ class JobResource extends JsonResource
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'deleted_at' => $this->deleted_at?->format(config('global.datetime_format')),
+            'featured_at' => $this->featured_at ? $this->featured_at->format(config('global.datetime_format')) : null,
         ];
 
         $agency = $user->agency;
         if ($agency) {
             if ($this->agency_name == null) {
                 $data['agency']['name'] = $agency->name;
-
             } else {
                 $data['agency']['name'] = $this->agency_name;
             }
@@ -130,7 +130,6 @@ class JobResource extends JsonResource
             'description' => $seo_description,
             'tags' => $this->seo_keywords,
         ];
-
     }
 
     private function generateSeoTitle($site_name, $separator)

@@ -46,9 +46,9 @@ class JobController extends Controller
             'category_id' => $category->id,
             'address_id' => 5,
             'status' => $request->status,
-            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
-            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 10)).'',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 10)) . '',
             'state_id' => $state->id ?? 1,
             'city_id' => $city->id ?? 1,
         ]);
@@ -59,7 +59,6 @@ class JobController extends Controller
             $request->merge([
                 $label => 1,
             ]);
-
         }
         $job = Job::create($request->all());
 
@@ -88,14 +87,24 @@ class JobController extends Controller
         $request->merge([
             'category_id' => $category->id,
             'address_id' => 5,
-            'industry_experience' => ''.implode(',', array_slice($request->industry_experience ?? [], 0, 10)).'',
-            'media_experience' => ''.implode(',', array_slice($request->media_experience ?? [], 0, 10)).'',
-            'strengths' => ''.implode(',', array_slice($request->strengths ?? [], 0, 10)).'',
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 10)) . '',
             'state_id' => $state->id ?? $job->state_id,
             'city_id' => $city->id ?? $job->city_id,
         ]);
 
         $this->appendWorkplacePreference($request);
+
+
+        if ($request?->is_featured && !$job?->is_featured) {
+            $job->featured_at = now();
+        }
+
+        if ($job?->is_featured && !$request?->is_featured) {
+            $job->featured_at = null;
+        }
+
         $job->update($request->all());
 
         if ($request->hasFile('file')) {
@@ -123,7 +132,7 @@ class JobController extends Controller
 
         $extension = $file->getClientOriginalExtension();
 
-        $folder = $resource_type.'/'.$uuid;
+        $folder = $resource_type . '/' . $uuid;
         $filePath = Storage::disk('s3')->put($folder, $file);
 
         $attachment = Attachment::create([
