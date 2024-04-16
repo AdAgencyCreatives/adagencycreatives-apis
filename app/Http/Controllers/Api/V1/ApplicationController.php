@@ -158,7 +158,7 @@ class ApplicationController extends Controller
             }
 
             Message::create($msg_data);
-            if ($request->message != '') {
+            if ($job->apply_type == 'Internal' && $request->message != '') {
                 $seconds = now()->addSecond();
                 $msg_data['created_at'] = $seconds;
                 $msg_data['updated_at'] = $seconds;
