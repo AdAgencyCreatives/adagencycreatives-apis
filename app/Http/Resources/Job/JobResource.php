@@ -60,7 +60,7 @@ class JobResource extends JsonResource
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'deleted_at' => $this->deleted_at?->format(config('global.datetime_format')),
-            'featured_at' => $this->featured_at ? $this->featured_at->format(config('global.datetime_format')) : null,
+            // 'featured_at' => $this->featured_at ? $this->featured_at->format(config('global.datetime_format')) : null,
         ];
 
         $agency = $user->agency;
