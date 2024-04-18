@@ -135,7 +135,7 @@ class Application extends Model
 
 
                 $data = [
-                    'receiver' => $applicant,
+                    'receiver' => $applicant->email,
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
@@ -152,7 +152,7 @@ class Application extends Model
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
                 $data = [
-                    'receiver' => $applicant,
+                    'receiver' => $applicant->email,
                     'data' => [
                         'applicant' => $applicant->first_name ?? '',
                         'job_title' => $job->title ?? '',
