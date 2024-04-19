@@ -164,7 +164,7 @@ class DashboardController extends Controller
             $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
 
             $agency = Agency::where('user_id', $user->id)->first();
-            $profile_views_count = $agency->views;
+            $profile_views_count = $agency ? $agency->views : 0;
 
             $stats = [
                 'number_of_posts' => $jobs_count,
