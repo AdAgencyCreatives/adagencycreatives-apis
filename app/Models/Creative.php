@@ -39,6 +39,10 @@ class Creative extends Model
         'featured_at',
     ];
 
+    protected $casts = [
+        'featured_at' => 'datetime'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

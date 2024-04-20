@@ -28,7 +28,9 @@ class BookmarkResource extends JsonResource
 
     public function mapResourcePath()
     {
-        $model = $this->bookmarkable_type::where('user_id', $this->bookmarkable_id)->firstOrFail();
+
+        $model = $this->bookmarkable_type::where('id', $this->bookmarkable_id)->firstOrFail();
+
         if ($model->user) {
             switch ($this->bookmarkable_type) {
                 case 'App\Models\Creative':
