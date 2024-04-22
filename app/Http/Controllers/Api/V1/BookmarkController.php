@@ -39,6 +39,8 @@ class BookmarkController extends Controller
             }
         }
 
+        $query->orderByDesc('updated_at');
+
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new BookmarkCollection($bookmarks);
