@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Test Data'))
+@section('title', __('Test Data View'))
 
 @section('scripts')
 
