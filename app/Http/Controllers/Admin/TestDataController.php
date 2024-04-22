@@ -70,7 +70,7 @@ class TestDataController extends Controller
             ]);
         }
 
-        if ($view) {
+        if (strlen($view) > 0 && is_numeric($view)) {
             return new UnreadMessage($data[$view]);
         }
 
