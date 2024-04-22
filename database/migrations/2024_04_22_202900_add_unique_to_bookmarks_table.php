@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('bookmarks', function (Blueprint $table) {
             //
-            $table->unique(['user_id', 'bookmarkable_id']);
+            $table->unique(['user_id', 'bookmarkable_type', 'bookmarkable_id']);
         });
     }
 
