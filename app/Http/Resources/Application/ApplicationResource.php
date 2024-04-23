@@ -23,7 +23,7 @@ class ApplicationResource extends JsonResource
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
             'job_title' => $job->title,
-            'resume_url' => 'demo', //$this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
+            'resume_url' => 'logged_in_uuid=' . $logged_in_user?->uuid, //$this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
