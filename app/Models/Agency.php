@@ -36,6 +36,10 @@ class Agency extends Model
         'featured_at',
     ];
 
+    protected $casts = [
+        'featured_at' => 'datetime'
+    ];
+
     public function getApprovedJobCountAttribute()
     {
         // Access the 'open_jobs' relationship through the 'user' relationship

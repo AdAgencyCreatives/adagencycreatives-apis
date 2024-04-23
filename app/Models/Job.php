@@ -59,6 +59,7 @@ class Job extends Model
 
     protected $casts = [
         'expired_at' => 'datetime',
+        'featured_at' => 'datetime',
     ];
 
     public const STATUSES = [
