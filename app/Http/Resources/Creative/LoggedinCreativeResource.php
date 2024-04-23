@@ -52,7 +52,7 @@ class LoggedinCreativeResource extends JsonResource
             'is_opentorelocation' => $this->is_opentorelocation,
             'phone_number' => $this->get_phone_number($user, $logged_in_user),
             'location' => $this->location,
-            'resume' => 'demo', //$this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
+            'resume' => $this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
             'portfolio_website' => $this->get_website_preview($user),
             'links' => new LinkCollection($user->links),
             // 'seo' => $this->generate_seo(),
