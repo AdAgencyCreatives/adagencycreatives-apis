@@ -23,7 +23,7 @@ class ApplicationResource extends JsonResource
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
             'job_title' => $job->title,
-            'resume_url' => 'filter[user_id]' . $request->input('filter.user_id'), //$this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
+            'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -48,7 +48,8 @@ class ApplicationResource extends JsonResource
         } else {
             $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d'));
 
-            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user?->uuid]);
+            $u2 = $logged_in_user?->uuid ? $logged_in_user->uuid : request()->input('filter.user_id');
+            return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $u2]);
         }
     }
 }
