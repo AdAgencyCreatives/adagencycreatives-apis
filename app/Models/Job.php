@@ -306,6 +306,15 @@ class Job extends Model
         });
 
         static::updating(function ($job) {
+
+            $agencyName = $job->user?->agency?->name ?? '';
+            $slug = sprintf('%s %s %s %s %s', $agencyName, $job->state?->name, $job->city?->name, $job->employment_type, $job->title);
+            $slug = Str::slug($slug);
+            //if slug already exists, then add 2 to it, if that exists, then add 3 to it and so on
+            $slugCount = count(Job::whereRaw("slug REGEXP '^{$slug}(-[0-9]*)?$'")->where("id", '<>', $job->id)->get());
+            $slug = $slugCount ? "{$slug}-{$slugCount}" : $slug;
+            $job->slug = $slug;
+
             $category = Category::find($job->category_id);
 
             $author = User::find($job->user_id);
