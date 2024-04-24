@@ -16,9 +16,9 @@ class LoggedinCreativeCollection extends ResourceCollection
     {
         $arr = parent::toArray($request);
 
-        for ($i = 0; $i < count($arr); $i++) {
-            $arr[$i] = new CreativeResource($arr[$i]);
-        }
+        // for ($i = 0; $i < count($arr); $i++) {
+        //     $arr[$i] = new CreativeResource($arr[$i]);
+        // }
 
         return $arr;
     }
