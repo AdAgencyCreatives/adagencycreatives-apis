@@ -534,8 +534,6 @@ class CreativeController extends Controller
                 $creative = $creatives->first();
                 $creative->increment('views');
                 $creative->save();
-
-                return new CreativeResource($creative);
             }
         }
 
