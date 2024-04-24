@@ -203,7 +203,7 @@ class LoggedinCreativeResource extends JsonResource
         $seo_description_format = $this->seo_description ? $this->seo_description : settings('creative_description');
 
         return replacePlaceholders($seo_description_format, [
-            '%creatives_about%' => $this->about,
+            '%creatives_about%' => strip_tags($this->about),
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
