@@ -18,6 +18,9 @@ class SettingsController extends Controller
             'creative_title' => settings('creative_title'),
             'creative_description' => settings('creative_description'),
 
+            'agency_title' => settings('agency_title'),
+            'agency_description' => settings('agency_description'),
+
             'creative_spotlight_title' => settings('creative_spotlight_title'),
         ];
 
@@ -58,6 +61,16 @@ class SettingsController extends Controller
     public function update_creatives(Request $request)
     {
         settings($request->only('creative_title', 'creative_description'));
+        Session::flash('success', 'SEO updated successfully');
+
+        Artisan::call('cache:clear');
+
+        return redirect()->back();
+    }
+
+    public function update_agencys(Request $request)
+    {
+        settings($request->only('agency_title', 'agency_description'));
         Session::flash('success', 'SEO updated successfully');
 
         Artisan::call('cache:clear');
