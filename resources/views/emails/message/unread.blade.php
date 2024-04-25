@@ -17,7 +17,7 @@
                         <div class="candidate-thumbnail">
                             <div class="candidate-logo">
                                 <img width="50" height="50"
-                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px;"
+                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
                                     src="{{ $user['profile_picture'] }}" />
                             </div>
                         </div>
