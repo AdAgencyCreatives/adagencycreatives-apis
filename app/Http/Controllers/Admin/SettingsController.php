@@ -68,7 +68,7 @@ class SettingsController extends Controller
         return redirect()->back();
     }
 
-    public function update_agencys(Request $request)
+    public function update_agencies(Request $request)
     {
         settings($request->only('agency_title', 'agency_description'));
         Session::flash('success', 'SEO updated successfully');
