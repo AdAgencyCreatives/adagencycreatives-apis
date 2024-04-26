@@ -34,7 +34,7 @@ class ApplicationController extends Controller
             ]);
 
         $query = $query->with('job');
-        $applications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $applications = $query->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
     }

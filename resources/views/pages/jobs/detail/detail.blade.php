@@ -73,7 +73,17 @@
                 data: requestData,
                 dataType: 'json',
                 success: function(response) {
-                    populateApplications(response.data);
+                    let applications = response.data;
+                    const rejected = applications.filter((app) => {
+                        return app.status === 'rejected';
+                    });
+                    let others = applications.filter((app) => {
+                        return app.status !== 'rejected';
+                    });
+
+                    applications = others.concat(rejected);
+
+                    populateApplications(applications);
                 },
                 error: function() {
                     alert('Failed to fetch applications from the API.');
@@ -319,7 +329,7 @@
                 const status = $(this).data('status');
                 const data = {status: status};
                 $(this).html('<div class="spinner-border spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>');
-                let icon = ''
+                let icon = '';
                 if (status === 'accepted') {
                     icon = '<i class="fas fa-check"></i>';
                 } else if (status === 'rejected') {
