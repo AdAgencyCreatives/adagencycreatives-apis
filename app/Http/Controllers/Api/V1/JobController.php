@@ -78,7 +78,7 @@ class JobController extends Controller
         }
 
         $jobs = $jobs->with('applications', function ($query) {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('status', 'asc')->orderBy('id', 'desc');
         })->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
