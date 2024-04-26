@@ -71,9 +71,9 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        if ($request->input('filter.agency_name')) {
+        if ($request->input('agency_name')) {
             $query->with('user.agency', function ($q) use ($request) {
-                $q->where('name', 'LIKE', '%' . $request->input('filter.agency_name') . '%');
+                $q->where('name', 'LIKE', '%' . $request->input('agency_name') . '%');
             });
         } else {
             $query->with('user.agency');
@@ -135,9 +135,9 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        if ($request->input('filter.agency_name')) {
+        if ($request->input('agency_name')) {
             $query->with('user.agency', function ($q) use ($request) {
-                $q->where('name', 'LIKE', '%' . $request->input('filter.agency_name') . '%');
+                $q->where('name', 'LIKE', '%' . $request->input('agency_name') . '%');
             });
         } else {
             $query->with('user.agency');
