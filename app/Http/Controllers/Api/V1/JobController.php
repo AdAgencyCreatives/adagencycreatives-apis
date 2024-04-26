@@ -90,7 +90,8 @@ class JobController extends Controller
             $query->orderBy('status', 'asc')->orderBy('id', 'desc');
         })->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return new JobCollection($jobs);
+        return $request->input('agency_name');
+        //return new JobCollection($jobs);
         // return $jobs;
     }
 
