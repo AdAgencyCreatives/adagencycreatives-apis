@@ -88,11 +88,12 @@ class AgencyResource extends JsonResource
     {
         $seo_title_format = $this->seo_title ? $this->seo_title : settings('agency_title');
 
+        $location = $this->get_location($this->user);
         return replacePlaceholders($seo_title_format, [
             '%agencies_contact_first_name%' => $this->user->first_name,
             '%agencies_contact_last_name%' => $this->user->last_name,
             '%agencies_company_name%' => $this->name,
-            '%agencies_location%' => isset($this->location) ? sprintf('%s, %s', ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')) : '',
+            '%agencies_location%' => isset($location) ? sprintf('%s, %s', ($location['city'] ? $location['city'] : ''), ($location['state'] ? $location['state'] : '')) : '',
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
