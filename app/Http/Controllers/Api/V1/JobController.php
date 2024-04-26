@@ -90,9 +90,7 @@ class JobController extends Controller
             $query->orderBy('status', 'asc')->orderBy('id', 'desc');
         })->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return $request->input('agency_name');
-        //return new JobCollection($jobs);
-        // return $jobs;
+        return new JobCollection($jobs);
     }
 
     public function jobs_for_logged_in(Request $request)
@@ -157,8 +155,7 @@ class JobController extends Controller
             return $job;
         });
 
-        return $request->input('agency_name');
-        //return new JobLoggedInCollection($jobs);
+        return new JobLoggedInCollection($jobs);
     }
 
     public function jobs_homepage(Request $request)
