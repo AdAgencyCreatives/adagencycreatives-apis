@@ -347,7 +347,7 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function(response) {
-                    $('#application-container').html('');
+                    $('#applications-container').html('');
                     fetchApplications();
                 },
                 error: function() {
