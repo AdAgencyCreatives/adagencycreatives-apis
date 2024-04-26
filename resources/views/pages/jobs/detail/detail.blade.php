@@ -20,12 +20,17 @@
             } else {
                 applications.forEach(function(application) {
                     var applicationCard = $('<div class="card">');
-
                     var cardHeader = $('<div class="card-header px-4 pt-4">');
-                    cardHeader.append(
-                        '<div style="float:right"><a href="' + application.resume_url +
-                        '" class="btn btn-primary mt-n1">Download Resume <i class="fas fa-download"></i></a></div>'
-                    );
+
+                    if (application.status === 'pending') {
+                        cardHeader.append('<div style="float:right"><a href="javascript:void(0);" class="btn btn-default mt-n1 mark-application" data-status="accepted" data-id="'+ application.id +'" title="Interested"><i class="fas fa-check"></i></a></div>');
+                        cardHeader.append('<div style="float:right"><a href="javascript:void(0);" class="btn btn-default mt-n1 mark-application" data-status="rejected" data-id="'+ application.id +'" title="Not Aligned"><i class="fas fa-times"></i></a></div>');
+                    } else {
+                        cardHeader.append('<div style="float:right"><a href="javascript:void(0);" class="btn btn-default mt-n1 mark-application" data-status="pending" data-id="'+ application.id +'" title="Undo"><i class="fas fa-undo"></i></a></div>');
+                    }
+
+                    cardHeader.append('<div style="float:right"><a href="' + application.resume_url + '" class="btn btn-primary mt-n1 mr-2">Download Resume <i class="fas fa-download"></i></a></div>');
+
                     var userNameLink = $('<a target="_blank" href="' + '/users/' + application.user_profile_id +
                             '/details' + '">')
                         .text(application.user);
@@ -69,8 +74,6 @@
                 dataType: 'json',
                 success: function(response) {
                     populateApplications(response.data);
-
-
                 },
                 error: function() {
                     alert('Failed to fetch applications from the API.');
@@ -243,7 +246,6 @@
 
 
             var job_state = "{{ $job->state?->uuid }}";
-            console.log(job_state);
             fetchStates(job_state);
 
             var years_of_experience = "{{ $job->years_of_experience }}";
@@ -310,6 +312,24 @@
                 getCitiesByState(selectedStateId, city_id);
             });
 
+            const application_container = $('#applications-container');
+            application_container.on('click', '.mark-application', async function () {
+                const e = $(this);
+                const id = $(this).data('id');
+                const status = $(this).data('status');
+                const data = {status: status};
+                $(this).html('<div class="spinner-border spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>');
+                let icon = ''
+                if (status === 'accepted') {
+                    icon = '<i class="fas fa-check"></i>';
+                } else if (status === 'rejected') {
+                    icon = '<i class="fas fa-times"></i>';
+                } else {
+                    icon = '<i class="fas fa-undo"></i>';
+                }
+                updateApplication(id, data, icon, e);
+            });
+
             tinymce.init({
                 selector: 'textarea',
                 menubar: false,
@@ -318,6 +338,25 @@
             });
 
         });
+
+        async function updateApplication(id, data, icon, e) {
+            $.ajax({
+                url: '/api/v1/applications/'+ id,
+                method: 'PATCH',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(response) {
+                    $('#applications-container').html('');
+                    fetchApplications();
+                },
+                error: function() {
+                    e.html(icon);
+                    alert('Something went wrong!');
+                },
+
+            });
+        }
     </script>
 @endsection
 
