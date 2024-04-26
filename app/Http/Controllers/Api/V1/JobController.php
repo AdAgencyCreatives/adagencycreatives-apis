@@ -157,7 +157,8 @@ class JobController extends Controller
             return $job;
         });
 
-        return new JobLoggedInCollection($jobs);
+        return $request->input('agency_name');
+        //return new JobLoggedInCollection($jobs);
     }
 
     public function jobs_homepage(Request $request)
