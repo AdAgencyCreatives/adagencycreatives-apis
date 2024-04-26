@@ -89,10 +89,10 @@ class AgencyResource extends JsonResource
         $seo_title_format = $this->seo_title ? $this->seo_title : settings('agency_title');
 
         return replacePlaceholders($seo_title_format, [
-            '%creatives_first_name%' => $this->user->first_name,
-            '%creatives_last_name%' => $this->user->last_name,
-            '%creatives_title%' => $this->title,
-            '%creatives_location%' => isset($this->location) ? sprintf('%s, %s', ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')) : '',
+            '%agencies_contact_first_name%' => $this->user->first_name,
+            '%agencies_contact_last_name%' => $this->user->last_name,
+            '%agencies_company_name%' => $this->name,
+            '%agencies_location%' => isset($this->location) ? sprintf('%s, %s', ($this->location['city'] ? $this->location['city'] : ''), ($this->location['state'] ? $this->location['state'] : '')) : '',
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
@@ -103,7 +103,7 @@ class AgencyResource extends JsonResource
         $seo_description_format = $this->seo_description ? $this->seo_description : settings('agency_description');
 
         return replacePlaceholders($seo_description_format, [
-            '%creatives_about%' => $this->about,
+            '%agencies_about%' => $this->about,
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
