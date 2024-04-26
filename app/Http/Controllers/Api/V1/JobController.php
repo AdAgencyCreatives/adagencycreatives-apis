@@ -47,7 +47,6 @@ class JobController extends Controller
                 AllowedFilter::scope('city_slug'),
                 AllowedFilter::scope('agency'),
                 'title',
-                'agency_name',
                 'slug',
                 'employment_type',
                 'apply_type',
@@ -71,15 +70,7 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        if ($request->input('agency_name')) {
-            $query->with('user.agency', function ($q) use ($request) {
-                $q->where('name', 'LIKE', '%' . $request->input('agency_name') . '%');
-            });
-        } else {
-            $query->with('user.agency');
-        }
-
-        $jobs = $query->with('category', 'state', 'city', 'attachment')
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->withCount('applications');
 
         if ($request->applications_count) {
@@ -91,6 +82,7 @@ class JobController extends Controller
         })->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
+        // return $jobs;
     }
 
     public function jobs_for_logged_in(Request $request)
@@ -110,7 +102,6 @@ class JobController extends Controller
                 AllowedFilter::scope('state_slug'),
                 AllowedFilter::scope('city_slug'),
                 'title',
-                'agency_name',
                 'slug',
                 'employment_type',
                 'apply_type',
@@ -134,15 +125,7 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        if ($request->input('agency_name')) {
-            $query->with('user.agency', function ($q) use ($request) {
-                $q->where('name', 'LIKE', '%' . $request->input('agency_name') . '%');
-            });
-        } else {
-            $query->with('user.agency');
-        }
-
-        $jobs = $query->with('category', 'state', 'city', 'attachment')
+        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->withCount('applications')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
