@@ -22,6 +22,7 @@ class Application extends Model
         'attachment_id',
         'message',
         'status',
+        'removed_from_recent',
     ];
 
     const STATUSES = [

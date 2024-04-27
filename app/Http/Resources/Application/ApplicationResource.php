@@ -28,6 +28,7 @@ class ApplicationResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+            'removed_from_recent' => $this?->removed_from_recent ? $this->removed_from_recent : false,
 
             'relationships' => [
                 'notes' => [

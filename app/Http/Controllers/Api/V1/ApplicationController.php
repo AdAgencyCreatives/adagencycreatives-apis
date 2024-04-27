@@ -233,4 +233,16 @@ class ApplicationController extends Controller
             return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $logged_in_user?->uuid]);
         }
     }
+
+    public function remove_from_recent($uuid)
+    {
+        try {
+            $application = Application::where('uuid', $uuid)->firstOrFail();
+            $application->update(['remove_from_recent' => true]);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new ApplicationResource($application);
+    }
 }

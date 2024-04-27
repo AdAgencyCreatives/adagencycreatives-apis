@@ -44,6 +44,7 @@ use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
+use App\Models\Application;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -253,3 +254,6 @@ Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
 Route::resource('publication-resources', PublicationResourceController::class);
 Route::resource('featured_cities', FeaturedLocationController::class);
+
+// Applications
+Route::post('applications/remove_from_recent/{uuid}', [Application::class, 'remove_from_recent']);
