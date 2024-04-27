@@ -256,4 +256,4 @@ Route::resource('publication-resources', PublicationResourceController::class);
 Route::resource('featured_cities', FeaturedLocationController::class);
 
 // Applications
-Route::post('applications/remove_from_recent/{uuid}', [Application::class, 'remove_from_recent']);
+Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
