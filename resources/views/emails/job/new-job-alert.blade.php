@@ -32,7 +32,7 @@
                             @endif
 
                         </div>
-                        @if (strlen($data['subscribers_count']) > 0)
+                        @if ($data['subscribers_count'] && strlen($data['subscribers_count']) > 0)
                             <div><b>For Staging Only:</b><br />
                                 Subscribers Count = {{ $data['subscribers_count'] }}
                             </div>
