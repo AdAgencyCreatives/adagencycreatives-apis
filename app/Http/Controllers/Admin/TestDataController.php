@@ -98,9 +98,9 @@ class TestDataController extends Controller
             $categories = $category->id;
         }
 
-        return view('pages.test_data.index', ['data' => $categories]);
+        // return view('pages.test_data.index', ['data' => $categories]);
 
-        $data = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+        $data = JobAlert::with('user')->where('category_id', 'IN', "(" . $categories . ")")->where('status', 1)->get();
         return view('pages.test_data.index', ['data' => $data]);
     }
 }
