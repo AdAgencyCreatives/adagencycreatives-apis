@@ -330,7 +330,24 @@ class Job extends Model
 
             $oldStatus = $job->getOriginal('status');
             if ($oldStatus == 'draft' && $job->status === 'approved') {
-                $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+                // $categorySubscribers = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
+
+                $categories = [];
+
+                $category = Category::where('id', $job->category_id)->first();
+
+                $group_categories = Category::where('group_name', $category->name)->get();
+
+                if (count($group_categories) > 0) {
+                    for ($i = 0; $i < count($group_categories); $i++) {
+                        $categories[$i] = $group_categories[$i]->id;
+                    }
+                } else {
+                    $categories[0] = $category->id;
+                }
+
+
+                $categorySubscribers = JobAlert::with('user')->whereIn('category_id', $categories)->where('status', 1)->get();
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
 
@@ -354,7 +371,6 @@ class Job extends Model
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
-
 
                 /**
                  * Send Notification to Admin about new job
