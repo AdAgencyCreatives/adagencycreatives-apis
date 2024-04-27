@@ -80,6 +80,7 @@
                 var row = '<tr>' +
                     '<td>' + category.id + '</td>' +
                     '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
+                    '<td class="category-name">' + (category?.group_name || "") + '</td>' +
                     '<td>' + category.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
@@ -213,6 +214,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Group Name</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
                                         </tr>
