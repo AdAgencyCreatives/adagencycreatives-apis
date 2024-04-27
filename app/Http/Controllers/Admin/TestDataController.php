@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\Message\UnreadMessage;
+use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobAlert;
 use App\Models\Message;
@@ -81,6 +82,22 @@ class TestDataController extends Controller
     public function index(Request $request)
     {
         $job = json_decode(json_encode(array('category_id' => 4)), FALSE);
+
+        $categories = '';
+
+        $category = Category::where('id', $job->category_id)->get();
+        $group_categories = Category::where('group_name', $category->name)->get();
+
+        if (count($group_categories) > 0) {
+            for ($i = 0; $i < count($group_categories); $i++) {
+                $categories .= ($i == 0 ? '' : ',') . $group_categories[$i]->id;
+            }
+        } else {
+            $categories = $category->id;
+        }
+
+        return view('pages.test_data.index', ['data' => $categories]);
+
         $data = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
         return view('pages.test_data.index', ['data' => $data]);
     }
