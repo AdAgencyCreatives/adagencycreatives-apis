@@ -81,7 +81,7 @@ class TestDataController extends Controller
 
     public function index(Request $request)
     {
-        $job = json_decode(json_encode(array('category_id' => 4)), FALSE);
+        $job = json_decode(json_encode(array('category_id' => $request?->cid ?? 0)), FALSE);
 
         $categories = '';
 
