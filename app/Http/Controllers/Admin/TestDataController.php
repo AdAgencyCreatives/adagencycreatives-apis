@@ -86,6 +86,8 @@ class TestDataController extends Controller
         $categories = '';
 
         $category = Category::where('id', $job->category_id)->get();
+        return view('pages.test_data.index', ['data' => $category]);
+
         $group_categories = Category::where('group_name', $category->name)->get();
 
         if (count($group_categories) > 0) {
