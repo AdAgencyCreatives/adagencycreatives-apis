@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\JobAlert\JobAlertCollection;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Job;
 use App\Models\JobAlert;
@@ -82,6 +83,6 @@ class TestDataController extends Controller
     {
         $job = json_decode(json_encode(array('category_id' => 4)), FALSE);
         $data = JobAlert::with('user')->where('category_id', $job->category_id)->where('status', 1)->get();
-        return view('pages.test_data.index', ['data' => $data]);
+        return view('pages.test_data.index', ['data' => new JobAlertCollection($data)]);
     }
 }
