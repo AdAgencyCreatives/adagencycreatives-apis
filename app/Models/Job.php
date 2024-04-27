@@ -358,6 +358,7 @@ class Job extends Model
                         'agency' => $agency_name,
                         'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
                         'category' => $category?->name,
+                        'subscribers_count' => count($categorySubscribers),
                     ],
                     'subscribers' => $categorySubscribers,
                 ];

@@ -136,7 +136,6 @@ class SendEmailJob implements ShouldQueue
                     }
                 } else {
                     // on staging / non-production only 1 email goes to admin for confirmation of alert
-                    $email_data['subscribers_count'] = count($subscribers);
                     Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $this->adminEmail));
                 }
 
