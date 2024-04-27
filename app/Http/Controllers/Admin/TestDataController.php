@@ -83,7 +83,7 @@ class TestDataController extends Controller
     {
         $job = json_decode(json_encode(array('category_id' => $request?->cid ?? 0)), FALSE);
 
-        $categories = '';
+        $categories = [];
 
         $category = Category::where('id', $job->category_id)->first();
         // return view('pages.test_data.index', ['data' => $category]);
@@ -92,10 +92,10 @@ class TestDataController extends Controller
 
         if (count($group_categories) > 0) {
             for ($i = 0; $i < count($group_categories); $i++) {
-                $categories .= ($i == 0 ? '' : ',') . $group_categories[$i]->id;
+                $categories[$i] = $group_categories[$i]->id;
             }
         } else {
-            $categories = $category->id;
+            $categories[0] = $category->id;
         }
 
         // return view('pages.test_data.index', ['data' => $categories]);
