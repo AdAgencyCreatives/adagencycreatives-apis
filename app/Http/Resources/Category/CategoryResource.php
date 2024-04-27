@@ -11,6 +11,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->uuid,
             'name' => $this->name,
+            'group_name' => $this->group_name ?? "",
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
         ];

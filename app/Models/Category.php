@@ -16,6 +16,7 @@ class Category extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'group_name',
     ];
 
     public function creatives()
