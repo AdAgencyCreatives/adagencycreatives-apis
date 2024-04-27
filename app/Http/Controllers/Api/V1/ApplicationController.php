@@ -237,9 +237,8 @@ class ApplicationController extends Controller
     public function remove_from_recent($uuid)
     {
         try {
-            return $uuid;
             $application = Application::where('uuid', $uuid)->firstOrFail();
-            $application->update(['remove_from_recent' => true]);
+            $application->update(['removed_from_recent' => true]);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
