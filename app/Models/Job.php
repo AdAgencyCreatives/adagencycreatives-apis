@@ -229,6 +229,12 @@ class Job extends Model
         return $query->whereIn('media_experience', $medias);
     }
 
+    public function scopeSlug(Builder $query, $slug): Builder
+    {
+
+        return $query->where('slug', $slug);
+    }
+
     public function getStatusAttribute($value)
     {
         switch ($value) {
