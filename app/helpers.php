@@ -217,6 +217,30 @@ if (!function_exists('updateLink')) {
     }
 }
 
+function url_exists($url) {
+    $headers = @get_headers($url);
+	if( strpos( $headers[0], '200' ) === false ) return false;
+	return true;
+}
+
+function formate_url($url) {
+    $find = ['https://', 'http://', 'www.'];
+    $replace   = ['', '', ''];
+
+    $formatted_url = str_replace($find, $replace, $url);
+    if (url_exists('https://'. $formatted_url)) {
+    	return 'https://'. $formatted_url;
+    } else if (url_exists('http://'. $formatted_url)) {
+    	return 'http://'. $formatted_url;
+    } else if (url_exists('https://www.'. $formatted_url)) {
+    	return 'https://www.'. $formatted_url;
+    } else if (url_exists('http://www.'. $formatted_url)) {
+    	return 'http://www.'. $formatted_url;
+    }
+
+    return $url;
+}
+
 if (!function_exists('updateLocation')) {
     function updateLocation($request, $user, $label)
     {
