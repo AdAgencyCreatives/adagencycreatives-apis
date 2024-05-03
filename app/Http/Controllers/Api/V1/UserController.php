@@ -111,18 +111,20 @@ class UserController extends Controller
                 $creative->user_id = $user->id;
                 $creative->save();
 
+                $portfolio_site = $request->portfolio_site ? formate_url($request->portfolio_site) : '';
+
                 Link::create([
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
                     'label' => 'portfolio',
-                    'url' => $request->portfolio_site ?? '',
+                    'url' => $portfolio_site,
                 ]);
 
                 SendEmailJob::dispatch([
                     'receiver' => $admin,
                     'data' => [
                         'user' => $user,
-                        'url' => $request->portfolio_site ?? '',
+                        'url' => $portfolio_site,
                     ],
                 ], 'new_user_registration_creative_role');
             }
