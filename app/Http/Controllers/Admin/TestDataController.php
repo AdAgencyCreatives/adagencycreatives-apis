@@ -114,7 +114,7 @@ class TestDataController extends Controller
         $sender = json_decode(json_encode(array(
             'first_name' => 'Gabriel',
             'last_name' => 'Grove',
-            'profile_url' => 'creative-two',
+            'profile_url' => 'gabriel-grove',
         )), FALSE);
 
         $profile_url = $sender->profile_url;
