@@ -125,6 +125,8 @@ class TestDataController extends Controller
                 'recipient' => $receiver->first_name,
                 'inviter' => $sender->first_name,
                 'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
+                'APP_NAME' => env('APP_NAME'),
+                'FRONTEND_URL' => env('FRONTEND_URL'),
             ],
         ];
         return view('emails.friendship.request', ['data' => $data['data']]);
