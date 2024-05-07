@@ -111,6 +111,7 @@ class TestDataController extends Controller
             'last_name' => 'Doe',
             'slug' => 'john-doe',
             'role' => 'creative',
+            'username' => 'johndoe'
         )), FALSE);
 
         $sender = json_decode(json_encode(array(
@@ -118,6 +119,7 @@ class TestDataController extends Controller
             'last_name' => 'Grove',
             'slug' => 'gabriel-grove',
             'role' => 'creative',
+            'username' => 'gabrielgrove',
         )), FALSE);
 
         if ($sender->role == 'creative') {
