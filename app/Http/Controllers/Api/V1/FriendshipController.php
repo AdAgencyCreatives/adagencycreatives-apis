@@ -73,14 +73,14 @@ class FriendshipController extends Controller
                 } else {
                     $profile_url = $sender->username;
                 }
-                SendEmailJob::dispatch([
-                    'receiver' => $receiver,
-                    'data' => [
-                        'recipient' => $receiver->first_name,
-                        'inviter' => $sender->first_name,
-                        'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
-                    ],
-                ], 'friendship_request_sent');
+                // SendEmailJob::dispatch([
+                //     'receiver' => $receiver,
+                //     'data' => [
+                //         'recipient' => $receiver->first_name,
+                //         'inviter' => $sender->first_name,
+                //         'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
+                //     ],
+                // ], 'friendship_request_sent');
             } catch (\Exception $e) {
                 throw new ApiException($e, 'CS-01');
             }
