@@ -112,8 +112,8 @@ class TestDataController extends Controller
         )), FALSE);
 
         $sender = json_decode(json_encode(array(
-            'first_name' => 'Creative',
-            'last_name' => 'Two',
+            'first_name' => 'Gabriel',
+            'last_name' => 'Grove',
             'profile_url' => 'creative-two',
         )), FALSE);
 
