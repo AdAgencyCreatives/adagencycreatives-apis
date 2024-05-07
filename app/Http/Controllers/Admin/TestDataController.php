@@ -109,21 +109,21 @@ class TestDataController extends Controller
         $receiver = json_decode(json_encode(array(
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'profile_url' => 'john-doe',
+            'slug' => 'john-doe',
             'role' => 'creative',
         )), FALSE);
 
         $sender = json_decode(json_encode(array(
             'first_name' => 'Gabriel',
             'last_name' => 'Grove',
-            'profile_url' => 'gabriel-grove',
+            'slug' => 'gabriel-grove',
             'role' => 'creative',
         )), FALSE);
 
         if ($sender->role == 'creative') {
-            $profile_url = '/creative/' . $sender->creative?->slug ?? '';
+            $profile_url = '/creative/' . $sender?->slug ?? '';
         } elseif ($sender->role == 'agency') {
-            $profile_url = '/agency/' . $sender->agency?->slug ?? '';
+            $profile_url = '/agency/' . $sender?->slug ?? '';
         } else {
             $profile_url = $sender->username;
         }
