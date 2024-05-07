@@ -56,7 +56,7 @@ class FriendshipController extends Controller
 
         // Check if a friendship already exists or a pending request
         $existingFriendship = $this->checkExistingFriendship($sender->id, $receiver->id);
-        if (! $existingFriendship) {
+        if (!$existingFriendship) {
             // Create a new friend request
             FriendRequest::create([
                 'uuid' => Str::uuid(),
@@ -67,20 +67,20 @@ class FriendshipController extends Controller
 
             try {
                 if ($sender->role == 'creative') {
-                    $profile_url = '/creative/'.$sender->creative?->slug ?? '';
+                    $profile_url = '/creative/' . $sender->creative?->slug ?? '';
                 } elseif ($sender->role == 'agency') {
-                    $profile_url = '/agency/'.$sender->agency?->slug ?? '';
+                    $profile_url = '/agency/' . $sender->agency?->slug ?? '';
                 } else {
                     $profile_url = $sender->username;
                 }
-                // SendEmailJob::dispatch([
-                //     'receiver' => $receiver,
-                //     'data' => [
-                //         'recipient' => $receiver->first_name,
-                //         'inviter' => $sender->first_name,
-                //         'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url) ,
-                //     ],
-                // ], 'friendship_request_sent');
+                SendEmailJob::dispatch([
+                    'receiver' => $receiver,
+                    'data' => [
+                        'recipient' => $receiver->first_name,
+                        'inviter' => $sender->first_name,
+                        'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
+                    ],
+                ], 'friendship_request_sent');
             } catch (\Exception $e) {
                 throw new ApiException($e, 'CS-01');
             }
@@ -99,14 +99,12 @@ class FriendshipController extends Controller
 
                     return response()->json(['message' => 'You both are now friends.'], 200);
                 }
-
             } elseif ($existingFriendship->status == 'accepted') {
                 return response()->json(['message' => 'Friendship already exists.'], 400);
             } elseif ($existingFriendship->status === 'cancelled' || $existingFriendship->status === 'declined') {
                 $existingFriendship->update(['status' => 'pending']);
 
                 return response()->json(['message' => 'Friendship request sent again.']);
-
             } elseif ($existingFriendship->status == 'unfriended') {
                 $existingFriendship->update([
                     'status' => 'pending',
@@ -117,7 +115,6 @@ class FriendshipController extends Controller
                 return response()->json(['message' => 'Friendship request sent again.']);
             }
         }
-
     }
 
     public function respondToFriendRequest(FriendRequestRespondRequest $request)
@@ -163,17 +160,15 @@ class FriendshipController extends Controller
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
 
                 return response()->json(['message' => sprintf('You both are no longer friends.')]);
-
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw new ApiException($e, 'CS-01');
         }
 
-            return response()->json(['message' => sprintf('Friend request %s', $response)]);
+        return response()->json(['message' => sprintf('Friend request %s', $response)]);
     }
 
     public function getFriends()
@@ -217,7 +212,7 @@ class FriendshipController extends Controller
             $query->where('user1_id', $friend->id)->where('user2_id', $user->id);
         })->first();
 
-        if (! $friendship) {
+        if (!$friendship) {
             return response()->json(['message' => 'Friendship does not exist.'], 400);
         }
 
