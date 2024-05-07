@@ -127,6 +127,6 @@ class TestDataController extends Controller
                 'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
             ],
         ];
-        return view('emails.friendship.request', ['data' => $data]);
+        return view('emails.friendship.request', ['data' => $data['data']);
     }
 }
