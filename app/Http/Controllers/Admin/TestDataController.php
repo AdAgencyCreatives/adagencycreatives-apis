@@ -109,22 +109,31 @@ class TestDataController extends Controller
         $receiver = json_decode(json_encode(array(
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'profile_url' => 'john-doe',
+            'role' => 'creative',
         )), FALSE);
 
         $sender = json_decode(json_encode(array(
             'first_name' => 'Gabriel',
             'last_name' => 'Grove',
             'profile_url' => 'gabriel-grove',
+            'role' => 'creative',
         )), FALSE);
 
-        $profile_url = $sender->profile_url;
+        if ($sender->role == 'creative') {
+            $profile_url = '/creative/' . $sender->creative?->slug ?? '';
+        } elseif ($sender->role == 'agency') {
+            $profile_url = '/agency/' . $sender->agency?->slug ?? '';
+        } else {
+            $profile_url = $sender->username;
+        }
 
         $data = [
             'receiver' => $receiver,
             'data' => [
                 'recipient' => $receiver->first_name,
                 'inviter' => $sender->first_name,
-                'iniviter_profile' => sprintf("%s/%s", env('FRONTEND_URL'), $profile_url),
+                'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
                 'APP_NAME' => env('APP_NAME'),
                 'FRONTEND_URL' => env('FRONTEND_URL'),
             ],
