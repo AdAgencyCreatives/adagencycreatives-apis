@@ -148,10 +148,10 @@ class TestDataController extends Controller
     {
         $date_range = date(now()->subDay());
 
-        dd($date_range);
         $friendRequests = FriendRequest::where('status', 'pending')
             ->where('updated_at', '=', $date_range)
             ->get();
-        return view('pages.test_data.index', ['data' => $friendRequests]);
+
+        dd($friendRequests);
     }
 }
