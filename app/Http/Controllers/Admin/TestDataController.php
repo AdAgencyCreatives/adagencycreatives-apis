@@ -148,7 +148,6 @@ class TestDataController extends Controller
     {
         $date_range = now()->subDay()->format('Y-m-d');
 
-        dd($date_range);
         $friendRequests = FriendRequest::where('status', 'pending')
             ->whereDate('updated_at', '=', $date_range)
             ->get();
