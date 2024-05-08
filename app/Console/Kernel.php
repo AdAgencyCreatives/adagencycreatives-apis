@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:unread-mention-notification')->dailyAt($daily_time);
         $schedule->command('adagencycreatives:schedule-notifications')->everyFifteenMinutes();
         // $schedule->command('portfolio_latest:generate')->everyMinute();
+        $schedule->command('email:send-friend-request-emails')->dailyAt($daily_time);
     }
 
     /**

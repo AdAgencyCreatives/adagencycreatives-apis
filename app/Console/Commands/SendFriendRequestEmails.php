@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendEmailJob;
 use App\Models\FriendRequest;
 use App\Models\Friendship;
 use Illuminate\Console\Command;
@@ -10,59 +11,38 @@ use Illuminate\Support\Facades\DB;
 class SendFriendRequestEmails extends Command
 {
 
-    protected $signature = 'send-friend-request-emails';
-    protected $description = 'It will send friend request status emails to users who have not logged in in 24 hours.';
+    protected $signature = 'email:send-friend-request-emails';
+    protected $description = 'It will send friend request status emails to users who have not responded to friend request in last 24 hours.';
 
     public function handle()
     {
-        // Get the oldest contacts who sent messages to the user
-        $friendRequests = FriendRequest::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
-            // ->where('status', 'pending')
-            // ->where('created_at', '>=', \Carbon\Carbon::now()->subDay())
-            ->groupBy('sender_id')
-            ->orderBy('max_created_at', 'asc')
+        $date_range = now()->subDay()->format('Y-m-d');
+
+        $friendRequests = FriendRequest::where('status', 'pending')
+            ->whereDate('updated_at', '=', $date_range)
+            ->with('sender', 'receiver')
             ->get();
 
+        foreach ($friendRequests as $fr) {
+            $receiver = $fr->receiver;
+            $sender = $fr->sender;
 
-        dd($friendRequests->toArray());
-        $unreadMessages = Friendship::whereNull('read_at')
-            ->select('receiver_id', DB::raw('count(*) as message_count'))
-            ->groupBy('receiver_id')
-            ->get();
-
-        foreach ($unreadMessages as $unreadMessage) {
-
-            $recipient = $unreadMessage->receiver;
-            $unreadMessageCount = $unreadMessage->message_count;
-
-            // Get the oldest contacts who sent messages to the user
-            $oldestmessages = Message::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
-                ->where('receiver_id', $unreadMessage->receiver_id)
-                ->whereNull('read_at')
-                ->groupBy('sender_id')
-                ->take(5)
-                ->orderBy('max_created_at', 'asc')
-                ->with('sender')
-                ->get();
-
-            $recent_messages = [];
-            foreach ($oldestmessages as $msg) {
-                $recent_messages[] = [
-                    'name' => $msg->sender->first_name,
-                    'profile_url' => env('FRONTEND_URL').'/profile/'.$msg->sender->id,
-                    'profile_picture' => get_profile_picture($msg->sender),
-                    'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
-                ];
+            if ($sender->role == 'creative') {
+                $profile_url = '/creative/' . $sender->creative?->slug ?? '';
+            } elseif ($sender->role == 'agency') {
+                $profile_url = '/agency/' . $sender->agency?->slug ?? '';
+            } else {
+                $profile_url = $sender->username;
             }
 
-            $data = [
-                'recipient' => $recipient->first_name,
-                'unread_message_count' => $unreadMessageCount,
-                'recent_messages' => $recent_messages,
-            ];
-
-
+            SendEmailJob::dispatch([
+                'receiver' => $receiver,
+                'data' => [
+                    'recipient' => $receiver->first_name,
+                    'inviter' => $sender->first_name,
+                    'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
+                ],
+            ], 'friendship_request_sent');
         }
     }
-
 }
