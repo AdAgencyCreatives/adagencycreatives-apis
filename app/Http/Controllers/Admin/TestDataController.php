@@ -148,7 +148,7 @@ class TestDataController extends Controller
     {
         $date_range = date(now()->subDay());
         $friendRequests = FriendRequest::where('status', 'pending')
-            // ->where('email_due', '=', $date_range)
+            ->where('updated_at', '=', $date_range)
             ->get();
         return view('pages.test_data.index', ['data' => $friendRequests]);
     }
