@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Category;
+use App\Models\FriendRequest;
 use App\Models\Job;
 use App\Models\JobAlert;
 use App\Models\Message;
@@ -141,5 +142,16 @@ class TestDataController extends Controller
             ],
         ];
         return view('emails.friendship.request', ['data' => $data['data']]);
+    }
+
+    public function testFr(Request $request)
+    {
+        $friendRequests = FriendRequest::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
+            // ->where('status', 'pending')
+            // ->where('created_at', '>=', \Carbon\Carbon::now()->subDay())
+            ->groupBy('sender_id')
+            ->orderBy('max_created_at', 'asc')
+            ->get();
+        return view('pages.test_data.index', ['data' => $friendRequests]);
     }
 }

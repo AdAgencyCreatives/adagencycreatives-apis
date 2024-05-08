@@ -403,3 +403,4 @@ Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class
 
 //Get Test Data
 Route::get('/test-data', [TestDataController::class, 'index'])->name('test-data');
+Route::get('/test-fr', [TestDataController::class, 'testFr'])->name('test-fr');
