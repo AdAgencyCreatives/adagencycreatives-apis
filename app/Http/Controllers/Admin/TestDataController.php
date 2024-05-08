@@ -146,7 +146,10 @@ class TestDataController extends Controller
 
     public function testFr(Request $request)
     {
-        $friendRequests = FriendRequest::where('status', 'pending')->where('email_due', 1)->get();
+        $date_range = date(now()->subDay());
+        $friendRequests = FriendRequest::where('status', 'pending')
+            // ->where('email_due', '=', $date_range)
+            ->get();
         return view('pages.test_data.index', ['data' => $friendRequests]);
     }
 }
