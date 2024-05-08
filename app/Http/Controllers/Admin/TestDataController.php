@@ -146,12 +146,7 @@ class TestDataController extends Controller
 
     public function testFr(Request $request)
     {
-        $friendRequests = FriendRequest::select('sender_id', DB::raw('MIN(created_at) as max_created_at'))
-            // ->where('status', 'pending')
-            // ->where('created_at', '>=', \Carbon\Carbon::now()->subDay())
-            ->groupBy('sender_id')
-            ->orderBy('max_created_at', 'asc')
-            ->get();
+        $friendRequests = FriendRequest::where('status', 'pending')->get();
         return view('pages.test_data.index', ['data' => $friendRequests]);
     }
 }
