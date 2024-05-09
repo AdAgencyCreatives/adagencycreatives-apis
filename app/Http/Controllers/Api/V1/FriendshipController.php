@@ -51,7 +51,7 @@ class FriendshipController extends Controller
     public function sendFriendRequest(FriendRequestSendRequest $request)
     {
         // FriendRequest::where('id', '>', 0)->delete();
-        $sender = $request->user();
+        $sender = $request?->sender_id ? User::where('uuid', $request->sender_id)->first() : $request->user();
         $receiver = User::where('uuid', $request->receiver_id)->first();
 
         // Check if a friendship already exists or a pending request
@@ -115,6 +115,13 @@ class FriendshipController extends Controller
                 return response()->json(['message' => 'Friendship request sent again.']);
             }
         }
+    }
+
+    public function sendFriendRequestAdmin(FriendRequestSendRequest $request)
+    {
+        $sender = User::where('id', 202)->first(); // User ID: 202 represents => Ad Agency Creatives
+        $request->merge(['sender_id' => $sender->uuid]);
+        return $this->sendFriendRequest($request);
     }
 
     public function respondToFriendRequest(FriendRequestRespondRequest $request)
