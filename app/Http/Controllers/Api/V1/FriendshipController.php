@@ -117,13 +117,6 @@ class FriendshipController extends Controller
         }
     }
 
-    public function sendFriendRequestAdmin(FriendRequestSendRequest $request)
-    {
-        $sender = User::where('id', 202)->first(); // User ID: 202 represents => Ad Agency Creatives
-        $request->merge(['sender_id' => $sender->uuid]);
-        return $this->sendFriendRequest($request);
-    }
-
     public function respondToFriendRequest(FriendRequestRespondRequest $request)
     {
         $user = $request->user();
