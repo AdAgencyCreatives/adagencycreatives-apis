@@ -150,6 +150,7 @@ class TestDataController extends Controller
 
         $friendRequests = FriendRequest::where('status', 'pending')
             ->whereDate('updated_at', '=', $date_range)
+            ->orderBy('id')->orderByDesc('updated_at')
             ->get();
 
         dd($friendRequests);
