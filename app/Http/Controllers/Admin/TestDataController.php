@@ -154,18 +154,20 @@ class TestDataController extends Controller
             ->get();
 
         $bundle = [];
+        $receivers = [];
 
         foreach ($friendRequests as $fr) {
             $receiver = $fr->receiver;
             $sender = $fr->sender;
 
-            if (array_key_exists($receiver, $bundle)) {
-                $bundle[$receiver][count($bundle)] = $sender;
+            if (array_key_exists($receiver->id, $bundle)) {
+                $bundle[$receiver->id][count($bundle)] = $sender;
             } else {
-                $bundle[$receiver] = array(0 => $sender);
+                $bundle[$receiver->id] = array(0 => $sender);
+                $receivers[count($receivers)] = $receiver;
             }
         }
 
-        dd($bundle);
+        dd($receivers);
     }
 }
