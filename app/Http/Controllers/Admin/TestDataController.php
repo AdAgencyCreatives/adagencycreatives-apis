@@ -140,6 +140,8 @@ class TestDataController extends Controller
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'senders' => $senders,
+                    'APP_NAME' => env('APP_NAME'),
+                    'FRONTEND_URL' => env('FRONTEND_URL'),
                 ],
             ];
             return view('emails.friendship.request', ['data' => $data['data']]);
