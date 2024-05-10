@@ -140,6 +140,7 @@ class TestDataController extends Controller
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'senders' => $senders,
+                    'multiple' => count($senders) > 0,
                     'APP_NAME' => env('APP_NAME'),
                     'FRONTEND_URL' => env('FRONTEND_URL'),
                 ],

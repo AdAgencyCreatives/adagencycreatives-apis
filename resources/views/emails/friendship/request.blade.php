@@ -5,15 +5,48 @@
         <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
-            <p>Creatives below would like to become friends in The
+            <p>
+                @if ($data['multiple'])
+                    Creatives
+                @else
+                    Creative
+                @endif
+                below would like to become
+
+                @if ($data['multiple'])
+                    friends
+                @else
+                    friend
+                @endif
+
+                in The
                 Lounge
-                on <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.</p>
+                on
+                <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
+            </p>
 
             <p>Click <a href="{{ $data['FRONTEND_URL'] }}/friends?friendships=requests" style="color: #3c5cc4;"
                     target="_blank">my
                     requests</a> to
-                accept this invite and start a conversation, or click profile image below to view
-                inviter’s profile.</p>
+                accept
+
+                @if ($data['multiple'])
+                    invites
+                @else
+                    invite
+                @endif
+
+                and start a conversation, or click profile
+
+                @if ($data['multiple'])
+                    images
+                @else
+                    image
+                @endif
+
+                below to view
+                inviter’s profile.
+            </p>
             <div style="margin: 15px 0;">
 
                 @foreach ($data['senders'] as $user)
