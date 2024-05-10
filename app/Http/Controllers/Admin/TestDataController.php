@@ -107,41 +107,43 @@ class TestDataController extends Controller
 
     public function index(Request $request)
     {
-        $receiver = json_decode(json_encode(array(
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'slug' => 'john-doe',
-            'role' => 'creative',
-            'username' => 'johndoe'
-        )), FALSE);
 
-        $sender = json_decode(json_encode(array(
-            'first_name' => 'Creative',
-            'last_name' => 'Two',
-            'slug' => 'creative-two',
-            'role' => 'creative',
-            'username' => 'creative-two',
-        )), FALSE);
+        $date_range = now()->subDay()->format('Y-m-d');
 
-        if ($sender->role == 'creative') {
-            $profile_url = '/creative/' . $sender?->slug ?? '';
-        } elseif ($sender->role == 'agency') {
-            $profile_url = '/agency/' . $sender?->slug ?? '';
-        } else {
-            $profile_url = $sender->username;
+        $friendRequests = FriendRequest::where('status', 'pending')
+            ->whereDate('updated_at', '=', $date_range)
+            ->orderBy('receiver_id')->orderByDesc('updated_at')
+            ->get();
+
+        $bundle = [];
+        $receivers = [];
+
+        foreach ($friendRequests as $fr) {
+            $receiver = $fr->receiver;
+            $sender = $fr->sender;
+
+            $sender->profile_picture = get_profile_picture($sender);
+
+            if (array_key_exists($receiver->id, $bundle)) {
+                $bundle[$receiver->id][count($bundle)] = $sender;
+            } else {
+                $bundle[$receiver->id] = array(0 => $sender);
+                $receivers[count($receivers)] = $receiver;
+            }
         }
 
-        $data = [
-            'receiver' => $receiver,
-            'data' => [
-                'recipient' => $receiver->first_name,
-                'inviter' => $sender->first_name,
-                'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
-                'APP_NAME' => env('APP_NAME'),
-                'FRONTEND_URL' => env('FRONTEND_URL'),
-            ],
-        ];
-        return view('emails.friendship.request', ['data' => $data['data']]);
+        foreach ($receivers as $receiver) {
+            $senders = $bundle[$receiver->id];
+
+            $data = [
+                'receiver' => $receiver,
+                'data' => [
+                    'recipient' => $receiver->first_name,
+                    'senders' => $senders,
+                ],
+            ];
+            return view('emails.friendship.request', ['data' => $data['data']]);
+        }
     }
 
     public function testFr(Request $request)
@@ -160,6 +162,8 @@ class TestDataController extends Controller
             $receiver = $fr->receiver;
             $sender = $fr->sender;
 
+            $sender->profile_picture = get_profile_picture($sender);
+
             if (array_key_exists($receiver->id, $bundle)) {
                 $bundle[$receiver->id][count($bundle)] = $sender;
             } else {
@@ -168,6 +172,10 @@ class TestDataController extends Controller
             }
         }
 
-        dd($receivers);
+        foreach ($receivers as $receiver) {
+            $senders = $bundle[$receiver->id];
+        }
+
+        dd($senders);
     }
 }

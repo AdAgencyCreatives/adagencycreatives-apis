@@ -12,8 +12,38 @@
             <p>Click <a href="{{ $data['FRONTEND_URL'] }}/friends?friendships=requests" style="color: #3c5cc4;"
                     target="_blank">my
                     requests</a> to
-                accept this invite and start a conversation, or click <a href="{{ $data['iniviter_profile'] }}"
-                    style="color: #3c5cc4;" target="_blank">here</a>
-                to view
-                {{ $data['inviter'] }}’s profile.</p>
+                accept this invite and start a conversation, or click profile image below to view
+                inviter’s profile.</p>
+            <div style="margin: 15px 0;">
+
+                @foreach ($data['senders'] as $user)
+                    <div class="candidate-top-wrapper flex-middle-sm"
+                        style="display: flex; gap: 15px; margin-bottom: 5px;">
+                        <div class="candidate-thumbnail">
+                            <div class="candidate-logo">
+                                <img width="50" height="50"
+                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
+                                    src="{{ $user['profile_picture'] }}" />
+                            </div>
+                        </div>
+
+
+                        <div class="candidate-information">
+                            <div class="title-wrapper">
+                                <h1 class="candidate-title"
+                                    style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
+                                    {{ $user['name'] }}
+                                </h1>
+                                <span style="color: #ccc;">{{ $user['message_time'] }}</span>
+                            </div>
+                            <div class="candidate-metas">
+
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                <a href="{{ $data['FRONTEND_URL'] }}" target="_blank"
+                    style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
+                    Check Messages</a>
+            </div>
             @include('emails.includes.lounge_footer')
