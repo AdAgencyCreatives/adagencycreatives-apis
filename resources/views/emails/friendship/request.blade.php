@@ -19,27 +19,31 @@
                 @foreach ($data['senders'] as $user)
                     <div class="candidate-top-wrapper flex-middle-sm"
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
-                        <div class="candidate-thumbnail">
-                            <div class="candidate-logo">
-                                <img width="50" height="50"
-                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
-                                    src="{{ $user->profile_picture }}" />
-                            </div>
-                        </div>
+                        <a href="{{ $data['FRONTEND_URL'] }}/creative/{{ $user?->slug || '' }}" style="color: #3c5cc4;"
+                            target="_blank">
 
-
-                        <div class="candidate-information">
-                            <div class="title-wrapper">
-                                <h1 class="candidate-title"
-                                    style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
-                                    {{ $user->first_name }}
-                                </h1>
-                                {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
+                            <div class="candidate-thumbnail">
+                                <div class="candidate-logo">
+                                    <img width="50" height="50"
+                                        style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
+                                        src="{{ $user?->profile_picture || '' }}" />
+                                </div>
                             </div>
-                            <div class="candidate-metas">
 
+                            <div class="candidate-information">
+                                <div class="title-wrapper">
+                                    <h1 class="candidate-title"
+                                        style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
+                                        {{ $user?->first_name || '' }}
+                                    </h1>
+                                    {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
+                                </div>
+                                <div class="candidate-metas">
+
+                                </div>
                             </div>
-                        </div>
+
+                        </a>
                     </div>
                 @endforeach
             </div>
