@@ -174,8 +174,7 @@ class TestDataController extends Controller
 
         foreach ($receivers as $receiver) {
             $senders = $bundle[$receiver->id];
+            dd($senders);
         }
-
-        dd($senders);
     }
 }
