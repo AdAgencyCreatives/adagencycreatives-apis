@@ -159,10 +159,10 @@ class TestDataController extends Controller
             $receiver = $fr->receiver;
             $sender = $fr->sender;
 
-            if (array_key_exists($receiver->id, $bundle)) {
-                $bundle[$receiver->id][count($bundle)] = $sender->creative->slug;
+            if (array_key_exists($receiver, $bundle)) {
+                $bundle[$receiver][count($bundle)] = $sender;
             } else {
-                $bundle[$receiver->id] = array(0 => $sender->creative->slug);
+                $bundle[$receiver] = array(0 => $sender);
             }
         }
 
