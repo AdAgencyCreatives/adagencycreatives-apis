@@ -32,7 +32,7 @@
                             <div class="title-wrapper">
                                 <h1 class="candidate-title"
                                     style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
-                                    {{ $user->name }}
+                                    {{ $user->first_name }}
                                 </h1>
                                 {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
                             </div>
