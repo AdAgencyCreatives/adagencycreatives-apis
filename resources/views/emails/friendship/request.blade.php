@@ -5,7 +5,7 @@
         <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
-            <p>{{ $data['inviter'] }} would like to become friends in The
+            <p>Creatives below would like to become friends in The
                 Lounge
                 on <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.</p>
 
