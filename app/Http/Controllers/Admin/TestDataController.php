@@ -153,6 +153,19 @@ class TestDataController extends Controller
             ->orderBy('receiver_id')->orderByDesc('updated_at')
             ->get();
 
-        dd($friendRequests);
+        $bundle = [];
+
+        foreach ($friendRequests as $fr) {
+            $receiver = $fr->receiver;
+            $sender = $fr->sender;
+
+            if (array_key_exists($receiver->id, $bundle)) {
+                $bundle[$receiver->id][count($bundle)] = $sender;
+            } else {
+                $bundle[$receiver->id] = array(0 => $sender);
+            }
+        }
+
+        dd($bundle);
     }
 }
