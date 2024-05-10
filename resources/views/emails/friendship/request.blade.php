@@ -36,12 +36,12 @@
                     invite
                 @endif
 
-                and start a conversation, or click profile
+                and start a conversation, or click
 
                 @if ($data['multiple'])
-                    images
+                    profiles
                 @else
-                    image
+                    profile
                 @endif
 
                 below to view
