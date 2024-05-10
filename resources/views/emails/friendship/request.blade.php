@@ -52,8 +52,8 @@
                 @foreach ($data['senders'] as $user)
                     <div class="candidate-top-wrapper flex-middle-sm"
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
-                        <a href="{{ $data['FRONTEND_URL'] }}/creative/{{ $user->slug }}" style="color: #3c5cc4;"
-                            target="_blank">
+                        <a href="{{ $data['FRONTEND_URL'] }}/creative/{{ $user->creative->slug }}"
+                            style="color: #3c5cc4;" target="_blank">
 
                             <div class="candidate-thumbnail">
                                 <div class="candidate-logo">
