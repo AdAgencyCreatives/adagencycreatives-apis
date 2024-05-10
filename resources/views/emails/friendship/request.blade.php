@@ -50,34 +50,33 @@
             <div style="margin: 15px 0;">
 
                 @foreach ($data['senders'] as $user)
-                    <div class="candidate-top-wrapper flex-middle-sm"
+                    <a href="{{ $data['FRONTEND_URL'] }}/creative/{{ $user->creative->slug }}" <div
+                        class="candidate-top-wrapper flex-middle-sm"
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
-                        <a href="{{ $data['FRONTEND_URL'] }}/creative/{{ $user->creative->slug }}"
-                            style="color: #3c5cc4;" target="_blank">
+                        style="color: #3c5cc4;" target="_blank">
 
-                            <div class="candidate-thumbnail">
-                                <div class="candidate-logo">
-                                    <img width="50" height="50"
-                                        style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
-                                        src="{{ $user?->profile_picture }}" />
-                                </div>
+                        <div class="candidate-thumbnail">
+                            <div class="candidate-logo">
+                                <img width="50" height="50"
+                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
+                                    src="{{ $user?->profile_picture }}" />
                             </div>
+                        </div>
 
-                            <div class="candidate-information">
-                                <div class="title-wrapper">
-                                    <h1 class="candidate-title"
-                                        style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
-                                        {{ $user?->first_name }}
-                                    </h1>
-                                    {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
-                                </div>
-                                <div class="candidate-metas">
-
-                                </div>
+                        <div class="candidate-information">
+                            <div class="title-wrapper">
+                                <h1 class="candidate-title"
+                                    style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
+                                    {{ $user?->first_name }}
+                                </h1>
+                                {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
                             </div>
+                            <div class="candidate-metas">
 
-                        </a>
-                    </div>
-                @endforeach
+                            </div>
+                        </div>
             </div>
-            @include('emails.includes.lounge_footer')
+            </a>
+            @endforeach
+        </div>
+        @include('emails.includes.lounge_footer')
