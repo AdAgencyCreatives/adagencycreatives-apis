@@ -6,22 +6,7 @@
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p>
-                @if ($data['multiple'])
-                    Creatives
-                @else
-                    Creative
-                @endif
-                below would like to become
-
-                @if ($data['multiple'])
-                    friends
-                @else
-                    friend
-                @endif
-
-                in The
-                Lounge
-                on
+                You have pending friend requests in The Lounge on
                 <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
             </p>
 
