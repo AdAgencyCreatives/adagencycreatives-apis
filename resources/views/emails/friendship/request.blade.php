@@ -23,7 +23,7 @@
                             <div class="candidate-logo">
                                 <img width="50" height="50"
                                     style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
-                                    src="{{ $user['profile_picture'] }}" />
+                                    src="{{ $user->profile_picture }}" />
                             </div>
                         </div>
 
@@ -32,9 +32,9 @@
                             <div class="title-wrapper">
                                 <h1 class="candidate-title"
                                     style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
-                                    {{ $user['name'] }}
+                                    {{ $user->name }}
                                 </h1>
-                                <span style="color: #ccc;">{{ $user['message_time'] }}</span>
+                                {{-- <span style="color: #ccc;">{{ $user['message_time'] }}</span> --}}
                             </div>
                             <div class="candidate-metas">
 
@@ -42,8 +42,5 @@
                         </div>
                     </div>
                 @endforeach
-                <a href="{{ $data['FRONTEND_URL'] }}" target="_blank"
-                    style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
-                    Check Messages</a>
             </div>
             @include('emails.includes.lounge_footer')
