@@ -25,8 +25,8 @@ class FriendshipRequest extends Mailable
     {
         return new Envelope(
             // subject: sprintf('%s wants to be friends on %s', $this->data['inviter'], $this->data['APP_NAME']),
-            subject: sprintf('%s wants to be friends on %s', "Someone", $this->data['APP_NAME']),
-
+            // subject: sprintf('%s wants to be friends on %s', "Someone", $this->data['APP_NAME']),
+            subject: sprintf('Pending Friend Alert on %s', $this->data['APP_NAME']),
         );
     }
 

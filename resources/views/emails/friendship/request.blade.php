@@ -6,7 +6,13 @@
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p>
-                You have pending friend requests in The Lounge on
+                You have
+                @if ($data['multiple'] == 'yes')
+                    pending friend requests
+                @else
+                    a pending friend request
+                @endif
+                in The Lounge on
                 <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
             </p>
 
@@ -15,7 +21,7 @@
                     requests</a> to
                 accept
 
-                @if ($data['multiple'])
+                @if ($data['multiple'] == 'yes')
                     invites
                 @else
                     invite
@@ -23,7 +29,7 @@
 
                 and start a conversation, or click
 
-                @if ($data['multiple'])
+                @if ($data['multiple'] == 'yes')
                     profiles
                 @else
                     profile
