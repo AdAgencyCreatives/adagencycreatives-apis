@@ -80,7 +80,7 @@ class SendFriendRequestEmails extends Command
                 'data' => [
                     'recipient' => $receiver->first_name,
                     'senders' => $senders,
-                    'multiple' => count($senders) > 0 ? "yes" : "no",
+                    'multiple' => count($senders) > 1 ? "yes" : "no",
                 ],
             ], 'friendship_request_sent');
         }
