@@ -197,7 +197,7 @@ class TestDataController extends Controller
             $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
 
             $info = pathinfo($profile_picture);
-            dd($info);
+            // dd($info);
 
             $fname = $info['basename'];
             $thumbWidth = 150;
