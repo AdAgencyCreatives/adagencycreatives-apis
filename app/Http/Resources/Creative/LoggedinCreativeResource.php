@@ -34,7 +34,8 @@ class LoggedinCreativeResource extends JsonResource
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
-            'user_thumbnail' => $this->get_user_thumbnail($user),
+            // 'user_thumbnail' => $this->get_user_thumbnail($user),
+            'user_thumbnail' => $user->id,
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
             'employment_type' => getEmploymentTypes($this->employment_type),
@@ -108,8 +109,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_user_thumbnail($user)
     {
-        // return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
-        return getAttachmentBasePath() . $user->user_thumbnail->path;
+        return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
