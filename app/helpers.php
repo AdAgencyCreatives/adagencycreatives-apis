@@ -391,6 +391,14 @@ if (!function_exists('get_profile_picture')) {
         return $defaultImage;
     }
 }
+
+if (!function_exists('get_user_thumbnail')) {
+    function get_user_thumbnail($user)
+    {
+        return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : "";
+    }
+}
+
 if (!function_exists('get_profile_picture_id')) {
     function get_profile_picture_id($user)
     {
