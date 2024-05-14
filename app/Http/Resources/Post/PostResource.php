@@ -19,6 +19,7 @@ class PostResource extends JsonResource
             'author' => $user->full_name ?? '',
             'author_slug' => get_user_slug($user),
             'author_avatar' => get_profile_picture($user ?? null),
+            'user_thumbnail' => get_user_thumbnail($user ?? null),
             'content' => $this->content,
             'status' => $this->status,
             'attachments' => new AttachmentCollection($this->attachments),
@@ -34,12 +35,12 @@ class PostResource extends JsonResource
             'relationships' => [
                 'comments' => [
                     'links' => [
-                        'related' => route('comments.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('comments.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
                 'likes' => [
                     'links' => [
-                        'related' => route('likes.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('likes.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
             ],
@@ -58,7 +59,7 @@ class PostResource extends JsonResource
 
         // Include information about whether the user has liked, laughed, or reacted in any other way
         $userReactions = collect($allReactionTypes)->mapWithKeys(function ($type) use ($reactionsGrouped, $authenticatedUserId) {
-            return ['user_has_'.$type => $reactionsGrouped->get($type, collect())->where('user_id', $authenticatedUserId)->isNotEmpty()];
+            return ['user_has_' . $type => $reactionsGrouped->get($type, collect())->where('user_id', $authenticatedUserId)->isNotEmpty()];
         });
 
         return $reactionsCount->merge($userReactions);
@@ -68,13 +69,12 @@ class PostResource extends JsonResource
 
     public function get_image($user)
     {
-        if(!$user) return '';
+        if (!$user) return '';
 
         if ($user->role == 'creative' || $user->role == 'admin') {
-            return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : null;
+            return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : null;
         } elseif ($user->role == 'agency' || $user->role == 'advisor') {
-            return isset($user->agency_logo) ? getAttachmentBasePath().$user->agency_logo->path : null;
+            return isset($user->agency_logo) ? getAttachmentBasePath() . $user->agency_logo->path : null;
         }
-
     }
 }

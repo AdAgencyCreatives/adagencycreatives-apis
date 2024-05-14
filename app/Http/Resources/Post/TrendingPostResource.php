@@ -18,6 +18,7 @@ class TrendingPostResource extends JsonResource
             'author' => $user->full_name ?? '',
             'author_slug' => get_user_slug($user),
             'author_avatar' => get_profile_picture($user ?? null),
+            'user_thumbnail' => get_user_thumbnail($user ?? null),
             'content' => $this->content,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -26,12 +27,12 @@ class TrendingPostResource extends JsonResource
             'relationships' => [
                 'comments' => [
                     'links' => [
-                        'related' => route('comments.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('comments.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
                 'likes' => [
                     'links' => [
-                        'related' => route('likes.index').'?filter[post_id]='.$this->uuid,
+                        'related' => route('likes.index') . '?filter[post_id]=' . $this->uuid,
                     ],
                 ],
             ],
