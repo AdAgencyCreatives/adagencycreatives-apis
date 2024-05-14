@@ -18,6 +18,7 @@ class PostReactionResource extends JsonResource
             'user' => $user->full_name,
             'username' => $user->username,
             'profile_picture' => get_profile_picture($user),
+            'user_thumbnail' => get_user_thumbnail($user),
             'reaction_type' => $this->type,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
