@@ -240,8 +240,8 @@ class TestDataController extends Controller
     {
         $user = User::where('id', $request->user_id)->first();
 
-        return new AttachmentResource($user->user_thumbnail);
+        // return new AttachmentResource($user->user_thumbnail);
 
-        // return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
+        return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
     }
 }
