@@ -127,4 +127,13 @@ class AttachmentController extends Controller
             throw new ApiException($e, 'ATD-01');
         }
     }
+
+    public function generateThumbnailAttachment(Request $request)
+    {
+        try {
+            $user = User::where('uuid', $request->user_id)->first();
+            return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
+        } catch (\Exception $ex) {
+        }
+    }
 }

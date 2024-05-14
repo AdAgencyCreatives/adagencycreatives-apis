@@ -13,6 +13,7 @@ use App\Models\Media;
 use App\Models\Notification;
 use App\Models\Phone;
 use App\Models\Strength;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-if (! function_exists('getEmploymentTypes')) {
+if (!function_exists('getEmploymentTypes')) {
     function getEmploymentTypes($commaSeparatedNames)
     {
         return explode(',', $commaSeparatedNames);
@@ -106,6 +107,80 @@ if (!function_exists('storeImage')) {
             ]);
             return $attachment;
         }
+    }
+}
+
+if (!function_exists('storeThumb')) {
+    function storeThumb($user, $resource_type, $thumbWidth = 150)
+    {
+        $uuid = Str::uuid();
+
+        $existing_attachment = Attachment::where('user_id', $user->id)->where('resource_type', $resource_type)->first();
+
+        if ($user->role == 'creative') {
+            $original_image  = getAttachmentBasePath() . $user->profile_picture->path;
+        } else {
+            $original_image  = getAttachmentBasePath() . $user->agency_logo->path;
+        }
+
+        $info = pathinfo($original_image);
+
+        $extension = $info['extension'];
+        $folder = $resource_type . '/' . $uuid;
+
+        // load image
+
+        if (strtolower($info['extension']) == 'png') {
+            $img = \imagecreatefrompng("{$original_image}");
+        } else if (strtolower($info['extension']) == 'bmp') {
+            $img = \imagecreatefrombmp("{$original_image}");
+        } else if (strtolower($info['extension']) == 'gif') {
+            $img = \imagecreatefromgif("{$original_image}");
+        } else {
+            $img = \imagecreatefromjpeg("{$original_image}");
+        }
+
+        // get image size
+        $width = imagesx($img);
+        $height = imagesy($img);
+
+        // calculate thumbnail size
+        $new_width = $thumbWidth;
+        $new_height = floor($height * ($thumbWidth / $width));
+
+        // create a new temporary image
+        $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+        // copy and resize old image into new image 
+        imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+        $temp = tmpfile();
+        // save thumbnail into a temp file
+        imagejpeg($tmp_img, $temp, 100);
+
+        $filePath = $folder . "/" . $info['basename'];
+        if (Storage::disk('s3')->put($filePath, $temp)) {
+            $fullFilePath = getAttachmentBasePath() . $filePath;
+        }
+
+        fclose($temp);
+        imagedestroy($tmp_img);
+        imagedestroy($img);
+
+        $attachment = Attachment::create([
+            'uuid' => $uuid,
+            'user_id' => $user->id,
+            'resource_type' => $resource_type,
+            'path' => $fullFilePath,
+            'name' => $info['filename'],
+            'extension' => $extension,
+        ]);
+
+        if ($attachment && $existing_attachment) {
+            $existing_attachment->delete();
+        }
+
+        return $attachment;
     }
 }
 
@@ -217,25 +292,27 @@ if (!function_exists('updateLink')) {
     }
 }
 
-function url_exists($url) {
+function url_exists($url)
+{
     $headers = @get_headers($url);
-	if( strpos( $headers[0], '200' ) === false ) return false;
-	return true;
+    if (strpos($headers[0], '200') === false) return false;
+    return true;
 }
 
-function formate_url($url) {
+function formate_url($url)
+{
     $find = ['https://', 'http://', 'www.'];
     $replace   = ['', '', ''];
 
     $formatted_url = str_replace($find, $replace, $url);
-    if (url_exists('https://'. $formatted_url)) {
-    	return 'https://'. $formatted_url;
-    } else if (url_exists('http://'. $formatted_url)) {
-    	return 'http://'. $formatted_url;
-    } else if (url_exists('https://www.'. $formatted_url)) {
-    	return 'https://www.'. $formatted_url;
-    } else if (url_exists('http://www.'. $formatted_url)) {
-    	return 'http://www.'. $formatted_url;
+    if (url_exists('https://' . $formatted_url)) {
+        return 'https://' . $formatted_url;
+    } else if (url_exists('http://' . $formatted_url)) {
+        return 'http://' . $formatted_url;
+    } else if (url_exists('https://www.' . $formatted_url)) {
+        return 'https://www.' . $formatted_url;
+    } else if (url_exists('http://www.' . $formatted_url)) {
+        return 'http://www.' . $formatted_url;
     }
 
     return $url;
@@ -435,11 +512,9 @@ if (!function_exists('get_agency_logo')) { //We will use this funtion where we n
     function get_agency_logo($job, $user)
     {
 
-        if($job->attachment_id != null ){
+        if ($job->attachment_id != null) {
             return Attachment::find($job->attachment_id);
-
-        }
-        else{
+        } else {
             // dd($user->agency_logo);
             return $user->agency_logo;
         }

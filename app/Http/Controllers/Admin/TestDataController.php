@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Attachment\AttachmentResource;
 use App\Mail\Message\UnreadMessage;
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\FriendRequest;
 use App\Models\Job;
 use App\Models\JobAlert;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class TestDataController extends Controller
 {
@@ -181,25 +185,30 @@ class TestDataController extends Controller
         }
     }
 
-    public function testImg(Request $request)
+    public function testThumb(Request $request)
     {
-    }
+        $user_id = $request->user_id;
 
-    function createThumbs($pathToImages, $pathToThumbs, $thumbWidth)
-    {
-        // open the directory
-        $dir = opendir($pathToImages);
+        if ($user_id) {
+            $user = User::where('uuid', $user_id)->first();
 
-        // loop through it, looking for any/all JPG files:
-        while (false !== ($fname = readdir($dir))) {
-            // parse path for the extension
-            $info = pathinfo($pathToImages . $fname);
-            // continue only if this is a JPEG image
+            // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
+
+            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
+
+            $info = pathinfo($profile_picture);
+            dd($info);
+
+            $fname = $info['basename'];
+            $thumbWidth = 150;
+            $thumb_path = str_replace($info['filename'], $info['filename'] . "_thumb", $user->profile_picture->path);
+
+            // dd($thumb_path);
+
             if (strtolower($info['extension']) == 'jpg') {
-                echo "Creating thumbnail for {$fname} <br />";
 
                 // load image and get image size
-                $img = imagecreatefromjpeg("{$pathToImages}{$fname}");
+                $img = \imagecreatefromjpeg("{$profile_picture}");
                 $width = imagesx($img);
                 $height = imagesy($img);
 
@@ -213,11 +222,23 @@ class TestDataController extends Controller
                 // copy and resize old image into new image 
                 imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
-                // save thumbnail into a file
-                imagejpeg($tmp_img, "{$pathToThumbs}{$fname}");
+                $temp = tmpfile();
+                // save thumbnail into a temp file
+                imagejpeg($tmp_img, $temp);
+
+                $filePath = Storage::disk('s3')->put($thumb_path, $temp);
+
+                fclose($temp);
+
+                return '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
             }
         }
-        // close the directory
-        closedir($dir);
+        return "No-UUID";
+    }
+
+    public function testThumbAtt(Request $request)
+    {
+        $user = User::where('id', $request->user_id)->first();
+        return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
     }
 }

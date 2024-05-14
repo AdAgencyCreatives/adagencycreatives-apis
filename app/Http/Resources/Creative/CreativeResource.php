@@ -29,6 +29,7 @@ class CreativeResource extends JsonResource
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
+            'profile_image_thumb' => $this->get_profile_image_thumb($user),
             'years_of_experience' => $this->years_of_experience,
             'about' => $this->about,
             'employment_type' => getEmploymentTypes($this->employment_type),
@@ -68,6 +69,11 @@ class CreativeResource extends JsonResource
     }
 
     public function get_profile_image($user)
+    {
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+    }
+
+    public function get_profile_image_thumb($user)
     {
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
