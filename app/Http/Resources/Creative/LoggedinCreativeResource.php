@@ -108,7 +108,8 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_user_thumbnail($user)
     {
-        return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
+        // return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
+        return getAttachmentBasePath() . $user->user_thumbnail->path;
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)

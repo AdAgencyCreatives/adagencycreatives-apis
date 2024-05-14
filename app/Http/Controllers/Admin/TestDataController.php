@@ -239,6 +239,9 @@ class TestDataController extends Controller
     public function testThumbAtt(Request $request)
     {
         $user = User::where('id', $request->user_id)->first();
+
+        dd($user->user_thumbnail);
+
         return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
     }
 }
