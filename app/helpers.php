@@ -532,3 +532,16 @@ if (!function_exists('get_agency_logo')) { //We will use this funtion where we n
         }
     }
 }
+
+
+if (!function_exists('get_agency_user_thumbnail')) { //We will use this funtion where we need to check for all three agency related roles
+    function get_agency_user_thumbnail($job, $user)
+    {
+
+        if ($job->attachment_id != null) {
+            return ""; // not creating logo thumbnail at job post
+        } else {
+            return $user->user_thumbnail;
+        }
+    }
+}
