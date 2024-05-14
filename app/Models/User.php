@@ -82,6 +82,11 @@ class User extends Authenticatable
         return $this->hasOne(Attachment::class)->where('resource_type', 'agency_logo')->latest();
     }
 
+    public function user_thumbnail()
+    {
+        return $this->hasOne(Attachment::class)->where('resource_type', 'user_thumbnail')->latest();
+    }
+
     public function portfolio_spotlights()
     {
         return $this->hasMany(Attachment::class)->where('resource_type', 'creative_spotlight');
@@ -347,7 +352,7 @@ class User extends Authenticatable
     public function scopeIsFeatured(Builder $query, $value): Builder
     {
         $value = explode('_', $value);
-        if($value[0] == 'creative') {
+        if ($value[0] == 'creative') {
             $creative_ids = Creative::where('is_featured', $value[1])->pluck('user_id');
             return $query->whereIn('id', $creative_ids);
         } else {
@@ -447,15 +452,14 @@ class User extends Authenticatable
                             'recipient' => $user->first_name,
                             'old_email' => $oldEmail,
                             'new_email' => $newEmail,
-                    ]
+                        ]
                     ];
                     SendEmailJob::dispatch($data, 'email_updated');
-
                 }
 
-                 if ($user->isDirty('role')) {
+                if ($user->isDirty('role')) {
                     $newRole = $user->role;
-                    if($newRole == 'creative' ){
+                    if ($newRole == 'creative') {
                         Agency::where('user_id', $user->id)->delete();
                         Creative::onlyTrashed()->where('user_id', $user->id)->restore();
 
@@ -466,8 +470,7 @@ class User extends Authenticatable
                         Phone::where('user_id', $user->id)->where('label', 'business')->update([
                             'label' => 'personal'
                         ]);
-                    }
-                    elseif(in_array($newRole, ['agency', 'advisor', 'recruiter'])){
+                    } elseif (in_array($newRole, ['agency', 'advisor', 'recruiter'])) {
                         Creative::where('user_id', $user->id)->delete();
                         Agency::onlyTrashed()->where('user_id', $user->id)->restore();
 
@@ -482,7 +485,6 @@ class User extends Authenticatable
 
                     Artisan::call('optimize:clear');
                 }
-
             });
             static::updated(function ($user) {
                 Cache::forget('dashboard_stats_cache');
@@ -503,7 +505,6 @@ class User extends Authenticatable
                         }
                     });
                 }
-
             });
 
             static::deleted(function ($user) {
