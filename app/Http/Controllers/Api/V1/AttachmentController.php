@@ -134,6 +134,7 @@ class AttachmentController extends Controller
             $user = User::where('uuid', $request->user_id)->first();
             return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
         } catch (\Exception $ex) {
+            return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
 }
