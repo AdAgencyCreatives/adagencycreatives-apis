@@ -159,9 +159,7 @@ if (!function_exists('storeThumb')) {
         imagejpeg($tmp_img, $temp, 100);
 
         $filePath = $folder . "/" . $info['basename'];
-        if (Storage::disk('s3')->put($filePath, $temp)) {
-            $fullFilePath = getAttachmentBasePath() . $filePath;
-        }
+        Storage::disk('s3')->put($filePath, $temp);
 
         fclose($temp);
         imagedestroy($tmp_img);
@@ -171,7 +169,7 @@ if (!function_exists('storeThumb')) {
             'uuid' => $uuid,
             'user_id' => $user->id,
             'resource_type' => $resource_type,
-            'path' => $fullFilePath,
+            'path' => $filePath,
             'name' => $info['filename'],
             'extension' => $extension,
         ]);
