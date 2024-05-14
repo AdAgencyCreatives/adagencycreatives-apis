@@ -23,20 +23,24 @@ class ShortCreativeResource extends JsonResource
 
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'name' => $user->first_name.' '.$user->last_name,
+            'name' => $user->first_name . ' ' . $user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
+            'user_thumbnail' => $this->get_user_thumbnail($user),
             'location' => $this->location,
         ];
     }
 
-
-
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath().$user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+    }
+
+    public function get_user_thumbnail($user)
+    {
+        return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
     }
 
     public function get_location($user)
@@ -59,7 +63,4 @@ class ShortCreativeResource extends JsonResource
             ];
         }
     }
-
-
-
 }
