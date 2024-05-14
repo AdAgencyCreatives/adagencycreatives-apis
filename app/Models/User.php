@@ -87,6 +87,7 @@ class User extends Authenticatable
         return $this->hasOne(Attachment::class)->where('resource_type', 'user_thumbnail')->latest();
     }
 
+
     public function portfolio_spotlights()
     {
         return $this->hasMany(Attachment::class)->where('resource_type', 'creative_spotlight');
