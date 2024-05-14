@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function user_thumbnail()
     {
-        return $this->hasOne(Attachment::class, 'user_id', 'id')->where('resource_type', 'user_thumbnail')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'user_thumbnail')->latest();
     }
 
     public function portfolio_spotlights()
