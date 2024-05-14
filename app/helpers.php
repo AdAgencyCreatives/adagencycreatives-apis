@@ -144,9 +144,15 @@ if (!function_exists('storeThumb')) {
         $width = imagesx($img);
         $height = imagesy($img);
 
+        if ($width <= $height) {
+            $new_width = $thumbWidth;
+            $new_height = floor($height * ($thumbWidth / $width));
+        } else {
+            $new_height = $thumbWidth;
+            $new_width = floor($width * ($thumbWidth / $height));
+        }
         // calculate thumbnail size
-        $new_width = $thumbWidth;
-        $new_height = floor($height * ($thumbWidth / $width));
+
 
         // create a new temporary image
         $tmp_img = imagecreatetruecolor($new_width, $new_height);
