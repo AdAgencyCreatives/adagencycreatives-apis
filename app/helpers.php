@@ -541,7 +541,7 @@ if (!function_exists('get_agency_user_thumbnail')) { //We will use this funtion 
         if ($job->attachment_id != null) {
             return ""; // not creating logo thumbnail at job post
         } else {
-            return $user->user_thumbnail;
+            return $user?->user_thumbnail;
         }
     }
 }
