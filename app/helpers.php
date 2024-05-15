@@ -144,6 +144,7 @@ if (!function_exists('storeThumb')) {
         $width = imagesx($img);
         $height = imagesy($img);
 
+        // calculate thumbnail size
         if ($width <= $height) {
             $new_width = $thumbWidth;
             $new_height = floor($height * ($thumbWidth / $width));
@@ -151,11 +152,14 @@ if (!function_exists('storeThumb')) {
             $new_height = $thumbWidth;
             $new_width = floor($width * ($thumbWidth / $height));
         }
-        // calculate thumbnail size
-
 
         // create a new temporary image
         $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+        if (strtolower($info['extension']) == 'png') {
+            imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
+            imagealphablending($tmp_img, TRUE);
+        }
 
         // copy and resize old image into new image 
         imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
