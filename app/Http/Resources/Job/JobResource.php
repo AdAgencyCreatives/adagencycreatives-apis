@@ -76,7 +76,7 @@ class JobResource extends JsonResource
             $sub_agency_logo = get_agency_logo($this, $user);
             $sub_agency_user_thumbnail = get_agency_user_thumbnail($this, $user);
             $data['agency']['logo'] = getAttachmentBasePath() . $sub_agency_logo?->path;
-            // $data['agency']['user_thumbnail'] = isset($sub_agency_user_thumbnail) ? getAttachmentBasePath() . $sub_agency_user_thumbnail->path : "";
+            $data['agency']['user_thumbnail'] = isset($sub_agency_user_thumbnail) ? getAttachmentBasePath() . $sub_agency_user_thumbnail->path : "";
 
             $data['agency']['logo_id'] = $this->attachment_id ? $sub_agency_logo?->uuid : null;
             $data['agency']['fallback_image'] = get_profile_picture($user); //so that frontend don't need to send request again after deleting the image
