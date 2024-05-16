@@ -6,7 +6,13 @@
         <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
-            <p>We wanted you to know that you have {{ $data['unread_message_count'] }} new message on
+            <p>We wanted you to know that you have
+                @if ($data['unread_message_count'] > 1)
+                    new messages
+                @else
+                    a new message
+                @endif
+                on
                 <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
             </p>
             <div style="margin: 15px 0;">
