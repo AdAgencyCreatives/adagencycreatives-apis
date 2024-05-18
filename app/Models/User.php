@@ -16,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\ActivityLoggerTrait;
-
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -508,31 +508,55 @@ class User extends Authenticatable
                 }
             });
 
-            static::deleted(function ($user) {
+            static::deleting(function ($user) {
                 Cache::forget('dashboard_stats_cache');
                 Cache::forget('all_users_with_posts'); //cache for displaying count of posts on admin dashboard for posts page
                 Cache::forget('all_users_with_attachments'); //cache for displaying count of attachments on admin dashboard for Media page
                 Cache::forget('all_creatives'); //cache for displaying list of creatives Add Creative Spotlight page
                 Cache::forget('get_users'); //cache for displaying list of creatives Add Creative Spotlight page
 
-                if ($user->role == 'creative') {
-                    Creative::where('user_id', $user->id)->delete();
-                    Education::where('user_id', $user->id)->delete();
-                    Experience::where('user_id', $user->id)->delete();
+                DB::transaction(function () use ($user) {
+
+                    if ($user->role == 'creative') {
+                        Creative::where('user_id', $user->id)->delete();
+                        Education::where('user_id', $user->id)->delete();
+                        Experience::where('user_id', $user->id)->delete();
+                    } elseif ($user->role == 'agency' || $user->role == 'advisor' || $user->role == 'recruiter') {
+                        Agency::where('user_id', $user->id)->delete();
+                        // PackageRequest::where('user_id', $user->id)->delete();
+                    }
+
+                    Link::where('user_id', $user->id)->delete();
+                    Attachment::where('user_id', $user->id)->delete();
+                    Address::where('user_id', $user->id)->delete();
+                    Phone::where('user_id', $user->id)->delete();
+                    Bookmark::where('user_id', $user->id)->delete();
+                    Review::where('user_id', $user->id)->delete();
+                    Resume::where('user_id', $user->id)->delete();
+
+                    // Delete all the user Groups, when group is deleted, all posts will be deleted
+                    Group::where('user_id', $user->id)->delete();
+
+                    // Delete everything indirectly related to user
+                    GroupMember::where('user_id', $user->id)->delete();
+
+                    ScheduleNotification::where('sender_id', $user->id)->orWhere('recipient_id', $user->id)->delete();
                     PostReaction::where('user_id', $user->id)->delete();
-                } elseif ($user->role == 'agency') {
-                    Agency::where('user_id', $user->id)->delete();
-                }
+                    Post::where('user_id', $user->id)->delete();
+                    Comment::where('user_id', $user->id)->delete();
 
-                Link::where('user_id', $user->id)->delete();
-                Attachment::where('user_id', $user->id)->delete();
-                Address::where('user_id', $user->id)->delete();
-                Phone::where('user_id', $user->id)->delete();
-                Bookmark::where('user_id', $user->id)->delete();
-                Review::where('user_id', $user->id)->delete();
+                    Friendship::where('user1_id', $user->id)->orWhere('user2_id', $user->id)->delete();
 
-                // Delete all the user Groups, when group is deleted, all posts will be deleted
-                Group::where('user_id', $user->id)->delete();
+                    Job::where('user_id', $user->id)->delete();
+                    Application::where('user_id', $user->id)->delete();
+
+                    Note::where('user_id', $user->id)->delete();
+                    Link::where('user_id', $user->id)->delete();
+                    Notification::where('user_id', $user->id)->delete();
+                    Activity::where('user_id', $user->id)->delete();
+                });
+                //End Transaction
+
             });
         }
     }

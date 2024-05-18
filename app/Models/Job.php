@@ -441,8 +441,7 @@ class Job extends Model
             Cache::forget('dashboard_stats_cache');
             Cache::forget('featured_cities');
 
-            // Application::where('job_id', $job->id)->delete();
-
+            Application::where('job_id', $job->id)->delete();
         });
     }
 
