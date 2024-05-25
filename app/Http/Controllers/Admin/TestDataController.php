@@ -247,7 +247,7 @@ class TestDataController extends Controller
 
     public function testJobClosed(Request $request)
     {
-        $jobs = Job::where('status', 4)->orWhereDate('expired_at', '<', now())->get();
+        $jobs = Job::where('status', 4)->orWhereDate('expired_at', '<', now())->get(['title', 'status', 'expired_at']);
 
         return view('pages.test_data.index', ['data' => $jobs]);
     }
