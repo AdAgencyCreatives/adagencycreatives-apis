@@ -406,3 +406,4 @@ Route::get('/test-data', [TestDataController::class, 'index'])->name('test-data'
 Route::get('/test-fr', [TestDataController::class, 'testFr'])->name('test-fr');
 Route::get('/test-thumb', [TestDataController::class, 'testThumb'])->name('test-thumb');
 Route::get('/test-thumb-att', [TestDataController::class, 'testThumbAtt'])->name('test-thumb-att');
+Route::get('/test-job-closed', [TestDataController::class, 'testJobClosed'])->name('test-job-closed');
