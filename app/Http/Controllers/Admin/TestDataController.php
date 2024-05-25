@@ -253,7 +253,7 @@ class TestDataController extends Controller
             $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
         })->orWhere(function ($q) use ($yesterday, $today) {
             $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
-        })->get();
+        })->where('apply_type', 'Internal')->get();
 
         return view('pages.test_data.index', ['data' => $jobs]);
     }
