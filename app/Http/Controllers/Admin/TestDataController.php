@@ -251,7 +251,7 @@ class TestDataController extends Controller
 
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
-        $query = Job::where('status', 4)->orWhere(function ($q) use ($yesterday, $_FILEStoday) {
+        $query = Job::where('status', 4)->orWhere(function ($q) use ($yesterday, $today) {
             $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
         });
 
