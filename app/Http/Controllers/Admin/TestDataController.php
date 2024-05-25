@@ -249,12 +249,12 @@ class TestDataController extends Controller
     {
         $jobs = Job::where('status', 4)->orWhereDate('expired_at', '<', now())->get(['title', 'status', 'expired_at']);
 
+        $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
-        $tomorrow = now()->addDay()->toDateString();
-        $query = Job::where('status', 4)->orWhere(function ($q) use ($today, $tomorrow) {
-            $q->whereDate('expired_at', '>=', $today)->where('expired_at', '<', $tomorrow);
+        $query = Job::where('status', 4)->orWhere(function ($q) use ($yesterday, $_FILEStoday) {
+            $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
         });
 
-        return view('pages.test_data.index', ['data' => $query->toSql()]);
+        return view('pages.test_data.index', ['data' => $query->get()]);
     }
 }
