@@ -13,63 +13,17 @@ class SendJobClosedEmails extends Command
     protected $signature = 'email:send-job-closed-emails';
     protected $description = 'It will send job closed emails to users who have applied on internal jobs.';
 
-    // public function handle()
-    // {
-    //     $date_range = now()->subDay()->format('Y-m-d');
-
-    //     $friendRequests = FriendRequest::where('status', 'pending')
-    //         ->whereDate('updated_at', '=', $date_range)
-    //         ->with('sender', 'receiver')
-    //         ->get();
-
-    //     foreach ($friendRequests as $fr) {
-    //         $receiver = $fr->receiver;
-    //         $sender = $fr->sender;
-
-    //         if ($sender->role == 'creative') {
-    //             $profile_url = '/creative/' . $sender->creative?->slug ?? '';
-    //         } elseif ($sender->role == 'agency') {
-    //             $profile_url = '/agency/' . $sender->agency?->slug ?? '';
-    //         } else {
-    //             $profile_url = $sender->username;
-    //         }
-
-    //         SendEmailJob::dispatch([
-    //             'receiver' => $receiver,
-    //             'data' => [
-    //                 'recipient' => $receiver->first_name,
-    //                 'inviter' => $sender->first_name,
-    //                 'iniviter_profile' => sprintf("%s%s", env('FRONTEND_URL'), $profile_url),
-    //             ],
-    //         ], 'friendship_request_sent');
-    //     }
-    // }
-
     public function handle()
     {
-        $date_range = now()->subDay()->format('Y-m-d');
-
-        $friendRequests = FriendRequest::where('status', 'pending')
-            ->whereDate('updated_at', '=', $date_range)
-            ->orderBy('receiver_id')->orderByDesc('updated_at')
-            ->get();
-
-        $bundle = [];
-        $receivers = [];
-
-        foreach ($friendRequests as $fr) {
-            $receiver = $fr->receiver;
-            $sender = $fr->sender;
-
-            $sender->profile_picture = get_profile_picture($sender);
-
-            if (array_key_exists($receiver->id, $bundle)) {
-                $bundle[$receiver->id][count($bundle)] = $sender;
-            } else {
-                $bundle[$receiver->id] = array(0 => $sender);
-                $receivers[count($receivers)] = $receiver;
-            }
-        }
+         $yesterday = now()->subDay()->toDateString();
+        $today = now()->toDateString();
+        $jobs = Job::withCount('applications')->where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
+            $query->where(function ($q) use ($yesterday, $today) {
+                $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
+            })->orWhere(function ($q) use ($yesterday, $today) {
+                $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
+            });
+        })->get();
 
         foreach ($receivers as $receiver) {
             $senders = $bundle[$receiver->id];

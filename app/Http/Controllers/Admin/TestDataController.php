@@ -249,13 +249,17 @@ class TestDataController extends Controller
     {
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
-        $jobs = Job::withCount('applications')->where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
+        $jobs = Job::where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
                 $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
             })->orWhere(function ($q) use ($yesterday, $today) {
                 $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
             });
-        })->get();
+        })
+            ->with('application', function ($query) {
+                $query->where('status', 0);
+            })
+            ->get();
 
         return view('pages.test_data.index', ['data' => $jobs]);
     }
