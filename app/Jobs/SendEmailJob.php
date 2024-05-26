@@ -71,6 +71,7 @@ class SendEmailJob implements ShouldQueue
 
             'job_expiring_soon_admin',
             'job_expiring_soon_agency',
+            'job_closed_email',
 
             'email_updated',
 
