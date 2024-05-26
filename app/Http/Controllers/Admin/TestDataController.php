@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Attachment\AttachmentResource;
+use App\Http\Resources\Job\JobResource;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -261,6 +262,6 @@ class TestDataController extends Controller
             })
             ->get();
 
-        return view('pages.test_data.index', ['data' => $jobs]);
+        return view('pages.test_data.index', ['data' => new JobResource($jobs)]);
     }
 }
