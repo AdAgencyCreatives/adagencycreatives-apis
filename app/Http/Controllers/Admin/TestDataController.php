@@ -263,7 +263,7 @@ class TestDataController extends Controller
         $applications = [];
         for ($i = 0; $i < count($jobs); $i++) {
             $job = $jobs[$i];
-            array_merge($applications, $job->applications || []);
+            $applications = array_merge($applications, $job->applications || []);
         }
 
 
