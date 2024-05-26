@@ -260,13 +260,22 @@ class TestDataController extends Controller
             $query->where('status', 0);
         })->get();
 
-        $applications = [];
+        $data = [];
         for ($i = 0; $i < count($jobs); $i++) {
             $job = $jobs[$i];
-            $applications = array_merge($applications, $job->applications ? $job->applications->all() : []);
+
+            for ($j = 0; $j < count($job->applications); $j++) {
+                $application = $job->applications[$j];
+
+                $data[] = array(
+                    'recipient_name' => $application->user->name,
+                    'job_title' => $job->title,
+                    'agency_name' => $job->agency_name ? $job->agency_name : $job->agency->name,
+                );
+            }
         }
 
 
-        return view('pages.test_data.index', ['data' => $applications]);
+        return view('pages.test_data.index', ['data' => $data]);
     }
 }
