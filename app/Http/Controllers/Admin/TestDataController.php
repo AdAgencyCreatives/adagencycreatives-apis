@@ -256,12 +256,15 @@ class TestDataController extends Controller
             })->orWhere(function ($q) use ($yesterday, $today) {
                 $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
             });
-        })
-            ->with('applications', function ($query) {
-                $query->where('status', 0);
-            })
-            ->get();
+        })->get();
 
-        return view('pages.test_data.index', ['data' => new JobResource($jobs)]);
+        $applications = [];
+        for ($i = 0; $i < count($jobs); $i++) {
+            $job = $jobs[$i];
+            $applications[] = $job->applications;
+        }
+
+
+        return view('pages.test_data.index', ['data' => $applications]);
     }
 }
