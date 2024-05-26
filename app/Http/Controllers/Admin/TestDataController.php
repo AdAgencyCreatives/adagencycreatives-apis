@@ -256,6 +256,8 @@ class TestDataController extends Controller
             })->orWhere(function ($q) use ($yesterday, $today) {
                 $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
             });
+        })->with('applications', function ($query) {
+            $query->where('status', 1);
         })->get();
 
         $applications = [];
