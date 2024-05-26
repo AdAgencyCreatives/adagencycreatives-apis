@@ -48,11 +48,11 @@ class SendJobClosedEmails extends Command
 
 
             SendEmailJob::dispatch([
-                'receiver' => $receiver,
+                'receiver' => $item->receiver,
                 'data' => [
-                    'recipient' => $receiver->first_name,
-                    'senders' => $senders,
-                    'multiple' => count($senders) > 1 ? "yes" : "no",
+                    'recipient' => $item->recipient_name,
+                    'job_title' => $item->job_title,
+                    'agency_name' => $item->agency_name,
                 ],
             ], 'friendship_request_sent');
         }
