@@ -268,6 +268,7 @@ class TestDataController extends Controller
                 $application = $job->applications[$j];
 
                 $data[] = array(
+                    'recipient' =>  $application->user->email,
                     'recipient_name' => $application->user->full_name,
                     'job_title' => $job->title,
                     'agency_name' => $job->agency_name ? $job->agency_name : $job->agency->name,
