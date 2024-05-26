@@ -35,6 +35,7 @@ class SendJobClosedEmails extends Command
                 $application = $job->applications[$j];
 
                 $data[] = array(
+                    'receiver' =>  $application->user->email,
                     'recipient_name' => $application->user->full_name,
                     'job_title' => $job->title,
                     'agency_name' => $job->agency_name ? $job->agency_name : $job->agency->name,
@@ -46,15 +47,14 @@ class SendJobClosedEmails extends Command
         for ($k = 0; $k < count($data); $k++) {
             $item = $data[$k];
 
-
             SendEmailJob::dispatch([
-                'receiver' => $item->receiver,
+                'receiver' => $item['receiver'],
                 'data' => [
-                    'recipient' => $item->recipient_name,
-                    'job_title' => $item->job_title,
-                    'agency_name' => $item->agency_name,
+                    'recipient' => $item['recipient_name'],
+                    'job_title' => $item['job_title'],
+                    'agency_name' => $item['agency_name'],
                 ],
-            ], 'friendship_request_sent');
+            ], 'job_closed_email');
         }
     }
 }

@@ -9,6 +9,7 @@ use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
+use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
 use App\Mail\Application\Removed;
 use App\Mail\ContactFormMail;
@@ -175,6 +176,10 @@ class SendEmailJob implements ShouldQueue
                 break;
             case 'agency_is_interested':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new Interested($this->data['data'])); // To the applicant
+                break;
+
+            case 'job_closed_email':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobClosed($this->data['data'])); // To the applicant
                 break;
 
                 /**
