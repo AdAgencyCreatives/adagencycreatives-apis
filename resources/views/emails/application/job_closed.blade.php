@@ -24,6 +24,4 @@
 
                         <p>Wishing you all the best.</p>
 
-                        <p>Thanks,</p>
-
                         @include('emails.includes.jobboard_footer')
