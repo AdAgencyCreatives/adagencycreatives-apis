@@ -16,7 +16,7 @@
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['recipient_name'] }},</span>
 
-                        <p>The {{ $data['job_title'] }} posted by {{ $data['agency_name'] }} has been closed on
+                        <p>The <b>{{ $data['job_title'] }}</b> posted by {{ $data['agency_name'] }} has been closed on
                             {{ $data['APP_NAME'] }} job board. The job could have expired or it was filled. Either way,
                             we
                             wanted to keep you informed and thank you for your time and interest.
