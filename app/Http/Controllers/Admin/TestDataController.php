@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Job\JobResource;
+use App\Mail\Application\JobClosed;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -276,7 +277,25 @@ class TestDataController extends Controller
             }
         }
 
+        for ($k = 0; $k < count($data); $k++) {
+            $item = $data[$k];
 
-        return view('pages.test_data.index', ['data' => $data]);
+            // SendEmailJob::dispatch([
+            //     'receiver' => $item['receiver'],
+            //     'data' => [
+            //         'recipient' => $item['recipient_name'],
+            //         'job_title' => $item['job_title'],
+            //         'agency_name' => $item['agency_name'],
+            //     ],
+            // ], 'job_closed_email');
+            return new JobClosed([
+                        'recipient' => $item['recipient_name'],
+                        'job_title' => $item['job_title'],
+                        'agency_name' => $item['agency_name'],
+                    ]);
+        }
+
+
+        // return view('pages.test_data.index', ['data' => $data]);
     }
 }
