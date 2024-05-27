@@ -289,12 +289,11 @@ class TestDataController extends Controller
             //     ],
             // ], 'job_closed_email');
             return new JobClosed([
-                'recipient' => $item['recipient'],
+                'recipient_name' => $item['recipient_name'],
                 'job_title' => $item['job_title'],
                 'agency_name' => $item['agency_name'],
             ]);
         }
-
 
         // return view('pages.test_data.index', ['data' => $data]);
     }
