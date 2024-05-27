@@ -50,7 +50,7 @@ class SendJobClosedEmails extends Command
             SendEmailJob::dispatch([
                 'receiver' => $item['receiver'],
                 'data' => [
-                    'recipient' => $item['recipient_name'],
+                    'recipient_name' => $item['recipient_name'],
                     'job_title' => $item['job_title'],
                     'agency_name' => $item['agency_name'],
                 ],
