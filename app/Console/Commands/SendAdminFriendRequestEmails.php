@@ -21,13 +21,18 @@ class SendFriendRequestEmails extends Command
     public function handle()
     {
         $admin_id = 202;
-        $batch_size = 999;
+        $batch_size = 50;
 
         $sender = User::where('id', $admin_id)->first();
-        $receivers = User::where('id', '<>', $admin_id)->take($batch_size)->get();
 
         $existing = FriendRequest::where('sender_id', $admin_id)->get(['receiver_id'])->all();
-        $existing_users = implode(',', $existing);
+        $exclude_list = [$admin_id];
+
+        for ($i = 0; $i < count($existing); $i++) {
+            $exclude_list[] = $existing[$i]->receiver_id;
+        }
+
+        $receivers = User::where('role', '4')->whereNotIn('id', $exclude_list)->get();
 
         $now = now();
         $desired = Carbon::parse('2024-05-28 15:17:12');
@@ -39,9 +44,9 @@ class SendFriendRequestEmails extends Command
 
         $this->info('Time Now: ' . $now->format('Y-m-d H:i:s'));
         $this->info('Time Allowed After: ' . $desired->format('Y-m-d H:i:s'));
-        $this->info('Found: ' . count($receivers) . ' Receivers');
-        $this->info('Existing Receivers: ' . $existing_users);
-
+        $this->info('Valid Receivers: ' . count($receivers) . ' Receivers');
+        $this->info('Excluded: ' . count($exclude_list));
+        $this->info('Batch Size: ' . $batch_size);
 
         // for ($i = 0; $i < count($receivers); $i++) {
         //     $receiver = $receivers[$i];

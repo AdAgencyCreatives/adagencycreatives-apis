@@ -17,9 +17,10 @@
 
                         <p>The <b>{{ $data['job_title'] }}</b> posted by {{ $data['agency_name'] }} has been closed on
                             {{ $data['APP_NAME'] }} job board.
-                            The job post could have expired or another candidate was selected. Either way, we
-                            wanted to keep you informed and thank you for your time and interest.
                         </p>
+
+                        <p>The job post could have expired or another candidate was selected. Either way, we
+                            wanted to keep you informed and thank you for your time and interest.</p>
 
                         <p>Wishing you all the best.</p>
 

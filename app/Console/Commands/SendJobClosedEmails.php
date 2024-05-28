@@ -17,6 +17,10 @@ class SendJobClosedEmails extends Command
     {
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
+
+        $this->info('From: ' . $yesterday);
+        $this->info('To: ' . $today);
+
         $jobs = Job::where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
                 $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
@@ -43,6 +47,7 @@ class SendJobClosedEmails extends Command
             }
         }
 
+        $this->info("Sending Email to " . count($data) . ' Applicants');
 
         for ($k = 0; $k < count($data); $k++) {
             $item = $data[$k];
