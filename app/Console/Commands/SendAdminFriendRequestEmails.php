@@ -27,7 +27,7 @@ class SendFriendRequestEmails extends Command
         $receivers = User::where('id', '<>', $admin_id)->take($batch_size)->get();
 
         $now = now();
-        $now->setTimeZone('CST');
+
         $desired = Carbon::parse('2024-05-29 10:00:00');
         $this->info('Time: ' . $now->format('Y-m-d H:i:s'));
         $this->info('Time: ' . $desired->format('Y-m-d H:i:s'));
