@@ -34,7 +34,7 @@ class SendUnreadJobAlertEmail extends Command
             $agency = $author->agency;
 
             $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
-            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
+            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug) : '');
 
             $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
             $data = [
@@ -44,7 +44,7 @@ class SendUnreadJobAlertEmail extends Command
                     'agency' => $agency_name,
                     'category' => $category?->name,
                     'user' => $author,
-                    'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
+                    'agency_profile' => $agency_profile,
                 ],
                 'subscribers' => $author,
             ];
