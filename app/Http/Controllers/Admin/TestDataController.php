@@ -265,6 +265,14 @@ class TestDataController extends Controller
         for ($i = 0; $i < count($jobs); $i++) {
             $job = $jobs[$i];
 
+            $author = User::find($job->user_id);
+            $agency = $author->agency;
+
+            $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
+            $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency?->slug) : '');
+
+            $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
+
             for ($j = 0; $j < count($job->applications); $j++) {
                 $application = $job->applications[$j];
 
@@ -272,7 +280,9 @@ class TestDataController extends Controller
                     'receiver' =>  $application->user->email,
                     'recipient_name' => $application->user->full_name,
                     'job_title' => $job->title,
-                    'agency_name' => $job->agency_name ? $job->agency_name : $job->agency->name,
+                    'job_url' => $job_url,
+                    'agency_name' => $agency_name,
+                    'agency_profile' => $agency_profile,
                 );
             }
         }
