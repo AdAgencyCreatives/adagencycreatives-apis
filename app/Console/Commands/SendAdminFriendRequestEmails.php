@@ -21,17 +21,26 @@ class SendFriendRequestEmails extends Command
     public function handle()
     {
         $admin_id = 202;
-        $batch_size = 50;
+        $batch_size = 999;
 
         $sender = User::where('id', $admin_id)->first();
         $receivers = User::where('id', '<>', $admin_id)->take($batch_size)->get();
 
-        $now = now();
+        $existing = FriendRequest::where('sender_id', $admin_id)->get(['receiver_id'])->all();
+        $existing_users = implode(',', $existing);
 
-        $desired = Carbon::parse('2024-05-29 10:00:00');
-        $this->info('Time: ' . $now->format('Y-m-d H:i:s'));
-        $this->info('Time: ' . $desired->format('Y-m-d H:i:s'));
+        $now = now();
+        $desired = Carbon::parse('2024-05-28 15:17:12');
+
+        if (!$now->gt($desired)) {
+            $this->info('Waiting for: ' . $desired->format('Y-m-d H:i:s'));
+            return;
+        }
+
+        $this->info('Time Now: ' . $now->format('Y-m-d H:i:s'));
+        $this->info('Time Allowed After: ' . $desired->format('Y-m-d H:i:s'));
         $this->info('Found: ' . count($receivers) . ' Receivers');
+        $this->info('Existing Receivers: ' . $existing_users);
 
 
         // for ($i = 0; $i < count($receivers); $i++) {
