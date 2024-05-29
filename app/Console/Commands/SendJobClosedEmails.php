@@ -23,7 +23,7 @@ class SendJobClosedEmails extends Command
         $this->info('From: ' . $yesterday);
         $this->info('To: ' . $today);
 
-        $jobs = Job::where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
+        $jobs = Job::where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
                 $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
             })->orWhere(function ($q) use ($yesterday, $today) {
@@ -55,6 +55,7 @@ class SendJobClosedEmails extends Command
                     'job_url' => $job_url,
                     'agency_name' => $agency_name,
                     'agency_profile' => $agency_profile,
+                    'apply_type' => $job->apply_type,
                 );
             }
         }
@@ -69,7 +70,10 @@ class SendJobClosedEmails extends Command
                 'data' => [
                     'recipient_name' => $item['recipient_name'],
                     'job_title' => $item['job_title'],
+                    'job_url' => $item['job_url'],
                     'agency_name' => $item['agency_name'],
+                    'agency_profile' => $item['agency_profile'],
+                    'apply_type' => $item['apply_type'],
                 ],
             ], 'job_closed_email');
         }
