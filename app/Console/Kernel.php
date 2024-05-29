@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $daily_time = "10:00";
-        $daily_time_test = "10:50";
         $schedule->command('telescope:prune --hours=480')->daily();
         $schedule->command('email:unread-message-count')->dailyAt($daily_time);
         // $schedule->command('email:unread-message-count72')->dailyAt($daily_time);
@@ -26,7 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('adagencycreatives:schedule-notifications')->everyFifteenMinutes();
         // $schedule->command('portfolio_latest:generate')->everyMinute();
 
-        $schedule->command('email:send-pending-friend-request-emails')->dailyAt($daily_time_test);
+        $schedule->command('email:send-pending-friend-request-emails')->dailyAt($daily_time);
 
         $schedule->command('email:send-job-closed-emails')->dailyAt($daily_time);
     }
