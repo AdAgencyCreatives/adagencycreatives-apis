@@ -301,7 +301,9 @@ class TestDataController extends Controller
             return new JobClosed([
                 'recipient_name' => $item['recipient_name'],
                 'job_title' => $item['job_title'],
+                'job_url' => $item['job_url'],
                 'agency_name' => $item['agency_name'],
+                'agency_profile' => $item['agency_profile'],
             ]);
         }
 
