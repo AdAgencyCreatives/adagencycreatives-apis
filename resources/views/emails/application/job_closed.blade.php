@@ -23,13 +23,13 @@
                                 {{ $data['agency_name'] }}
                             @endif
                             has been closed on
-                            <a href="{{ $data['FRONTEND_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a> job board.
+                            <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a> job board.
                         </p>
 
                         <p>The job post could have expired or another candidate was selected. Either way, we
                             wanted to keep you informed and thank you for your time and interest.</p>
 
-                        <p>Click <a href="{{ $data['FRONTEND_URL'] }}/creative-jobs/" target="_blank">here</a> to view
+                        <p>Click <a href="{{ $data['APP_URL'] }}/creative-jobs/" target="_blank">here</a> to view
                             more current open jobs.
                         </p>
 
