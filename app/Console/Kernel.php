@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('portfolio_latest:generate')->everyMinute();
 
         $schedule->command('email:send-friend-request-emails')->dailyAt($daily_time);
+
         $schedule->command('email:send-job-closed-emails')->dailyAt($daily_time);
     }
 
