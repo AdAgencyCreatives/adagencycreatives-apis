@@ -278,7 +278,7 @@ class TestDataController extends Controller
 
                 $data[] = array(
                     'receiver' =>  $application->user->email,
-                    'recipient_name' => $application->user->full_name,
+                    'recipient_name' => $application->user->first_name,
                     'job_title' => $job->title,
                     'job_url' => $job_url,
                     'agency_name' => $agency_name,
