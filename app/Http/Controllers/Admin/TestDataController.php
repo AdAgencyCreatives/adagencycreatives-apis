@@ -251,7 +251,7 @@ class TestDataController extends Controller
     {
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
-        $jobs = Job::where('apply_type', 'Internal')->where(function ($query) use ($yesterday, $today) {
+        $jobs = Job::where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
                 $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
             })->orWhere(function ($q) use ($yesterday, $today) {
@@ -283,10 +283,11 @@ class TestDataController extends Controller
                     'job_url' => $job_url,
                     'agency_name' => $agency_name,
                     'agency_profile' => $agency_profile,
+                    'apply_type' => $job->apply_type,
                 );
             }
         }
-
+        
         for ($k = 0; $k < count($data); $k++) {
             $item = $data[$k];
 
@@ -304,6 +305,7 @@ class TestDataController extends Controller
                 'job_url' => $item['job_url'],
                 'agency_name' => $item['agency_name'],
                 'agency_profile' => $item['agency_profile'],
+                'apply_type' => $item['apply_type'],
             ]);
         }
 
