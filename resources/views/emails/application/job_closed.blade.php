@@ -9,6 +9,9 @@
             <a class="btn btn-primary" href="?apply_type=Internal">Internal Job Closed Version</a>
             <a class="btn btn-primary" href="?apply_type=External">External Job Closed Version</a>
         </div>
+        <div>
+            You are currently viewing: <b>{{ $data['apply_type'] }}</b> Job Closed Version
+        </div>
     </td>
 </tr>
 <tr>
