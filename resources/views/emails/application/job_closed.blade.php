@@ -40,14 +40,15 @@
                             @endif
                             has been closed on
                             <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a> job board.
+
+                            @if ($data['apply_type'] == 'Internal')
                         </p>
 
                         <p>
-                            @if ($data['apply_type'] == 'Internal')
-                                The job post could have expired or another candidate was selected. Either way, we
-                                wanted to keep you informed and thank you for your time and interest.
-                            @else
-                                We wanted to keep you informed and thank you for exploring the opportunity.
+                            The job post could have expired or another candidate was selected. Either way, we
+                            wanted to keep you informed and thank you for your time and interest.
+                        @else
+                            We wanted to keep you informed and thank you for exploring the opportunity.
                             @endif
                         </p>
 
