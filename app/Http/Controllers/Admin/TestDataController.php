@@ -252,11 +252,12 @@ class TestDataController extends Controller
         $apply_type = $request->apply_type ?? "Internal";
 
         if (env('APP_ENV') != 'production') {
-            Job::whereIn('id', [171])->update(['apply_type'=>$apply_type, 'expired_at'=> now()->subDay(),'updated_at'=> now()->subDay(), 'status'=> 3]);
+            Job::whereIn('id', [171])->update(['apply_type' => $apply_type, 'expired_at' => now()->subDay(), 'updated_at' => now()->subDay(), 'status' => 3]);
         }
 
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
+
         $jobs = Job::where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
                 $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
@@ -267,7 +268,7 @@ class TestDataController extends Controller
             $query->where('status', 0);
         });
 
-        if($apply_type != 'Both') {
+        if ($apply_type != '') {
             $jobs = $jobs->where('apply_type', $apply_type);
         }
 
@@ -296,11 +297,11 @@ class TestDataController extends Controller
                     'agency_name' => $agency_name,
                     'agency_profile' => $agency_profile,
                     'apply_type' => $job->apply_type,
-                    'show_test_links'=> 'yes'
+                    'show_test_links' => 'yes'
                 );
             }
         }
-        
+
         for ($k = 0; $k < count($data); $k++) {
             $item = $data[$k];
 

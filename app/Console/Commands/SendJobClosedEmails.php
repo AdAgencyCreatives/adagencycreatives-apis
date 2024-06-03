@@ -17,6 +17,7 @@ class SendJobClosedEmails extends Command
 
     public function handle()
     {
+
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
 
@@ -56,7 +57,7 @@ class SendJobClosedEmails extends Command
                     'agency_name' => $agency_name,
                     'agency_profile' => $agency_profile,
                     'apply_type' => $job->apply_type,
-                    'show_test_links'=>'no'
+                    'show_test_links' => 'no'
                 );
             }
         }
