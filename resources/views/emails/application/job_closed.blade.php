@@ -5,12 +5,16 @@
     <td
         style="padding: 10px; display: flex; flex-direction: column; row-gap: 10px; background-color: pink; justify-content: center; align-items: center">
         <div>Ignore this pink section, use the links given below to view different versions</div>
-        <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
-            <a class="btn btn-primary" href="?apply_type=Internal">Internal Job Closed Version</a>
-            <a class="btn btn-primary" href="?apply_type=External">External Job Closed Version</a>
-        </div>
         <div>
             You are currently viewing: <b>{{ $data['apply_type'] }}</b> Job Closed Version
+        </div>
+        <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
+            <a class="btn btn-primary" href="?apply_type=Internal"
+                style="display: {{ $data['apply_type'] == 'Internal' ? 'd-none' : '' }}">View Internal Job Closed
+                Version</a>
+            <a class="btn btn-primary" href="?apply_type=External"
+                style="display: {{ $data['apply_type'] == 'External' ? 'd-none' : '' }}">View External Job Closed
+                Version</a>
         </div>
     </td>
 </tr>
