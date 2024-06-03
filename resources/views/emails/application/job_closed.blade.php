@@ -4,7 +4,7 @@
 <tr>
     <td
         style="padding: 10px; display: flex; flex-direction: column; row-gap: 10px; background-color: pink; justify-content: center; align-items: center">
-        <div>Ignore this pink section, use links below to view different versions</div>
+        <div>Ignore this pink section, use the links given below to view different versions</div>
         <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
             <a class="btn btn-primary btn-link" href="?apply_type=Internal">Internal Job</a>
             <a class="btn btn-primary btn-link" href="?apply_type=External">External Job</a>
