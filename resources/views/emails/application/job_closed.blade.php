@@ -9,12 +9,11 @@
             You are currently viewing: <b>{{ $data['apply_type'] }}</b> Job Closed Version
         </div>
         <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
-            <a class="btn btn-primary" href="?apply_type=Internal"
-                style="display: {{ $data['apply_type'] == 'Internal' ? 'd-none' : '' }}">View Internal Job Closed
-                Version</a>
-            <a class="btn btn-primary" href="?apply_type=External"
-                style="display: {{ $data['apply_type'] == 'External' ? 'd-none' : '' }}">View External Job Closed
-                Version</a>
+            @if ($data['apply_type'] == 'External')
+                <a class="btn btn-primary" href="?apply_type=Internal">View Internal Job Closed Version</a>
+            @else
+                <a class="btn btn-primary" href="?apply_type=External">View External Job Closed Version</a>
+            @endif
         </div>
     </td>
 </tr>
