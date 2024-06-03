@@ -319,6 +319,7 @@ class TestDataController extends Controller
                 'agency_name' => $item['agency_name'],
                 'agency_profile' => $item['agency_profile'],
                 'apply_type' => $item['apply_type'],
+                'show_test_links' => $item['show_test_links'],
             ]);
         }
 
