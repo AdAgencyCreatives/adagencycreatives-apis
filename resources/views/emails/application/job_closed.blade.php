@@ -1,22 +1,24 @@
 @include('emails.includes.jobboard_header')
 
 <!-- 1 Column Text : BEGIN -->
-<tr>
-    <td
-        style="padding: 10px; display: flex; flex-direction: column; row-gap: 10px; background-color: pink; justify-content: center; align-items: center">
-        <div>Ignore this pink section, use the links given below to view different versions</div>
-        <div>
-            You are currently viewing: <b>{{ $data['apply_type'] }}</b> Job Closed Version
-        </div>
-        <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
-            @if ($data['apply_type'] == 'External')
-                <a class="btn btn-primary" href="?apply_type=Internal">View Internal Job Closed Version</a>
-            @else
-                <a class="btn btn-primary" href="?apply_type=External">View External Job Closed Version</a>
-            @endif
-        </div>
-    </td>
-</tr>
+@if ($data['show_test_links'] == 'yes')
+    <tr>
+        <td
+            style="padding: 10px; display: flex; flex-direction: column; row-gap: 10px; background-color: pink; justify-content: center; align-items: center">
+            <div>Ignore this pink section, use the links given below to view different versions</div>
+            <div>
+                You are currently viewing: <b>{{ $data['apply_type'] }}</b> Job Closed Version
+            </div>
+            <div style="display: flex; column-gap: 10px; justify-content: center; align-items: center">
+                @if ($data['apply_type'] == 'External')
+                    <a class="btn btn-primary" href="?apply_type=Internal">View Internal Job Closed Version</a>
+                @else
+                    <a class="btn btn-primary" href="?apply_type=External">View External Job Closed Version</a>
+                @endif
+            </div>
+        </td>
+    </tr>
+@endif
 <tr>
     <td>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">

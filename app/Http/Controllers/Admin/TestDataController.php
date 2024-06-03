@@ -296,6 +296,7 @@ class TestDataController extends Controller
                     'agency_name' => $agency_name,
                     'agency_profile' => $agency_profile,
                     'apply_type' => $job->apply_type,
+                    'show_test_links'=> 'no'
                 );
             }
         }
