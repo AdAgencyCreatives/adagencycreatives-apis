@@ -2,6 +2,12 @@
 
 <!-- 1 Column Text : BEGIN -->
 <tr>
+    <td style="display: flex; gap: 10px;">
+        <a class="btn btn-primary btn-link" href="?apply_type=Internal">View Internal Version</a>
+        <a class="btn btn-primary btn-link" href="?apply_type=External">View External Version</a>
+    </td>
+</tr>
+<tr>
     <td>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>

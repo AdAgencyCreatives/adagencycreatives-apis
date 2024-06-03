@@ -249,7 +249,11 @@ class TestDataController extends Controller
 
     public function testJobClosed(Request $request)
     {
-        $apply_type = $request->apply_type ?? "Both";
+        if (env('APP_ENV') != 'production') {
+            Job::whereIn('id', [171, 172])->update(['expired_at'=> now()->subDay(),'updated_at'=> now()->subDay(), 'status'=> 3]);
+        }
+        
+        $apply_type = $request->apply_type ?? "Internal";
 
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
