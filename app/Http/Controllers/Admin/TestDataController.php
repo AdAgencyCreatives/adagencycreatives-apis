@@ -249,6 +249,8 @@ class TestDataController extends Controller
 
     public function testJobClosed(Request $request)
     {
+        $apply_type = $request->apply_type ?? "Both";
+
         $yesterday = now()->subDay()->toDateString();
         $today = now()->toDateString();
         $jobs = Job::where(function ($query) use ($yesterday, $today) {
@@ -259,7 +261,13 @@ class TestDataController extends Controller
             });
         })->with('applications', function ($query) {
             $query->where('status', 0);
-        })->get();
+        });
+
+        if($apply_type != 'Both') {
+            $jobs = $jobs->where('apply_type', $apply_type);
+        }
+
+        $jobs = $jobs->get();
 
         $data = [];
         for ($i = 0; $i < count($jobs); $i++) {
