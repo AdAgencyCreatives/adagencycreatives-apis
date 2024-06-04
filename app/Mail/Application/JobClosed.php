@@ -24,7 +24,8 @@ class JobClosed extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('Your %s Job Application Status', $this->data['APP_NAME']),
+            // subject: sprintf('Your %s Job Application Status', $this->data['APP_NAME']),
+            subject: sprintf('%s Job Closed', $this->data['APP_NAME']),
         );
     }
 

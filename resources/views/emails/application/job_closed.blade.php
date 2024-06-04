@@ -48,11 +48,8 @@
                             @if ($data['apply_type'] == 'Internal')
                                 The job post could have expired or another candidate was selected. Either way, we
                                 wanted to keep you informed and thank you for your time and interest.
-                        </p>
-
-                        <p>
-                        @else
-                            We wanted to keep you informed and thank you for exploring the opportunity.
+                            @else
+                                We wanted to keep you informed and thank you for exploring the opportunity.
                             @endif
                             Click <a href="{{ $data['APP_URL'] }}/creative-jobs/" target="_blank">here</a> to view
                             more current open jobs.
