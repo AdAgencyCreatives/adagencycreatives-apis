@@ -21,6 +21,9 @@
                             account has not been approved at this time.
                         </p>
 
+                        <p>This platform is designed to support advertising, art director, designers, and copywriters in
+                            the United States.</p>
+
                         <h4 style="text-decoration: underline;">Details:</h4>
                         <div><b>User name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
