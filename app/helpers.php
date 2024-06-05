@@ -309,18 +309,22 @@ function url_exists($url)
 
 function formate_url($url)
 {
-    $find = ['https://', 'http://', 'www.'];
-    $replace   = ['', '', ''];
+    try {
+        $find = ['https://', 'http://', 'www.'];
+        $replace   = ['', '', ''];
 
-    $formatted_url = str_replace($find, $replace, $url);
-    if (url_exists('https://' . $formatted_url)) {
-        return 'https://' . $formatted_url;
-    } else if (url_exists('http://' . $formatted_url)) {
-        return 'http://' . $formatted_url;
-    } else if (url_exists('https://www.' . $formatted_url)) {
-        return 'https://www.' . $formatted_url;
-    } else if (url_exists('http://www.' . $formatted_url)) {
-        return 'http://www.' . $formatted_url;
+        $formatted_url = str_replace($find, $replace, $url);
+        if (url_exists('https://' . $formatted_url)) {
+            return 'https://' . $formatted_url;
+        } else if (url_exists('http://' . $formatted_url)) {
+            return 'http://' . $formatted_url;
+        } else if (url_exists('https://www.' . $formatted_url)) {
+            return 'https://www.' . $formatted_url;
+        } else if (url_exists('http://www.' . $formatted_url)) {
+            return 'http://www.' . $formatted_url;
+        }
+    } catch (Exception $ex) {
+        throw $ex;
     }
 
     return $url;
