@@ -324,7 +324,7 @@ function formate_url($url)
             return 'http://www.' . $formatted_url;
         }
     } catch (Exception $ex) {
-        throw $ex;
+        throw new Exception("What???");
     }
 
     return $url;
