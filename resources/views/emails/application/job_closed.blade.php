@@ -34,7 +34,7 @@
                             {{ $data['recipient_name'] }},</span>
 
                         <p>The <b><a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a></b>
-                            posted by
+                            opportunity posted by
                             @if (strlen($data['agency_profile']) > 0)
                                 <a href="{{ $data['agency_profile'] }}" target="_blank"> {{ $data['agency_name'] }}</a>
                             @else

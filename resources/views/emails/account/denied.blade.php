@@ -18,10 +18,9 @@
                         <p style="">We appreciate your interest in joining <a href="{{ $data['FRONTEND_URL'] }}"
                                 target="_blank">{{ $data['APP_NAME'] }}</a>.
                             Unfortunately, the following
-                            account has not been approved at this time.
-                        </p>
-
-                        <p>This platform is designed to support advertising, art director, designers, and copywriters in
+                            account has not been approved at this time. This platform is designed to support
+                            advertising, art director, designers, and copywriters
+                            in
                             the United States.</p>
 
                         <h4 style="text-decoration: underline;">Details:</h4>
