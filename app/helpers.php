@@ -314,17 +314,39 @@ function formate_url($url)
         $replace   = ['', '', ''];
 
         $formatted_url = str_replace($find, $replace, $url);
-        if (url_exists('https://' . $formatted_url)) {
-            return 'https://' . $formatted_url;
-        } else if (url_exists('http://' . $formatted_url)) {
-            return 'http://' . $formatted_url;
-        } else if (url_exists('https://www.' . $formatted_url)) {
-            return 'https://www.' . $formatted_url;
-        } else if (url_exists('http://www.' . $formatted_url)) {
-            return 'http://www.' . $formatted_url;
+        try {
+            if (url_exists('https://' . $formatted_url)) {
+                return 'https://' . $formatted_url;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Check 1. Failed");
+        }
+
+        try {
+            if (url_exists('http://' . $formatted_url)) {
+                return 'http://' . $formatted_url;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Check 2. Failed");
+        }
+
+        try {
+            if (url_exists('https://www.' . $formatted_url)) {
+                return 'https://www.' . $formatted_url;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Check 3. Failed");
+        }
+
+        try {
+            if (url_exists('http://www.' . $formatted_url)) {
+                return 'http://www.' . $formatted_url;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Check 4. Failed");
         }
     } catch (Exception $ex) {
-        throw new Exception("What???");
+        throw $ex;
     }
 
     return $url;
