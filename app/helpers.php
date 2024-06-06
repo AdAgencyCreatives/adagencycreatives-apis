@@ -319,7 +319,6 @@ function formate_url($url)
                 return 'https://' . $formatted_url;
             }
         } catch (Exception $e) {
-            throw new Exception("Check 1. Failed");
         }
 
         try {
@@ -327,7 +326,6 @@ function formate_url($url)
                 return 'http://' . $formatted_url;
             }
         } catch (Exception $e) {
-            throw new Exception("Check 2. Failed");
         }
 
         try {
@@ -335,7 +333,6 @@ function formate_url($url)
                 return 'https://www.' . $formatted_url;
             }
         } catch (Exception $e) {
-            throw new Exception("Check 3. Failed");
         }
 
         try {
@@ -346,7 +343,6 @@ function formate_url($url)
             throw new Exception("Check 4. Failed");
         }
     } catch (Exception $ex) {
-        throw $ex;
     }
 
     return $url;
