@@ -19,7 +19,7 @@
                                 target="_blank">{{ $data['APP_NAME'] }}</a>.
                             Unfortunately, the following
                             account has not been approved at this time. This platform is designed to support
-                            advertising, art director, designers, and copywriters
+                            advertising art director, designers, and copywriters
                             in
                             the United States.</p>
 
