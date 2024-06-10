@@ -16,23 +16,20 @@
                             {{ $data['user']->first_name ?? '' }},</span>
 
                         <p style="">We appreciate your interest in joining <a href="{{ $data['FRONTEND_URL'] }}"
-                                target="_blank">{{ $data['APP_NAME'] }}</a>.
-                            Unfortunately, the following
-                            account has not been approved at this time. This platform is designed to support
-                            advertising art director, designers, and copywriters
-                            in
-                            the United States.</p>
+                                target="_blank">{{ $data['APP_NAME'] }}</a>.<br>
+                            This platform is designed to support advertising art director, designers, and copywriters in
+                            the United States.<br>
+                            Unfortunately, the following account has not been approved at this time.</p>
 
-                        <h4 style="text-decoration: underline;">Details:</h4>
+                        <h4 style="text-decoration: underline; margin-bottom: 3px;">Details:</h4>
                         <div><b>User name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
 
 
                         <div style="margin-top: 20px;">If you have any questions about this decision,
-                            reach out to
-                            <a href="mailto:info@adagencycreatives.com">info@adagencycreatives.com</a>. Our team
-                            receives many inquiries and requests, so please allow
-                            up to a few business days for us to respond.
+                            reach out to <a href="mailto:info@adagencycreatives.com">info@adagencycreatives.com</a>. Our
+                            team receives many inquiries and requests, so please allow a few business days for us to
+                            respond.
                         </div>
 
                         @include('emails.includes.jobboard_footer')
