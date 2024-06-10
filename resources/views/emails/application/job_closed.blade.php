@@ -52,7 +52,7 @@
                                 We wanted to keep you informed and thank you for exploring the opportunity.
                             @endif
                             Click <a href="{{ $data['APP_URL'] }}/creative-jobs/" target="_blank">here</a> to view
-                            more current open jobs.
+                            current open jobs.
                         </p>
 
                         <p>Wishing you all the best.</p>
