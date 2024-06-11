@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:send-pending-friend-request-emails')->dailyAt($daily_time);
 
         $schedule->command('email:send-job-closed-emails')->dailyAt($daily_time);
-        $schedule->command('email:send-admin-friend-request-emails')->everyMinute();
+        // $schedule->command('email:send-admin-friend-request-emails')->everyMinute();
     }
 
     /**

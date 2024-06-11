@@ -66,7 +66,7 @@ class SendAdminFriendRequestEmails extends Command
                 //     'date_created' => now(),
                 //     'date_updated' => now(),
                 // ]);
-                $this->info('New friendship created between: ' . $existingFriendship->initiatedByUser->full_name . " and " . $existingFriendship->receivedByUser->full_name);
+                $this->info('New friendship created between: ' . $sender->full_name . " and " . $receiver->full_name);
             } else if ($existingFriendship->status != 'pending' && $existingFriendship->status != 'accepted') {
                 // $existingFriendship->update([
                 //     'status' => 'pending',
@@ -74,9 +74,9 @@ class SendAdminFriendRequestEmails extends Command
                 //     'receiver_id' => $receiver->id,
                 //     'date_updated' => now(),
                 // ]);
-                $this->info('Existing friendship updated between: ' . $existingFriendship->initiatedByUser->full_name . " and " . $existingFriendship->receivedByUser->full_name);
+                $this->info('Existing friendship updated between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
             } else {
-                $this->info('Pending friendship request between: ' . $existingFriendship->initiatedByUser->full_name . " and " . $existingFriendship->receivedByUser->full_name);
+                $this->info('Pending friendship request between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
             }
         }
 
