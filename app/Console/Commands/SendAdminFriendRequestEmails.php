@@ -21,7 +21,6 @@ class SendFriendRequestEmails extends Command
     public function handle()
     {
         $admin_id = 202;
-        $batch_size = 50;
 
         $sender = User::where('id', $admin_id)->first();
 
@@ -46,37 +45,40 @@ class SendFriendRequestEmails extends Command
         $this->info('Time Allowed After: ' . $desired->format('Y-m-d H:i:s'));
         $this->info('Valid Receivers: ' . count($receivers) . ' Receivers');
         $this->info('Excluded: ' . count($exclude_list));
-        $this->info('Batch Size: ' . $batch_size);
 
-        // for ($i = 0; $i < count($receivers); $i++) {
-        //     $receiver = $receivers[$i];
+        for ($i = 0; $i < count($receivers); $i++) {
+            $receiver = $receivers[$i];
 
-        //     // Check if a friendship already exists or a pending request
-        //     $existingFriendship = FriendRequest::where(function ($query) use ($sender, $receiver) {
-        //         $query->where('sender_id', $sender)->where('receiver_id', $receiver);
-        //     })->orWhere(function ($query) use ($sender, $receiver) {
-        //         $query->where('sender_id', $receiver)->where('receiver_id', $sender);
-        //     })->first();
+            // Check if a friendship already exists or a pending request
+            $existingFriendship = FriendRequest::where(function ($query) use ($sender, $receiver) {
+                $query->where('sender_id', $sender)->where('receiver_id', $receiver);
+            })->orWhere(function ($query) use ($sender, $receiver) {
+                $query->where('sender_id', $receiver)->where('receiver_id', $sender);
+            })->first();
 
-        //     if (!$existingFriendship) {
-        //         // Create a new friend request
-        //         FriendRequest::create([
-        //             'uuid' => Str::uuid(),
-        //             'sender_id' => $sender->id,
-        //             'receiver_id' => $receiver->id,
-        //             'status' => 'pending',
-        //             'date_created' => now(),
-        //             'date_updated' => now(),
-        //         ]);
-        //     } else if ($existingFriendship->status != 'pending' && $existingFriendship->status != 'accepted') {
-        //         $existingFriendship->update([
-        //             'status' => 'pending',
-        //             'sender_id' => $sender->id,
-        //             'receiver_id' => $receiver->id,
-        //             'date_updated' => now(),
-        //         ]);
-        //     }
-        // }
+            if (!$existingFriendship) {
+                // Create a new friend request
+                // FriendRequest::create([
+                //     'uuid' => Str::uuid(),
+                //     'sender_id' => $sender->id,
+                //     'receiver_id' => $receiver->id,
+                //     'status' => 'pending',
+                //     'date_created' => now(),
+                //     'date_updated' => now(),
+                // ]);
+                $this->info('New friendship created between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
+            } else if ($existingFriendship->status != 'pending' && $existingFriendship->status != 'accepted') {
+                // $existingFriendship->update([
+                //     'status' => 'pending',
+                //     'sender_id' => $sender->id,
+                //     'receiver_id' => $receiver->id,
+                //     'date_updated' => now(),
+                // ]);
+                $this->info('Existing friendship updated between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
+            } else {
+                $this->info('Pending friendship request between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
+            }
+        }
 
         // $date_range = now()->format('Y-m-d');
 
