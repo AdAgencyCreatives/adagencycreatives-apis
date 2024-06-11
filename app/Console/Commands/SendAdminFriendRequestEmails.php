@@ -64,23 +64,23 @@ class SendAdminFriendRequestEmails extends Command
             })->first();
 
             if (!$existingFriendship) {
-                // Create a new friend request
-                // FriendRequest::create([
-                //     'uuid' => Str::uuid(),
-                //     'sender_id' => $sender->id,
-                //     'receiver_id' => $receiver->id,
-                //     'status' => 'pending',
-                //     'date_created' => now(),
-                //     'date_updated' => now(),
-                // ]);
+                //Create a new friend request
+                FriendRequest::create([
+                    'uuid' => Str::uuid(),
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id,
+                    'status' => 'pending',
+                    'date_created' => now(),
+                    'date_updated' => now(),
+                ]);
                 $this->info('New friendship created between: ' . $sender->full_name . " and " . $receiver->full_name);
             } else if ($existingFriendship->status != 'pending' && $existingFriendship->status != 'accepted') {
-                // $existingFriendship->update([
-                //     'status' => 'pending',
-                //     'sender_id' => $sender->id,
-                //     'receiver_id' => $receiver->id,
-                //     'date_updated' => now(),
-                // ]);
+                $existingFriendship->update([
+                    'status' => 'pending',
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id,
+                    'date_updated' => now(),
+                ]);
                 $this->info('Existing friendship updated between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
             } else {
                 $this->info('Pending friendship request between: ' . $existingFriendship->sender->full_name . " and " . $existingFriendship->receiver->full_name);
