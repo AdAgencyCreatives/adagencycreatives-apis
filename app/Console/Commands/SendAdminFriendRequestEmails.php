@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 
-class SendFriendRequestEmails extends Command
+class SendAdminFriendRequestEmails extends Command
 {
 
     protected $signature = 'email:send-admin-friend-request-emails';
