@@ -35,8 +35,8 @@ class SendAdminFriendRequestEmails extends Command
         $receivers = User::where('role', '4')->whereNotIn('id', $exclude_list)->take($batch_size)->get();
 
         $now = now();
-        $desired_from = Carbon::parse('2024-05-28 15:17:12');
-        $desired_to = Carbon::parse('2024-05-28 15:17:12');
+        $desired_from = Carbon::parse('2024-06-12 08:00');
+        $desired_to = Carbon::parse('2024-06-12 08:00');
 
         if (!$now->gt($desired_from)) {
             $this->info('Can\'t execute before: ' . $desired_from->format('Y-m-d H:i:s'));
