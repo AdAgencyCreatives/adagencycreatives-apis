@@ -117,7 +117,7 @@ class SendAdminFriendRequestEmails extends Command
             }
         }
 
-        $this->info('Recipient Count: ');
+        $this->info('Recipient Count: ' . count($receivers));
 
         foreach ($receivers as $receiver) {
             $senders = $bundle[$receiver->id];
