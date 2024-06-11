@@ -38,6 +38,11 @@ class SendAdminFriendRequestEmails extends Command
         $desired_from = Carbon::parse('2024-06-11 08:00');
         $desired_to = Carbon::parse('2024-06-12 08:00');
 
+        $this->info('Time Now: ' . $now->format('Y-m-d H:i:s'));
+        $this->info('Execution Allowed Between: ' . $desired_from->format('Y-m-d H:i:s') . " and " . $desired_to->format('Y-m-d H:i:s'));
+        $this->info('Valid Receivers: ' . count($receivers) . ' Receivers');
+        $this->info('Excluded: ' . count($exclude_list));
+
         if (!$now->gt($desired_from)) {
             $this->info('Can\'t execute before: ' . $desired_from->format('Y-m-d H:i:s'));
             return;
@@ -47,11 +52,6 @@ class SendAdminFriendRequestEmails extends Command
             $this->info('Can\'t execute after: ' . $desired_to->format('Y-m-d H:i:s'));
             return;
         }
-
-        $this->info('Time Now: ' . $now->format('Y-m-d H:i:s'));
-        $this->info('Execution Allowed Between: ' . $desired_from->format('Y-m-d H:i:s') . " and " . $desired_to->format('Y-m-d H:i:s'));
-        $this->info('Valid Receivers: ' . count($receivers) . ' Receivers');
-        $this->info('Excluded: ' . count($exclude_list));
 
         for ($i = 0; $i < count($receivers); $i++) {
             $receiver = $receivers[$i];
