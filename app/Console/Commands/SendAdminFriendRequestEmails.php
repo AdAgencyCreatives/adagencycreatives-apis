@@ -21,6 +21,7 @@ class SendAdminFriendRequestEmails extends Command
     public function handle()
     {
         $admin_id = 202;
+        $batch_size = 50;
 
         $sender = User::where('id', $admin_id)->first();
 
@@ -31,18 +32,24 @@ class SendAdminFriendRequestEmails extends Command
             $exclude_list[] = $existing[$i]->receiver_id;
         }
 
-        $receivers = User::where('role', '4')->whereNotIn('id', $exclude_list)->get();
+        $receivers = User::where('role', '4')->whereNotIn('id', $exclude_list)->take($batch_size)->get();
 
         $now = now();
-        $desired = Carbon::parse('2024-05-28 15:17:12');
+        $desired_from = Carbon::parse('2024-05-28 15:17:12');
+        $desired_to = Carbon::parse('2024-05-28 15:17:12');
 
-        if (!$now->gt($desired)) {
-            $this->info('Waiting for: ' . $desired->format('Y-m-d H:i:s'));
+        if (!$now->gt($desired_from)) {
+            $this->info('Can\'t execute before: ' . $desired_from->format('Y-m-d H:i:s'));
+            return;
+        }
+
+        if (!$now->lt($desired_to)) {
+            $this->info('Can\'t execute after: ' . $desired_to->format('Y-m-d H:i:s'));
             return;
         }
 
         $this->info('Time Now: ' . $now->format('Y-m-d H:i:s'));
-        $this->info('Time Allowed After: ' . $desired->format('Y-m-d H:i:s'));
+        $this->info('Execution Allowed Between: ' . $desired_from->format('Y-m-d H:i:s') . " and " . $desired_to->format('Y-m-d H:i:s'));
         $this->info('Valid Receivers: ' . count($receivers) . ' Receivers');
         $this->info('Excluded: ' . count($exclude_list));
 
