@@ -25,7 +25,6 @@
                         <div><b>User name: </b>{{ $data['user']->username ?? '' }}</div>
                         <div><b>Email: </b>{{ $data['user']->email ?? '' }}</div>
 
-
                         <div style="margin-top: 20px;">If you have any questions about this decision,
                             reach out to <a href="mailto:info@adagencycreatives.com">info@adagencycreatives.com</a>. Our
                             team receives many inquiries and requests, so please allow a few business days for us to
