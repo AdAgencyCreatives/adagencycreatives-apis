@@ -16,8 +16,8 @@
                             {{ $data['user']->first_name ?? '' }},</span>
 
                         <p style="">We appreciate your interest in joining <a href="{{ $data['FRONTEND_URL'] }}"
-                                target="_blank">{{ $data['APP_NAME'] }}</a>.<br>
-                            This platform is designed to support advertising art director, designers, and copywriters in
+                                target="_blank">{{ $data['APP_NAME'] }}</a>. This platform is designed to support
+                            advertising art director, designers, and copywriters in
                             the United States. Unfortunately, the following account has not been approved at this time.
                         </p>
 
