@@ -27,8 +27,10 @@
             <div style="text-align:center;">
                 <div>© {{ date('Y') }} Ad Agency Creatives. All Rights Reserved.</div>
                 <div style="display:inline-block; margin-top:5px;" id="footer">
-                    <a style="color: #ffffff; margin-right: 15px;" href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
-                    <a style="color: #ffffff; margin-right: 15px;" href="https://adagencycreatives.com/terms-and-conditions/">User
+                    <a style="color: #ffffff; margin-right: 15px;"
+                        href="https://adagencycreatives.com/privacy-policy/">Privacy Policy</a>
+                    <a style="color: #ffffff; margin-right: 15px;"
+                        href="https://adagencycreatives.com/terms-and-conditions/">User
                         Agreement</a>
                     <a style="color: #ffffff;" href="https://adagencycreatives.com/contact">Contact Us</a>
                 </div>
@@ -41,6 +43,19 @@
 </td>
 </tr>
 </table>
+@isset($data)
+    @isset($data['APP_URL'])
+        @if ($data['APP_URL'] != 'https://api.adagencycreatives.com')
+            <div style="display: none">
+                <pre>
+                    @php
+                        print_r($data);
+                    @endphp
+                </pre>
+            </div>
+        @endif
+    @endisset
+@endisset
 </body>
 
 </html>

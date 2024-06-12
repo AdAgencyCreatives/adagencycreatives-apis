@@ -1,0 +1,72 @@
+{
+	"data": {
+		"receiver": {
+			"id": 713,
+			"uuid": "d8d4fd1a-e7b8-11ee-b782-12514dfb7b7b",
+			"first_name": "Staging",
+			"last_name": "Admin",
+			"username": "muzammil.rehman.upwork",
+			"email": "muzammil.rehman.upwork@gmail.com",
+			"two_factor_secret": null,
+			"two_factor_recovery_codes": null,
+			"role": "admin",
+			"status": "active",
+			"is_visible": 1,
+			"remember_token": "lLlqLVQFIAgWgDonfrahv0cODTnodBr6T4f0LaTQgxnHSxc3JfOihLveajbu",
+			"created_at": null,
+			"updated_at": "2024-03-21T19:27:56.000000Z",
+			"deleted_at": null,
+			"stripe_id": null,
+			"pm_type": null,
+			"pm_last_four": null,
+			"trial_ends_at": null
+		},
+		"data": {
+			"receiver_name": "Advisor",
+			"applicant": {
+				"id": 5,
+				"uuid": "fcb55f04-40b0-3dd2-bbf6-ee5062e00514",
+				"first_name": "Creative",
+				"last_name": "Two",
+				"username": "creative-two-two",
+				"email": "creative2two@gmail.com",
+				"two_factor_secret": null,
+				"two_factor_recovery_codes": null,
+				"role": "creative",
+				"status": "active",
+				"is_visible": 1,
+				"remember_token": null,
+				"created_at": "2023-11-08T23:04:04.000000Z",
+				"updated_at": "2024-06-06T22:48:35.000000Z",
+				"deleted_at": null,
+				"stripe_id": null,
+				"pm_type": null,
+				"pm_last_four": null,
+				"trial_ends_at": null,
+				"resume": null
+			},
+			"job_title": "Demo Job By Advisor for Designing",
+			"job_url": "http://127.0.0.1:8000/job/designing-agency-texas-dallas-part-time-demo-job-by-advisor-for-designing",
+			"resume_url": "http://localhost:8000/download/resume?name=Creative_Two_AdAgencyCreatives_2024-06-12&u1=fcb55f04-40b0-3dd2-bbf6-ee5062e00514&u2=fcb55f04-40b0-3dd2-bbf6-ee5062e00514",
+			"creative_name": "Creative Two",
+			"creative_profile": "http://127.0.0.1:8000/creative/creative-two-two",
+			"message": "another apply"
+		}
+	},
+	"emailType": "new_candidate_application",
+	"adminEmail": "App\\Models\\User:713",
+	"devEmails": [
+		"adeelakhterit@gmail.com",
+		"muzammil.rehman.upwork@gmail.com"
+	],
+	"job": null,
+	"connection": null,
+	"queue": null,
+	"chainConnection": null,
+	"chainQueue": null,
+	"chainCatchCallbacks": null,
+	"delay": null,
+	"afterCommit": null,
+	"middleware": [],
+	"chained": []
+}

@@ -407,3 +407,4 @@ Route::get('/test-fr', [TestDataController::class, 'testFr'])->name('test-fr');
 Route::get('/test-thumb', [TestDataController::class, 'testThumb'])->name('test-thumb');
 Route::get('/test-thumb-att', [TestDataController::class, 'testThumbAtt'])->name('test-thumb-att');
 Route::get('/test-job-closed', [TestDataController::class, 'testJobClosed'])->name('test-job-closed');
+Route::get('/test-new-application', [TestDataController::class, 'testNewApplication'])->name('test-new-application');

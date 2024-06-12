@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Job\JobResource;
 use App\Mail\Application\JobClosed;
+use App\Mail\Application\NewApplication;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class TestDataController extends Controller
 {
@@ -325,5 +327,14 @@ class TestDataController extends Controller
         }
 
         // return view('pages.test_data.index', ['data' => $data]);
+    }
+
+    public function testNewApplication(Request $request)
+    {
+        $json_data = File::get(resource_path('ignore/new-application.json'));
+        $data = json_decode($json_data, true);
+
+        return new NewApplication($data['data']['data']);
+        // return "<pre>" . print_r($data['data']['data'], true) . "</pre>";
     }
 }
