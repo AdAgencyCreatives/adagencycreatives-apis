@@ -5,7 +5,8 @@
 @php
 
     $url_map = [
-        '127.0.0.1:8000' => 'http://localhost:3000/',
+        '127.0.0.1:8000' => 'http://localhost:8000/',
+        'localhost:8000' => 'http://localhost:8000/',
         'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
         'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
     ];
@@ -96,14 +97,16 @@
                 var row = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
                     '<td>\
-                            <div class="user-details">\
-                                <div>' + (job?.agency_name || job?.agency?.name) + '</div>\
-                            </div>\
-                        </td>' +
+                                    <div class="user-details">\
+                                        <div>' + (job?.agency_name || job?.agency?.name) + '</div>\
+                                    </div>\
+                                </td>' +
                     '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
                     '</a></td>' +
-                    '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type == "External" ?
-                        '<br><a class="btn btn-dark" href="' + job.external_link + '" target="_blank">Apply Now</a>' : "") + '</td>' +
+                    '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type ==
+                        "External" ?
+                        '<br><a class="btn btn-dark" href="' + job.external_link +
+                        '" target="_blank">Apply Now</a>' : "") + '</td>' +
                     // '<td>' + job.description.substring(0, 30) + "..." + '</td>' +
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.employment_type + '</td>' +
