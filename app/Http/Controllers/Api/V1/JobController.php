@@ -59,6 +59,7 @@ class JobController extends Controller
                 'status',
                 AllowedFilter::trashed(),
             ])
+            ->defaultSort('-featured_at', '-updated_at', "-created_at")
             ->allowedSorts('featured_at', 'updated_at', 'created_at');
 
         if ($industries !== null) {
@@ -75,8 +76,6 @@ class JobController extends Controller
         if ($request->applications_count) {
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
         }
-
-        $jobs->orderByDesc('featured_at')->orderByDesc('updated_at')->orderByDesc('created_at');
 
         $jobs = $jobs->with('applications', function ($query) {
             $query->orderBy('status', 'asc')->orderBy('id', 'desc');
