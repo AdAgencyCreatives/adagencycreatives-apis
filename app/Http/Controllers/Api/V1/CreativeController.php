@@ -9,6 +9,7 @@ use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\User\UserCollection;
+use App\Models\Application;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\User;
@@ -24,6 +25,14 @@ class CreativeController extends Controller
 {
     public function search1(Request $request) //Agency with No package
     {
+        $agency_user_id = $request?->user()?->id;
+        $agency_user_applicants = [];
+        if (isset($agency_user_id)) {
+            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                $query->where('user_id', $agency_user_id);
+            })->pluck('user_id')->toArray());
+        }
+
         $search = $request->search;
 
         $exact_search_ids = $this->getSearch1CreativeIDs($search, 'exact-match');
@@ -34,9 +43,15 @@ class CreativeController extends Controller
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
+            ->whereHas('user', function ($query) use ($agency_user_applicants) {
+                $query->where('status', 1)
+                    ->where(function ($q) use ($agency_user_applicants) {
+                        $q->where('is_visible', 1)
+                            ->orWhere(function ($q1) use ($agency_user_applicants) {
+                                $q1->where('is_visible', 0)
+                                    ->whereIn('user_id', $agency_user_applicants);
+                            });
+                    });
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
@@ -49,6 +64,14 @@ class CreativeController extends Controller
 
     public function search2(Request $request) //Agency with active package
     {
+        $agency_user_id = $request?->user()?->id;
+        $agency_user_applicants = [];
+        if (isset($agency_user_id)) {
+            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                $query->where('user_id', $agency_user_id);
+            })->pluck('user_id')->toArray());
+        }
+
         $searchTerms = explode(',', $request->search);
         $combinedCreativeIds = $this->process_three_terms_search($searchTerms);
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
@@ -57,9 +80,15 @@ class CreativeController extends Controller
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
+            ->whereHas('user', function ($query) use ($agency_user_applicants) {
+                $query->where('status', 1)
+                    ->where(function ($q) use ($agency_user_applicants) {
+                        $q->where('is_visible', 1)
+                            ->orWhere(function ($q1) use ($agency_user_applicants) {
+                                $q1->where('is_visible', 0)
+                                    ->whereIn('user_id', $agency_user_applicants);
+                            });
+                    });
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
@@ -73,6 +102,14 @@ class CreativeController extends Controller
 
     public function search3(Request $request)
     {
+        $agency_user_id = $request?->user()?->id;
+        $agency_user_applicants = [];
+        if (isset($agency_user_id)) {
+            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                $query->where('user_id', $agency_user_id);
+            })->pluck('user_id')->toArray());
+        }
+
         /**
          * SEARCH CRITERIA
          *
@@ -100,8 +137,15 @@ class CreativeController extends Controller
         // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)->where('status', 1);
+            ->whereHas('user', function ($query) use ($agency_user_applicants) {
+                $query->where('status', 1)
+                    ->where(function ($q) use ($agency_user_applicants) {
+                        $q->where('is_visible', 1)
+                            ->orWhere(function ($q1) use ($agency_user_applicants) {
+                                $q1->where('is_visible', 0)
+                                    ->whereIn('user_id', $agency_user_applicants);
+                            });
+                    });
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
