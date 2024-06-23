@@ -82,7 +82,8 @@ class SendEmailJob implements ShouldQueue
             'hire-an-advisor-job-completed',
 
             'job_approved_alert_all_subscribers',
-            'application_removed_by_agency'
+            'application_removed_by_agency',
+            'new_candidate_application'
         ];
 
         // Check if the current email type is in the array and update the receiver's email
