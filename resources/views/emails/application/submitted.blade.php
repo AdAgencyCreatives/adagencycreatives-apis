@@ -20,7 +20,7 @@
                                 target="_blank">{{ $data['job_title'] }}</a> has been submitted.
                         </p>
 
-                        <p>We know the job search can be an uncertain journey, and we’re rooting for you all the way.
+                        <p>We know the job search can be an uncertain journey and we’re rooting for you all the way.
                         </p>
 
                         @include('emails.includes.jobboard_footer')
