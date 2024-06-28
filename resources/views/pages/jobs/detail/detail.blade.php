@@ -4,8 +4,9 @@
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
-    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/j1xmsbgy7mm4sd2czch7suv0680w3flyx8n2daatar52pxm3/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
+
     <script>
         function populateApplications(applications) {
 
@@ -37,7 +38,7 @@
 
                     cardHeader.append('<div style="float:right"><a href="' + application.resume_url +
                         '" class="btn btn-primary mt-n1 mr-2">Download Resume <i class="fas fa-download"></i></a></div>'
-                        );
+                    );
 
                     var userNameLink = $('<a target="_blank" href="' + '/users/' + application.user_profile_id +
                             '/details' + '">')
@@ -340,7 +341,7 @@
                 };
                 $(this).html(
                     '<div class="spinner-border spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>'
-                    );
+                );
                 let icon = '';
                 if (status === 'accepted') {
                     icon = '<i class="fas fa-check"></i>';

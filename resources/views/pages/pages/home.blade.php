@@ -3,7 +3,7 @@
 @section('title', Str::ucfirst($page))
 
 @section('scripts')
-    <script src="https://cdn.tiny.cloud/1/0de1wvfzr5x0z7za5hi7txxvlhepurk5812ub5p0fu5tnywh/tinymce/6/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/j1xmsbgy7mm4sd2czch7suv0680w3flyx8n2daatar52pxm3/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
 
     <script>
