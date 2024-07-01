@@ -362,6 +362,13 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeIsDeleted(Builder $query, $value): Builder
+    {
+        if ($value)
+            return $query->onlyTrashed();
+        return $query;
+    }
+
     public function getRoleAttribute($value)
     {
         switch ($value) {

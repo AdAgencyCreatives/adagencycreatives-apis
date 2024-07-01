@@ -20,6 +20,8 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class UserController extends Controller
 {
     public function index()
@@ -32,8 +34,18 @@ class UserController extends Controller
         return view('pages.users.add');
     }
 
-    public function details(User $user)
+    public function details(Request $request, $user_id)
     {
+        if ($request?->show == 'deleted') {
+            $user = User::onlyTrashed()->where('id', '=', $user_id)->first();
+        } else {
+            $user = User::where('id', '=', $user_id)->first();
+        }
+
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+
         $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
             if (!$user->agency) {
@@ -44,7 +56,6 @@ class UserController extends Controller
             }
             $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
             $subscription = Subscription::where('user_id', $user->id)->latest();
-
         } elseif ($user->role == 'creative') {
             if (!$user->creative) {
                 $creative = new Creative();
@@ -179,7 +190,7 @@ class UserController extends Controller
 
             if ($user->role == 'agency') {
                 SendEmailJob::dispatch([
-                'receiver' => $user, 'data' => $user,
+                    'receiver' => $user, 'data' => $user,
                 ], 'account_approved_agency');
             }
 
@@ -189,8 +200,8 @@ class UserController extends Controller
             if ($user->role == 'creative') {
 
                 SendEmailJob::dispatch([
-                       'receiver' => $user, 'data' => $user,
-                   ], 'account_approved');
+                    'receiver' => $user, 'data' => $user,
+                ], 'account_approved');
 
                 $portfolio_website = $user->portfolio_website_link()->first();
                 if ($portfolio_website) {
@@ -219,22 +230,21 @@ class UserController extends Controller
         }
     }
 
-     public function deleteRelatedRecordsPermanently($user_id)
+    public function deleteRelatedRecordsPermanently($user_id)
     {
         $tables = DB::select('SHOW TABLES');
-        $db = "Tables_in_".env('DB_DATABASE');
+        $db = "Tables_in_" . env('DB_DATABASE');
 
         foreach ($tables as $table) {
 
             $table = $table->$db;
 
-                try{
-                    $sql = "DELETE FROM {$table} WHERE user_id = ? OR deleted_at IS NOT NULL";
-                    DB::statement($sql, [$user_id]);
-                }
-                catch(\Exception $e){
-                    continue;
-                }
+            try {
+                $sql = "DELETE FROM {$table} WHERE user_id = ? OR deleted_at IS NOT NULL";
+                DB::statement($sql, [$user_id]);
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
         $sql = "DELETE FROM users WHERE id = ? OR deleted_at IS NOT NULL";

@@ -55,6 +55,7 @@ class UserController extends Controller
                 AllowedFilter::scope('city_id'),
 
                 AllowedFilter::scope('is_featured'),
+                AllowedFilter::scope('is_deleted'),
             ])
 
             ->defaultSort('-created_at')

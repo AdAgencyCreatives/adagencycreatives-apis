@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'image_id' => get_profile_picture_id($this),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+            'deleted_at' => $this?->deleted_at ? $this->deleted_at->format(config('global.datetime_format')) : '',
 
             'relationships' => [
                 'phones' => [

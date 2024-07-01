@@ -61,6 +61,7 @@
 
             var visibility = $('#is_visible').val();
             var featured = $('#is_featured').val();
+            var deleted = $('#is_deleted').val();
 
             //Agency filters
             var company_slug = $('#agency_slug').val();
@@ -81,8 +82,6 @@
                 }
             }
 
-
-
             filters = {
                 role: selectedRole,
                 status: selectedStatus,
@@ -98,6 +97,7 @@
 
                 is_visible: visibility,
                 is_featured: featured,
+                is_deleted: deleted,
             };
 
             Object.keys(filters).forEach(function(key) {
@@ -143,14 +143,20 @@
                     roleBasedActions = '<a href="' + editUrl +
                         '" target="_blank">Details</a>';
                 } else {
-                    roleBasedActions = '<a href="' + editUrl +
-                        '" target="_blank">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
-                        user.uuid + '">Delete</a>';
+                    if (user?.deleted_at) {
+                        roleBasedActions = '<a href="' + editUrl +
+                            (user?.deleted_at ? '?show=deleted' : '') +
+                            '" target="_blank">Details</a><br>Deleted At:<br>' + user?.deleted_at;
+                    } else {
+                        roleBasedActions = '<a href="' + editUrl +
+                            '" target="_blank">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
+                            user.uuid + '">Delete</a>';
+                    }
                 }
 
                 var statusDropdown =
                     '<select class="status-dropdown form-control form-select select2" data-user-id="' +
-                    user.uuid + '">' +
+                    user.uuid + '"' + (user?.deleted_at ? ' disabled' : '') + '>' +
                     '<option value="pending" ' + (user.status === 'pending' ? 'selected' : '') +
                     '>Pending</option>' +
                     '<option value="active" ' + (user.status === 'active' ? 'selected' : '') + '>Active</option>' +

@@ -58,6 +58,18 @@
 
                         <div class="col-sm">
                             <div class="form-group">
+                                <label class="form-label" for="is_deleted"> Is Deleted? </label>
+                                <select name="is_deleted" id="is_deleted"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="-100"> Select Deleted</option>
+                                    <option value="1"> Yes</option>
+                                    <option value="0"> No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
                                 <label class="form-label" for="is_visible"> Profile Hidden Status </label>
                                 <select name="is_visible" id="is_visible"
                                     class="form-control form-select custom-select select2" data-toggle="select2">

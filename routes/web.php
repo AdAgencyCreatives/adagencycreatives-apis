@@ -249,7 +249,7 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
 
         Route::resource('users', UserController::class)->only('index', 'details');
-        Route::get('users/{user}/details', [UserController::class, 'details']);
+        Route::get('users/{user_id}/details', [UserController::class, 'details']);
 
         /**
          * (Job) Package Requests
