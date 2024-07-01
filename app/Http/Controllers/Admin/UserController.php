@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $str = Str::uuid();
         if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
-            if (!$user->agency) {
+            if (!$user->agency && !($request?->show == 'deleted')) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -56,7 +56,7 @@ class UserController extends Controller
             }
             $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
             $subscription = Subscription::where('user_id', $user->id)->latest();
-        } elseif ($user->role == 'creative') {
+        } elseif ($user->role == 'creative' && !($request?->show == 'deleted')) {
             if (!$user->creative) {
                 $creative = new Creative();
                 $creative->uuid = $str;
