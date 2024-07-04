@@ -273,4 +273,13 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            var isDeleted = "{{ $user?->deleted_at }}"?.length > 0;
+            if (isDeleted) {
+                $("input[type='submit']").hide();
+                $("button[type='submit']").hide();
+            }
+        });
+    </script>
 @endsection

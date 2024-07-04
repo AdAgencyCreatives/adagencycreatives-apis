@@ -73,6 +73,25 @@ class UserController extends Controller
         return view('pages.users.profile', compact('user'));
     }
 
+    public function details_deleted(Request $request, $user_id)
+    {
+        $user = User::onlyTrashed()->where('id', '=', $user_id)->first();
+
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+
+        $str = Str::uuid();
+        if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+            $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
+            $subscription = Subscription::where('user_id', $user->id)->latest();
+        } elseif ($user->role == 'creative' && !($request?->show == 'deleted')) {
+            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
+        }
+
+        return view('pages.users.profile', compact('user'));
+    }
+
     public function store(StoreAdminUserRequest $request)
     {
         try {

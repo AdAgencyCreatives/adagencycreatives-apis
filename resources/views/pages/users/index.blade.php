@@ -144,9 +144,7 @@
                         '" target="_blank">Details</a>';
                 } else {
                     if (user?.deleted_at) {
-                        roleBasedActions = '<a href="' + editUrl +
-                            (user?.deleted_at ? '?show=deleted' : '') +
-                            '" target="_blank">Details</a><br>Deleted At:<br>' + user?.deleted_at;
+                        roleBasedActions = '<a href="' + editUrl + '_deleted" target="_blank ">Details</a>';
                     } else {
                         roleBasedActions = '<a href="' + editUrl +
                             '" target="_blank">Details</a> | <a href="#" class="delete-user-btn" data-id="' +
@@ -155,14 +153,19 @@
                 }
 
                 var statusDropdown =
-                    '<select class="status-dropdown form-control form-select select2" data-user-id="' +
-                    user.uuid + '"' + (user?.deleted_at ? ' disabled' : '') + '>' +
-                    '<option value="pending" ' + (user.status === 'pending' ? 'selected' : '') +
-                    '>Pending</option>' +
-                    '<option value="active" ' + (user.status === 'active' ? 'selected' : '') + '>Active</option>' +
-                    '<option value="inactive" ' + (user.status === 'inactive' ? 'selected' : '') +
-                    '>Inactive</option>' +
-                    '</select>';
+                    user?.deleted_at ?
+                    '<span class="badge rounded-pill bg-secondary" style="letter-spacing: 0.1em; padding: 5px 10px;">Deleted</span><br>' +
+                    user
+                    ?.deleted_at + '' : (
+                        '<select class="status-dropdown form-control form-select select2" data-user-id="' +
+                        user.uuid + '">' +
+                        '<option value="pending" ' + (user.status === 'pending' ? 'selected' : '') +
+                        '>Pending</option>' +
+                        '<option value="active" ' + (user.status === 'active' ? 'selected' : '') +
+                        '>Active</option>' +
+                        '<option value="inactive" ' + (user.status === 'inactive' ? 'selected' : '') +
+                        '>Inactive</option>' +
+                        '</select>');
 
                 var row = '<tr>' +
                     '<td>' + user.id + '</td>' +
