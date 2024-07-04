@@ -43,7 +43,6 @@ class SubscriptionController extends Controller
 
             // Check if a coupon code was provided and apply it
             if ($request->has('coupon_code')) {
-
             }
             $subscriptionBuilder->withCoupon('TEST40    ');
             $subscription = $subscriptionBuilder->allowPromotionCodes()->create($request->token);
@@ -64,7 +63,7 @@ class SubscriptionController extends Controller
 
             $data = [
                 'order_no' => $order->id,
-                'username' => $user->first_name.' '.$user->last_name,
+                'username' => $user->first_name . ' ' . $user->last_name,
                 'email' => $user->email,
                 'total' => $plan->price,
                 'pm_type' => $subscription->owner->pm_type,
@@ -140,7 +139,7 @@ class SubscriptionController extends Controller
 
             $data = [
                 'order_no' => $order->id,
-                'username' => $user->first_name.' '.$user->last_name,
+                'username' => $user->first_name . ' ' . $user->last_name,
                 'email' => $user->email,
                 'total' => $plan->price,
                 'pm_type' => '',
@@ -167,7 +166,7 @@ class SubscriptionController extends Controller
 
         $data = [
             'name' => $request->name, // Plan Name
-            'quota_left' => $request->quota_left ?: $plan->quota,
+            'quota_left' => $request?->quota_left >= 0 ? $request?->quota_left : $plan->quota,
             'ends_at' => $request->ends_at,
         ];
 
