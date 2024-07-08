@@ -216,13 +216,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('messages/{receiverId}', [ChatController::class, 'index']);
     Route::get('my-contacts', [ChatController::class, 'getAllMessageContacts']);
     Route::apiResource('messages', ChatController::class);
+    Route::post('notifications/send-lounge-mention-notifications', [NotificationController::class, 'sendLoungeMentionNotifications']);
     Route::get('notifications/count', [NotificationController::class, 'count']);
     Route::apiResource('notifications', NotificationController::class);
     Route::get('activities/count', [ActivityController::class, 'count']);
     Route::apiResource('activities', ActivityController::class);
     Route::post('delete-conversation', [ChatController::class, 'deleteConversation']);
     Route::post('delete-single-message/{id}', [ChatController::class, 'deleteSingleMessage']);
-    Route::post('notifications/send-lounge-mention-notifications', [NotificationController::class, 'sendLoungeMentionNotifications']);
     /**
      * SEO
      */

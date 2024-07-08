@@ -172,8 +172,8 @@ Route::group(['middleware' => ['auth']], function () {
         // Taxonomies
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
-        Route::resource('locations', LocationController::class);
         Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
+        Route::resource('locations', LocationController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
