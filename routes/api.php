@@ -222,6 +222,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('activities', ActivityController::class);
     Route::post('delete-conversation', [ChatController::class, 'deleteConversation']);
     Route::post('delete-single-message/{id}', [ChatController::class, 'deleteSingleMessage']);
+    Route::get('notifications/send-lounge-mention-email', [NotificationController::class, 'sendLoungeMentionEmail']);
     /**
      * SEO
      */

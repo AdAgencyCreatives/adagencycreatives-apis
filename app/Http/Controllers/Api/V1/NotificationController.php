@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Notification\StoreNotificationRequest;
 use App\Http\Resources\Notification\NotificationCollection;
 use App\Http\Resources\Notification\NotificationResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
@@ -37,7 +38,7 @@ class NotificationController extends Controller
         }
 
         $notifications = $query->paginate($request->per_page ?? config('global.request.pagination_limit'))
-        ->withQueryString();
+            ->withQueryString();
 
         return new NotificationCollection($notifications);
     }
@@ -56,7 +57,7 @@ class NotificationController extends Controller
                 $body = $request->input('body');
                 if (isset($body['post_id'])) {
 
-                    $post= Post::where('uuid', $body['post_id'])->first();
+                    $post = Post::where('uuid', $body['post_id'])->first();
                     $request->merge(['body' => $post->id]);
                 }
             }
@@ -64,7 +65,6 @@ class NotificationController extends Controller
             $notification = Notification::create($request->all());
 
             return new NotificationResource($notification);
-
         } catch (\Exception $e) {
             throw new ApiException($e, 'NS-01');
         }
@@ -110,5 +110,42 @@ class NotificationController extends Controller
         return response()->json([
             'count' => $query->count(),
         ]);
+    }
+
+    public function sendLoungeMentionEmail(Request $request)
+    {
+        $notification_id = $request?->notification_id;
+
+
+        if (!$notification_id) {
+            return;
+        }
+
+        $notification = Notification::where('id', $notification_id)
+            ->get();
+
+        $post = Post::find($notification->body);
+        $group = $post->group;
+        $receiver = User::find($notification->user_id);
+        $author = $post->user;
+
+        $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
+
+        $data = [
+            'data' => [
+                'recipient' => $receiver->first_name,
+                'name' => $author->full_name,
+                'inviter' => $author->full_name,
+                'inviter_profile_url' => sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
+                'profile_picture' => get_profile_picture($author),
+                'user' => $author,
+                'group_url' => $group_url,
+                'group' => $group->name,
+                'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
+            ],
+            'receiver' => $receiver
+        ];
+
+        SendEmailJob::dispatch($data, 'user_mentioned_in_post');
     }
 }
