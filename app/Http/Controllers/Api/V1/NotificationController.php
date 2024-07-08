@@ -112,40 +112,57 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function sendLoungeMentionEmail(Request $request)
+    public function sendLoungeMentionNotifications(Request $request)
     {
-        $notification_id = $request?->notification_id;
+        try {
 
+            $recipient_ids = $request?->recipient_ids;
 
-        if (!$notification_id) {
-            return;
+            foreach ($recipient_ids as $recipient_id) {
+
+                $user = User::where('uuid', $recipient_id)->first();
+
+                $data = array();
+                $data['uuid'] = Str::uuid();
+
+                $data['user_id'] = $user->id;
+                $data['type'] = $request->notification_type;
+                $data['message'] = $request->notification_text;
+
+                $post = Post::where('uuid', $request->post_id)->first();
+                $data['body'] = array('post_id' => $post->id);
+
+                $notification = Notification::create($data);
+
+                $group = $post->group;
+                $receiver = User::find($notification->user_id);
+                $author = $post->user;
+
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
+
+                $data = [
+                    'data' => [
+                        'recipient' => $receiver->first_name,
+                        'name' => $author->full_name,
+                        'inviter' => $author->full_name,
+                        'inviter_profile_url' => sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
+                        'profile_picture' => get_profile_picture($author),
+                        'user' => $author,
+                        'group_url' => $group_url,
+                        'group' => $group->name,
+                        'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
+                    ],
+                    'receiver' => $receiver
+                ];
+
+                if ($request?->send_email == 'yes') {
+                    SendEmailJob::dispatch($data, 'user_mentioned_in_post');
+                }
+            }
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'NS-01');
         }
 
-        $notification = Notification::where('id', $notification_id)
-            ->get();
-
-        $post = Post::find($notification->body);
-        $group = $post->group;
-        $receiver = User::find($notification->user_id);
-        $author = $post->user;
-
-        $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
-
-        $data = [
-            'data' => [
-                'recipient' => $receiver->first_name,
-                'name' => $author->full_name,
-                'inviter' => $author->full_name,
-                'inviter_profile_url' => sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
-                'profile_picture' => get_profile_picture($author),
-                'user' => $author,
-                'group_url' => $group_url,
-                'group' => $group->name,
-                'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
-            ],
-            'receiver' => $receiver
-        ];
-
-        SendEmailJob::dispatch($data, 'user_mentioned_in_post');
+        return json_encode(array('status' => 'success'));
     }
 }
