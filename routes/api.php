@@ -93,7 +93,7 @@ Route::get('get_media-experiences', [MediaController::class, 'get_medias']);
 // Route::get('employment_types', [JobController::class, 'get_employment_types']);
 Route::get('employment_types', [EmploymentTypeController::class, 'get_employment_types']);
 Route::get('get_resume_employment_types', [EmploymentTypeController::class, 'get_resume_employment_types']);
-Route::get('locations', [LocationController::class, 'index'])->name("locations_index");
+Route::get('locations', [LocationController::class, 'index']);
 Route::get('cities', [LocationController::class, 'cities']); //For Fetching Only Cities
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
