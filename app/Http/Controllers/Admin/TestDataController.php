@@ -17,6 +17,7 @@ use App\Models\FriendRequest;
 use App\Models\Job;
 use App\Models\JobAlert;
 use App\Models\Message;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -450,5 +451,45 @@ class TestDataController extends Controller
             ->pluck('id')
             ->toArray();
         return $creativeIds;
+    }
+
+    public function testSkipJobAlertsForRepostJobs(Request $request)
+    {
+
+        $applications = array();
+        $notifications = array();
+
+        $current_job = Job::where('id', $request?->job_id)->first();
+        $apps = Application::where('job_id', $current_job?->id)->get()->pluck('user_id')->toArray();
+        $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $current_job?->id)))->get()->pluck('user_id')->toArray();
+        $applications = array_merge($applications, $apps ? $apps : []);
+        $notifications = array_merge($notifications, $notifs ? $notifs : []);
+
+        $original_job = Job::where('id', $request?->repost_job_id)->first();
+
+        while ($original_job?->id) {
+            $apps = Application::where('job_id', $original_job?->id)->get()->pluck('user_id')->toArray();
+            $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $original_job?->id)))->get()->pluck('user_id')->toArray();
+            $applications = array_merge($applications, $apps ? $apps : []);
+            $notifications = array_merge($notifications, $notifs ? $notifs : []);
+            $original_job = Job::where('id', $original_job?->repost_job_id)->first();
+        }
+
+        $users = array_values(array_unique(array_merge($applications, $notifications)));
+
+        $category = Category::where('id', $current_job->category_id)->first();
+
+        $group_categories = Category::where('group_name', $category->name)->get();
+
+        if (count($group_categories) > 0) {
+            for ($i = 0; $i < count($group_categories); $i++) {
+                $categories[$i] = $group_categories[$i]->id;
+            }
+        } else {
+            $categories[0] = $category->id;
+        }
+        $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get()->pluck('user_id')->toArray();
+
+        return $categorySubscribers;
     }
 }

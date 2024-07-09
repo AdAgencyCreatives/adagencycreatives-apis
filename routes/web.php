@@ -410,3 +410,4 @@ Route::get('/test-thumb-att', [TestDataController::class, 'testThumbAtt'])->name
 Route::get('/test-job-closed', [TestDataController::class, 'testJobClosed'])->name('test-job-closed');
 Route::get('/test-new-application', [TestDataController::class, 'testNewApplication'])->name('test-new-application');
 Route::get('/test-creative-search', [TestDataController::class, 'testCreativeSearch'])->name('test-creative-search');
+Route::get('/test-skip-job-alerts-for-repost-jobs', [TestDataController::class, 'testSkipJobAlertsForRepostJobs'])->name('test-skip-job-alerts-for-repost-jobs');
