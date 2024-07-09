@@ -55,6 +55,7 @@ class Job extends Model
         'seo_keywords',
         'views',
         'featured_at',
+        'repost_job_id',
     ];
 
     protected $casts = [

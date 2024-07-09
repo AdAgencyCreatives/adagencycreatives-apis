@@ -43,12 +43,13 @@ class SendUnreadLoungeMentionEmail extends Command
                     'recipient' => $receiver->first_name,
                     'name' => $author->full_name,
                     'inviter' => $author->full_name,
-                    'inviter_profile_url' =>sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
+                    'inviter_profile_url' => sprintf("%s/creative/%s", env('FRONTEND_URL'), $author?->username),
                     'profile_picture' => get_profile_picture($author),
                     'user' => $author,
                     'group_url' => $group_url,
                     'group' => $group->name,
                     'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
+                    'notification_uuid' => $notification->uuid,
                 ],
                 'receiver' => $receiver
             ];

@@ -26,7 +26,8 @@
                 </div>
             </div>
 
-            <p style="margin-top: -10px;">Click to see the &nbsp; <a href="{{ $data['group_url'] }}" target="_blank"
+            <p style="margin-top: -10px;">Click to see the &nbsp; <a
+                    href="{{ $data['group_url'] }}?notified={{ $data['notification_uuid'] }}" target="_blank"
                     style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
                     Post</a>
             </p>

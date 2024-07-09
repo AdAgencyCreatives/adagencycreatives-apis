@@ -185,17 +185,17 @@ class User extends Authenticatable
 
     public function alert()
     {
-        return $this->hasOne(JobAlert::class)->withTrashed();
+        return $this->hasOne(JobAlert::class);
     }
 
     public function alert_categories()
     {
-        return $this->belongsToMany(Category::class, 'job_alerts', 'user_id', 'category_id')->withTrashed()->withTimestamps();
+        return $this->belongsToMany(Category::class, 'job_alerts', 'user_id', 'category_id')->withTimestamps();
     }
 
     public function orders()
     {
-        return $this->hasMany(Order::class)->withTrashed();
+        return $this->hasMany(Order::class);
     }
 
     public function active_subscription()
@@ -216,7 +216,7 @@ class User extends Authenticatable
 
     public function groups()
     {
-        return $this->hasMany(Group::class)->withTrashed();
+        return $this->hasMany(Group::class);
     }
 
     public function posts()
@@ -226,7 +226,7 @@ class User extends Authenticatable
 
     public function receivedReviews()
     {
-        return $this->hasMany(Review::class, 'target_id');
+        return $this->hasMany(Review::class, 'target_id')->withTrashed();
     }
 
     public function sentMessages()
@@ -241,12 +241,12 @@ class User extends Authenticatable
 
     public function bookmarks()
     {
-        return $this->morphMany(Bookmark::class, 'bookmarkable')->withTrashed();
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
     }
 
     public function notes()
     {
-        return $this->morphMany(Note::class, 'notable')->withTrashed();
+        return $this->morphMany(Note::class, 'notable');
     }
 
     public function notifications()

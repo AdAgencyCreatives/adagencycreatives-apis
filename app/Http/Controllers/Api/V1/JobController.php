@@ -295,6 +295,7 @@ class JobController extends Controller
         $category = Category::where('uuid', $request->category_id)->first();
         $state = Location::where('uuid', $request->state_id)->first();
         $city = Location::where('uuid', $request->city_id)->first();
+        $repost_job = Job::where('uuid', $request->repost_job_id)->first();
 
         $request->merge([
             'uuid' => Str::uuid(),
@@ -306,6 +307,7 @@ class JobController extends Controller
             'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
             'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
             'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
+            'repost_job_id' => $repost_job?->id,
         ]);
 
         try {
