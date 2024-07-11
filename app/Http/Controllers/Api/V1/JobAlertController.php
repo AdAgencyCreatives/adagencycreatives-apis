@@ -10,14 +10,23 @@ use App\Models\Category;
 use App\Models\JobAlert;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class JobAlertController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
+        $user_uuid = $request?->filter['user_id'];
+
+        $sql = "INSERT INTO job_alerts SELECT NULL, UUID(), (SELECT id FROM users WHERE uuid = '" . $user_uuid . "'), categories.id, 0, NOW(), NOW() FROM categories WHERE categories.id NOT IN (SELECT job_alerts.category_id FROM job_alerts INNER JOIN users ON job_alerts.user_id = users.id WHERE users.uuid = '" . $user_uuid . "');";
+
+        DB::update($sql);
+
         $query = QueryBuilder::for(JobAlert::class)
             ->allowedFilters(
                 [
