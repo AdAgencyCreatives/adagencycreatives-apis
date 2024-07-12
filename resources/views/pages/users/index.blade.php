@@ -165,6 +165,9 @@
                         '>Active</option>' +
                         '<option value="inactive" ' + (user.status === 'inactive' ? 'selected' : '') +
                         '>Inactive</option>' +
+                        '<option value="not_aligned_no_auto_email" ' + (user.status ===
+                            'not_aligned_no_auto_email' ? 'selected' : '') +
+                        '>Not Aligned / No Auto Email</option>' +
                         '</select>');
 
                 var row = '<tr>' +

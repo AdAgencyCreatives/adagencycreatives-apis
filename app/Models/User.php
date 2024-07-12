@@ -70,7 +70,7 @@ class User extends Authenticatable
         'PENDING' => 0,
         'ACTIVE' => 1,
         'INACTIVE' => 2,
-        'NOT ALIGNED / NO AUTO EMAIL' => 3
+        'NOT_ALIGNED_NO_AUTO_EMAIL' => 4,
     ];
 
     public function profile_picture()
@@ -418,7 +418,7 @@ class User extends Authenticatable
                 return 'active';
             case User::STATUSES['INACTIVE']:
                 return 'inactive';
-            case User::STATUSES['NOT ALIGNED / NO AUTO EMAIL']:
+            case User::STATUSES['NOT_ALIGNED_NO_AUTO_EMAIL']:
                 return 'not_aligned_no_auto_email';
 
             default:
@@ -436,7 +436,7 @@ class User extends Authenticatable
                 $this->attributes['status'] = User::STATUSES['INACTIVE'];
                 break;
             case 'not_aligned_no_auto_email':
-                $this->attributes['status'] = User::STATUSES['NOT ALIGNED / NO AUTO EMAIL'];
+                $this->attributes['status'] = User::STATUSES['NOT_ALIGNED_NO_AUTO_EMAIL'];
                 break;
             default:
                 $this->attributes['status'] = User::STATUSES['PENDING'];

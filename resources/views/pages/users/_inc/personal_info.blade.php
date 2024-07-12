@@ -63,7 +63,9 @@
                                         </option>
                                         <option value="inactive" @if ($user->status == 'inactive') selected @endif>
                                             Inactive</option>
-
+                                        <option value="not_aligned_no_auto_email"
+                                            @if ($user->status == 'not_aligned_no_auto_email') selected @endif>
+                                            Not Aligned / No Auto Email</option>
                                     </select>
                                 </div>
                             </div>
