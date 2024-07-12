@@ -70,6 +70,7 @@ class User extends Authenticatable
         'PENDING' => 0,
         'ACTIVE' => 1,
         'INACTIVE' => 2,
+        'NOT_ALIGNED' => 3
     ];
 
     public function profile_picture()
@@ -417,6 +418,8 @@ class User extends Authenticatable
                 return 'active';
             case User::STATUSES['INACTIVE']:
                 return 'inactive';
+            case User::STATUSES['NOT_ALIGNED']:
+                return 'not_aligned';
 
             default:
                 return null;
@@ -431,6 +434,9 @@ class User extends Authenticatable
                 break;
             case 'inactive':
                 $this->attributes['status'] = User::STATUSES['INACTIVE'];
+                break;
+            case 'not_aligned':
+                $this->attributes['status'] = User::STATUSES['NOT_ALIGNED'];
                 break;
             default:
                 $this->attributes['status'] = User::STATUSES['PENDING'];
