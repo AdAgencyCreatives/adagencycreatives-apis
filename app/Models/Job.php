@@ -286,6 +286,32 @@ class Job extends Model
         }
     }
 
+    private static function getExistingSubscribedOrAppliedUsers($job)
+    {
+        $applications = array();
+        $notifications = array();
+
+        $current_job = Job::where('id', $job->id)->first();
+        $apps = Application::where('job_id', $current_job?->id)->get()->pluck('user_id')->toArray();
+        $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $current_job?->id)))->get()->pluck('user_id')->toArray();
+        $applications = array_merge($applications, $apps ? $apps : []);
+        $notifications = array_merge($notifications, $notifs ? $notifs : []);
+
+        $original_job = Job::where('id', $job?->repost_job_id)->first();
+
+        while ($original_job?->id) {
+            $apps = Application::where('job_id', $original_job?->id)->get()->pluck('user_id')->toArray();
+            $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $original_job?->id)))->get()->pluck('user_id')->toArray();
+            $applications = array_merge($applications, $apps ? $apps : []);
+            $notifications = array_merge($notifications, $notifs ? $notifs : []);
+            $original_job = Job::where('id', $original_job?->repost_job_id)->first();
+        }
+
+        $users = array_values(array_unique(array_merge($applications, $notifications)));
+
+        return $users;
+    }
+
     protected static function booted()
     {
         static::creating(function ($job) {
@@ -353,26 +379,7 @@ class Job extends Model
                     $categories[0] = $category->id;
                 }
 
-                $applications = array();
-                $notifications = array();
-
-                $current_job = Job::where('id', $job->id)->first();
-                $apps = Application::where('job_id', $current_job?->id)->get()->pluck('user_id')->toArray();
-                $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $current_job?->id)))->get()->pluck('user_id')->toArray();
-                $applications = array_merge($applications, $apps ? $apps : []);
-                $notifications = array_merge($notifications, $notifs ? $notifs : []);
-
-                $original_job = Job::where('id', $job?->repost_job_id)->first();
-
-                while ($original_job?->id) {
-                    $apps = Application::where('job_id', $original_job?->id)->get()->pluck('user_id')->toArray();
-                    $notifs = Notification::where('type', 'job_alert')->where('body', json_encode(array('job_id' => $original_job?->id)))->get()->pluck('user_id')->toArray();
-                    $applications = array_merge($applications, $apps ? $apps : []);
-                    $notifications = array_merge($notifications, $notifs ? $notifs : []);
-                    $original_job = Job::where('id', $original_job?->repost_job_id)->first();
-                }
-
-                $users = array_values(array_unique(array_merge($applications, $notifications)));
+                $users = Job::getExistingSubscribedOrAppliedUsers($job);
 
                 $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get();
 
@@ -398,6 +405,11 @@ class Job extends Model
                 foreach ($categorySubscribers as $creative) {
                     create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
+
+                // if ($categorySubscribers && count($categorySubscribers) > 0) {
+                //     SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
+                // }
+
                 SendEmailJob::dispatch($data, 'job_approved_alert_all_subscribers');
 
                 /**
