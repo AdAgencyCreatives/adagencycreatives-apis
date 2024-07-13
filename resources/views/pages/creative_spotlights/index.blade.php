@@ -91,6 +91,7 @@
                     '<td>' + attachment.title + '</td>' +
                     '<td>' + attachment.slug + '</td>' +
                     '<td>' + statusDropdown + '</td>' +
+                    '<td><span class="badge bg-success me-2">' + attachment.published_at +
                     '<td><span class="badge bg-primary me-2">' + attachment.updated_at +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
@@ -211,6 +212,7 @@
                                             <th>Title</th>
                                             <th>Slug</th>
                                             <th>Status</th>
+                                            <th>Published At</th>
                                             <th>Updated At</th>
                                             <th>Actions</th>
                                         </tr>
