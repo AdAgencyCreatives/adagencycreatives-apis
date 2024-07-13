@@ -16,7 +16,7 @@
                 });
 
                 var data = {
-                    name: $('#new_category').val()
+                    name: $('#new_category').val(),
                 };
 
                 $.ajax({
@@ -100,6 +100,14 @@
                 }
                 // Add other validation or form submission logic as needed
             });
+
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
         });
     </script>
 @endsection
@@ -152,6 +160,11 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Published At</label>
+                            <input class="form-control daterange" type="text" name="published_at" />
+                        </div>
+
+                        <div class="mb-3">
                             <div class="mb-3 error-placeholder">
                                 <label class="form-label">Spotlight Video</label>
                                 <div>
@@ -166,5 +179,4 @@
             </div>
         </div>
     </div>
-
 @endsection

@@ -93,6 +93,7 @@ class CreativeSpotlightController extends Controller
             'name' => $filename,
             'slug' => Str::slug($user->full_name),
             'status' => $status,
+            'published_at' => $request->published_at,
         ]);
 
         return $attachment;

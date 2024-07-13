@@ -11,6 +11,7 @@ class CreativeSpotlightResource extends JsonResource
     {
         $created_at = Carbon::parse($this->created_at);
         $updated_at = Carbon::parse($this?->updated_at ? $this->updated_at : $this->created_at);
+        $published_at = Carbon::parse($this->published_at);
 
         return [
             'id' => $this->uuid,
@@ -18,6 +19,7 @@ class CreativeSpotlightResource extends JsonResource
             'slug' => $this->slug,
             'url' => getAttachmentBasePath() . $this->path,
             'status' => $this->status,
+            'published_at' => $published_at->format('M d, Y'),
             'created_at' => $created_at->format('M d, Y'),
             'updated_at' => $updated_at->format('M d, Y'),
         ];

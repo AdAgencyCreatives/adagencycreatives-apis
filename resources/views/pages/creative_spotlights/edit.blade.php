@@ -39,13 +39,26 @@
             });
         }
 
-        $(".daterange").daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true,
-            locale: {
-                format: "Y-MM-DD"
-            }
-        });
+        var published_at = "{{ $spotlight->published_at }}";
+
+        if (published_at) {
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                startDate: published_at,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+        } else {
+            $(".daterange").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "Y-MM-DD"
+                }
+            });
+        }
     </script>
 @endsection
 
@@ -85,6 +98,11 @@
                         <div class="mb-3">
                             <label for="slug" class="form-label">Slug</label>
                             <input type="text" class="form-control" name="slug" value="{{ $spotlight->slug }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Published At</label>
+                            <input class="form-control daterange" type="text" name="published_at" />
                         </div>
 
                         <div class="mb-3">

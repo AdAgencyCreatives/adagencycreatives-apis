@@ -48,6 +48,7 @@ class CreativeSpotlightController extends Controller
             $spotlight->update([
                 'title' => $request->title,
                 'slug' => $request->slug,
+                'published_at' => $request->published_at,
             ]);
         }
 
@@ -73,6 +74,7 @@ class CreativeSpotlightController extends Controller
             'name' => $filename,
             'slug' => $request->slug,
             'status' => $status,
+            'published_at' => $request->published_at,
         ]);
 
         return $attachment;
