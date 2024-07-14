@@ -682,20 +682,6 @@ class CreativeController extends Controller
         if ($creative_updated) {
             $creative->fresh();
 
-            if ($creative?->category?->id) {
-                $alert = JobAlert::where('user_id', $creative->user->id)->where('category_id', $creative->category->id)->first();
-                if (!$alert) {
-                    JobAlert::create([
-                        'uuid' => Str::uuid(),
-                        'user_id' => $creative->user->id,
-                        'category_id' => $creative->category->id,
-                        'status' => 1,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-            }
-
             return response()->json([
                 'message' => 'Creative updated successfully.',
                 'data' => new CreativeResource($creative),
@@ -830,8 +816,24 @@ class CreativeController extends Controller
                 return !is_null($value);
             }));
             $creative->save();
+            $creative->fresh();
 
             updateLocation($request, $user, 'personal');
+
+            if ($creative?->category?->id) {
+                $alert = JobAlert::where('user_id', $creative->user->id)->where('category_id', $creative->category->id)->first();
+                if (!$alert) {
+                    JobAlert::create([
+                        'uuid' => Str::uuid(),
+                        'user_id' => $creative->user->id,
+                        'category_id' => $creative->category->id,
+                        'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
 
             return response()->json([
                 'message' => 'Creative updated successfully.',
