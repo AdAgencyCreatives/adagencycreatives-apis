@@ -219,15 +219,6 @@ class UserController extends Controller
              */
             if ($user->role == 'creative') {
 
-                JobAlert::create([
-                    'uuid' => Str::uuid(),
-                    'user_id' => $user->id,
-                    'category_id' => $user->creative->category->id,
-                    'status' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
                 SendEmailJob::dispatch([
                     'receiver' => $user, 'data' => $user,
                 ], 'account_approved');

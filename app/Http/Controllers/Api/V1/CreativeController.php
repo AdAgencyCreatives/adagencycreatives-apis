@@ -12,6 +12,7 @@ use App\Http\Resources\User\UserCollection;
 use App\Models\Application;
 use App\Models\Category;
 use App\Models\Creative;
+use App\Models\JobAlert;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -680,6 +681,20 @@ class CreativeController extends Controller
         $creative_updated = $creative->save();
         if ($creative_updated) {
             $creative->fresh();
+
+            if ($creative?->category?->id) {
+                $alert = JobAlert::where('user_id', $creative->user->id)->where('category_id', $creative->category->id)->first();
+                if (!$alert) {
+                    JobAlert::create([
+                        'uuid' => Str::uuid(),
+                        'user_id' => $creative->user->id,
+                        'category_id' => $creative->category->id,
+                        'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
 
             return response()->json([
                 'message' => 'Creative updated successfully.',
