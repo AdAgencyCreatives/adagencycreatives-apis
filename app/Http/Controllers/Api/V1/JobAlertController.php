@@ -80,7 +80,7 @@ class JobAlertController extends Controller
             $category = Category::where('uuid', $request->category_id)->first();
             $alert = JobAlert::where('user_id', $user->id)->where('category_id', $category->id)->first();
             if ($alert) {
-                if ($request->status == 1) {
+                if ($request->status == 1 || $user->creative->category->id == $category->id) {
                     $alert->update(['status' => $request->status]);
                 } else {
                     $alert->delete();
