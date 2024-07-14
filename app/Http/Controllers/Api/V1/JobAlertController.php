@@ -31,11 +31,7 @@ class JobAlertController extends Controller
 
         $alerts = $query->get()->sortBy('category.name');
 
-        if (!empty($alerts) &&  $alerts->count() > 0) {
-            return new JobAlertCollection($alerts);
-        }
-
-        return ApiResponse::error('Job alert not found', 404);
+        return new JobAlertCollection($alerts);
     }
 
     public function store(StoreJobAlertRequest $request)
