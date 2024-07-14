@@ -183,6 +183,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Alerts
      */
     Route::apiResource('job-alerts', JobAlertController::class);
+    Route::post('add-remove-job-alerts', [JobAlertController::class, 'addRemoveJobAlerts']);
     Route::apiResource('package-requests', PackageRequestController::class);
     Route::get('get_assigned_agencies', [PackageRequestController::class, 'get_assigned_agencies']); //Get assigned agencies for advisor
 

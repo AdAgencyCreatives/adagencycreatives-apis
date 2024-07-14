@@ -21,12 +21,6 @@ class JobAlertController extends Controller
     public function index(Request $request)
     {
 
-        $user_uuid = $request?->filter['user_id'];
-
-        $sql = "INSERT INTO job_alerts SELECT NULL, UUID(), (SELECT id FROM users WHERE uuid = '" . $user_uuid . "'), categories.id, 0, NOW(), NOW() FROM categories WHERE categories.id NOT IN (SELECT job_alerts.category_id FROM job_alerts INNER JOIN users ON job_alerts.user_id = users.id WHERE users.uuid = '" . $user_uuid . "');";
-
-        DB::update($sql);
-
         $query = QueryBuilder::for(JobAlert::class)
             ->allowedFilters(
                 [
@@ -73,6 +67,36 @@ class JobAlertController extends Controller
             $alert = JobAlert::where('uuid', $uuid)->first();
             $alert->update(['status' => $request->status]);
             $alerts = JobAlert::whereUserId($alert->user_id)->get()->sortBy('category.name');
+            return new JobAlertCollection($alerts);
+        } catch (ModelNotFoundException $exception) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    public function addRemoveJobAlerts(StoreJobAlertRequest $request)
+    {
+        try {
+            $user = User::where('uuid', $request->user_id)->first();
+            $category = Category::where('uuid', $request->category_id)->first();
+            $alert = JobAlert::where('user_id', $user->id)->where('category_id', $category->id)->first();
+            if ($alert) {
+                if ($request->status == 1) {
+                    $alert->update(['status' => $request->status]);
+                } else {
+                    $alert->delete();
+                }
+            } else {
+                JobAlert::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'category_id' => $category->id,
+                    'status' => $request->status,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            $alerts = JobAlert::where('user_id', $user->id)->get()->sortBy('category.name');
             return new JobAlertCollection($alerts);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
