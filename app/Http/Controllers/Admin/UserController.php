@@ -12,6 +12,7 @@ use App\Jobs\SendEmailJob;
 use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
+use App\Models\JobAlert;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -217,6 +218,15 @@ class UserController extends Controller
              * Generate portfolio website preview
              */
             if ($user->role == 'creative') {
+
+                JobAlert::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'category_id' => $user->creative->category->id,
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
                 SendEmailJob::dispatch([
                     'receiver' => $user, 'data' => $user,
