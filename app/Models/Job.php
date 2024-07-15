@@ -233,7 +233,7 @@ class Job extends Model
     public function scopeSlug(Builder $query, $slug): Builder
     {
 
-        return $query->where('slug', $slug);
+        return $query->where('slug', '=', $slug);
     }
 
     public function getStatusAttribute($value)
