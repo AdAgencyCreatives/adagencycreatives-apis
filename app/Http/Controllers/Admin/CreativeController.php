@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Creative;
 use App\Models\Education;
 use App\Models\Experience;
+use App\Models\JobAlert;
 use App\Models\Link;
 use App\Models\Location;
 use App\Models\Phone;
@@ -118,6 +119,20 @@ class CreativeController extends Controller
             'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
             'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
         ]);
+
+        if ($category?->id) {
+            $alert = JobAlert::where('user_id', $user->id)->where('category_id', $category->id)->first();
+            if (!$alert) {
+                JobAlert::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'category_id' => $category->id,
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         Session::flash('success', 'Creative updated successfully');
 
