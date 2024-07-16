@@ -121,16 +121,21 @@ class CreativeController extends Controller
         ]);
 
         if ($category?->id) {
-            $alert = JobAlert::where('user_id', $user->id)->where('category_id', $category->id)->first();
-            if (!$alert) {
-                JobAlert::create([
-                    'uuid' => Str::uuid(),
-                    'user_id' => $user->id,
-                    'category_id' => $category->id,
-                    'status' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+            $cat_ids = array($category->id);
+            $group_cat_ids = Category::where('group_name', '=', $category->name)->get()->pluck('id')->toArray();
+            $cat_ids = array_values(array_merge($cat_ids, $group_cat_ids));
+            foreach ($cat_ids as $cat_id) {
+                $alert = JobAlert::where('user_id', $user->id)->where('category_id', $cat_id)->first();
+                if (!$alert) {
+                    JobAlert::create([
+                        'uuid' => Str::uuid(),
+                        'user_id' => $user->id,
+                        'category_id' => $cat_id,
+                        'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 
