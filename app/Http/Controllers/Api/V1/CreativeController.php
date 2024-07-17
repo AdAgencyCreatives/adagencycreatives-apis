@@ -26,6 +26,8 @@ class CreativeController extends Controller
 {
     public function search1(Request $request) //Agency with No package
     {
+        $role = $request?->role ?? 'agency';
+
         $agency_user_id = $request?->user()?->id;
         $agency_user_applicants = [];
         if (isset($agency_user_id)) {
@@ -65,6 +67,8 @@ class CreativeController extends Controller
 
     public function search2(Request $request) //Agency with active package
     {
+        $role = $request?->role ?? 'agency';
+
         $agency_user_id = $request?->user()?->id;
         $agency_user_applicants = [];
         if (isset($agency_user_id)) {
@@ -74,7 +78,7 @@ class CreativeController extends Controller
         }
 
         $searchTerms = explode(',', $request->search);
-        $combinedCreativeIds = $this->process_three_terms_search($searchTerms);
+        $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
         // Combine and deduplicate the IDs while preserving the order
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
@@ -103,6 +107,8 @@ class CreativeController extends Controller
 
     public function search3(Request $request)
     {
+        $role = $request?->role ?? 'agency';
+
         $agency_user_id = $request?->user()?->id;
         $agency_user_applicants = [];
         if (isset($agency_user_id)) {
@@ -124,9 +130,9 @@ class CreativeController extends Controller
         $searchTerms = explode(',', $request->search);
 
         if (count($searchTerms) === 1) {
-            $combinedCreativeIds = $this->process_single_term_search($searchTerms[0]);
+            $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
         } else {
-            $combinedCreativeIds = $this->process_three_terms_search($searchTerms);
+            $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
         }
 
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
@@ -158,17 +164,17 @@ class CreativeController extends Controller
     }
 
 
-    public function process_single_term_search($searchTerm)
+    public function process_single_term_search($searchTerm, $role)
     {
-        $creative_1 = $this->getCreativeIDs(trim($searchTerm), 'exact-match');
-        $creative_2 = $this->getCreativeIDs(trim($searchTerm), 'starts-with');
-        $creative_3 = $this->getCreativeIDs(trim($searchTerm), 'contains');
+        $creative_1 = $this->getCreativeIDs(trim($searchTerm), 'exact-match', $role);
+        $creative_2 = $this->getCreativeIDs(trim($searchTerm), 'starts-with', $role);
+        $creative_3 = $this->getCreativeIDs(trim($searchTerm), 'contains', $role);
 
         return array_merge($creative_1, $creative_2, $creative_3);
     }
 
 
-    public function process_three_terms_search($searchTerms)
+    public function process_three_terms_search($searchTerms, $role)
     {
         // Initialize arrays to store IDs for each match type
         $exactMatchIds = [];
@@ -176,7 +182,7 @@ class CreativeController extends Controller
 
         // Iterate through each term for exact match
         foreach ($searchTerms as $term) {
-            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match');
+            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match', $role);
         }
 
         // Find common IDs across all exact match arrays
@@ -192,7 +198,7 @@ class CreativeController extends Controller
         $combinedCreativeIds = $commonExactMatchIds;
 
         foreach ($searchTerms as $term) {
-            $containsIds[] = $this->getCreativeIDs(trim($term), 'contains');
+            $containsIds[] = $this->getCreativeIDs(trim($term), 'contains', $role);
         }
         if (isset($containsIds[0]) && isset($containsIds[1])) {
             $ids_for_point_3 = array_intersect($containsIds[0], $exactMatchIds[1]); // Point 3 City is exact, Title is with % LIKE %
@@ -204,7 +210,7 @@ class CreativeController extends Controller
         return $combinedCreativeIds;
     }
 
-    public function getCreativeIDs($search, $match_type = 'contains') // match_type => contains | starts-with | exact-match
+    public function getCreativeIDs($search, $match_type, $role) // match_type => contains | starts-with | exact-match
     {
         if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
@@ -273,64 +279,67 @@ class CreativeController extends Controller
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
         }
 
-        $sql .= 'UNION DISTINCT' . "\n";
+        if ($role != 'creative') {
 
-        // Search via Industry Experience
-        $sql .= 'SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ind.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-        }
+            $sql .= 'UNION DISTINCT' . "\n";
 
-        $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Industry Experience
+            $sql .= 'SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ind.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
 
-        // Search via Media Experience
-        $sql .= 'SELECT cr.id FROM creatives cr JOIN medias md ON FIND_IN_SET(md.uuid, cr.media_experience) > 0' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "md.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-        }
+            $sql .= 'UNION DISTINCT' . "\n";
 
-        $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Media Experience
+            $sql .= 'SELECT cr.id FROM creatives cr JOIN medias md ON FIND_IN_SET(md.uuid, cr.media_experience) > 0' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "md.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
 
-        // Search via Strengths
-        $sql .= 'SELECT cr.id FROM creatives cr JOIN strengths st ON FIND_IN_SET(st.uuid, cr.strengths) > 0' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "st.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-        }
+            $sql .= 'UNION DISTINCT' . "\n";
 
-        $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Strengths
+            $sql .= 'SELECT cr.id FROM creatives cr JOIN strengths st ON FIND_IN_SET(st.uuid, cr.strengths) > 0' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "st.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
 
-        // Search via Employment Type (Tye of work e.g. Full-Time)
-        $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.employment_type LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-        }
+            $sql .= 'UNION DISTINCT' . "\n";
 
-        $sql .= 'UNION DISTINCT' . "\n";
-        // Search via Years of experience
-        $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.years_of_experience LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-        }
+            // Search via Employment Type (Tye of work e.g. Full-Time)
+            $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.employment_type LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
 
-        $workplace_preferences = [
-            'featured' => 'is_featured',
-            'urgent' => 'is_urgent',
-            'remote' => 'is_remote',
-            'hybrid' => 'is_hybrid',
-            'on site' => 'is_onsite',
-            'open to relocation' => 'is_opentorelocation',
-        ];
+            $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Years of experience
+            $sql .= 'SELECT cr.id FROM creatives cr' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.years_of_experience LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
 
-        // Search via Workplace Preference
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            if (isset($workplace_preferences[$term])) {
-                $sql .= ($i == 0 ? 'UNION DISTINCT' . "\n" . 'SELECT cr.id FROM creatives cr WHERE ' . "\n" : ' OR ') . $workplace_preferences[$term] . '=1' . "\n";
+            $workplace_preferences = [
+                'featured' => 'is_featured',
+                'urgent' => 'is_urgent',
+                'remote' => 'is_remote',
+                'hybrid' => 'is_hybrid',
+                'on site' => 'is_onsite',
+                'open to relocation' => 'is_opentorelocation',
+            ];
+
+            // Search via Workplace Preference
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                if (isset($workplace_preferences[$term])) {
+                    $sql .= ($i == 0 ? 'UNION DISTINCT' . "\n" . 'SELECT cr.id FROM creatives cr WHERE ' . "\n" : ' OR ') . $workplace_preferences[$term] . '=1' . "\n";
+                }
             }
         }
 
@@ -343,7 +352,9 @@ class CreativeController extends Controller
 
     public function search6(Request $request)
     {
-        $creativeIds =  $this->getCreativeIDs($request->search, 'exact-match');
+        $role = $request?->role ?? 'agency';
+
+        $creativeIds =  $this->getCreativeIDs($request->search, 'exact-match', $role);
 
         $creatives = Creative::with('category')
             ->whereIn('id', $creativeIds)
@@ -363,6 +374,8 @@ class CreativeController extends Controller
 
     public function search4(Request $request)
     {
+        $role = $request?->role ?? 'agency';
+
         $term = $request->search;
         $field = $request->field;
 
