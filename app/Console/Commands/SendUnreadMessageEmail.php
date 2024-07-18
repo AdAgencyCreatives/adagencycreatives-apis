@@ -45,10 +45,11 @@ class SendUnreadMessageEmail extends Command
 
             foreach ($oldestmessages as $msg) {
                 $recent_messages[] = [
-                    'name' => $msg->sender->first_name,
+                    'name' => $msg->sender->first_name . ' ' . $msg->sender->last_name,
                     'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
+                    'category' => $msg->sender?->creative?->category?->name ?? '',
                 ];
             }
 

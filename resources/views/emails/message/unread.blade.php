@@ -35,7 +35,7 @@
                                     style="font-size: 16px; font-weight: normal; margin-bottom: 5px; margin-top: 10px;">
                                     {{ $user['name'] }}
                                 </h1>
-                                <span style="color: #ccc;">{{ $user['message_time'] }}</span>
+                                <span style="color: #ccc;">{{ $user['category'] }}</span>
                             </div>
                             <div class="candidate-metas">
 
