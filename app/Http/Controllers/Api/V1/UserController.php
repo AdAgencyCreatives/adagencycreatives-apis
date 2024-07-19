@@ -77,6 +77,11 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role = $request->role;
+
+            if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+                $user->username = $this->get_agency_username($request->agency_name, $user->first_name);
+            }
+
             $user->save();
 
             $role = Role::findByName($request->role);
@@ -224,6 +229,31 @@ class UserController extends Controller
         $user = User::withTrashed()->where('username', $username)->first();
         if ($user) {
             $username = $username . '-' . Str::random(5);
+        }
+
+        return $username;
+    }
+
+    public function get_agency_username($agency_name, $contact_first_name)
+    {
+
+        $proposed_name = $agency_name;
+        $proposed_slug = Str::slug($proposed_name);
+        $username = $proposed_slug; // check if only agency name is unique
+        $user = User::withTrashed()->where('username', $username)->first();
+
+        if ($user) {
+            $proposed_name = $agency_name . '-' . $contact_first_name;
+            $proposed_slug = Str::slug($proposed_name);
+            $username = $proposed_slug; // check if agency name and contact first name is unquie
+            $user = User::withTrashed()->where('username', $username)->first();
+
+            $slug_postfix = 1;
+            while ($user) {
+                $username = $proposed_slug . '-' . $slug_postfix;
+                $user = User::withTrashed()->where('username', $username)->first();
+                $slug_postfix++;
+            }
         }
 
         return $username;

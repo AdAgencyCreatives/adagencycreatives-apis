@@ -105,18 +105,26 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->role = $request->role;
             $user->status = $request->status;
+
+            if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+                $user->username = $this->get_agency_username($request->agency_name, $user->first_name);
+            }
+
             $user->save();
 
             $role = Role::findByName($request->role);
             $user->assignRole($role);
 
-            if (in_array($user->role, ['advisor', 'agency', 'recruiter'])) {
+            if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
                 $agency->name = 'Default Agency';
                 $agency->size = '10';
                 $agency->about = '';
+
+                $user->username = $this->get_agency_username($user, $agency);
+
                 $agency->save();
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
@@ -157,6 +165,31 @@ class UserController extends Controller
     {
         $username = Str::before($email, '@');
         $username = Str::slug($username);
+
+        return $username;
+    }
+
+    public function get_agency_username($agency_name, $contact_first_name)
+    {
+
+        $proposed_name = $agency_name;
+        $proposed_slug = Str::slug($proposed_name);
+        $username = $proposed_slug; // check if only agency name is unique
+        $user = User::withTrashed()->where('username', $username)->first();
+
+        if ($user) {
+            $proposed_name = $agency_name . '-' . $contact_first_name;
+            $proposed_slug = Str::slug($proposed_name);
+            $username = $proposed_slug; // check if agency name and contact first name is unquie
+            $user = User::withTrashed()->where('username', $username)->first();
+
+            $slug_postfix = 1;
+            while ($user) {
+                $username = $proposed_slug . '-' . $slug_postfix;
+                $user = User::withTrashed()->where('username', $username)->first();
+                $slug_postfix++;
+            }
+        }
 
         return $username;
     }
