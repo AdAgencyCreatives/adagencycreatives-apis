@@ -73,14 +73,14 @@ class UserController extends Controller
             $user->uuid = Str::uuid();
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
-            $user->username = $this->get_username_from_email($request->email);
+            if ($request->role == 'agency') {
+                $user->username = $this->get_agency_username($request->agency_name, $request->first_name);
+            } else {
+                $user->username = $this->get_username_from_email($request->email);
+            }
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role = $request->role;
-
-            if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
-                $user->username = $this->get_agency_username($request->agency_name, $user->first_name);
-            }
 
             $user->save();
 
