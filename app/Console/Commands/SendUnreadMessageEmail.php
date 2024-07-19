@@ -46,11 +46,11 @@ class SendUnreadMessageEmail extends Command
 
             foreach ($oldestmessages as $msg) {
                 $name = $msg?->sender?->first_name . ' ' . $msg?->sender?->last_name;
-                $related = 'N/A';
+                $related = '';
 
                 if ($msg?->sender?->agency) {
                     $name = $msg?->sender?->agency->name;
-                    $related = $msg?->sender?->first_name;
+                    // $related = $msg?->sender?->first_name;
                 } else if ($msg?->sender?->creative) {
                     // $related = $msg?->sender?->creative?->title;
                     if ($msg?->sender?->creative?->category?->name) {
