@@ -37,7 +37,7 @@
                                 href="{{ $data['APP_URL'] }}/mentoring-resources" target="_blank">Resources</a>
                             and <a href="{{ $data['APP_URL'] }}/publication-resources" target="_blank">Publications</a>
                             sections on our home page, or connect with other creatives in <a
-                                href="{{ $data['FRONTEND_URL'] }}/community" target="_blank">The Lounge</a>.
+                                href="{{ $data['APP_URL'] }}/community" target="_blank">The Lounge</a>.
                         </p>
 
                         <p>Trust that the right opportunity is looking for you. It's all about the timing.
