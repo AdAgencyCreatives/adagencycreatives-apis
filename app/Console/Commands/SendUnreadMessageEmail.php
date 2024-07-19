@@ -43,13 +43,27 @@ class SendUnreadMessageEmail extends Command
 
             $recent_messages = [];
 
+
             foreach ($oldestmessages as $msg) {
+                $name = $msg?->sender?->name;
+                $related = 'N/A';
+
+                if ($msg?->sender?->agency) {
+                    $name = $msg?->sender?->agency->name;
+                    $related = $msg?->sender?->first_name;
+                } else if ($msg?->sender?->creative) {
+                    // $related = $msg?->sender?->creative?->title;
+                    if ($msg?->sender?->creative?->category?->name) {
+                        $related = $msg?->sender?->creative?->category?->name;
+                    }
+                }
+
                 $recent_messages[] = [
-                    'name' => $msg->sender->first_name . ' ' . $msg->sender->last_name,
+                    'name' => $name,
                     'profile_url' => env('FRONTEND_URL') . '/profile/' . $msg->sender->id,
                     'profile_picture' => get_profile_picture($msg->sender),
                     'message_time' => \Carbon\Carbon::parse($msg->max_created_at)->diffForHumans(),
-                    'category' => $msg->sender?->creative?->category?->name ?? '',
+                    'related' => $related,
                 ];
             }
 
