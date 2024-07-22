@@ -192,6 +192,7 @@ class ApplicationController extends Controller
         try {
             $application = Application::where('uuid', $uuid)->firstOrFail();
             $application->update($request->only(['status', 'message']));
+            $application->refresh();
 
             return new ApplicationResource($application);
         } catch (ModelNotFoundException $exception) {
