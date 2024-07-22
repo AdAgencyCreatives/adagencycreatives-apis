@@ -94,8 +94,10 @@ class Application extends Model
                 break;
             case 'recommended':
                 $this->attributes['status'] = Application::STATUSES['RECOMMENDED'];
+                break;
             case 'hired':
                 $this->attributes['status'] = Application::STATUSES['HIRED'];
+                break;
             default:
                 $this->attributes['status'] = Application::STATUSES['PENDING'];
                 break;
