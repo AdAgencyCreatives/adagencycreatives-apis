@@ -194,7 +194,7 @@ class ApplicationController extends Controller
             $application->update($request->only(['status', 'message']));
             $application->refresh();
 
-            return $request->only(['status', 'message']);
+            return $application;
             return new ApplicationResource($application);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
