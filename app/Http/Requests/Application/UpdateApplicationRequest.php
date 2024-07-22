@@ -16,7 +16,7 @@ class UpdateApplicationRequest extends FormRequest
         return [
             'resume' => 'sometimes',
             'message' => 'sometimes',
-            'status' => 'sometimes|in:pending,accepted,rejected,archived,shortlisted,recommended,hired',
+            'status' => 'sometimes|in:pending,accepted,rejected,archived,recommended,shortlisted,hired',
         ];
     }
 }
