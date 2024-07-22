@@ -30,8 +30,8 @@ class Application extends Model
         'ACCEPTED' => 1,
         'REJECTED' => 2,
         'ARCHIVED' => 3, // Application will remove from agency frontend, but it will still exist in the database, so that candidate can't submit the application again.
-        'SHORTLISTED' => 4,
-        'RECOMMENDED' => 5,
+        'RECOMMENDED' => 4,
+        'SHORTLISTED' => 5,
         'HIRED' => 6,
     ];
 
