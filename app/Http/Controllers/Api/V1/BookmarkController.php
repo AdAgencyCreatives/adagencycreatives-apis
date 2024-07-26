@@ -64,6 +64,16 @@ class BookmarkController extends Controller
                 'bookmarkable_id' => $model_id,
             ]);
 
+            $existing = Bookmark::where([
+                'user_id' => $user->id,
+                'bookmarkable_type' => $modelClass,
+                'bookmarkable_id' => $model_id,
+            ])->get();
+
+            if ($existing) {
+                return new BookmarkResource($existing);
+            }
+
             $bookmark = Bookmark::create($request->all());
 
             return new BookmarkResource($bookmark);
