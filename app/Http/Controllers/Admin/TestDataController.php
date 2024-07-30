@@ -533,7 +533,7 @@ class TestDataController extends Controller
 
     public function testDataUrl(Request $request)
     {
-        return @get_headers($request?->url);
+        return curl_init($request?->url);
         // return $this->validate_url($request?->url ?? "");
     }
 }
