@@ -533,7 +533,7 @@ class TestDataController extends Controller
 
     public function testDataUrl(Request $request)
     {
-        return curl_init($request?->url);
+        return curl_init($request?->url) !== false ? "success" : "failure";
         // return $this->validate_url($request?->url ?? "");
     }
 }
