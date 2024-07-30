@@ -494,7 +494,7 @@ class TestDataController extends Controller
         return $categorySubscribers;
     }
 
-    function formate_url($url)
+    function validate_url($url)
     {
         $errors = "";
         $valid_url = false;
@@ -530,6 +530,6 @@ class TestDataController extends Controller
 
     public function testDataUrl(Request $request)
     {
-        return formate_url($request?->url ?? "");
+        return $this->validate_url($request?->url ?? "");
     }
 }
