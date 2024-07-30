@@ -376,7 +376,7 @@ function formate_url($url)
     } catch (Exception $ex) {
     }
 
-    return $$result;
+    return $result;
 }
 
 if (!function_exists('updateLocation')) {
