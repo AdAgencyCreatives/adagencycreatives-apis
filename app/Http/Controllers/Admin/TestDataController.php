@@ -533,6 +533,6 @@ class TestDataController extends Controller
 
     public function testDataUrl(Request $request)
     {
-        return formate_url($request->url);
+        return url_exists($request->url) ? "success" : "failure";
     }
 }
