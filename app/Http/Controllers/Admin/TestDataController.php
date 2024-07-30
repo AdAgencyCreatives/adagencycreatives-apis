@@ -533,7 +533,31 @@ class TestDataController extends Controller
 
     public function testDataUrl(Request $request)
     {
-        return curl_init($request?->url) !== false ? "success" : "failure";
-        // return $this->validate_url($request?->url ?? "");
+        // Initialize an URL to the variable 
+        $url = $request->url;
+
+        // Use curl_init() function to initialize a cURL session 
+        $curl = curl_init($url);
+
+        // Use curl_setopt() to set an option for cURL transfer 
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+
+        // Use curl_exec() to perform cURL session 
+        $result = curl_exec($curl);
+
+        if ($result !== false) {
+
+            // Use curl_getinfo() to get information 
+            // regarding a specific transfer 
+            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+            if ($statusCode == 404) {
+                return "URL Doesn't Exist";
+            } else {
+                return "URL Exist";
+            }
+        } else {
+            return "URL Doesn't Exist";
+        }
     }
 }
