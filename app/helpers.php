@@ -310,8 +310,6 @@ if (!function_exists('updateLink')) {
 
 function url_exists($url)
 {
-    // Initialize an URL to the variable 
-    $url = $request->url;
 
     // Use curl_init() function to initialize a cURL session 
     $curl = curl_init($url);
