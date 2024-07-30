@@ -19,6 +19,7 @@ use App\Models\JobAlert;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -511,12 +512,14 @@ class TestDataController extends Controller
                     if (url_exists($formatted_url)) {
                         $valid_url = $formatted_url;
                         break;
+                    } else {
+                        throw new Exception($formatted_url);
                     }
-                } catch (\Exception $e) {
-                    $tries .= "Failed for => " . $formatted_url . "<br>\n";
+                } catch (Exception $e) {
+                    $tries .= "Failed for => " . $e->getMessage()  . "<br>\n";
                 }
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $tries .= "Something else => " . $ex->getMessage() . "<br>\n";
         }
 
