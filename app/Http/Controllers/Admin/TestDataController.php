@@ -496,7 +496,7 @@ class TestDataController extends Controller
 
     function validate_url($url)
     {
-        $errors = "";
+        $tries = "";
         $valid_url = false;
         try {
             $find = ['https://wwww.', 'https://', 'http://www.', 'http://', 'www.'];
@@ -514,17 +514,18 @@ class TestDataController extends Controller
                         break;
                     }
                 } catch (Exception $e) {
-                    $errors .= "Failed for => " . $formatted_url . "<br>\n";
+                    $tries .= "Failed for => " . $formatted_url . "<br>\n";
                 }
             }
         } catch (Exception $ex) {
-            $errors .= "Something else => " . $ex->getMessage() . "<br>\n";
+            $tries .= "Something else => " . $ex->getMessage() . "<br>\n";
         }
 
         return array(
             'status' => $valid_url != false ? "success" : "failure",
             'url' => $url,
             'valid_url' => $valid_url,
+            'tries' => $tries,
         );
     }
 
