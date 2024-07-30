@@ -492,4 +492,8 @@ class TestDataController extends Controller
 
         return $categorySubscribers;
     }
+    public function testDataUrl(Request $request)
+    {
+        return formate_url($request?->url ?? "");
+    }
 }
