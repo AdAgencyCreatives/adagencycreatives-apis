@@ -19,6 +19,7 @@ use App\Models\JobAlert;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -492,6 +493,41 @@ class TestDataController extends Controller
 
         return $categorySubscribers;
     }
+
+    function formate_url($url)
+    {
+        $errors = "";
+        $valid_url = false;
+        try {
+            $find = ['https://wwww.', 'https://', 'http://www.', 'http://', 'www.'];
+            $replace   = ['', '', '', '', ''];
+
+            $trimmed_url = str_replace($find, $replace, $url);
+
+            $formats = ["https://", "https://www.", "http://", "http://www."];
+
+            foreach ($formats as $format) {
+                $formatted_url = $format . $trimmed_url;
+                try {
+                    if (url_exists($formatted_url)) {
+                        $valid_url = $formatted_url;
+                        break;
+                    }
+                } catch (Exception $e) {
+                    $errors .= "Failed for => " . $formatted_url . "<br>\n";
+                }
+            }
+        } catch (Exception $ex) {
+            $errors .= "Something else => " . $ex->getMessage() . "<br>\n";
+        }
+
+        return array(
+            'status' => $valid_url != false ? "success" : "failure",
+            'url' => $url,
+            'valid_url' => $valid_url,
+        );
+    }
+
     public function testDataUrl(Request $request)
     {
         return formate_url($request?->url ?? "");
