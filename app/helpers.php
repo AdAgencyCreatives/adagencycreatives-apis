@@ -340,6 +340,7 @@ function url_exists($url)
 
 function formate_url($url)
 {
+    $result = $url;
     try {
         $find = ['https://', 'http://', 'www.'];
         $replace   = ['', '', ''];
@@ -347,35 +348,35 @@ function formate_url($url)
         $formatted_url = str_replace($find, $replace, $url);
         try {
             if (url_exists('https://' . $formatted_url)) {
-                return 'https://' . $formatted_url;
+                $result = 'https://' . $formatted_url;
             }
         } catch (Exception $e) {
         }
 
         try {
             if (url_exists('http://' . $formatted_url)) {
-                return 'http://' . $formatted_url;
+                $result = 'http://' . $formatted_url;
             }
         } catch (Exception $e) {
         }
 
         try {
             if (url_exists('https://www.' . $formatted_url)) {
-                return 'https://www.' . $formatted_url;
+                $result = 'https://www.' . $formatted_url;
             }
         } catch (Exception $e) {
         }
 
         try {
             if (url_exists('http://www.' . $formatted_url)) {
-                return 'http://www.' . $formatted_url;
+                $result = 'http://www.' . $formatted_url;
             }
         } catch (Exception $e) {
         }
     } catch (Exception $ex) {
     }
 
-    return $url;
+    return $$result;
 }
 
 if (!function_exists('updateLocation')) {
