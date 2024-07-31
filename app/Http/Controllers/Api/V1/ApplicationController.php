@@ -240,7 +240,10 @@ class ApplicationController extends Controller
     public function remove_from_recent(Request $request, $uuid)
     {
         try {
-            $user_id = $request->user()->id;
+
+            $user = User::where('uuid', $request->user_id)->firstOrFail();
+            $user_id = $user->id;
+
             $application = Application::where('uuid', $uuid)->firstOrFail();
 
             $existing_users = $application->removed_from_recent ?? "";
