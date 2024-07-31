@@ -237,11 +237,26 @@ class ApplicationController extends Controller
         }
     }
 
-    public function remove_from_recent($uuid)
+    public function remove_from_recent(Request $request, $uuid)
     {
         try {
+            $user_id = $request->user()->id;
             $application = Application::where('uuid', $uuid)->firstOrFail();
-            $application->update(['removed_from_recent' => true]);
+
+            $existing_users = $application->removed_from_recent ?? "";
+            $new_users = $user_id;
+
+            if (strlen($existing_users) > 0) {
+                $users_arr = preg_split("/,/", $existing_users);
+                if (!in_array($user_id, $users_arr)) {
+                    $users_arr[count($users_arr)] = $user_id;
+                    $new_users = join(",", $users_arr);
+                } else {
+                    $new_users = $existing_users;
+                }
+            }
+
+            $application->update(['removed_from_recent' => $new_users]);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
         }
