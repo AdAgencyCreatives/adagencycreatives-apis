@@ -14,6 +14,7 @@ class UpdateApplicationRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => 'sometimes',
             'resume' => 'sometimes',
             'message' => 'sometimes',
             'status' => 'sometimes|in:pending,accepted,rejected,archived,recommended,shortlisted,hired',
