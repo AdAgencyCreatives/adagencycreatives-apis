@@ -22,6 +22,7 @@ class BookmarkController extends Controller
         $query = QueryBuilder::for(Bookmark::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                "search"
             ]);
 
         if ($request->has('resource_type')) {
