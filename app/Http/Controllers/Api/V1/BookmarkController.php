@@ -55,23 +55,23 @@ class BookmarkController extends Controller
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        if ($request->has('search')) {
-            $filtered = [];
-            foreach ($bookmarks as $bookmark) {
-                $search_into = "";
-                if ($bookmark->bookmarkable_type == "creatives") {
-                    $bookmark_user = $bookmark->bookmarkable->user;
-                    $search_into = $bookmark_user->first_name . " " . $bookmark_user->last_name;
-                } else {
-                    $search_into = $bookmark->bookmarkable->name;
-                }
+        // if ($request->has('search')) {
+        //     $filtered = [];
+        //     foreach ($bookmarks as $bookmark) {
+        //         $search_into = "";
+        //         if ($bookmark->bookmarkable_type == "creatives") {
+        //             $bookmark_user = $bookmark->bookmarkable->user;
+        //             $search_into = $bookmark_user->first_name . " " . $bookmark_user->last_name;
+        //         } else {
+        //             $search_into = $bookmark->bookmarkable->name;
+        //         }
 
-                if (stripos($search_into, $request->search) !== false) {
-                    $filtered[count($filtered)] = $bookmark;
-                }
-            }
-            $bookmarks = $filtered;
-        }
+        //         if (stripos($search_into, $request->search) !== false) {
+        //             $filtered[count($filtered)] = $bookmark;
+        //         }
+        //     }
+        //     $bookmarks = $filtered;
+        // }
 
         return new BookmarkCollection($bookmarks);
     }
