@@ -44,7 +44,7 @@ class BookmarkController extends Controller
         $query->orderByDesc('updated_at');
 
         if ($request->has('search')) {
-            $query = $query->with('bookmarkable')->whereHasMorph('bookmarkable', Agency::class, function ($query) use ($request) {
+            $query->with('bookmarkable')->whereHasMorph('bookmarkable', Agency::class, function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->search . '%');
             })->orwhereHasMorph('bookmarkable',  Creative::class, function ($query) use ($request) {
                 $query->whereHas('user', function ($q) use ($request) {
