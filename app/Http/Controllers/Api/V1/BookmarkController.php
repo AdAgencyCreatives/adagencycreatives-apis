@@ -11,6 +11,7 @@ use App\Http\Resources\Bookmark\BookmarkResource;
 use App\Models\Agency;
 use App\Models\Bookmark;
 use App\Models\Creative;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -43,12 +44,14 @@ class BookmarkController extends Controller
 
         $query->orderByDesc('updated_at');
 
+        $user = User::where('uuid', $request->filter['user_id'])->get();
+
         if ($request->has('search')) {
-            $query->with('bookmarkable')->whereHasMorph('bookmarkable', Agency::class, function ($query) use ($request) {
-                $query->whereRaw('bookmarks.user_id=' . $request->filter['user_id'])
+            $query->with('bookmarkable')->whereHasMorph('bookmarkable', Agency::class, function ($query) use ($request, $user) {
+                $query->whereRaw('bookmarks.user_id=' . $user->id)
                     ->where('name', 'like', '%' . $request->search . '%');
-            })->orwhereHasMorph('bookmarkable',  Creative::class, function ($query) use ($request) {
-                $query->whereRaw('bookmarks.user_id=' . $request->filter['user_id'])
+            })->orwhereHasMorph('bookmarkable',  Creative::class, function ($query) use ($request, $user) {
+                $query->whereRaw('bookmarks.user_id=' . $user->id)
                     ->whereHas('user', function ($q) use ($request) {
                         $q->whereRaw("concat(first_name, ' ', last_name) LIKE '%" . $request->search . "%'"); // Your Condition
                     });
