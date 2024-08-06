@@ -22,7 +22,6 @@ class BookmarkController extends Controller
         $query = QueryBuilder::for(Bookmark::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
-                "search"
             ]);
 
         if ($request->has('resource_type')) {
@@ -43,6 +42,17 @@ class BookmarkController extends Controller
         $query->orderByDesc('updated_at');
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        if ($request->has('search')) {
+            $filtered = [];
+            foreach ($bookmarks as $bookmark) {
+                $user_full_name = $bookmark->user->first_name + " " + $bookmark->user->last_name;
+                if (strripos($user_full_name, $request->search) !== false) {
+                    $filtered[count($filtered)] = $bookmark;
+                }
+            }
+            $bookmarks = $filtered;
+        }
 
         return new BookmarkCollection($bookmarks);
     }
