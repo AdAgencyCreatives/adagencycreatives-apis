@@ -48,7 +48,7 @@ class BookmarkController extends Controller
                 $query->where('name', 'like', '%' . $request->search . '%');
             })->orwhereHasMorph('bookmarkable',  Creative::class, function ($query) use ($request) {
                 $query->whereHas('user', function ($q) use ($request) {
-                    $q->whereRaw("concat(first_name, ' ', last_name) LIKE %" . $request->search . "%"); // Your Condition
+                    $q->whereRaw("concat(first_name, ' ', last_name) LIKE '%" . $request->search . "%'"); // Your Condition
                 });
             });
         }
