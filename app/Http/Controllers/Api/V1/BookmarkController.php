@@ -46,9 +46,15 @@ class BookmarkController extends Controller
         if ($request->has('search')) {
             $filtered = [];
             foreach ($bookmarks as $bookmark) {
-                $bookmark_user = $bookmark->bookmarkable->user;
-                $user_full_name = $bookmark_user->first_name . " " . $bookmark_user->last_name;
-                if (stripos($user_full_name, $request->search) !== false) {
+                $search_into = "";
+                if ($bookmark->bookmarkable_type == "creatives") {
+                    $bookmark_user = $bookmark->bookmarkable->user;
+                    $search_into = $bookmark_user->first_name . " " . $bookmark_user->last_name;
+                } else {
+                    $search_into = $bookmark->bookmarkable->title;
+                }
+
+                if (stripos($search_into, $request->search) !== false) {
                     $filtered[count($filtered)] = $bookmark;
                 }
             }
