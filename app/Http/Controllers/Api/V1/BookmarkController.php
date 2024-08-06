@@ -46,7 +46,7 @@ class BookmarkController extends Controller
         if ($request->has('search')) {
             $filtered = [];
             foreach ($bookmarks as $bookmark) {
-                $user_full_name = $bookmark->user->first_name + " " + $bookmark->user->last_name;
+                $user_full_name = $bookmark->user->first_name . " " . $bookmark->user->last_name;
                 if (strripos($user_full_name, $request->search) !== false) {
                     $filtered[count($filtered)] = $bookmark;
                 }
