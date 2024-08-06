@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Bookmark\StoreBookmarkRequest;
 use App\Http\Resources\Bookmark\BookmarkCollection;
 use App\Http\Resources\Bookmark\BookmarkResource;
+use App\Models\Agency;
 use App\Models\Bookmark;
+use App\Models\Creative;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,6 +42,16 @@ class BookmarkController extends Controller
         }
 
         $query->orderByDesc('updated_at');
+
+        if ($request->has('search')) {
+            $query = $query->with('bookmarkable')->whereHasMorph('bookmarkable_type', Agency::class, function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })->orwhereHasMorph('bookmarkable_type',  Creative::class, function ($query) use ($request) {
+                $query->whereHas('user', function ($q) use ($request) {
+                    $q->whereRaw("concat(first_name, ' ', last_name) LIKE %" . $request->search . "%"); // Your Condition
+                });
+            });
+        }
 
         $bookmarks = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
