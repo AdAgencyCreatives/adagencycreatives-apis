@@ -44,7 +44,7 @@ class BookmarkController extends Controller
 
         $query->orderByDesc('updated_at');
 
-        $user = User::where('uuid', $request->filter['user_id'])->get();
+        $user = User::where('uuid', $request->filter['user_id'])->first();
 
         if ($request->has('search')) {
             $query->with('bookmarkable')->whereHasMorph('bookmarkable', Agency::class, function ($query) use ($request, $user) {
