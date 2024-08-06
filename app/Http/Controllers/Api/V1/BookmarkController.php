@@ -48,13 +48,11 @@ class BookmarkController extends Controller
             foreach ($bookmarks as $bookmark) {
                 $bookmark_user = $bookmark->bookmarkable->user;
                 $user_full_name = $bookmark_user->first_name . " " . $bookmark_user->last_name;
-                if (true || stripos($user_full_name, $request->search) !== false) {
-                    // $filtered[count($filtered)] = $bookmark;
-                    $filtered[count($filtered)] = $user_full_name;
+                if (stripos($user_full_name, $request->search) !== false) {
+                    $filtered[count($filtered)] = $bookmark;
                 }
             }
-            // $bookmarks = $filtered;
-            return $filtered;
+            $bookmarks = $filtered;
         }
 
         return new BookmarkCollection($bookmarks);
