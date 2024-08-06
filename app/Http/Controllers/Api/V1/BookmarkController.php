@@ -51,7 +51,7 @@ class BookmarkController extends Controller
                     $bookmark_user = $bookmark->bookmarkable->user;
                     $search_into = $bookmark_user->first_name . " " . $bookmark_user->last_name;
                 } else {
-                    $search_into = $bookmark->bookmarkable->title;
+                    $search_into = $bookmark->bookmarkable->name;
                 }
 
                 if (stripos($search_into, $request->search) !== false) {
