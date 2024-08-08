@@ -381,7 +381,9 @@ class Job extends Model
 
                 $users = Job::getExistingSubscribedOrAppliedUsers($job);
 
-                $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get();
+                $categorySubscribers = JobAlert::with('user')->whereHas('user', function ($q) {
+                    $q->where('status', 1);
+                })->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get();
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
 
