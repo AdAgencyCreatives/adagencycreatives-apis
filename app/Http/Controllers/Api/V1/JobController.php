@@ -70,19 +70,29 @@ class JobController extends Controller
             applyExperienceFilter($query, $medias, 'media_experience', 'job_posts');
         }
 
-        $jobs = $query->with('user.agency', 'category', 'state', 'city', 'attachment')
+        $query->with('user.agency', 'category', 'state', 'city', 'attachment')
             ->withCount('applications');
 
         if ($request->applications_count) {
-            $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
+            $query->having('applications_count', '>=', $request->applications_count);
         }
 
-        $jobs = $jobs->with('applications', function ($query) {
-            $query->orderBy('status', 'asc')->orderBy('id', 'desc');
-        })->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
+
+        if ($recent_only) {
+            $query->where('status', 1);
+        }
+
+        $query->with('applications', function ($q) use ($recent_only) {
+            if ($recent_only) {
+                $q->where('status', 0);
+            }
+            $q->orderBy('status', 'asc')->orderBy('id', 'desc');
+        });
+
+        $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
-        // return $jobs;
     }
 
     public function jobs_for_logged_in(Request $request)
