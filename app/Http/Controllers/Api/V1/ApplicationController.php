@@ -202,26 +202,8 @@ class ApplicationController extends Controller
     {
         try {
 
-
             $application = Application::where('uuid', $uuid)->firstOrFail();
             $application->update($request->only(['status', 'message']));
-            $application->refresh();
-
-            // Remove from recent if user updates the application status
-            $user = User::where('uuid', $request->user_id)->firstOrFail();
-            $user_id = $user->id;
-            $existing_users = $application->removed_from_recent ?? "";
-            $new_users = $user_id;
-            if (strlen($existing_users) > 0) {
-                $users_arr = preg_split("/,/", $existing_users);
-                if (!in_array($user_id, $users_arr)) {
-                    $users_arr[count($users_arr)] = $user_id;
-                    $new_users = join(",", $users_arr);
-                } else {
-                    $new_users = $existing_users;
-                }
-            }
-            $application->update(['removed_from_recent' => $new_users]);
             $application->refresh();
 
             return new ApplicationResource($application);
