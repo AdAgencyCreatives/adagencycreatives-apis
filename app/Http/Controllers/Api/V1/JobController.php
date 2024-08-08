@@ -77,20 +77,9 @@ class JobController extends Controller
             $jobs = $jobs->having('applications_count', '>=', $request->applications_count);
         }
 
-        $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
-
-        if ($recent_only) {
-            $jobs->where('status', 1);
-        }
-
-        $jobs->with('applications', function ($query) use ($recent_only) {
-            if ($recent_only) {
-                $query->where('status', 0);
-            }
+        $jobs = $jobs->with('applications', function ($query) {
             $query->orderBy('status', 'asc')->orderBy('id', 'desc');
-        });
-
-        $jobs->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        })->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new JobCollection($jobs);
         // return $jobs;
