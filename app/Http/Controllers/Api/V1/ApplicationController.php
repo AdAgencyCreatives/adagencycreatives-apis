@@ -33,7 +33,18 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
-        $query = $query->with('job');
+        $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
+
+        if ($recent_only) {
+            $query->where('status', 0);
+        }
+
+        $query->with('job', function ($q) use ($recent_only) {
+            if ($recent_only) {
+                $q->where('status', 1);
+            }
+        });
+
         $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new ApplicationCollection($applications);
