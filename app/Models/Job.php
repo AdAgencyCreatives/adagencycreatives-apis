@@ -437,8 +437,8 @@ class Job extends Model
 
             if ($job->status === 'filled' && $job->advisor_id != null) {
 
-                $state = Location::where('uuid', $job->state_id)->first();
-                $city = Location::where('uuid', $job->city_id)->first();
+                $state = Location::where('id', $job->state_id)->first();
+                $city = Location::where('id', $job->city_id)->first();
                 $advisor = User::find($job->advisor_id);
                 $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
