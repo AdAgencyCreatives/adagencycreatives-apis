@@ -152,19 +152,22 @@ class ApplicationController extends Controller
 
             $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
 
-            SendEmailJob::dispatch([
-                'receiver' => $job_user,
-                'data' => [
-                    'receiver_name' => $job_user->first_name ?? $job_user->username,
-                    'applicant' => $applicant_user,
-                    'job_title' => $job->title,
-                    'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                    'resume_url' => $resume_url,
-                    'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
-                    'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
-                    'message' => $request->message,
-                ],
-            ], 'new_candidate_application'); // To the agency
+            if ($job_user?->agency?->job_notifications_enabled) {
+                // send email only if job notifications are enabled.
+                SendEmailJob::dispatch([
+                    'receiver' => $job_user,
+                    'data' => [
+                        'receiver_name' => $job_user->first_name ?? $job_user->username,
+                        'applicant' => $applicant_user,
+                        'job_title' => $job->title,
+                        'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                        'resume_url' => $resume_url,
+                        'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
+                        'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
+                        'message' => $request->message,
+                    ],
+                ], 'new_candidate_application'); // To the agency
+            }
 
             $msg_data['receiver_id'] = $job_user->id;
             $event_data2["receiver_id"] = $job_user->uuid;
