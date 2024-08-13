@@ -232,9 +232,7 @@ class ApplicationController extends Controller
         $user = $request->user();
         $searchText = $request->searchText;
 
-        $query = Application::with('job');
-
-        $applications = $query
+        $applications = Application::with('job')
             ->whereHas('job', function ($q) use ($searchText) {
                 $q->where('title', 'LIKE', '%' . $searchText . '%');
             })
