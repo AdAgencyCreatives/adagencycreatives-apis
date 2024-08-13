@@ -20,7 +20,7 @@ class JobResource extends JsonResource
             }
         }
 
-        if ($request->has('applicantSearch')) {
+        if ($request->has('applicantSearch') && strlen($request->applicantSearch) > 0) {
             $applications = $applications->filter(function ($application) use ($request) {
                 $user = $application->user;
                 $name = $user->first_name . ' ' . $user->last_name;

@@ -89,7 +89,7 @@ class JobController extends Controller
             }
             $q->orderBy('status', 'asc')->orderBy('id', 'desc');
 
-            if ($request->has('applicantSearch')) {
+            if ($request->has('applicantSearch') && strlen($request->applicantSearch) > 0) {
                 $q->whereHas('user', function ($q) use ($request) {
                     $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
                 });
