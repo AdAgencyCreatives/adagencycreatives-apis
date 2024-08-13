@@ -230,15 +230,13 @@ class ApplicationController extends Controller
     public function applied_jobs(Request $request)
     {
         $user = $request->user();
-        $searchText = $request->has('searchText') ? $request->searchText : false;
+        $searchText = $request->searchText;
 
         $query = Application::with('job');
 
         $applications = $query
             ->whereHas('job', function ($q) use ($searchText) {
-                if ($searchText) {
-                    $q->where('title', 'LIKE', '%' . $searchText . '%');
-                }
+                $q->where('title', 'LIKE', '%' . $searchText . '%');
             })
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
