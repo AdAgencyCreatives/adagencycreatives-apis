@@ -18,6 +18,7 @@ class UpdateAgencyRequest extends FormRequest
             'about' => 'sometimes',
             'size' => 'sometimes',
             'type_of_work' => 'sometimes',
+            'job_notifications_enabled' => 'sometimes',
         ];
     }
 }
