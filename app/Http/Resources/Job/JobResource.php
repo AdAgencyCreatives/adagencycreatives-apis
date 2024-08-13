@@ -16,12 +16,15 @@ class JobResource extends JsonResource
         if ($this->advisor_id != null) {
             // If application_status is provided, filter applications by status
             if ($request->has('application_status')) {
-                $applications = $applications->whereHas('user', function ($q) use ($request) {
-                    $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->searchText . "%'");
-                })->where('status', $request->application_status);
+                $applications = $applications->where('status', $request->application_status);
             }
         }
 
+        if ($request->has('searchText')) {
+            $applications = $applications->whereHas('user', function ($q) use ($request) {
+                $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->searchText . "%'");
+            });
+        }
 
         $data = [
             'type' => 'jobs',
