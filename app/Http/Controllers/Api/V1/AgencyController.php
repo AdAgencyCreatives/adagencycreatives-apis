@@ -404,7 +404,7 @@ class AgencyController extends Controller
         }
     }
 
-    public function update_job_notifications(Request $request, $uuid)
+    public function update_email_notifications(Request $request, $uuid)
     {
         try {
             $user = User::where('uuid', $uuid)->first();
