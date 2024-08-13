@@ -404,6 +404,33 @@ class AgencyController extends Controller
         }
     }
 
+    public function update_job_notifications(Request $request, $uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->first();
+            $agency = Agency::where('user_id', $user->id)->first();
+
+            if (!$agency) {
+                return response()->json([
+                    'message' => 'No agency found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+
+            $agency->job_notifications_enabled = $request->job_notifications_enabled;
+            $agency->save();
+
+            return response()->json([
+                'message' => 'Agency updated successfully.',
+                'data' => new AgencyResource($agency),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function update_profile_advisor(Request $request, $uuid)
     {
         try {

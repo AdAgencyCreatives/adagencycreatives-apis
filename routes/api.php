@@ -128,6 +128,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Board Routes
      */
     Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
+    Route::patch('agency_update_job_notifications/{user}', [AgencyController::class, 'update_job_notifications']);
     Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
