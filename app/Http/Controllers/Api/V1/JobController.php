@@ -90,7 +90,7 @@ class JobController extends Controller
             $q->orderBy('status', 'asc')->orderBy('id', 'desc');
         });
 
-        $query->whereHas('user.creative', function ($q) use ($request) {
+        $query->whereHas('user', function ($q) use ($request) {
             $q->whereRaw("CONCAT(first_name,' ',last_name) LIKE '%" . $request->searchText . "%'");
         });
 
