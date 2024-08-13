@@ -228,6 +228,7 @@ class AgencyController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
+                $query->whereIn('role', [3]); // 3 = agency (by default)
             })
             ->orderByDesc('is_featured')
             ->orderBy('created_at')
