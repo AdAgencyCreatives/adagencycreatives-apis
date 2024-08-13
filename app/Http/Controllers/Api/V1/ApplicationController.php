@@ -34,12 +34,16 @@ class ApplicationController extends Controller
             ]);
 
         $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
+        $searchText = $request->has('searchText') ? $request->searchText : false;
 
         if ($recent_only) {
             $query->where('status', 0);
         }
 
-        $query->with('job', function ($q) use ($recent_only) {
+        $query->with('job', function ($q) use ($recent_only, $searchText) {
+            if ($searchText) {
+                $q->where('title', 'LIKE', '%' . $searchText . '%');
+            }
             if ($recent_only) {
                 $q->where('status', 1);
             }
