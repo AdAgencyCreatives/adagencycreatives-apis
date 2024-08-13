@@ -24,7 +24,7 @@ class JobResource extends JsonResource
             $applications = $applications->filter(function ($application) use ($request) {
                 $user = $application->user;
                 $name = $user->first_name . ' ' . $user->last_name;
-                return stripos($name, $request->applicantSearch) >= 0;
+                return stripos($name, $request->applicantSearch) !== FALSE;
             });
         }
 
