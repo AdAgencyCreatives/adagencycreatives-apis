@@ -40,7 +40,9 @@ class ApplicationController extends Controller
             $query->where('status', 0);
         }
 
-        $query->with('job', function ($q) use ($recent_only, $searchText) {
+        $query->with('job');
+
+        $query->whereHas('job', function ($q) use ($recent_only, $searchText) {
             if ($searchText) {
                 $q->where('title', 'LIKE', '%' . $searchText . '%');
             }
