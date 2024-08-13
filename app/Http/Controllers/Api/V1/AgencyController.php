@@ -159,6 +159,8 @@ class AgencyController extends Controller
                 // This will only work for
                 if (request()->is('api/v1/recruiters/search1')) {
                     $query->whereIn('role', [2, 5]); // 2 = advisor, 5 = recruiter
+                } else {
+                    $query->whereIn('role', [3]); // 3 = agency (by default)
                 }
             })
             ->orderByDesc('is_featured')
