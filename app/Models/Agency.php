@@ -34,7 +34,7 @@ class Agency extends Model
         'seo_keywords',
         'views',
         'featured_at',
-        'job_notifications_enabled',
+        'email_notifications_enabled',
     ];
 
     protected $casts = [

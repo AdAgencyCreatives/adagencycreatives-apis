@@ -417,7 +417,7 @@ class AgencyController extends Controller
             }
 
 
-            $agency->job_notifications_enabled = $request->job_notifications_enabled;
+            $agency->email_notifications_enabled = $request->email_notifications_enabled;
             $agency->save();
 
             return response()->json([
