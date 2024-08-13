@@ -21,9 +21,7 @@ class JobResource extends JsonResource
         }
 
         if ($request->has('applicantSearch')) {
-            $applications = $applications->whereHas('user', function ($q) use ($request) {
-                $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
-            });
+            $applications = $applications->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
         }
 
         $data = [
