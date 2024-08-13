@@ -89,9 +89,11 @@ class JobController extends Controller
             }
             $q->orderBy('status', 'asc')->orderBy('id', 'desc');
 
-            $q->whereHas('user', function ($q) use ($request) {
-                $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->searchText . "%'");
-            });
+            if ($request->has('applicantSearch')) {
+                $q->whereHas('user', function ($q) use ($request) {
+                    $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
+                });
+            }
         });
 
         $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
