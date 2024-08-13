@@ -91,7 +91,7 @@ class JobController extends Controller
         });
 
         $query->whereHas('user', function ($q) use ($request) {
-            $q->whereRaw("CONCAT(first_name,' ',last_name) LIKE '%" . $request->searchText . "%'");
+            $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->searchText . "%'");
         });
 
         $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
