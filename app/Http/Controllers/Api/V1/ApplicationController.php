@@ -34,7 +34,6 @@ class ApplicationController extends Controller
             ]);
 
         $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
-        $searchText = $request->has('searchText') ? $request->searchText : false;
 
         if ($recent_only) {
             $query->where('status', 0);
@@ -43,12 +42,6 @@ class ApplicationController extends Controller
         $query->with('job', function ($q) use ($recent_only) {
             if ($recent_only) {
                 $q->where('status', 1);
-            }
-        });
-
-        $query->whereHas('job', function ($q) use ($searchText) {
-            if ($searchText) {
-                $q->where('title', 'LIKE', '%' . $searchText . '%');
             }
         });
 
@@ -237,9 +230,16 @@ class ApplicationController extends Controller
     public function applied_jobs(Request $request)
     {
         $user = $request->user();
+        $searchText = $request->has('searchText') ? $request->searchText : false;
 
-        $applications = Application::with('job')
-            ->whereHas('job')
+        $query = Application::with('job');
+
+        $applications = $query
+            ->whereHas('job', function ($q) use ($searchText) {
+                if ($searchText) {
+                    $q->where('title', 'LIKE', '%' . $searchText . '%');
+                }
+            })
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'));
