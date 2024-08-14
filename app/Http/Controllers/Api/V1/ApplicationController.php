@@ -237,7 +237,7 @@ class ApplicationController extends Controller
                 $query
                     ->where('title', 'LIKE', '%' . $searchText . '%')
                     ->orWhereHas('user.agency', function ($q) use ($searchText) {
-                        $q->where('title', 'LIKE', '%' . $searchText . '%');
+                        $q->where('name', 'LIKE', '%' . $searchText . '%');
                     });
             })
             ->where('user_id', $user->id)
