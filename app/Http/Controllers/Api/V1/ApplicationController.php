@@ -233,8 +233,12 @@ class ApplicationController extends Controller
         $searchText = $request->searchText;
 
         $applications = Application::with('job')
-            ->whereHas('job', function ($q) use ($searchText) {
-                $q->where('title', 'LIKE', '%' . $searchText . '%');
+            ->whereHas('job', function ($query) use ($searchText) {
+                $query
+                    ->where('title', 'LIKE', '%' . $searchText . '%')
+                    ->orWhereHas('user.agency', function ($q) use ($searchText) {
+                        $q->where('title', 'LIKE', '%' . $searchText . '%');
+                    });
             })
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
