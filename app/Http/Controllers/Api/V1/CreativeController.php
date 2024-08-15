@@ -128,16 +128,27 @@ class CreativeController extends Controller
 
         // Split the search terms into an array
         $searchTerms = explode(',', $request->search);
+        $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
 
+        $combinedCreativeIds = [];
         if (count($searchTerms) === 1) {
             $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
         } else {
             $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
         }
 
+        $combinedCreativeIdsLevel2 = [];
+        if (count($searchTermsLevel2) === 1) {
+            $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
+        } else {
+            $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
+        }
+
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
         // Combine and deduplicate the IDs while preserving the order
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+
+        $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
 
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
