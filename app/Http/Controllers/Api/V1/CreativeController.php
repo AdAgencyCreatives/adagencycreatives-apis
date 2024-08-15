@@ -150,6 +150,8 @@ class CreativeController extends Controller
 
         $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
 
+        return  $combinedCreativeIds;
+
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         // Retrieve creative records from the database and order them based on the calculated order
