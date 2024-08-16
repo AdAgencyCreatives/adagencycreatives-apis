@@ -13,6 +13,7 @@ use App\Http\Resources\AppliedJob\AppliedJobCollection;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use App\Models\Attachment;
+use App\Models\Creative;
 use App\Models\Job;
 use App\Models\Message;
 use App\Models\User;
@@ -293,8 +294,8 @@ class ApplicationController extends Controller
         $job_user = User::where('uuid', '=', $request->job_user_id)->first();
         $job_user_id = $job_user->id;
 
-        $creative_user = User::where('uuid', '=', $request->creative_user_id)->first();
-        $creative_user_id = $creative_user->id;
+        $creative = Creative::where('uuid', '=', $request->creative_user_id)->first();
+        $creative_user_id = $creative->user->id;
 
         $query = Application::whereHas('job.user', function ($q) use ($job_user_id) {
             $q->where('id', '=', $job_user_id);
