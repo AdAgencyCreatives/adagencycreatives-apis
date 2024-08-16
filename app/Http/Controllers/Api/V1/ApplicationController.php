@@ -290,10 +290,10 @@ class ApplicationController extends Controller
 
     public function get_creative_applications(Request $request)
     {
-        $job_user = User::where('uuid', '=', $request->job_user_id);
+        $job_user = User::where('uuid', '=', $request->job_user_id)->first();
         $job_user_id = $job_user->id;
 
-        $creative_user = User::where('uuid', '=', $request->creative_user_id);
+        $creative_user = User::where('uuid', '=', $request->creative_user_id)->first();
         $creative_user_id = $creative_user->id;
 
         $query = Application::whereHas('job.user', function ($q) use ($job_user_id) {
