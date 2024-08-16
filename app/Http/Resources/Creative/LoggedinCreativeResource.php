@@ -73,7 +73,7 @@ class LoggedinCreativeResource extends JsonResource
             return $user->email;
         }
 
-        if ($logged_in_user->role === 'agency' && $subscription_status !== 'active') {
+        if ($logged_in_user->role === 'agency' && !($subscription_status == 'active' || hasAppliedToAgencyJob($user->id, $logged_in_user->id))) {
             return null;
         }
 
@@ -84,17 +84,17 @@ class LoggedinCreativeResource extends JsonResource
         return $user->email;
     }
 
-    public function get_phone_number($user, $logged_in_user)
+    public function get_phone_number($user, $logged_in_user, $subscription_status, $is_friend)
     {
         if ($logged_in_user->id == $user->id) {
             return $user->personal_phone ? $user->personal_phone->phone_number : null;
         }
 
-        if ($logged_in_user->role === 'creative') {
+        if ($logged_in_user->role === 'agency' && !($subscription_status == 'active' || hasAppliedToAgencyJob($user->id, $logged_in_user->id))) {
             return null;
         }
 
-        if ($logged_in_user->role === 'agency' && !hasAppliedToAgencyJob($user->id, $logged_in_user->id)) {
+        if ($logged_in_user->role === 'creative' && !$is_friend) {
             return null;
         }
 
