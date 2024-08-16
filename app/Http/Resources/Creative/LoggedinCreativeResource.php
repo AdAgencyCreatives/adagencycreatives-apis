@@ -51,7 +51,7 @@ class LoggedinCreativeResource extends JsonResource
                 'is_onsite' => $this->is_onsite,
             ],
             'is_opentorelocation' => $this->is_opentorelocation,
-            'phone_number' => $this->get_phone_number($user, $logged_in_user),
+            'phone_number' => $this->get_phone_number($user, $logged_in_user, $subscription_status, $is_friend),
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
             'portfolio_website' => $this->get_website_preview($user),
