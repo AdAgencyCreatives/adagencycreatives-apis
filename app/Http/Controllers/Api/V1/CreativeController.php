@@ -138,10 +138,12 @@ class CreativeController extends Controller
         }
 
         $combinedCreativeIdsLevel2 = [];
-        if (count($searchTermsLevel2) === 1) {
-            $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
-        } else {
-            $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
+        if (count($searchTermsLevel2) > 0) {
+            if (count($searchTermsLevel2) === 1) {
+                $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
+            } else {
+                $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
+            }
         }
 
         $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
@@ -383,13 +385,12 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-    public function search4(Request $request)
+    public function getSearch4CreativeIds($request)
     {
-        $role = $request?->role ?? 'agency';
-
         $term = $request->search;
         $field = $request->field;
 
+        $creativeIds = [];
         try {
             $sql = '';
             $bindings = '';
@@ -479,7 +480,27 @@ class CreativeController extends Controller
             $creativeIds = [];
         }
 
-        $creatives = Creative::whereIn('id', $creativeIds)
+        return $creativeIds;
+    }
+    public function search4(Request $request)
+    {
+        $role = $request?->role ?? 'agency';
+
+        $combinedCreativeIds = $this->getSearch4CreativeIds($request);
+
+        $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+        $combinedCreativeIdsLevel2 = [];
+        if (count($searchTermsLevel2) > 0) {
+            if (count($searchTermsLevel2) === 1) {
+                $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
+            } else {
+                $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
+            }
+        }
+
+        $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
+
+        $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) {
                 $query->where('is_visible', 1)
                     ->where('status', 1);
