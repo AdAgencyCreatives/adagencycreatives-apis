@@ -190,15 +190,11 @@ class CreativeController extends Controller
 
         // Split the search terms into an array
         $searchTerms = explode(',', $request->search);
-        $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+        $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2 ?? ""));
 
         $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
         for ($i = 1; $i < count($searchTerms); $i++) {
             $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTerms[$i], $role))));
-        }
-
-        for ($i = 0; $i < count($searchTermsLevel2); $i++) {
-            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTermsLevel2[$i], $role))));
         }
 
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
@@ -207,9 +203,11 @@ class CreativeController extends Controller
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) use ($agency_user_applicants) {
-                $query->where('status', 1)
+                $query
+                    ->where('status', 1)
                     ->where(function ($q) use ($agency_user_applicants) {
-                        $q->where('is_visible', 1)
+                        $q
+                            ->where('is_visible', 1)
                             ->orWhere(function ($q1) use ($agency_user_applicants) {
                                 $q1->where('is_visible', 0)
                                     ->whereIn('user_id', $agency_user_applicants);
@@ -224,7 +222,6 @@ class CreativeController extends Controller
 
         return new LoggedinCreativeCollection($creatives);
     }
-
 
     public function process_single_term_search($searchTerm, $role)
     {
