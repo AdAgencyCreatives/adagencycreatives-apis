@@ -288,7 +288,7 @@ class ApplicationController extends Controller
         return new ApplicationResource($application);
     }
 
-    public function user_has_applications(Request $request)
+    public function get_creative_applications(Request $request)
     {
         $query = Application::whereHas('job.user', function ($q) use ($request) {
             $q->where('id', '=', $request->job_user_id);
