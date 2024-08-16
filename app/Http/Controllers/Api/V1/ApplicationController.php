@@ -290,9 +290,15 @@ class ApplicationController extends Controller
 
     public function get_creative_applications(Request $request)
     {
-        $query = Application::whereHas('job.user', function ($q) use ($request) {
-            $q->where('id', '=', $request->job_user_id);
-        })->where('user_id', '=', $request->creative_user_id);
+        $job_user = User::where('uuid', '=', $request->job_user_id);
+        $job_user_id = $job_user->id;
+
+        $creative_user = User::where('uuid', '=', $request->creative_user_id);
+        $creative_user_id = $creative_user->id;
+
+        $query = Application::whereHas('job.user', function ($q) use ($job_user_id) {
+            $q->where('id', '=', $job_user_id);
+        })->where('user_id', '=', $creative_user_id);
 
         $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
