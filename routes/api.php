@@ -261,3 +261,4 @@ Route::resource('featured_cities', FeaturedLocationController::class);
 
 // Applications
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
+Route::get('user_has_applications', [ApplicationController::class, 'user_has_applications']);

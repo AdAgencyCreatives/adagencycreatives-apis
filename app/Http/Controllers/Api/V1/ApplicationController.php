@@ -287,4 +287,15 @@ class ApplicationController extends Controller
 
         return new ApplicationResource($application);
     }
+
+    public function user_has_applications(Request $request)
+    {
+        $query = Application::whereHas('job.user', function ($q) use ($request) {
+            $q->where('id', '=', $request->job_user_id);
+        })->where('user_id', '=', $request->creative_user_id);
+
+        $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new ApplicationCollection($applications);
+    }
 }
