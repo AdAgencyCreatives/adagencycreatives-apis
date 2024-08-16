@@ -105,6 +105,77 @@ class CreativeController extends Controller
     }
 
 
+    // public function search3(Request $request)
+    // {
+    //     $role = $request?->role ?? 'agency';
+
+    //     $agency_user_id = $request?->user()?->id;
+    //     $agency_user_applicants = [];
+    //     if (isset($agency_user_id)) {
+    //         $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+    //             $query->where('user_id', $agency_user_id);
+    //         })->pluck('user_id')->toArray());
+    //     }
+
+    //     /**
+    //      * SEARCH CRITERIA
+    //      *
+    //      * 1. Exact 1+2+3: Art Director in Chicago with CPG experience
+    //      * 2. Exact 1+2: Art Director in Chicago with no CPG experience
+    //      * 3. Contains 1 + Exact 2: All creatives with "contains" Art Director in their title (because sometimes we can go up and down a level for the right person) in Chicago. So this search would provide me Jr Art Directors and Senior Art Directors in Chicago. So Contains part of the first search, but the exact second
+    //      * 4. Exact 1:  All creatives with the exact title "Art Director" in any location even in Canada (some jobs will allow remote if they are a perfect fit otherwise in emergencies)
+    //      */
+
+    //     // Split the search terms into an array
+    //     $searchTerms = explode(',', $request->search);
+    //     $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+
+    //     $combinedCreativeIds = [];
+    //     if (count($searchTerms) === 1) {
+    //         $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
+    //     } else {
+    //         $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
+    //     }
+
+    //     $combinedCreativeIdsLevel2 = [];
+    //     if (count($searchTermsLevel2) > 0) {
+    //         if (count($searchTermsLevel2) === 1) {
+    //             $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
+    //         } else {
+    //             $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
+    //         }
+    //     }
+
+    //     $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+    //     // Combine and deduplicate the IDs while preserving the order
+    //     $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+
+    //     $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
+
+    //     $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
+
+    //     // Retrieve creative records from the database and order them based on the calculated order
+    //     $creatives = Creative::with('category')
+    //         ->whereIn('id', $combinedCreativeIds)
+    //         ->whereHas('user', function ($query) use ($agency_user_applicants) {
+    //             $query->where('status', 1)
+    //                 ->where(function ($q) use ($agency_user_applicants) {
+    //                     $q->where('is_visible', 1)
+    //                         ->orWhere(function ($q1) use ($agency_user_applicants) {
+    //                             $q1->where('is_visible', 0)
+    //                                 ->whereIn('user_id', $agency_user_applicants);
+    //                         });
+    //                 });
+    //         })
+    //         ->orderByRaw($rawOrder)
+    //         ->orderByDesc('is_featured')
+    //         ->orderBy('created_at')
+    //         ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+    //         ->withQueryString();
+
+    //     return new LoggedinCreativeCollection($creatives);
+    // }
+
     public function search3(Request $request)
     {
         $role = $request?->role ?? 'agency';
@@ -117,40 +188,18 @@ class CreativeController extends Controller
             })->pluck('user_id')->toArray());
         }
 
-        /**
-         * SEARCH CRITERIA
-         *
-         * 1. Exact 1+2+3: Art Director in Chicago with CPG experience
-         * 2. Exact 1+2: Art Director in Chicago with no CPG experience
-         * 3. Contains 1 + Exact 2: All creatives with "contains" Art Director in their title (because sometimes we can go up and down a level for the right person) in Chicago. So this search would provide me Jr Art Directors and Senior Art Directors in Chicago. So Contains part of the first search, but the exact second
-         * 4. Exact 1:  All creatives with the exact title "Art Director" in any location even in Canada (some jobs will allow remote if they are a perfect fit otherwise in emergencies)
-         */
-
         // Split the search terms into an array
         $searchTerms = explode(',', $request->search);
         $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
 
-        $combinedCreativeIds = [];
-        if (count($searchTerms) === 1) {
-            $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
-        } else {
-            $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
+        $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
+        for ($i = 1; $i < count($searchTerms); $i++) {
+            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTerms[$i], $role))));
         }
 
-        $combinedCreativeIdsLevel2 = [];
-        if (count($searchTermsLevel2) > 0) {
-            if (count($searchTermsLevel2) === 1) {
-                $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
-            } else {
-                $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
-            }
+        for ($i = 0; $i < count($searchTermsLevel2); $i++) {
+            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTermsLevel2[$i], $role))));
         }
-
-        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
-        // Combine and deduplicate the IDs while preserving the order
-        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
-
-        $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
 
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
