@@ -17,7 +17,7 @@ class JobResource extends JsonResource
         $advisor_user = null;
 
         if ($this->advisor_id != null) {
-            $advisor_user = User::where('id', '=', $this->advisor_id);
+            $advisor_user = User::where('id', '=', $this->advisor_id)->first();
             // If application_status is provided, filter applications by status
             if ($request->has('application_status')) {
                 $applications = $applications->where('status', $request->application_status);
@@ -64,7 +64,7 @@ class JobResource extends JsonResource
             'location' => $this->get_location(),
             'agency' => [],
             'advisor_id' => $this->advisor_id ?? null,
-            'advisor_name' => $advisor_user ? ($advisor_user->first_name . ' ' . $advisor_user->last_name) : '',
+            'advisor_name' => $advisor_user?->agency?->name ?? '',
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'applications' => new ApplicationCollection($applications),
