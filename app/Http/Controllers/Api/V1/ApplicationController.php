@@ -102,7 +102,7 @@ class ApplicationController extends Controller
              * they really appplied or not
              */
 
-            if ($job->apply_type == 'Internal') {
+            if ($job->apply_type == 'Internal' && $applicant_user?->email_notifications_enabled) {
                 SendEmailJob::dispatch([
                     'receiver' => $applicant_user,
                     'data' => [
@@ -153,7 +153,7 @@ class ApplicationController extends Controller
 
             $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
 
-            if ($job_user?->email_notifications_enabled) {
+            if ($job->apply_type == 'Internal' && $job_user?->email_notifications_enabled) {
                 // send email only if job notifications are enabled.
                 SendEmailJob::dispatch([
                     'receiver' => $job_user,
