@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Job;
 
 use App\Http\Resources\Application\ApplicationCollection;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
@@ -13,7 +14,10 @@ class JobResource extends JsonResource
         $category = $this->category;
         $applications = $this->applications;
 
+        $advisor_user = null;
+
         if ($this->advisor_id != null) {
+            $advisor_user = User::where('id', '=', $this->advisor_id);
             // If application_status is provided, filter applications by status
             if ($request->has('application_status')) {
                 $applications = $applications->where('status', $request->application_status);
@@ -60,6 +64,7 @@ class JobResource extends JsonResource
             'location' => $this->get_location(),
             'agency' => [],
             'advisor_id' => $this->advisor_id ?? null,
+            'advisor_name' => $advisor_user ? $advisor_user->full_name : '',
             'seo' => $this->generate_seo(),
             'applications_count' => $this->applications_count,
             'applications' => new ApplicationCollection($applications),
