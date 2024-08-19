@@ -405,7 +405,7 @@ class Job extends Model
                 }
 
                 foreach ($categorySubscribers as $creative) {
-                    create_notification($creative->user_id, sprintf('New job posted in %s category.', $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
+                    create_notification($creative->user_id, sprintf('New <a href="%s/job/%s">job</a> posted in %s category.', env('FRONTEND_URL'), $job->slug, $category->name), 'job_alert', ['job_id' => $job->id]); //Send notification to candidates
                 }
 
                 // if ($categorySubscribers && count($categorySubscribers) > 0) {
