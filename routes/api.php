@@ -128,7 +128,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Job Board Routes
      */
     Route::patch('agency_profile/{user}', [AgencyController::class, 'update_profile']);
-    Route::patch('agency_update_email_notifications/{user}', [AgencyController::class, 'update_email_notifications']);
     Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
@@ -262,3 +261,4 @@ Route::resource('featured_cities', FeaturedLocationController::class);
 // Applications
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
 Route::get('get_creative_applications', [ApplicationController::class, 'get_creative_applications']);
+Route::patch('user_update_email_notifications/{user}', [UserController::class, 'update_email_notifications']);
