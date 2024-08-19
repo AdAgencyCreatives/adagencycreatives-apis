@@ -30,6 +30,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'deleted_at' => $this?->deleted_at ? $this->deleted_at->format(config('global.datetime_format')) : '',
+            'email_notifications_enabled' => $this->email_notifications_enabled,
 
             'relationships' => [
                 'phones' => [

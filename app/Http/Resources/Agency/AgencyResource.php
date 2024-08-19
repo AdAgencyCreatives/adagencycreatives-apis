@@ -46,7 +46,6 @@ class AgencyResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
-            'email_notifications_enabled' => $this->email_notifications_enabled,
         ];
     }
 

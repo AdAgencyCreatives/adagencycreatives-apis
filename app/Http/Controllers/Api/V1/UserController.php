@@ -23,6 +23,7 @@ use App\Models\PortfolioCaptureLog;
 use App\Models\PortfolioCaptureQueue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
@@ -167,7 +168,8 @@ class UserController extends Controller
 
                 if ($user->role == 'agency') {
                     SendEmailJob::dispatch([
-                        'receiver' => $user, 'data' => $user,
+                        'receiver' => $user,
+                        'data' => $user,
                     ], 'account_approved_agency');
                 }
 
@@ -178,7 +180,8 @@ class UserController extends Controller
                 if ($user->role == 'creative') {
 
                     SendEmailJob::dispatch([
-                        'receiver' => $user, 'data' => $user,
+                        'receiver' => $user,
+                        'data' => $user,
                     ], 'account_approved');
 
 
@@ -194,7 +197,8 @@ class UserController extends Controller
 
             if ($newStatus === 'inactive' && $oldStatus === 'pending') {
                 SendEmailJob::dispatch([
-                    'receiver' => $user, 'data' => $user,
+                    'receiver' => $user,
+                    'data' => $user,
                 ], 'account_denied');
             }
             $user->update($request->all());
@@ -583,6 +587,31 @@ class UserController extends Controller
             return response()->json(['time_diff' => $time_diff, 'data' => $log], 200);
         } else {
             return response()->json(['message' => 'User not found.'], 401);
+        }
+    }
+
+    public function update_email_notifications(Request $request, $uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->first();
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'No user found.',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            $user->email_notifications_enabled = $request->email_notifications_enabled;
+            $user->save();
+
+            return response()->json([
+                'message' => 'User updated successfully.',
+                'data' => new UserResource($user),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }

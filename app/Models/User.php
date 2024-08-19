@@ -39,6 +39,7 @@ class User extends Authenticatable
         'role',
         'status',
         'is_visible',
+        'email_notifications_enabled',
     ];
 
     //protected $appends = array('full_name');
