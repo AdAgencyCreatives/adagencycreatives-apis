@@ -23,7 +23,7 @@ class ApplicationResource extends JsonResource
             'creative_category' => $user->creative?->category?->name,
             'creative_title' => $user->creative->title,
             'user_profile_id' => $user->id,
-            'job_id' => $job->uuid,
+            'job_id' => $job?->uuid,
             'job_title' => $job->title,
             'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
