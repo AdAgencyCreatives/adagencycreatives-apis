@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Application;
 
+use App\Models\Job;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicationResource extends JsonResource
@@ -10,7 +11,8 @@ class ApplicationResource extends JsonResource
     {
         $logged_in_user = request()->user();
         $user = $this->user;
-        $job = $this->job;
+        // $job = $this->job;
+        $job = Job::where('id', '=', $this->job_id)->first();
 
         return [
             'type' => 'applications',
@@ -23,7 +25,7 @@ class ApplicationResource extends JsonResource
             'creative_category' => $user->creative?->category?->name,
             'creative_title' => $user->creative->title,
             'user_profile_id' => $user->id,
-            'job_id' => $job?->uuid,
+            'job_id' => $job->uuid,
             'job_title' => $job->title,
             'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
