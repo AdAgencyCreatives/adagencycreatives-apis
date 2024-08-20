@@ -35,6 +35,11 @@ class UserController extends Controller
         return view('pages.users.add');
     }
 
+    public function createCreative()
+    {
+        return view('pages.users.add_creative');
+    }
+
     public function createAgency()
     {
         return view('pages.users.add_agency');

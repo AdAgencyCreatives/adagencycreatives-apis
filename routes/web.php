@@ -194,10 +194,10 @@ Route::group(['middleware' => ['auth']], function () {
         include_once 'community.php';
 
         Route::resource('users', UserController::class);
-        Route::get('advisor/create', [UserController::class, 'create'])->name('advisor.create');
-        Route::get('recruiter/create', [UserController::class, 'create'])->name('recruiter.create');
+        Route::get('advisor/create', [UserController::class, 'createAgency'])->name('advisor.create');
+        Route::get('recruiter/create', [UserController::class, 'createAgency'])->name('recruiter.create');
         Route::get('agency/create', [UserController::class, 'createAgency'])->name('agency.create');
-        Route::get('creative/create', [UserController::class, 'create'])->name('creative.create');
+        Route::get('creative/create', [UserController::class, 'createCreative'])->name('creative.create');
 
         Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
         Route::put('/user/profile_picture/{user}', [UserController::class, 'update_profile_picture'])->name('user.profile.picture');
