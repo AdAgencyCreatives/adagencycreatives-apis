@@ -18,7 +18,9 @@ class StoreUserRequest extends FormRequest
             'last_name' => 'required|max:255',
             'email' => 'required|unique:users',
             'password' => 'required|min:8',
-            'role' => 'sometimes|in:agency,creative',
+            'role' => 'sometimes|in:agency,advisor,recruiter,creative',
+            'agency_name' => 'sometimes|max:255',
+            'agency_website' => 'sometimes|max:255',
         ];
     }
 }
