@@ -205,6 +205,8 @@
                                             class="form-control form-select custom-select select2" data-toggle="select2">
                                             <option value="creative">
                                                 Creative</option>
+                                            <option value="agency">
+                                                Agency</option>
                                         </select>
                                     </div>
                                 </div>
