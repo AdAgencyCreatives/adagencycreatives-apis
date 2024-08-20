@@ -91,7 +91,7 @@ class UserController extends Controller
             $admin = User::where('email', env('ADMIN_EMAIL'))->first();
 
             $str = Str::uuid();
-            if (in_array($user->role, ['agency', 'advisor', 'recruiter'])) {
+            if (in_array($user->role, ['agency'])) {
                 $agency = new Agency();
                 $agency->uuid = $str;
                 $agency->user_id = $user->id;
@@ -103,13 +103,6 @@ class UserController extends Controller
                     'user_id' => $user->id,
                     'label' => 'linkedin',
                     'url' => $request->linkedin_profile ?? '',
-                ]);
-
-                Link::create([
-                    'uuid' => Str::uuid(),
-                    'user_id' => $user->id,
-                    'label' => 'website',
-                    'url' => $request->website ?? '',
                 ]);
 
                 SendEmailJob::dispatch([

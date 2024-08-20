@@ -13,6 +13,7 @@ use App\Models\Agency;
 use App\Models\Attachment;
 use App\Models\Creative;
 use App\Models\JobAlert;
+use App\Models\Link;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -128,13 +129,20 @@ class UserController extends Controller
                 $agency = new Agency();
                 $agency->uuid = Str::uuid();
                 $agency->user_id = $user->id;
-                $agency->name = 'Default Agency';
+                $agency->name = $request->agency_name ?? 'Default Agency';
                 $agency->size = '10';
                 $agency->about = '';
 
                 $user->username = $this->get_agency_username($user, $agency);
 
                 $agency->save();
+
+                Link::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'label' => 'linkedin',
+                    'url' => $request->linkedin_profile ?? '',
+                ]);
             } elseif (in_array($user->role, ['creative'])) {
                 $creative = new Creative();
                 $creative->uuid = Str::uuid();

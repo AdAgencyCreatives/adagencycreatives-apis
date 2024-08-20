@@ -44,7 +44,7 @@
 
                 var formData = {
                     agency_name: $("#agency_name").val(),
-                    agency_website: $("#agency_website").val(),
+                    linkedin_profile: $("#linkedin_profile").val(),
                     first_name: $("#first_name").val(),
                     last_name: $("#last_name").val(),
                     email: $("#email").val(),
@@ -135,9 +135,9 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="agency_website" class="form-label">Company Website</label>
-                                    <input type="text" class="form-control" id="agency_website"
-                                        placeholder="Company Website">
+                                    <label for="linkedin_profile" class="form-label">Company LinkedIn</label>
+                                    <input type="text" class="form-control" id="linkedin_profile"
+                                        placeholder="Company LinkedIn">
                                 </div>
                             </div>
                         </div>

@@ -19,6 +19,8 @@ class StoreAdminUserRequest extends FormRequest
             'email' => 'required|unique:users',
             'password' => 'required',
             'role' => 'sometimes|in:admin,advisor,agency,creative,recruiter',
+            'agency_name' => 'sometimes|max:255',
+            'agency_website' => 'sometimes|max:255',
         ];
     }
 }
