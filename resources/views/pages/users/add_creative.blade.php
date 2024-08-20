@@ -16,6 +16,7 @@
             } else if (currentUrl.includes("recruiter")) {
                 valueToMatch = "recruiter";
             }
+            $("#role").select2();
             $("#role").val(valueToMatch);
             $('#role').trigger('change');
         }
@@ -202,7 +203,7 @@
                                         <label class="form-label" for="role"> Role </label>
                                         <select name="role" id="role"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="creative" selected>
+                                            <option value="creative">
                                                 Creative</option>
                                         </select>
                                     </div>
