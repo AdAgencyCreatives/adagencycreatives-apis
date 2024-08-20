@@ -202,7 +202,7 @@
                                         <label class="form-label" for="role"> Role </label>
                                         <select name="role" id="role"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="creative">
+                                            <option value="creative" selected>
                                                 Creative</option>
                                         </select>
                                     </div>
