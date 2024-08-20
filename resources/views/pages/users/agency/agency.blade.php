@@ -4,7 +4,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h5 class="card-title mb-0">Agency info</h5>
+                <h5 class="card-title mb-0">Agency Info</h5>
             </div>
             <div class="card-body">
                 <form id="agency-form2" action="{{ route('agency.update', $user->agency?->uuid) }}" method="POST"
@@ -15,7 +15,7 @@
                         <div class="col-md-6">
 
                             <div class="mb-3">
-                                <label for="name" class="form-label">Agency Name</label>
+                                <label for="name" class="form-label">Company Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Agency Name" value="{{ $user->agency?->name }}">
                             </div>
