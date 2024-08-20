@@ -7,16 +7,15 @@
             var currentUrl = window.location.href;
             var valueToMatch = "";
 
-            if (currentUrl.includes("advisor")) {
+            if (currentUrl.includes("advisor/create")) {
                 valueToMatch = "advisor";
-            } else if (currentUrl.includes("agency")) {
+            } else if (currentUrl.includes("agency/create")) {
                 valueToMatch = "agency";
-            } else if (currentUrl.includes("creative")) {
+            } else if (currentUrl.includes("creative/create")) {
                 valueToMatch = "creative";
-            } else if (currentUrl.includes("recruiter")) {
+            } else if (currentUrl.includes("recruiter/create")) {
                 valueToMatch = "recruiter";
             }
-            $("#role").select2();
             $("#role").val(valueToMatch);
             $('#role').trigger('change');
         }
@@ -205,8 +204,6 @@
                                             class="form-control form-select custom-select select2" data-toggle="select2">
                                             <option value="creative">
                                                 Creative</option>
-                                            <option value="agency">
-                                                Agency</option>
                                         </select>
                                     </div>
                                 </div>
