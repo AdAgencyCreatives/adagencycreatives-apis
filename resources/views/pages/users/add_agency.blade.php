@@ -43,6 +43,8 @@
                 }
 
                 var formData = {
+                    agency_name: $("#agency_name").val(),
+                    agency_website: $("#agency_website").val(),
                     first_name: $("#first_name").val(),
                     last_name: $("#last_name").val(),
                     email: $("#email").val(),
@@ -120,6 +122,26 @@
                 </div>
                 <div class="card-body">
                     <form id="add-user-form">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label for="agency_name" class="form-label">Company Name</label>
+                                    <input type="text" class="form-control" id="agency_name" placeholder="Company Name">
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="agency_website" class="form-label">Company Website</label>
+                                    <input type="text" class="form-control" id="agency_website"
+                                        placeholder="Company Website">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
 
@@ -202,8 +224,6 @@
                                         <label class="form-label" for="role"> Role </label>
                                         <select name="role" id="role"
                                             class="form-control form-select custom-select select2" data-toggle="select2">
-                                            <option value="creative">
-                                                Creative</option>
                                             <option value="agency">
                                                 Agency
                                             </option>
@@ -211,8 +231,6 @@
                                                 Advisor</option>
                                             <option value="recruiter">
                                                 Recruiter</option>
-                                            <option value="admin">
-                                                Admin</option>
                                         </select>
                                     </div>
                                 </div>

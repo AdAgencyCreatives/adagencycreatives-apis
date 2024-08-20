@@ -17,7 +17,7 @@
                             <div class="mb-3">
                                 <label for="name" class="form-label">Company Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Agency Name" value="{{ $user->agency?->name }}">
+                                    placeholder="Company Name" value="{{ $user->agency?->name }}">
                             </div>
 
                         </div>
