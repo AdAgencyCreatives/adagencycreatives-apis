@@ -35,6 +35,11 @@ class UserController extends Controller
         return view('pages.users.add');
     }
 
+    public function createAgency()
+    {
+        return view('pages.users.add_agency');
+    }
+
     public function details(Request $request, $user_id)
     {
         if ($request?->show == 'deleted') {
@@ -242,7 +247,8 @@ class UserController extends Controller
 
             if ($user->role == 'agency') {
                 SendEmailJob::dispatch([
-                    'receiver' => $user, 'data' => $user,
+                    'receiver' => $user,
+                    'data' => $user,
                 ], 'account_approved_agency');
             }
 
@@ -252,7 +258,8 @@ class UserController extends Controller
             if ($user->role == 'creative') {
 
                 SendEmailJob::dispatch([
-                    'receiver' => $user, 'data' => $user,
+                    'receiver' => $user,
+                    'data' => $user,
                 ], 'account_approved');
 
                 $portfolio_website = $user->portfolio_website_link()->first();
@@ -275,7 +282,8 @@ class UserController extends Controller
             $user->save();
 
             SendEmailJob::dispatch([
-                'receiver' => $user, 'data' => $user,
+                'receiver' => $user,
+                'data' => $user,
             ], 'account_denied');
 
             return redirect()->route('users.index');

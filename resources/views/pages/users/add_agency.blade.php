@@ -124,7 +124,7 @@
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="first_name" class="form-label">First Name</label>
+                                    <label for="first_name" class="form-label">Contact First Name</label>
                                     <input type="text" class="form-control" id="first_name" placeholder="First Name">
                                 </div>
 
@@ -132,7 +132,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <label for="last_name" class="form-label">Contact Last Name</label>
                                     <input type="text" class="form-control" id="last_name" placeholder="Last Name">
                                 </div>
                             </div>
