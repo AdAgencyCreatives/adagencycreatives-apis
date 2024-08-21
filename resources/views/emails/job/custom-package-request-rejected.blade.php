@@ -117,7 +117,7 @@
                             <tr>
                                 <td style="text-align: center; padding: 15px 0; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold; color: #ffffff; font-size: 30px"
                                     class="header_text_color header_text_size">
-                                    <img width="60%"
+                                    <img width="100%" style="max-width: 500px !important;"
                                         src="https://adagencycreatives.com/wp-content/uploads/2022/04/AAC-LOGO-500-×-100-px-1.png"
                                         alt="" />
                                 </td>
