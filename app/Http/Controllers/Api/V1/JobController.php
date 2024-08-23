@@ -87,7 +87,7 @@ class JobController extends Controller
             $query->where("title", "LIKE", "%" . str_replace(" ", "%", $request->jobSearch) . "%");
         }
 
-        $query->with('applications')->whereHas('applications', function ($q) use ($recent_only, $request) {
+        $query->withWhereHas('applications', function ($q) use ($recent_only, $request) {
             if ($recent_only) {
                 $q->where('status', 0);
             }
