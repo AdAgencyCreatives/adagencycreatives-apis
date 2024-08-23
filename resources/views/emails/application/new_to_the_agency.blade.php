@@ -1,5 +1,7 @@
 @include('emails.includes.jobboard_header')
-
+@php
+    $apply_type = isset($data['apply_type']) ? $data['apply_type'] : 'Internal';
+@endphp
 <!-- 1 Column Text : BEGIN -->
 <tr>
     <td>
@@ -9,15 +11,27 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        New Applicant</h1>
+                        @if ($apply_type == 'Internal')
+                            New
+                        @else
+                            Interested
+                        @endif
+                        Applicant
+                    </h1>
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
 
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['receiver_name'] }},</span>
 
-                        <p>Great news! A new candidate has applied for your <a href="{{ $data['job_url'] }}"
-                                target="_blank">{{ $data['job_title'] }}</a> role on
+                        <p>Great news! A new candidate
+                            @if ($apply_type == 'Internal')
+                                has applied for
+                            @else
+                                clicked Apply Now to
+                            @endif
+                            your
+                            <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> role on
                             <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
                         </p>
 
