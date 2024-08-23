@@ -23,7 +23,8 @@
                             complete your <a href="{{ $data['FRONTEND_URL'] }}/profile" target="_blank">profile</a>
                             first.
                             You can start by telling everyone a bit about yourself, your skills, and your goals.</div>
-                        <div style="margin-top: 20px;">Once you’ve got a strong profile, take a moment to adjust
+                        <div style="margin-top: 20px;">Once you’ve got a strong profile and resume, take a moment to
+                            adjust
                             your preferences. After that,
                             you’re ready to get out there and start making some new connections.</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
