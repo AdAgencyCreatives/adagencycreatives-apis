@@ -87,18 +87,18 @@ class JobController extends Controller
             $query->where("title", "LIKE", "%" . str_replace(" ", "%", $request->jobSearch) . "%");
         }
 
-        $query->withWhereHas('applications', function ($q) use ($recent_only, $request) {
-            if ($recent_only) {
-                $q->where('status', 0);
-            }
-            $q->orderBy('status', 'asc')->orderBy('id', 'desc');
+        // $query->withWhereHas('applications', function ($q) use ($recent_only, $request) {
+        //     if ($recent_only) {
+        //         $q->where('status', 0);
+        //     }
+        //     $q->orderBy('status', 'asc')->orderBy('id', 'desc');
 
-            if ($request->has('applicantSearch') && strlen($request->applicantSearch) > 0) {
-                $q->whereHas('user', function ($q) use ($request) {
-                    $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
-                });
-            }
-        });
+        //     if ($request->has('applicantSearch') && strlen($request->applicantSearch) > 0) {
+        //         $q->whereHas('user', function ($q) use ($request) {
+        //             $q->whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $request->applicantSearch . "%'");
+        //         });
+        //     }
+        // });
 
         $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
