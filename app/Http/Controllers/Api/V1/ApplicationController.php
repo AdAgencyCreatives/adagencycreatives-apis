@@ -134,7 +134,7 @@ class ApplicationController extends Controller
 
             if ($job->apply_type == 'External') {
                 $msg_data['message'] = sprintf(
-                    "<a style='text-decoration:underline;' href='%s'>%s</a> is interested in the job <a style='text-decoration:underline;' href='%s'>%s</a>",
+                    "<a style='text-decoration:underline;' href='%s'>%s</a> clicked apply now to the job <a style='text-decoration:underline;' href='%s'>%s</a>",
                     $creative_url,
                     $applicant_user->full_name,
                     $job_url,
