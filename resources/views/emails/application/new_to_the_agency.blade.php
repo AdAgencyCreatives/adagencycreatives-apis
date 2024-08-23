@@ -33,6 +33,10 @@
                             your
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> role on
                             <a href="{{ $data['APP_URL'] }}" target="_blank">{{ $data['APP_NAME'] }}</a>.
+                            @if ($apply_type == 'Internal')
+                            @else
+                                You have selected the external apply option.
+                            @endif
                         </p>
 
                         <div><b>Creative: </b>
