@@ -88,7 +88,7 @@ class JobController extends Controller
         }
 
         $query->where(function ($q) use ($recent_only, $request) {
-            $q->whereRaw('1=1')->orWhere(function ($qry) use ($recent_only, $request) {
+            $q->where(function ($qry) use ($recent_only, $request) {
                 $qry->having('applications_count', '>', 0)
                     ->withWhereHas('applications', function ($q) use ($recent_only, $request) {
                         if ($recent_only) {
@@ -102,7 +102,7 @@ class JobController extends Controller
                             });
                         }
                     });
-            });
+            })->orWhereRaw('1=1');
         });
 
         $jobs = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
