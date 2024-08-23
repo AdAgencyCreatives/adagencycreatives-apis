@@ -153,7 +153,7 @@ class ApplicationController extends Controller
 
             $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
 
-            if ($job->apply_type == 'Internal' && $job_user?->email_notifications_enabled) {
+            if ($job_user?->email_notifications_enabled) {
                 // send email only if job notifications are enabled.
                 SendEmailJob::dispatch([
                     'receiver' => $job_user,
@@ -166,6 +166,7 @@ class ApplicationController extends Controller
                         'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
                         'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
                         'message' => $request->message,
+                        'apply_type' => $job->apply_type,
                     ],
                 ], 'new_candidate_application'); // To the agency
             }
