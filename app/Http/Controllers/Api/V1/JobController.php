@@ -88,7 +88,7 @@ class JobController extends Controller
         }
 
         $query->where(function ($q) use ($recent_only, $request) {
-            $q->having('applications_count', '>=', 0)
+            $q->having('applications_count', '>', 0)
                 ->withWhereHas('applications', function ($q) use ($recent_only, $request) {
                     if ($recent_only) {
                         $q->where('status', 0);
