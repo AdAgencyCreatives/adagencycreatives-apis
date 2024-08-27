@@ -74,7 +74,7 @@ class Creative extends Model
 
     public function scopeName(Builder $query, $name)
     {
-        $user_ids = User::whereRaw("CONCAT(users.first_name,' ', users.last_name) LIKE '%" . $name . "%'")->pluck('id');
+        $user_ids = User::whereRaw("CONCAT(first_name,' ', last_name) LIKE '%" . $name . "%'")->pluck('id');
 
         return $query->whereIn('user_id', $user_ids);
     }
