@@ -195,6 +195,8 @@ if (!function_exists('storeThumb')) {
 if (!function_exists('storeCropped')) {
     function storeCropped($user, $resource_type, $crop_x = 0, $crop_y = 0, $crop_width = 150, $crop_height = 150)
     {
+        $thumbWidth = 150;
+
         $uuid = Str::uuid();
 
         $existing_attachment = Attachment::where('user_id', $user->id)->where('resource_type', $resource_type)->first();
@@ -223,7 +225,31 @@ if (!function_exists('storeCropped')) {
         }
 
 
-        $tmp_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
+        $cropped_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
+
+        // get image size
+        $width = imagesx($cropped_img);
+        $height = imagesy($cropped_img);
+
+        // calculate thumbnail size
+        if ($width <= $height) {
+            $new_width = $thumbWidth;
+            $new_height = floor($height * ($thumbWidth / $width));
+        } else {
+            $new_height = $thumbWidth;
+            $new_width = floor($width * ($thumbWidth / $height));
+        }
+
+        // create a new temporary image
+        $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+        if (strtolower($info['extension']) == 'png') {
+            imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
+            imagealphablending($tmp_img, TRUE);
+        }
+
+        // copy and resize old image into new image 
+        imagecopyresized($tmp_img, $cropped_img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         $temp = tmpfile();
         // save thumbnail into a temp file
