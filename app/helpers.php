@@ -192,6 +192,67 @@ if (!function_exists('storeThumb')) {
     }
 }
 
+if (!function_exists('storeCropped')) {
+    function storeCropped($user, $resource_type, $crop_x = 0, $crop_y = 0, $crop_width = 150, $crop_height = 150)
+    {
+        $uuid = Str::uuid();
+
+        $existing_attachment = Attachment::where('user_id', $user->id)->where('resource_type', $resource_type)->first();
+
+        if ($user->role == 'creative') {
+            $original_image  = getAttachmentBasePath() . $user->profile_picture->path;
+        } else {
+            $original_image  = getAttachmentBasePath() . $user->agency_logo->path;
+        }
+
+        $info = pathinfo($original_image);
+
+        $extension = $info['extension'];
+        $folder = $resource_type . '/' . $uuid;
+
+        // load image
+
+        if (strtolower($info['extension']) == 'png') {
+            $img = \imagecreatefrompng("{$original_image}");
+        } else if (strtolower($info['extension']) == 'bmp') {
+            $img = \imagecreatefrombmp("{$original_image}");
+        } else if (strtolower($info['extension']) == 'gif') {
+            $img = \imagecreatefromgif("{$original_image}");
+        } else {
+            $img = \imagecreatefromjpeg("{$original_image}");
+        }
+
+
+        $tmp_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
+
+        $temp = tmpfile();
+        // save thumbnail into a temp file
+        imagejpeg($tmp_img, $temp, 100);
+
+        $filePath = $folder . "/" . $info['basename'];
+        Storage::disk('s3')->put($filePath, $temp);
+
+        fclose($temp);
+        imagedestroy($tmp_img);
+        imagedestroy($img);
+
+        $attachment = Attachment::create([
+            'uuid' => $uuid,
+            'user_id' => $user->id,
+            'resource_type' => $resource_type,
+            'path' => $filePath,
+            'name' => $info['filename'],
+            'extension' => $extension,
+        ]);
+
+        if ($attachment && $existing_attachment) {
+            $existing_attachment->delete();
+        }
+
+        return $attachment;
+    }
+}
+
 if (!function_exists('replacePlaceholders')) {
     function replacePlaceholders($format, $replacements)
     {

@@ -137,4 +137,18 @@ class AttachmentController extends Controller
             return ApiResponse::error(trans('response.not_found'), 404);
         }
     }
+
+    public function generateCroppedAttachment(Request $request)
+    {
+        try {
+            $user = User::where('uuid', $request->user_id)->first();
+            $crop_x = $request->x;
+            $crop_y = $request->y;
+            $crop_width = $request->width;
+            $crop_height = $request->height;
+            return new AttachmentResource(storeCropped($user, 'user_thumbnail', $crop_x, $crop_y, $crop_width, $crop_height));
+        } catch (\Exception $ex) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
 }

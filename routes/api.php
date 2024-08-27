@@ -142,6 +142,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('delete_job_logo', [AttachmentController::class, 'delete_job_logo']);
     Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
     Route::get('generate-thumbnail-attachment', [AttachmentController::class, 'generateThumbnailAttachment']);
+    Route::get('generate-cropped-attachment', [AttachmentController::class, 'generateCroppedAttachment']);
 
     Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);
     Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
