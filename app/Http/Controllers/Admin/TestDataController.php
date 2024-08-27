@@ -565,18 +565,8 @@ class TestDataController extends Controller
 
                 // load image and get image size
                 $img = \imagecreatefromjpeg("{$profile_picture}");
-                $width = imagesx($img);
-                $height = imagesy($img);
 
-                // calculate thumbnail size
-                $new_width = $thumbWidth;
-                $new_height = floor($height * ($thumbWidth / $width));
-
-                // create a new temporary image
-                $tmp_img = imagecreatetruecolor($new_width, $new_height);
-
-                // copy and resize old image into new image 
-                imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                $tmp_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
 
                 $temp = tmpfile();
                 // save thumbnail into a temp file
