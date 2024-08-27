@@ -540,6 +540,10 @@ class TestDataController extends Controller
     public function testCrop(Request $request)
     {
         $user_id = $request->user_id;
+        $crop_x = $request->x;
+        $crop_y = $request->y;
+        $crop_width = $request->width;
+        $crop_height = $request->height;
 
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
@@ -582,7 +586,13 @@ class TestDataController extends Controller
 
                 fclose($temp);
 
-                return '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
+                $html = 'Crop Params:<br>';
+                $html .= 'x:' . $crop_x . '<br>';
+                $html .= 'y:' . $crop_y . '<br>';
+                $html .= 'width:' . $crop_width . '<br>';
+                $html .= 'height:' . $crop_height . '<br>';
+                $html .= '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
+                return $html;
             }
         }
         return "No-UUID";
