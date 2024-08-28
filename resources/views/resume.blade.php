@@ -15,7 +15,7 @@
 
         @page {
             size: A4;
-            margin: 0;
+            margin: 12.7mm;
         }
 
         /* Set content to fill the entire A4 page */
@@ -36,7 +36,7 @@
             /* Adjust the width as needed */
             height: 100%;
             /* Adjust the height as needed*/
-            padding: 12.7mm;
+            padding: 20px;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
