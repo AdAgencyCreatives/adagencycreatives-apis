@@ -32,17 +32,15 @@
 
         /* Style content with shaded background */
         .content {
-            width: 80%;
+            width: 100%;
             /* Adjust the width as needed */
-            height: 80%;
+            height: 100%;
             /* Adjust the height as needed*/
-            padding: 20px;
+            padding: 12.7mm;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             /* Light gray shade */
-
-            border: 12.7mm solid #000;
         }
 
         @font-face {
