@@ -41,6 +41,8 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             /* Light gray shade */
+
+            border: 12.7mm solid #000;
         }
 
         @font-face {
