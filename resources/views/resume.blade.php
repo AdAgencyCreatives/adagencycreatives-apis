@@ -6,43 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $resume_name }}</title>
     <style>
-        /* Set A4 size */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @page {
-            size: A4;
-            margin: 12.7mm;
-        }
-
-        /* Set content to fill the entire A4 page */
-        html,
-        body {
-            width: 210mm;
-            height: 297mm;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Style content with shaded background */
-        .content {
-            width: 100%;
-            /* Adjust the width as needed */
-            height: 100%;
-            /* Adjust the height as needed*/
-            padding: 20px;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            /* Light gray shade */
-        }
-
         @font-face {
             font-family: 'Jost';
             src: url('{{ asset('assets/fonts/Jost/Jost-VariableFont_wght.ttf') }}') format('truetype');
