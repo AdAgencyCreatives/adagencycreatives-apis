@@ -6,6 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $resume_name }}</title>
     <style>
+        /* Set A4 size */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        /* Set content to fill the entire A4 page */
+        html,
+        body {
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Style content with shaded background */
+        .content {
+            width: 80%;
+            /* Adjust the width as needed */
+            height: 80%;
+            /* Adjust the height as needed*/
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            /* Light gray shade */
+        }
+
         @font-face {
             font-family: 'Jost';
             src: url('{{ asset('assets/fonts/Jost/Jost-VariableFont_wght.ttf') }}') format('truetype');
@@ -118,109 +155,110 @@
 </head>
 
 <body>
-    <section style="display: flex; gap: 30px; align-items: center;">
-        <div>
-            <img src="{{ $data['profile_image'] }}" style="max-width: 200px; max-height: 200px;" />
-        </div>
-        <div>
-            <h1 class="mb-2">{{ $data['name'] ?? '' }}</h1>
-            <p class="mb-2 mt-0">{{ $data['title'] }}</p>
-            <a href="tel:949-903-6732" class="mb-2" style="display: block;">{{ $data['phone_number'] ?? '' }}</a>
-            <a href="mailto:{{ $user->email }}" class="mb-2">{{ $user->email }}</a>
-        </div>
-    </section>
-    <section>
-        <h1>About</h1>
-        <p>{{ strip_tags($data['about']) ?? '' }}</p>
-    </section>
-
-    @if (!is_null($portfolio_website_preview_img))
-        <section>
-            <h1>Portfolio site</h1>
-            <img src="{{ $portfolio_website_preview_img }}" style="width:100%" />
+    <div class="content">
+        <section style="display: flex; gap: 30px; align-items: center;">
+            <div>
+                <img src="{{ $data['profile_image'] }}" style="max-width: 200px; max-height: 200px;" />
+            </div>
+            <div>
+                <h1 class="mb-2">{{ $data['name'] ?? '' }}</h1>
+                <p class="mb-2 mt-0">{{ $data['title'] }}</p>
+                <a href="tel:949-903-6732" class="mb-2" style="display: block;">{{ $data['phone_number'] ?? '' }}</a>
+                <a href="mailto:{{ $user->email }}" class="mb-2">{{ $user->email }}</a>
+            </div>
         </section>
-    @endif
+        <section>
+            <h1>About</h1>
+            <p>{{ strip_tags($data['about']) ?? '' }}</p>
+        </section>
 
-    <section class="creative-details"
-        style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 20px; margin-top: 15px;">
-        <div>
-            <p><strong>Years of Experience</strong></p>
-            <p>{{ $data['years_of_experience'] ?? '' }}</p>
-        </div>
-        <div>
-            <p><strong>Email</strong></p>
-            <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
-        </div>
-        <div>
-            <p><strong>Phone Number</strong></p>
-            <p><a href="tel:949-903-6732">{{ $data['phone_number'] ?? '' }}</a></p>
-        </div>
-        <div>
-            <p><strong>Industry Experience</strong></p>
-            <p>
-                @foreach ($data['industry_experience'] as $index => $ie)
+        @if (!is_null($portfolio_website_preview_img))
+            <section>
+                <h1>Portfolio site</h1>
+                <img src="{{ $portfolio_website_preview_img }}" style="width:100%" />
+            </section>
+        @endif
+
+        <section class="creative-details"
+            style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 20px; margin-top: 15px;">
+            <div>
+                <p><strong>Years of Experience</strong></p>
+                <p>{{ $data['years_of_experience'] ?? '' }}</p>
+            </div>
+            <div>
+                <p><strong>Email</strong></p>
+                <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
+            </div>
+            <div>
+                <p><strong>Phone Number</strong></p>
+                <p><a href="tel:949-903-6732">{{ $data['phone_number'] ?? '' }}</a></p>
+            </div>
+            <div>
+                <p><strong>Industry Experience</strong></p>
+                <p>
+                    @foreach ($data['industry_experience'] as $index => $ie)
+                        {{ $ie }}@if (!$loop->last)
+                            ,
+                        @endif
+                    @endforeach
+
+                </p>
+            </div>
+            <div>
+                <p><strong>Media Experience</strong></p>
+                @foreach ($data['media_experience'] as $index => $ie)
                     {{ $ie }}@if (!$loop->last)
                         ,
                     @endif
                 @endforeach
-
-            </p>
-        </div>
-        <div>
-            <p><strong>Media Experience</strong></p>
-            @foreach ($data['media_experience'] as $index => $ie)
-                {{ $ie }}@if (!$loop->last)
-                    ,
-                @endif
-            @endforeach
-        </div>
-        <div>
-            <p><strong>Type of Work</strong></p>
-            <p> {{ implode(',', $data['employment_type']) ?? '' }}</p>
-        </div>
-    </section>
-    <section>
-        <div id="job-candidate-education" class="candidate-detail-education my_resume_eduarea">
-            <h1 class="title">Education</h1>
-            @foreach ($educations as $education)
-                <div class="content">
-                    @if ($education->degree)
-                        <div class="circle">{{ substr($education->degree, 0, 1) }}</div>
-                    @endif
-
-                    <div class="top-info"><span class="edu_stats">{{ $education->degree ?? '' }}</span></div>
-                    <div class="edu_center"><span class="university">{{ $education->college ?? '' }}</span></div>
-                </div>
-            @endforeach
-
-        </div>
-    </section>
-    <section>
-        @if (count($experiences))
-            <div id="job-candidate-experience" class="candidate-detail-experience my_resume_eduarea color-blue">
-                <h1 class="title">Work &amp; Experience</h1>
-                @foreach ($experiences as $experience)
+            </div>
+            <div>
+                <p><strong>Type of Work</strong></p>
+                <p> {{ implode(',', $data['employment_type']) ?? '' }}</p>
+            </div>
+        </section>
+        <section>
+            <div id="job-candidate-education" class="candidate-detail-education my_resume_eduarea">
+                <h1 class="title">Education</h1>
+                @foreach ($educations as $education)
                     <div class="content">
-                        <div class="circle">
-                            {{ substr($experience->title ?? ($experience->company ?? 'ABC'), 0, 1) }} </div>
-                        <div class="top-info">
-                            <span class="edu_stats">{{ $experience->title ?? '' }}</span>
+                        @if ($education->degree)
+                            <div class="circle">{{ substr($education->degree, 0, 1) }}</div>
+                        @endif
 
-                            <span class="year">
-                                {{ $experience->started_at?->format('Y/m/d') ?? '' }} -
-                                {{ $experience->completed_at?->format('Y/m/d') ?? '' }} </span>
-
-                        </div>
-                        <div class="edu_center">
-                            <span class="university">{{ $experience->company ?? '' }}</span>
-                        </div>
-                        <p class="mb0">
-                            {{ $experience->description ?? '' }}
-                        </p>
+                        <div class="top-info"><span class="edu_stats">{{ $education->degree ?? '' }}</span></div>
+                        <div class="edu_center"><span class="university">{{ $education->college ?? '' }}</span></div>
                     </div>
                 @endforeach
-        @endif
-        </div>
+
+            </div>
+        </section>
+        <section>
+            @if (count($experiences))
+                <div id="job-candidate-experience" class="candidate-detail-experience my_resume_eduarea color-blue">
+                    <h1 class="title">Work &amp; Experience</h1>
+                    @foreach ($experiences as $experience)
+                        <div class="content">
+                            <div class="circle">
+                                {{ substr($experience->title ?? ($experience->company ?? 'ABC'), 0, 1) }} </div>
+                            <div class="top-info">
+                                <span class="edu_stats">{{ $experience->title ?? '' }}</span>
+
+                                <span class="year">
+                                    {{ $experience->started_at?->format('Y/m/d') ?? '' }} -
+                                    {{ $experience->completed_at?->format('Y/m/d') ?? '' }} </span>
+
+                            </div>
+                            <div class="edu_center">
+                                <span class="university">{{ $experience->company ?? '' }}</span>
+                            </div>
+                            <p class="mb0">
+                                {{ $experience->description ?? '' }}
+                            </p>
+                        </div>
+                    @endforeach
+            @endif
+    </div>
     </section>
     @if (count($portfolio_items))
         <section>
@@ -232,7 +270,7 @@
             </div>
         </section>
     @endif
-
+    </div>
     <script>
         window.print()
     </script>
