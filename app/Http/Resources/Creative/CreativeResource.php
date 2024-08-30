@@ -32,7 +32,7 @@ class CreativeResource extends JsonResource
             'user_thumbnail' => $this->get_user_thumbnail($user),
             'user_thumbnail_base64' => $this->get_user_thumbnail_base64($user),
             'years_of_experience' => $this->years_of_experience,
-            'portfolio_items' => $this->get_portfolio_items(),
+            'portfolio_items' => $this->get_portfolio_items($user),
             'about' => $this->about,
             'employment_type' => getEmploymentTypes($this->employment_type),
             'industry_experience' => getIndustryNames($this->industry_experience),
@@ -91,11 +91,11 @@ class CreativeResource extends JsonResource
         return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
     }
 
-    public function get_portfolio_items()
+    public function get_portfolio_items($user)
     {
         $portfolio_items = [];
 
-        foreach ($this->portfolio_items as $item) {
+        foreach ($user->portfolio_items as $item) {
             $portfolio_items[] = getAttachmentBasePath() . $item;
         }
         return $portfolio_items;

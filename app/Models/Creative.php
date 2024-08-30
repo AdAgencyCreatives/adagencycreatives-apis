@@ -58,11 +58,6 @@ class Creative extends Model
         return $this->hasOne(Attachment::class, 'resource_id', 'id')->where('resource_type', 'profile_picture');
     }
 
-    public function portfolio_items()
-    {
-        return $this->hasMany(Attachment::class, 'resource_id', 'id')->where('resource_type', 'portfolio_item');
-    }
-
     public function scopeUserId(Builder $query, $user_id)
     {
         $user = User::where('uuid', $user_id)->first();
