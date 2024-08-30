@@ -167,7 +167,7 @@ class LoggedinCreativeResource extends JsonResource
         $portfolio_items = [];
 
         foreach ($user->portfolio_items as $item) {
-            $portfolio_items[] = getAttachmentBasePath() . $item;
+            $portfolio_items[] = getAttachmentBasePath() . $item->path;
         }
         return $portfolio_items;
     }
