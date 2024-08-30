@@ -53,6 +53,7 @@ class CreativeResource extends JsonResource
             'location' => $this->location,
             'resume' => get_resume($user),
             'portfolio_website' => $this->get_website_preview($user),
+            'portfolio_website_base64' => $this->get_website_preview_base64($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -83,13 +84,27 @@ class CreativeResource extends JsonResource
 
     public function get_user_thumbnail_base64($user)
     {
-        $user_thumbnail = $this->get_user_thumbnail($user);
-        return "data:image/jpeg;charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
+        try {
+            $user_thumbnail = $this->get_user_thumbnail($user);
+            return "data:image/jpeg;charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
+        } catch (\Exception $e) {
+        }
+        return "data:image/jpeg;charset=utf-8;base64,";
     }
 
     public function get_website_preview($user)
     {
         return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
+    }
+
+    public function get_website_preview_base64($user)
+    {
+        try {
+            $website_preview = $this->get_website_preview($user);
+            return "data:image/jpeg;charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
+        } catch (\Exception $e) {
+        }
+        return "data:image/jpeg;charset=utf-8;base64,";
     }
 
     public function get_portfolio_items($user)
