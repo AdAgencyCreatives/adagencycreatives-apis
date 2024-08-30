@@ -58,6 +58,7 @@ class LoggedinCreativeResource extends JsonResource
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
             'portfolio_website' => $this->get_website_preview($user),
+            'portfolio_website_base64' => $this->get_website_preview_base64($user),
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
