@@ -108,7 +108,7 @@ class CreativeResource extends JsonResource
 
         foreach ($user->portfolio_items as $item) {
             try {
-                $portfolio_items_base64[] =   base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
+                $portfolio_items_base64[] = "data:image/jpeg;charset=utf-8;base64," .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
             } catch (\Exception $e) {
             }
         }
