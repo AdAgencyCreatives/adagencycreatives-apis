@@ -44,6 +44,7 @@ use App\Http\Controllers\Api\V1\StrengthController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
+use App\Http\Controllers\Api\V1\UtilsController;
 use App\Models\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -263,3 +264,5 @@ Route::resource('featured_cities', FeaturedLocationController::class);
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
 Route::get('get_creative_applications', [ApplicationController::class, 'get_creative_applications']);
 Route::patch('user_update_email_notifications/{user}', [UserController::class, 'update_email_notifications']);
+
+Route::get('/get_base64', [UtilsController::class, 'get_base64']);
