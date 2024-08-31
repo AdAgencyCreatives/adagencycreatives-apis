@@ -36,6 +36,7 @@ class LoggedinCreativeResource extends JsonResource
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
+            'profile_image_base64' =>  $allowBase64 ? $this->get_profile_image_base64($user) : "",
             'user_thumbnail' => $this->get_user_thumbnail($user),
             'user_thumbnail_base64' => $allowBase64 ?  $this->get_user_thumbnail_base64($user) : "",
             'years_of_experience' => $this->years_of_experience,
@@ -111,6 +112,16 @@ class LoggedinCreativeResource extends JsonResource
     public function get_profile_image($user)
     {
         return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+    }
+
+    public function get_profile_image_base64($user)
+    {
+        try {
+            $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
+            return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . (strlen($profile_picture) > 0 ? base64_encode(file_get_contents($profile_picture)) : "");
+        } catch (\Exception $e) {
+        }
+        return "";
     }
 
     public function get_user_thumbnail($user)
