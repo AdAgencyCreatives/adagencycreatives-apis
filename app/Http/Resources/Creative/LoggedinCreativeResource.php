@@ -124,6 +124,7 @@ class LoggedinCreativeResource extends JsonResource
             $user_thumbnail = isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : "";
             return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
         } catch (\Exception $e) {
+            return $e->getMessage();
         }
         return "";
     }
