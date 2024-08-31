@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Creative;
 
 use App\Http\Resources\Link\LinkCollection;
+use App\Http\Resources\Review\ReviewResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CreativeResource extends JsonResource
@@ -59,6 +60,7 @@ class CreativeResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
             'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
+            'reviews' => $this->get_reviews($user),
         ];
     }
 
@@ -219,5 +221,15 @@ class CreativeResource extends JsonResource
 
             return route('download.resume', ['name' => $resume_filename, 'uuid1' => $user->uuid, 'uuid2' => $logged_in_user->uuid]);
         }
+    }
+
+    public function get_reviews($user)
+    {
+        $reviews = [];
+
+        foreach ($user->receivedReviews as $item) {
+            $reviews[] = new ReviewResource($item);
+        }
+        return $reviews;
     }
 }

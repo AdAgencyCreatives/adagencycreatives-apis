@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Creative;
 
 use App\Http\Resources\Link\LinkCollection;
+use App\Http\Resources\Review\ReviewResource;
 use App\Models\Job;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -68,6 +69,7 @@ class LoggedinCreativeResource extends JsonResource
                 'is_friend' => $is_friend,
                 'has_posted_job' => $this->get_posted_job($logged_in_user, $subscription_status),
             ],
+            'reviews' => $this->get_reviews($user),
         ];
     }
 
@@ -260,5 +262,15 @@ class LoggedinCreativeResource extends JsonResource
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
+    }
+
+    public function get_reviews($user)
+    {
+        $reviews = [];
+
+        foreach ($user->receivedReviews as $item) {
+            $reviews[] = new ReviewResource($item);
+        }
+        return $reviews;
     }
 }
