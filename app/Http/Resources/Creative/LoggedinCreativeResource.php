@@ -15,6 +15,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function toArray($request)
     {
+        $allowBase64 = $request->has('base64') && $request->base64 == "yes";
 
         $logged_in_user = request()->user();
         $user = $this->user;
@@ -36,10 +37,10 @@ class LoggedinCreativeResource extends JsonResource
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
             'user_thumbnail' => $this->get_user_thumbnail($user),
-            'user_thumbnail_base64' => $this->get_user_thumbnail_base64($user),
+            'user_thumbnail_base64' => $allowBase64 ?  $this->get_user_thumbnail_base64($user) : "",
             'years_of_experience' => $this->years_of_experience,
             'portfolio_items' => $this->get_portfolio_items($user),
-            'portfolio_items_base64' => $this->get_portfolio_items_base64($user),
+            'portfolio_items_base64' => $allowBase64 ? $this->get_portfolio_items_base64($user) : "",
             'about' => $this->about,
             'employment_type' => getEmploymentTypes($this->employment_type),
             'industry_experience' => getIndustryNames($this->industry_experience),
@@ -59,7 +60,7 @@ class LoggedinCreativeResource extends JsonResource
             'location' => $this->location,
             'resume' => $this->get_resume($user, $logged_in_user, $subscription_status, $is_friend),
             'portfolio_website' => $this->get_website_preview($user),
-            'portfolio_website_base64' => $this->get_website_preview_base64($user),
+            'portfolio_website_base64' => $allowBase64 ? $this->get_website_preview_base64($user) : "",
             'links' => new LinkCollection($user->links),
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
@@ -124,7 +125,7 @@ class LoggedinCreativeResource extends JsonResource
             return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
         } catch (\Exception $e) {
         }
-        return "data:image/jpeg;charset=utf-8;base64,";
+        return "";
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
@@ -173,11 +174,11 @@ class LoggedinCreativeResource extends JsonResource
     public function get_website_preview_base64($user)
     {
         try {
-            $website_preview = $this->get_website_preview($user);
-            return "data:image/jpeg;charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
+            $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
+            return "data:image/" . $user->portfolio_website_preview->extension . ";charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
         } catch (\Exception $e) {
         }
-        return "data:image/jpeg;charset=utf-8;base64,";
+        return "";
     }
 
     public function get_portfolio_items($user)
@@ -196,7 +197,7 @@ class LoggedinCreativeResource extends JsonResource
 
         foreach ($user->portfolio_items as $item) {
             try {
-                $portfolio_items_base64[] = "data:image/jpeg;charset=utf-8;base64," .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
+                $portfolio_items_base64[] = "data:image/" . $item->extension . ";charset=utf-8;base64," .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
             } catch (\Exception $e) {
             }
         }

@@ -540,6 +540,20 @@ if (!function_exists('get_profile_picture')) {
     }
 }
 
+
+if (!function_exists('get_profile_picture_attachment')) {
+    function get_profile_picture_attachment($user)
+    {
+        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
+            return $user->profile_picture;
+        } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
+            return $user->agency_logo;
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('get_user_thumbnail')) {
     function get_user_thumbnail($user)
     {
