@@ -120,8 +120,8 @@ class LoggedinCreativeResource extends JsonResource
     public function get_user_thumbnail_base64($user)
     {
         try {
-            $user_thumbnail = $this->get_user_thumbnail($user);
-            return "data:image/jpeg;charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
+            $user_thumbnail = isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : "";
+            return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
         } catch (\Exception $e) {
         }
         return "data:image/jpeg;charset=utf-8;base64,";
