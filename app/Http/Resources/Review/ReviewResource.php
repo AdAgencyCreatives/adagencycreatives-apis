@@ -17,7 +17,7 @@ class ReviewResource extends JsonResource
             'user' => $user->full_name,
             'user_slug' => get_user_slug($user),
             'profile_picture' => get_profile_picture($user),
-            'profile_picture_base64' => $this->get_website_preview_base64($user),
+            'profile_picture_base64' => $this->get_profile_picture_base64($user),
             'target_id' => $this->target->uuid,
             'comment' => $this->comment,
             'rating' => $this->rating,
