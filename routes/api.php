@@ -263,6 +263,7 @@ Route::resource('featured_cities', FeaturedLocationController::class);
 // Applications
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
 Route::get('get_creative_applications', [ApplicationController::class, 'get_creative_applications']);
+Route::get('is_creative_applicant', [ApplicationController::class, 'is_creative_applicant']);
 Route::patch('user_update_email_notifications/{user}', [UserController::class, 'update_email_notifications']);
 
 Route::get('/get_base64', [UtilsController::class, 'get_base64']);

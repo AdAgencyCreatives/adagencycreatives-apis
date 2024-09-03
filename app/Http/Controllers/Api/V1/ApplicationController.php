@@ -306,4 +306,18 @@ class ApplicationController extends Controller
 
         return new ApplicationCollection($applications);
     }
+
+    public function is_creative_applicant(Request $request)
+    {
+        $job_user = User::where('uuid', '=', $request->job_user_id)->first();
+        $job_user_id = $job_user->id;
+
+        $creative = Creative::where('uuid', '=', $request->creative_user_id)->first();
+        $creative_user_id = $creative->user->id;
+
+        $job_ids = Job::where('user_id', '=', $job_user_id)->orWhere('advisor_id', '=', $job_user_id)->pluck('id')->toArray();
+        $app_ids = Application::whereIn('job_id', $job_ids)->where('user_id', '=', $creative_user_id)->pluck('id')->toArray();
+
+        return count($app_ids) > 0;
+    }
 }
