@@ -170,7 +170,7 @@ class ApplicationController extends Controller
                         'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
                         'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
                         'creative_aac_profile' => sprintf('%s/creative-profile/%s', env('FRONTEND_URL'), $applicant_user->username),
-                        'message' => $message,
+                        'message' => html_entity_decode($message),
                         'apply_type' => $job->apply_type,
                     ],
                 ], 'new_candidate_application'); // To the agency
