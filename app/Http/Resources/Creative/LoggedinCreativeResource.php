@@ -4,7 +4,9 @@ namespace App\Http\Resources\Creative;
 
 use App\Http\Resources\Link\LinkCollection;
 use App\Http\Resources\Review\ReviewResource;
+use App\Models\Application;
 use App\Models\Job;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LoggedinCreativeResource extends JsonResource
@@ -70,9 +72,23 @@ class LoggedinCreativeResource extends JsonResource
                 'subscription_status' => $subscription_status,
                 'is_friend' => $is_friend,
                 'has_posted_job' => $this->get_posted_job($logged_in_user, $subscription_status),
+                'is_creative_applicant' => $this->isCreativeApplicant($logged_in_user, $this),
             ],
             'reviews' => $this->get_reviews($user),
         ];
+    }
+
+    public function isCreativeApplicant($viewer, $creative)
+    {
+        if ($viewer && in_array($viewer->role, ['agency', 'advisor', 'recruiter'])) {
+            $job_user_id = $viewer->id;
+            $creative_user_id = $creative->user->id;
+
+            $job_ids = Job::where('user_id', '=', $job_user_id)->orWhere('advisor_id', '=', $job_user_id)->pluck('id')->toArray();
+            $app_ids = Application::whereIn('job_id', $job_ids)->where('user_id', '=', $creative_user_id)->pluck('id')->toArray();
+
+            return count($app_ids) > 0;
+        }
     }
 
     public function get_email($user, $logged_in_user, $subscription_status, $is_friend)
