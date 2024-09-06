@@ -154,6 +154,10 @@ class ApplicationController extends Controller
             $resume_url = $this->get_resume_url($applicant_user, $applicant_user);
 
             if ($job_user?->email_notifications_enabled) {
+                $message =  $request->message ?? "";
+                if (stripos($message, "clicked apply now") !== FALSE) {
+                    $message = "Clicked <i>Apply Now</i>";
+                }
                 // send email only if job notifications are enabled.
                 SendEmailJob::dispatch([
                     'receiver' => $job_user,
@@ -166,7 +170,7 @@ class ApplicationController extends Controller
                         'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
                         'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
                         'creative_aac_profile' => sprintf('%s/creative-profile/%s', env('FRONTEND_URL'), $applicant_user->username),
-                        'message' => $request->message,
+                        'message' => $message,
                         'apply_type' => $job->apply_type,
                     ],
                 ], 'new_candidate_application'); // To the agency
