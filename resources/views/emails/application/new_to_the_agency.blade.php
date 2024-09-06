@@ -2,7 +2,7 @@
 @php
     $apply_type = isset($data['apply_type']) ? $data['apply_type'] : 'Internal';
     $message = $data['message'] ?? '';
-    if (@apply_type == 'External') {
+    if ($apply_type == 'External') {
         $message = str_ireplace('Apply Now', '<i>Apply Now</i>', $data['message']);
     }
 @endphp
