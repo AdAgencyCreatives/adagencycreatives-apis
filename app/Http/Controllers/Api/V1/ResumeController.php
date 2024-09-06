@@ -109,7 +109,7 @@ class ResumeController extends Controller
         } else {
             $portfolio_website_preview_img = null;
         }
-        $data = (new CreativeResource($creative))->toArray([]);
+        $data = (new CreativeResource($creative))->toArray($request);
 
         //If user role is creative, then hide phone number from resume
         if ($auth_user->role == 'creative') {
