@@ -8,7 +8,7 @@ class ReviewResource extends JsonResource
 {
     public function toArray($request)
     {
-        $allowBase64 = $request->has('base64') && $request->base64 == "yes";
+        $allowBase64 = $request?->base64 == "yes";
 
         $user = $this->user;
 

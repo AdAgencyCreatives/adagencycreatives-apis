@@ -15,7 +15,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function toArray($request)
     {
-        $allowBase64 = $request->has('base64') && $request->base64 == "yes";
+        $allowBase64 = $request?->base64 == "yes";
 
         $logged_in_user = request()->user();
         $user = $this->user;
