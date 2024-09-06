@@ -10,7 +10,7 @@
                 <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
                     class="body_text_color body_text_size">
                     <h1
-                        style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
+                        style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000; text-transform: uppercase; line-height: 1.05em">
                         @if ($apply_type == 'Internal')
                             New
                         @else
