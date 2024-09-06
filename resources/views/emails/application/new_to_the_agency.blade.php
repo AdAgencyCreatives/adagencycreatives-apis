@@ -28,7 +28,7 @@
                             @if ($apply_type == 'Internal')
                                 has applied for
                             @else
-                                clicked Apply Now to
+                                clicked <i>Apply Now</i> to
                             @endif
                             your
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> role on
@@ -51,6 +51,8 @@
                             <a href="{{ $data['resume_url'] }}" target="_blank">Resume
                                 Link</a>
                         </div>
+                        <div><b>Profile Link: </b><a href="{{ $data['creative_profile'] }}" target="_blank">AAC
+                                Profile</a></div>
                         <div><b>Message: </b>{{ $data['message'] ?? '' }}</div>
 
                         <p>We hope this candidate is a strong fit.</p>
