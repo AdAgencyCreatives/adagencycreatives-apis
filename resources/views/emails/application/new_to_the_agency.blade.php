@@ -51,7 +51,7 @@
                             <a href="{{ $data['resume_url'] }}" target="_blank">Resume
                                 Link</a>
                         </div>
-                        <div><b>Profile Link: </b><a href="{{ $data['creative_profile'] }}" target="_blank">AAC
+                        <div><b>Profile Link: </b><a href="{{ $data['creative_aac_profile'] }}" target="_blank">AAC
                                 Profile</a></div>
                         <div><b>Message: </b>
                             @if ($apply_type == 'Internal')
