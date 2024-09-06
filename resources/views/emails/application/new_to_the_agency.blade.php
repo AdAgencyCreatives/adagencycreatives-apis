@@ -1,6 +1,10 @@
 @include('emails.includes.jobboard_header')
 @php
     $apply_type = isset($data['apply_type']) ? $data['apply_type'] : 'Internal';
+    $message = $data['message'] ?? '';
+    if (@apply_type == 'External') {
+        $message = str_ireplace('Apply Now', '<i>Apply Now</i>', $data['message']);
+    }
 @endphp
 <!-- 1 Column Text : BEGIN -->
 <tr>
@@ -53,7 +57,7 @@
                         </div>
                         <div><b>Profile Link: </b><a href="{{ $data['creative_profile'] }}" target="_blank">AAC
                                 Profile</a></div>
-                        <div><b>Message: </b>{{ $data['message'] ?? '' }}</div>
+                        <div><b>Message: </b>{{ $message }}</div>
 
                         <p>We hope this candidate is a strong fit.</p>
                         @include('emails.includes.jobboard_footer')
