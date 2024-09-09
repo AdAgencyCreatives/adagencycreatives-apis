@@ -89,7 +89,6 @@ class CreativeResource extends JsonResource
             $profile_picture_extension = isset($user->profile_picture) ? $user->profile_picture->extension : 'png';
             return "data:image/" . $profile_picture_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($profile_picture));
         } catch (\Exception $e) {
-            return $e->getMessage();
         }
         return "";
     }
@@ -106,7 +105,6 @@ class CreativeResource extends JsonResource
             $user_thumbnail_extension = isset($user->user_thumbnail) ? $user->user_thumbnail->extension : 'png';
             return "data:image/" . $user_thumbnail_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
         } catch (\Exception $e) {
-            return $e->getMessage();
         }
         return "";
     }
