@@ -85,8 +85,9 @@ class CreativeResource extends JsonResource
     public function get_profile_image_base64($user)
     {
         try {
-            $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
-            return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . (strlen($profile_picture) > 0 ? base64_encode(file_get_contents($profile_picture)) : base64_encode(file_get_contents(asset('assets/img/placeholder.png'))));
+            $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+            $profile_picture_extension = isset($user->profile_picture) ? $user->profile_picture->extension : 'png';
+            return "data:image/" . $profile_picture_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($profile_picture));
         } catch (\Exception $e) {
         }
         return "";
@@ -100,8 +101,9 @@ class CreativeResource extends JsonResource
     public function get_user_thumbnail_base64($user)
     {
         try {
-            $user_thumbnail = isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : "";
-            return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . (strlen($user_thumbnail) > 0 ? base64_encode(file_get_contents($user_thumbnail)) : "");
+            $user_thumbnail = isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
+            $user_thumbnail_extension = isset($user->user_thumbnail) ? $user->user_thumbnail->extension : 'png';
+            return "data:image/" . $user_thumbnail_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
         } catch (\Exception $e) {
         }
         return "";
