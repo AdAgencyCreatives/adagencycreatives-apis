@@ -136,6 +136,7 @@ class LoggedinCreativeResource extends JsonResource
             $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
             return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . (strlen($profile_picture) > 0 ? base64_encode(file_get_contents($profile_picture)) : base64_encode(file_get_contents(asset('assets/img/placeholder.png'))));
         } catch (\Exception $e) {
+            return $e->getMessage();
         }
         return "";
     }
@@ -152,6 +153,7 @@ class LoggedinCreativeResource extends JsonResource
             $user_thumbnail_extension = isset($user->user_thumbnail) ? $user->user_thumbnail->extension : 'png';
             return "data:image/" . $user_thumbnail_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
         } catch (\Exception $e) {
+            return $e->getMessage();
         }
         return "";
     }
