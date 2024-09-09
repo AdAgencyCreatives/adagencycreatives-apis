@@ -86,7 +86,7 @@ class CreativeResource extends JsonResource
     {
         try {
             $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
-            return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . (strlen($profile_picture) > 0 ? base64_encode(file_get_contents($profile_picture)) : "");
+            return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . (strlen($profile_picture) > 0 ? base64_encode(file_get_contents($profile_picture)) : base64_encode(file_get_contents(asset('assets/img/placeholder.png'))));
         } catch (\Exception $e) {
         }
         return "";
