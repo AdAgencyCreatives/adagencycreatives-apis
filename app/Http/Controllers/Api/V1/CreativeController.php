@@ -69,12 +69,14 @@ class CreativeController extends Controller
     {
         $role = $request?->role ?? 'agency';
 
-        $agency_user_id = $request?->user()?->id;
-        $agency_user_applicants = [];
-        if (isset($agency_user_id)) {
-            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
-                $query->where('user_id', $agency_user_id);
-            })->pluck('user_id')->toArray());
+        if ($role == 'agency') {
+            $agency_user_id = $request?->user()?->id;
+            $agency_user_applicants = [];
+            if (isset($agency_user_id)) {
+                $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                    $query->where('user_id', $agency_user_id);
+                })->pluck('user_id')->toArray());
+            }
         }
 
         $searchTerms = explode(',', $request->search);
@@ -84,22 +86,34 @@ class CreativeController extends Controller
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
-        $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) use ($agency_user_applicants) {
-                $query->where('status', 1)
-                    ->where(function ($q) use ($agency_user_applicants) {
-                        $q->where('is_visible', 1)
-                            ->orWhere(function ($q1) use ($agency_user_applicants) {
-                                $q1->where('is_visible', 0)
-                                    ->whereIn('user_id', $agency_user_applicants);
-                            });
-                    });
-            })
-            ->orderByRaw($rawOrder)
-            ->orderByDesc('is_featured')
-            ->orderBy('created_at')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
+        if ($role == 'creative') {
+            $creatives = Creative::whereIn('id', $combinedCreativeIds)
+                ->whereHas('user', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->orderByRaw($rawOrder)
+                ->orderByDesc('is_featured')
+                ->orderBy('created_at')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        } else {
+            $creatives = Creative::whereIn('id', $combinedCreativeIds)
+                ->whereHas('user', function ($query) use ($agency_user_applicants) {
+                    $query->where('status', 1)
+                        ->where(function ($q) use ($agency_user_applicants) {
+                            $q->where('is_visible', 1)
+                                ->orWhere(function ($q1) use ($agency_user_applicants) {
+                                    $q1->where('is_visible', 0)
+                                        ->whereIn('user_id', $agency_user_applicants);
+                                });
+                        });
+                })
+                ->orderByRaw($rawOrder)
+                ->orderByDesc('is_featured')
+                ->orderBy('created_at')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        }
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -292,23 +306,26 @@ class CreativeController extends Controller
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
             // Check if the term contains a space or underscore (full name or both names)
-            if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
-                $separator = strpos($term, ' ') !== false ? ' ' : '_';
-                $names = explode($separator, $term);
-                $firstName = trim($names[0]);
-                $lastName = trim($names[1]);
+            // if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
+            //     $separator = strpos($term, ' ') !== false ? ' ' : '_';
+            //     $names = explode($separator, $term);
+            //     $firstName = trim($names[0]);
+            //     $lastName = trim($names[1]);
 
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+            //     $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$firstName%$lastName" . $wildCardEnd . "'" . "\n";
+            //     $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
 
-                // Additional check for reverse order
-                $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
-                $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
-            } else {
-                // Search by individual terms
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
-                $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
-            }
+            //     // Additional check for reverse order
+            //     $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
+            //     $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
+            // } else {
+            //     // Search by individual terms
+            //     $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            //     $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            // }
+
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
