@@ -255,7 +255,7 @@ class CreativeController extends Controller
 
         // Iterate through each term for exact match
         foreach ($searchTerms as $term) {
-            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match', $role);
+            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'contains', $role);
         }
 
         // Find common IDs across all exact match arrays
