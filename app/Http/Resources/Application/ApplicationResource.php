@@ -14,6 +14,10 @@ class ApplicationResource extends JsonResource
         // $job = $this->job;
         $job = Job::where('id', '=', $this->job_id)->first();
 
+        if (!$user) {
+            return [];
+        }
+
         return [
             'type' => 'applications',
             'id' => $this->uuid,
