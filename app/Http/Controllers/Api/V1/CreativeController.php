@@ -247,7 +247,7 @@ class CreativeController extends Controller
     }
 
 
-    public function process_three_terms_search($searchTerms, $role, $match_type = 'exact-match')
+    public function process_three_terms_search($searchTerms, $role)
     {
         // Initialize arrays to store IDs for each match type
         $exactMatchIds = [];
@@ -255,7 +255,7 @@ class CreativeController extends Controller
 
         // Iterate through each term for exact match
         foreach ($searchTerms as $term) {
-            $exactMatchIds[] = $this->getCreativeIDs(trim($term), $match_type, $role);
+            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match', $role);
         }
 
         // Find common IDs across all exact match arrays
@@ -324,8 +324,8 @@ class CreativeController extends Controller
             //     $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
             // }
 
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
-            $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$term%'" . "\n";
+            $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$term%'" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
