@@ -76,83 +76,83 @@ class User extends Authenticatable
 
     public function profile_picture()
     {
-        return $this->hasOne(Attachment::class)->withTrashed()->where('resource_type', 'profile_picture')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'profile_picture')->latest();
     }
 
     public function agency_logo()
     {
-        return $this->hasOne(Attachment::class)->withTrashed()->where('resource_type', 'agency_logo')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'agency_logo')->latest();
     }
 
     public function user_thumbnail()
     {
-        return $this->hasOne(Attachment::class)->withTrashed()->where('resource_type', 'user_thumbnail')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'user_thumbnail')->latest();
     }
 
 
     public function portfolio_spotlights()
     {
-        return $this->hasMany(Attachment::class)->withTrashed()->where('resource_type', 'creative_spotlight');
+        return $this->hasMany(Attachment::class)->where('resource_type', 'creative_spotlight');
     }
 
     public function portfolio_items() //upto 5 items
     {
-        return $this->hasMany(Attachment::class)->withTrashed()->where('resource_type', 'portfolio_item');
+        return $this->hasMany(Attachment::class)->where('resource_type', 'portfolio_item');
     }
 
     public function portfolio_item_links() //upto 5 items
     {
-        return $this->hasMany(Link::class)->withTrashed()->where('label', 'portfolio');
+        return $this->hasMany(Link::class)->where('label', 'portfolio');
     }
 
     public function portfolio_website_link()
     {
-        return $this->hasOne(Link::class)->withTrashed()->where('label', 'portfolio');
+        return $this->hasOne(Link::class)->where('label', 'portfolio');
     }
 
     public function portfolio_website_preview()
     {
-        return $this->hasOne(Attachment::class)->withTrashed()->where('resource_type', 'website_preview')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview')->latest();
     }
 
     public function agency()
     {
-        return $this->hasOne(Agency::class)->withTrashed();
+        return $this->hasOne(Agency::class);
     }
 
     public function creative()
     {
-        return $this->hasOne(Creative::class)->withTrashed();
+        return $this->hasOne(Creative::class);
     }
 
     public function phones()
     {
-        return $this->hasMany(Phone::class)->withTrashed();
+        return $this->hasMany(Phone::class);
     }
 
     public function personal_phone()
     {
-        return $this->hasOne(Phone::class)->withTrashed()->where('label', 'personal');
+        return $this->hasOne(Phone::class)->where('label', 'personal');
     }
 
     public function business_phone()
     {
-        return $this->hasOne(Phone::class)->withTrashed()->where('label', 'business');
+        return $this->hasOne(Phone::class)->where('label', 'business');
     }
 
     public function addresses()
     {
-        return $this->hasMany(Address::class)->withTrashed();
+        return $this->hasMany(Address::class);
     }
 
     public function links()
     {
-        return $this->hasMany(Link::class)->withTrashed();
+        return $this->hasMany(Link::class);
     }
 
     public function attachments()
     {
-        return $this->hasMany(Attachment::class)->withTrashed();
+        return $this->hasMany(Attachment::class);
     }
 
     // public function resume()
@@ -162,27 +162,27 @@ class User extends Authenticatable
 
     public function resume()
     {
-        return $this->hasOne(Attachment::class)->withTrashed()->where('resource_type', 'resume')->latest();
+        return $this->hasOne(Attachment::class)->where('resource_type', 'resume')->latest();
     }
 
     public function educations()
     {
-        return $this->hasMany(Education::class)->withTrashed();
+        return $this->hasMany(Education::class);
     }
 
     public function experiences()
     {
-        return $this->hasMany(Experience::class)->withTrashed();
+        return $this->hasMany(Experience::class);
     }
 
     public function jobs()
     {
-        return $this->hasMany(Job::class)->withTrashed();
+        return $this->hasMany(Job::class);
     }
 
     public function open_jobs()
     {
-        return $this->hasMany(Job::class)->withTrashed()->where('status', Job::STATUSES['APPROVED'])->count();
+        return $this->hasMany(Job::class)->where('status', Job::STATUSES['APPROVED'])->count();
     }
 
     public function alert()
@@ -223,12 +223,12 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany(Post::class)->withTrashed();
+        return $this->hasMany(Post::class);
     }
 
     public function receivedReviews()
     {
-        return $this->hasMany(Review::class, 'target_id')->withTrashed();
+        return $this->hasMany(Review::class, 'target_id');
     }
 
     public function sentMessages()
@@ -253,7 +253,7 @@ class User extends Authenticatable
 
     public function notifications()
     {
-        return $this->hasMany(Notification::class)->withTrashed();
+        return $this->hasMany(Notification::class);
     }
 
     /**
