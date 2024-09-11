@@ -165,7 +165,7 @@ class ApplicationController extends Controller
                         'resume_url' => $resume_url,
                         'creative_name' => sprintf('%s %s', $applicant_user->first_name, $applicant_user->last_name),
                         'creative_profile' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $applicant_user->username),
-                        'creative_aac_profile' => sprintf('%s/creative-profile/%s', env('FRONTEND_URL'), $applicant_user->username),
+                        'creative_aac_profile' => sprintf('%s/creative-pdf/%s', env('FRONTEND_URL'), $applicant_user->username),
                         'message' => $request->message,
                         'apply_type' => $job->apply_type,
                     ],
