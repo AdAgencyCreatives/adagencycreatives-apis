@@ -33,7 +33,7 @@ class LoggedinCreativeResource extends JsonResource
 
         $educations = $request->has("educations") && $request->educations == "yes" ? ($user?->educations ?? []) : [];
         $experiences = $request->has("experiences") && $request->experiences == "yes" ? ($user?->experiences ?? []) : [];
-        $reviews = $request->has("reviews") && $request->reviews == "yes" ? ($user?->reviews ?? []) : [];
+        $reviews = $request->has("reviews") && $request->reviews == "yes" ? ($user?->receivedReviews ?? []) : [];
 
         return [
             'type' => 'creatives',
