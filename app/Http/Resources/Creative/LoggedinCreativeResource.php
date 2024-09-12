@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources\Creative;
 
+use App\Http\Resources\Education\EducationCollection;
+use App\Http\Resources\Experience\ExperienceCollection;
 use App\Http\Resources\Link\LinkCollection;
+use App\Http\Resources\Review\ReviewCollection;
 use App\Http\Resources\Review\ReviewResource;
 use App\Models\Application;
 use App\Models\Job;
@@ -27,6 +30,10 @@ class LoggedinCreativeResource extends JsonResource
         $subscription_status = get_subscription_status_string($logged_in_user);
 
         $is_friend = are_they_friend($user->id, $logged_in_user->id);
+
+        $educations = $request->has("educations") && $request->educations == "yes" ? ($user?->educations ?? []) : [];
+        $experiences = $request->has("experiences") && $request->experiences == "yes" ? ($user?->experiences ?? []) : [];
+        $reviews = $request->has("reviews") && $request->reviews == "yes" ? ($user?->reviews ?? []) : [];
 
         return [
             'type' => 'creatives',
@@ -74,7 +81,9 @@ class LoggedinCreativeResource extends JsonResource
                 'has_posted_job' => $this->get_posted_job($logged_in_user, $subscription_status),
                 'is_creative_applicant' => $this->isCreativeApplicant($logged_in_user, $this),
             ],
-            'reviews' => $this->get_reviews($user),
+            'educations' => new EducationCollection($educations),
+            'experiences' => new ExperienceCollection($experiences),
+            'reviews' => new ReviewCollection($reviews),
         ];
     }
 
@@ -291,15 +300,5 @@ class LoggedinCreativeResource extends JsonResource
             '%site_name%' => $site_name,
             '%separator%' => $separator,
         ]);
-    }
-
-    public function get_reviews($user)
-    {
-        $reviews = [];
-
-        foreach ($user->receivedReviews as $item) {
-            $reviews[] = new ReviewResource($item);
-        }
-        return $reviews;
     }
 }
