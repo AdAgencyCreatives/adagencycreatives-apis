@@ -587,4 +587,55 @@ class TestDataController extends Controller
         }
         return "No-UUID";
     }
+
+    public function testWelcome(Request $request)
+    {
+        $user_id = $request->user_id;
+        $crop_x = $request->x;
+        $crop_y = $request->y;
+        $crop_width = $request->width;
+        $crop_height = $request->height;
+
+        if ($user_id) {
+            $user = User::where('uuid', $user_id)->first();
+
+            // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
+
+            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
+
+            $info = pathinfo($profile_picture);
+            // dd($info);
+
+            $fname = $info['basename'];
+            $thumbWidth = 150;
+            $thumb_path = str_replace($info['filename'], $info['filename'] . "_thumb", $user->profile_picture->path);
+
+            // dd($thumb_path);
+
+            if (strtolower($info['extension']) == 'jpg') {
+
+                // load image and get image size
+                $img = \imagecreatefromjpeg("{$profile_picture}");
+
+                $tmp_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
+
+                $temp = tmpfile();
+                // save thumbnail into a temp file
+                imagejpeg($tmp_img, $temp);
+
+                $filePath = Storage::disk('s3')->put($thumb_path, $temp);
+
+                fclose($temp);
+
+                $html = 'Crop Params:<br>';
+                $html .= 'x:' . $crop_x . '<br>';
+                $html .= 'y:' . $crop_y . '<br>';
+                $html .= 'width:' . $crop_width . '<br>';
+                $html .= 'height:' . $crop_height . '<br>';
+                $html .= '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
+                return $html;
+            }
+        }
+        return "No-UUID";
+    }
 }
