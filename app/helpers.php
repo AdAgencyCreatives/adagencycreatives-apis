@@ -530,8 +530,12 @@ if (!function_exists('get_profile_picture')) {
     {
         $defaultImage = asset('assets/img/placeholder.png');
         $attachmentBasePath = getAttachmentBasePath();
-        if (in_array($user->role, ['admin', 'creative']) && $user->profile_picture) {
-            return $attachmentBasePath . $user->profile_picture->path;
+        if (in_array($user->role, ['admin', 'creative'])) {
+            if ($user->profile_picture) {
+                return $attachmentBasePath . $user->profile_picture->path;
+            } else {
+                return "";
+            }
         } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && $user->agency_logo) {
             return $attachmentBasePath . $user->agency_logo->path;
         }
