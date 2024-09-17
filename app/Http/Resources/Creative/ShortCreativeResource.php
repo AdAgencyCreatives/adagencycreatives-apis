@@ -35,7 +35,7 @@ class ShortCreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : '';
     }
 
     public function get_user_thumbnail($user)
