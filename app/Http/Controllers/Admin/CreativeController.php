@@ -13,6 +13,7 @@ use App\Models\JobAlert;
 use App\Models\Link;
 use App\Models\Location;
 use App\Models\Phone;
+use App\Models\Post;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -26,9 +27,52 @@ class CreativeController extends Controller
         $this->userService = $userService;
     }
 
+
+    private function get_location($user)
+    {
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
+    }
+
+    private function getWelcomePost($creative)
+    {
+        $user = $creative->user;
+        $creative_category = isset($creative->category) ? $creative->category->name : null;
+        $creative_location = $this->get_location($user);
+
+        return '<div class="welcome-lounge">' .
+            '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
+            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+            '  <div class="user_info">' .
+            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+            ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
+            ($creative_location['state'] || $creative_location['city'] ? ('    <div class="location">' . ($creative_location['state'] . (($creative_location['state'] && $creative_location['city']) ? ', ' : '') . $creative_location['city']) . '</div>') : '') .
+            '  </div>' .
+            '</div>';
+    }
+
     public function update(Request $request, $uuid)
     {
         $creative = Creative::where('uuid', $uuid)->first();
+
+        $was_is_featured = $creative->is_featured;
+        $was_is_welcomed = $creative->is_welcomed;
+
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
             'is_visible' => $request->is_visible,
@@ -61,6 +105,8 @@ class CreativeController extends Controller
             $creative->featured_at = null;
         }
 
+        $now_is_featured = $request?->is_featured;
+
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
@@ -90,6 +136,24 @@ class CreativeController extends Controller
         }
 
         $this->updateLocation($request, $user);
+
+        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured) {
+
+            $post = Post::create([
+                'uuid' => Str::uuid(),
+                'user_id' => 202, // admin/erika
+                'group_id' => 4, // The Lounge Feed
+                'content' => $this->getWelcomePost($creative),
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            if ($post) {
+                $creative->is_welcomed = true;
+                $creative->save();
+            }
+        }
 
         // dd($request->all());
         Session::flash('success', 'Creative updated successfully');
