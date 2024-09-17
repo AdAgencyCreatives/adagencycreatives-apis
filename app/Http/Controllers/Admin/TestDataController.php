@@ -595,7 +595,7 @@ class TestDataController extends Controller
         $user = $creative->user;
 
         return '<div class="welcome-lounge">' .
-            '  <img src=' . env('APP_URL') . '/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
+            '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
             '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
             '  <div class="user_info">' .
             '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
