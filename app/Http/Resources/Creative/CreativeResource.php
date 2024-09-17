@@ -80,15 +80,17 @@ class CreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
+        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : '');
+        // return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
     public function get_profile_image_base64($user)
     {
         try {
-            $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
-            $profile_picture_extension = isset($user->profile_picture) ? $user->profile_picture->extension : 'png';
-            return "data:image/" . $profile_picture_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($profile_picture));
+            $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
+            if(strlen($profile_picture)>0) {
+                return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($profile_picture));
+            }
         } catch (\Exception $e) {
         }
         return "";
@@ -102,9 +104,11 @@ class CreativeResource extends JsonResource
     public function get_user_thumbnail_base64($user)
     {
         try {
-            $user_thumbnail = isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : asset('assets/img/placeholder.png');
-            $user_thumbnail_extension = isset($user->user_thumbnail) ? $user->user_thumbnail->extension : 'png';
-            return "data:image/" . $user_thumbnail_extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
+            $user_thumbnail = isset($user->user_thumbnail) ? (getAttachmentBasePath() . $user->user_thumbnail->path) : "";
+            if(strlen($user_thumbnail)>0) {
+                return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
+            }
+            
         } catch (\Exception $e) {
         }
         return "";
@@ -119,7 +123,9 @@ class CreativeResource extends JsonResource
     {
         try {
             $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
-            return "data:image/" . $user->portfolio_website_preview->extension . ";charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
+            if(strlen($website_preview)>0) {
+                return "data:image/" . $user->portfolio_website_preview->extension . ";charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
+            }
         } catch (\Exception $e) {
         }
         return "";
