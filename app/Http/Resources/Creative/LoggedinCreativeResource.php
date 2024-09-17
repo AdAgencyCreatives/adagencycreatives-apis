@@ -75,6 +75,8 @@ class LoggedinCreativeResource extends JsonResource
             'seo' => $this->generate_seo(),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
+            'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
+            'is_welcomed' => $this->is_welcomed,
             'logged_in_user' => [
                 'subscription_status' => $subscription_status,
                 'is_friend' => $is_friend,

@@ -13,6 +13,7 @@ use App\Models\Application;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\JobAlert;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -766,6 +767,21 @@ class CreativeController extends Controller
         return new CreativeResource($creative);
     }
 
+    private function getWelcomePost($creative)
+    {
+        $user = $creative->user;
+
+        return '<div class="welcome-lounge">' .
+            '  <img src=' . env('APP_URL') . '"/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
+            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+            '  <div class="user_info">' .
+            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+            '    <div class="category">' . ($creative->creative_category) . '</div>' .
+            '    <div class="location">' . ($creative->location->state . ', ' . $creative->location->city) . '</div>' .
+            '  </div>' .
+            '</div>';
+    }
+
     public function update(UpdateCreativeRequest $request, $uuid)
     {
         if (empty($request->all())) {
@@ -782,13 +798,40 @@ class CreativeController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $was_is_featured = $creative->is_featured;
+        $was_is_welcomed = $creative->is_welcomed;
+
         $data = $request->except(['_token']);
         foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
+
+        $now_is_featured = $creative->is_featured;
+
         $creative_updated = $creative->save();
         if ($creative_updated) {
             $creative->fresh();
+
+            if (!$was_is_welcomed && !$was_is_featured && $now_is_featured) {
+
+                $post = Post::create([
+                    'uuid' => Str::uuid(),
+                    'user_id' => 202, // admin/erika
+                    'group_id' => 4, // The Lounge Feed
+                    'content' => $this->getWelcomePost($creative),
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                if ($post) {
+                    $creative->is_welcomed = true;
+                    $creative_updated = $creative->save();
+                    if ($creative_updated) {
+                        $creative->fresh();
+                    }
+                }
+            }
 
             return response()->json([
                 'message' => 'Creative updated successfully.',

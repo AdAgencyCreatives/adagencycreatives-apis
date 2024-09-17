@@ -37,6 +37,7 @@ class Creative extends Model
         'seo_keywords',
         'views',
         'featured_at',
+        'is_welcomed',
     ];
 
     protected $casts = [

@@ -63,6 +63,7 @@ class CreativeResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
             'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
+            'is_welcomed' => $this->is_welcomed,
             'reviews' => $this->get_reviews($user),
         ];
     }

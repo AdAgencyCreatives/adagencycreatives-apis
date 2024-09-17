@@ -590,52 +590,18 @@ class TestDataController extends Controller
 
     public function testWelcome(Request $request)
     {
-        $user_id = $request->user_id;
-        $crop_x = $request->x;
-        $crop_y = $request->y;
-        $crop_width = $request->width;
-        $crop_height = $request->height;
+        $creative = Creative::where('id', '=', $request->creative_id);
 
-        if ($user_id) {
-            $user = User::where('uuid', $user_id)->first();
+        $user = $creative->user;
 
-            // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
-
-            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
-
-            $info = pathinfo($profile_picture);
-            // dd($info);
-
-            $fname = $info['basename'];
-            $thumbWidth = 150;
-            $thumb_path = str_replace($info['filename'], $info['filename'] . "_thumb", $user->profile_picture->path);
-
-            // dd($thumb_path);
-
-            if (strtolower($info['extension']) == 'jpg') {
-
-                // load image and get image size
-                $img = \imagecreatefromjpeg("{$profile_picture}");
-
-                $tmp_img = imagecrop($img, ['x' => $crop_x, 'y' => $crop_y, 'width' => $crop_width, 'height' => $crop_height]);
-
-                $temp = tmpfile();
-                // save thumbnail into a temp file
-                imagejpeg($tmp_img, $temp);
-
-                $filePath = Storage::disk('s3')->put($thumb_path, $temp);
-
-                fclose($temp);
-
-                $html = 'Crop Params:<br>';
-                $html .= 'x:' . $crop_x . '<br>';
-                $html .= 'y:' . $crop_y . '<br>';
-                $html .= 'width:' . $crop_width . '<br>';
-                $html .= 'height:' . $crop_height . '<br>';
-                $html .= '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
-                return $html;
-            }
-        }
-        return "No-UUID";
+        return '<div class="welcome-lounge">' .
+            '  <img src=' . env('APP_URL') . '"/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
+            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+            '  <div class="user_info">' .
+            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+            '    <div class="category">' . ($creative->creative_category) . '</div>' .
+            '    <div class="location">' . ($creative->location->state . ', ' . $creative->location->city) . '</div>' .
+            '  </div>' .
+            '</div>';
     }
 }
