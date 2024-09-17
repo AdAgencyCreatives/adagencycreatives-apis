@@ -599,7 +599,7 @@ class TestDataController extends Controller
             '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
             '  <div class="user_info">' .
             '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
-            '    <div class="category">' . ($creative->creative_category) . '</div>' .
+            '    <div class="category">' . ($creative->category->name) . '</div>' .
             '    <div class="location">' . ($creative->location?->state . ', ' . $creative->location?->city) . '</div>' .
             '  </div>' .
             '</div>';
