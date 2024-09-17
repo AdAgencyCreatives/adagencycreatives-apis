@@ -138,7 +138,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_profile_image($user)
     {
-        return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : '');
+        return isset($user->profile_picture) ? (getAttachmentBasePath() . $user->profile_picture->path) : '';
         // return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png');
     }
 
@@ -146,7 +146,7 @@ class LoggedinCreativeResource extends JsonResource
     {
         try {
             $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : "";
-            if(strlen($profile_picture)>0) {
+            if (strlen($profile_picture) > 0) {
                 return "data:image/" . $user->profile_picture->extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($profile_picture));
             }
         } catch (\Exception $e) {
@@ -163,10 +163,9 @@ class LoggedinCreativeResource extends JsonResource
     {
         try {
             $user_thumbnail = isset($user->user_thumbnail) ? (getAttachmentBasePath() . $user->user_thumbnail->path) : "";
-            if(strlen($user_thumbnail)>0) {
+            if (strlen($user_thumbnail) > 0) {
                 return "data:image/" . $user->user_thumbnail->extension . ";charset=utf-8;base64," . base64_encode(file_get_contents($user_thumbnail));
             }
-            
         } catch (\Exception $e) {
         }
         return "";
@@ -219,7 +218,7 @@ class LoggedinCreativeResource extends JsonResource
     {
         try {
             $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
-            if(strlen($website_preview)>0) {
+            if (strlen($website_preview) > 0) {
                 return "data:image/" . $user->portfolio_website_preview->extension . ";charset=utf-8;base64," . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : "");
             }
         } catch (\Exception $e) {
