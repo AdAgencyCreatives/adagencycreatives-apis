@@ -600,7 +600,7 @@ class TestDataController extends Controller
             '  <div class="user_info">' .
             '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
             '    <div class="category">' . ($creative->creative_category) . '</div>' .
-            $creative->location != null ? ('    <div class="location">' . ($creative->location->state . ', ' . $creative->location->city) . '</div>') : '' .
+            '    <div class="location">' . ($creative->location?->state . ', ' . $creative->location?->city) . '</div>' .
             '  </div>' .
             '</div>';
     }
