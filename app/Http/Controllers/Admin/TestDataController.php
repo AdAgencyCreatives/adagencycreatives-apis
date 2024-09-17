@@ -590,7 +590,7 @@ class TestDataController extends Controller
 
     public function testWelcome(Request $request)
     {
-        $creative = Creative::where('id', '=', $request->creative_id);
+        $creative = Creative::where('id', '=', $request->creative_id)->first();
 
         $user = $creative->user;
 
