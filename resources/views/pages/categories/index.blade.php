@@ -84,7 +84,8 @@
                 var row = '<tr>' +
                     '<td>' + category.id + '</td>' +
                     '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
-                    '<td class="group-name">' + (category?.group_name || "") + '</td>' +
+                    '<td class="group-name" data-id="' + category.id + '">' + (category?.group_name || "") +
+                    '</td>' +
                     '<td>' + category.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
