@@ -20,7 +20,7 @@
 
             selectElement.append(option);
 
-            $.each(groups, function(index, group) {
+            $.each(data, function(index, group) {
                 var option = $('<option>', {
                     value: group.name,
                     text: group.name
