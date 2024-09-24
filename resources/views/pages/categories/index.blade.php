@@ -84,7 +84,7 @@
                 var row = '<tr>' +
                     '<td>' + category.id + '</td>' +
                     '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
-                    '<td class="category-name">' + (category?.group_name || "") + '</td>' +
+                    '<td class="group-name">' + (category?.group_name || "") + '</td>' +
                     '<td>' + category.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
@@ -142,6 +142,75 @@
                         method: 'PUT',
                         data: {
                             name: newText
+                        },
+                        success: function(response) {
+                            if (response.data) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: "Succesfully updated",
+                                    icon: 'success'
+                                });
+                            }
+
+
+                        },
+                        error: function(error) {
+                            if (error.responseJSON && error.responseJSON.errors) {
+                                var errorMessages = error.responseJSON.errors;
+
+                                // Process and display error messages
+                                var errorMessage = '';
+                                $.each(errorMessages, function(field, messages) {
+                                    errorMessage += field + ': ' + messages
+                                        .join(', ') + '\n';
+                                });
+
+                                Swal.fire({
+                                    title: 'Validation Error',
+                                    text: errorMessage,
+                                    icon: 'error'
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: error.message,
+                                    icon: 'error'
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+
+            $('table').on('dblclick', '.group-name', function() {
+                var currentText = $(this).text();
+                var id = $(this).data('id');
+                var inputField = $('<input>', {
+                    type: 'text',
+                    value: currentText
+                });
+
+                $(this).html(inputField);
+
+                inputField.focus();
+                inputField.on('blur', function() {
+                    var newText = $(this).val();
+                    $(this).parent().text(
+                        newText);
+
+                    console.log(id);
+                    console.log(newText);
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        }
+                    });
+                    $.ajax({
+                        url: '/api/v1/categories/' + id,
+                        method: 'PUT',
+                        data: {
+                            group_name: newText
                         },
                         success: function(response) {
                             if (response.data) {
