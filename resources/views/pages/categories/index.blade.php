@@ -10,27 +10,6 @@
         var perPage = 10;
         var filters = {};
 
-        function populateGroupNameDropdown(data, selector) {
-            let selectElement = $(selector);
-
-            var option = $('<option>', {
-                value: "",
-                text: ""
-            });
-
-            selectElement.append(option);
-
-            $.each(data, function(index, group) {
-                var option = $('<option>', {
-                    value: group.name,
-                    text: group.name
-                });
-
-                selectElement.append(option);
-            });
-
-        }
-
         function fetchCategories() {
 
             $.ajax({
@@ -40,7 +19,6 @@
                 success: function(response) {
                     populateGroupFilter(response.data, '#category');
                     populateGroupFilter(response.data, '#group');
-                    populateGroupNameDropdown(response.data, '#group_name');
                 },
                 error: function() {
                     alert('Failed to fetch categories from the API.');
@@ -103,18 +81,10 @@
                 roleBasedActions = '<a href="#" class="delete-category-btn" data-id="' +
                     category.id + '">Delete</a>';
 
-                var group_name_dropdown = '<div class="form-group">' +
-                    '  <label class="form-label" for="group_name"> Group </label>' +
-                    '  <select name="group_name" id="group_name" class="form-control form-select custom-select select2" data-toggle="select2">' +
-                    '    <option value="-100">Select Group</option>' +
-                    '  </select>' +
-                    '</div>';
-
                 var row = '<tr>' +
                     '<td>' + category.id + '</td>' +
                     '<td class="category-name" data-id="' + category.id + '">' + category.name + '</td>' +
-                    // '<td class="category-name">' + (category?.group_name || "") + '</td>' +
-                    '<td class="category-name">' + group_name_dropdown + '</td>' +
+                    '<td class="category-name">' + (category?.group_name || "") + '</td>' +
                     '<td>' + category.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
 
