@@ -62,7 +62,7 @@
 
                 },
                 error: function() {
-                    alert('Failed to fetch categories from the API.');
+                    alert('Failed to filter categories from the API.');
                 }
             });
         }
