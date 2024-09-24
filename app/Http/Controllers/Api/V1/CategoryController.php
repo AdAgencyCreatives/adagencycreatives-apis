@@ -67,7 +67,7 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::where('uuid', $uuid)->first();
-            $category->update($request->only('name'));
+            $category->update($request->only('name', 'group_name'));
 
             return new CategoryResource($category);
         } catch (ModelNotFoundException $exception) {
