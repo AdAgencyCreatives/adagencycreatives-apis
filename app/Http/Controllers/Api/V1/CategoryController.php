@@ -25,6 +25,7 @@ class CategoryController extends Controller
         $query = QueryBuilder::for(Category::class)
             ->allowedFilters([
                 'name',
+                'group',
             ])
             ->defaultSort('name')
             ->allowedSorts('name');
