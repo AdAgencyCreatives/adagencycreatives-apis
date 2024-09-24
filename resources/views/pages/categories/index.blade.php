@@ -18,6 +18,7 @@
                 dataType: 'json',
                 success: function(response) {
                     populateGroupFilter(response.data, '#category');
+                    populateGroupFilter(response.data, '#group');
                 },
                 error: function() {
                     alert('Failed to fetch categories from the API.');
@@ -31,12 +32,15 @@
                 per_page: perPage
             };
 
-            var selectedState = $('#category option:selected').text();
+            var selectedCategory = $('#category option:selected').text();
+            var selectedGroup = $('#group option:selected').text();
 
-            if (selectedState != 'Select Category') {
-                filters = {
-                    name: selectedState
-                };
+            filters = {};
+            if (selectedCategory != 'Select Category') {
+                filters['name'] = selectedCategory;
+            }
+            if (selectedGroup != 'Select Group') {
+                filters['group'] = selectedGroup;
             }
 
             Object.keys(filters).forEach(function(key) {
