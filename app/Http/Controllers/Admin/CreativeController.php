@@ -57,8 +57,8 @@ class CreativeController extends Controller
         $creative_category = isset( $creative->category ) ? $creative->category->name : null;
         $creative_location = $this->get_location( $user );
 
-        return '<div class="welcome-lounge">' .
-        '<a href="' . env( 'FRONTEND_URL' ) . '/creative/' .  $user->slug. '">@' . $user->full_name . '</a><br />' .
+        return '<a href="' . env( 'FRONTEND_URL' ) . '/creative/' .  $user->slug. '">@' . $user->full_name . '</a><br />' .
+        '<div class="welcome-lounge">' .
         '  <img src="' . env( 'APP_URL' ) . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
         '  <img class="user_image" src="' . ( isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' ) ) . '" alt="Profile Image" />' .
         '  <div class="user_info">' .
