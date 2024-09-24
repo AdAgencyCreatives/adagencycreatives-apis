@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use App\Models\Address;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -12,6 +14,7 @@ use App\Models\Experience;
 use App\Models\JobAlert;
 use App\Models\Link;
 use App\Models\Location;
+use App\Models\Notification;
 use App\Models\Phone;
 use App\Models\Post;
 use App\Models\User;
@@ -63,6 +66,53 @@ class CreativeController extends Controller
         ( $creative_location[ 'state' ] || $creative_location[ 'city' ] ? ( '    <div class="location">' . ( $creative_location[ 'state' ] . ( ( $creative_location[ 'state' ] && $creative_location[ 'city' ] ) ? ', ' : '' ) . $creative_location[ 'city' ] ) . '</div>' ) : '' ) .
         '  </div>' .
         '</div>';
+    }
+
+    public function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' )
+ {
+        try {
+            $author = $post->user;
+            foreach ( $recipient_ids as $recipient_id ) {
+
+                $receiver = User::where( 'uuid', $recipient_id )->first();
+
+                $data = array();
+                $data[ 'uuid' ] = Str::uuid();
+
+                $data[ 'user_id' ] = $receiver->id;
+                $data[ 'type' ] = 'lounge_mention';
+                $data[ 'message' ] = $author->full_name . ' commented on you in his post';
+
+                $data[ 'body' ] = array( 'post_id' => $post->id );
+
+                $notification = Notification::create( $data );
+
+                $group = $post->group;
+
+                $group_url = $group ? ( $group->slug == 'feed' ? env( 'FRONTEND_URL' ) . '/community' : env( 'FRONTEND_URL' ) . '/groups/' . $group->uuid ) : '';
+
+                $data = [
+                    'data' => [
+                        'recipient' => $receiver->first_name,
+                        'name' => $author->full_name,
+                        'inviter' => $author->full_name,
+                        'inviter_profile_url' => sprintf( '%s/creative/%s', env( 'FRONTEND_URL' ), $author?->username ),
+                        'profile_picture' => get_profile_picture( $author ),
+                        'user' => $author,
+                        'group_url' => $group_url,
+                        'group' => $group->name,
+                        'post_time' => \Carbon\Carbon::parse( $post->created_at )->diffForHumans(),
+                    ],
+                    'receiver' => $receiver
+                ];
+
+                if ( $send_email == 'yes' ) {
+                    SendEmailJob::dispatch( $data, 'user_mentioned_in_post' );
+                }
+            }
+        } catch ( \Exception $e ) {
+            throw new ApiException( $e, 'NS-01' );
+        }
     }
 
     public function update( Request $request, $uuid )
@@ -152,6 +202,8 @@ class CreativeController extends Controller
             if ( $post ) {
                 $creative->is_welcomed = true;
                 $creative->save();
+
+                $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
             }
         }
 
