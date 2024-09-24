@@ -102,6 +102,7 @@ class CreativeController extends Controller
                         'group_url' => $group_url,
                         'group' => $group->name,
                         'post_time' => \Carbon\Carbon::parse( $post->created_at )->diffForHumans(),
+                        'notification_uuid' => $notification->uuid,
                     ],
                     'receiver' => $receiver
                 ];
