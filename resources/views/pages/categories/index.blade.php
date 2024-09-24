@@ -40,7 +40,7 @@
                 filters['name'] = selectedCategory;
             }
             if (selectedGroup != 'Select Group') {
-                filters['group'] = selectedGroup;
+                filters['group_name'] = selectedGroup;
             }
 
             Object.keys(filters).forEach(function(key) {
