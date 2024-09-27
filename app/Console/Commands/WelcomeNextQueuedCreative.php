@@ -19,11 +19,10 @@ class WelcomeNextQueuedCreative extends Command {
     public function handle() {
 
         try {
-            $this->info( 'Today\'s Date: '. today()->toDateString() );
-
-            $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', ' = ', 1 )->whereDate( 'welcomed_at', ' = ', today()->toDateString() )->count( 'welcomed_at' );
-            $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', ' = ', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
-            $next_welcome_creative = Creative::where( 'is_welcomed', ' = ', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
+            $this->info( "Today's: " . today()->toDateString() );
+            $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+            $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+            $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
 
             $this->info( implode( [
                 'Before Processing Stats => ',
@@ -106,8 +105,8 @@ class WelcomeNextQueuedCreative extends Command {
 
         return '<a href="' . env( 'FRONTEND_URL' ) . '/creative/' . $user->username . '">@' . $user->full_name . '</a><br />' .
         '<div class="welcome-lounge">' .
-        '  <img src="' . env( 'APP_URL' ) . '/assets/img/welcome-blank.gif' alt='Welcome Creative" />' .
-        '  <img class="user_image' src='' . ( isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' ) ) . '' alt='Profile Image" />' .
+        '  <img src="' . env( 'APP_URL' ) . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
+        '  <img class="user_image" src="' . ( isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' ) ) . '" alt="Profile Image" />' .
         '  <div class="user_info">' .
         '    <div class="name">' . ( $user->first_name . ' ' . $user->last_name ) . '</div>' .
         ( $creative_category != null ? ( '    <div class="category">' . $creative_category . '</div>' ) : '' ) .
