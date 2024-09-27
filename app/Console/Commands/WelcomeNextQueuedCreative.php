@@ -57,7 +57,7 @@ class WelcomeNextQueuedCreative extends Command {
                 }
             }
         } catch( \Exception $e ) {
-            $this->error( $e->getMessage() );
+            $this->info( $e->getMessage() );
         }
     }
 
