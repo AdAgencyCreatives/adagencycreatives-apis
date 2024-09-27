@@ -17,44 +17,45 @@ class WelcomeNextQueuedCreative extends Command {
     protected $description = 'Generates Welcome Post in Lounge';
 
     public function handle() {
-        $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
-        $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
-        $next_welcome_creative = null;
+        $this->info( 'I am in' );
+        // $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+        // $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+        // $next_welcome_creative = null;
 
-        if ( $today_welcomed_at_creatives_count < 3 ) {
-            $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
+        // if ( $today_welcomed_at_creatives_count < 3 ) {
+        //     $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
 
-            if ( $next_welcome_creative ) {
-                $creative = $next_welcome_creative;
-                $post = Post::create( [
-                    'uuid' => Str::uuid(),
-                    'user_id' => 202, // admin/erika
-                    'group_id' => 4, // The Lounge Feed
-                    'content' => $this->getWelcomePost( $creative ),
-                    'status' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ] );
+        //     if ( $next_welcome_creative ) {
+        //         $creative = $next_welcome_creative;
+        //         $post = Post::create( [
+        //             'uuid' => Str::uuid(),
+        //             'user_id' => 202, // admin/erika
+        //             'group_id' => 4, // The Lounge Feed
+        //             'content' => $this->getWelcomePost( $creative ),
+        //             'status' => 1,
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        // ] );
 
-                if ( $post ) {
-                    $creative->is_welcomed = true;
-                    $creative->welcomed_at = now();
-                    $creative->save();
+        //         if ( $post ) {
+        //             $creative->is_welcomed = true;
+        //             $creative->welcomed_at = now();
+        //             $creative->save();
 
-                    $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+        //             $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
 
-                    $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
-                    $this->info( implode( [
-                        'Today Welcomed: ',
-                        '' . $today_welcomed_at_creatives_count,
-                        'Remaining in Queue: ',
-                        '' . $previous_welcome_queued_at_creatives_count,
-                        'Next Creative in Queue: ',
-                        '' . $next_welcome_creative?->id ?? '',
-                    ] ) );
-                }
-            }
-        }
+        //             $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
+        //             $this->info( implode( [
+        //                 'Today Welcomed: ',
+        //                 '' . $today_welcomed_at_creatives_count,
+        //                 'Remaining in Queue: ',
+        //                 '' . $previous_welcome_queued_at_creatives_count,
+        //                 'Next Creative in Queue: ',
+        //                 '' . $next_welcome_creative?->id ?? '',
+        // ] ) );
+        //         }
+        //     }
+        // }
     }
 
     private function getWelcomePost( $creative ) {
