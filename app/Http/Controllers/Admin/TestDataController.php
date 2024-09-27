@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
+use App\Jobs\SendEmailJob;
 use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
 use App\Mail\Message\UnreadMessage;
@@ -18,6 +20,7 @@ use App\Models\Job;
 use App\Models\JobAlert;
 use App\Models\Message;
 use App\Models\Notification;
+use App\Models\Post;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class TestDataController extends Controller
 {
@@ -628,16 +632,85 @@ class TestDataController extends Controller
     //         '</div>';
     // }
 
+    public function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' )
+    {
+        try {
+            $author = $post->user;
+            foreach ( $recipient_ids as $recipient_id ) {
+
+                $receiver = User::where( 'uuid', $recipient_id )->first();
+
+                $data = array();
+                $data[ 'uuid' ] = Str::uuid();
+
+                $data[ 'user_id' ] = $receiver->id;
+                $data[ 'type' ] = 'lounge_mention';
+                $data[ 'message' ] = $author->full_name . ' commented on you in his post';
+
+                $data[ 'body' ] = array( 'post_id' => $post->id );
+
+                $notification = Notification::create( $data );
+
+                $group = $post->group;
+
+                $group_url = $group ? ( $group->slug == 'feed' ? env( 'FRONTEND_URL' ) . '/community' : env( 'FRONTEND_URL' ) . '/groups/' . $group->uuid ) : '';
+
+                $data = [
+                    'data' => [
+                        'recipient' => $receiver->first_name,
+                        'name' => $author->full_name,
+                        'inviter' => $author->full_name,
+                        'inviter_profile_url' => sprintf( '%s/creative/%s', env( 'FRONTEND_URL' ), $author?->username ),
+                        'profile_picture' => get_profile_picture( $author ),
+                        'user' => $author,
+                        'group_url' => $group_url,
+                        'group' => $group->name,
+                        'post_time' => \Carbon\Carbon::parse( $post->created_at )->diffForHumans(),
+                        'notification_uuid' => $notification->uuid,
+                    ],
+                    'receiver' => $receiver
+                ];
+
+                if ( $send_email == 'yes' ) {
+                    SendEmailJob::dispatch( $data, 'user_mentioned_in_post' );
+                }
+            }
+        } catch ( Exception $e ) {
+            throw new ApiException( $e, 'NS-01' );
+        }
+    }
+    
     public function testWelcome(Request $request)
     {
+        $creative_id = $request->has('creative_id') ? $request->creative_id : null;
+
+        if($creative_id) {
+            $creative = Creative::where('id','=',$creative_id)->first();
+            $post = Post::create( [
+                'uuid' => Str::uuid(),
+                'user_id' => 202, // admin/erika
+                'group_id' => 4, // The Lounge Feed
+                'content' => $this->getWelcomePost( $creative ),
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ] );
+
+            if ( $post ) {
+                $creative->is_welcomed = true;
+                $creative->welcomed_at = now();
+                $creative->save();
+
+                $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+            }
+        } 
+        
         $today_welcomed_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
         $previous_welcome_queued_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+        $next_welcome_creative = null;
 
         if($today_welcomed_at_creatives_count < 3) {
             $next_welcome_creative = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->orderBy('welcome_queued_at')->first();
-            if($next_welcome_creative) {
-                
-            }
         }
         
         return array(
