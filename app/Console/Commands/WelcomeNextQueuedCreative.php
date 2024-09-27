@@ -46,7 +46,6 @@ class WelcomeNextQueuedCreative extends Command {
                     }
                 } else {
                     $this->info( 'No more next queued creative found.' );
-
                 }
             } else {
                 $this->info( "Today's Welcome Quota is finished." );
@@ -57,9 +56,9 @@ class WelcomeNextQueuedCreative extends Command {
                 'Current Stats => ',
                 'Today Welcomed: ',
                 '' . $today_welcomed_at_creatives_count,
-                'Remaining in Queue: ',
+                ', Remaining in Queue: ',
                 '' . $previous_welcome_queued_at_creatives_count,
-                'Next Creative in Queue: ',
+                ', Next Creative in Queue: ',
                 '' . $next_welcome_creative?->id ?? '',
             ] ) );
         } catch( \Exception $e ) {
