@@ -43,19 +43,25 @@ class WelcomeNextQueuedCreative extends Command {
                         $creative->save();
 
                         $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
-
-                        $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
-                        $this->info( implode( [
-                            'Today Welcomed: ',
-                            '' . $today_welcomed_at_creatives_count,
-                            'Remaining in Queue: ',
-                            '' . $previous_welcome_queued_at_creatives_count,
-                            'Next Creative in Queue: ',
-                            '' . $next_welcome_creative?->id ?? '',
-                        ] ) );
                     }
+                } else {
+                    $this->info( 'No more next queued creative found.' );
+
                 }
+            } else {
+                $this->info( "Today's Welcome Quota is finished." );
             }
+
+            $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
+            $this->info( implode( [
+                'Current Stats => ',
+                'Today Welcomed: ',
+                '' . $today_welcomed_at_creatives_count,
+                'Remaining in Queue: ',
+                '' . $previous_welcome_queued_at_creatives_count,
+                'Next Creative in Queue: ',
+                '' . $next_welcome_creative?->id ?? '',
+            ] ) );
         } catch( \Exception $e ) {
             $this->info( $e->getMessage() );
         }
