@@ -62,7 +62,10 @@ class WelcomeNextQueuedCreative extends Command {
                 $this->info( "Today's Welcome Quota is finished." );
             }
 
+            $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+            $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
             $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy( 'welcome_queued_at' )->first();
+
             $this->info( implode( [
                 'After Processing Stats => ',
                 'Today Welcomed: ',
