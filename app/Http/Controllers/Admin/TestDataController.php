@@ -633,9 +633,17 @@ class TestDataController extends Controller
         $today_welcomed_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
         $previous_welcome_queued_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
 
+        if($today_welcomed_at_creatives_count < 3) {
+            $next_welcome_creative = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->orderBy('welcome_queued_at')->first();
+            if($next_welcome_creative) {
+                
+            }
+        }
+        
         return array(
             'today_welcomed_at_creatives_count' => $today_welcomed_at_creatives_count,
             'previous_welcome_queued_at_creatives_count' => $previous_welcome_queued_at_creatives_count,
+            'next_welcome_creative'=> $next_welcome_creative?->user?->full_name || "",
         );
     }
 }
