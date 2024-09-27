@@ -22,7 +22,6 @@ use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -693,7 +692,7 @@ class TestDataController extends Controller
                     SendEmailJob::dispatch( $data, 'user_mentioned_in_post' );
                 }
             }
-        } catch ( Exception $e ) {
+        } catch ( \Exception $e ) {
             throw new ApiException( $e, 'NS-01' );
         }
     }
