@@ -193,8 +193,8 @@ class CreativeController extends Controller
         if ( !$was_is_welcomed && !$was_is_featured && $now_is_featured ) {
 
             // check if already three creatives have been welcomed or not
-            $today_welcomed_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
-            $previous_welcome_queued_at_creatives_count = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+            $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+            $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
 
             if ( $today_welcomed_at_creatives_count >= 3 || $previous_welcome_queued_at_creatives_count > 0 ) {
                 $creative->welcome_queued_at = now();
