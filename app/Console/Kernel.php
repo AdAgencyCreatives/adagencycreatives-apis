@@ -29,6 +29,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('email:send-job-closed-emails')->dailyAt($daily_time);
         // $schedule->command('email:send-admin-friend-request-emails')->everyMinute();
+        $schedule->command('welcome-next-queued-creative')->dailyAt("10:00");
+        $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
+        $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
+
     }
 
     /**
