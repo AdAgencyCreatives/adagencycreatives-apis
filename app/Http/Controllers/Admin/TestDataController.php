@@ -699,28 +699,28 @@ class TestDataController extends Controller
     
     public function testWelcome(Request $request)
     {
-        $creative_id = $request->has('creative_id') ? $request->creative_id : null;
+        // $creative_id = $request->has('creative_id') ? $request->creative_id : null;
 
-        if($creative_id) {
-            $creative = Creative::where('id','=',$creative_id)->first();
-            $post = Post::create( [
-                'uuid' => Str::uuid(),
-                'user_id' => 202, // admin/erika
-                'group_id' => 4, // The Lounge Feed
-                'content' => $this->getWelcomePost( $creative ),
-                'status' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ] );
+        // if($creative_id) {
+        //     $creative = Creative::where('id','=',$creative_id)->first();
+        //     $post = Post::create( [
+        //         'uuid' => Str::uuid(),
+        //         'user_id' => 202, // admin/erika
+        //         'group_id' => 4, // The Lounge Feed
+        //         'content' => $this->getWelcomePost( $creative ),
+        //         'status' => 1,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ] );
 
-            if ( $post ) {
-                $creative->is_welcomed = true;
-                $creative->welcomed_at = now();
-                $creative->save();
+        //     if ( $post ) {
+        //         $creative->is_welcomed = true;
+        //         $creative->welcomed_at = now();
+        //         $creative->save();
 
-                $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
-            }
-        } 
+        //         $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+        //     }
+        // } 
         
         $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
         $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
