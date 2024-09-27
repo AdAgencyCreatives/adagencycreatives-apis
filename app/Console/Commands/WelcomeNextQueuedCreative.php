@@ -19,7 +19,7 @@ class WelcomeNextQueuedCreative extends Command {
     public function handle() {
 
         try {
-            $this->info( today()->toDateString() );
+            $this->info( 'Today: '. today()->toDateString() );
             $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
             $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
             $next_welcome_creative = null;
