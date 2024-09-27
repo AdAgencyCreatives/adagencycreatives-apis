@@ -728,7 +728,7 @@ class TestDataController extends Controller
         $next_welcome_creative = null;
 
         if($today_welcomed_at_creatives_count < 3) {
-            $next_welcome_creative = Creative::whereNot( 'is_welcomed' )->whereNotNull( 'welcome_queued_at' )->orderBy('welcome_queued_at')->first();
+            $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy('welcome_queued_at')->first();
         }
         
         return array(
