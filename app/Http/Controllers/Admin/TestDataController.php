@@ -643,7 +643,7 @@ class TestDataController extends Controller
         return array(
             'today_welcomed_at_creatives_count' => $today_welcomed_at_creatives_count,
             'previous_welcome_queued_at_creatives_count' => $previous_welcome_queued_at_creatives_count,
-            'next_welcome_creative'=> $next_welcome_creative?->user?->full_name ?? "",
+            'next_welcome_creative'=> $next_welcome_creative?->id ?? "",
         );
     }
 }
