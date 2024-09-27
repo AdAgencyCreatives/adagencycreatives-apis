@@ -195,22 +195,26 @@ class CreativeController extends Controller
             // check if already three creatives have been welcomed or not
             $creatives_count = Creative::whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
 
-            $post = Post::create( [
-                'uuid' => Str::uuid(),
-                'user_id' => 202, // admin/erika
-                'group_id' => 4, // The Lounge Feed
-                'content' => $this->getWelcomePost( $creative ),
-                'status' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ] );
+            if ( $creatives_count >= 3 ) {
 
-            if ( $post ) {
-                $creative->is_welcomed = true;
-                $creative->welcomed_at = now();
-                $creative->save();
+            } else {
+                $post = Post::create( [
+                    'uuid' => Str::uuid(),
+                    'user_id' => 202, // admin/erika
+                    'group_id' => 4, // The Lounge Feed
+                    'content' => $this->getWelcomePost( $creative ),
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ] );
 
-                $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+                if ( $post ) {
+                    $creative->is_welcomed = true;
+                    $creative->welcomed_at = now();
+                    $creative->save();
+
+                    $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+                }
             }
         }
 
