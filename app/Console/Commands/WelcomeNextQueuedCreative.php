@@ -68,6 +68,27 @@ class WelcomeNextQueuedCreative extends Command {
         }
     }
 
+    private function get_location( $user )
+ {
+        $address = $user->addresses ? collect( $user->addresses )->firstWhere( 'label', 'personal' ) : null;
+
+        if ( $address ) {
+            return [
+                'state_id' => $address->state ? $address->state->uuid : null,
+                'state' => $address->state ? $address->state->name : null,
+                'city_id' => $address->city ? $address->city->uuid : null,
+                'city' => $address->city ? $address->city->name : null,
+            ];
+        } else {
+            return [
+                'state_id' => null,
+                'state' => null,
+                'city_id' => null,
+                'city' => null,
+            ];
+        }
+    }
+
     private function getWelcomePost( $creative ) {
         $user = $creative->user;
         $creative_category = isset( $creative->category ) ? $creative->category->name : null;
@@ -85,7 +106,7 @@ class WelcomeNextQueuedCreative extends Command {
         '</div>';
     }
 
-    public function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' ) {
+    private function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' ) {
         try {
             $author = $post->user;
             foreach ( $recipient_ids as $recipient_id ) {
