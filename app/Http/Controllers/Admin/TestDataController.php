@@ -630,7 +630,12 @@ class TestDataController extends Controller
 
     public function testWelcome(Request $request)
     {
-        $creatives_count = Creative::whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
-        return $creatives_count;
+        $today_welcomed_at_creatives_count = Creative::whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+        $previous_welcome_queued_at_creatives_count = Creative::whereDate( 'welcome_queued_at', '<', today()->toDateString() )->count( 'welcome_queued_at' );
+
+        return array(
+            'today_welcomed_at_creatives_count' => $today_welcomed_at_creatives_count,
+            'previous_welcome_queued_at_creatives_count' => $previous_welcome_queued_at_creatives_count,
+        );
     }
 }
