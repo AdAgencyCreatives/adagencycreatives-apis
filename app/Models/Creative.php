@@ -38,10 +38,14 @@ class Creative extends Model
         'views',
         'featured_at',
         'is_welcomed',
+        'welcome_at',
+        'welcome_queued_at',
     ];
 
     protected $casts = [
-        'featured_at' => 'datetime'
+        'featured_at' => 'datetime',
+        'welcome_at' => 'datetime',
+        'welcome_queued_at' => 'datetime',
     ];
 
     public function user()

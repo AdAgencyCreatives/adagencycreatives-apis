@@ -609,22 +609,28 @@ class TestDataController extends Controller
         }
     }
 
+    // public function testWelcome(Request $request)
+    // {
+    //     $creative = Creative::where('id', '=', $request->creative_id)->first();
+
+    //     $user = $creative->user;
+    //     $creative_category = isset($creative->category) ? $creative->category->name : null;
+    //     $creative_location = $this->get_location($user);
+
+    //     return '<div class="welcome-lounge">' .
+    //         '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
+    //         '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+    //         '  <div class="user_info">' .
+    //         '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+    //         ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
+    //         ($creative_location['state'] || $creative_location['city'] ? ('    <div class="location">' . ($creative_location['state'] . (($creative_location['state'] && $creative_location['city']) ? ', ' : '') . $creative_location['city']) . '</div>') : '') .
+    //         '  </div>' .
+    //         '</div>';
+    // }
+
     public function testWelcome(Request $request)
     {
-        $creative = Creative::where('id', '=', $request->creative_id)->first();
-
-        $user = $creative->user;
-        $creative_category = isset($creative->category) ? $creative->category->name : null;
-        $creative_location = $this->get_location($user);
-
-        return '<div class="welcome-lounge">' .
-            '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.jpeg" alt="Welcome Creative" />' .
-            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
-            '  <div class="user_info">' .
-            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
-            ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
-            ($creative_location['state'] || $creative_location['city'] ? ('    <div class="location">' . ($creative_location['state'] . (($creative_location['state'] && $creative_location['city']) ? ', ' : '') . $creative_location['city']) . '</div>') : '') .
-            '  </div>' .
-            '</div>';
+        $creatives_count = Creative::whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+        return $creatives_count;
     }
 }

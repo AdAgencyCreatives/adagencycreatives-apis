@@ -123,6 +123,7 @@ class CreativeController extends Controller
 
         $was_is_featured = $creative->is_featured;
         $was_is_welcomed = $creative->is_welcomed;
+        $was_welcome_queued_at = $creative->welcome_queued_at;
 
         $user = User::where( 'id', $creative->user_id )->first();
         $user->update( [
@@ -191,6 +192,9 @@ class CreativeController extends Controller
 
         if ( !$was_is_welcomed && !$was_is_featured && $now_is_featured ) {
 
+            // check if already three creatives have been welcomed or not
+            $creatives_count = Creative::whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
+
             $post = Post::create( [
                 'uuid' => Str::uuid(),
                 'user_id' => 202, // admin/erika
@@ -203,6 +207,7 @@ class CreativeController extends Controller
 
             if ( $post ) {
                 $creative->is_welcomed = true;
+                $creative->welcomed_at = now();
                 $creative->save();
 
                 $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );

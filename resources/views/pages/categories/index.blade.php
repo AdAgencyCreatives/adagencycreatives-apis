@@ -88,8 +88,8 @@
                     '</td>' +
                     '<td>' + category.created_at + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
-
                     '</tr>';
+
                 tbody.append(row);
             });
         }
