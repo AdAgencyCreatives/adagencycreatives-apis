@@ -746,6 +746,7 @@ class TestDataController extends Controller
 
         $completed_fields += (strlen($creative?->title || "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->category?->name || "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->years_of_experience || "") > 0) ? 1 : 0;
 
         $progress = intval(100 * $completed_fields / $required_fields);
 
@@ -754,7 +755,7 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletion(Request $request)
     {
-        $creatives = Creative::all()->take(10)->sortBy('created_at');
+        $creatives = Creative::all()->take(30)->sortBy('created_at');
 
         $output = [];
 
