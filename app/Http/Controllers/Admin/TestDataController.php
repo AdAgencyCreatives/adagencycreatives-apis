@@ -750,12 +750,12 @@ class TestDataController extends Controller
         $completed_fields += (strlen($creative?->industry_experience ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->media_experience ?? "") > 0) ? 1 : 0;
 
-        // $address = $creative?->user?->addresses ? collect($creative?->user->addresses)->firstWhere('label', 'personal') : null;
+        $address = $creative?->user?->addresses ? collect($creative?->user->addresses)->firstWhere('label', 'personal') : null;
 
-        // if ($address) {
-        //     $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
-        //     $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
-        // }
+        if ($address) {
+            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
+        }
 
         $completed_fields += (strlen($creative?->strengths ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->employment_type ?? "") > 0) ? 1 : 0;
