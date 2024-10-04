@@ -738,10 +738,9 @@ class TestDataController extends Controller
         );
     }
 
-    private function getCreativeProfileProgress(Creative $creative) {
-$progress = 0;
-
-return progress;
+    private function getCreativeProfileProgress($creative) {
+        $progress = 0;
+        return $progress;
     }
 
     public function calculateProfileCompletion(Request $request) {
