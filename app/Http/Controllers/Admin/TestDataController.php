@@ -775,7 +775,11 @@ class TestDataController extends Controller
         $output[] = "Creatives: " . count($creatives);
 
         foreach ($creatives as $creative) {
-            $output[] = sprintf("Progress: %d%%", $this->getCreativeProfileProgress($creative)) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
+            $progress = $this->getCreativeProfileProgress($creative);
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
+            $creative->profile_complete_progress = $progress;
+            $creative->profile_completed_at = $progress == 100 ? today() : null;
+            $creative->save();
         }
 
         return implode("\n<br />", $output);
