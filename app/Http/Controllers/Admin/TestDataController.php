@@ -745,7 +745,7 @@ class TestDataController extends Controller
 
         $output[] = "Creatives: " . count($creatives);
         foreach ($creatives as $creative) {
-            $output[] = $creative?->user?->full_name . ", " . $creative->created_at?->format( config( 'global.datetime_format' ) );
+            $output[] = $creative?->created_at?->format( config( 'global.datetime_format' ) ) . ", " . $creative?->user?->full_name;
         }
 
         return implode("\n<br />", $output);
