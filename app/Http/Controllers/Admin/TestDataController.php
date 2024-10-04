@@ -737,4 +737,10 @@ class TestDataController extends Controller
             'next_welcome_creative'=> $next_welcome_creative?->id ?? "",
         );
     }
+
+    public function calculateProfileCompletion(Request $request) {
+        $creatives = Creative::all();
+
+        return "Creatives: " . count($creatives);
+    }
 }

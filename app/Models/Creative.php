@@ -40,6 +40,8 @@ class Creative extends Model
         'is_welcomed',
         'welcome_at',
         'welcome_queued_at',
+        'profile_complete_progress',
+        'profile_completed_at',
     ];
 
     protected $casts = [
