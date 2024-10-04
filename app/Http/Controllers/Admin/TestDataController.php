@@ -741,6 +741,13 @@ class TestDataController extends Controller
     public function calculateProfileCompletion(Request $request) {
         $creatives = Creative::all()->sortBy('created_at');
 
-        return "Creatives: " . count($creatives);
+        $output = [];
+
+        $output[] = "Creatives: " . count($creatives);
+        foreach ($creatives as $creative) {
+            $output[] = $creative->full_name . ", " . $creative->created_at?->format( config( 'global.datetime_format' ) );
+        }
+
+        return implode("\n<br />", $output);
     }
 }
