@@ -631,72 +631,72 @@ class TestDataController extends Controller
     //         '</div>';
     // }
 
-    private function getWelcomePost( $creative )
+    private function getWelcomePost($creative)
     {
         $user = $creative->user;
-        $creative_category = isset( $creative->category ) ? $creative->category->name : null;
-        $creative_location = $this->get_location( $user );
+        $creative_category = isset($creative->category) ? $creative->category->name : null;
+        $creative_location = $this->get_location($user);
 
-        return '<a href="' . env( 'FRONTEND_URL' ) . '/creative/' . $user->username . '">@' . $user->full_name . '</a><br />' .
-        '<div class="welcome-lounge">' .
-        '  <img src="' . env( 'APP_URL' ) . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
-        '  <img class="user_image" src="' . ( isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' ) ) . '" alt="Profile Image" />' .
-        '  <div class="user_info">' .
-        '    <div class="name">' . ( $user->first_name . ' ' . $user->last_name ) . '</div>' .
-        ( $creative_category != null ? ( '    <div class="category">' . $creative_category . '</div>' ) : '' ) .
-        ( $creative_location[ 'state' ] || $creative_location[ 'city' ] ? ( '    <div class="location">' . ( $creative_location[ 'state' ] . ( ( $creative_location[ 'state' ] && $creative_location[ 'city' ] ) ? ', ' : '' ) . $creative_location[ 'city' ] ) . '</div>' ) : '' ) .
-        '  </div>' .
-        '</div>';
+        return '<a href="' . env('FRONTEND_URL') . '/creative/' . $user->username . '">@' . $user->full_name . '</a><br />' .
+            '<div class="welcome-lounge">' .
+            '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
+            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+            '  <div class="user_info">' .
+            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+            ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
+            ($creative_location['state'] || $creative_location['city'] ? ('    <div class="location">' . ($creative_location['state'] . (($creative_location['state'] && $creative_location['city']) ? ', ' : '') . $creative_location['city']) . '</div>') : '') .
+            '  </div>' .
+            '</div>';
     }
 
-    public function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' )
+    public function sendLoungeMentionNotifications($post, $recipient_ids, $send_email = 'yes')
     {
         try {
             $author = $post->user;
-            foreach ( $recipient_ids as $recipient_id ) {
+            foreach ($recipient_ids as $recipient_id) {
 
-                $receiver = User::where( 'uuid', $recipient_id )->first();
+                $receiver = User::where('uuid', $recipient_id)->first();
 
                 $data = array();
-                $data[ 'uuid' ] = Str::uuid();
+                $data['uuid'] = Str::uuid();
 
-                $data[ 'user_id' ] = $receiver->id;
-                $data[ 'type' ] = 'lounge_mention';
-                $data[ 'message' ] = $author->full_name . ' commented on you in his post';
+                $data['user_id'] = $receiver->id;
+                $data['type'] = 'lounge_mention';
+                $data['message'] = $author->full_name . ' commented on you in his post';
 
-                $data[ 'body' ] = array( 'post_id' => $post->id );
+                $data['body'] = array('post_id' => $post->id);
 
-                $notification = Notification::create( $data );
+                $notification = Notification::create($data);
 
                 $group = $post->group;
 
-                $group_url = $group ? ( $group->slug == 'feed' ? env( 'FRONTEND_URL' ) . '/community' : env( 'FRONTEND_URL' ) . '/groups/' . $group->uuid ) : '';
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
 
                 $data = [
                     'data' => [
                         'recipient' => $receiver->first_name,
                         'name' => $author->full_name,
                         'inviter' => $author->full_name,
-                        'inviter_profile_url' => sprintf( '%s/creative/%s', env( 'FRONTEND_URL' ), $author?->username ),
-                        'profile_picture' => get_profile_picture( $author ),
+                        'inviter_profile_url' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $author?->username),
+                        'profile_picture' => get_profile_picture($author),
                         'user' => $author,
                         'group_url' => $group_url,
                         'group' => $group->name,
-                        'post_time' => \Carbon\Carbon::parse( $post->created_at )->diffForHumans(),
+                        'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
                         'notification_uuid' => $notification->uuid,
                     ],
                     'receiver' => $receiver
                 ];
 
-                if ( $send_email == 'yes' ) {
-                    SendEmailJob::dispatch( $data, 'user_mentioned_in_post' );
+                if ($send_email == 'yes') {
+                    SendEmailJob::dispatch($data, 'user_mentioned_in_post');
                 }
             }
-        } catch ( \Exception $e ) {
-            throw new ApiException( $e, 'NS-01' );
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'NS-01');
         }
     }
-    
+
     public function testWelcome(Request $request)
     {
         // $creative_id = $request->has('creative_id') ? $request->creative_id : null;
@@ -721,29 +721,38 @@ class TestDataController extends Controller
         //         $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
         //     }
         // } 
-        
-        $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
-        $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+
+        $today_welcomed_at_creatives_count = Creative::where('is_welcomed', '=', 1)->whereDate('welcomed_at', '=', today()->toDateString())->count('welcomed_at');
+        $previous_welcome_queued_at_creatives_count = Creative::where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->count('welcome_queued_at');
         $next_welcome_creative = null;
 
-        if($today_welcomed_at_creatives_count < 3) {
-            $next_welcome_creative = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->orderBy('welcome_queued_at')->first();
+        if ($today_welcomed_at_creatives_count < 3) {
+            $next_welcome_creative = Creative::where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->orderBy('welcome_queued_at')->first();
         }
-        
+
         return array(
-            'Today' => today()->toDateString(), 
+            'Today' => today()->toDateString(),
             'today_welcomed_at_creatives_count' => $today_welcomed_at_creatives_count,
             'previous_welcome_queued_at_creatives_count' => $previous_welcome_queued_at_creatives_count,
-            'next_welcome_creative'=> $next_welcome_creative?->id ?? "",
+            'next_welcome_creative' => $next_welcome_creative?->id ?? "",
         );
     }
 
-    private function getCreativeProfileProgress($creative) {
+    private function getCreativeProfileProgress($creative)
+    {
         $progress = 0;
+        $required_fields = 10;
+        $completed_fields = 0;
+
+        $completed_fields += (strlen($creative?->title || "") > 0) ? 1 : 0;
+
+        $progress = intval(100 * $completed_fields / $required_fields);
+
         return $progress;
     }
 
-    public function calculateProfileCompletion(Request $request) {
+    public function calculateProfileCompletion(Request $request)
+    {
         $creatives = Creative::all()->take(10)->sortBy('created_at');
 
         $output = [];
@@ -751,7 +760,7 @@ class TestDataController extends Controller
         $output[] = "Creatives: " . count($creatives);
 
         foreach ($creatives as $creative) {
-            $output[] = sprintf("Progress: %03d", $this->getCreativeProfileProgress($creative)) . ", Registered: " .  $creative?->user?->created_at?->format( config( 'global.datetime_format' ) ) . ", " . $creative?->user?->full_name;
+            $output[] = sprintf("Progress: %03d", $this->getCreativeProfileProgress($creative)) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
         }
 
         return implode("\n<br />", $output);
