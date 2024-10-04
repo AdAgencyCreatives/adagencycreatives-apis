@@ -745,6 +745,7 @@ class TestDataController extends Controller
         $completed_fields = 0;
 
         $completed_fields += (strlen($creative?->title || "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->category?->name || "") > 0) ? 1 : 0;
 
         $progress = intval(100 * $completed_fields / $required_fields);
 
