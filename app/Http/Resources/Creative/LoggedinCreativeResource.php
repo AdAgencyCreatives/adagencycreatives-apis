@@ -77,8 +77,10 @@ class LoggedinCreativeResource extends JsonResource
             'updated_at' => $this->created_at->format( config( 'global.datetime_format' ) ),
             'featured_at' => $this->featured_at ? $this->featured_at?->format( config( 'global.datetime_format' ) ) : null,
             'is_welcomed' => $this->is_welcomed,
-            'welcome_at' => $this->welcome_at ? $this->welcome_at?->format( config( 'global.datetime_format' ) ) : null,
+            'welcomed_at' => $this->welcomed_at ? $this->welcomed_at?->format( config( 'global.datetime_format' ) ) : null,
             'welcome_queued_at' => $this->welcome_queued_at ? $this->welcome_queued_at?->format( config( 'global.datetime_format' ) ) : null,
+            'profile_complete_progress' => $this->profile_complete_progress,
+            'profile_completed_at' => $this->profile_completed_at ? $this->profile_completed_at?->format( config( 'global.datetime_format' ) ) : null,
             'logged_in_user' => [
                 'subscription_status' => $subscription_status,
                 'is_friend' => $is_friend,
