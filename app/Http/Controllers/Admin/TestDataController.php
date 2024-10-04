@@ -768,7 +768,7 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletion(Request $request)
     {
-        $creatives = Creative::all()->take(30)->sortBy('created_at');
+        $creatives = Creative::all()->sortBy('created_at');
 
         $output = [];
 
