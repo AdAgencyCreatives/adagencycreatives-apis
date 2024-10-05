@@ -811,6 +811,8 @@ class TestDataController extends Controller
         ];
         if ($request?->has('email') && $request?->email == "yes") {
             SendEmailJob::dispatch($data, 'profile_completion_creative');
+            $creative->profile_completion_reminded_at = today();
+            $creative->save();
         }
 
         return new ProfileCompletionCreative($data['data']);
