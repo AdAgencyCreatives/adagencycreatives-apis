@@ -7,6 +7,7 @@ use App\Mail\Account\AccountApprovedAgency;
 use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
+use App\Mail\Account\ProfileCompletionCreative;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
 use App\Mail\Application\JobClosed;
@@ -83,7 +84,8 @@ class SendEmailJob implements ShouldQueue
 
             'job_approved_alert_all_subscribers',
             'application_removed_by_agency',
-            'new_candidate_application'
+            'new_candidate_application',
+            'profile_completion_creative',
         ];
 
         // Check if the current email type is in the array and update the receiver's email
@@ -226,6 +228,10 @@ class SendEmailJob implements ShouldQueue
                  */
             case 'user_mentioned_in_post':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new LoungeMention($this->data['data']));
+                break;
+
+            case 'profile_completion_creative':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionCreative($this->data['data']));
                 break;
 
             default:

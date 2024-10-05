@@ -8,6 +8,7 @@ use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Jobs\SendEmailJob;
+use App\Mail\Account\ProfileCompletionCreative;
 use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
 use App\Mail\Message\UnreadMessage;
@@ -783,5 +784,25 @@ class TestDataController extends Controller
         }
 
         return implode("\n<br />", $output);
+    }
+
+    public function previewProfileCompletionEmail(Request $request)
+    {
+        $creatives = Creative::whereNull('profile_completed_at')->sortBy('created_at')->take(1);
+
+        $creative = $creatives[0];
+
+        $data = [
+            'data' => [
+                'first_name' => $creative?->user?->first_name ?? '',
+                'category_name' => $creative?->category?->name ?? '',
+            ],
+            'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
+        ];
+        if ($request?->has('email') && $request?->email == "yes") {
+            SendEmailJob::dispatch($data, 'profile_completion_creative');
+        }
+
+        return new ProfileCompletionCreative($data);
     }
 }
