@@ -790,6 +790,8 @@ class TestDataController extends Controller
     {
         $creative = Creative::whereNull('profile_completed_at')->orderBy('created_at')->take(1)->first();
 
+        return json_encode($creative);
+
         $data = [
             'data' => [
                 'first_name' => $creative?->user?->first_name ?? '',
