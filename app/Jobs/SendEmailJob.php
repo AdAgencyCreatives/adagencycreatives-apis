@@ -7,7 +7,7 @@ use App\Mail\Account\AccountApprovedAgency;
 use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
-use App\Mail\Account\ProfileCompletionCreative;
+use App\Mail\Account\ProfileCompletionCreativeReminder;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
 use App\Mail\Application\JobClosed;
@@ -231,7 +231,7 @@ class SendEmailJob implements ShouldQueue
                 break;
 
             case 'profile_completion_creative':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionCreative($this->data['data']));
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionCreativeReminder($this->data['data']));
                 break;
 
             default:

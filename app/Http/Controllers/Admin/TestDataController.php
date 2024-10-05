@@ -8,7 +8,7 @@ use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Jobs\SendEmailJob;
-use App\Mail\Account\ProfileCompletionCreative;
+use App\Mail\Account\ProfileCompletionCreativeReminder;
 use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
 use App\Mail\Message\UnreadMessage;
@@ -815,6 +815,6 @@ class TestDataController extends Controller
             $creative->save();
         }
 
-        return new ProfileCompletionCreative($data['data']);
+        return new ProfileCompletionCreativeReminder($data['data']);
     }
 }
