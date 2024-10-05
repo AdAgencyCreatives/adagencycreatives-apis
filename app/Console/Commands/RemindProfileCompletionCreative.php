@@ -22,6 +22,14 @@ class RemindProfileCompletionCreative extends Command
 
         try {
             $this->info($this->description);
+
+            $creatives = Creative::whereNull('profile_completed_at')
+                ->whereNull('profile_completion_reminded_at')
+                ->orderBy('created_at')
+                ->take(30)
+                ->get();
+
+            $this->info("Creatives to process: " . count($creatives));
         } catch (\Exception $e) {
             $this->info($e->getMessage());
         }
