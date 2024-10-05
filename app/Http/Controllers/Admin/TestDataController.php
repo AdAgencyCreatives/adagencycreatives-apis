@@ -789,7 +789,7 @@ class TestDataController extends Controller
     public function profileCompletionCreative(Request $request)
     {
         if ($request->has('user_id')) {
-            $creative = Creative::whereHas('user', function ($q) {
+            $creative = Creative::whereHas('user', function ($q) use ($request) {
                 $q->where('id', '=', $request->user_id);
             })->first();
         } else {
