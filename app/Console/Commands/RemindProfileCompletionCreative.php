@@ -29,7 +29,29 @@ class RemindProfileCompletionCreative extends Command
                 ->take(30)
                 ->get();
 
-            $this->info("Creatives to process: " . count($creatives));
+            $creatives_to_process = count($creatives);
+            $creatives_processed = 0;
+
+            $this->info("Creatives to process: " . $creatives_to_process);
+
+            try {
+                foreach ($creatives as $creative) {
+                    $data = [
+                        'data' => [
+                            'first_name' => $creative?->user?->first_name ?? '',
+                            'category_name' => $creative?->category?->name ?? '',
+                        ],
+                        'receiver' => $creative?->user,
+                    ];
+                    SendEmailJob::dispatch($data, 'profile_completion_creative');
+                    $creative->profile_completion_reminded_at = today();
+                    $creative->save();
+                    $creatives_processed += 1;
+                }
+            } catch (\Throwable $th) {
+            }
+
+            $this->info("Creatives processed: " . $creatives_processed);
         } catch (\Exception $e) {
             $this->info($e->getMessage());
         }
