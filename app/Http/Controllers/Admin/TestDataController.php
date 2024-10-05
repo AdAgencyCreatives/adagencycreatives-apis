@@ -788,7 +788,7 @@ class TestDataController extends Controller
 
     public function profileCompletionCreative(Request $request)
     {
-        $creatives = Creative::whereNull('profile_completed_at')->sortBy('created_at')->take(1);
+        $creatives = Creative::whereNull('profile_completed_at')->orderBy('created_at')->take(1);
 
         $creative = $creatives[0];
 
