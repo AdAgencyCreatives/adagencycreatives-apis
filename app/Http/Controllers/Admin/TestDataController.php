@@ -786,7 +786,7 @@ class TestDataController extends Controller
         return implode("\n<br />", $output);
     }
 
-    public function previewProfileCompletionEmail(Request $request)
+    public function profileCompletionCreative(Request $request)
     {
         $creatives = Creative::whereNull('profile_completed_at')->sortBy('created_at')->take(1);
 
