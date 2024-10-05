@@ -31,4 +31,30 @@
                             lean on your community. Experience a better way to network with fellow Ad Agency Creatives.
                         </p>
 
+                        <p>
+                            If you like it, tell us, and tell others. Others will tell their agencies.
+                            Agencies will post jobs, recruiters will network, and life runs smooth again,
+                            for creatives and agencies. Not a bad goal. It’s a better way to get back to work.
+                        </p>
+
+                        <p>
+                            We get you… New is always a little frightful. Jumping in with both feet can be scary.
+                            So, if that is not you, right now, go to your profile.
+                            Scroll down to Show my profile and select hide.
+                            Yeah, we included a hide your profile feature.
+                            We know there are times when you want off the grid to new prospective employers.
+                            Pretty cool, huh. Don’t forget to change it back to show your profile when you take it for a
+                            spin.
+                        </p>
+
+                        <p>
+                            Help us, help you. Good or bad, tell us <a
+                                href="{{ sprintf('%s/community', $data['FRONTEND_URL']) }}"
+                                target="_blank">@AdAgencyCreatives</a>.
+                        </p>
+
+                        <p>
+                            🤞 🤟 ✌
+                        </p>
+
                         @include('emails.includes.jobboard_footer')
