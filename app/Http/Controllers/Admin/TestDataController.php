@@ -790,8 +790,6 @@ class TestDataController extends Controller
     {
         $creative = Creative::whereNull('profile_completed_at')->orderBy('created_at')->take(1)->first();
 
-        return json_encode($creative?->user);
-
         $data = [
             'data' => [
                 'first_name' => $creative?->user?->first_name ?? '',
@@ -803,6 +801,6 @@ class TestDataController extends Controller
             SendEmailJob::dispatch($data, 'profile_completion_creative');
         }
 
-        return new ProfileCompletionCreative($data);
+        return new ProfileCompletionCreative($data['data']);
     }
 }
