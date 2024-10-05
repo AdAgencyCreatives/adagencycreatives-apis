@@ -415,3 +415,4 @@ Route::get('/test-creative-search', [TestDataController::class, 'testCreativeSea
 Route::get('/test-skip-job-alerts-for-repost-jobs', [TestDataController::class, 'testSkipJobAlertsForRepostJobs'])->name('test-skip-job-alerts-for-repost-jobs');
 Route::get('/test-data-url', [TestDataController::class, 'testDataUrl'])->name('test-data-url');
 Route::get('/calculate-profile-completion', [TestDataController::class, 'calculateProfileCompletion'])->name('calculate-profile-completion');
+Route::get('/profile-completion-creative', [TestDataController::class, 'profileCompletionCreative'])->name('profile-completion-creative');
