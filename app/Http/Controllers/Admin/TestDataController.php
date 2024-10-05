@@ -797,7 +797,7 @@ class TestDataController extends Controller
                 'first_name' => $creative?->user?->first_name ?? '',
                 'category_name' => $creative?->category?->name ?? '',
             ],
-            'receiver' => User::where('email', env('ADMIN_EMAIL'))->first()
+            'receiver' => $creative?->user,
         ];
         if ($request?->has('email') && $request?->email == "yes") {
             SendEmailJob::dispatch($data, 'profile_completion_creative');
