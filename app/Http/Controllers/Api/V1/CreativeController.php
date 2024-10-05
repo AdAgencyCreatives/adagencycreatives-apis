@@ -89,15 +89,15 @@ class CreativeController extends Controller
 
         if ($role == 'creative') {
             $creatives = Creative::whereIn('id', $combinedCreativeIds)
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
-            })
-            ->orderByRaw($rawOrder)
-            ->orderByDesc('is_featured')
-            ->orderBy('created_at')
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
+                ->whereHas('user', function ($query) {
+                    $query->where('is_visible', 1)
+                        ->where('status', 1);
+                })
+                ->orderByRaw($rawOrder)
+                ->orderByDesc('is_featured')
+                ->orderBy('created_at')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
         } else {
             $creatives = Creative::whereIn('id', $combinedCreativeIds)
                 ->whereHas('user', function ($query) use ($agency_user_applicants) {
@@ -723,11 +723,11 @@ class CreativeController extends Controller
             'user.personal_phone',
             'category',
         ])
-        ->whereHas('user', function ($query) {
-            $query->where('is_visible', 1)
-                ->where('status', 1);
-        })
-        ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
         return new HomepageCreativeCollection($creatives);
@@ -773,6 +773,33 @@ class CreativeController extends Controller
         return new CreativeResource($creative);
     }
 
+    private function getCreativeProfileProgress($creative)
+    {
+        $progress = 0;
+        $required_fields = 10;
+        $completed_fields = 0;
+
+        $completed_fields += (strlen($creative?->title ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->category?->name ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->years_of_experience ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->industry_experience ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->media_experience ?? "") > 0) ? 1 : 0;
+
+        $address = $creative?->user?->addresses ? collect($creative?->user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
+        }
+
+        $completed_fields += (strlen($creative?->strengths ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->employment_type ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($creative?->about ?? "") > 0) ? 1 : 0;
+
+        $progress = intval(100 * $completed_fields / $required_fields);
+
+        return $progress;
+    }
 
     public function update(UpdateCreativeRequest $request, $uuid)
     {
@@ -796,6 +823,10 @@ class CreativeController extends Controller
         }
 
         $now_is_featured = $creative->is_featured;
+
+        $progress = $this->getCreativeProfileProgress($creative);
+        $creative->profile_complete_progress = $progress;
+        $creative->profile_completed_at = $progress == 100 ? today() : null;
 
         $creative_updated = $creative->save();
         if ($creative_updated) {
