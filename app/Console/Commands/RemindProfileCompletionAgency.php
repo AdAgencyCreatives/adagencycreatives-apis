@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class RemindProfileCompletionAgency extends Command
 {
-    protected $signature = 'remind-profile-completion-creative';
+    protected $signature = 'remind-profile-completion-agency';
 
     protected $description = "Remind's Profile Completion for Agency";
 
@@ -40,6 +40,7 @@ class RemindProfileCompletionAgency extends Command
                     $data = [
                         'data' => [
                             'first_name' => $user?->first_name ?? '',
+                            'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $user?->username),
                         ],
                         'receiver' => $user,
                     ];
