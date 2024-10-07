@@ -803,7 +803,9 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionCreative(Request $request)
     {
-        $creatives = Creative::all()->sortBy('created_at');
+        $creatives = Creative::whereHas('user', function ($q) {
+            $q->where('role', '=', 4)->orderBy('created_at');
+        })->get();
 
         $output = [];
 
@@ -828,7 +830,9 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionAgency(Request $request)
     {
-        $agencies = Agency::all()->sortBy('created_at');
+        $agencies = Agency::whereHas('user', function ($q) {
+            $q->where('role', '=', 3)->orderBy('created_at');
+        })->get();
 
         $output = [];
 
