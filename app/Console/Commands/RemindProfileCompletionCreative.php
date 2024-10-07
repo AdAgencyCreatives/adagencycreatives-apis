@@ -26,7 +26,7 @@ class RemindProfileCompletionCreative extends Command
             $users = User::where('role', '=', 4)->whereNull('profile_completed_at')
                 ->whereNull('profile_completion_reminded_at')
                 ->orderBy('created_at')
-                ->take(30)
+                ->take(10)
                 ->get();
 
             $users_to_process = count($users);
