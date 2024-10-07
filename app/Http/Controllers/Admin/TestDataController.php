@@ -850,7 +850,7 @@ class TestDataController extends Controller
         $data = [
             'data' => [
                 'first_name' => $agency?->user?->first_name ?? '',
-                'category_name' => $agency?->category?->name ?? '',
+                'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $agency->user?->username),
             ],
             'receiver' => $agency?->user,
         ];
