@@ -48,9 +48,9 @@ class RemindProfileCompletionAgency extends Command
                     $user->profile_completion_reminded_at = today();
                     $user->save();
                     $users_processed += 1;
-                    $this->info("Reminded Agency: " . $user?->full_name);
+                    $this->info("Reminded Agency: " . $user?->full_name . " - " . $user?->agency?->name);
                 } catch (\Throwable $th) {
-                    $this->info("Failed Reminding Agency: " . $user?->full_name);
+                    $this->info("Failed Reminding Agency: " . $user?->full_name . " - " . $user?->agency?->name);
                 }
             }
 
