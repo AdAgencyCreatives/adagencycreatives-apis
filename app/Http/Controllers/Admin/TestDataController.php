@@ -776,12 +776,14 @@ class TestDataController extends Controller
         $output[] = "Creatives: " . count($creatives);
 
         foreach ($creatives as $creative) {
+            if (!$creative->user) {
+                continue;
+            }
+
             $progress = $this->getCreativeProfileProgress($creative);
             $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
 
-            $user = User::whereHas('user', function ($q) use ($creative) {
-                $q->where('uuid', '=', $creative->user->uuid);
-            })->first();
+            $user = User::where('uuid', '=', $creative->user->uuid)->first();
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
             $user->save();
