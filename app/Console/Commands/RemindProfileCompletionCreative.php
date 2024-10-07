@@ -23,35 +23,35 @@ class RemindProfileCompletionCreative extends Command
         try {
             $this->info($this->description);
 
-            $creatives = Creative::whereNull('profile_completed_at')
+            $users = User::where('role', '=', 4)->whereNull('profile_completed_at')
                 ->whereNull('profile_completion_reminded_at')
                 ->orderBy('created_at')
                 ->take(30)
                 ->get();
 
-            $creatives_to_process = count($creatives);
-            $creatives_processed = 0;
+            $users_to_process = count($users);
+            $users_processed = 0;
 
-            $this->info("Creatives to process: " . $creatives_to_process);
+            $this->info("Creatives to process: " . $users_to_process);
 
             try {
-                foreach ($creatives as $creative) {
+                foreach ($users as $user) {
                     $data = [
                         'data' => [
-                            'first_name' => $creative?->user?->first_name ?? '',
-                            'category_name' => $creative?->category?->name ?? '',
+                            'first_name' => $user?->first_name ?? '',
+                            'category_name' => $user?->creative?->category?->name ?? '',
                         ],
-                        'receiver' => $creative?->user,
+                        'receiver' => $user,
                     ];
                     SendEmailJob::dispatch($data, 'profile_completion_creative');
-                    $creative->profile_completion_reminded_at = today();
-                    $creative->save();
-                    $creatives_processed += 1;
+                    $user->profile_completion_reminded_at = today();
+                    $user->save();
+                    $users_processed += 1;
                 }
             } catch (\Throwable $th) {
             }
 
-            $this->info("Creatives processed: " . $creatives_processed);
+            $this->info("Creatives processed: " . $users_processed);
         } catch (\Exception $e) {
             $this->info($e->getMessage());
         }
