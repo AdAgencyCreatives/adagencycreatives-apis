@@ -834,7 +834,7 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionAgency(Request $request)
     {
-        $agencies = Agency::all()->sortBy('created_at')->take(10);
+        $agencies = Agency::all()->sortBy('created_at');
 
         $output = [];
 
