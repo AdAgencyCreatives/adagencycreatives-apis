@@ -35,8 +35,8 @@ class RemindProfileCompletionAgency extends Command
 
             $this->info("Agencies to process: " . $users_to_process);
 
-            try {
-                foreach ($users as $user) {
+            foreach ($users as $user) {
+                try {
                     $data = [
                         'data' => [
                             'first_name' => $user?->first_name ?? '',
@@ -48,8 +48,10 @@ class RemindProfileCompletionAgency extends Command
                     $user->profile_completion_reminded_at = today();
                     $user->save();
                     $users_processed += 1;
+                    $this->info("Reminded Agency: " . $user?->full_name);
+                } catch (\Throwable $th) {
+                    $this->info("Failed Reminding Agency: " . $user?->full_name);
                 }
-            } catch (\Throwable $th) {
             }
 
             $this->info("Agencies processed: " . $users_processed);

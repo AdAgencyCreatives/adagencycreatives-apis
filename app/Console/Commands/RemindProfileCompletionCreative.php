@@ -35,8 +35,8 @@ class RemindProfileCompletionCreative extends Command
 
             $this->info("Creatives to process: " . $users_to_process);
 
-            try {
-                foreach ($users as $user) {
+            foreach ($users as $user) {
+                try {
                     $data = [
                         'data' => [
                             'first_name' => $user?->first_name ?? '',
@@ -48,8 +48,10 @@ class RemindProfileCompletionCreative extends Command
                     $user->profile_completion_reminded_at = today();
                     $user->save();
                     $users_processed += 1;
+                    $this->info("Reminded Creative: " . $user?->full_name);
+                } catch (\Throwable $th) {
+                    $this->info("Failed Reminding Creative: " . $user?->full_name);
                 }
-            } catch (\Throwable $th) {
             }
 
             $this->info("Creatives processed: " . $users_processed);
