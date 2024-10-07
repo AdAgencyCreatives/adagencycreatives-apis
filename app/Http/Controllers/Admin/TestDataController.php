@@ -9,9 +9,11 @@ use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
 use App\Jobs\SendEmailJob;
 use App\Mail\Account\ProfileCompletionCreativeReminder;
+use App\Mail\Account\ProfileCompletionAgencyReminder;
 use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
 use App\Mail\Message\UnreadMessage;
+use App\Models\Agency;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Category;
@@ -825,5 +827,40 @@ class TestDataController extends Controller
         }
 
         return new ProfileCompletionCreativeReminder($data['data']);
+    }
+
+    public function profileCompletionAgency(Request $request)
+    {
+        if ($request->has('user_id')) {
+            $agency = Agency::whereHas('user', function ($q) use ($request) {
+                $q->where('id', '=', $request->user_id);
+            })->first();
+        } else {
+            $agency = Agency::whereHas('user', function ($q) {
+                $q->whereNull('profile_completed_at')->orderBy('created_at');
+            })->take(1)->first();
+        }
+
+        if (!$agency) {
+            return response()->json([
+                'message' => "Agency not found",
+            ], 500);
+        }
+
+        $data = [
+            'data' => [
+                'first_name' => $agency?->user?->first_name ?? '',
+                'category_name' => $agency?->category?->name ?? '',
+            ],
+            'receiver' => $agency?->user,
+        ];
+        if ($request?->has('email') && $request?->email == "yes") {
+            SendEmailJob::dispatch($data, 'profile_completion_agency');
+            $user = User::where('uuid', '=', $agency->user->uuid)->first();
+            $user->profile_completion_reminded_at = today();
+            $user->save();
+        }
+
+        return new ProfileCompletionAgencyReminder($data['data']);
     }
 }

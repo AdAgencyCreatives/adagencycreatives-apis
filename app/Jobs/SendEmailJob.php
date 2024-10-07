@@ -7,6 +7,7 @@ use App\Mail\Account\AccountApprovedAgency;
 use App\Mail\Account\AccountDenied;
 use App\Mail\Account\NewUserRegistrationAgency;
 use App\Mail\Account\NewUserRegistrationCreative;
+use App\Mail\Account\ProfileCompletionAgencyReminder;
 use App\Mail\Account\ProfileCompletionCreativeReminder;
 use App\Mail\Application\ApplicationSubmitted;
 use App\Mail\Application\Interested;
@@ -86,6 +87,7 @@ class SendEmailJob implements ShouldQueue
             'application_removed_by_agency',
             'new_candidate_application',
             'profile_completion_creative',
+            'profile_completion_agency',
         ];
 
         // Check if the current email type is in the array and update the receiver's email
@@ -232,6 +234,10 @@ class SendEmailJob implements ShouldQueue
 
             case 'profile_completion_creative':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionCreativeReminder($this->data['data']));
+                break;
+
+            case 'profile_completion_agency':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionAgencyReminder($this->data['data']));
                 break;
 
             default:

@@ -4,18 +4,18 @@ namespace App\Console\Commands;
 
 use App\Exceptions\ApiException;
 use App\Jobs\SendEmailJob;
-use App\Models\Creative;
+use App\Models\Agency;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class RemindProfileCompletionCreative extends Command
+class RemindProfileCompletionAgency extends Command
 {
     protected $signature = 'remind-profile-completion-creative';
 
-    protected $description = "Remind's Profile Completion for Creative";
+    protected $description = "Remind's Profile Completion for Agency";
 
     public function handle()
     {
@@ -23,7 +23,7 @@ class RemindProfileCompletionCreative extends Command
         try {
             $this->info($this->description);
 
-            $users = User::where('role', '=', 4)
+            $users = User::where('role', '=', 3)
                 ->whereNull('profile_completed_at')
                 ->whereNull('profile_completion_reminded_at')
                 ->orderBy('created_at')
@@ -33,18 +33,17 @@ class RemindProfileCompletionCreative extends Command
             $users_to_process = count($users);
             $users_processed = 0;
 
-            $this->info("Creatives to process: " . $users_to_process);
+            $this->info("Agencies to process: " . $users_to_process);
 
             try {
                 foreach ($users as $user) {
                     $data = [
                         'data' => [
                             'first_name' => $user?->first_name ?? '',
-                            'category_name' => $user?->creative?->category?->name ?? '',
                         ],
                         'receiver' => $user,
                     ];
-                    SendEmailJob::dispatch($data, 'profile_completion_creative');
+                    SendEmailJob::dispatch($data, 'profile_completion_agency');
                     $user->profile_completion_reminded_at = today();
                     $user->save();
                     $users_processed += 1;
@@ -52,7 +51,7 @@ class RemindProfileCompletionCreative extends Command
             } catch (\Throwable $th) {
             }
 
-            $this->info("Creatives processed: " . $users_processed);
+            $this->info("Agencies processed: " . $users_processed);
         } catch (\Exception $e) {
             $this->info($e->getMessage());
         }
