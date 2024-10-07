@@ -772,7 +772,7 @@ class TestDataController extends Controller
     private function getAgencyProfileProgress($agency): int
     {
         $progress = 0;
-        $required_fields = 16;
+        $required_fields = 15;
         $completed_fields = 0;
 
         $completed_fields +=  strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
