@@ -779,6 +779,13 @@ class TestDataController extends Controller
         $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
         $completed_fields +=  $agency?->user?->agency_website_link && strlen($agency->user->agency_website_link->url) > 0 ? 1 : 0;
 
+        $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
+        }
+
         // agency_website_link
         // if ($agency?->links) {
         //     foreach ($$agency->links as $link) {
@@ -792,12 +799,7 @@ class TestDataController extends Controller
         // $completed_fields += (strlen($agency?->industry_experience ?? "") > 0) ? 1 : 0;
         // $completed_fields += (strlen($agency?->media_experience ?? "") > 0) ? 1 : 0;
 
-        // $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'personal') : null;
 
-        // if ($address) {
-        //     $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
-        //     $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
-        // }
 
         // $completed_fields += (strlen($agency?->strengths ?? "") > 0) ? 1 : 0;
         // $completed_fields += (strlen($agency?->employment_type ?? "") > 0) ? 1 : 0;
