@@ -799,7 +799,9 @@ class TestDataController extends Controller
                 $q->where('id', '=', $request->user_id);
             })->first();
         } else {
-            $creative = Creative::whereHas('user')->whereNull('profile_completed_at')->orderBy('created_at')->take(1)->first();
+            $creative = Creative::whereHas('user', function($q){
+                $q->whereNull('profile_completed_at')->orderBy('created_at');
+            }{})->take(1)->first();
         }
 
         if (!$creative) {
@@ -817,8 +819,9 @@ class TestDataController extends Controller
         ];
         if ($request?->has('email') && $request?->email == "yes") {
             SendEmailJob::dispatch($data, 'profile_completion_creative');
-            $creative->profile_completion_reminded_at = today();
-            $creative->save();
+            $user = User::where('uuid', '=', $creative->user->uuid)->first();
+            $user->profile_completion_reminded_at = today();
+            $user->save();
         }
 
         return new ProfileCompletionCreativeReminder($data['data']);
