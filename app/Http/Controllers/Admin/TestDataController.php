@@ -779,7 +779,7 @@ class TestDataController extends Controller
         $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
         $completed_fields +=  $agency?->user?->agency_website_link && strlen($agency->user->agency_website_link->url) > 0 ? 1 : 0;
 
-        $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'personal') : null;
+        $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'business') : null;
 
         if ($address) {
             $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
