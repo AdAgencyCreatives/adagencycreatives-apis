@@ -778,9 +778,9 @@ class TestDataController extends Controller
         foreach ($creatives as $creative) {
             $progress = $this->getCreativeProfileProgress($creative);
             $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
-            $creative->profile_complete_progress = $progress;
-            $creative->profile_completed_at = $progress == 100 ? today() : null;
-            $creative->save();
+            $creative->user->profile_complete_progress = $progress;
+            $creative->user->profile_completed_at = $progress == 100 ? today() : null;
+            $creative->user->save();
         }
 
         return implode("\n<br />", $output);

@@ -33,6 +33,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
         $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
 
+        $schedule->command('remind-profile-completion-creative')->dailyAt("10:00");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("11:00");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("12:00");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("13:00");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("14:00");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("15:00");
     }
 
     /**
