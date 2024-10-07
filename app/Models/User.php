@@ -115,6 +115,11 @@ class User extends Authenticatable
         return $this->hasOne(Attachment::class)->where('resource_type', 'website_preview')->latest();
     }
 
+    public function agency_website_link()
+    {
+        return $this->hasOne(Link::class)->where('label', 'website');
+    }
+
     public function agency()
     {
         return $this->hasOne(Agency::class);

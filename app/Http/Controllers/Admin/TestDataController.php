@@ -777,8 +777,9 @@ class TestDataController extends Controller
 
         $completed_fields +=  $agency?->user?->agency_logo && strlen($agency->user->agency_logo->path) > 0 ? 1 : 0;
 
-        // $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
 
+        // agency_website_link
         // if ($agency?->links) {
         //     foreach ($$agency->links as $link) {
         //         if ($link->label == "website" && strlen($link->url) > 0) {
