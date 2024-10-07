@@ -46,6 +46,9 @@ class AgencyResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
+            'profile_complete_progress' => $user?->profile_complete_progress ?? '0',
+            'profile_completed_at' => $user?->profile_completed_at ? $this->profile_completed_at?->format(config('global.datetime_format')) : null,
+            'profile_completion_reminded_at' => $user?->profile_completion_reminded_at ? $this->profile_completion_reminded_at?->format(config('global.datetime_format')) : null,
         ];
     }
 

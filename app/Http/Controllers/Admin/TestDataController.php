@@ -769,7 +769,45 @@ class TestDataController extends Controller
         return $progress;
     }
 
-    public function calculateProfileCompletion(Request $request)
+    private function getAgencyProfileProgress($agency): int
+    {
+        $progress = 0;
+        $required_fields = 17;
+        $completed_fields = 0;
+
+        $completed_fields +=  $agency?->user?->agency_logo && strlen($agency->user->agency_logo->path) > 0 ? 1 : 0;
+
+        // $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
+
+        // if ($agency?->links) {
+        //     foreach ($$agency->links as $link) {
+        //         if ($link->label == "website" && strlen($link->url) > 0) {
+        //             $completed_fields += 1;
+        //         }
+        //     }
+        // }
+
+        // $completed_fields += (strlen($agency?->years_of_experience ?? "") > 0) ? 1 : 0;
+        // $completed_fields += (strlen($agency?->industry_experience ?? "") > 0) ? 1 : 0;
+        // $completed_fields += (strlen($agency?->media_experience ?? "") > 0) ? 1 : 0;
+
+        // $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'personal') : null;
+
+        // if ($address) {
+        //     $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+        //     $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
+        // }
+
+        // $completed_fields += (strlen($agency?->strengths ?? "") > 0) ? 1 : 0;
+        // $completed_fields += (strlen($agency?->employment_type ?? "") > 0) ? 1 : 0;
+        // $completed_fields += (strlen($agency?->about ?? "") > 0) ? 1 : 0;
+
+        $progress = intval(100 * $completed_fields / $required_fields);
+
+        return $progress;
+    }
+
+    public function calculateProfileCompletionCreative(Request $request)
     {
         $creatives = Creative::all()->sortBy('created_at');
 
@@ -786,6 +824,31 @@ class TestDataController extends Controller
             $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
 
             $user = User::where('uuid', '=', $creative->user->uuid)->first();
+            $user->profile_complete_progress = $progress;
+            $user->profile_completed_at = $progress == 100 ? today() : null;
+            $user->save();
+        }
+
+        return implode("\n<br />", $output);
+    }
+
+    public function calculateProfileCompletionAgency(Request $request)
+    {
+        $agencies = Agency::all()->sortBy('created_at')->take(10);
+
+        $output = [];
+
+        $output[] = "Agencies: " . count($agencies);
+
+        foreach ($agencies as $agency) {
+            if (!$agency->user) {
+                continue;
+            }
+
+            $progress = $this->getAgencyProfileProgress($agency);
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $agency?->user?->created_at?->format(config('global.datetime_format')) . ", " . $agency?->user?->full_name;
+
+            $user = User::where('uuid', '=', $agency->user->uuid)->first();
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
             $user->save();

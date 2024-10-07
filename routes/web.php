@@ -414,6 +414,7 @@ Route::get('/test-new-application', [TestDataController::class, 'testNewApplicat
 Route::get('/test-creative-search', [TestDataController::class, 'testCreativeSearch'])->name('test-creative-search');
 Route::get('/test-skip-job-alerts-for-repost-jobs', [TestDataController::class, 'testSkipJobAlertsForRepostJobs'])->name('test-skip-job-alerts-for-repost-jobs');
 Route::get('/test-data-url', [TestDataController::class, 'testDataUrl'])->name('test-data-url');
-Route::get('/calculate-profile-completion', [TestDataController::class, 'calculateProfileCompletion'])->name('calculate-profile-completion');
+Route::get('/calculate-profile-completion-creative', [TestDataController::class, 'calculateProfileCompletionCreative'])->name('calculate-profile-completion-creative');
+Route::get('/calculate-profile-completion-agency', [TestDataController::class, 'calculateProfileCompletionAgency'])->name('calculate-profile-completion-agency');
 Route::get('/profile-completion-creative', [TestDataController::class, 'profileCompletionCreative'])->name('profile-completion-creative');
 Route::get('/profile-completion-agency', [TestDataController::class, 'profileCompletionAgency'])->name('profile-completion-agency');

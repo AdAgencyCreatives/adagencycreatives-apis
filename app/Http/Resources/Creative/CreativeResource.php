@@ -66,9 +66,9 @@ class CreativeResource extends JsonResource
             'is_welcomed' => $this->is_welcomed,
             'welcomed_at' => $this->welcomed_at ? $this->welcomed_at?->format(config('global.datetime_format')) : null,
             'welcome_queued_at' => $this->welcome_queued_at ? $this->welcome_queued_at?->format(config('global.datetime_format')) : null,
-            'profile_complete_progress' => $this->profile_complete_progress,
-            'profile_completed_at' => $this->profile_completed_at ? $this->profile_completed_at?->format(config('global.datetime_format')) : null,
-            'profile_completion_reminded_at' => $this->profile_completion_reminded_at ? $this->profile_completion_reminded_at?->format(config('global.datetime_format')) : null,
+            'profile_complete_progress' => $user?->profile_complete_progress ?? '0',
+            'profile_completed_at' => $user?->profile_completed_at ? $this->profile_completed_at?->format(config('global.datetime_format')) : null,
+            'profile_completion_reminded_at' => $user?->profile_completion_reminded_at ? $this->profile_completion_reminded_at?->format(config('global.datetime_format')) : null,
             'reviews' => $this->get_reviews($user),
         ];
     }
