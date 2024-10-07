@@ -779,7 +779,7 @@ class TestDataController extends Controller
             $progress = $this->getCreativeProfileProgress($creative);
             $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
 
-            $user = User::where('id', '=', $creative->user->id);
+            $user = User::where('id', '=', $creative->user->id)->first();
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
             $user->save();
