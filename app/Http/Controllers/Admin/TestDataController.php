@@ -775,9 +775,9 @@ class TestDataController extends Controller
         $required_fields = 17;
         $completed_fields = 0;
 
-        $completed_fields +=  $agency?->user?->agency_logo && strlen($agency->user->agency_logo->path) > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
         $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
-        $completed_fields +=  $agency?->user?->agency_website_link && strlen($agency->user->agency_website_link->url) > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->agency_website_link?->url ?? '') > 0 ? 1 : 0;
 
         $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'business') : null;
         if ($address) {
@@ -785,7 +785,10 @@ class TestDataController extends Controller
             $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
         }
 
-        $completed_fields +=  $agency?->user?->agency_linkedin_link && strlen($agency->user->agency_linkedin_link->url) > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->agency_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->first_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->last_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->business_phone?->phone_number ?? '') > 0 ? 1 : 0;
 
 
         // agency_website_link
