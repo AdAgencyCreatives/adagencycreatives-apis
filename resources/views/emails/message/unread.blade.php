@@ -28,7 +28,7 @@
                                         src="{{ $user['profile_picture'] }}" />
                                 @else
                                     <div
-                                        style="text-transform: uppercase; width: 50px !important; height: 50px !important; margin: 0; margin-right: 10px !important; background-color: #000 !important; color: #fff !important; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 1em; padding: 0;">
+                                        style="display: flex; justify-content: center; align-items: center; text-transform: uppercase; width: 50px !important; height: 50px !important; border-radius: 100%; margin: 0; margin-right: 10px !important; background-color: #000 !important; color: #fff !important; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 1em; padding: 0;">
                                         {{ substr($user['name'], 0, 1) }}
                                     </div>
                                 @endif
