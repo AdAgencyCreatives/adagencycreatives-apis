@@ -33,8 +33,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
         $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
 
-        $schedule->command('remind-profile-completion-creative')->everyFifteenMinutes();
-        $schedule->command('remind-profile-completion-agency')->everyFifteenMinutes();
+        if (env('APP_ENV') == 'staging') {
+            $schedule->command('remind-profile-completion-creative')->everyFifteenMinutes();
+            $schedule->command('remind-profile-completion-agency')->everyFifteenMinutes();
+        }
     }
 
     /**
