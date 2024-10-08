@@ -22,9 +22,16 @@
                         style="display: flex; gap: 15px; margin-bottom: 5px;">
                         <div class="candidate-thumbnail">
                             <div class="candidate-logo">
-                                <img width="50" height="50"
-                                    style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
-                                    src="{{ $user['profile_picture'] }}" />
+                                @if (strlen($user['profile_picture'] ?? '') > 0)
+                                    <img width="50" height="50"
+                                        style="border-radius: 100% !important; height: 50px !important; width: 50px !important; margin-right: 10px; object-fit:cover !important"
+                                        src="{{ $user['profile_picture'] }}" />
+                                @else
+                                    <div
+                                        style="text-transform: uppercase; width: 50px !important; height: 50px !important; margin: 0; margin-right: 10px !important; background-color: #000 !important; color: #fff !important; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 1em; padding: 0;">
+                                        {{ substr($user['name'], 0, 1) }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
