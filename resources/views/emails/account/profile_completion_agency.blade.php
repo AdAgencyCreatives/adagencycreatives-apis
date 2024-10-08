@@ -23,13 +23,13 @@
 
                         <p>
                             When you are entering your profile,
-                            we invite you to post your first creative job opportunity with our talented creative users.
+                            we invite you to post your first creative job opportunity.
                             Experience a better way for your team to source creative talent solutions.
                             A community in a network.
                         </p>
 
                         <p>
-                            Help us, help you. Good or bad, tell us <a
+                            Help us help you. Good or bad, let us know <a
                                 href="mailto:membersupport@adagencycreatives.com">membersupport@adagencycreatives.com</a>.
                         </p>
 
