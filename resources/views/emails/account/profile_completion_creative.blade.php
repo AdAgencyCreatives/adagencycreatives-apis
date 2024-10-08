@@ -37,7 +37,7 @@
                         </p>
 
                         <p>
-                            Help us help you. Good or bad, let us <a
+                            Help us help you. Good or bad, let us know <a
                                 href="{{ sprintf('%s/community', $data['FRONTEND_URL']) }}"
                                 target="_blank">@AdAgencyCreatives</a>.
                         </p>
