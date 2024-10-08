@@ -1,7 +1,7 @@
 <p style=""></p>
 <p style="margin-bottom: 0px;">Thanks,</p>
 <p style="margin: 0;">Member Support</p>
-<img width="150" src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo.png"
+<img width="150" src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-footer.png"
     alt="" />
 <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
 <img class="footer-logo" style="width: 100px; position: absolute; right: 15px; bottom: 15px;"
