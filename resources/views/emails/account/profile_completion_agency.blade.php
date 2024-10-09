@@ -17,8 +17,8 @@
 
                         <p>
                             We noticed your Ad Agency Creatives agency profile is incomplete.
-                            Our community is currently viewing your agency as <a
-                                href="{{ sprintf('%s', $data['profile_url']) }}" target="_blank">profile</a>.
+                            To view your current agency profile click <a
+                                href="{{ sprintf('%s', $data['profile_url']) }}" target="_blank">here</a>.
                         </p>
 
                         <p>
