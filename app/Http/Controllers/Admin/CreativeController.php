@@ -123,12 +123,12 @@ class CreativeController extends Controller
 
         $was_is_featured = $creative->is_featured;
         $was_is_welcomed = $creative->is_welcomed;
-        $was_welcome_queued_at = $creative->welcome_queued_at;
 
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
             'is_visible' => $request->is_visible,
         ]);
+        $user->refresh();
         //Present in users table
 
         $uuid = Str::uuid();
@@ -190,7 +190,7 @@ class CreativeController extends Controller
 
         $this->updateLocation($request, $user);
 
-        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured) {
+        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured && $user->is_visible) {
 
             // check if already three creatives have been welcomed or not
             $today_welcomed_at_creatives_count = Creative::where('is_welcomed', '=', 1)->whereDate('welcomed_at', '=', today()->toDateString())->count('welcomed_at');
