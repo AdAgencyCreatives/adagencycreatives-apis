@@ -24,17 +24,17 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class CreativeController extends Controller
- {
-    public function __construct( protected UserService $userService )
- {
+{
+    public function __construct(protected UserService $userService)
+    {
         $this->userService = $userService;
     }
 
-    private function get_location( $user )
- {
-        $address = $user->addresses ? collect( $user->addresses )->firstWhere( 'label', 'personal' ) : null;
+    private function get_location($user)
+    {
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
 
-        if ( $address ) {
+        if ($address) {
             return [
                 'state_id' => $address->state ? $address->state->uuid : null,
                 'state' => $address->state ? $address->state->name : null,
@@ -51,94 +51,94 @@ class CreativeController extends Controller
         }
     }
 
-    private function getWelcomePost( $creative )
- {
+    private function getWelcomePost($creative)
+    {
         $user = $creative->user;
-        $creative_category = isset( $creative->category ) ? $creative->category->name : null;
-        $creative_location = $this->get_location( $user );
+        $creative_category = isset($creative->category) ? $creative->category->name : null;
+        $creative_location = $this->get_location($user);
 
-        return '<a href="' . env( 'FRONTEND_URL' ) . '/creative/' . $user->username . '">@' . $user->full_name . '</a><br />' .
-        '<div class="welcome-lounge">' .
-        '  <img src="' . env( 'APP_URL' ) . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
-        '  <img class="user_image" src="' . ( isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' ) ) . '" alt="Profile Image" />' .
-        '  <div class="user_info">' .
-        '    <div class="name">' . ( $user->first_name . ' ' . $user->last_name ) . '</div>' .
-        ( $creative_category != null ? ( '    <div class="category">' . $creative_category . '</div>' ) : '' ) .
-        ( $creative_location[ 'state' ] || $creative_location[ 'city' ] ? ( '    <div class="location">' . ( $creative_location[ 'state' ] . ( ( $creative_location[ 'state' ] && $creative_location[ 'city' ] ) ? ', ' : '' ) . $creative_location[ 'city' ] ) . '</div>' ) : '' ) .
-        '  </div>' .
-        '</div>';
+        return '<a href="' . env('FRONTEND_URL') . '/creative/' . ($user?->creative?->slug ?? $user->username) . '">@' . $user->full_name . '</a><br />' .
+            '<div class="welcome-lounge">' .
+            '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
+            '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
+            '  <div class="user_info">' .
+            '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
+            ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
+            ($creative_location['state'] || $creative_location['city'] ? ('    <div class="location">' . ($creative_location['state'] . (($creative_location['state'] && $creative_location['city']) ? ', ' : '') . $creative_location['city']) . '</div>') : '') .
+            '  </div>' .
+            '</div>';
     }
 
-    public function sendLoungeMentionNotifications( $post, $recipient_ids, $send_email = 'yes' )
- {
+    public function sendLoungeMentionNotifications($post, $recipient_ids, $send_email = 'yes')
+    {
         try {
             $author = $post->user;
-            foreach ( $recipient_ids as $recipient_id ) {
+            foreach ($recipient_ids as $recipient_id) {
 
-                $receiver = User::where( 'uuid', $recipient_id )->first();
+                $receiver = User::where('uuid', $recipient_id)->first();
 
                 $data = array();
-                $data[ 'uuid' ] = Str::uuid();
+                $data['uuid'] = Str::uuid();
 
-                $data[ 'user_id' ] = $receiver->id;
-                $data[ 'type' ] = 'lounge_mention';
-                $data[ 'message' ] = $author->full_name . ' commented on you in his post';
+                $data['user_id'] = $receiver->id;
+                $data['type'] = 'lounge_mention';
+                $data['message'] = $author->full_name . ' commented on you in his post';
 
-                $data[ 'body' ] = array( 'post_id' => $post->id );
+                $data['body'] = array('post_id' => $post->id);
 
-                $notification = Notification::create( $data );
+                $notification = Notification::create($data);
 
                 $group = $post->group;
 
-                $group_url = $group ? ( $group->slug == 'feed' ? env( 'FRONTEND_URL' ) . '/community' : env( 'FRONTEND_URL' ) . '/groups/' . $group->uuid ) : '';
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
 
                 $data = [
                     'data' => [
                         'recipient' => $receiver->first_name,
                         'name' => $author->full_name,
                         'inviter' => $author->full_name,
-                        'inviter_profile_url' => sprintf( '%s/creative/%s', env( 'FRONTEND_URL' ), $author?->username ),
-                        'profile_picture' => get_profile_picture( $author ),
+                        'inviter_profile_url' => sprintf('%s/creative/%s', env('FRONTEND_URL'), ($author?->creative?->slug ?? $author->username)),
+                        'profile_picture' => get_profile_picture($author),
                         'user' => $author,
                         'group_url' => $group_url,
                         'group' => $group->name,
-                        'post_time' => \Carbon\Carbon::parse( $post->created_at )->diffForHumans(),
+                        'post_time' => \Carbon\Carbon::parse($post->created_at)->diffForHumans(),
                         'notification_uuid' => $notification->uuid,
                     ],
                     'receiver' => $receiver
                 ];
 
-                if ( $send_email == 'yes' ) {
-                    SendEmailJob::dispatch( $data, 'user_mentioned_in_post' );
+                if ($send_email == 'yes') {
+                    SendEmailJob::dispatch($data, 'user_mentioned_in_post');
                 }
             }
-        } catch ( \Exception $e ) {
-            throw new ApiException( $e, 'NS-01' );
+        } catch (\Exception $e) {
+            throw new ApiException($e, 'NS-01');
         }
     }
 
-    public function update( Request $request, $uuid )
- {
-        $creative = Creative::where( 'uuid', $uuid )->first();
+    public function update(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
 
         $was_is_featured = $creative->is_featured;
         $was_is_welcomed = $creative->is_welcomed;
         $was_welcome_queued_at = $creative->welcome_queued_at;
 
-        $user = User::where( 'id', $creative->user_id )->first();
-        $user->update( [
+        $user = User::where('id', $creative->user_id)->first();
+        $user->update([
             'is_visible' => $request->is_visible,
-        ] );
+        ]);
         //Present in users table
 
         $uuid = Str::uuid();
-        $this->userService->appendWorkplacePreference( $request );
+        $this->userService->appendWorkplacePreference($request);
 
-        $request->merge( [
-            'employment_type' => implode( ',', $request->employment_type ?? [] ),
-        ] );
+        $request->merge([
+            'employment_type' => implode(',', $request->employment_type ?? []),
+        ]);
 
-        $data = $request->only( [
+        $data = $request->only([
             'years_of_experience',
             'employment_type',
             'is_featured',
@@ -148,216 +148,216 @@ class CreativeController extends Controller
             'is_onsite',
             'is_opentorelocation',
             'about',
-        ] );
+        ]);
 
-        if ( $request?->is_featured && !$creative?->is_featured ) {
+        if ($request?->is_featured && !$creative?->is_featured) {
             $creative->featured_at = now();
         }
 
-        if ( $creative?->is_featured && !$request?->is_featured ) {
+        if ($creative?->is_featured && !$request?->is_featured) {
             $creative->featured_at = null;
         }
 
         $now_is_featured = $request?->is_featured;
 
-        foreach ( $data as $key => $value ) {
+        foreach ($data as $key => $value) {
             $creative->$key = $value;
         }
         $creative->save();
 
-        if ( $request->input( 'phone' ) != null ) {
-            $this->updatePhone( $user, $request->input( 'phone' ) );
+        if ($request->input('phone') != null) {
+            $this->updatePhone($user, $request->input('phone'));
         }
 
-        if ( $request->has( 'linkedin' ) && $request->input( 'linkedin' ) != null ) {
-            $this->updateLink( $user, 'linkedin', $request->input( 'linkedin' ) );
+        if ($request->has('linkedin') && $request->input('linkedin') != null) {
+            $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
 
-        if ( $request->has( 'file' ) && is_object( $request->file ) ) {
+        if ($request->has('file') && is_object($request->file)) {
             //Delete Previous picture
-            if ( $user->attachments->where( 'resource_type', 'profile_picture' )->count() ) {
-                Attachment::where( 'user_id', $user->id )->where( 'resource_type', 'profile_picture' )->delete();
+            if ($user->attachments->where('resource_type', 'profile_picture')->count()) {
+                Attachment::where('user_id', $user->id)->where('resource_type', 'profile_picture')->delete();
             }
 
-            $attachment = storeImage( $request, $user->id, 'profile_picture' );
+            $attachment = storeImage($request, $user->id, 'profile_picture');
 
-            if ( isset( $attachment ) && is_object( $attachment ) ) {
-                Attachment::whereId( $attachment->id )->update( [
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
                     'resource_id' => $creative->id,
-                ] );
+                ]);
             }
         }
 
-        $this->updateLocation( $request, $user );
+        $this->updateLocation($request, $user);
 
-        if ( !$was_is_welcomed && !$was_is_featured && $now_is_featured ) {
+        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured) {
 
             // check if already three creatives have been welcomed or not
-            $today_welcomed_at_creatives_count = Creative::where( 'is_welcomed', '=', 1 )->whereDate( 'welcomed_at', '=', today()->toDateString() )->count( 'welcomed_at' );
-            $previous_welcome_queued_at_creatives_count = Creative::where( 'is_welcomed', '=', 0 )->whereNotNull( 'welcome_queued_at' )->count( 'welcome_queued_at' );
+            $today_welcomed_at_creatives_count = Creative::where('is_welcomed', '=', 1)->whereDate('welcomed_at', '=', today()->toDateString())->count('welcomed_at');
+            $previous_welcome_queued_at_creatives_count = Creative::where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->count('welcome_queued_at');
 
-            if ( $today_welcomed_at_creatives_count >= 3 || $previous_welcome_queued_at_creatives_count > 0 ) {
+            if ($today_welcomed_at_creatives_count >= 3 || $previous_welcome_queued_at_creatives_count > 0) {
                 $creative->welcome_queued_at = now();
                 $creative->save();
             } else {
-                $post = Post::create( [
+                $post = Post::create([
                     'uuid' => Str::uuid(),
                     'user_id' => 202, // admin/erika
                     'group_id' => 4, // The Lounge Feed
-                    'content' => $this->getWelcomePost( $creative ),
+                    'content' => $this->getWelcomePost($creative),
                     'status' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ] );
+                ]);
 
-                if ( $post ) {
+                if ($post) {
                     $creative->is_welcomed = true;
                     $creative->welcomed_at = now();
                     $creative->save();
 
-                    $this->sendLoungeMentionNotifications( $post, [ $creative->user->uuid ], 'yes' );
+                    $this->sendLoungeMentionNotifications($post, [$creative->user->uuid], 'yes');
                 }
             }
         }
 
         // dd( $request->all() );
-        Session::flash( 'success', 'Creative updated successfully' );
+        Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
     }
 
-    public function update_qualification( Request $request, $uuid )
- {
-        $creative = Creative::where( 'uuid', $uuid )->first();
-        $user = User::where( 'id', $creative->user_id )->first();
+    public function update_qualification(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
+        $user = User::where('id', $creative->user_id)->first();
         $uuid = Str::uuid();
 
-        if ( $request->input( 'portfolio' ) != null ) {
-            $this->updateLink( $user, 'portfolio', $request->input( 'portfolio' ) );
+        if ($request->input('portfolio') != null) {
+            $this->updateLink($user, 'portfolio', $request->input('portfolio'));
         }
 
-        if ( $request->input( 'linkedin' ) != null ) {
-            $this->updateLink( $user, 'linkedin', $request->input( 'linkedin' ) );
+        if ($request->input('linkedin') != null) {
+            $this->updateLink($user, 'linkedin', $request->input('linkedin'));
         }
 
-        $category = Category::where( 'uuid', $request->category )->first();
-        $creative->update( [
+        $category = Category::where('uuid', $request->category)->first();
+        $creative->update([
             'category_id' => $category->id ?? null,
             'title' => $request->title ?? '',
-            'industry_experience' => '' . implode( ',', array_slice( $request->industry_experience ?? [], 0, 10 ) ) . '',
-            'media_experience' => '' . implode( ',', array_slice( $request->media_experience ?? [], 0, 10 ) ) . '',
-            'strengths' => '' . implode( ',', array_slice( $request->strengths ?? [], 0, 5 ) ) . '',
-        ] );
+            'industry_experience' => '' . implode(',', array_slice($request->industry_experience ?? [], 0, 10)) . '',
+            'media_experience' => '' . implode(',', array_slice($request->media_experience ?? [], 0, 10)) . '',
+            'strengths' => '' . implode(',', array_slice($request->strengths ?? [], 0, 5)) . '',
+        ]);
 
-        if ( $category?->id ) {
-            $cat_ids = array( $category->id );
-            $group_cat_ids = Category::where( 'group_name', '=', $category->name )->get()->pluck( 'id' )->toArray();
-            $cat_ids = array_values( array_merge( $cat_ids, $group_cat_ids ) );
-            foreach ( $cat_ids as $cat_id ) {
-                $alert = JobAlert::where( 'user_id', $user->id )->where( 'category_id', $cat_id )->first();
-                if ( !$alert ) {
-                    JobAlert::create( [
+        if ($category?->id) {
+            $cat_ids = array($category->id);
+            $group_cat_ids = Category::where('group_name', '=', $category->name)->get()->pluck('id')->toArray();
+            $cat_ids = array_values(array_merge($cat_ids, $group_cat_ids));
+            foreach ($cat_ids as $cat_id) {
+                $alert = JobAlert::where('user_id', $user->id)->where('category_id', $cat_id)->first();
+                if (!$alert) {
+                    JobAlert::create([
                         'uuid' => Str::uuid(),
                         'user_id' => $user->id,
                         'category_id' => $cat_id,
                         'status' => 1,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ] );
+                    ]);
                 }
             }
         }
 
-        Session::flash( 'success', 'Creative updated successfully' );
+        Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
     }
 
-    public function update_experience( Request $request, $uuid )
- {
-        $experience_ids = $request->input( 'experience_id' );
-        $titles = $request->input( 'title' );
-        $companies = $request->input( 'company' );
-        $descriptions = $request->input( 'description' );
+    public function update_experience(Request $request, $uuid)
+    {
+        $experience_ids = $request->input('experience_id');
+        $titles = $request->input('title');
+        $companies = $request->input('company');
+        $descriptions = $request->input('description');
 
-        foreach ( $experience_ids as $key => $experience_id ) {
-            $experience = Experience::find( $experience_id );
-            $experience->title = $titles[ $key ];
-            $experience->company = $companies[ $key ];
-            $experience->description = $descriptions[ $key ];
+        foreach ($experience_ids as $key => $experience_id) {
+            $experience = Experience::find($experience_id);
+            $experience->title = $titles[$key];
+            $experience->company = $companies[$key];
+            $experience->description = $descriptions[$key];
             $experience->save();
         }
 
-        Session::flash( 'success', 'Creative updated successfully' );
+        Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
     }
 
-    public function update_education( Request $request, $uuid )
- {
-        $education_ids = $request->input( 'education_id' );
-        $degree = $request->input( 'degree' );
-        $college = $request->input( 'college' );
+    public function update_education(Request $request, $uuid)
+    {
+        $education_ids = $request->input('education_id');
+        $degree = $request->input('degree');
+        $college = $request->input('college');
 
-        foreach ( $education_ids as $key => $education_id ) {
-            $education = Education::find( $education_id );
-            $education->degree = $degree[ $key ];
-            $education->college = $college[ $key ];
+        foreach ($education_ids as $key => $education_id) {
+            $education = Education::find($education_id);
+            $education->degree = $degree[$key];
+            $education->college = $college[$key];
             $education->save();
         }
 
-        Session::flash( 'success', 'Creative updated successfully' );
+        Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
     }
 
-    private function updatePhone( $user, $phone_number )
- {
+    private function updatePhone($user, $phone_number)
+    {
         $country_code = '+1';
 
-        if ( strpos( $phone_number, $country_code ) === 0 ) {
-            $phone_number = substr( $phone_number, strlen( $country_code ) );
-            $phone_number = trim( $phone_number );
+        if (strpos($phone_number, $country_code) === 0) {
+            $phone_number = substr($phone_number, strlen($country_code));
+            $phone_number = trim($phone_number);
         }
 
-        $phone = Phone::where( 'user_id', $user->id )->where( 'label', 'personal' )->first();
-        if ( $phone ) {
-            $phone->update( [ 'country_code' => $country_code, 'phone_number' => $phone_number ] );
+        $phone = Phone::where('user_id', $user->id)->where('label', 'personal')->first();
+        if ($phone) {
+            $phone->update(['country_code' => $country_code, 'phone_number' => $phone_number]);
         } else {
 
-            Phone::create( [
+            Phone::create([
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
                 'label' => 'personal',
                 'country_code' => $country_code,
                 'phone_number' => $phone_number,
-            ] );
+            ]);
         }
     }
 
-    private function updateLink( $user, $label, $url )
- {
-        $link = Link::where( 'user_id', $user->id )->where( 'label', $label )->first();
-        if ( $link ) {
-            $link->update( [ 'url' => $url ] );
+    private function updateLink($user, $label, $url)
+    {
+        $link = Link::where('user_id', $user->id)->where('label', $label)->first();
+        if ($link) {
+            $link->update(['url' => $url]);
         } else {
 
-            Link::create( [
+            Link::create([
                 'uuid' => Str::uuid(),
                 'user_id' => $user->id,
                 'label' => $label,
                 'url' => $url,
-            ] );
+            ]);
         }
     }
 
-    private function updateLocation( $request, $user )
- {
-        $state = Location::where( 'uuid', $request->state )->first();
-        $city = Location::where( 'uuid', $request->city )->first();
+    private function updateLocation($request, $user)
+    {
+        $state = Location::where('uuid', $request->state)->first();
+        $city = Location::where('uuid', $request->city)->first();
         $address = $user->addresses->first();
 
-        if ( !$address ) {
+        if (!$address) {
             $address = new Address();
             $address->uuid = Str::uuid();
             $address->user_id = $user->id;
@@ -365,13 +365,13 @@ class CreativeController extends Controller
             $address->country_id = 1;
         }
 
-        if ( !$state ) {
+        if (!$state) {
             return;
         }
 
         $address->state_id = $state->id;
 
-        if ( $city ) {
+        if ($city) {
             $address->city_id = $city->id;
         } else {
             // If only the state is available, set the city to 0
@@ -381,35 +381,35 @@ class CreativeController extends Controller
         $address->save();
     }
 
-    public function update_seo( Request $request, $uuid )
- {
-        $creative = Creative::where( 'uuid', $uuid )->first();
-        $creative->update( [
+    public function update_seo(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
+        $creative->update([
             'seo_title' => $request->seo_title,
             'seo_description' => $request->seo_description,
-            'seo_keywords' => implode( ',', $request->seo_keywords ? $request->seo_keywords : [] ),
-        ] );
-        Session::flash( 'success', 'Creative updated successfully' );
+            'seo_keywords' => implode(',', $request->seo_keywords ? $request->seo_keywords : []),
+        ]);
+        Session::flash('success', 'Creative updated successfully');
 
         return redirect()->back();
     }
 
-    public function update_website_preview( Request $request, $uuid )
- {
-        $creative = Creative::where( 'uuid', $uuid )->first();
+    public function update_website_preview(Request $request, $uuid)
+    {
+        $creative = Creative::where('uuid', $uuid)->first();
 
-        if ( $request->has( 'file' ) && is_object( $request->file ) ) {
+        if ($request->has('file') && is_object($request->file)) {
             //Delete Previous picture
-            Attachment::where( 'user_id', $creative->user_id )->where( 'resource_type', 'website_preview' )->delete();
-            $attachment = storeImage( $request, $creative->user_id, 'website_preview' );
+            Attachment::where('user_id', $creative->user_id)->where('resource_type', 'website_preview')->delete();
+            $attachment = storeImage($request, $creative->user_id, 'website_preview');
 
-            if ( isset( $attachment ) && is_object( $attachment ) ) {
-                Attachment::whereId( $attachment->id )->update( [
+            if (isset($attachment) && is_object($attachment)) {
+                Attachment::whereId($attachment->id)->update([
                     'resource_id' => $creative->id,
-                ] );
+                ]);
             }
         }
-        Session::flash( 'success', 'Updated successfully' );
+        Session::flash('success', 'Updated successfully');
         return redirect()->back();
     }
 }

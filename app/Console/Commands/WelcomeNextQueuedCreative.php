@@ -109,7 +109,7 @@ class WelcomeNextQueuedCreative extends Command
         $creative_category = isset($creative->category) ? $creative->category->name : null;
         $creative_location = $this->get_location($user);
 
-        return '<a href="' . env('FRONTEND_URL') . '/creative/' . $user->username . '">@' . $user->full_name . '</a><br />' .
+        return '<a href="' . env('FRONTEND_URL') . '/creative/' . ($user?->creative?->slug ?? $user->username) . '">@' . $user->full_name . '</a><br />' .
             '<div class="welcome-lounge">' .
             '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
             '  <img class="user_image" src="' . (isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : asset('assets/img/placeholder.png')) . '" alt="Profile Image" />' .
@@ -149,7 +149,7 @@ class WelcomeNextQueuedCreative extends Command
                         'recipient' => $receiver->first_name,
                         'name' => $author->full_name,
                         'inviter' => $author->full_name,
-                        'inviter_profile_url' => sprintf('%s/creative/%s', env('FRONTEND_URL'), $author?->username),
+                        'inviter_profile_url' => sprintf('%s/creative/%s', env('FRONTEND_URL'), ($author?->creative?->slug ?? $author->username)),
                         'profile_picture' => get_profile_picture($author),
                         'user' => $author,
                         'group_url' => $group_url,
