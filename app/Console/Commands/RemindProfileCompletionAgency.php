@@ -40,7 +40,7 @@ class RemindProfileCompletionAgency extends Command
                     $data = [
                         'data' => [
                             'first_name' => $user?->first_name ?? '',
-                            'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $user?->username),
+                            'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $user?->agency?->slug),
                         ],
                         'receiver' => $user,
                     ];
