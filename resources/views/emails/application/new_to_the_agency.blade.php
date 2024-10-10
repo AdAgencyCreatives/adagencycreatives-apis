@@ -61,5 +61,4 @@
                             @endif
                         </div>
 
-                        <p>We hope this candidate is a strong fit.</p>
                         @include('emails.includes.jobboard_footer')
