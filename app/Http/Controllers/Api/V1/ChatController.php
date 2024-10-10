@@ -148,16 +148,6 @@ class ChatController extends Controller
                     'receiver' => $message?->receiver,
                     'data' => $data,
                 ], 'unread_message');
-
-                $event_data3 = [
-                    'receiver_id' => $request->sender_id,
-                    'message_sender_id' => $request->sender_id,
-                    'message_receiver_id' => $request->receiver_id,
-                    'message' => 'An email notification is sent to ' . $receiver->full_name,
-                    'message_type' => 'conversation_updated',
-                    'message_action' => 'message-sent'
-                ];
-                event(new MessageReceived($event_data3));
             }
 
             return $msg_resource;
