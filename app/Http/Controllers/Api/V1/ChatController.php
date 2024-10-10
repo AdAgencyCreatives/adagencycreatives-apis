@@ -11,6 +11,7 @@ use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Resources\Message\MessageCollection;
 use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\User\UserResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -111,6 +112,30 @@ class ChatController extends Controller
 
             event(new MessageReceived($event_data1));
             event(new MessageReceived($event_data2));
+
+            if ($message?->receiver?->email_notifications_enabled) {
+                $data = [
+                    'recipient' => $message?->receiver?->first_name,
+                    'unread_message_count' => 1,
+                    'recent_messages' => [$message],
+                    'date_range' => now()
+                ];
+
+                SendEmailJob::dispatch([
+                    'receiver' => $message?->receiver,
+                    'data' => $data,
+                ], 'unread_message');
+
+                $event_data3 = [
+                    'receiver_id' => $request->sender_id,
+                    'message_sender_id' => $request->sender_id,
+                    'message_receiver_id' => $request->receiver_id,
+                    'message' => 'An email notification is sent to ' . $receiver->full_name,
+                    'message_type' => 'conversation_updated',
+                    'message_action' => 'message-sent'
+                ];
+                event(new MessageReceived($event_data3));
+            }
 
             return $msg_resource;
         } catch (\Exception $e) {
