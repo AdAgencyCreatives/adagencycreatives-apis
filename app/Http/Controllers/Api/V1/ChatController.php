@@ -113,7 +113,8 @@ class ChatController extends Controller
             event(new MessageReceived($event_data1));
             event(new MessageReceived($event_data2));
 
-            if ($message?->receiver?->email_notifications_enabled) {
+            if ($message?->sender?->email_notifications_enabled) {
+
                 $data = [
                     'recipient' => $message?->receiver?->first_name,
                     'unread_message_count' => 1,
