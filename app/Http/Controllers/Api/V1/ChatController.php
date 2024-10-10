@@ -115,10 +115,32 @@ class ChatController extends Controller
 
             if ($message?->sender?->email_notifications_enabled) {
 
+                $name = $message?->sender?->first_name . ' ' . $message?->sender?->last_name;
+                $related = '';
+                $recent_messages = [];
+
+                if ($message?->sender?->agency) {
+                    $name = $message?->sender?->agency->name;
+                    // $related = $message?->sender?->first_name;
+                } else if ($message?->sender?->creative) {
+                    // $related = $message?->sender?->creative?->title;
+                    if ($message?->sender?->creative?->category?->name) {
+                        $related = $message?->sender?->creative?->category?->name;
+                    }
+                }
+
+                $recent_messages[] = [
+                    'name' => $name,
+                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $message->sender->id,
+                    'profile_picture' => get_profile_picture($message->sender),
+                    'message_time' => \Carbon\Carbon::parse($message->max_created_at)->diffForHumans(),
+                    'related' => $related,
+                ];
+
                 $data = [
                     'recipient' => $message?->receiver?->first_name,
                     'unread_message_count' => 1,
-                    'recent_messages' => [$message],
+                    'recent_messages' => $recent_messages,
                     'date_range' => now()
                 ];
 
