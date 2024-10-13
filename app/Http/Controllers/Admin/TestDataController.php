@@ -924,5 +924,10 @@ class TestDataController extends Controller
         return new ProfileCompletionAgencyReminder($data['data']);
     }
 
-    public function dateTimeCheck(Request $request) {}
+    public function dateTimeCheck(Request $request)
+    {
+        $today = today();
+
+        return $today;
+    }
 }
