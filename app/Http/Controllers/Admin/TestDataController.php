@@ -25,6 +25,7 @@ use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -926,8 +927,12 @@ class TestDataController extends Controller
 
     public function dateTimeCheck(Request $request)
     {
-        $today = today();
+        $date = today();
 
-        return $today;
+        if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
+            echo "The date is between Monday and Friday.";
+        } else {
+            echo "The date is not between Monday and Friday.";
+        }
     }
 }
