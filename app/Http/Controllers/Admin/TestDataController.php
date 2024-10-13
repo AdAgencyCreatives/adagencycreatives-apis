@@ -929,10 +929,20 @@ class TestDataController extends Controller
     {
         $date = today();
 
-        if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
-            echo "The date is between Monday and Friday.";
-        } else {
-            echo "The date is not between Monday and Friday.";
+        if ($request->has('date') && strlen($request->date) > 0) {
+            $date = Carbon::parse('2024-10-14');
         }
+
+        $messages = [];
+
+        $messages[] = $date->toDateString();
+
+        if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
+            $messages[] = "The date is between Monday and Friday.";
+        } else {
+            $messages[] = "The date is not between Monday and Friday.";
+        }
+
+        return implode("\n<br />", $messages);
     }
 }
