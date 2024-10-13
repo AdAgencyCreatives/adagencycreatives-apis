@@ -33,10 +33,19 @@ class Kernel extends ConsoleKernel
         $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
         $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
 
-        if (env('APP_ENV') == 'staging') {
-            $schedule->command('remind-profile-completion-creative')->everyFifteenMinutes();
-            $schedule->command('remind-profile-completion-agency')->everyFifteenMinutes();
-        }
+        $schedule->command('remind-profile-completion-creative')->dailyAt("10:30");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("11:30");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("12:30");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("13:30");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("14:30");
+        $schedule->command('remind-profile-completion-creative')->dailyAt("15:30");
+
+        $schedule->command('remind-profile-completion-agency')->dailyAt('11:00');
+        $schedule->command('remind-profile-completion-agency')->dailyAt('12:00');
+        $schedule->command('remind-profile-completion-agency')->dailyAt('13:00');
+        $schedule->command('remind-profile-completion-agency')->dailyAt('14:00');
+        $schedule->command('remind-profile-completion-agency')->dailyAt('15:00');
+        $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
     }
 
     /**
