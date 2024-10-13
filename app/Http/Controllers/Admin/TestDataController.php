@@ -542,7 +542,6 @@ class TestDataController extends Controller
         return formate_url($request->url);
     }
 
-
     public function testCrop(Request $request)
     {
         $user_id = $request->user_id;
@@ -924,4 +923,6 @@ class TestDataController extends Controller
 
         return new ProfileCompletionAgencyReminder($data['data']);
     }
+
+    public function dateTimeCheck(Request $request) {}
 }
