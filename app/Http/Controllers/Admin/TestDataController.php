@@ -811,6 +811,7 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionCreative(Request $request)
     {
+
         $date_before = today()->subDays(2);
 
         $users = User::where('role', '=', 4)
@@ -823,7 +824,7 @@ class TestDataController extends Controller
 
         $output = [];
 
-        $output[] = "Creatives: " . count($users);
+        $output[] = "Total Active Creatives: " . count($users) . ", Registered Before: " . $date_before->toDateString();
 
         foreach ($users as $user) {
 
@@ -854,7 +855,7 @@ class TestDataController extends Controller
 
         $output = [];
 
-        $output[] = "Agencies: " . count($users);
+        $output[] = "Total Active Agencies: " . count($users) . ", Registered Before: " . $date_before->toDateString();
 
         foreach ($users as $user) {
 
