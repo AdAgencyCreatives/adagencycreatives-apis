@@ -45,7 +45,7 @@ class CalculateProfileCompletionAgency extends Command
                     $user->profile_completed_at = $progress == 100 ? today() : null;
                     $user->save();
                     $users_processed += 1;
-                    $this->info("Calculate Profile Completion Success for Agency: " . $user?->full_name);
+                    $this->info("Profile Completed: " . $progress . " for Agency: " . $user?->full_name . ", " . $user?->email);
                 } catch (\Exception $e2) {
                     $this->info("Calculate Profile Completion Failed for Agency: " . $user?->full_name);
                 }
