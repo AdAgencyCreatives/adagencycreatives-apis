@@ -825,7 +825,7 @@ class TestDataController extends Controller
             }
 
             $progress = $this->getCreativeProfileProgress($creative);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", " . $creative?->user?->full_name;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $creative?->user?->full_name . ", Email: " . $creative?->user?->email;
 
             $user = User::where('uuid', '=', $creative->user->uuid)->first();
             $user->profile_complete_progress = $progress;
@@ -852,7 +852,7 @@ class TestDataController extends Controller
             }
 
             $progress = $this->getAgencyProfileProgress($agency);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $agency?->user?->created_at?->format(config('global.datetime_format')) . ", " . $agency?->user?->full_name;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $agency?->user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $agency?->user?->full_name . ", Email: " . $agency?->user?->email;
 
             $user = User::where('uuid', '=', $agency->user->uuid)->first();
             $user->profile_complete_progress = $progress;
