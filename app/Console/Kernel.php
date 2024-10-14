@@ -39,19 +39,19 @@ class Kernel extends ConsoleKernel
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
             // The date is between Monday and Friday.
 
-            $schedule->command('remind-profile-completion-creative')->dailyAt("10:30");
-            $schedule->command('remind-profile-completion-creative')->dailyAt("11:30");
-            $schedule->command('remind-profile-completion-creative')->dailyAt("12:30");
-            $schedule->command('remind-profile-completion-creative')->dailyAt("13:30");
-            $schedule->command('remind-profile-completion-creative')->dailyAt("14:30");
-            $schedule->command('remind-profile-completion-creative')->dailyAt("15:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("10:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("11:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("12:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("13:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("14:30");
+            // $schedule->command('remind-profile-completion-creative')->dailyAt("15:30");
 
-            $schedule->command('remind-profile-completion-agency')->dailyAt('11:00');
-            $schedule->command('remind-profile-completion-agency')->dailyAt('12:00');
-            $schedule->command('remind-profile-completion-agency')->dailyAt('13:00');
-            $schedule->command('remind-profile-completion-agency')->dailyAt('14:00');
-            $schedule->command('remind-profile-completion-agency')->dailyAt('15:00');
-            $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('11:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('12:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('13:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('14:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('15:00');
+            // $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
         }
     }
 
