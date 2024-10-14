@@ -744,9 +744,16 @@ class TestDataController extends Controller
     private function getCreativeProfileProgress($creative)
     {
         $progress = 0;
-        $required_fields = 10;
+        $required_fields = 17;
         $completed_fields = 0;
 
+        $completed_fields +=  strlen($creative?->user?->profile_picture?->path ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->first_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->last_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->portfolio_website_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->creative_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->email ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($creative?->user?->personal_phone?->phone_number ?? '') > 0 ? 1 : 0;
         $completed_fields += (strlen($creative?->title ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->category?->name ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->years_of_experience ?? "") > 0) ? 1 : 0;
@@ -772,7 +779,7 @@ class TestDataController extends Controller
     private function getAgencyProfileProgress($agency): int
     {
         $progress = 0;
-        $required_fields = 15;
+        $required_fields = 16;
         $completed_fields = 0;
 
         $completed_fields +=  strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
@@ -786,6 +793,7 @@ class TestDataController extends Controller
         }
 
         $completed_fields +=  strlen($agency?->user?->agency_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->email ?? '') > 0 ? 1 : 0;
         $completed_fields +=  strlen($agency?->user?->first_name ?? '') > 0 ? 1 : 0;
         $completed_fields +=  strlen($agency?->user?->last_name ?? '') > 0 ? 1 : 0;
         $completed_fields +=  strlen($agency?->user?->business_phone?->phone_number ?? '') > 0 ? 1 : 0;

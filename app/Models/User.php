@@ -120,6 +120,11 @@ class User extends Authenticatable
         return $this->hasOne(Link::class)->where('label', 'website');
     }
 
+    public function creative_linkedin_link()
+    {
+        return $this->hasOne(Link::class)->where('label', 'linkedin');
+    }
+
     public function agency_linkedin_link()
     {
         return $this->hasOne(Link::class)->where('label', 'linkedin');
