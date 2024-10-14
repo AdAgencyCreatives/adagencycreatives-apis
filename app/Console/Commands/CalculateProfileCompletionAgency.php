@@ -56,4 +56,37 @@ class CalculateProfileCompletionAgency extends Command
             $this->info($e->getMessage());
         }
     }
+
+    private function getAgencyProfileProgress($agency): int
+    {
+        $progress = 0;
+        $required_fields = 16;
+        $completed_fields = 0;
+
+        $completed_fields +=  strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
+        $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->agency_website_link?->url ?? '') > 0 ? 1 : 0;
+
+        $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'business') : null;
+        if ($address) {
+            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
+        }
+
+        $completed_fields +=  strlen($agency?->user?->agency_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->email ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->first_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->last_name ?? '') > 0 ? 1 : 0;
+        $completed_fields +=  strlen($agency?->user?->business_phone?->phone_number ?? '') > 0 ? 1 : 0;
+        $completed_fields += (strlen($agency?->about ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($agency?->industry_experience ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($agency?->media_experience ?? "") > 0) ? 1 : 0;
+        $completed_fields += ($agency?->is_remote || $agency?->is_hybrid || $agency?->is_onsite) ? 1 : 0;
+        $completed_fields += (strlen($agency?->size ?? "") > 0) ? 1 : 0;
+        $completed_fields += (strlen($agency?->slug ?? "") > 0) ? 1 : 0;
+
+        $progress = intval(100 * $completed_fields / $required_fields);
+
+        return $progress;
+    }
 }
