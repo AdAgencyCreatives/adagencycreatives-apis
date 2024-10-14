@@ -811,23 +811,28 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionCreative(Request $request)
     {
-        $creatives = Creative::whereHas('user', function ($q) {
-            $q->where('role', '=', 4)->orderBy('created_at');
-        })->get();
+        $date_before = today()->subDays(2);
+
+        $users = User::where('role', '=', 4)
+            ->whereNull('profile_completed_at')
+            ->whereNull('profile_completion_reminded_at')
+            ->where('is_active', 1)
+            ->whereDate('created_at', '<', $date_before)
+            ->orderBy('created_at')
+            ->take(30)
+            ->get();
 
         $output = [];
 
-        $output[] = "Creatives: " . count($creatives);
+        $output[] = "Creatives: " . count($users);
 
-        foreach ($creatives as $creative) {
-            if (!$creative->user) {
-                continue;
-            }
+        foreach ($users as $user) {
+
+            $creative = $user->creative;
 
             $progress = $this->getCreativeProfileProgress($creative);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $creative?->user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $creative?->user?->full_name . ", Email: " . $creative?->user?->email;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Email: " . $user?->email;
 
-            $user = User::where('uuid', '=', $creative->user->uuid)->first();
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
             $user->save();
@@ -838,23 +843,28 @@ class TestDataController extends Controller
 
     public function calculateProfileCompletionAgency(Request $request)
     {
-        $agencies = Agency::whereHas('user', function ($q) {
-            $q->where('role', '=', 3)->orderBy('created_at');
-        })->get();
+        $date_before = today()->subDays(2);
+
+        $users = User::where('role', '=', 3)
+            ->whereNull('profile_completed_at')
+            ->whereNull('profile_completion_reminded_at')
+            ->where('is_active', 1)
+            ->whereDate('created_at', '<', $date_before)
+            ->orderBy('created_at')
+            ->take(10)
+            ->get();
 
         $output = [];
 
-        $output[] = "Agencies: " . count($agencies);
+        $output[] = "Agencies: " . count($users);
 
-        foreach ($agencies as $agency) {
-            if (!$agency->user) {
-                continue;
-            }
+        foreach ($users as $user) {
+
+            $agency = $user->agency;
 
             $progress = $this->getAgencyProfileProgress($agency);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $agency?->user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $agency?->user?->full_name . ", Email: " . $agency?->user?->email;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Email: " . $user?->email;
 
-            $user = User::where('uuid', '=', $agency->user->uuid)->first();
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
             $user->save();
