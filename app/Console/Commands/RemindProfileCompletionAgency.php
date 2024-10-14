@@ -28,7 +28,7 @@ class RemindProfileCompletionAgency extends Command
             $users = User::where('role', '=', 3)
                 ->whereNull('profile_completed_at')
                 ->whereNull('profile_completion_reminded_at')
-                ->where('is_active', 1)
+                ->where('status', 1)
                 ->whereDate('created_at', '<', $date_before)
                 ->orderBy('created_at')
                 ->take(10)
