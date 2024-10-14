@@ -819,7 +819,6 @@ class TestDataController extends Controller
             ->where('status', 1)
             ->whereDate('created_at', '<', $date_before)
             ->orderBy('created_at')
-            ->take(30)
             ->get();
 
         $output = [];
@@ -851,7 +850,6 @@ class TestDataController extends Controller
             ->where('status', 1)
             ->whereDate('created_at', '<', $date_before)
             ->orderBy('created_at')
-            ->take(10)
             ->get();
 
         $output = [];
