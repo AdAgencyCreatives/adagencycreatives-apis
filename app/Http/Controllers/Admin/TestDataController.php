@@ -824,7 +824,7 @@ class TestDataController extends Controller
 
         $output = [];
 
-        $output[] = "Total Active Creatives: " . count($users) . ", Registered Before: " . $date_before->toDateString();
+        $output[] = "Total Active Creatives: " . count($users) . ", Registered On/Before: " . $date_before->toDateString();
 
         foreach ($users as $user) {
 
@@ -855,7 +855,7 @@ class TestDataController extends Controller
 
         $output = [];
 
-        $output[] = "Total Active Agencies: " . count($users) . ", Registered Before: " . $date_before->toDateString();
+        $output[] = "Total Active Agencies: " . count($users) . ", Registered On/Before: " . $date_before->toDateString();
 
         foreach ($users as $user) {
 
