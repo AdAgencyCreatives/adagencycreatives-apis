@@ -29,7 +29,7 @@ class RemindProfileCompletionCreative extends Command
                 ->whereNull('profile_completed_at')
                 ->whereNull('profile_completion_reminded_at')
                 ->where('status', 1)
-                ->whereDate('created_at', '<', $date_before)
+                ->whereDate('created_at', '<=', $date_before)
                 ->orderBy('created_at')
                 ->take(30)
                 ->get();
