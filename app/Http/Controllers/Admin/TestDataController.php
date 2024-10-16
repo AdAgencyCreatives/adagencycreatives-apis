@@ -985,19 +985,8 @@ class TestDataController extends Controller
             $q->orderBy('created_at');
         })->whereIn('user_id', $agency_users_without_job_posts)->get();
 
-        $results = [];
+        $agency_without_job_posts = $agencies_without_job_posts[0];
 
-        for ($i = 0; $i < count($agencies_without_job_posts); $i++) {
-            $agency = $agencies_without_job_posts[$i];
-            $user = $agency?->user;
-
-            $results[] = [
-                $agency->name,
-                $user->first_name,
-                $user->last_name
-            ];
-        }
-
-        return $results;
+        return $agency_without_job_posts;
     }
 }
