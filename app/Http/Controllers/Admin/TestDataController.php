@@ -989,8 +989,8 @@ class TestDataController extends Controller
             ->where('is_job_posted', '=', 0)
             ->whereNull('job_posting_reminded_at')
             ->join('users', "users.id", "=", "agencies.user_id")
-            ->select(["agencies.name", "users.first_name", "users.last_name"])
-            ->get(["name", "first_name", "last_name"]);
+            ->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
+            ->get(["name", "first_name", "last_name", "created_at"]);
 
         return $agencies_without_job_posts;
     }
