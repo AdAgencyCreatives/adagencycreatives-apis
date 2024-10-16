@@ -966,16 +966,18 @@ class TestDataController extends Controller
 
     public function agenciesWithoutJobPosts(Request $request)
     {
-        $agency_user_ids = Agency::whereHas('user', function ($q) {
+        $date_before = today()->subDays(5);
+
+        $agency_user_ids = Agency::whereHas('user', function ($q) use ($date_before) {
             $q->where('status', '=', 1)
                 ->where('role', '=', 3)
-                ->orderBy('created_at');
+                ->whereDate('created_at', '<=', $date_before);
         })->pluck('user_id')->toArray();
 
-        $job_user_ids = Job::whereHas('user', function ($q) {
+        $job_user_ids = Job::whereHas('user', function ($q) use ($date_before) {
             $q->where('status', '=', 1)
                 ->where('role', '=', 3)
-                ->orderBy('created_at');
+                ->whereDate('created_at', '<=', $date_before);
         })->pluck('user_id')->toArray();
 
         $agency_user_ids = array_values(array_unique($agency_user_ids));
