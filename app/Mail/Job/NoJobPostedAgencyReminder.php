@@ -27,7 +27,7 @@ class NoJobPostedAgencyReminder extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('New message from %s', config('app.name'))
+            subject: sprintf('A gift from %s', config('app.name'))
         );
     }
 
