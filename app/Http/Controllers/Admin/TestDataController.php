@@ -962,4 +962,15 @@ class TestDataController extends Controller
 
         return implode("\n<br />", $messages);
     }
+
+    public function agenciesWithoutJobPosts(Request $request)
+    {
+        $job_user_ids = Job::whereHas('user', function ($q) {
+            $q->where('status', '=', 1)
+                ->where('role', '=', 3)
+                ->orderBy('created_at');
+        })->pluck('user_id')->toArray();
+
+        return $job_user_ids;
+    }
 }

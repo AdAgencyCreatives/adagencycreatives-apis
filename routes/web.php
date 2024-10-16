@@ -418,4 +418,5 @@ Route::get('/calculate-profile-completion-creative', [TestDataController::class,
 Route::get('/calculate-profile-completion-agency', [TestDataController::class, 'calculateProfileCompletionAgency'])->name('calculate-profile-completion-agency');
 Route::get('/profile-completion-creative', [TestDataController::class, 'profileCompletionCreative'])->name('profile-completion-creative');
 Route::get('/profile-completion-agency', [TestDataController::class, 'profileCompletionAgency'])->name('profile-completion-agency');
-Route::get('/date-time-check', [TestDataController::class, 'dateTimeCheck'])->name('date-time-check');
+Route::get('/date-time-check', [TestDataController::class, 'dateTimeCheck'])->name(name: 'date-time-check');
+Route::get('/agencies-without-job-posts', [TestDataController::class, 'agenciesWithoutJobPosts'])->name('agencies-without-job-posts');
