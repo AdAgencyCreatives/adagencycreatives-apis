@@ -983,11 +983,12 @@ class TestDataController extends Controller
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
-        $agencies_without_job_posts = Agency::whereHas('user', function ($q) {
-            $q->orderBy('created_at');
-        })->whereIn('user_id', $agency_users_without_job_posts)
+        $agencies_without_job_posts = Agency::whereIn('user_id', $agency_users_without_job_posts)
             ->where('is_job_posted', '=', 0)
             ->whereNull('job_posting_reminded_at')
+            ->whereHas('user', function ($q) {
+                $q->orderBy('created_at');
+            })
             ->join('users', "users.id", "=", "agencies.user_id")
             ->select(["agencies.name", "users.first_name", "users.last_name"])
             ->get(["name", "first_name", "last_name"]);
