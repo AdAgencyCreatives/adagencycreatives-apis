@@ -969,7 +969,7 @@ class TestDataController extends Controller
             $q->where('status', '=', 1)
                 ->where('role', '=', 3)
                 ->orderBy('created_at');
-        })->pluck('user_id')->toArray();
+        })->pluck('user_id')->unique()->toArray();
 
         return $job_user_ids;
     }
