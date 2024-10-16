@@ -65,7 +65,10 @@ class Kernel extends ConsoleKernel
             $schedule->command('calculate-profile-completion-agency')->dailyAt('15:55');
             $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
 
-            $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
+            $targetDate = Carbon::parse("2024-10-23");
+            if ($date->greaterThanOrEqualTo($targetDate)) {
+                $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
+            }
         }
     }
 
