@@ -965,14 +965,22 @@ class TestDataController extends Controller
 
     public function agenciesWithoutJobPosts(Request $request)
     {
-        $job_user_ids = Job::whereHas('user', function ($q) {
+        $agency_user_ids = Agency::whereHas('user', function ($q) {
             $q->where('status', '=', 1)
-                ->where('role', '=', 3)
-                ->orderBy('created_at');
+                ->where('role', '=', 3);
         })->pluck('user_id')->toArray();
 
+        $job_user_ids = Job::whereHas('user', function ($q) {
+            $q->where('status', '=', 1)
+                ->where('role', '=', 3);
+        })->pluck('user_id')->toArray();
+
+        $agency_user_ids = array_values(array_unique($agency_user_ids));
         $job_user_ids = array_values(array_unique($job_user_ids));
 
-        return $job_user_ids;
+        return array(
+            $agency_user_ids,
+            $job_user_ids
+        );
     }
 }
