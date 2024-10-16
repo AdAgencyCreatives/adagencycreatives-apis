@@ -963,7 +963,7 @@ class TestDataController extends Controller
         //     $messages[] = "The date is not between Monday and Friday.";
         // }
 
-        if ($date . lessThan($targetDate)) {
+        if ($date->lessThan($targetDate)) {
             $messages[] = "The date is < " . $targetDate->toDateString();
         } else {
             $messages[] = "The date is >= " . $targetDate->toDateString();
