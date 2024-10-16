@@ -996,7 +996,7 @@ class TestDataController extends Controller
         //     ->get(["name", "first_name", "last_name", "created_at"]);
 
         $agencies_without_job_posts = User::join('agencies', "agencies.user_id", "=", "users.id")
-            ->whereHas('agencies', function ($q) use ($agency_users_without_job_posts) {
+            ->whereHas('agency', function ($q) use ($agency_users_without_job_posts) {
                 $q->whereIn('user_id', $agency_users_without_job_posts)
                     ->where('is_job_posted', '=', 0)
                     ->whereNull('job_posting_reminded_at');
