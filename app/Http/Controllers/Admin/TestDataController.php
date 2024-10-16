@@ -985,9 +985,7 @@ class TestDataController extends Controller
 
         $agencies_without_job_posts = Agency::whereHas('user', function ($q) {
             $q->orderBy('created_at');
-        })->whereIn('user_id', $agency_users_without_job_posts)->get();
-
-        $agency_without_job_posts = $agencies_without_job_posts[0];
+        })->whereIn('user_id', $agency_users_without_job_posts)->get(["name", "users.first_name"]);
 
         return $agencies_without_job_posts;
     }
