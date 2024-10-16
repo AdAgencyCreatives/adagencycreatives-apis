@@ -980,7 +980,7 @@ class TestDataController extends Controller
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
-        $agencies_without_job_posts = Agency::with('user:id,first_name,last_name')->whereIn('user_id', $agency_users_without_job_posts)->get(["name", "user_first_name", "user_last_name"]);
+        $agencies_without_job_posts = Agency::with('user:first_name,last_name')->whereIn('user_id', $agency_users_without_job_posts)->get(["name"]);
         return $agencies_without_job_posts;
     }
 }
