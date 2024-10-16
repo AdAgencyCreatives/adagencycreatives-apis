@@ -1063,6 +1063,9 @@ class TestDataController extends Controller
             ],
             'receiver' => $user,
         ];
+
+        return $data;
+
         if ($request?->has('email') && $request?->email == "yes") {
             SendEmailJob::dispatch($data, 'no_job_posted_agency_reminder');
             $agency = Agency::where('uuid', '=', $agency->uuid)->first();
