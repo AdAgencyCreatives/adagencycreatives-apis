@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
@@ -980,7 +981,7 @@ class TestDataController extends Controller
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
-        $agencies_without_job_posts = Agency::withWhereHas('user:first_name,last_name')->whereIn('user_id', $agency_users_without_job_posts)->get(["name"]);
-        return $agencies_without_job_posts;
+        $agencies_without_job_posts = Agency::with('user')->whereIn('user_id', $agency_users_without_job_posts)->get();
+        return new AgencyCollection($agencies_without_job_posts);
     }
 }
