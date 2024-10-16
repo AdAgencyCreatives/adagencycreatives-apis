@@ -987,11 +987,20 @@ class TestDataController extends Controller
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
-        $agencies_without_job_posts = Agency::whereIn('user_id', $agency_users_without_job_posts)
-            ->where('is_job_posted', '=', 0)
-            ->whereNull('job_posting_reminded_at')
-            ->join('users', "users.id", "=", "agencies.user_id")
-            ->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
+        // $agencies_without_job_posts = Agency::whereIn('user_id', $agency_users_without_job_posts)
+        //     ->where('is_job_posted', '=', 0)
+        //     ->whereNull('job_posting_reminded_at')
+        //     ->join('users', "users.id", "=", "agencies.user_id")
+        //     ->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
+        //     ->orderBy("users.created_at")
+        //     ->get(["name", "first_name", "last_name", "created_at"]);
+
+        $agencies_without_job_posts = User::join('agencies', "agencies.user_id", "=", "users.id")
+            ->whereHas('agencies', function ($q) use ($agency_users_without_job_posts) {
+                $q->whereIn('user_id', $agency_users_without_job_posts)
+                    ->where('is_job_posted', '=', 0)
+                    ->whereNull('job_posting_reminded_at');
+            })->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
             ->orderBy("users.created_at")
             ->get(["name", "first_name", "last_name", "created_at"]);
 
