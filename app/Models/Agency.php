@@ -37,7 +37,7 @@ class Agency extends Model
     ];
 
     protected $casts = [
-        'featured_at' => 'datetime'
+        'featured_at' => 'datetime',
     ];
 
     public function getApprovedJobCountAttribute()

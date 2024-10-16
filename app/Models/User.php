@@ -42,6 +42,11 @@ class User extends Authenticatable
         'email_notifications_enabled',
     ];
 
+    protected $casts = [
+        'profile_completed_at' => 'datetime',
+        'profile_completion_reminded_at' => 'datetime',
+    ];
+
     //protected $appends = array('full_name');
 
 

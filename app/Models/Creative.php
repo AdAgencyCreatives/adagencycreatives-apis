@@ -40,17 +40,12 @@ class Creative extends Model
         'is_welcomed',
         'welcomed_at',
         'welcome_queued_at',
-        'profile_complete_progress',
-        'profile_completed_at',
-        'profile_completion_reminded_at',
     ];
 
     protected $casts = [
         'featured_at' => 'datetime',
         'welcomed_at' => 'datetime',
         'welcome_queued_at' => 'datetime',
-        'profile_completed_at' => 'datetime',
-        'profile_completion_reminded_at' => 'datetime',
     ];
 
     public function user()
