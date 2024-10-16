@@ -992,7 +992,7 @@ class TestDataController extends Controller
                 ->where('is_job_posted', '=', 0)
                 ->whereNull('job_posting_reminded_at');
         })->orderBy("created_at")
-            ->get(["first_name", "last_name", "created_at"]);
+            ->get();
 
         $output = [];
 
