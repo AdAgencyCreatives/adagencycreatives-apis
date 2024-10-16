@@ -995,14 +995,12 @@ class TestDataController extends Controller
         //     ->orderBy("users.created_at")
         //     ->get(["name", "first_name", "last_name", "created_at"]);
 
-        $agencies_without_job_posts = User::join('agencies', "agencies.user_id", "=", "users.id")
-            ->whereHas('agency', function ($q) use ($agency_users_without_job_posts) {
-                $q->whereIn('user_id', $agency_users_without_job_posts)
-                    ->where('is_job_posted', '=', 0)
-                    ->whereNull('job_posting_reminded_at');
-            })->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
-            ->orderBy("users.created_at")
-            ->get(["name", "first_name", "last_name", "created_at"]);
+        $agencies_without_job_posts = User::whereHas('agency', function ($q) use ($agency_users_without_job_posts) {
+            $q->whereIn('user_id', $agency_users_without_job_posts)
+                ->where('is_job_posted', '=', 0)
+                ->whereNull('job_posting_reminded_at');
+        })->orderBy("created_at")
+            ->get(["name"]);
 
         return $agencies_without_job_posts;
     }
