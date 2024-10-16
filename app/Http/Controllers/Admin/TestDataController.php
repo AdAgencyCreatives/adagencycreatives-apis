@@ -863,7 +863,7 @@ class TestDataController extends Controller
             $agency = $user->agency;
 
             $progress = $this->getAgencyProfileProgress($agency);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Email: " . $user?->email;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
 
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
@@ -987,14 +987,6 @@ class TestDataController extends Controller
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
-        // $agencies_without_job_posts = Agency::whereIn('user_id', $agency_users_without_job_posts)
-        //     ->where('is_job_posted', '=', 0)
-        //     ->whereNull('job_posting_reminded_at')
-        //     ->join('users', "users.id", "=", "agencies.user_id")
-        //     ->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
-        //     ->orderBy("users.created_at")
-        //     ->get(["name", "first_name", "last_name", "created_at"]);
-
         $agencies_without_job_posts = User::whereHas('agency', function ($q) use ($agency_users_without_job_posts) {
             $q->whereIn('user_id', $agency_users_without_job_posts)
                 ->where('is_job_posted', '=', 0)
@@ -1002,6 +994,17 @@ class TestDataController extends Controller
         })->orderBy("created_at")
             ->get(["first_name", "last_name", "created_at"]);
 
-        return $agencies_without_job_posts;
+        $output = [];
+
+        $output[] = "Total Agencies Not Posting Any Job: " . count($agencies_without_job_posts) . ", Registered On/Before: " . $date_before->toDateString();
+
+        foreach ($agencies_without_job_posts as $user) {
+
+            $agency = $user->agency;
+
+            $output[] = "Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
+        }
+
+        return implode("\n<br />", $output);
     }
 }
