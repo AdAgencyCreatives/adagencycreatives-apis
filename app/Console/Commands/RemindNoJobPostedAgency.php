@@ -63,7 +63,7 @@ class RemindNoJobPostedAgency extends Command
                 try {
                     $data = [
                         'data' => [
-                            'first_name' => $user?->first_name ?? $user?->full_name ?? '',
+                            'first_name' => $user?->first_name ?? $user?->username ?? '',
                             'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $user?->agency?->slug),
                         ],
                         'receiver' => $user,
