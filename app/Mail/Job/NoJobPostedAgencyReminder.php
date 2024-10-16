@@ -34,7 +34,7 @@ class NoJobPostedAgencyReminder extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.account.profile_completion_agency',
+            view: 'emails.job.no_job_posted',
         );
     }
 
