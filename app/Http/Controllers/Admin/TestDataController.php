@@ -13,6 +13,7 @@ use App\Mail\Account\ProfileCompletionCreativeReminder;
 use App\Mail\Account\ProfileCompletionAgencyReminder;
 use App\Mail\Application\JobClosed;
 use App\Mail\Application\NewApplication;
+use App\Mail\Job\NoJobPostedAgencyReminder;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Agency;
 use App\Models\Application;
@@ -1006,5 +1007,62 @@ class TestDataController extends Controller
         }
 
         return implode("\n<br />", $output);
+    }
+
+    public function noJobPostedAgencyReminder(Request $request)
+    {
+        $date_before = today()->subDays(5);
+
+        $agency_user_ids = Agency::whereHas('user', function ($q) use ($date_before) {
+            $q->where('status', '=', 1)
+                ->where('role', '=', 3)
+                ->whereDate('created_at', '<=', $date_before);
+        })->pluck('user_id')->toArray();
+
+        $job_user_ids = Job::whereHas('user', function ($q) use ($date_before) {
+            $q->where('status', '=', 1)
+                ->where('role', '=', 3)
+                ->whereDate('created_at', '<=', $date_before);
+        })->pluck('user_id')->toArray();
+
+        $agency_user_ids = array_values(array_unique($agency_user_ids));
+        $job_user_ids = array_values(array_unique($job_user_ids));
+
+        Agency::whereIn('user_id', $job_user_ids)->update(['is_job_posted' => 1]);
+
+        $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
+
+        $agencies_without_job_posts = User::whereHas('agency', function ($q) use ($agency_users_without_job_posts) {
+            $q->whereIn('user_id', $agency_users_without_job_posts)
+                ->where('is_job_posted', '=', 0)
+                ->whereNull('job_posting_reminded_at');
+        })->orderBy("created_at")
+            ->take(1)
+            ->get();
+
+        $user = $agencies_without_job_posts[0];
+        $agency = $user?->agency;
+
+        if (!$agency) {
+            return response()->json([
+                'message' => "Agency not found",
+            ], 500);
+        }
+
+        $data = [
+            'data' => [
+                'first_name' => $user?->first_name ?? '',
+                'profile_url' => sprintf('%s/agency/%s', env('FRONTEND_URL'), $agency->slug),
+            ],
+            'receiver' => $user,
+        ];
+        if ($request?->has('email') && $request?->email == "yes") {
+            SendEmailJob::dispatch($data, 'no_job_posted_agency_reminder');
+            $agency = Agency::where('uuid', '=', $agency->uuid)->first();
+            $agency->job_posting_reminded_at = today();
+            $agency->save();
+        }
+
+        return new NoJobPostedAgencyReminder($data['data']);
     }
 }

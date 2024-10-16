@@ -420,3 +420,4 @@ Route::get('/profile-completion-creative', [TestDataController::class, 'profileC
 Route::get('/profile-completion-agency', [TestDataController::class, 'profileCompletionAgency'])->name('profile-completion-agency');
 Route::get('/date-time-check', [TestDataController::class, 'dateTimeCheck'])->name(name: 'date-time-check');
 Route::get('/agencies-without-job-posts', [TestDataController::class, 'agenciesWithoutJobPosts'])->name('agencies-without-job-posts');
+Route::get('/no-job-posted-agency-reminder', [TestDataController::class, 'noJobPostedAgencyReminder'])->name('no-job-posted-agency-reminder');

@@ -25,6 +25,7 @@ use App\Mail\Job\CustomJobRequestRejected;
 use App\Mail\Job\Invitation as JobInvitation;
 use App\Mail\Job\JobPostedApprovedAlertAllSubscribers;
 use App\Mail\Job\NewJobPosted;
+use App\Mail\Job\NoJobPostedAgencyReminder;
 use App\Mail\JobPostExpiring\JobPostExpiringAdmin;
 use App\Mail\JobPostExpiring\JobPostExpiringAgency;
 use App\Mail\Message\UnreadMessage;
@@ -88,6 +89,7 @@ class SendEmailJob implements ShouldQueue
             'new_candidate_application',
             'profile_completion_creative',
             'profile_completion_agency',
+            'no_job_posted_agency_reminder',
         ];
 
         // Check if the current email type is in the array and update the receiver's email
@@ -238,6 +240,10 @@ class SendEmailJob implements ShouldQueue
 
             case 'profile_completion_agency':
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionAgencyReminder($this->data['data']));
+                break;
+
+            case 'no_job_posted_agency_reminder':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NoJobPostedAgencyReminder($this->data['data']));
                 break;
 
             default:

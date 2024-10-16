@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Account;
+namespace App\Mail\Job;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ProfileCompletionAgencyReminder extends Mailable
+class NoJobPostedAgencyReminder extends Mailable
 {
     use Queueable, SerializesModels;
 
