@@ -991,7 +991,7 @@ class TestDataController extends Controller
             $agency = $agencies_without_job_posts[$i];
             $user = $agency?->user;
 
-            $resutls[] = [
+            $results[] = [
                 $agency->name,
                 $user->first_name,
                 $user->last_name
