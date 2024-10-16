@@ -988,6 +988,9 @@ class TestDataController extends Controller
         $agencies_without_job_posts = Agency::whereIn('user_id', $agency_users_without_job_posts)
             ->where('is_job_posted', '=', 0)
             ->whereNull('job_posting_reminded_at')
+            ->whereHas('user', function ($q) {
+                $q->orderBy('created_at');
+            })
             ->join('users', "users.id", "=", "agencies.user_id")
             ->select(["agencies.name", "users.first_name", "users.last_name", "users.created_at"])
             ->get(["name", "first_name", "last_name", "created_at"]);
