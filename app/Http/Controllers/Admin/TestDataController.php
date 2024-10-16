@@ -978,9 +978,8 @@ class TestDataController extends Controller
         $agency_user_ids = array_values(array_unique($agency_user_ids));
         $job_user_ids = array_values(array_unique($job_user_ids));
 
-        return array(
-            $agency_user_ids,
-            $job_user_ids
-        );
+        $agency_users_without_job_posts = array_diff($agency_user_ids, $job_user_ids);
+
+        return $agency_users_without_job_posts;
     }
 }
