@@ -979,7 +979,7 @@ class TestDataController extends Controller
         $agency_user_ids = array_values(array_unique($agency_user_ids));
         $job_user_ids = array_values(array_unique($job_user_ids));
 
-        Agency::whereIn('user_id', $job_user_ids)->update(['job_posts' => 1]);
+        Agency::whereIn('user_id', $job_user_ids)->update(['is_job_posted' => 1]);
 
         $agency_users_without_job_posts = array_values(array_unique(array_diff($agency_user_ids, $job_user_ids)));
 
