@@ -947,6 +947,7 @@ class TestDataController extends Controller
     public function dateTimeCheck(Request $request)
     {
         $date = today();
+        $targetDate = Carbon::parse("2024-10-23");
 
         if ($request->has('date') && strlen($request->date) > 0) {
             $date = Carbon::parse($request->date);
@@ -956,10 +957,16 @@ class TestDataController extends Controller
 
         $messages[] = $date;
 
-        if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
-            $messages[] = "The date is between Monday and Friday.";
+        // if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
+        //     $messages[] = "The date is between Monday and Friday.";
+        // } else {
+        //     $messages[] = "The date is not between Monday and Friday.";
+        // }
+
+        if ($date . lessThan($targetDate)) {
+            $messages[] = "The date is < " . $targetDate->toDateString();
         } else {
-            $messages[] = "The date is not between Monday and Friday.";
+            $messages[] = "The date is >= " . $targetDate->toDateString();
         }
 
         return implode("\n<br />", $messages);
