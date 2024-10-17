@@ -34,42 +34,42 @@ class Kernel extends ConsoleKernel
         $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
         $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
 
-        // $date = today();
+        $date = today();
 
-        // if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
-        //     // The date is between Monday and Friday.
+        if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
+            // The date is between Monday and Friday.
 
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("10:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("10:30");
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("11:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("11:30");
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("12:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("12:30");
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("13:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("13:30");
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("14:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("14:30");
-        //     $schedule->command('calculate-profile-completion-creative')->dailyAt("15:25");
-        //     $schedule->command('remind-profile-completion-creative')->dailyAt("15:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("10:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("10:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("11:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("11:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("12:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("12:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("13:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("13:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("14:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("14:30");
+            $schedule->command('calculate-profile-completion-creative')->dailyAt("15:25");
+            $schedule->command('remind-profile-completion-creative')->dailyAt("15:30");
 
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('10:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('11:00');
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('11:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('12:00');
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('12:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('13:00');
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('13:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('14:00');
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('14:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('15:00');
-        //     $schedule->command('calculate-profile-completion-agency')->dailyAt('15:55');
-        //     $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('10:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('11:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('11:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('12:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('12:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('13:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('13:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('14:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('14:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('15:00');
+            $schedule->command('calculate-profile-completion-agency')->dailyAt('15:55');
+            $schedule->command('remind-profile-completion-agency')->dailyAt('16:00');
 
-        //     $targetDate = Carbon::parse("2024-10-23");
-        //     if ($date->greaterThanOrEqualTo($targetDate)) {
-        //         $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
-        //     }
-        // }
+            $targetDate = Carbon::parse("2024-10-23");
+            if ($date->greaterThanOrEqualTo($targetDate)) {
+                $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
+            }
+        }
     }
 
     /**
