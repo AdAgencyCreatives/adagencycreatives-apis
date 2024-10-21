@@ -150,7 +150,8 @@ class Application extends Model
 
                 $application_email_log = ApplicationEmailLog::where('application_id', '=', $application->id)
                     ->where('status', '=', getApplicationStatusInteger($application->status))
-                    ->whereDate('email_sent_at', today())->first();
+                    // ->whereDate('email_sent_at', today())
+                    ->first();
 
                 if (!$application_email_log) {
                     $data = [
