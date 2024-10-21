@@ -52,7 +52,29 @@ class Application extends Model
 
     public function setStatusAttribute($value)
     {
-        setApplicationStatus($this, $value);
+        switch ($value) {
+            case 'accepted':
+                $this->attributes['status'] = APPLICATION_STATUSES['ACCEPTED'];
+                break;
+            case 'rejected':
+                $this->attributes['status'] = APPLICATION_STATUSES['REJECTED'];
+                break;
+            case 'archived':
+                $this->attributes['status'] = APPLICATION_STATUSES['ARCHIVED'];
+                break;
+            case 'shortlisted':
+                $this->attributes['status'] = APPLICATION_STATUSES['SHORTLISTED'];
+                break;
+            case 'recommended':
+                $this->attributes['status'] = APPLICATION_STATUSES['RECOMMENDED'];
+                break;
+            case 'hired':
+                $this->attributes['status'] = APPLICATION_STATUSES['HIRED'];
+                break;
+            default:
+                $this->attributes['status'] = APPLICATION_STATUSES['PENDING'];
+                break;
+        }
     }
 
     public function scopeUserId(Builder $query, $user_id)
@@ -110,7 +132,7 @@ class Application extends Model
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
                 $application_email_log = ApplicationEmailLog::where('application_id', '=', $application->id)
-                    ->where('status', '=', getApplicationStatus($application->status))
+                    ->where('status', '=', $application->status)
                     ->whereDate('email_sent_at', today())->first();
 
                 if (!$application_email_log) {

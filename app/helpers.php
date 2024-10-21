@@ -56,35 +56,6 @@ if (!function_exists('getApplicationStatus')) {
     }
 }
 
-if (!function_exists('setApplicationStatus')) {
-    function setApplicationStatus($application, $value)
-    {
-        switch ($value) {
-            case 'accepted':
-                $application->status = APPLICATION_STATUSES['ACCEPTED'];
-                break;
-            case 'rejected':
-                $application->status = APPLICATION_STATUSES['REJECTED'];
-                break;
-            case 'archived':
-                $application->status = APPLICATION_STATUSES['ARCHIVED'];
-                break;
-            case 'shortlisted':
-                $application->status = APPLICATION_STATUSES['SHORTLISTED'];
-                break;
-            case 'recommended':
-                $application->status = APPLICATION_STATUSES['RECOMMENDED'];
-                break;
-            case 'hired':
-                $application->status = APPLICATION_STATUSES['HIRED'];
-                break;
-            default:
-                $application->status = APPLICATION_STATUSES['PENDING'];
-                break;
-        }
-    }
-}
-
 if (!function_exists('getEmploymentTypes')) {
     function getEmploymentTypes($commaSeparatedNames)
     {
