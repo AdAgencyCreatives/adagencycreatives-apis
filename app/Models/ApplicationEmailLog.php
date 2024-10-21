@@ -10,6 +10,8 @@ class ApplicationEmailLog extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'application_id',
         'status',
