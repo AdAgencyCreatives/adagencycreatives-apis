@@ -25,16 +25,6 @@ class Application extends Model
         'removed_from_recent',
     ];
 
-    const STATUSES = [
-        'PENDING' => 0,
-        'ACCEPTED' => 1,
-        'REJECTED' => 2,
-        'ARCHIVED' => 3, // Application will remove from agency frontend, but it will still exist in the database, so that candidate can't submit the application again.
-        'RECOMMENDED' => 4,
-        'SHORTLISTED' => 5,
-        'HIRED' => 6,
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -57,51 +47,12 @@ class Application extends Model
 
     public function getStatusAttribute($value)
     {
-        switch ($value) {
-            case Application::STATUSES['PENDING']:
-                return 'pending';
-            case Application::STATUSES['ACCEPTED']:
-                return 'accepted';
-            case Application::STATUSES['REJECTED']:
-                return 'rejected';
-            case Application::STATUSES['ARCHIVED']:
-                return 'archived';
-            case Application::STATUSES['SHORTLISTED']:
-                return 'shortlisted';
-            case Application::STATUSES['RECOMMENDED']:
-                return 'recommended';
-            case Application::STATUSES['HIRED']:
-                return 'hired';
-            default:
-                return null;
-        }
+        return getApplicationStatus($value);
     }
 
     public function setStatusAttribute($value)
     {
-        switch ($value) {
-            case 'accepted':
-                $this->attributes['status'] = Application::STATUSES['ACCEPTED'];
-                break;
-            case 'rejected':
-                $this->attributes['status'] = Application::STATUSES['REJECTED'];
-                break;
-            case 'archived':
-                $this->attributes['status'] = Application::STATUSES['ARCHIVED'];
-                break;
-            case 'shortlisted':
-                $this->attributes['status'] = Application::STATUSES['SHORTLISTED'];
-                break;
-            case 'recommended':
-                $this->attributes['status'] = Application::STATUSES['RECOMMENDED'];
-                break;
-            case 'hired':
-                $this->attributes['status'] = Application::STATUSES['HIRED'];
-                break;
-            default:
-                $this->attributes['status'] = Application::STATUSES['PENDING'];
-                break;
-        }
+        setApplicationStatus($this, $value);
     }
 
     public function scopeUserId(Builder $query, $user_id)
@@ -159,7 +110,7 @@ class Application extends Model
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
                 $application_email_log = ApplicationEmailLog::where('application_id', '=', $application->id)
-                    ->where('status', '=', $application->status)
+                    ->where('status', '=', getApplicationStatus($application->status))
                     ->whereDate('email_sent_at', today())->first();
 
                 if (!$application_email_log) {

@@ -21,6 +21,70 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
+
+const APPLICATION_STATUSES = [
+    'PENDING' => 0,
+    'ACCEPTED' => 1,
+    'REJECTED' => 2,
+    'ARCHIVED' => 3, // Application will remove from agency frontend, but it will still exist in the database, so that candidate can't submit the application again.
+    'RECOMMENDED' => 4,
+    'SHORTLISTED' => 5,
+    'HIRED' => 6,
+];
+
+if (!function_exists('getApplicationStatus')) {
+    function getApplicationStatus($value)
+    {
+        switch ($value) {
+            case APPLICATION_STATUSES['PENDING']:
+                return 'pending';
+            case APPLICATION_STATUSES['ACCEPTED']:
+                return 'accepted';
+            case APPLICATION_STATUSES['REJECTED']:
+                return 'rejected';
+            case APPLICATION_STATUSES['ARCHIVED']:
+                return 'archived';
+            case APPLICATION_STATUSES['SHORTLISTED']:
+                return 'shortlisted';
+            case APPLICATION_STATUSES['RECOMMENDED']:
+                return 'recommended';
+            case APPLICATION_STATUSES['HIRED']:
+                return 'hired';
+            default:
+                return null;
+        }
+    }
+}
+
+if (!function_exists('setApplicationStatus')) {
+    function setApplicationStatus($application, $value)
+    {
+        switch ($value) {
+            case 'accepted':
+                $application->attributes['status'] = APPLICATION_STATUSES['ACCEPTED'];
+                break;
+            case 'rejected':
+                $application->attributes['status'] = APPLICATION_STATUSES['REJECTED'];
+                break;
+            case 'archived':
+                $application->attributes['status'] = APPLICATION_STATUSES['ARCHIVED'];
+                break;
+            case 'shortlisted':
+                $application->attributes['status'] = APPLICATION_STATUSES['SHORTLISTED'];
+                break;
+            case 'recommended':
+                $application->attributes['status'] = APPLICATION_STATUSES['RECOMMENDED'];
+                break;
+            case 'hired':
+                $application->attributes['status'] = APPLICATION_STATUSES['HIRED'];
+                break;
+            default:
+                $application->attributes['status'] = APPLICATION_STATUSES['PENDING'];
+                break;
+        }
+    }
+}
+
 if (!function_exists('getEmploymentTypes')) {
     function getEmploymentTypes($commaSeparatedNames)
     {

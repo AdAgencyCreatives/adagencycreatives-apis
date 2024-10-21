@@ -948,12 +948,6 @@ class TestDataController extends Controller
     public function dateTimeCheck(Request $request)
     {
 
-        $application_email_log = ApplicationEmailLog::where('application_id', '=', 157)
-            ->where('status', '=', 1)
-            ->whereDate('email_sent_at', today())->first();
-
-        return $application_email_log;
-
         $date = today();
         $targetDate = Carbon::parse("2024-10-23");
 
