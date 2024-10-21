@@ -33,26 +33,35 @@ const APPLICATION_STATUSES = [
 ];
 
 if (!function_exists('getApplicationStatus')) {
-    function getApplicationStatus($value)
+    function getApplicationStatusInteger($value)
     {
+        $integer_value = 0; // default pending 
+
         switch ($value) {
-            case APPLICATION_STATUSES['PENDING']:
-                return 'pending';
-            case APPLICATION_STATUSES['ACCEPTED']:
-                return 'accepted';
-            case APPLICATION_STATUSES['REJECTED']:
-                return 'rejected';
-            case APPLICATION_STATUSES['ARCHIVED']:
-                return 'archived';
-            case APPLICATION_STATUSES['SHORTLISTED']:
-                return 'shortlisted';
-            case APPLICATION_STATUSES['RECOMMENDED']:
-                return 'recommended';
-            case APPLICATION_STATUSES['HIRED']:
-                return 'hired';
+            case 'accepted':
+                $integer_value = APPLICATION_STATUSES['ACCEPTED'];
+                break;
+            case 'rejected':
+                $integer_value = APPLICATION_STATUSES['REJECTED'];
+                break;
+            case 'archived':
+                $integer_value = APPLICATION_STATUSES['ARCHIVED'];
+                break;
+            case 'shortlisted':
+                $integer_value = APPLICATION_STATUSES['SHORTLISTED'];
+                break;
+            case 'recommended':
+                $integer_value = APPLICATION_STATUSES['RECOMMENDED'];
+                break;
+            case 'hired':
+                $integer_value = APPLICATION_STATUSES['HIRED'];
+                break;
             default:
-                return null;
+                $integer_value = APPLICATION_STATUSES['PENDING'];
+                break;
         }
+
+        return $integer_value;
     }
 }
 
