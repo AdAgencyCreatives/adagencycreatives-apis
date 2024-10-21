@@ -61,25 +61,25 @@ if (!function_exists('setApplicationStatus')) {
     {
         switch ($value) {
             case 'accepted':
-                $application->attributes['status'] = APPLICATION_STATUSES['ACCEPTED'];
+                $application->status = APPLICATION_STATUSES['ACCEPTED'];
                 break;
             case 'rejected':
-                $application->attributes['status'] = APPLICATION_STATUSES['REJECTED'];
+                $application->status = APPLICATION_STATUSES['REJECTED'];
                 break;
             case 'archived':
-                $application->attributes['status'] = APPLICATION_STATUSES['ARCHIVED'];
+                $application->status = APPLICATION_STATUSES['ARCHIVED'];
                 break;
             case 'shortlisted':
-                $application->attributes['status'] = APPLICATION_STATUSES['SHORTLISTED'];
+                $application->status = APPLICATION_STATUSES['SHORTLISTED'];
                 break;
             case 'recommended':
-                $application->attributes['status'] = APPLICATION_STATUSES['RECOMMENDED'];
+                $application->status = APPLICATION_STATUSES['RECOMMENDED'];
                 break;
             case 'hired':
-                $application->attributes['status'] = APPLICATION_STATUSES['HIRED'];
+                $application->status = APPLICATION_STATUSES['HIRED'];
                 break;
             default:
-                $application->attributes['status'] = APPLICATION_STATUSES['PENDING'];
+                $application->status = APPLICATION_STATUSES['PENDING'];
                 break;
         }
     }
