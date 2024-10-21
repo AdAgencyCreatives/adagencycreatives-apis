@@ -17,6 +17,7 @@ use App\Mail\Job\NoJobPostedAgencyReminder;
 use App\Mail\Message\UnreadMessage;
 use App\Models\Agency;
 use App\Models\Application;
+use App\Models\ApplicationEmailLog;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Creative;
@@ -946,6 +947,13 @@ class TestDataController extends Controller
 
     public function dateTimeCheck(Request $request)
     {
+
+        $application_email_log = ApplicationEmailLog::where('application_id', '=', 157)
+            ->where('status', '=', 'accepted')
+            ->whereDate('email_sent_at', today())->first();
+
+        return $application_email_log;
+
         $date = today();
         $targetDate = Carbon::parse("2024-10-23");
 
