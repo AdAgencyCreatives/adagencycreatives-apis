@@ -949,7 +949,7 @@ class TestDataController extends Controller
     {
 
         $application_email_log = ApplicationEmailLog::where('application_id', '=', 157)
-            ->where('status', '=', 'accepted')
+            ->where('status', '=', 1)
             ->whereDate('email_sent_at', today())->first();
 
         return $application_email_log;
