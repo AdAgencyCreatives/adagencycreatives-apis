@@ -47,7 +47,24 @@ class Application extends Model
 
     public function getStatusAttribute($value)
     {
-        return getApplicationStatus($value);
+        switch ($value) {
+            case APPLICATION_STATUSES['PENDING']:
+                return 'pending';
+            case APPLICATION_STATUSES['ACCEPTED']:
+                return 'accepted';
+            case APPLICATION_STATUSES['REJECTED']:
+                return 'rejected';
+            case APPLICATION_STATUSES['ARCHIVED']:
+                return 'archived';
+            case APPLICATION_STATUSES['SHORTLISTED']:
+                return 'shortlisted';
+            case APPLICATION_STATUSES['RECOMMENDED']:
+                return 'recommended';
+            case APPLICATION_STATUSES['HIRED']:
+                return 'hired';
+            default:
+                return null;
+        }
     }
 
     public function setStatusAttribute($value)
