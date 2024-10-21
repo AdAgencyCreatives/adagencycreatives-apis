@@ -158,19 +158,30 @@ class Application extends Model
 
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
-                $data = [
-                    'receiver' => $applicant->email,
-                    'data' => [
-                        'applicant' => $applicant->first_name ?? '',
-                        'job_title' => $job->title ?? '',
-                        'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
-                        'agency_name' => $agency_name ?? '',
-                        'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
-                    ],
+                $application_email_log = ApplicationEmailLog::where('application_id', '=', $application->id)
+                    ->where('status', '=', $application->status)
+                    ->whereDate('email_sent_at', today())->first();
 
-                ];
-                create_notification($applicant->id, sprintf('Application accepted on "%s" job.', $job->title));
-                SendEmailJob::dispatch($data, 'agency_is_interested');
+                if (!$application_email_log) {
+                    $data = [
+                        'receiver' => $applicant->email,
+                        'data' => [
+                            'applicant' => $applicant->first_name ?? '',
+                            'job_title' => $job->title ?? '',
+                            'job_url' => sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug),
+                            'agency_name' => $agency_name ?? '',
+                            'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
+                        ],
+
+                    ];
+                    create_notification($applicant->id, sprintf('Application accepted on "%s" job.', $job->title));
+                    SendEmailJob::dispatch($data, 'agency_is_interested');
+                    ApplicationEmailLog::create([
+                        'application_id' => $application->id,
+                        'status' => $application->status,
+                        'email_sent_at' => now(),
+                    ]);
+                }
             }
         });
     }
