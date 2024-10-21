@@ -132,7 +132,7 @@ class Application extends Model
             if ($oldStatus == 'pending' && in_array($application->status, ['accepted'])) {
 
                 $application_email_log = ApplicationEmailLog::where('application_id', '=', $application->id)
-                    ->where('status', '=', $application->status)
+                    ->where('status', '=', getApplicationStatus($application->status))
                     ->whereDate('email_sent_at', today())->first();
 
                 if (!$application_email_log) {
