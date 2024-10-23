@@ -43,6 +43,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
+        'approved_at' => 'datetime',
         'profile_completed_at' => 'datetime',
         'profile_completion_reminded_at' => 'datetime',
     ];

@@ -256,6 +256,8 @@ class UserController extends Controller
 
         if ($user) {
             $user->status = 'active';
+            $user->approved_at = now();
+
             $user->save();
 
             if ($user->role == 'agency') {
