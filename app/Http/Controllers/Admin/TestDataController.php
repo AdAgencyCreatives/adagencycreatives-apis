@@ -957,7 +957,7 @@ class TestDataController extends Controller
 
         $messages = [];
 
-        $messages[] = $date;
+        $messages[] = "Today: " . $date;
 
         // if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
         //     $messages[] = "The date is between Monday and Friday.";
@@ -970,6 +970,26 @@ class TestDataController extends Controller
         } else {
             $messages[] = "The date is < " . $targetDate->toDateString();
         }
+
+        $messages[] = "Difference in days to remind: ";
+
+        $diff = 0;
+        switch ($date->dayOfWeek) {
+            case Carbon::MONDAY:
+            case Carbon::TUESDAY:
+                $diff = 4;
+                break;
+            case Carbon::WEDNESDAY:
+                $diff = 3;
+                break;
+            case Carbon::THURSDAY:
+            case Carbon::FRIDAY:
+                $diff = 2;
+                break;
+        }
+
+        $new_date = $date->subDays($diff);
+        $messages[] = "Remind: " . $new_date;
 
         return implode("\n<br />", $messages);
     }
