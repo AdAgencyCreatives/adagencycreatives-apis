@@ -973,18 +973,11 @@ class TestDataController extends Controller
 
         $messages[] = "Difference in days to remind: ";
 
-        $diff = 0;
+        $diff = 2;
         switch ($date->dayOfWeek) {
             case Carbon::MONDAY:
             case Carbon::TUESDAY:
                 $diff = 4;
-                break;
-            case Carbon::WEDNESDAY:
-                $diff = 3;
-                break;
-            case Carbon::THURSDAY:
-            case Carbon::FRIDAY:
-                $diff = 2;
                 break;
         }
 
