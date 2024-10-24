@@ -26,9 +26,9 @@ class SendJobClosedEmails extends Command
 
         $jobs = Job::where(function ($query) use ($yesterday, $today) {
             $query->where(function ($q) use ($yesterday, $today) {
-                $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->where('updated_at', '<', $today);
+                $q->where('status', 4)->whereDate('updated_at', '>=', $yesterday)->whereDate('updated_at', '<', $today);
             })->orWhere(function ($q) use ($yesterday, $today) {
-                $q->whereDate('expired_at', '>=', $yesterday)->where('expired_at', '<', $today);
+                $q->whereDate('expired_at', '>=', $yesterday)->whereDate('expired_at', '<', $today);
             });
         })->with('applications', function ($query) {
             $query->where('status', 0);
