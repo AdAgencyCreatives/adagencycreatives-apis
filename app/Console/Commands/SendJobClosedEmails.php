@@ -49,20 +49,16 @@ class SendJobClosedEmails extends Command
             for ($j = 0; $j < count($job->applications); $j++) {
                 $application = $job->applications[$j];
 
-                if ($application->status != "rejected") {
-                    $data[] = array(
-                        'receiver' =>  $application->user->email,
-                        'recipient_name' => $application->user->first_name,
-                        'job_title' => $job->title,
-                        'job_url' => $job_url,
-                        'agency_name' => $agency_name,
-                        'agency_profile' => $agency_profile,
-                        'apply_type' => $job->apply_type,
-                        'show_test_links' => 'no'
-                    );
-                } else {
-                    $this->info('Email skipped for rejected candidate: ' . $application->user->first_name . ", " . $application->user->email);
-                }
+                $data[] = array(
+                    'receiver' =>  $application->user->email,
+                    'recipient_name' => $application->user->first_name,
+                    'job_title' => $job->title,
+                    'job_url' => $job_url,
+                    'agency_name' => $agency_name,
+                    'agency_profile' => $agency_profile,
+                    'apply_type' => $job->apply_type,
+                    'show_test_links' => 'no'
+                );
             }
         }
 
