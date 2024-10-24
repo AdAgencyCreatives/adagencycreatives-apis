@@ -61,7 +61,7 @@ class SendJobClosedEmails extends Command
                         'show_test_links' => 'no'
                     );
                 } else {
-                    $this->info('Skipping rejected candidate: ' . $application->user->first_name . ", " . $application->user->email);
+                    $this->info('Email skipped for rejected candidate: ' . $application->user->first_name . ", " . $application->user->email);
                 }
             }
         }
@@ -83,6 +83,8 @@ class SendJobClosedEmails extends Command
                     'show_test_links' => $item['show_test_links'],
                 ],
             ], 'job_closed_email');
+
+            $this->info('Email sent to: ' . $item['recipient_name'] . ", " . $item['receiver']);
         }
     }
 }
