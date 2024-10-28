@@ -77,9 +77,10 @@
                     '<td>' + job.category + '</td>' +
                     '<td>' + job.agency_name + '</td>' +
                     '<td>' + job.advisor + '</td>' +
-                    '<td>' + statusDropdown + '</td>' +
-                    '<td><span class="badge bg-primary me-2">' + job.created_at +
-                    '<td>' + roleBasedActions + '</td>' +
+                    // '<td>' + statusDropdown + '</td>' +
+                    '<td>' + '<span class="badge bg-secondary me-2">' + job.status + '</span></td>' +
+                    '<td><span class="badge bg-primary me-2">' + job.created_at + '</span></td>'
+                '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
                 tbody.append(row);
             });
