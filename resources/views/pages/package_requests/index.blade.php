@@ -78,7 +78,8 @@
                     '<td>' + job.agency_name + '</td>' +
                     '<td>' + job.advisor + '</td>' +
                     // '<td>' + statusDropdown + '</td>' +
-                    '<td><span class="badge bg-secondary me-2">' + job.status + '</span></td>' +
+                    '<td><span class="badge bg-' + (job.status == 'approved' ? 'success' : (job.status ==
+                        "rejected" ? "danger" : "info")) + ' me-2">' + job.status + '</span></td>' +
                     '<td><span class="badge bg-primary me-2">' + job.created_at + '</span></td>' +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
