@@ -154,7 +154,7 @@
 
                 var statusDropdown =
                     user?.deleted_at ?
-                    '<span class="badge rounded-pill bg-secondary" style="letter-spacing: 0.1em; padding: 5px 10px;">Deleted</span><br>' +
+                    '<span class="badge bg-secondary" style="letter-spacing: 0.1em; padding: 5px 10px;">Deleted</span><br>' +
                     user
                     ?.deleted_at + '' : (
                         '<select class="status-dropdown form-control form-select select2" data-user-id="' +

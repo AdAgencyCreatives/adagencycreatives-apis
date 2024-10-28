@@ -139,7 +139,7 @@ function getRoleBadge(role) {
 
     const badgeColor = roleColors[role] || 'danger';
 
-    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + role.charAt(0).toUpperCase() + role.slice(1) + '</span>';
+    return '<span class="badge bg-' + badgeColor + '">' + role.charAt(0).toUpperCase() + role.slice(1) + '</span>';
 }
 
 function getStatusBadge(status) {
@@ -151,7 +151,7 @@ function getStatusBadge(status) {
 
     const badgeColor = statusColors[status] || 'secondary';
 
-    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+    return '<span class="badge bg-' + badgeColor + '">' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
 }
 
 function getPlanBadge(plan) {
@@ -163,7 +163,7 @@ function getPlanBadge(plan) {
 
     const badgeColor = planColors[plan] || 'secondary';
 
-    return '<span class="badge rounded-pill bg-' + badgeColor + '">' + plan + '</span>';
+    return '<span class="badge bg-' + badgeColor + '">' + plan + '</span>';
 }
 
 function displayJobOptionsBadges(job) {
@@ -425,34 +425,34 @@ function getCitiesByState(stateId, selected_id = null) {
             var citySelect = $('#city');
             citySelect.empty(); // Clear previous options
 
-           if (response.data.length > 0) {
-            citySelect.append($('<option>', {
-                value: "-100",
-                text: "Select City"
-            }));
-
-            $.each(response.data, function (index, city) {
+            if (response.data.length > 0) {
                 citySelect.append($('<option>', {
-                    value: city.uuid,
-                    text: city.name
+                    value: "-100",
+                    text: "Select City"
                 }));
-            });
 
-               if (selected_id !== null) {
-                   citySelect.val(selected_id);
-               }
-               else {
-                   citySelect.val("-100");
-               }
+                $.each(response.data, function (index, city) {
+                    citySelect.append($('<option>', {
+                        value: city.uuid,
+                        text: city.name
+                    }));
+                });
 
-               citySelect.trigger('change');
-        } else {
-            // No cities available
-            citySelect.append($('<option>', {
-                value: "-100",
-                text: "No Cities available"
-            }));
-        }
+                if (selected_id !== null) {
+                    citySelect.val(selected_id);
+                }
+                else {
+                    citySelect.val("-100");
+                }
+
+                citySelect.trigger('change');
+            } else {
+                // No cities available
+                citySelect.append($('<option>', {
+                    value: "-100",
+                    text: "No Cities available"
+                }));
+            }
 
         },
         error: function (xhr, textStatus, errorThrown) {
