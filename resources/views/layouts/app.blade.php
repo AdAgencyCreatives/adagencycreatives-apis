@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     @yield('styles')
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <style>
+        td>.badge {
+            width: 100%;
+            padding: 5px;
+            text-transform: capitalize;
+        }
+    </style>
 </head>
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
