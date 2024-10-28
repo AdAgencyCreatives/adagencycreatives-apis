@@ -25,8 +25,13 @@ class RemindProfileCompletionAgency extends Command
         $date = today();
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
             try {
-
-                $date_before = today()->subDays(2);
+                $diff = 6;
+                switch ($date->dayOfWeek) {
+                    case Carbon::FRIDAY:
+                        $diff = 4;
+                        break;
+                }
+                $date_before = today()->subDays($diff);
 
                 $users = User::where('role', '=', 3)
                     ->whereNull('profile_completed_at')

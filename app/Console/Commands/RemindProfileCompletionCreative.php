@@ -25,10 +25,9 @@ class RemindProfileCompletionCreative extends Command
         $date = today();
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
             try {
-                $diff = 2;
+                $diff = 6;
                 switch ($date->dayOfWeek) {
-                    case Carbon::MONDAY:
-                    case Carbon::TUESDAY:
+                    case Carbon::FRIDAY:
                         $diff = 4;
                         break;
                 }
