@@ -18,7 +18,7 @@
             width: 100%;
             padding: 5px;
             text-transform: capitalize;
-            line-height: 1em;
+            line-height: 1.5;
         }
     </style>
 </head>
