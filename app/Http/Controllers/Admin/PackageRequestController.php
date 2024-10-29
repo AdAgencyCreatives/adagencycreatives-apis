@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\Message;
 use App\Models\PackageRequest;
+use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -38,6 +40,8 @@ class PackageRequestController extends Controller
                 $advisor = User::find($advisor_id);
                 $package_request->assigned_to = $advisor_id;
 
+                $this->update_package($advisor);
+
                 $agency_url = sprintf('%s/agency/%s', env('FRONTEND_URL'), $agency->slug);
                 $msg_data = [
                     'uuid' => Str::uuid(),
@@ -63,9 +67,35 @@ class PackageRequestController extends Controller
             Session::flash('success', 'Job updated successfully');
 
             return redirect()->back();
-
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
+        }
+    }
+
+    private function update_package($user)
+    {
+
+        $subscription = Subscription::where('user_id', $user->id)->latest()->first(); // Retrieve the latest subscription
+        $plan = Plan::where('slug', '=', 'premium-hire-an-advisor')->first();
+
+        if ($subscription) {
+            $subscription->update([
+                'quantity' => $subscription->quantity + 1,
+                'quota_left' => $subscription->quota_left + 1,
+            ]);
+        } else {
+
+            $totalQuota = $plan->quota;
+            $endDate = now()->addDays($plan->days);
+
+            $user->subscriptions()->create([
+                'user_id' => $user->id,
+                'name' => $plan->slug,
+                'price' => $plan->price,
+                'quantity' => $totalQuota,
+                'quota_left' => $totalQuota,
+                'ends_at' => $endDate,
+            ]);
         }
     }
 }
