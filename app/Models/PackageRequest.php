@@ -122,6 +122,8 @@ class PackageRequest extends Model
                 $data['quota_left'] = $data['quota_left'] + 1;
             }
             $subscription->update($data);
+            $subscription->refresh();
+            die(print_r($subscription));
         } else {
 
             $newSubscriptionData = array_merge($data, [
