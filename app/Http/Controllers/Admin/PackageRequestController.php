@@ -83,8 +83,6 @@ class PackageRequestController extends Controller
                 'quota_left' => $subscription->quota_left + 1,
             ]);
             $subscription->refresh();
-
-            die(print_r($subscription));
         } else {
 
             $totalQuota = $plan->quota;
