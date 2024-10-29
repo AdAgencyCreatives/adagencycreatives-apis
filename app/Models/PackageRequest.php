@@ -105,7 +105,7 @@ class PackageRequest extends Model
         }
     }
 
-    public static function assignSubscription($user_id, $plan_name)
+    public static function assignSubscription($user_id, $plan_name, $role)
     {
         $subscription = Subscription::where('user_id', $user_id)->latest()->first(); // Retrieve the latest subscription
 
@@ -114,10 +114,13 @@ class PackageRequest extends Model
         $data = [
             'name' => $plan->slug, // Plan Name
             'quota_left' => $plan->quota,
-            'ends_at' => now()->addDays($plan->days) ,
+            'ends_at' => now()->addDays($plan->days),
         ];
 
         if ($subscription) {
+            if ($role == "advisor") {
+                $data['quota_left'] = $data['quota_left'] + 1;
+            }
             $subscription->update($data);
         } else {
 
@@ -140,23 +143,15 @@ class PackageRequest extends Model
             if ($oldStatus === 'pending' && $newStatus != 'pending') { //New status is something else
                 $user = User::find($package_request->user_id);
                 if ($newStatus === 'approved') {
-
+                    PackageRequest::assignSubscription($package_request->user_id, 'premium-hire-an-advisor', 'agency');
+                    PackageRequest::assignSubscription($package_request->assigned_to, 'premium-hire-an-advisor', 'advisor');
                 } elseif ($newStatus === 'rejected') {
                     SendEmailJob::dispatch([
-                        'receiver' => $user, 'data' => $user,
+                        'receiver' => $user,
+                        'data' => $user,
                     ], 'custom_job_request_rejected');
                 }
             }
         });
-
-        static::updated(function ($package_request) {
-            $newStatus = $package_request->status;
-
-            if ($newStatus == 'approved') {
-                PackageRequest::assignSubscription($package_request->user_id, 'premium-hire-an-advisor');
-                PackageRequest::assignSubscription($package_request->assigned_to, 'premium-hire-an-advisor');
-            }
-        });
-
     }
 }
