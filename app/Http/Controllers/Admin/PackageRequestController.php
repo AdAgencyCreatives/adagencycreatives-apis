@@ -78,6 +78,7 @@ class PackageRequestController extends Controller
         $subscription = Subscription::where('user_id', $user->id)->latest()->first(); // Retrieve the latest subscription
         $plan = Plan::where('slug', '=', 'premium-hire-an-advisor')->first();
 
+        die(print_r($subscription));
         if ($subscription) {
             $subscription->update([
                 'quantity' => $subscription->quantity + 1,
