@@ -119,7 +119,7 @@ class PackageRequest extends Model
 
         if ($subscription) {
             if ($role == "advisor") {
-                $data['quota_left'] = $data['quota_left'] + 1;
+                $data['quota_left'] = $subscription->quota_left + 1;
             }
             $subscription->update($data);
             $subscription->refresh();
