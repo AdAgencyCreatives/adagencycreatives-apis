@@ -40,7 +40,9 @@ class PackageRequestController extends Controller
                 $advisor = User::find($advisor_id);
                 $package_request->assigned_to = $advisor_id;
 
-                $this->update_package($advisor);
+                if ($package_request->status == "pending" && $request->input('status') == "approved") {
+                    $this->update_package($advisor);
+                }
 
                 $agency_url = sprintf('%s/agency/%s', env('FRONTEND_URL'), $agency->slug);
                 $msg_data = [
@@ -64,7 +66,7 @@ class PackageRequestController extends Controller
 
             $package_request->save();
 
-            Session::flash('success', 'Job updated successfully');
+            Session::flash('success', 'Package request updated successfully');
 
             return redirect()->back();
         } catch (ModelNotFoundException $exception) {
@@ -83,6 +85,8 @@ class PackageRequestController extends Controller
                 'quota_left' => $subscription->quota_left + 1,
             ]);
             $subscription->refresh();
+
+            die("Quota Left: " . $subscription->quota_left);
         } else {
 
             $totalQuota = $plan->quota;
