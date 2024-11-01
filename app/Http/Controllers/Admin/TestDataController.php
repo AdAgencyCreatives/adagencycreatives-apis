@@ -276,8 +276,6 @@ class TestDataController extends Controller
             $original_image  = getAttachmentBasePath() . $user?->portfolio_website_preview?->path;
             $extension =  $user?->portfolio_website_preview?->extension;
 
-            $info = pathinfo($original_image);
-
             if (strtolower($extension) == 'png') {
                 $img = \imagecreatefrompng("{$original_image}");
             } else if (strtolower($extension) == 'bmp') {
@@ -304,8 +302,7 @@ class TestDataController extends Controller
             // create a new temporary image
             $tmp_img = imagecreatetruecolor($new_width, $new_height);
 
-            dd($tmp_img);
-            if (strtolower($info['extension']) == 'png') {
+            if (strtolower($extension) == 'png') {
                 imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
                 imagealphablending($tmp_img, TRUE);
             }
