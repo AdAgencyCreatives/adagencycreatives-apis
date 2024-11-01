@@ -274,6 +274,7 @@ class TestDataController extends Controller
 
             $original_image  = getAttachmentBasePath() . $user->portfolio_website_preview->path;
 
+            die($original_image);
             $info = pathinfo($original_image);
             // dd($info);
 
