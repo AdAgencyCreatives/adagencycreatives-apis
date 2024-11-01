@@ -207,7 +207,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_website_preview_base64($user, $thumbWidth = 250)
     {
-        return get_image_base64($user?->portfolio_website_preview ?? null);
+        return get_thumb_base64($user?->portfolio_website_preview ?? null);
     }
 
     public function get_portfolio_items($user)
