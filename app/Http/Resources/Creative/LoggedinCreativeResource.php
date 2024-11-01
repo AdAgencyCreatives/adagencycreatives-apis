@@ -205,7 +205,7 @@ class LoggedinCreativeResource extends JsonResource
         return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
     }
 
-    public function get_website_preview_base64($user, $thumbWidth = 250)
+    public function get_website_preview_base64($user, $thumbWidth = 400)
     {
         return get_thumb_base64($user?->portfolio_website_preview ?? null, $thumbWidth);
     }
