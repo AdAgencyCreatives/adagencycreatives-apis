@@ -267,50 +267,68 @@ class TestDataController extends Controller
     public function testThumbResampled(Request $request)
     {
         $user_id = $request->user_id;
+        $thumbWidth = 250;
 
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
 
-            // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
+            $original_image  = getAttachmentBasePath() . $user->portfolio_website_preview->path;
 
-            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
-
-            $info = pathinfo($profile_picture);
+            $info = pathinfo($original_image);
             // dd($info);
 
-            $fname = $info['basename'];
-            $thumbWidth = 150;
-            $thumb_path = str_replace($info['filename'], $info['filename'] . "_thumb", $user->profile_picture->path);
+            $info = pathinfo($original_image);
 
-            // dd($thumb_path);
+            // load image
 
-            if (strtolower($info['extension']) == 'jpg') {
+            if (strtolower($info['extension']) == 'png') {
+                $img = \imagecreatefrompng("{$original_image}");
+            } else if (strtolower($info['extension']) == 'bmp') {
+                $img = \imagecreatefrombmp("{$original_image}");
+            } else if (strtolower($info['extension']) == 'gif') {
+                $img = \imagecreatefromgif("{$original_image}");
+            } else {
+                $img = \imagecreatefromjpeg("{$original_image}");
+            }
 
-                // load image and get image size
-                $img = \imagecreatefromjpeg("{$profile_picture}");
-                $width = imagesx($img);
-                $height = imagesy($img);
+            // get image size
+            $width = imagesx($img);
+            $height = imagesy($img);
 
-                // calculate thumbnail size
+            // calculate thumbnail size
+            if ($width <= $height) {
                 $new_width = $thumbWidth;
                 $new_height = floor($height * ($thumbWidth / $width));
-
-                // create a new temporary image
-                $tmp_img = imagecreatetruecolor($new_width, $new_height);
-
-                // copy and resize old image into new image 
-                imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-
-                $temp = tmpfile();
-                // save thumbnail into a temp file
-                imagejpeg($tmp_img, $temp);
-
-                $filePath = Storage::disk('s3')->put($thumb_path, $temp);
-
-                fclose($temp);
-
-                return '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
+            } else {
+                $new_height = $thumbWidth;
+                $new_width = floor($width * ($thumbWidth / $height));
             }
+
+            // create a new temporary image
+            $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+            if (strtolower($info['extension']) == 'png') {
+                imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
+                imagealphablending($tmp_img, TRUE);
+            }
+
+            // copy and resize old image into new image 
+            imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+            imagefilter($tmp_img, IMG_FILTER_CONTRAST, -5);
+
+            ob_start();
+            // save thumbnail into a temp file
+            imagejpeg($tmp_img, null, 100);
+
+            $imageData = ob_get_contents();
+            ob_end_clean();
+
+            imagedestroy($tmp_img);
+            imagedestroy($img);
+
+
+            return '<img src="' . 'data:image/jpeg;charset=utf-8;base64,' . (strlen($original_image) > 0 ? base64_encode($imageData) : '') . '" />';
         }
         return "No-UUID";
     }

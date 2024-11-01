@@ -406,6 +406,7 @@ Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class
 Route::get('/test-data', [TestDataController::class, 'index'])->name('test-data');
 Route::get('/test-fr', [TestDataController::class, 'testFr'])->name('test-fr');
 Route::get('/test-thumb', [TestDataController::class, 'testThumb'])->name('test-thumb');
+Route::get('/test-thumb-rs', [TestDataController::class, 'testThumbResampled'])->name('test-thumb-rs');
 Route::get('/test-crop', [TestDataController::class, 'testCrop'])->name('test-crop');
 Route::get('/test-welcome', [TestDataController::class, 'testWelcome'])->name('test-welcome');
 Route::get('/test-thumb-att', [TestDataController::class, 'testThumbAtt'])->name('test-thumb-att');
