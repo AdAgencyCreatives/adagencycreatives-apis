@@ -267,7 +267,7 @@ class TestDataController extends Controller
     public function testThumbResampled(Request $request)
     {
         $user_id = $request->user_id;
-        $thumbWidth = 250;
+        $thumbWidth = 150;
 
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
