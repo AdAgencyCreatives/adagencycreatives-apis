@@ -277,7 +277,7 @@ class TestDataController extends Controller
 
             $info = pathinfo($original_image);
 
-            dd($info);
+            dd(\imagecreatefromjpeg("{$original_image}"));
             // load image
 
             if (strtolower($info['extension']) == 'png') {
