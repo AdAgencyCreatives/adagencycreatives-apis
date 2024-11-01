@@ -222,8 +222,25 @@ if (!function_exists('get_image_base64')) {
             $original_picture = $original_picture_attachment?->path ? getAttachmentBasePath() . $original_picture_attachment->path : '';
             $extension = $original_picture_attachment?->extension;
             if (strlen($original_picture) > 0) {
+                return 'data:image/' . $extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($original_picture));
+            }
+        } catch (\Exception $e) {
+        }
+        return '';
+    }
+}
+
+if (!function_exists('get_thumb_base64')) {
+    function get_thumb_base64($original_picture_attachment, $thumbWidth = 100)
+    {
+        try {
+            if (!$original_picture_attachment) {
+                return '';
+            }
+            $original_picture = $original_picture_attachment?->path ? getAttachmentBasePath() . $original_picture_attachment->path : '';
+            $extension = $original_picture_attachment?->extension;
+            if (strlen($original_picture) > 0) {
                 return getThumbBase64($original_picture, $extension, $thumbWidth);
-                // return 'data:image/' . $extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($original_picture));
             }
         } catch (\Exception $e) {
         }

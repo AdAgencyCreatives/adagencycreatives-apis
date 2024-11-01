@@ -149,7 +149,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_profile_image_base64($user, $thumbWidth = 100)
     {
-        return get_image_base64($user?->profile_picture ?? null);
+        return get_thumb_base64($user?->profile_picture ?? null);
     }
 
     public function get_user_thumbnail($user)
@@ -159,7 +159,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_user_thumbnail_base64($user, $thumbWidth = 100)
     {
-        return get_image_base64($user?->user_thumbnail ?? null);
+        return get_thumb_base64($user?->user_thumbnail ?? null);
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
@@ -226,7 +226,7 @@ class LoggedinCreativeResource extends JsonResource
 
         foreach ($user->portfolio_items as $item) {
             try {
-                $portfolio_items_base64[] = get_image_base64($item, $thumbWidth);
+                $portfolio_items_base64[] = get_thumb_base64($item, $thumbWidth);
                 // $portfolio_items_base64[] = 'data:image/' . $item->extension . ';charset=utf-8;base64,' .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
             } catch (\Exception $e) {
             }
