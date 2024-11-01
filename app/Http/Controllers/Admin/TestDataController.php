@@ -302,10 +302,10 @@ class TestDataController extends Controller
                 $new_width = floor($width * ($thumbWidth / $height));
             }
 
+            dd([$width, $height, $new_width, $new_height]);
+
             // create a new temporary image
             $tmp_img = imagecreatetruecolor($new_width, $new_height);
-
-            dd($tmp_img);
 
             if (strtolower($info['extension']) == 'png') {
                 imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
