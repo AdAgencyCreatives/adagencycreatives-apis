@@ -288,7 +288,6 @@ class TestDataController extends Controller
                 $img = \imagecreatefromjpeg("{$original_image}");
             }
 
-            dd($img);
             // get image size
             $width = imagesx($img);
             $height = imagesy($img);
@@ -309,6 +308,8 @@ class TestDataController extends Controller
                 imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
                 imagealphablending($tmp_img, TRUE);
             }
+
+            dd($img);
 
             // copy and resize old image into new image 
             imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
