@@ -264,6 +264,57 @@ class TestDataController extends Controller
         return new AttachmentResource(storeThumb($user, 'user_thumbnail'));
     }
 
+    public function testThumbResampled(Request $request)
+    {
+        $user_id = $request->user_id;
+
+        if ($user_id) {
+            $user = User::where('uuid', $user_id)->first();
+
+            // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
+
+            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
+
+            $info = pathinfo($profile_picture);
+            // dd($info);
+
+            $fname = $info['basename'];
+            $thumbWidth = 150;
+            $thumb_path = str_replace($info['filename'], $info['filename'] . "_thumb", $user->profile_picture->path);
+
+            // dd($thumb_path);
+
+            if (strtolower($info['extension']) == 'jpg') {
+
+                // load image and get image size
+                $img = \imagecreatefromjpeg("{$profile_picture}");
+                $width = imagesx($img);
+                $height = imagesy($img);
+
+                // calculate thumbnail size
+                $new_width = $thumbWidth;
+                $new_height = floor($height * ($thumbWidth / $width));
+
+                // create a new temporary image
+                $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+                // copy and resize old image into new image 
+                imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+                $temp = tmpfile();
+                // save thumbnail into a temp file
+                imagejpeg($tmp_img, $temp);
+
+                $filePath = Storage::disk('s3')->put($thumb_path, $temp);
+
+                fclose($temp);
+
+                return '<img src="' . getAttachmentBasePath() . $thumb_path . '" />';
+            }
+        }
+        return "No-UUID";
+    }
+
     public function testJobClosed(Request $request)
     {
         $apply_type = $request->apply_type ?? "Internal";
