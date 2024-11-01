@@ -130,14 +130,13 @@ class CreativeResource extends JsonResource
         try {
             $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
             if (strlen($website_preview) > 0) {
-                return "HERE";
-                // return getThumbBase64($website_preview, $thumbWidth);
+                return getThumbBase64($website_preview, $thumbWidth);
                 // return 'data:image/' . $user->portfolio_website_preview->extension . ';charset=utf-8;base64,' . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : '');
             }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-        return 'there';
+        return '';
     }
 
     public function get_portfolio_items($user)
