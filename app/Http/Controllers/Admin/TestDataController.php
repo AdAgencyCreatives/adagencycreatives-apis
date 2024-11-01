@@ -277,7 +277,6 @@ class TestDataController extends Controller
             $extension =  $user?->portfolio_website_preview?->extension;
 
             $info = pathinfo($original_image);
-            $img = null;
 
             if (strtolower($extension) == 'png') {
                 $img = \imagecreatefrompng("{$original_image}");
@@ -289,6 +288,7 @@ class TestDataController extends Controller
                 $img = \imagecreatefromjpeg("{$original_image}");
             }
 
+            dd($img);
             // get image size
             $width = imagesx($img);
             $height = imagesy($img);
