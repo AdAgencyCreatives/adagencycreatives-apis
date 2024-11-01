@@ -155,18 +155,18 @@ if (!function_exists('storeImage')) {
 }
 
 if (!function_exists('getThumbBase64')) {
-    function getThumbBase64($original_image, $thumbWidth = 150)
+    function getThumbBase64($original_image, $extension, $thumbWidth = 150)
     {
 
         $info = pathinfo($original_image);
 
         // load image
 
-        if (strtolower($info['extension']) == 'png') {
+        if (strtolower($extension) == 'png') {
             $img = \imagecreatefrompng("{$original_image}");
-        } else if (strtolower($info['extension']) == 'bmp') {
+        } else if (strtolower($extension) == 'bmp') {
             $img = \imagecreatefrombmp("{$original_image}");
-        } else if (strtolower($info['extension']) == 'gif') {
+        } else if (strtolower($extension) == 'gif') {
             $img = \imagecreatefromgif("{$original_image}");
         } else {
             $img = \imagecreatefromjpeg("{$original_image}");
@@ -177,7 +177,7 @@ if (!function_exists('getThumbBase64')) {
         $height = imagesy($img);
 
         // calculate thumbnail size
-        if ($width <= $height) {
+        if ($width >= $height) {
             $new_width = $thumbWidth;
             $new_height = floor($height * ($thumbWidth / $width));
         } else {
@@ -188,7 +188,7 @@ if (!function_exists('getThumbBase64')) {
         // create a new temporary image
         $tmp_img = imagecreatetruecolor($new_width, $new_height);
 
-        if (strtolower($info['extension']) == 'png') {
+        if (strtolower($extension) == 'png') {
             imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
             imagealphablending($tmp_img, TRUE);
         }
@@ -196,7 +196,7 @@ if (!function_exists('getThumbBase64')) {
         // copy and resize old image into new image 
         imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
-        // imagefilter($tmp_img, IMG_FILTER_CONTRAST, -5);
+        //imagefilter($tmp_img, IMG_FILTER_CONTRAST, -5);
 
         ob_start();
         // save thumbnail into a temp file
@@ -209,6 +209,25 @@ if (!function_exists('getThumbBase64')) {
         imagedestroy($img);
 
         return 'data:image/jpeg;charset=utf-8;base64,' . (strlen($original_image) > 0 ? base64_encode($imageData) : '');
+    }
+}
+
+if (!function_exists('get_image_base64')) {
+    function get_image_base64($original_picture_attachment, $thumbWidth = 100)
+    {
+        try {
+            if (!$original_picture_attachment) {
+                return '';
+            }
+            $original_picture = $original_picture_attachment?->path ? getAttachmentBasePath() . $original_picture_attachment->path : '';
+            $extension = $original_picture_attachment?->extension;
+            if (strlen($original_picture) > 0) {
+                return getThumbBase64($original_picture, $extension, $thumbWidth);
+                // return 'data:image/' . $extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($original_picture));
+            }
+        } catch (\Exception $e) {
+        }
+        return '';
     }
 }
 
