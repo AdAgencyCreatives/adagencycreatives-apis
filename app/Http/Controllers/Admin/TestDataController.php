@@ -304,12 +304,11 @@ class TestDataController extends Controller
             // create a new temporary image
             $tmp_img = imagecreatetruecolor($new_width, $new_height);
 
+            dd($tmp_img);
             if (strtolower($info['extension']) == 'png') {
                 imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
                 imagealphablending($tmp_img, TRUE);
             }
-
-            dd($img);
 
             // copy and resize old image into new image 
             imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
