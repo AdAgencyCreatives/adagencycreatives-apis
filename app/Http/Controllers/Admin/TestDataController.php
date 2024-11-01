@@ -293,7 +293,7 @@ class TestDataController extends Controller
             $height = imagesy($img);
 
             // calculate thumbnail size
-            if ($width <= $height) {
+            if ($width >= $height) {
                 $new_width = $thumbWidth;
                 $new_height = floor($height * ($thumbWidth / $width));
             } else {
