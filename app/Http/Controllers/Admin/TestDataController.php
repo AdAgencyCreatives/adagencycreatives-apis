@@ -273,37 +273,22 @@ class TestDataController extends Controller
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
 
-            $original_image  = getAttachmentBasePath() . $user->portfolio_website_preview->path;
+            $original_image  = getAttachmentBasePath() . $user?->portfolio_website_preview?->path;
+            $extension =  $user?->portfolio_website_preview?->extension;
 
+            dd($extension);
 
             $info = pathinfo($original_image);
             $img = null;
 
-            if (strtolower($info['extension']) == 'png') {
+            if (strtolower($extension) == 'png') {
                 $img = \imagecreatefrompng("{$original_image}");
-            } else if (strtolower($info['extension']) == 'bmp') {
+            } else if (strtolower($extension) == 'bmp') {
                 $img = \imagecreatefrombmp("{$original_image}");
-            } else if (strtolower($info['extension']) == 'gif') {
+            } else if (strtolower($extension) == 'gif') {
                 $img = \imagecreatefromgif("{$original_image}");
             } else {
-                if (!$img) {
-                    try {
-                        $img = \imagecreatefromjpeg("{$original_image}");
-                    } catch (Exception $e1) {
-                    }
-                }
-                if (!$img) {
-                    try {
-                        $img = \imagecreatefrompng("{$original_image}");
-                    } catch (Exception $e1) {
-                    }
-                }
-                if (!$img) {
-                    try {
-                        $img = \imagecreatefrombmp("{$original_image}");
-                    } catch (Exception $e1) {
-                    }
-                }
+                $img = \imagecreatefromjpeg("{$original_image}");
             }
 
             // get image size
