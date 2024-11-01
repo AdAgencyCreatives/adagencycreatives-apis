@@ -154,6 +154,62 @@ if (!function_exists('storeImage')) {
     }
 }
 
+if (!function_exists('getThumbBase64')) {
+    function getThumbBase64($original_image, $thumbWidth = 150)
+    {
+
+        $info = pathinfo($original_image);
+
+        // load image
+
+        if (strtolower($info['extension']) == 'png') {
+            $img = \imagecreatefrompng("{$original_image}");
+        } else if (strtolower($info['extension']) == 'bmp') {
+            $img = \imagecreatefrombmp("{$original_image}");
+        } else if (strtolower($info['extension']) == 'gif') {
+            $img = \imagecreatefromgif("{$original_image}");
+        } else {
+            $img = \imagecreatefromjpeg("{$original_image}");
+        }
+
+        // get image size
+        $width = imagesx($img);
+        $height = imagesy($img);
+
+        // calculate thumbnail size
+        if ($width <= $height) {
+            $new_width = $thumbWidth;
+            $new_height = floor($height * ($thumbWidth / $width));
+        } else {
+            $new_height = $thumbWidth;
+            $new_width = floor($width * ($thumbWidth / $height));
+        }
+
+        // create a new temporary image
+        $tmp_img = imagecreatetruecolor($new_width, $new_height);
+
+        if (strtolower($info['extension']) == 'png') {
+            imagefill($tmp_img, 0, 0, imagecolorallocate($tmp_img, 255, 255, 255));
+            imagealphablending($tmp_img, TRUE);
+        }
+
+        // copy and resize old image into new image 
+        imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+        ob_start();
+        // save thumbnail into a temp file
+        imagejpeg($tmp_img, null, 100);
+
+        $imageData = ob_get_contents();
+        ob_end_clean();
+
+        imagedestroy($tmp_img);
+        imagedestroy($img);
+
+        return 'data:image/jpeg;charset=utf-8;base64,' . (strlen($original_image) > 0 ? base64_encode($imageData) : '');
+    }
+}
+
 if (!function_exists('storeThumb')) {
     function storeThumb($user, $resource_type, $thumbWidth = 150)
     {

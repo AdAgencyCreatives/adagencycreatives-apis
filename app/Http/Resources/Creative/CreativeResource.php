@@ -89,12 +89,13 @@ class CreativeResource extends JsonResource
         // return isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' );
     }
 
-    public function get_profile_image_base64($user)
+    public function get_profile_image_base64($user, $thumbWidth = 100)
     {
         try {
             $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : '';
             if (strlen($profile_picture) > 0) {
-                return 'data:image/' . $user->profile_picture->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($profile_picture));
+                return getThumbBase64($profile_picture, $thumbWidth);
+                // return 'data:image/' . $user->profile_picture->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($profile_picture));
             }
         } catch (\Exception $e) {
         }
@@ -106,12 +107,13 @@ class CreativeResource extends JsonResource
         return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : '';
     }
 
-    public function get_user_thumbnail_base64($user)
+    public function get_user_thumbnail_base64($user, $thumbWidth = 100)
     {
         try {
             $user_thumbnail = isset($user->user_thumbnail) ? (getAttachmentBasePath() . $user->user_thumbnail->path) : '';
             if (strlen($user_thumbnail) > 0) {
-                return 'data:image/' . $user->user_thumbnail->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($user_thumbnail));
+                return getThumbBase64($user_thumbnail, $thumbWidth);
+                // return 'data:image/' . $user->user_thumbnail->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($user_thumbnail));
             }
         } catch (\Exception $e) {
         }
@@ -123,12 +125,13 @@ class CreativeResource extends JsonResource
         return $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
     }
 
-    public function get_website_preview_base64($user)
+    public function get_website_preview_base64($user, $thumbWidth = 250)
     {
         try {
             $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
             if (strlen($website_preview) > 0) {
-                return 'data:image/' . $user->portfolio_website_preview->extension . ';charset=utf-8;base64,' . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : '');
+                return getThumbBase64($website_preview, $thumbWidth);
+                // return 'data:image/' . $user->portfolio_website_preview->extension . ';charset=utf-8;base64,' . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : '');
             }
         } catch (\Exception $e) {
         }
@@ -145,13 +148,14 @@ class CreativeResource extends JsonResource
         return $portfolio_items;
     }
 
-    public function get_portfolio_items_base64($user)
+    public function get_portfolio_items_base64($user, $thumbWidth = 90)
     {
         $portfolio_items_base64 = [];
 
         foreach ($user->portfolio_items as $item) {
             try {
-                $portfolio_items_base64[] = 'data:image/' . $item->extension . ';charset=utf-8;base64,' .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
+                $portfolio_items_base64[] = getThumbBase64(getAttachmentBasePath() . $item->path, $thumbWidth);
+                // $portfolio_items_base64[] = 'data:image/' . $item->extension . ';charset=utf-8;base64,' .  base64_encode(file_get_contents(getAttachmentBasePath() . $item->path));
             } catch (\Exception $e) {
             }
         }
