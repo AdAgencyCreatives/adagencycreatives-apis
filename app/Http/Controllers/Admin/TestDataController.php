@@ -267,18 +267,16 @@ class TestDataController extends Controller
     public function testThumbResampled(Request $request)
     {
         $user_id = $request->user_id;
-        $thumbWidth = 150;
+        $thumbWidth = 250;
 
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
 
             $original_image  = getAttachmentBasePath() . $user->portfolio_website_preview->path;
 
-            die($original_image);
-            $info = pathinfo($original_image);
-            // dd($info);
 
             $info = pathinfo($original_image);
+            dd($info);
 
             // load image
 
