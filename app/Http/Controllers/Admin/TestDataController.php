@@ -29,6 +29,7 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -276,9 +277,7 @@ class TestDataController extends Controller
 
 
             $info = pathinfo($original_image);
-
-            dd(\imagecreatefrompng("{$original_image}"));
-            // load image
+            $img = null;
 
             if (strtolower($info['extension']) == 'png') {
                 $img = \imagecreatefrompng("{$original_image}");
@@ -287,7 +286,24 @@ class TestDataController extends Controller
             } else if (strtolower($info['extension']) == 'gif') {
                 $img = \imagecreatefromgif("{$original_image}");
             } else {
-                $img = \imagecreatefromjpeg("{$original_image}");
+                if (!$img) {
+                    try {
+                        $img = \imagecreatefromjpeg("{$original_image}");
+                    } catch (Exception $e1) {
+                    }
+                }
+                if (!$img) {
+                    try {
+                        $img = \imagecreatefrompng("{$original_image}");
+                    } catch (Exception $e1) {
+                    }
+                }
+                if (!$img) {
+                    try {
+                        $img = \imagecreatefrombmp("{$original_image}");
+                    } catch (Exception $e1) {
+                    }
+                }
             }
 
             // get image size
