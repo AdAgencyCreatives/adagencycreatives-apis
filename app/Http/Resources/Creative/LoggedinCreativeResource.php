@@ -152,8 +152,8 @@ class LoggedinCreativeResource extends JsonResource
         try {
             $profile_picture = isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : '';
             if (strlen($profile_picture) > 0) {
-                // return getThumbBase64($profile_picture, $thumbWidth);
-                return 'data:image/' . $user->profile_picture->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($profile_picture));
+                return getThumbBase64($profile_picture, $thumbWidth);
+                // return 'data:image/' . $user->profile_picture->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($profile_picture));
             }
         } catch (\Exception $e) {
         }
@@ -170,8 +170,8 @@ class LoggedinCreativeResource extends JsonResource
         try {
             $user_thumbnail = isset($user->user_thumbnail) ? (getAttachmentBasePath() . $user->user_thumbnail->path) : '';
             if (strlen($user_thumbnail) > 0) {
-                // return getThumbBase64($user_thumbnail, $thumbWidth);
-                return 'data:image/' . $user->user_thumbnail->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($user_thumbnail));
+                return getThumbBase64($user_thumbnail, $thumbWidth);
+                // return 'data:image/' . $user->user_thumbnail->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($user_thumbnail));
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -227,8 +227,8 @@ class LoggedinCreativeResource extends JsonResource
         try {
             $website_preview = $user->portfolio_website_preview ? getAttachmentBasePath() . $user->portfolio_website_preview->path : '';
             if (strlen($website_preview) > 0) {
-                // return getThumbBase64($website_preview, $thumbWidth);
-                return 'data:image/' . $user->portfolio_website_preview->extension . ';charset=utf-8;base64,' . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : '');
+                return getThumbBase64($website_preview, $thumbWidth);
+                // return 'data:image/' . $user->portfolio_website_preview->extension . ';charset=utf-8;base64,' . (strlen($website_preview) > 0 ? base64_encode(file_get_contents($website_preview)) : '');
             }
         } catch (\Exception $e) {
         }

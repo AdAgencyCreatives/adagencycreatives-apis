@@ -194,7 +194,7 @@ if (!function_exists('getThumbBase64')) {
         }
 
         // copy and resize old image into new image 
-        imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+        imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         ob_start();
         // save thumbnail into a temp file
