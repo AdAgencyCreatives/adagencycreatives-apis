@@ -277,6 +277,7 @@ class TestDataController extends Controller
 
             $info = pathinfo($original_image);
 
+            dd($info);
             // load image
 
             if (strtolower($info['extension']) == 'png') {
@@ -301,8 +302,6 @@ class TestDataController extends Controller
                 $new_height = $thumbWidth;
                 $new_width = floor($width * ($thumbWidth / $height));
             }
-
-            dd([$width, $height, $new_width, $new_height]);
 
             // create a new temporary image
             $tmp_img = imagecreatetruecolor($new_width, $new_height);
