@@ -157,9 +157,6 @@ if (!function_exists('storeImage')) {
 if (!function_exists('getThumbBase64')) {
     function getThumbBase64($original_image, $extension, $thumbWidth = 150)
     {
-
-        $info = pathinfo($original_image);
-
         // load image
 
         if (strtolower($extension) == 'png') {

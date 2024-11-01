@@ -149,7 +149,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_profile_image_base64($user, $thumbWidth = 100)
     {
-        return get_thumb_base64($user?->profile_picture ?? null);
+        return get_thumb_base64($user?->profile_picture ?? null, $thumbWidth);
     }
 
     public function get_user_thumbnail($user)
@@ -159,7 +159,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_user_thumbnail_base64($user, $thumbWidth = 100)
     {
-        return get_thumb_base64($user?->user_thumbnail ?? null);
+        return get_thumb_base64($user?->user_thumbnail ?? null, $thumbWidth);
     }
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
@@ -207,7 +207,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_website_preview_base64($user, $thumbWidth = 250)
     {
-        return get_thumb_base64($user?->portfolio_website_preview ?? null);
+        return get_thumb_base64($user?->portfolio_website_preview ?? null, $thumbWidth);
     }
 
     public function get_portfolio_items($user)

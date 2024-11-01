@@ -322,7 +322,6 @@ class TestDataController extends Controller
             imagedestroy($tmp_img);
             imagedestroy($img);
 
-
             return '<img src="' . 'data:image/jpeg;charset=utf-8;base64,' . (strlen($original_image) > 0 ? base64_encode($imageData) : '') . '" />';
         }
         return "No-UUID";
