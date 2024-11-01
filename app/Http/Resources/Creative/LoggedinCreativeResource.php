@@ -174,6 +174,7 @@ class LoggedinCreativeResource extends JsonResource
                 return 'data:image/' . $user->user_thumbnail->extension . ';charset=utf-8;base64,' . base64_encode(file_get_contents($user_thumbnail));
             }
         } catch (\Exception $e) {
+            return $e->getMessage();
         }
         return '';
     }
