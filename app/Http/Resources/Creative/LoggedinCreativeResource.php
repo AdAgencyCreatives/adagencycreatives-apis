@@ -147,7 +147,7 @@ class LoggedinCreativeResource extends JsonResource
         // return isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' );
     }
 
-    public function get_profile_image_base64($user, $thumbWidth = 100)
+    public function get_profile_image_base64($user, $thumbWidth = 200)
     {
         return get_thumb_base64($user?->profile_picture ?? null, $thumbWidth);
     }
@@ -157,7 +157,7 @@ class LoggedinCreativeResource extends JsonResource
         return isset($user->user_thumbnail) ? getAttachmentBasePath() . $user->user_thumbnail->path : '';
     }
 
-    public function get_user_thumbnail_base64($user, $thumbWidth = 100)
+    public function get_user_thumbnail_base64($user, $thumbWidth = 200)
     {
         return get_thumb_base64($user?->user_thumbnail ?? null, $thumbWidth);
     }
@@ -220,7 +220,7 @@ class LoggedinCreativeResource extends JsonResource
         return $portfolio_items;
     }
 
-    public function get_portfolio_items_base64($user, $thumbWidth = 90)
+    public function get_portfolio_items_base64($user, $thumbWidth = 200)
     {
         $portfolio_items_base64 = [];
 
