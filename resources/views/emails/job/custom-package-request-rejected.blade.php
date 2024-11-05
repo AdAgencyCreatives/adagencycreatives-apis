@@ -22,6 +22,13 @@
             width: 100% !important;
         }
 
+        p {
+            margin: 1em 0 !important;
+            padding: 0 !important;
+            line-height: 1.5em !important;
+            text-align: justify !important;
+        }
+
         /* What it does: Stops email clients resizing small text. */
         * {
             -ms-text-size-adjust: 100%;
@@ -91,6 +98,10 @@
         /* What it does: Prevents underlining the button text in Windows 10 */
         .button-link {
             text-decoration: none !important;
+        }
+
+        a {
+            color: #ffffff;
         }
     </style>
 
@@ -213,8 +224,3 @@
 </body>
 
 </html>
-<style>
-    a {
-        color: #ffffff;
-    }
-</style>
