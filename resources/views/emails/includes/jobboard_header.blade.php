@@ -21,6 +21,13 @@
             width: 100% !important;
         }
 
+        p {
+            margin: 1em 0 !important;
+            padding: 0 !important;
+            line-height: 1.5em !important;
+            text-align: justify !important;
+        }
+
         a {
             color: black !important;
             /* Set anchor text color to black */

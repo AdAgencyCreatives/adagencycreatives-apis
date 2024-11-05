@@ -33,7 +33,8 @@
 
                         </div>
 
-                        <p style=""></p>
+                        <p style="">&nbsp;</p>
+                        <p style="">&nbsp;</p>
                         <p style="margin-bottom: 0px;">Thanks,</p>
                         <p style="margin: 0;">Member Support</p>
                         <img width="150"
