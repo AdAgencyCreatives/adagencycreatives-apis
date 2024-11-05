@@ -1,5 +1,4 @@
 <p style="">&nbsp;</p>
-<p style="">&nbsp;</p>
 <p>
     Thanks,<br />
     Member Support<br />
