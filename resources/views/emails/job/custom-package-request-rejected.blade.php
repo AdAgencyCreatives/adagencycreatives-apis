@@ -153,10 +153,20 @@
                                                             contact us if you have any further inquiries or would like
                                                             to discuss this decision.</span></p>
 
-                                                    <p><span style="color: #000000;">Thanks,<br />
-                                                            <span style="color: #000000;">Ad Agency Creatives<br />
-                                                                <span style="color: #000000;">Member Support
-                                                                    Team</span></span></span></p>
+                                                    <p style="">&nbsp;</p>
+                                                    <p style="">&nbsp;</p>
+                                                    <p>
+                                                        Thanks,<br />
+                                                        Member Support<br />
+                                                        <img width="150"
+                                                            src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo.png"
+                                                            alt="" />
+                                                    </p>
+                                                    <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do
+                                                        Cool $#*t!</p>
+                                                    <img class="footer-logo"
+                                                        style="width: 100px; position: absolute; right: 15px; bottom: 15px;"
+                                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/cropped-Ad-Agency-Creatives-Logo.png">
 
                                                 </div>
                                             </td>
