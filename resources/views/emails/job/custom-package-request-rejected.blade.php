@@ -26,7 +26,7 @@
             margin: 1em 0 !important;
             padding: 0 !important;
             line-height: 1.5em !important;
-            text-align: justify !important;
+            text-align: justify;
         }
 
         /* What it does: Stops email clients resizing small text. */
