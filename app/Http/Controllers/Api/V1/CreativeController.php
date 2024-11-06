@@ -199,10 +199,16 @@ class CreativeController extends Controller
         $role = $request?->role ?? 'agency';
 
         $agency_user_id = $request?->user()?->id;
+        $agency_user_role = $request?->user()?->role;
+
         $agency_user_applicants = [];
         if (isset($agency_user_id)) {
-            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
-                $query->where('user_id', $agency_user_id);
+            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id, $agency_user_role) {
+                if ($agency_user_role == 'advisor') {
+                    $query->where('advisor_id', $agency_user_id);
+                } else {
+                    $query->where('user_id', $agency_user_id);
+                }
             })->pluck('user_id')->toArray());
         }
 
