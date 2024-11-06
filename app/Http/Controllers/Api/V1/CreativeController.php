@@ -649,13 +649,13 @@ class CreativeController extends Controller
 
         if (isset($filters['filter']['slug'])) {
             $slug = $filters['filter']['slug'];
-            $logged_in_user = $request->user;
+            // $logged_in_user = $request->user;
 
-            $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
-            if ($current_creative && $current_creative->slug == $slug) { // Even if the user is not visible, he/she can view his/her own profile
-                unset($filters['filter']['is_visible']);
-                $request->replace($filters);
-            }
+            // $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
+            // if ($current_creative && $current_creative->slug == $slug) { // Even if the user is not visible, he/she can view his/her own profile
+            //     unset($filters['filter']['is_visible']);
+            //     $request->replace($filters);
+            // }
         }
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
