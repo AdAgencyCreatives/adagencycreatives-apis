@@ -106,7 +106,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Creatives
      */
-    Route::get('creatives', [CreativeController::class, 'index']);
     Route::get('creatives/search1', [CreativeController::class, 'search1']);
     Route::get('creatives/search2', [CreativeController::class, 'search2']);
     Route::get('creatives/search3', [CreativeController::class, 'search3']);
