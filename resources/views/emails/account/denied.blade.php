@@ -19,8 +19,8 @@
                                 target="_blank">{{ $data['APP_NAME'] }}</a>. This platform is designed to support
                             advertising art directors, designers, and copywriters in the United States.
                             Your registration is reviewed for relevant experience and your portfolio's alignment with
-                            opportunities we share.
-                            Unfortunately, the following account has not been approved at this time.
+                            opportunities we share. Unfortunately, the following account has not been approved at this
+                            time.
                         </p>
 
                         <h4 style="text-decoration: underline; margin-bottom: 3px;">Details:</h4>
