@@ -249,6 +249,7 @@ class CreativeController extends Controller
         return array_merge($creative_1, $creative_2, $creative_3);
     }
 
+
     public function process_three_terms_search($searchTerms, $role)
     {
         // Initialize arrays to store IDs for each match type
@@ -648,7 +649,7 @@ class CreativeController extends Controller
 
         if (isset($filters['filter']['slug'])) {
             $slug = $filters['filter']['slug'];
-            // $logged_in_user = request()->user();
+            $logged_in_user = request()->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
             if ($current_creative && $current_creative->slug == $slug) { // Even if the user is not visible, he/she can view his/her own profile
@@ -656,7 +657,6 @@ class CreativeController extends Controller
                 $request->replace($filters);
             }
         }
-
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
@@ -693,9 +693,9 @@ class CreativeController extends Controller
             }
         }
 
-        // if (request()->user()) {
-        //     return new LoggedinCreativeCollection($creatives);
-        // }
+        if (request()->user()) {
+            return new LoggedinCreativeCollection($creatives);
+        }
 
         return new CreativeCollection($creatives);
     }

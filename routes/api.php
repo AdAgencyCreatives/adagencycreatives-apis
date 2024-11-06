@@ -67,7 +67,7 @@ Route::post('/users', [UserController::class, 'store']);
 // Public GET routes
 Route::get('agencies', [AgencyController::class, 'index']);
 Route::get('home/creatives', [CreativeController::class, 'homepage_creatives']);
-// Route::get('creatives', [CreativeController::class, 'index']);
+Route::get('creatives', [CreativeController::class, 'index']);
 Route::get('jobs', [JobController::class, 'index']);
 
 Route::get('home/jobs/search', [JobController::class, 'jobs_homepage']);
@@ -133,7 +133,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
-    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']]); //->middleware('check.permissions:creative');
+    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
 
     Route::get('home/jobs/search/logged_in', [JobController::class, 'jobs_homepage_logged_in']);
     Route::get('jobs/logged_in', [JobController::class, 'jobs_for_logged_in']);
