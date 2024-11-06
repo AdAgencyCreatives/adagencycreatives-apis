@@ -202,7 +202,8 @@ class CreativeController extends Controller
         $agency_user_role = $request?->user()?->role;
 
         $agency_user_applicants = [];
-        if (isset($agency_user_id)) {
+
+        if (isset($agency_user_id) && isset($agency_user_role) && ($agency_user_role == 'agency' || $agency_user_role == 'advisor')) {
             $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id, $agency_user_role) {
                 if ($agency_user_role == 'advisor') {
                     $query->where('advisor_id', $agency_user_id);
@@ -653,7 +654,7 @@ class CreativeController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
-        $logged_in_user = get_auth_user();
+        $logged_in_user = Auth::guard('sanctum')->user();
 
         if (isset($filters['filter']['slug'])) {
             $slug = $filters['filter']['slug'];
@@ -1202,7 +1203,7 @@ class CreativeController extends Controller
 
     public function get_system_resume_url()
     {
-        $user = get_auth_user();
+        $user = request()->user();
         $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d'));
         return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $user->uuid]);
     }
