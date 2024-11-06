@@ -61,4 +61,5 @@
                             @endif
                         </div>
 
+                        <p style="">&nbsp;</p>
                         @include('emails.includes.jobboard_footer')

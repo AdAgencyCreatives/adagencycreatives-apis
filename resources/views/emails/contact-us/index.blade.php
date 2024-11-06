@@ -22,4 +22,5 @@
                         <div><b>Message: </b>{{ $data['message'] }}</div>
                         <div><b>Location: </b>{{ $data['location'] }}</div>
 
+                        <p style="">&nbsp;</p>
                         @include('emails.includes.jobboard_footer')
