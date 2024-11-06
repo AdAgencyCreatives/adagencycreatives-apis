@@ -647,11 +647,10 @@ class CreativeController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
+        $logged_in_user = Auth::guard('sanctum')->user();
 
         if (isset($filters['filter']['slug'])) {
             $slug = $filters['filter']['slug'];
-
-            $logged_in_user = Auth::guard('sanctum')->user();
 
             $current_creative = Creative::where('user_id', $logged_in_user->id)->first();
             if ($current_creative && $current_creative->slug == $slug) { // Even if the user is not visible, he/she can view his/her own profile
@@ -695,7 +694,7 @@ class CreativeController extends Controller
             }
         }
 
-        if (request()->user()) {
+        if ($logged_in_user) {
             return new LoggedinCreativeCollection($creatives);
         }
 
