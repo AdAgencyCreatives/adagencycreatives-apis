@@ -847,7 +847,7 @@ if (!function_exists('get_auth_user')) {
     {
         $user = request()->user();
         if (!$user) {
-            $user = get_auth_user();
+            $user = Auth::guard("sanctum")->user();
         }
         return $user;
     }
