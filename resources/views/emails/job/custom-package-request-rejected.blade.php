@@ -164,7 +164,6 @@
                                                             contact us if you have any further inquiries or would like
                                                             to discuss this decision.</span></p>
 
-                                                    <p style="">&nbsp;</p>
                                                     <p>
                                                         Thanks,<br />
                                                         Member Support<br />
