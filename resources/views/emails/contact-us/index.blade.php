@@ -17,10 +17,10 @@
                         <p>There is new inquiry message from someone.</p>
 
                         <div><b>Name: </b>{{ $data['name'] }}</div>
+                        <div><b>Location: </b>{{ $data['location'] }}</div>
                         <div><b>Email: </b>{{ $data['email'] }}</div>
                         <div><b>Phone: </b>{{ $data['phone'] }}</div>
                         <div><b>Message: </b>{{ $data['message'] }}</div>
-                        <div><b>Location: </b>{{ $data['location'] }}</div>
 
                         <p style="">&nbsp;</p>
                         @include('emails.includes.jobboard_footer')
