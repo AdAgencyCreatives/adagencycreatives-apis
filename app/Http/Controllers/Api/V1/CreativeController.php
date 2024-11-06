@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Creative\StoreCreativeRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
+use App\Http\Resources\Creative\CreativeCollection;
 use App\Http\Resources\Creative\CreativeResource;
 use App\Http\Resources\Creative\HomepageCreativeCollection;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
@@ -692,7 +693,11 @@ class CreativeController extends Controller
             }
         }
 
-        return new LoggedinCreativeCollection($creatives);
+        if (request()->user()) {
+            return new LoggedinCreativeCollection($creatives);
+        }
+
+        return new CreativeCollection($creatives);
     }
 
     public function homepage_creatives(Request $request) //Home page creatives
