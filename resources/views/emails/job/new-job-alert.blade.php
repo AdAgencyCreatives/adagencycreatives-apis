@@ -21,16 +21,15 @@
 
                         <h4 style="text-decoration: underline; margin-bottom: 5px;">Job Details</h4>
                         <div><b>Job Title: </b>{{ $data['title'] }}</div>
-                        <div><b>Job URL: </b>
-                            <a href="{{ $data['url'] }}" target="_blank">Click here to open job</a>
-                        </div>
                         <div><b>Agency: </b>
                             @if (strlen($data['agency_profile']) > 0)
                                 <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
                             @else
                                 {{ $data['agency'] }}
                             @endif
-
+                        </div>
+                        <div><b>Job Link: </b>
+                            <a href="{{ $data['url'] }}" target="_blank">Click here</a>
                         </div>
                         @if ($data['subscribers_count'] && strlen($data['subscribers_count']) > 0)
                             <div><b>For Staging Only:</b><br />
