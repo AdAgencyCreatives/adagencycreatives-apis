@@ -16,6 +16,7 @@ use App\Models\Strength;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -838,5 +839,16 @@ if (!function_exists('get_agency_user_thumbnail')) { //We will use this funtion 
         } else {
             return $user?->user_thumbnail;
         }
+    }
+}
+
+if (!function_exists('get_auth_user')) {
+    function get_auth_user()
+    {
+        $user = request()->user();
+        if (!$user) {
+            $user = get_auth_user();
+        }
+        return $user;
     }
 }

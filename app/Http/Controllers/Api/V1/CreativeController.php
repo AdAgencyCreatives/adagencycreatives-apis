@@ -653,7 +653,7 @@ class CreativeController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
-        $logged_in_user = Auth::guard('sanctum')->user();
+        $logged_in_user = get_auth_user();
 
         if (isset($filters['filter']['slug'])) {
             $slug = $filters['filter']['slug'];
@@ -1202,7 +1202,7 @@ class CreativeController extends Controller
 
     public function get_system_resume_url()
     {
-        $user = request()->user();
+        $user = get_auth_user();
         $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d'));
         return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $user->uuid]);
     }

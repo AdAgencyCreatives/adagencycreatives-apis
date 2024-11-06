@@ -36,8 +36,8 @@ class PackageRequestController extends Controller
             ->allowedSorts('created_at');
 
         $package_requests = $query
-         ->whereHas('user.agency')
-         ->paginate($request->per_page ?? config('global.request.pagination_limit'));
+            ->whereHas('user.agency')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
         return new PackageRequestCollection($package_requests);
     }
@@ -56,8 +56,8 @@ class PackageRequestController extends Controller
             'category_id' => $category->id,
             'state_id' => $state->id ?? null,
             'city_id' => $city->id ?? null,
-            'industry_experience' => ''.implode(',', $request->industry_experience).'',
-            'media_experience' => ''.implode(',', $request->media_experience).'',
+            'industry_experience' => '' . implode(',', $request->industry_experience) . '',
+            'media_experience' => '' . implode(',', $request->media_experience) . '',
             'comment' => $request->comments
         ]);
 
@@ -110,7 +110,7 @@ class PackageRequestController extends Controller
     public function get_assigned_agencies()
     {
         try {
-            $user = request()->user();
+            $user = get_auth_user();
             // Retrieve package requests for the user
             $packageRequests = PackageRequest::where('assigned_to', $user->id)
                 ->where('status', 1) //only approved

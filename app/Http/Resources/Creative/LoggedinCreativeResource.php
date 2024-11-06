@@ -23,7 +23,7 @@ class LoggedinCreativeResource extends JsonResource
     {
         $allowBase64 = $request->has('base64') && $request->base64 == 'yes';
 
-        $logged_in_user = Auth::guard('sanctum')->user();
+        $logged_in_user = get_auth_user();
 
         $user = $this->user;
         $this->creative_category = isset($this->category) ? $this->category->name : null;

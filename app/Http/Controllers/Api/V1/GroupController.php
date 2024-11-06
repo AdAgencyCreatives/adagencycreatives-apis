@@ -136,7 +136,7 @@ class GroupController extends Controller
     {
         try {
 
-            $user = request()->user();
+            $user = get_auth_user();
             $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->count();
             $groups = Group::where('status', 0)->get();
             $friends_count = Friendship::where('user1_id', $user->id)->orWhere('user2_id', $user->id)->count();
@@ -151,11 +151,8 @@ class GroupController extends Controller
             ];
 
             return response()->json($stats);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
 }

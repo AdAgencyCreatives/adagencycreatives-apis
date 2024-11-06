@@ -27,7 +27,7 @@ class ChatController extends Controller
         $contact = User::where('uuid', $contactId)->firstOrFail();
         $contactId = $contact->id;
 
-        $userId = request()->user()->id;
+        $userId = get_auth_user()->id;
 
         $messages = Message::where(function ($query) use ($userId, $contactId) {
             $query->where(function ($query) use ($userId, $contactId) {
@@ -283,7 +283,7 @@ class ChatController extends Controller
 
     public function getAllMessageContacts(Request $request) // Get list of contacts to be shown on left panel
     {
-        $userId = request()->user()->id;
+        $userId = get_auth_user()->id;
 
         // $contacts = Message::with('sender', 'receiver')->where(function ($query) use ($userId) {
         //     $query->where(function ($query) use ($userId) {

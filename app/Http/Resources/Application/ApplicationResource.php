@@ -9,7 +9,7 @@ class ApplicationResource extends JsonResource
 {
     public function toArray($request)
     {
-        $logged_in_user = request()->user();
+        $logged_in_user = get_auth_user();
         $user = $this->user;
         // $job = $this->job;
         $job = Job::where('id', '=', $this->job_id)->first();

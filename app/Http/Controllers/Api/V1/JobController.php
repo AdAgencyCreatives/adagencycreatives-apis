@@ -298,7 +298,7 @@ class JobController extends Controller
 
     public function store(StoreJobRequest $request)
     {
-        $user = request()->user();
+        $user = get_auth_user();
 
         /**
          * Store advisor id in separate column and in user_id ,

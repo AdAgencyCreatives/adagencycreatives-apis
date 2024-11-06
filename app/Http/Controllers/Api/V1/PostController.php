@@ -168,7 +168,7 @@ class PostController extends Controller
     public function main_feed(Request $request)
     {
         try {
-            $user = request()->user();
+            $user = get_auth_user();
             $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
 
             $feed_group = Group::where('slug', 'feed')->first();
