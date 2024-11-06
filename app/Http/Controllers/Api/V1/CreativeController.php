@@ -896,7 +896,7 @@ class CreativeController extends Controller
                 $userData['last_name'] = $request->last_name;
             }
 
-            if ($request->filled('slug')) {
+            if ($request->filled('slug') && $user->slug != $request->slug) {
                 $userData['username'] = $request->slug;
             }
 
