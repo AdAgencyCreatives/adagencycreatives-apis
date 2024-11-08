@@ -166,7 +166,7 @@ class LoggedinCreativeResource extends JsonResource
 
     public function get_resume($user, $logged_in_user, $subscription_status, $is_friend)
     {
-        //User is viewing his own profile
+        //User is viewing own profile
         if ($logged_in_user->id == $user->id) {
             return $this->get_resume_url($user, $logged_in_user);
         }

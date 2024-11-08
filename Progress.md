@@ -647,7 +647,7 @@ Admin can
 -   Set condition in backend for avoiding giving review to itself.
 -   Update and delete endpoint for review.
 -   Added friendship status in creatives resource.
--   Logged in user can see his email and phone on his detail page
+-   Logged in user can see their own email and phone on their own detail page
 
 ## 09/11/2023 Unread Message EMail
 

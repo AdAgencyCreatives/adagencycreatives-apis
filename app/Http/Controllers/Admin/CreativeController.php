@@ -82,7 +82,7 @@ class CreativeController extends Controller
 
                 $data['user_id'] = $receiver->id;
                 $data['type'] = 'lounge_mention';
-                $data['message'] = $author->full_name . ' commented on you in his post';
+                $data['message'] = $author->full_name . ' commented on you in a post';
 
                 $data['body'] = array('post_id' => $post->id);
 
