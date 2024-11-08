@@ -76,7 +76,7 @@ class Comment extends Model
                 $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
 
                 $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
-                $message = "<a href='{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
+                $message = "<a href='/creative/{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
                 $data = [
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
@@ -89,8 +89,47 @@ class Comment extends Model
             }
         });
 
-        static::updated(function () {
+        static::updated(function ($comment) {
             Cache::forget('trending_posts');
+
+            $pattern = '/creative\/([-\w]+)/';
+
+            // Match user slugs in the post content
+            preg_match_all($pattern, $comment->content, $matches);
+
+            // Extract unique user slugs
+            $user_slugs = array_unique($matches[1]);
+            $author = $comment->user;
+            $group = Group::find($comment->post->group_id); //it gives us group id as integer because this function triggers after post is created and it gives us newly created post object
+
+            foreach ($user_slugs as $slug) {
+                $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
+
+                $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
+                $message = "<a href='/creative/{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
+                $data = [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'body' => $comment->post->id,
+                    'type' => 'lounge_mention',
+                    'message' => $message
+                ];
+
+                $notification = Notification::where([
+                    'user_id' => $user->id,
+                    'body' => $comment->post->id,
+                    'type' => 'lounge_mention'
+                ])->orderByDesc('updated_at')->first();
+
+                if ($notification) {
+                    $notification->update([
+                        'read_at' => null,
+                        'created_at' => now()
+                    ]);
+                } else {
+                    Notification::create($data);
+                }
+            }
         });
 
         static::deleted(function () {

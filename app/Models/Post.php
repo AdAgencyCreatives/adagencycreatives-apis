@@ -139,7 +139,7 @@ class Post extends Model
                 $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
 
                 $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
-                $message = "<a href='{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
+                $message = "<a href='/creative/{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
                 $data = [
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
@@ -169,7 +169,7 @@ class Post extends Model
                 $user = User::where('username', $slug)->first(); //Person who is mentioned in the post
 
                 $group_url = $group ? ($group->slug == 'feed' ? env('FRONTEND_URL') . '/community' : env('FRONTEND_URL') . '/groups/' . $group->uuid) : '';
-                $message = "<a href='{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
+                $message = "<a href='/creative/{$author->username}'>{$author->full_name}</a> commented on you in a <a href='{$group_url}'>post</a>";
                 $data = [
                     'uuid' => Str::uuid(),
                     'user_id' => $user->id,
