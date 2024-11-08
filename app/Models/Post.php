@@ -184,7 +184,7 @@ class Post extends Model
                     'user_id' => $user->id,
                     'body' => $post->id,
                     'type' => 'lounge_mention'
-                ])->orderByDesc('updated_at')->first();
+                ])->orderByDesc('created_at')->first();
 
                 if ($notification) {
                     $notification->update([
