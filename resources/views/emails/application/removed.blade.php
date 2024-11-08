@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        Status Update</h1>
+                        Not Aligned</h1>
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
 
@@ -21,15 +21,17 @@
                         </p>
 
                         <p>
+                            Your application with
                             @if (strlen($data['agency_profile']) > 0)
                                 <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency_name'] }}</a>
                             @else
                                 {{ $data['agency_name'] }}
                             @endif
-                            reviewed your application and is not moving forward at this time for the
+                            is not moving forward at this time for the
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> opportunity.
                             There are a variety of reason candidates for this, such as; chose
-                            another candidate, an internal move was made, or the job was closed without a hire.
+                            another candidate, an internal move was made, or the job was closed without a hire or
+                            you are not interested in moving forward.
                         </p>
 
                         <p>As you know, our industry is alive and changing every moment. We encourage you
