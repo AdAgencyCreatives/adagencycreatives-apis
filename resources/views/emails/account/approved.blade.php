@@ -27,7 +27,7 @@
                             adjust your preferences.
                             After that, you're all set. You'll receive notification when new jobs
                             are posted or you're invited to apply by a recruiter or agency.</div>
-                        <div style="margin-top: 0px;">If you forget your password, no problem. You can reset it <a
+                        <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
                                 href="{{ $data['FRONTEND_URL'] }}/forgot-password?email={{ $data['user']->email }}&auto-submit=true"
                                 target="_blank">here</a>.
                         </div>
