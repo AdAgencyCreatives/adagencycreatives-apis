@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1
                         style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
-                        Not Aligned</h1>
+                        Status Update</h1>
                     <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
 
