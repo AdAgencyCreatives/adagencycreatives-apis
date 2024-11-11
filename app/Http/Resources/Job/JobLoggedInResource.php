@@ -10,6 +10,11 @@ class JobLoggedInResource extends JsonResource
     {
         $user = $this->user;
         $category = $this->category;
+        $applications = $this->applications;
+
+        $applications = $applications->filter(function ($application) use ($request) {
+            return $application?->user != null;
+        });
 
         $data = [
             'type' => 'jobs',
@@ -44,7 +49,8 @@ class JobLoggedInResource extends JsonResource
             'agency' => [],
             'advisor_id' => $this->advisor_id ?? null,
             'seo' => $this->generate_seo(),
-            'applications_count' => $this->applications_count,
+            // 'applications_count' => $this->applications_count,
+            'applications_count' => count($applications),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
@@ -58,7 +64,6 @@ class JobLoggedInResource extends JsonResource
         if ($agency) {
             if ($this->agency_name == null) {
                 $data['agency']['name'] = $agency->name;
-
             } else {
                 $data['agency']['name'] = $this->agency_name;
             }
@@ -71,7 +76,6 @@ class JobLoggedInResource extends JsonResource
             $data['agency']['logo_id'] = $this->attachment_id ? $sub_agency_logo?->uuid : null;
             $data['agency']['fallback_image'] = get_profile_picture($user);
             $data['agency']['role'] = $user->role;
-
         }
 
         return $data;
@@ -112,7 +116,6 @@ class JobLoggedInResource extends JsonResource
             'description' => $seo_description,
             'tags' => $this->seo_keywords,
         ];
-
     }
 
     private function generateSeoTitle($site_name, $separator)
