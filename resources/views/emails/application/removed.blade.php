@@ -30,7 +30,7 @@
                             is not moving forward at this time for the
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> opportunity.
                             There are a variety of reason candidates for this, such as; chose
-                            another candidate, an internal move was made, or the job was closed without a hire or
+                            another candidate, an internal move was made, the job was closed without a hire, or
                             you are not interested in moving forward.
                         </p>
 
