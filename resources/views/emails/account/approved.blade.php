@@ -25,7 +25,7 @@
                             You can start by telling everyone a bit about yourself, your skills, and your goals.</div>
                         <div style="margin-top: 20px;">Once you’ve got a strong profile and resume, take a moment to
                             adjust your preferences.
-                            After that, you're all set. You'll receive notification when new jobs
+                            After that, you're all set. You'll receive notifications when new jobs
                             are posted or you're invited to apply by a recruiter or agency.</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
                                 href="{{ $data['FRONTEND_URL'] }}/forgot-password?email={{ $data['user']->email }}&auto-submit=true"
