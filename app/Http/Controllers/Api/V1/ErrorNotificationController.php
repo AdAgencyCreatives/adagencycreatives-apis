@@ -26,12 +26,16 @@ class ErrorNotificationController extends Controller
         $ipAddress = $request->ip();
         $userAgent = $request->header('User-Agent');
 
+        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
         SendEmailJob::dispatch([
-            'url' => $request->url ?? '',
-            'error' => $request->error ?? '',
-            'date_time' => now(),
-            'ip_address' => $ipAddress,
-            'user_agent' => $userAgent,
+            'receiver' => $admin,
+            'data' => [
+                'url' => $request->url ?? '',
+                'error' => $request->error ?? '',
+                'date_time' => now(),
+                'ip_address' => $ipAddress,
+                'user_agent' => $userAgent,
+            ]
         ], 'error_notification');
 
         return json_encode(['status' => 'notified']);
