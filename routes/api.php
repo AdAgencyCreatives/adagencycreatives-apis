@@ -267,4 +267,4 @@ Route::get('is_creative_applicant', [ApplicationController::class, 'is_creative_
 Route::patch('user_update_email_notifications/{user}', [UserController::class, 'update_email_notifications']);
 
 Route::get('/get_base64', [UtilsController::class, 'get_base64']);
-Route::get('/notify-error', [ErrorNotificationController::class, 'index']);
+Route::post('/notify-error', [ErrorNotificationController::class, 'index']);
