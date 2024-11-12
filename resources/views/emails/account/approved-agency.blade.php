@@ -36,7 +36,7 @@
                         <p>
                             Thanks,<br />
                             Member Support<br />
-                            <img width="150"
+                            <img width="180"
                                 src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo.png"
                                 alt="" />
                         </p>
