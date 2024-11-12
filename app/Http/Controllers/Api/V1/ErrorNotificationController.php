@@ -21,6 +21,6 @@ class ErrorNotificationController extends Controller
 {
     public function index(Request $request)
     {
-        return print_r($request, true);
+        return $request->error;
     }
 }
