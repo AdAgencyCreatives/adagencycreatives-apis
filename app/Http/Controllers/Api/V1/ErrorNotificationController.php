@@ -31,7 +31,7 @@ class ErrorNotificationController extends Controller
             'receiver' => $admin,
             'data' => [
                 'url' => $request->url ?? '',
-                'error' => $request->error ?? '',
+                'error_message' => $request->error ?? '',
                 'date_time' => now(),
                 'ip_address' => $ipAddress,
                 'user_agent' => $userAgent,
