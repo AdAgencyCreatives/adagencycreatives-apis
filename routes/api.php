@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\CreativeSpotlightController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EducationController;
 use App\Http\Controllers\Api\V1\EmploymentTypeController;
+use App\Http\Controllers\Api\V1\ErrorNotificationController;
 use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\FestivalController;
 use App\Http\Controllers\Api\V1\GroupController;
@@ -266,3 +267,4 @@ Route::get('is_creative_applicant', [ApplicationController::class, 'is_creative_
 Route::patch('user_update_email_notifications/{user}', [UserController::class, 'update_email_notifications']);
 
 Route::get('/get_base64', [UtilsController::class, 'get_base64']);
+Route::get('/notify-error', [ErrorNotificationController::class, 'index']);

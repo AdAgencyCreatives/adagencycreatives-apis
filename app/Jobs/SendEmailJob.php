@@ -18,6 +18,7 @@ use App\Mail\ContactFormMail;
 use App\Mail\ContentUpdated\EmailUpdated;
 use App\Mail\CustomPkg\HireAnAdvisorJobCompleted;
 use App\Mail\CustomPkg\RequestAdminAlert;
+use App\Mail\ErrorNotificationMail;
 use App\Mail\Friend\FriendshipRequest;
 use App\Mail\Friend\FriendshipRequestAccepted;
 use App\Mail\Group\Invitation;
@@ -90,6 +91,7 @@ class SendEmailJob implements ShouldQueue
             'profile_completion_creative',
             'profile_completion_agency',
             'no_job_posted_agency_reminder',
+            'error_notification'
         ];
 
         // Check if the current email type is in the array and update the receiver's email
@@ -246,6 +248,9 @@ class SendEmailJob implements ShouldQueue
                 Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NoJobPostedAgencyReminder($this->data['data']));
                 break;
 
+            case 'error_notification':
+                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ErrorNotificationMail($this->data['data']));
+                break;
             default:
                 // Handle unknown email types or fallback logic
                 break;
