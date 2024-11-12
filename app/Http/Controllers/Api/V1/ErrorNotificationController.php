@@ -25,8 +25,8 @@ class ErrorNotificationController extends Controller
     {
         $site_error = SiteError::where('url', '=', $request->url)
             ->where('error_message', '=', $request->error_message)
-            ->whereDate('email_sent_at', '>=', now()->subHour())
-            ->whereDate('email_sent_at', '<', now())
+            ->where('email_sent_at', '>=', now()->subHour())
+            ->where('email_sent_at', '<', now())
             ->first();
 
         if ($site_error) {
