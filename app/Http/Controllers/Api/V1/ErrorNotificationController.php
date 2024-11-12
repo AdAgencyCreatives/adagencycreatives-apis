@@ -12,6 +12,7 @@ use App\Jobs\SendEmailJob;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -21,6 +22,18 @@ class ErrorNotificationController extends Controller
 {
     public function index(Request $request)
     {
-        return $request->error;
+
+        $ipAddress = $request->ip();
+        $userAgent = $request->header('User-Agent');
+
+        SendEmailJob::dispatch([
+            'url' => $request->url ?? '',
+            'error' => $request->error ?? '',
+            'date_time' => now(),
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ], 'error_notification');
+
+        return json_encode(['status' => 'notified']);
     }
 }

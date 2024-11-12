@@ -19,6 +19,8 @@
                         <div><b>URL: </b>{{ $data['url'] }}</div>
                         <div><b>Error Message: </b>{{ $data['error_message'] }}</div>
                         <div><b>Date/Time: </b>{{ $data['date_time'] }}</div>
+                        <div><b>IP Address: </b>{{ $data['ip_address'] }}</div>
+                        <div><b>User Agent: </b>{{ $data['user_agent'] }}</div>
 
                         <p style="">&nbsp;</p>
                         @include('emails.includes.jobboard_footer')
