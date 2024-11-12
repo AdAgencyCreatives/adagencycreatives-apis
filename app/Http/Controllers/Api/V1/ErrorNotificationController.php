@@ -12,6 +12,7 @@ use App\Jobs\SendEmailJob;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\SiteError;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,6 +23,21 @@ class ErrorNotificationController extends Controller
 {
     public function index(Request $request)
     {
+        $site_error = SiteError::where('url', '=', $request->url)
+            ->where('error_message', '=', $request->error_message)
+            ->whereDate('email_sent_at', '>=', now()->subHour())
+            ->whereDate('email_sent_at', '<', now())
+            ->first();
+
+        if ($site_error) {
+            return json_encode(['status' => 'Already notified at: ' . $site_error->email_sent_at]);
+        }
+
+        SiteError::create([
+            'url' => $request->url ?? '',
+            'error_message' => $request->error_message ?? '',
+            'email_sent_at' => now(),
+        ]);
 
         $ipAddress = $request->ip();
         $userAgent = $request->header('User-Agent');
@@ -31,13 +47,13 @@ class ErrorNotificationController extends Controller
             'receiver' => $admin,
             'data' => [
                 'url' => $request->url ?? '',
-                'error_message' => $request->error ?? '',
+                'error_message' => $request->error_message ?? '',
                 'date_time' => now(),
                 'ip_address' => $ipAddress,
                 'user_agent' => $userAgent,
             ]
         ], 'error_notification');
 
-        return json_encode(['status' => 'notified']);
+        return json_encode(['status' => 'Notified at: ' . now()]);
     }
 }
