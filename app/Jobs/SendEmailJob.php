@@ -102,6 +102,12 @@ class SendEmailJob implements ShouldQueue
 
     }
 
+    private function sendEmail($receiver, $bcc = [], $mailable)
+    {
+        $final_bcc = array_values(array_diff($bcc, is_array($receiver) ? $receiver : [$receiver]));
+        Mail::to($receiver)->bcc($final_bcc)->send($mailable);
+    }
+
     public function handle()
     {
         switch ($this->emailType) {
@@ -109,29 +115,29 @@ class SendEmailJob implements ShouldQueue
              * Account
              */
             case 'new_user_registration_creative_role':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NewUserRegistrationCreative($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new NewUserRegistrationCreative($this->data['data']));
                 break;
             case 'new_user_registration_agency_role':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NewUserRegistrationAgency($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new NewUserRegistrationAgency($this->data['data']));
                 break;
             case 'account_approved_agency':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new AccountApprovedAgency($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new AccountApprovedAgency($this->data['data']));
                 break;
             case 'account_approved':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new AccountApproved($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new AccountApproved($this->data['data']));
                 break;
             case 'account_denied':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new AccountDenied($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new AccountDenied($this->data['data']));
                 break;
 
                 /**
                  * Group
                  */
             case 'group_invitation':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new Invitation($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new Invitation($this->data['data']));
                 break;
             case 'order_confirmation':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ConfirmationAdmin($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ConfirmationAdmin($this->data['data']));
                 break;
             case 'job_approved_alert_all_subscribers':
                 $email_data = $this->data['email_data'];
@@ -143,11 +149,11 @@ class SendEmailJob implements ShouldQueue
                         // dd($subscriber->user?->full_name);
                         $subscriber = $subscriber->user;
                         $recipient = $subscriber->email;
-                        Mail::to($recipient)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
+                        $this->sendEmail($recipient, $this->devEmails, new JobPostedApprovedAlertAllSubscribers($email_data, $subscriber));
                     }
                 } else {
                     // on staging / non-production only 1 email goes to admin for confirmation of alert
-                    Mail::to($this->adminEmail)->bcc($this->devEmails)->send(new JobPostedApprovedAlertAllSubscribers($email_data, $this->adminEmail));
+                    $this->sendEmail($this->adminEmail, $this->devEmails, new JobPostedApprovedAlertAllSubscribers($email_data, $this->adminEmail));
                 }
 
                 break;
@@ -156,76 +162,76 @@ class SendEmailJob implements ShouldQueue
                  * Job
                  */
             case 'new_job_added_admin': // To inform the admin that a new job has been added
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NewJobPosted($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new NewJobPosted($this->data['data']));
                 break;
             case 'job_invitation':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobInvitation($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new JobInvitation($this->data['data']));
                 break;
                 // case 'custom_job_request_rejected':
-                //     Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new CustomJobRequestRejected($this->data['data']));
+                //     $this->sendEmail($this->data['receiver'], $this->devEmails, new CustomJobRequestRejected($this->data['data']));
                 //     break;
 
             case 'custom_pkg_request_admin_alert':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new RequestAdminAlert($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new RequestAdminAlert($this->data['data']));
                 break;
             case 'hire-an-advisor-job-completed':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new HireAnAdvisorJobCompleted($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new HireAnAdvisorJobCompleted($this->data['data']));
                 break;
 
                 /**
                  * Application
                  */
             case 'application_submitted':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ApplicationSubmitted($this->data['data'])); // To the applicant
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ApplicationSubmitted($this->data['data'])); // To the applicant
                 break;
             case 'new_candidate_application':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NewApplication($this->data['data'])); // To the Agency
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new NewApplication($this->data['data'])); // To the Agency
                 break;
             case 'application_removed_by_agency':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new Removed($this->data['data'])); // To the applicant
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new Removed($this->data['data'])); // To the applicant
                 break;
             case 'agency_is_interested':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new Interested($this->data['data'])); // To the applicant
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new Interested($this->data['data'])); // To the applicant
                 break;
 
             case 'job_closed_email':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobClosed($this->data['data'])); // To the applicant
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new JobClosed($this->data['data'])); // To the applicant
                 break;
 
                 /**
                  * Friend
                  */
             case 'friendship_request_sent':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new FriendshipRequest($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new FriendshipRequest($this->data['data']));
                 break;
             case 'friendship_request_accepted':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new FriendshipRequestAccepted($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new FriendshipRequestAccepted($this->data['data']));
                 break;
 
                 /**
                  * Message Count
                  */
             case 'unread_message':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new UnreadMessage($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new UnreadMessage($this->data['data']));
                 break;
 
             case 'contact_us_inquiry':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ContactFormMail($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ContactFormMail($this->data['data']));
                 break;
 
                 /**
                  * Job Post Expiring Soon
                  */
             case 'job_expiring_soon_admin':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAdmin($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new JobPostExpiringAdmin($this->data['data']));
                 break;
 
             case 'job_expiring_soon_agency':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new JobPostExpiringAgency($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new JobPostExpiringAgency($this->data['data']));
                 break;
 
             case 'email_updated':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new EmailUpdated($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new EmailUpdated($this->data['data']));
                 break;
 
 
@@ -233,23 +239,23 @@ class SendEmailJob implements ShouldQueue
                  * Group Post
                  */
             case 'user_mentioned_in_post':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new LoungeMention($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new LoungeMention($this->data['data']));
                 break;
 
             case 'profile_completion_creative':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionCreativeReminder($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ProfileCompletionCreativeReminder($this->data['data']));
                 break;
 
             case 'profile_completion_agency':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ProfileCompletionAgencyReminder($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ProfileCompletionAgencyReminder($this->data['data']));
                 break;
 
             case 'no_job_posted_agency_reminder':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new NoJobPostedAgencyReminder($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new NoJobPostedAgencyReminder($this->data['data']));
                 break;
 
             case 'error_notification':
-                Mail::to($this->data['receiver'])->bcc($this->devEmails)->send(new ErrorNotificationMail($this->data['data']));
+                $this->sendEmail($this->data['receiver'], $this->devEmails, new ErrorNotificationMail($this->data['data']));
                 break;
             default:
                 // Handle unknown email types or fallback logic
