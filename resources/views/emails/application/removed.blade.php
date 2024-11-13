@@ -29,14 +29,14 @@
                             @endif
                             is not moving forward at this time for the
                             <a href="{{ $data['job_url'] }}" target="_blank">{{ $data['job_title'] }}</a> opportunity.
-                            There are a variety of reason candidates for this, such as; chose
+                            There are a variety of reasons for this, such as; they chose
                             another candidate, an internal move was made, the job was closed without a hire, or
                             you are not interested in moving forward.
                         </p>
 
                         <p>As you know, our industry is alive and changing every moment. We encourage you
-                            to keep an eye on other opportunities. You might also try exploring the <a
-                                href="{{ $data['APP_URL'] }}/mentoring-resources" target="_blank">Resources</a>
+                            to keep an eye on the jobs board for other opportunities. You might also try exploring the
+                            <a href="{{ $data['APP_URL'] }}/mentoring-resources" target="_blank">Resources</a>
                             and <a href="{{ $data['APP_URL'] }}/publication-resources" target="_blank">Publications</a>
                             sections on our home page, or connect with other creatives in <a
                                 href="{{ $data['APP_URL'] }}/community" target="_blank">The Lounge</a>.
