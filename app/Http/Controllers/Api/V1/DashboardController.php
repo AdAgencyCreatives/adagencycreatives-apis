@@ -161,7 +161,8 @@ class DashboardController extends Controller
 
         $jobs_count = $jobs->count();
 
-        $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
+        $applications = Application::whereIn('job_id', $jobs->pluck('id'))
+            ->whereHas('user')->get();
         $applications_count = $applications->count();
 
         $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
