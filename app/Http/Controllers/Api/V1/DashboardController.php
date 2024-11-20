@@ -193,7 +193,7 @@ class DashboardController extends Controller
         $cacheKey = 'creative_dashboard_stats_' . $user->id;
 
         //$stats = Cache::remember($cacheKey, 60, function () use ($user) {
-        $jobs = Job::where('status', 1)->pluck('id');
+        $jobs = Job::all()->pluck('id');
         $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
 
         $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->whereIn('type', ['job', 'private'])->count();
