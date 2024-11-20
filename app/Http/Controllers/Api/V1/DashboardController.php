@@ -155,7 +155,10 @@ class DashboardController extends Controller
         $cacheKey = 'agency_dashboard_stats_' . $user->id;
 
         //$stats = Cache::remember($cacheKey, 60, function () use ($user) {
-        $jobs = Job::where('user_id', $user->id)->where('status', 1)->get(); //only active jobs
+        $jobs = Job::where('user_id', $user->id)
+            ->orWhere('advisor_id', $user->id)
+            ->get();
+
         $jobs_count = $jobs->count();
 
         $applications = Application::whereIn('job_id', $jobs->pluck('id'))->get();
