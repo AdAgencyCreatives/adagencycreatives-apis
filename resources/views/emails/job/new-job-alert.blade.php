@@ -38,7 +38,7 @@
                             <a href="{{ $data['url'] }}" target="_blank">Click here</a>
                         </div>
                         @if ($data['subscribers_count'] && strlen($data['subscribers_count']) > 0)
-                            <div><b>For Staging Only:</b><br />
+                            <div style="display: none"><b>For Staging Only:</b><br />
                                 Subscribers Count = {{ $data['subscribers_count'] }}
                             </div>
                         @endif
