@@ -389,7 +389,7 @@ class Job extends Model
 
                 $state = Location::where('id', $job->state_id)->first();
                 $city = Location::where('id', $job->city_id)->first();
-                $location = $state?->name . ' ' . $city?->name;
+                $location = $state?->name . ', ' . $city?->name;
 
                 $data = [
                     'email_data' => [
