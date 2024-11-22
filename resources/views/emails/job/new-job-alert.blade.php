@@ -28,6 +28,12 @@
                                 {{ $data['agency'] }}
                             @endif
                         </div>
+                        <div><b>Location: </b>
+                            {{ $data['location'] }}
+                        </div>
+                        <div><b>Remote: </b>
+                            {{ $data['remote'] }}
+                        </div>
                         <div><b>Job Link: </b>
                             <a href="{{ $data['url'] }}" target="_blank">Click here</a>
                         </div>
