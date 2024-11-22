@@ -387,6 +387,10 @@ class Job extends Model
 
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
 
+                $state = Location::where('id', $job->state_id)->first();
+                $city = Location::where('id', $job->city_id)->first();
+                $location = $state?->name . ' ' . $city?->name;
+
                 $data = [
                     'email_data' => [
                         'title' => $job->title ?? '',
@@ -394,6 +398,8 @@ class Job extends Model
                         'agency' => $agency_name,
                         'agency_profile' => strlen($agency_profile) > 0 ? sprintf("%s/agency/%s", env('FRONTEND_URL'), $agency_profile) : '',
                         'category' => $category?->name,
+                        'location' => $location,
+                        'remote' => $job?->is_remote ? 'Yes' : 'No',
                         'subscribers_count' => env('APP_ENV') == 'production' ? "" : "" . count($categorySubscribers),
                     ],
                     'subscribers' => $categorySubscribers,
