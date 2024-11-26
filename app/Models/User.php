@@ -336,7 +336,7 @@ class User extends Authenticatable
         //         ->Where('last_name', $name[0]);
         // }
 
-        return $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE '" . $name . "%'")
+        return $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE '" . $name . "%'");
     }
 
     public function scopeCategoryId(Builder $query, $uuid): Builder
