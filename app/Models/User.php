@@ -324,17 +324,19 @@ class User extends Authenticatable
 
     public function scopeFirstName(Builder $query, $name): Builder
     {
-        $name = explode(' ', $name);
-        //if name is only one, then search in first name, if two then search seocnd term into last_name
+        // $name = explode(' ', $name);
+        // //if name is only one, then search in first name, if two then search seocnd term into last_name
 
-        if (count($name) == 1) {
-            return $query->where('first_name', $name[0])->orWhere('last_name', $name[0]);
-        } else {
-            return $query->where('first_name', $name[0])
-                ->Where('last_name', $name[1])
-                ->orWhere('first_name', $name[1])
-                ->Where('last_name', $name[0]);
-        }
+        // if (count($name) == 1) {
+        //     return $query->where('first_name', $name[0])->orWhere('last_name', $name[0]);
+        // } else {
+        //     return $query->where('first_name', $name[0])
+        //         ->Where('last_name', $name[1])
+        //         ->orWhere('first_name', $name[1])
+        //         ->Where('last_name', $name[0]);
+        // }
+
+        return $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE '" . $name . "%'")
     }
 
     public function scopeCategoryId(Builder $query, $uuid): Builder
