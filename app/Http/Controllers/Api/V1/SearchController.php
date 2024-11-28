@@ -46,6 +46,26 @@ class SearchController extends Controller
             $search_items = array_merge($search_items, $employment_types);
         }
 
+        $years_of_experience = YearsOfExperience::orderBy('name')->select(DB::raw('"Years of Experience" as type'), 'name')->get()->toArray();
+        if ($years_of_experience && count($years_of_experience) > 0) {
+            $search_items = array_merge($search_items, $years_of_experience);
+        }
+
+        $media_experiences = Media::orderBy('name')->select(DB::raw('"Media Experience" as type'), 'name')->get()->toArray();
+        if ($media_experiences && count($media_experiences) > 0) {
+            $search_items = array_merge($search_items, $media_experiences);
+        }
+
+        $Strengths = Strength::orderBy('name')->select(DB::raw('"Strength" as type'), 'name')->get()->toArray();
+        if ($Strengths && count($Strengths) > 0) {
+            $search_items = array_merge($search_items, $Strengths);
+        }
+
+        $industry_experiences = Industry::orderBy('name')->select(DB::raw('"Industry Experience" as type'), 'name')->get()->toArray();
+        if ($industry_experiences && count($industry_experiences) > 0) {
+            $search_items = array_merge($search_items, $industry_experiences);
+        }
+
         return $search_items;
     }
 }
