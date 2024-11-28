@@ -24,8 +24,23 @@ class SearchController extends Controller
 {
     public function get_search_items(Request $request)
     {
-        $categories = Category::orderBy('name')->select(DB::raw('"Category" as type'), 'name')->get()->toArray();
+        $search_items = [];
 
-        return $categories;
+        $categories = Category::orderBy('name')->select(DB::raw('"Category" as type'), 'name')->get()->toArray();
+        if ($categories && count($categories) > 0) {
+            $search_items = array_merge($search_items, $categories);
+        }
+
+        $states = Location::whereNull('parent_id')->orderBy('name')->select(DB::raw('"State" as type'), 'name')->get()->toArray();
+        if ($states && count($states) > 0) {
+            $search_items = array_merge($search_items, $states);
+        }
+
+        $cities = Location::whereNotNull('parent_id')->orderBy('name')->select(DB::raw('"City" as type'), 'name')->get()->toArray();
+        if ($cities && count($cities) > 0) {
+            $search_items = array_merge($search_items, $cities);
+        }
+
+        return $search_items;
     }
 }
