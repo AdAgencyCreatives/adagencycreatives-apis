@@ -58,7 +58,7 @@ class SearchController extends Controller
 
         $strengths = Strength::orderBy('name')->select('name')->get()->toArray();
         if ($strengths && count($strengths) > 0) {
-            $search_items['Strengths'] = $strengths;
+            $search_items['strengths'] = $strengths;
         }
 
         $industry_experiences = Industry::orderBy('name')->select('name')->get()->toArray();
