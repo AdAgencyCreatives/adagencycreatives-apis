@@ -41,7 +41,7 @@ class SearchController extends Controller
             $search_items = array_merge($search_items, $cities);
         }
 
-        $employment_types = EmploymentTypes::orderBy('name')->select(DB::raw('"City" as type'), 'name')->get()->toArray();
+        $employment_types = EmploymentTypes::orderBy('name')->select(DB::raw('"Employment Type" as type'), 'name')->get()->toArray();
         if ($employment_types && count($employment_types) > 0) {
             $search_items = array_merge($search_items, $employment_types);
         }
