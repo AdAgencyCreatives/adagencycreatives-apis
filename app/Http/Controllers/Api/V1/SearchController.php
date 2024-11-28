@@ -24,7 +24,7 @@ class SearchController extends Controller
 {
     public function get_search_items(Request $request)
     {
-        $categories = Category::orderBy('name')->select('name', DB::raw('"Category" as type'))->get()->toArray();
+        $categories = Category::orderBy('name')->select(DB::raw('"Category" as type'), 'name')->get()->toArray();
 
         return $categories;
     }
