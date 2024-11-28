@@ -15,6 +15,7 @@ use App\Models\Strength;
 use App\Models\Industry;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -23,7 +24,7 @@ class SearchController extends Controller
 {
     public function get_search_items(Request $request)
     {
-        $categories = Category::orderBy('name')->select('name')->get()->toArray();
+        $categories = Category::orderBy('name')->select('name', DB::raw('"Category" as type'))->get()->toArray();
 
         return $categories;
     }
