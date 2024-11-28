@@ -268,3 +268,5 @@ Route::patch('user_update_email_notifications/{user}', [UserController::class, '
 
 Route::get('/get_base64', [UtilsController::class, 'get_base64']);
 Route::post('/notify-error', [ErrorNotificationController::class, 'index']);
+Route::post('/get_states', [LocationController::class, 'get_states']);
+Route::post('/get_cities', [LocationController::class, 'get_cities']);

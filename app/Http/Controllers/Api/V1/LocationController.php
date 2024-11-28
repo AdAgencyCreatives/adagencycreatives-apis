@@ -102,15 +102,41 @@ class LocationController extends Controller
 
     public function cities(Request $request)
     {
-       $query = QueryBuilder::for(Location::class);
-       $query = $query->whereNotNull('parent_id');
-       if ($request->per_page == -1) {
+        $query = QueryBuilder::for(Location::class);
+        $query = $query->whereNotNull('parent_id');
+        if ($request->per_page == -1) {
 
             $cities = $query->get();
         } else {
             $cities = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
         }
 
-       return new LocationCollection($cities);
+        return new LocationCollection($cities);
+    }
+
+    public function get_states(Request $request)
+    {
+        $query = QueryBuilder::for(Location::class);
+        $query = $query->whereNull('parent_id');
+        if ($request->per_page == -1) {
+            $states = $query->get();
+        } else {
+            $states = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        }
+
+        return new LocationCollection($states);
+    }
+
+    public function get_cities(Request $request)
+    {
+        $query = QueryBuilder::for(Location::class);
+        $query = $query->whereNotNull('parent_id');
+        if ($request->per_page == -1) {
+            $cities = $query->get();
+        } else {
+            $cities = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        }
+
+        return new LocationCollection($cities);
     }
 }
