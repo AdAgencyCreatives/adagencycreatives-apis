@@ -63,7 +63,8 @@ class SearchController extends Controller
             $search_items['media_experiences'] = $media_experiences;
         }
 
-        $strengths = Strength::select('name')->distinct()->orderBy('name')->get()->toArray();
+        // limited by the client to load only BICOP and Bilingual
+        $strengths = Strength::whereIn('name', ["BICOP", "Bilingual"])->select('name')->distinct()->orderBy('name')->get()->toArray();
 
         if ($strengths && count($strengths) > 0) {
             $search_items['strengths'] = $strengths;
