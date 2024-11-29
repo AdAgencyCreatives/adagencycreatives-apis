@@ -76,16 +76,22 @@ class SearchController extends Controller
             $search_items['industry_experiences'] = $industry_experiences;
         }
 
-        $educations = Education::select('degree as name')->distinct()->orderBy('degree')->get()->toArray();
+        $education_colleges = Education::select('college as name')->distinct()->orderBy('college')->get()->toArray();
 
-        if ($educations && count($educations) > 0) {
-            $search_items['educations'] = $educations;
+        if ($education_colleges && count($education_colleges) > 0) {
+            $search_items['education_colleges'] = $education_colleges;
         }
 
-        $experiences = Experience::select('title as name')->distinct()->orderBy('title')->get()->toArray();
+        $education_degrees = Education::select('degree as name')->distinct()->orderBy('degree')->get()->toArray();
 
-        if ($experiences && count($experiences) > 0) {
-            $search_items['experiences'] = $experiences;
+        if ($education_degrees && count($education_degrees) > 0) {
+            $search_items['education_degrees'] = $education_degrees;
+        }
+
+        $experience_companies = Experience::select('company as name')->distinct()->orderBy('company')->get()->toArray();
+
+        if ($experience_companies && count($experience_companies) > 0) {
+            $search_items['experience_companies'] = $experience_companies;
         }
 
         return $search_items;
