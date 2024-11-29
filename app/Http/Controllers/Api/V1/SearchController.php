@@ -76,13 +76,13 @@ class SearchController extends Controller
             $search_items['industry_experiences'] = $industry_experiences;
         }
 
-        $educations = Education::select('degree')->distinct()->orderBy('degree')->get()->toArray();
+        $educations = Education::select('degree as name')->distinct()->orderBy('degree')->get()->toArray();
 
         if ($educations && count($educations) > 0) {
             $search_items['educations'] = $educations;
         }
 
-        $experiences = Experience::select('title')->distinct()->orderBy('title')->get()->toArray();
+        $experiences = Experience::select('title as name')->distinct()->orderBy('title')->get()->toArray();
 
         if ($experiences && count($experiences) > 0) {
             $search_items['experiences'] = $experiences;
