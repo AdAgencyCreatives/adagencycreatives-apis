@@ -7,8 +7,10 @@ use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Education;
 use App\Models\Location;
 use App\Models\EmploymentTypes;
+use App\Models\Experience;
 use App\Models\YearsOfExperience;
 use App\Models\Media;
 use App\Models\Strength;
@@ -71,6 +73,18 @@ class SearchController extends Controller
 
         if ($industry_experiences && count($industry_experiences) > 0) {
             $search_items['industry_experiences'] = $industry_experiences;
+        }
+
+        $educations = Education::select('degree')->distinct()->orderBy('degree')->get()->toArray();
+
+        if ($educations && count($educations) > 0) {
+            $search_items['educations'] = $educations;
+        }
+
+        $experiences = Experience::select('title')->distinct()->orderBy('title')->get()->toArray();
+
+        if ($experiences && count($experiences) > 0) {
+            $search_items['experiences'] = $experiences;
         }
 
         return $search_items;
