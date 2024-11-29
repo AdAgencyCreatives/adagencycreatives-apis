@@ -26,42 +26,49 @@ class SearchController extends Controller
     {
         $search_items = [];
 
-        $categories = Category::orderBy('name')->select('name')->get()->toArray();
+        $categories = Category::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($categories && count($categories) > 0) {
             $search_items['categories'] = $categories;
         }
 
-        $states = Location::whereNull('parent_id')->orderBy('name')->select('name')->get()->toArray();
+        $states = Location::select('name')->distinct()->whereNull('parent_id')->orderBy('name')->get()->toArray();
+
         if ($states && count($states) > 0) {
             $search_items['states'] = $states;
         }
 
-        $cities = Location::whereNotNull('parent_id')->orderBy('name')->select('name')->get()->toArray();
+        $cities = Location::select('name')->distinct()->whereNotNull('parent_id')->orderBy('name')->get()->toArray();
         if ($cities && count($cities) > 0) {
             $search_items['cities'] = $cities;
         }
 
-        $employment_types = EmploymentTypes::orderBy('name')->select('name')->get()->toArray();
+        $employment_types = EmploymentTypes::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($employment_types && count($employment_types) > 0) {
             $search_items['employment_types'] = $employment_types;
         }
 
-        $years_of_experience = YearsOfExperience::orderBy('name')->select('name')->get()->toArray();
+        $years_of_experience = YearsOfExperience::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($years_of_experience && count($years_of_experience) > 0) {
             $search_items['years_of_experience'] = $years_of_experience;
         }
 
-        $media_experiences = Media::orderBy('name')->select('name')->get()->toArray();
+        $media_experiences = Media::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($media_experiences && count($media_experiences) > 0) {
             $search_items['media_experiences'] = $media_experiences;
         }
 
-        $strengths = Strength::orderBy('name')->select('name')->get()->toArray();
+        $strengths = Strength::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($strengths && count($strengths) > 0) {
             $search_items['strengths'] = $strengths;
         }
 
-        $industry_experiences = Industry::orderBy('name')->select('name')->get()->toArray();
+        $industry_experiences = Industry::select('name')->distinct()->orderBy('name')->get()->toArray();
+
         if ($industry_experiences && count($industry_experiences) > 0) {
             $search_items['industry_experiences'] = $industry_experiences;
         }
