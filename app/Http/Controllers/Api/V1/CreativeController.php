@@ -61,7 +61,7 @@ class CreativeController extends Controller
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -97,7 +97,7 @@ class CreativeController extends Controller
                 })
                 ->orderByRaw($rawOrder)
                 ->orderByDesc('is_featured')
-                ->orderBy('created_at')
+                ->orderByDesc('created_at')
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
         } else {
@@ -114,7 +114,7 @@ class CreativeController extends Controller
                 })
                 ->orderByRaw($rawOrder)
                 ->orderByDesc('is_featured')
-                ->orderBy('created_at')
+                ->orderByDesc('created_at')
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
         }
@@ -187,7 +187,7 @@ class CreativeController extends Controller
     //         })
     //         ->orderByRaw($rawOrder)
     //         ->orderByDesc('is_featured')
-    //         ->orderBy('created_at')
+    //         ->orderByDesc('created_at')
     //         ->paginate($request->per_page ?? config('global.request.pagination_limit'))
     //         ->withQueryString();
 
@@ -241,7 +241,7 @@ class CreativeController extends Controller
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -450,11 +450,9 @@ class CreativeController extends Controller
                     ->where('status', 1);
             })
             ->orderByDesc('is_featured')
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
-
-        return new LoggedinCreativeCollection($creatives);
 
         return new LoggedinCreativeCollection($creatives);
     }
@@ -580,7 +578,7 @@ class CreativeController extends Controller
                     ->where('status', 1);
             })
             ->orderByDesc('is_featured')
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -617,7 +615,7 @@ class CreativeController extends Controller
             })
             ->orderByRaw($rawOrder)
             ->orderByDesc('is_featured')
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate(25)
             ->withQueryString();
 
