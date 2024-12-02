@@ -225,7 +225,7 @@
     </section>
     @if (count($portfolio_items))
         <section>
-            <h1>Portfolio</h1>
+            <h1>Sneak Peek</h1>
             <div class="portfolio">
                 @foreach ($portfolio_items as $item)
                     <img src="{{ getAttachmentBasePath() . $item->path }}" style="max-width: 800px;" />
