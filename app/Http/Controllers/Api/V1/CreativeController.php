@@ -577,6 +577,8 @@ class CreativeController extends Controller
     public function related_creatives(Request $request) //based on first Title, Second State, Third City
     {
         $user = User::where('uuid', $request->creative_id)->first();
+
+        return print_r($user, true);
         $creative = Creative::where('user_id', $user->id)->first();
         $category = $creative->category;
         $location = get_location($user);
