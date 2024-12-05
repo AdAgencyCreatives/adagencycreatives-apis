@@ -60,8 +60,6 @@ class CreativeController extends Controller
                     });
             })
             ->orderByRaw($rawOrder)
-            ->orderByDesc('is_featured')
-            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -96,8 +94,6 @@ class CreativeController extends Controller
                         ->where('status', 1);
                 })
                 ->orderByRaw($rawOrder)
-                ->orderByDesc('is_featured')
-                ->orderByDesc('created_at')
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
         } else {
@@ -113,8 +109,6 @@ class CreativeController extends Controller
                         });
                 })
                 ->orderByRaw($rawOrder)
-                ->orderByDesc('is_featured')
-                ->orderByDesc('created_at')
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
         }
@@ -185,9 +179,6 @@ class CreativeController extends Controller
     //                         });
     //                 });
     //         })
-    //         ->orderByRaw($rawOrder)
-    //         ->orderByDesc('is_featured')
-    //         ->orderByDesc('created_at')
     //         ->paginate($request->per_page ?? config('global.request.pagination_limit'))
     //         ->withQueryString();
 
@@ -240,8 +231,6 @@ class CreativeController extends Controller
                     });
             })
             ->orderByRaw($rawOrder)
-            ->orderByDesc('is_featured')
-            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -450,8 +439,6 @@ class CreativeController extends Controller
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
-            ->orderByDesc('is_featured')
-            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -471,55 +458,55 @@ class CreativeController extends Controller
 
                 case 'state':
                     // Search via State Name
-                    $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
                     $sql .= " WHERE (lc.parent_id IS NULL AND lc.name ='" . trim($term) . "')";
                     break;
 
                 case 'city':
                     // Search via City Name
-                    $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
                     $sql .= " WHERE(lc.parent_id IS NOT NULL AND lc.name ='" . trim($term) . "')" . "\n";
                     break;
 
                 case 'industry-experience':
                     // Search via Industry Experience
-                    $sql = 'SELECT cr.id FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
                     $sql .= " WHERE ind.name ='" . trim($term) . "'" . "\n";
                     break;
 
                 case 'media-experience':
                     // Search via Media Experience
-                    $sql = 'SELECT cr.id FROM creatives cr JOIN medias med ON FIND_IN_SET(med.uuid, cr.media_experience) > 0' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN medias med ON FIND_IN_SET(med.uuid, cr.media_experience) > 0' . "\n";
                     $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
                     break;
 
                 case 'strengths':
                     // Search via Character Strengths
-                    $sql = 'SELECT cr.id FROM creatives cr JOIN strengths strn ON FIND_IN_SET(strn.uuid, cr.strengths) > 0' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN strengths strn ON FIND_IN_SET(strn.uuid, cr.strengths) > 0' . "\n";
                     $sql .= " WHERE strn.name ='" . trim($term) . "'" . "\n";
                     break;
 
                 case 'work-type':
                     // Search via Type of Work e.g Freelance, Contract, Full-Time
-                    $sql = 'SELECT cr.id FROM creatives cr' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr' . "\n";
                     $sql .= " WHERE cr.employment_type LIKE '%" . trim($term) . "%'" . "\n";
                     break;
 
                 case 'years-of-experience':
                     // Search via Type of Work e.g Freelance, Contract, Full-Time
-                    $sql = 'SELECT cr.id FROM creatives cr' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr' . "\n";
                     $sql .= " WHERE cr.years_of_experience ='" . trim($term) . "'" . "\n";
                     break;
 
                 case 'industry-title':
                     // Search via Category (Industry Title )
-                    $sql = 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
                     $sql .= " WHERE (ca.name ='" . trim($term) . "')" . "\n";
                     break;
 
                 case 'education-college':
                     // Search via Degree Program in Education
-                    $sql = 'SELECT cr.id FROM creatives cr ';
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr ';
                     $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                     $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
                     $sql .= "WHERE edu.college LIKE :term" . "\n";
@@ -528,7 +515,7 @@ class CreativeController extends Controller
 
                 case 'education-degree-program':
                     // Search via Degree Program in Education
-                    $sql = 'SELECT cr.id FROM creatives cr ';
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr ';
                     $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                     $sql .= 'INNER JOIN educations edu ON ur.id = edu.user_id ';
                     $sql .= "WHERE edu.degree = " . DB::raw('"' . trim($term) . '"') . "\n";
@@ -536,12 +523,15 @@ class CreativeController extends Controller
 
                 case 'experience-company':
                     // Search via Company name in Experience table
-                    $sql = 'SELECT cr.id FROM creatives cr ';
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr ';
                     $sql .= 'INNER JOIN users ur ON cr.user_id = ur.id ';
                     $sql .= 'INNER JOIN experiences exp ON ur.id = exp.user_id ';
                     $sql .= "WHERE exp.company = " . DB::raw('"' . trim($term) . '"') . "\n";
                     break;
             }
+
+            $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
             if ($bindings != '') {
                 $res = DB::select($sql, $bindings);
             } else {
@@ -578,8 +568,6 @@ class CreativeController extends Controller
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
-            ->orderByDesc('is_featured')
-            ->orderByDesc('created_at')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
@@ -615,8 +603,6 @@ class CreativeController extends Controller
                     ->where('status', 1);
             })
             ->orderByRaw($rawOrder)
-            ->orderByDesc('is_featured')
-            ->orderByDesc('created_at')
             ->paginate(25)
             ->withQueryString();
 
@@ -1035,7 +1021,7 @@ class CreativeController extends Controller
         $terms = explode(',', $search);
 
         // Search via First or Last Name
-        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
+        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
             // Check if the term contains a space or underscore (full name or both names)
@@ -1063,7 +1049,7 @@ class CreativeController extends Controller
         $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via City Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
@@ -1073,13 +1059,16 @@ class CreativeController extends Controller
         $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via State Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            break; //Because we only allow single term search
+            if ($i == 0) {
+                break; //Because we only allow single term search
+            }
         }
 
+        $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
         $res = DB::select($sql);
         $creativeIds = collect($res)
             ->pluck('id')
@@ -1108,7 +1097,7 @@ class CreativeController extends Controller
 
         $iterationCount = 0;
         // Search via First or Last Name
-        $sql = 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
+        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
             // Check if the term contains a space or underscore (full name or both names)
@@ -1140,7 +1129,7 @@ class CreativeController extends Controller
 
         $iterationCount = 0;
         // Search via City Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
         for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
@@ -1155,7 +1144,7 @@ class CreativeController extends Controller
 
         $iterationCount = 0;
         // Search via State Name
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
         for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
@@ -1170,7 +1159,7 @@ class CreativeController extends Controller
 
         $iterationCount = 0;
         // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
         for ($i = 0; $i < min(2, count($terms)); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
@@ -1181,6 +1170,7 @@ class CreativeController extends Controller
             }
         }
 
+        $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
         $res = DB::select($sql);
         $creativeIds = collect($res)
             ->pluck('id')
