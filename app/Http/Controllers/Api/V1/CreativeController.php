@@ -582,14 +582,14 @@ class CreativeController extends Controller
         $category = $creative->category;
         $location = get_location($user);
 
+        $sql = '';
+
         $related_category_ids = [];
         if ($category?->id) {
-            $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
+            $sql = 'SELECT cr.id, cr.created_at, cr.featured_at, 1 as priority FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id WHERE ca.id=' . $category->id . "\n";
+
+            $sql .= 'UNION DISTINCT' . "\n";
         }
-
-        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at, 1 as priority FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id WHERE ca.id IN (' . implode(',', $related_category_ids) . ')' . "\n";
-
-        $sql .= 'UNION DISTINCT' . "\n";
 
         $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at, 2 as priority FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
         $sql .= " WHERE (lc.parent_id IS NULL AND lc.uuid ='" . $location['state_id'] . "')" . "\n";
