@@ -582,7 +582,10 @@ class CreativeController extends Controller
         $category = $creative->category;
         $location = get_location($user);
 
-        $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
+        $related_category_ids = [];
+        if ($category?->id) {
+            $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
+        }
 
         $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id WHERE ca.id IN (' . implode(',', $related_category_ids) . ')' . "\n";
 
