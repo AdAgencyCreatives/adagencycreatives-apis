@@ -598,7 +598,6 @@ class CreativeController extends Controller
 
         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
 
-        return $sql;
         $res = DB::select($sql);
         $related_creative_ids = collect($res)->pluck('id')->toArray();
 
