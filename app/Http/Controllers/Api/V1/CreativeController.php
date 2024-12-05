@@ -578,11 +578,11 @@ class CreativeController extends Controller
     {
         $user = User::where('uuid', $request->creative_id)->first();
 
-        return print_r($user, true);
         $creative = Creative::where('user_id', $user->id)->first();
         $category = $creative->category;
         $location = get_location($user);
 
+        return print_r($location, true);
         $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
 
         $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
