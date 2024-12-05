@@ -582,10 +582,13 @@ class CreativeController extends Controller
         $category = $creative->category;
         $location = get_location($user);
 
-        return print_r($location, true);
         $related_category_ids = Creative::where('category_id', $category->id)->pluck('id')->toArray();
 
-        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
+        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id WHERE ca.id IN (' . implode(',', $related_category_ids) . ')' . "\n";
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
         $sql .= " WHERE (lc.parent_id IS NULL AND lc.uuid ='" . $location['state_id'] . "')" . "\n";
 
         $sql .= 'UNION DISTINCT' . "\n";
@@ -594,7 +597,7 @@ class CreativeController extends Controller
         $sql .= " WHERE (lc.parent_id IS NOT NULL AND lc.uuid = '" . $location['city_id'] . "')" . "\n";
 
         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
-        return $sql;
+
         $res = DB::select($sql);
         $related_creative_ids = collect($res)->pluck('id')->toArray();
 
