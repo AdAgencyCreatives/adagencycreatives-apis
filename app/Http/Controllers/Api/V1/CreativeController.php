@@ -360,7 +360,7 @@ class CreativeController extends Controller
         $sql .= 'UNION DISTINCT' . "\n";
 
         // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT cr.id FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+        $sql .= 'SELECT cr.id, ur.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
