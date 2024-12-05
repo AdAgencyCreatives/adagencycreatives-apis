@@ -592,7 +592,7 @@ class CreativeController extends Controller
         $sql .= " WHERE (lc.parent_id IS NOT NULL AND lc.uuid = '" . $location['city_id'] . "')" . "\n";
 
         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
-        dd($sql);
+        return $sql;
         $res = DB::select($sql);
         $related_creative_ids = collect($res)->pluck('id')->toArray();
 
