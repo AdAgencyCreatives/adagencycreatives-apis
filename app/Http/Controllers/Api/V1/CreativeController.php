@@ -417,6 +417,14 @@ class CreativeController extends Controller
                     $sql .= ($i == 0 ? 'UNION DISTINCT' . "\n" . 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr WHERE ' . "\n" : ' OR ') . $workplace_preferences[$term] . '=1' . "\n";
                 }
             }
+
+            $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Years of experience
+            $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN educations ed ON cr.user_id=ed.user_id' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.title LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
         }
 
         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
