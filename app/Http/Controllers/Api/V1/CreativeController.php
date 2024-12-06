@@ -423,7 +423,23 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN educations ed ON cr.user_id=ed.user_id' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.title LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.degree LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
+
+            $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Years of experience
+            $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN educations ed ON cr.user_id=ed.user_id' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.college LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            }
+
+            $sql .= 'UNION DISTINCT' . "\n";
+            // Search via Years of experience
+            $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN experiences ex ON cr.user_id=ex.user_id' . "\n";
+            for ($i = 0; $i < count($terms); $i++) {
+                $term = $terms[$i];
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ex.company LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
         }
 
