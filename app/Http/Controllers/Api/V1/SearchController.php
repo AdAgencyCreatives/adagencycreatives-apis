@@ -64,7 +64,7 @@ class SearchController extends Controller
         }
 
         // limited by the client to load only BICOP and Bilingual
-        $strengths = Strength::whereIn('name', ["BICOP", "Bilingual"])->select('name')->distinct()->orderBy('name')->get()->toArray();
+        $strengths = Strength::whereIn('name', ["BIPOC", "Bilingual"])->select('name')->distinct()->orderBy('name')->get()->toArray();
 
         if ($strengths && count($strengths) > 0) {
             $search_items['Strength'] = $strengths;
