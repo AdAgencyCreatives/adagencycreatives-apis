@@ -301,28 +301,21 @@ class CreativeController extends Controller
 
         $terms = explode(',', $search);
 
+        $sql = '';
+
+        // Search via Industry Title (a.k.a Category)
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
+        for ($i = 0; $i < count($terms); $i++) {
+            $term = $terms[$i];
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+        }
+
+        $sql .= 'UNION DISTINCT' . "\n";
+
         // Search via First or Last Name
-        $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
+        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
-            // Check if the term contains a space or underscore (full name or both names)
-            // if (strpos($term, ' ') !== false || strpos($term, '_') !== false) {
-            //     $separator = strpos($term, ' ') !== false ? ' ' : '_';
-            //     $names = explode($separator, $term);
-            //     $firstName = trim($names[0]);
-            //     $lastName = trim($names[1]);
-
-            //     $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$firstName%$lastName" . $wildCardEnd . "'" . "\n";
-            //     $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
-
-            //     // Additional check for reverse order
-            //     $sql .= " OR CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . "$lastName% $firstName" . $wildCardEnd . "'" . "\n";
-            //     $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . "$firstName% $lastName" . $wildCardEnd . "'" . "\n";
-            // } else {
-            //     // Search by individual terms
-            //     $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ur.first_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
-            //     $sql .= " OR ur.last_name LIKE '" . $wildCardStart . "$term" . $wildCardEnd . "'" . "\n";
-            // }
 
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$term%'" . "\n";
             $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$term%'" . "\n";
@@ -344,15 +337,6 @@ class CreativeController extends Controller
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-        }
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        // Search via Industry Title (a.k.a Category)
-        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
-        for ($i = 0; $i < count($terms); $i++) {
-            $term = $terms[$i];
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
         }
 
         if ($role != 'creative') {
