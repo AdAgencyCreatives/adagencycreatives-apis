@@ -561,15 +561,14 @@ class CreativeController extends Controller
 
         $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
 
-        return [
-            'role' => $role,
-            'search_terms_level2' => $request->search_level2,
-            'count' => count($searchTermsLevel2),
-        ];
-
         $combinedCreativeIdsLevel2 = [];
         if (count($searchTermsLevel2) > 0) {
             if (count($searchTermsLevel2) === 1) {
+                return [
+                    'role' => $role,
+                    'search_terms_level2' => $request->search_level2,
+                    'count' => count($searchTermsLevel2),
+                ];
                 $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
             } else {
                 $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
