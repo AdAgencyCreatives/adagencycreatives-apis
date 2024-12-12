@@ -239,6 +239,7 @@ class CreativeController extends Controller
 
     public function process_single_term_search($searchTerm, $role)
     {
+        return [$searchTerm, $role];
         $creative_1 = $this->getCreativeIDs(trim($searchTerm), 'exact-match', $role);
         $creative_2 = $this->getCreativeIDs(trim($searchTerm), 'starts-with', $role);
         $creative_3 = $this->getCreativeIDs(trim($searchTerm), 'contains', $role);
