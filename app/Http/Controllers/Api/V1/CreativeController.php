@@ -559,7 +559,11 @@ class CreativeController extends Controller
 
         $combinedCreativeIds = $this->getSearch4CreativeIds($request);
 
-        $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+        $searchTermsLevel2 = [];
+        $search_level2 = $request->search_level2 ?? "";
+        if (isset($search_level2) && strlen($search_level2) > 0) {
+            $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+        }
 
         $combinedCreativeIdsLevel2 = [];
         if (count($searchTermsLevel2) > 0) {
