@@ -565,6 +565,7 @@ class CreativeController extends Controller
         if (count($searchTermsLevel2) > 0) {
             if (count($searchTermsLevel2) === 1) {
                 $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
+                return [$combinedCreativeIds];
             } else {
                 $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
             }
