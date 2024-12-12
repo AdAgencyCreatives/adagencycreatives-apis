@@ -239,7 +239,6 @@ class CreativeController extends Controller
 
     public function process_single_term_search($searchTerm, $role)
     {
-        return [$searchTerm, $role];
         $creative_1 = $this->getCreativeIDs(trim($searchTerm), 'exact-match', $role);
         $creative_2 = $this->getCreativeIDs(trim($searchTerm), 'starts-with', $role);
         $creative_3 = $this->getCreativeIDs(trim($searchTerm), 'contains', $role);
@@ -286,7 +285,6 @@ class CreativeController extends Controller
 
     public function getCreativeIDs($search, $match_type, $role) // match_type => contains | starts-with | exact-match
     {
-        return [$match_type];
         if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
         }
@@ -562,11 +560,17 @@ class CreativeController extends Controller
         $combinedCreativeIds = $this->getSearch4CreativeIds($request);
 
         $searchTermsLevel2 = explode(',', $request->search_level2 ?? "");
+
+        return [
+            'role' => $role,
+            'search_terms_level2' => $request->search_level2,
+            'count' => count($searchTermsLevel2),
+        ];
+
         $combinedCreativeIdsLevel2 = [];
         if (count($searchTermsLevel2) > 0) {
             if (count($searchTermsLevel2) === 1) {
                 $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
-                return [$combinedCreativeIds];
             } else {
                 $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
             }
