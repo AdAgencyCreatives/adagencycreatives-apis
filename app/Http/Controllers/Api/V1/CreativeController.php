@@ -577,9 +577,8 @@ class CreativeController extends Controller
             } else {
                 $combinedCreativeIdsLevel2 = $this->process_three_terms_search($searchTermsLevel2, $role);
             }
+            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
         }
-
-        $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $combinedCreativeIdsLevel2)));
 
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) {
