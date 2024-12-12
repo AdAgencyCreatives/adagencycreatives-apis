@@ -567,7 +567,7 @@ class CreativeController extends Controller
                 return [
                     'role' => $role,
                     'search_terms_level2' => $request->search_level2,
-                    'count' => count($searchTermsLevel2),
+                    'WTF' => count($searchTermsLevel2),
                 ];
                 $combinedCreativeIdsLevel2 = $this->process_single_term_search($searchTermsLevel2[0], $role);
             } else {
