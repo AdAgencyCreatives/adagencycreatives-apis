@@ -285,7 +285,7 @@ class CreativeController extends Controller
 
     public function getCreativeIDs($search, $match_type, $role) // match_type => contains | starts-with | exact-match
     {
-        die($match_type);
+        return [$match_type];
         if (!isset($match_type) || strlen($match_type) == 0) {
             $match_type = 'contains';
         }
