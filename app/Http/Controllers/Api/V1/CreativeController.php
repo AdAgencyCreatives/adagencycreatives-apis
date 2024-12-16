@@ -116,8 +116,6 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-
-    // public function search3(Request $request)
     // {
     //     $role = $request?->role ?? 'agency';
 
@@ -319,8 +317,8 @@ class CreativeController extends Controller
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
 
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%$term%'" . "\n";
-            $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%$term%'" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
+            $sql .= " OR CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
