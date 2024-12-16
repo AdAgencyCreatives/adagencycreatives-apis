@@ -251,8 +251,8 @@ class CreativeController extends Controller
         for ($i = 0; $i < count($terms); $i++) {
             $term = trim($terms[$i]);
 
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(CONCAT(ur.first_name, ' ', ur.last_name) LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            $sql .= " OR (CONCAT(ur.last_name, ' ', ur.first_name) LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(CONCAT(ur.first_name, ' ', ur.last_name) LIKE '%" . trim($term) . "%')" . "\n";
+            $sql .= " OR (CONCAT(ur.last_name, ' ', ur.first_name) LIKE '%" . trim($term) . "%')" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
