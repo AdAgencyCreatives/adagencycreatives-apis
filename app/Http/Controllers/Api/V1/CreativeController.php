@@ -205,8 +205,14 @@ class CreativeController extends Controller
         }
 
         // Split the search terms into an array
-        $searchTerms = explode(',', $request->search);
-        $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2 ?? ""));
+        $searchTerms = [];
+        if (!empty($request->search)) {
+            $searchTerms = explode(',', $request->search);
+        }
+
+        if (!empty($request->search_level2)) {
+            $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2));
+        }
 
         $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
         for ($i = 1; $i < count($searchTerms); $i++) {
