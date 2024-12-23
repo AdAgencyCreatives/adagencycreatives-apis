@@ -59,6 +59,8 @@ class PostReactionController extends Controller
                 $existingReaction->delete();
             }
 
+            $post->update(['updated_at' => now()]);
+
             return response()->json(['message' => 'Reaction updated successfully']);
         }
 
@@ -69,6 +71,7 @@ class PostReactionController extends Controller
             'post_id' => $post->id,
             'type' => $type,
         ]);
+        $post->update(['updated_at' => now()]);
 
         return response()->json(['message' => 'Reaction added successfully']);
     }

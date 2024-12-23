@@ -71,10 +71,11 @@ class CommentController extends Controller
 
         try {
             $comment = Comment::create($request->all());
+            $post->update(['updated_at' => now()]);
 
             return ApiResponse::success(new CommentResource($comment), 200);
         } catch (\Exception $e) {
-            return ApiResponse::error('PS-01'.$e->getMessage(), 400);
+            return ApiResponse::error('PS-01' . $e->getMessage(), 400);
         }
     }
 
@@ -82,7 +83,10 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::where('uuid', $uuid)->firstOrFail();
+            $post = Post::where('uuid', $comment->post_id)->first();
+
             $comment->update($request->only('content'));
+            $post->update(['updated_at' => now()]);
 
             return new CommentResource($comment);
         } catch (ModelNotFoundException $exception) {
@@ -94,7 +98,10 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::where('uuid', $uuid)->firstOrFail();
+            $post = Post::where('uuid', $comment->post_id)->first();
+
             $comment->delete();
+            $post->update(['updated_at' => now()]);
 
             return ApiResponse::success(new CommentResource($comment), 200);
         } catch (\Exception $exception) {
