@@ -60,8 +60,9 @@ class PostReactionController extends Controller
             }
 
             $post->update(['updated_at' => now()]);
+            $post->refresh();
 
-            return response()->json(['message' => 'Reaction updated successfully']);
+            return response()->json(['message' => 'Reaction updated successfully. Post Updated: [' . $post->id . ', ', $post->updated_at . ']']);
         }
 
         // User has not reacted yet, create a new reaction
