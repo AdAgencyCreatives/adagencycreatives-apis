@@ -25,7 +25,7 @@
             margin: 1em 0 !important;
             padding: 0 !important;
             line-height: 1.5em !important;
-            text-align: justify;
+            text-align: left;
         }
 
         a {
