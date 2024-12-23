@@ -22,6 +22,7 @@ class Post extends Model
         'group_id',
         'content',
         'status',
+        'updated_at',
     ];
 
     public function attachments()
