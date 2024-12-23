@@ -83,7 +83,7 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::where('uuid', $uuid)->firstOrFail();
-            $post = Post::where('uuid', $comment->post_id)->first();
+            $post = Post::where('id', $comment->post_id)->first();
 
             $comment->update($request->only('content'));
             $post->update(['updated_at' => now()]);
@@ -98,7 +98,7 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::where('uuid', $uuid)->firstOrFail();
-            $post = Post::where('uuid', $comment->post_id)->first();
+            $post = Post::where('id', $comment->post_id)->first();
 
             $comment->delete();
             $post->update(['updated_at' => now()]);
