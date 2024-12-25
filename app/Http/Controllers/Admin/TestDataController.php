@@ -1195,6 +1195,17 @@ class TestDataController extends Controller
 
     public function test_user_preferred_picture(Request $request)
     {
-        return $request->get('slug');
+        $slug = $request->has('slug') ? $request->slug : '';
+        $preferred_picture = asset('assets/img/placeholder.png');
+        if (strlen($slug) > 0) {
+
+            $user = User::where('username', 'slug')->first();
+
+            if ($user) {
+                $preferred_picture = get_user_picture_preferred($user);
+            }
+        }
+
+        return '<img src="' . $preferred_picture . '" />';
     }
 }
