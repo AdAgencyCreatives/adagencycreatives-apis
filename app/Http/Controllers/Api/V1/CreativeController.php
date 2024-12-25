@@ -1176,6 +1176,31 @@ class CreativeController extends Controller
             }
         }
 
-        return response(file_get_contents($preferred_picture), 200)->header('Content-Type', 'image/jpeg');
+        // Load the GIF
+        $gif = imagecreatefromgif(asset('assets/img/welcome-blank.gif'));
+
+        // Load the image to embed
+        $image = imagecreatefromjpeg($preferred_picture);
+
+        // Get dimensions of the GIF and the image
+        $gif_width = imagesx($gif);
+        $gif_height = imagesy($gif);
+        $image_width = imagesx($image);
+        $image_height = imagesy($image);
+
+        // Define the position to embed the image (centered)
+        $x = ($gif_width - $image_width) / 2;
+        $y = ($gif_height - $image_height) / 2;
+
+        // Merge the image into the GIF
+        imagecopy($gif, $image, $x, $y, 0, 0, $image_width, $image_height);
+
+        $response = response($gif, 200)->header('Content-Type', 'image/gif');
+
+        // Free up memory
+        imagedestroy($gif);
+        imagedestroy($image);
+
+        return $response;
     }
 }
