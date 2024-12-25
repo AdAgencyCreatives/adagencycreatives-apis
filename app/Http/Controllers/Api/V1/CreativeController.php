@@ -1176,39 +1176,40 @@ class CreativeController extends Controller
             }
         }
 
-        // Load the GIF
-        $gif = imagecreatefromgif(asset('assets/img/welcome-blank.gif'));
+        return response(file_get_contents($preferred_picture), 200)->header('Content-Type', 'image/jpeg');
 
-        // Load the image to embed
-        $image = imagecreatefromjpeg($preferred_picture);
+        // // Load the GIF
+        // $gif = imagecreatefromgif(asset('assets/img/welcome-blank.gif'));
 
-        // Get dimensions of the GIF and the image
-        $gif_width = imagesx($gif);
-        $gif_height = imagesy($gif);
-        $image_width = imagesx($image);
-        $image_height = imagesy($image);
+        // // Load the image to embed
+        // $image = imagecreatefromjpeg($preferred_picture);
 
-        // Define the position to embed the image (centered)
-        $x = ($gif_width - $image_width) / 2;
-        $y = ($gif_height - $image_height) / 2;
+        // // Get dimensions of the GIF and the image
+        // $gif_width = imagesx($gif);
+        // $gif_height = imagesy($gif);
+        // $image_width = imagesx($image);
+        // $image_height = imagesy($image);
 
-        // Merge the image into the GIF
-        imagecopy($gif, $image, $x, $y, 0, 0, $image_width, $image_height);
+        // // Define the position to embed the image (centered)
+        // $x = ($gif_width - $image_width) / 2;
+        // $y = ($gif_height - $image_height) / 2;
 
-        // Start output buffering 
-        ob_start();
+        // // Merge the image into the GIF
+        // imagecopy($gif, $image, $x, $y, 0, 0, $image_width, $image_height);
 
-        // Save the resulting image
-        imagegif($gif);
+        // // Start output buffering 
+        // ob_start();
 
-        // Get the image content from the buffer 
-        $imageContent = ob_get_clean();
+        // // Save the resulting image
+        // imagegif($gif);
 
-        // Free up memory
-        imagedestroy($gif);
-        imagedestroy($image);
+        // // Get the image content from the buffer 
+        // $imageContent = ob_get_clean();
 
+        // // Free up memory
+        // imagedestroy($gif);
+        // imagedestroy($image);
 
-        return response($imageContent, 200)->header('Content-Type', 'image/jpeg');
+        // return response($imageContent, 200)->header('Content-Type', 'image/jpeg');
     }
 }
