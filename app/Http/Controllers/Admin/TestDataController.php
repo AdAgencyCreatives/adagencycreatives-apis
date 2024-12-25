@@ -1169,7 +1169,7 @@ class TestDataController extends Controller
             ->whereHas('group', function ($query) {
                 $query->where('status', '=', 0);
             })
-            ->whereBetween('created_at', [now(), now()->subMonths(2)])
+            ->whereBetween('created_at', [now()->subMonth(), now()])
             ->withCount('reactions')
             ->withCount('comments')
             ->orderBy('reactions_count', 'desc')
