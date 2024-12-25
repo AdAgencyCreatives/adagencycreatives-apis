@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\Admin\TestDataController;
+use App\Http\Controllers\Api\V1\CreativeController as V1CreativeController;
 use App\Http\Resources\MentorResource\MentorResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Attachment;

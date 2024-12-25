@@ -1162,4 +1162,20 @@ class CreativeController extends Controller
         $resume_filename = sprintf('%s_%s_AdAgencyCreatives_%s', $user->first_name, $user->last_name, date('Y-m-d'));
         return route('download.resume', ['name' => $resume_filename, 'u1' => $user->uuid, 'u2' => $user->uuid]);
     }
+
+    public function get_user_preferred_picture(Request $request)
+    {
+        $slug = $request->has('slug') ? $request->slug : '';
+        $preferred_picture = asset('assets/img/placeholder.png');
+        if (strlen($slug) > 0) {
+
+            $user = User::where('username', 'LIKE', $slug)->first();
+
+            if ($user) {
+                $preferred_picture = get_user_picture_preferred($user);
+            }
+        }
+
+        return response(file_get_contents($preferred_picture), 200)->header('Content-Type', 'image/jpeg');
+    }
 }

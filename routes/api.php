@@ -273,3 +273,5 @@ Route::post('/notify-error', [ErrorNotificationController::class, 'index']);
 Route::get('/get_states', [LocationController::class, 'get_states']);
 Route::get('/get_cities', [LocationController::class, 'get_cities']);
 Route::get('/get_search_items', [SearchController::class, 'get_search_items']);
+
+Route::get('/get-user-preferred-picture', [CreativeController::class, 'get_user_preferred_picture'])->name('get-user-preferred-picture');
