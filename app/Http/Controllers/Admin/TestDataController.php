@@ -1192,4 +1192,9 @@ class TestDataController extends Controller
 
         return new TrendingPostCollection($trendingPosts);
     }
+
+    public function test_user_preferred_picture(Request $request)
+    {
+        return $request->get('slug');
+    }
 }

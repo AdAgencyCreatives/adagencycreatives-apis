@@ -423,3 +423,4 @@ Route::get('/date-time-check', [TestDataController::class, 'dateTimeCheck'])->na
 Route::get('/agencies-without-job-posts', [TestDataController::class, 'agenciesWithoutJobPosts'])->name('agencies-without-job-posts');
 Route::get('/no-job-posted-agency-reminder', [TestDataController::class, 'noJobPostedAgencyReminder'])->name('no-job-posted-agency-reminder');
 Route::get('/test-trending-posts', [TestDataController::class, 'test_trending_posts'])->name('test-trending-posts');
+Route::get('/test-user-preferred-picture', [TestDataController::class, 'test_user_preferred_picture'])->name('test-user-preferred-picture');
