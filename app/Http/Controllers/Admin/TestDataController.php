@@ -1169,6 +1169,7 @@ class TestDataController extends Controller
             ->whereHas('group', function ($query) {
                 $query->where('status', '=', 0);
             })
+            ->whereBetween('created_at', [now(), now()->subMonth()])
             ->withCount('reactions')
             ->withCount('comments')
             ->orderBy('reactions_count', 'desc')
@@ -1178,8 +1179,6 @@ class TestDataController extends Controller
             ->withCount('reactions')
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
-
-        return $trendingPosts->all();
 
         $authenticatedUserId = auth()->id();
 
