@@ -1195,12 +1195,20 @@ class CreativeController extends Controller
         // Merge the image into the GIF
         imagecopy($gif, $image, $x, $y, 0, 0, $image_width, $image_height);
 
-        $response = response($gif, 200)->header('Content-Type', 'image/gif');
+        // Start output buffering 
+        ob_start();
+
+        // Save the resulting image
+        imagegif($gif);
+
+        // Get the image content from the buffer 
+        $imageContent = ob_get_clean();
 
         // Free up memory
         imagedestroy($gif);
         imagedestroy($image);
 
-        return $response;
+
+        return response($imageContent, 200)->header('Content-Type', 'image/jpeg');
     }
 }
