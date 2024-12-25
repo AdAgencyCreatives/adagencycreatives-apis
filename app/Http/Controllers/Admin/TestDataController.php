@@ -1199,7 +1199,7 @@ class TestDataController extends Controller
         $preferred_picture = asset('assets/img/placeholder.png');
         if (strlen($slug) > 0) {
 
-            $user = User::where('username', 'slug')->first();
+            $user = User::where('username', 'LIKE', $slug)->first();
 
             if ($user) {
                 $preferred_picture = get_user_picture_preferred($user);
