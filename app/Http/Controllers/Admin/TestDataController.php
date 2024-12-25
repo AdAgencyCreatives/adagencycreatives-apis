@@ -1156,7 +1156,7 @@ class TestDataController extends Controller
     }
 
 
-    public function trending_posts(Request $request)
+    public function test_trending_posts(Request $request)
     {
         $cacheKey = 'trending_posts';
         // Attempt to retrieve the data from the cache
