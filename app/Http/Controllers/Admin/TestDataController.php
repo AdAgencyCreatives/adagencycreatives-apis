@@ -1206,6 +1206,6 @@ class TestDataController extends Controller
             }
         }
 
-        response($preferred_picture, 200)->header('Content-Type', 'image/jpeg');
+        response(file_get_contents($preferred_picture), 200)->header('Content-Type', 'image/jpeg');
     }
 }
