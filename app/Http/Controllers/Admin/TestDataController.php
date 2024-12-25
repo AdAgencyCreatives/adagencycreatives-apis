@@ -1179,6 +1179,8 @@ class TestDataController extends Controller
             ->paginate($request->per_page ?? config('global.request.pagination_limit'))
             ->withQueryString();
 
+        return $trendingPosts->all();
+
         $authenticatedUserId = auth()->id();
 
         $trendingPosts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
