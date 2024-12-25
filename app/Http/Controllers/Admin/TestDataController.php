@@ -8,6 +8,7 @@ use App\Http\Resources\Agency\AgencyCollection;
 use App\Http\Resources\Attachment\AttachmentResource;
 use App\Http\Resources\Creative\LoggedinCreativeCollection;
 use App\Http\Resources\Job\JobResource;
+use App\Http\Resources\Post\TrendingPostCollection;
 use App\Jobs\SendEmailJob;
 use App\Mail\Account\ProfileCompletionCreativeReminder;
 use App\Mail\Account\ProfileCompletionAgencyReminder;
@@ -36,6 +37,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class TestDataController extends Controller
 {
@@ -1150,5 +1153,40 @@ class TestDataController extends Controller
         }
 
         return new NoJobPostedAgencyReminder($data['data']);
+    }
+
+
+    public function trending_posts(Request $request)
+    {
+        $cacheKey = 'trending_posts';
+        // Attempt to retrieve the data from the cache
+        $trendingPosts = QueryBuilder::for(Post::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('group_id'),
+            ])
+            ->whereHas('user')
+            ->whereHas('group', function ($query) {
+                $query->where('status', '=', 0);
+            })
+            ->withCount('reactions')
+            ->withCount('comments')
+            ->orderBy('reactions_count', 'desc')
+            ->orderBy('comments_count', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->with('comments')
+            ->withCount('reactions')
+            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
+
+        $authenticatedUserId = auth()->id();
+
+        $trendingPosts->getCollection()->transform(function ($post) use ($authenticatedUserId) {
+            $post->user_has_liked = $post->likes->contains('user_id', $authenticatedUserId);
+
+            return $post;
+        });
+
+        return new TrendingPostCollection($trendingPosts);
     }
 }
