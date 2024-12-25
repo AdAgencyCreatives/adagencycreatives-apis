@@ -712,7 +712,7 @@ class TestDataController extends Controller
         return '<a href="' . env('FRONTEND_URL') . '/creative/' . ($user?->creative?->slug ?? $user->username) . '">@' . $user->full_name . '</a><br />' .
             '<div class="welcome-lounge">' .
             '  <img src="' . env('APP_URL') . '/assets/img/welcome-blank.gif" alt="Welcome Creative" />' .
-            '  <img class="user_image" src="' . get_user_picture_preferred($user) . '" alt="Profile Image" />' .
+            '  <img class="user_image" src="' . env('APP_URL') . '/api/v1/get-user-preferred-picture/?slug=' . ($user?->creative?->slug ?? $user->username) . '" alt="Profile Image" />' .
             '  <div class="user_info">' .
             '    <div class="name">' . ($user->first_name . ' ' . $user->last_name) . '</div>' .
             ($creative_category != null ? ('    <div class="category">' . $creative_category . '</div>') : '') .
