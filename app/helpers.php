@@ -852,3 +852,19 @@ if (!function_exists('get_auth_user')) {
         return $user;
     }
 }
+
+if (!function_exists('get_user_picture_preferred')) {
+    function get_user_picture_preferred($user)
+    {
+        $preferred_picture = asset('assets/img/placeholder.png');
+        try {
+            if (isset($user->user_thumbnail) && strlen($user->user_thumbnail) > 0) {
+                $preferred_picture =  getAttachmentBasePath() . $user->user_thumbnail->path;
+            } else if (isset($user->profile_picture) && strlen($user->profile_picture) > 0) {
+                $preferred_picture =  getAttachmentBasePath() . $user->profile_picture->path;
+            }
+        } catch (\Exception $e) {
+        }
+        return $preferred_picture;
+    }
+}
