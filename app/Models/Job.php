@@ -385,6 +385,17 @@ class Job extends Model
                     $q->where('status', 1);
                 })->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get();
 
+                $uniqueCategorySubscribers = [];
+                $uniqueUserIds = [];
+                for ($i = 0; $i < count($categorySubscribers); $i++) {
+                    if (!in_array($categorySubscribers[$i]->user_id, $uniqueUserIds)) {
+                        $uniqueCategorySubscribers[] = $categorySubscribers[$i];
+                        $uniqueUserIds[] = $categorySubscribers[$i]->user_id;
+                    }
+                }
+
+                $categorySubscribers = $uniqueCategorySubscribers;
+
                 $job_url = sprintf('%s/job/%s', env('FRONTEND_URL'), $job->slug);
 
                 $state = Location::where('id', $job->state_id)->first();
