@@ -567,7 +567,16 @@ class TestDataController extends Controller
         }
         $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get();
 
-        return $categorySubscribers;
+        $uniqueCategorySubscribers = [];
+        $uniqueUserIds = [];
+        for ($i = 0; $i < count($categorySubscribers); $i++) {
+            if (!in_array($categorySubscribers[$i]->user_id, $uniqueUserIds)) {
+                $uniqueCategorySubscribers[] = $categorySubscribers[$i];
+                $uniqueUserIds[] = $categorySubscribers[$i]->user_id;
+            }
+        }
+
+        return $uniqueCategorySubscribers;
     }
 
     function validate_url($url)
