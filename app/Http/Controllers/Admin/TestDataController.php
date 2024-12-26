@@ -565,7 +565,7 @@ class TestDataController extends Controller
         } else {
             $categories[0] = $category->id;
         }
-        $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->get()->pluck('user_id')->toArray();
+        $categorySubscribers = JobAlert::with('user')->whereNotIn('user_id', $users)->whereIn('category_id', $categories)->where('status', 1)->distinct('user')->get()->pluck('user_id')->toArray();
 
         return $categorySubscribers;
     }
