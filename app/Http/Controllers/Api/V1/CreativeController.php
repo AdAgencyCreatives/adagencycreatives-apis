@@ -642,7 +642,8 @@ class CreativeController extends Controller
             'user.addresses.city',
             'user.personal_phone',
             'category',
-        ])->paginate($request->per_page ?? config('global.request.pagination_limit'));
+        ])->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->withQueryString();
 
         if (isset($filters['filter']['slug'])) { //Means user profile is being viewed on creatives page
             if ($creatives->count() === 1) { //Check if the collection count is 1 and update views if true
