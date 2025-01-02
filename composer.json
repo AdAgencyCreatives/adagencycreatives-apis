@@ -27,8 +27,7 @@
         "rawilk/laravel-settings": "^2.2",
         "spatie/laravel-permission": "^5.10",
         "spatie/laravel-query-builder": "^5.2",
-        "stripe/stripe-php": "^10.21",
-        "sybio/gif-creator": "^1.0"
+        "stripe/stripe-php": "^10.21"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
