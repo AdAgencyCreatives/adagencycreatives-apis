@@ -1217,4 +1217,60 @@ class TestDataController extends Controller
 
         return response(file_get_contents($preferred_picture), 200)->header('Content-Type', 'image/jpeg');
     }
+
+    public function test_welcome_picture(Request $request)
+    {
+        // Load the GIF image
+        $gifPath = 'https://staging-api.adagencycreatives.com/assets/img/welcome-blank.gif';
+        $gif = imagecreatefromgif($gifPath);
+
+        // Load the JPG image to embed
+        $jpgPath = 'https://staging-api.adagencycreatives.com/api/v1/get-user-preferred-picture/?slug=test-creative-1#ext=.jpg';
+        $jpg = imagecreatefromjpeg($jpgPath);
+
+        // Get the dimensions of the JPG image
+        $jpgWidth = imagesx($jpg);
+        $jpgHeight = imagesy($jpg);
+
+        // Create an array to store the frames
+        $frames = [];
+
+        // Extract frames from the GIF
+        for ($i = 0; $i < imagegif($gif); $i++) {
+            // Create a new image for the frame
+            $frame = imagecreatetruecolor(imagesx($gif), imagesy($gif));
+            imagecopy($frame, $gif, 0, 0, 0, 0, imagesx($gif), imagesy($gif));
+
+            // Embed the JPG image over the frame
+            imagecopy($frame, $jpg, 0, 0, 0, 0, $jpgWidth, $jpgHeight);
+
+            // Store the frame
+            $frames[] = $frame;
+        }
+
+        // Create a new GIF image
+        $newGif = imagecreatetruecolor(imagesx($gif), imagesy($gif));
+
+        // Add frames to the new GIF
+        foreach ($frames as $frame) {
+            imagegif($frame, $newGif);
+        }
+
+        ob_start();
+
+        imagegif($newGif);
+
+        $imageData = ob_get_contents();
+        ob_end_clean();
+
+        // Clean up
+        imagedestroy($gif);
+        imagedestroy($jpg);
+        foreach ($frames as $frame) {
+            imagedestroy($frame);
+        }
+        imagedestroy($newGif);
+
+        return response($imageData, 200)->header('Content-Type', 'image/gif');
+    }
 }
