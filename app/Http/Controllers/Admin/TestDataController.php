@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use GifCreator\GifCreator;
 
 class TestDataController extends Controller
 {
@@ -1220,6 +1221,55 @@ class TestDataController extends Controller
 
     public function test_welcome_picture(Request $request)
     {
-        return "in-progress";
+
+        // Load the GIF image
+        $gifPath = 'https://staging-api.adagencycreatives.com/assets/img/welcome-blank.gif';
+        $gif = imagecreatefromgif($gifPath);
+
+        // Load the JPG image to embed
+        $jpgPath = 'https://staging-api.adagencycreatives.com/api/v1/get-user-preferred-picture/?slug=test-creative-1#ext=.jpg';
+        $jpg = imagecreatefromjpeg($jpgPath);
+
+        // Get the dimensions of the JPG image
+        $jpgWidth = imagesx($jpg);
+        $jpgHeight = imagesy($jpg);
+
+        // Create an array to store the frames and delays
+        $frames = [];
+        $delays = [];
+
+        // Extract frames from the GIF
+        for ($i = 0; $i < imagegif($gif); $i++) {
+            // Create a new image for the frame
+            $frame = imagecreatetruecolor(imagesx($gif), imagesy($gif));
+            imagecopy($frame, $gif, 0, 0, 0, 0, imagesx($gif), imagesy($gif));
+
+            // Embed the JPG image over the frame
+            imagecopy($frame, $jpg, 0, 0, 0, 0, $jpgWidth, $jpgHeight);
+
+            // Store the frame and delay
+            ob_start();
+            imagegif($frame);
+            $frames[] = ob_get_contents();
+            ob_end_clean();
+            $delays[] = 10; // Set delay for each frame (in hundredths of a second)
+        }
+
+        // Create a new GIF image using GifCreator
+        $gc = new GifCreator();
+        $gc->create($frames, $delays, 0);
+
+        // Save the new GIF
+
+        $imagedata = $gc->getGif();
+
+        // Clean up
+        imagedestroy($gif);
+        imagedestroy($jpg);
+        foreach ($frames as $frame) {
+            imagedestroy($frame);
+        }
+
+        return response($imagedata, 200)->header('Content-Type', 'image/gif');
     }
 }
