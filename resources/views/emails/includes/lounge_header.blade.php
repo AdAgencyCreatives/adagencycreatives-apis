@@ -141,7 +141,7 @@
                                 <td style="text-align: center; padding: 15px 0; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold; color: #ffffff; font-size: 14px"
                                     class="header_text_color header_text_size">
                                     <img width="100%" style="max-width: 500px !important;"
-                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-black-white.svg"
+                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-black-white.png"
                                         alt="" />
                                 </td>
                             </tr>

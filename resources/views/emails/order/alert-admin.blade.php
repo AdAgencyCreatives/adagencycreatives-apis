@@ -152,7 +152,7 @@
                                                                                                                     bgcolor="transparent">
                                                                                                                     <img alt=""
                                                                                                                         width="360"
-                                                                                                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-black-white.svg"
+                                                                                                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-black-white.png"
                                                                                                                         max-width="100%"
                                                                                                                         style="border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; background-color: transparent; max-width: 100%; vertical-align: middle; width: 68%;"
                                                                                                                         border="0"
