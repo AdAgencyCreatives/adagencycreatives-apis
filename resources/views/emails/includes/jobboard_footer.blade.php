@@ -6,7 +6,7 @@
 </p>
 <table border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <td style="width: 20%;"></td>
+        <td style="width: 20%;">&nbsp;</td>
         <td style="width: 60%;">
             <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
         </td>
