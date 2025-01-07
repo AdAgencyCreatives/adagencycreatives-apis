@@ -6,8 +6,10 @@
         alt="" />
 </p>
 <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
-<img class="footer-logo" style="width: 120px; position: absolute; right: 15px; bottom: 15px;"
-    src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png">
+<div style="position: absolute; right: 15px; bottom: 15px;">
+    <img class="footer-logo" style="width: 120px;"
+        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png">
+</div>
 </div>
 </td>
 </tr>
