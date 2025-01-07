@@ -110,6 +110,12 @@
             text-decoration: none !important;
         }
 
+        .footer-logo {
+            position: absolute !important;
+            right: 15px !important;
+            bottom: 15px !important;
+        }
+
         @media (max-width:450px) {
             .content {
                 padding: 0 20px;
@@ -117,8 +123,8 @@
 
             .footer-logo {
                 position: static !important;
-                margin: 10px auto;
-                display: block;
+                margin: 10px auto !important;
+                display: block !important;
             }
         }
     </style>
