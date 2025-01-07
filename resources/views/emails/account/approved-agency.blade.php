@@ -37,7 +37,7 @@
                             Thanks,<br />
                             Member Support<br />
                             <img width="200"
-                                src="https://ad-agency-creatives.s3.us-east-1.amazonaws.com/agency_logo/ad-agency-creatives-logo-white-black.png"
+                                src="https://ad-agency-creatives.s3.us-east-1.amazonaws.com/agency_logo/aac-bottom-logo.png"
                                 alt="" />
                         </p>
                         <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
