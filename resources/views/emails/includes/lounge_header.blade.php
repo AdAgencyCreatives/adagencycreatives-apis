@@ -145,7 +145,7 @@
                                         alt="" />
                                 </td>
                             </tr>
-                        </table><br />
+                        </table>
                         <!-- Email Header : END -->
 
                         <!-- Email Body : BEGIN -->
