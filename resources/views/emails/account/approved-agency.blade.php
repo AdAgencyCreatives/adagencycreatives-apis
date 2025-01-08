@@ -40,9 +40,19 @@
                                 src="https://ad-agency-creatives.s3.us-east-1.amazonaws.com/agency_logo/aac-bottom-logo.png"
                                 alt="" />
                         </p>
-                        <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
-                        <img class="footer-logo" style="width: 120px;"
-                            src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="width: 20%;">&nbsp;</td>
+                                <td style="width: 60%;">
+                                    <p style="text-align: center; margin-bottom: 0;">Gather. Inspire. Do Cool $#*t!</p>
+                                </td>
+                                <td style="width: 20%;">
+                                    <img class="footer-logo"
+                                        style="display: block; width: 120px; position: absolute; right: 15px; bottom: 15px;"
+                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png">
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </td>
             </tr>
