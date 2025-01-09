@@ -2,7 +2,7 @@
     Thanks,<br />
     Member Support<br />
     <img width="200"
-        src="https://ad-agency-creatives.s3.us-east-1.amazonaws.com/agency_logo/ad-agency-creatives-logo-white-black.png"
+        src="https://ad-agency-creatives.s3.us-east-1.amazonaws.com/agency_logo/ad-agency-creatives-bottom-logo-bold.png"
         alt="" />
 </p>
 <table border="0" cellpadding="0" cellspacing="0">
