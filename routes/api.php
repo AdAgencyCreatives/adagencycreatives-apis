@@ -154,6 +154,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience')->names([
         'index' => 'api.experiences.index',
         'store' => 'api.experiences.store',
+        'show' => 'api.experiences.show',
         'update' => 'api.experiences.update',
         'destroy' => 'api.experiences.destroy',
     ]);
