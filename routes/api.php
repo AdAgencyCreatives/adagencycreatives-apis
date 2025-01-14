@@ -197,7 +197,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('media-experiences', MediaController::class);
 
     Route::apiResource('reviews', ReviewController::class);
-    Route::apiResource('users', UserController::class)->except(['store']);
+    Route::apiResource('users', UserController::class)->except(['store'])->names([
+        'index' => 'api.users.index',
+        'store' => 'api.users.store',
+        'show' => 'api.users.show',
+        'update' => 'api.users.update',
+        'destroy' => 'api.users.destroy',
+    ]);
 
     Route::put('jobs/{uuid}/admin', [JobController::class, 'updateFromAdmin']);
 
