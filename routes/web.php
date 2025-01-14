@@ -181,7 +181,11 @@ Route::group(['middleware' => ['auth']], function () {
             'city_create' => 'web.locations.city_create',
             'cities' => 'web.locations.cities',
         ]);
-        Route::resource('categories', CategoryController::class);
+        // Route::resource('categories', CategoryController::class);
+        Route::resource('categories', CategoryController::class)->names([
+            'index' => 'web.categories.index',
+            'create' => 'web.categories.create',
+        ]);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
         Route::resource('experiences', ExperienceController::class); // Years of experience
