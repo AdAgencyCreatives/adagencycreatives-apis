@@ -184,7 +184,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'get_categories' => 'api.categories.get_categories',
         'get_categories_with_creatives_count' => 'api.categories.get_categories_with_creatives_count',
     ]);
-    Route::apiResource('strengths', StrengthController::class);
+    Route::apiResource('strengths', StrengthController::class)->names([
+        'index' => 'api.strengths.index',
+        'store' => 'api.strengths.store',
+        'show' => 'api.strengths.show',
+        'update' => 'api.strengths.update',
+        'destroy' => 'api.strengths.destroy',
+        'get_strengths' => 'api.strengths.get_strengths',
+    ]);
 
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
