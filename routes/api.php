@@ -263,7 +263,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Community Routes
      */
     Route::post('groups/update/{group}', [GroupController::class, 'update']);
-    Route::apiResource('groups', GroupController::class);
+    Route::apiResource('groups', GroupController::class)->names([
+        'index' => 'api.groups.index',
+        'store' => 'api.groups.store',
+        'show' => 'api.groups.show',
+        'update' => 'api.groups.update',
+        'destroy' => 'api.groups.destroy',
+        'create' => 'api.groups.create',
+    ]);
     Route::get('get_groups', [GroupController::class, 'get_groups']);
     Route::get('trending_posts', [PostController::class, 'trending_posts']);
     Route::apiResource('posts', PostController::class);
