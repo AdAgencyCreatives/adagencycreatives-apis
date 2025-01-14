@@ -1223,4 +1223,9 @@ class TestDataController extends Controller
     {
         return "in-progress";
     }
+
+    public function testGenThumb(Request $request)
+    {
+        return "Test-Gen-Thumb";
+    }
 }

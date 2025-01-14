@@ -426,3 +426,4 @@ Route::get('/no-job-posted-agency-reminder', [TestDataController::class, 'noJobP
 Route::get('/test-trending-posts', [TestDataController::class, 'test_trending_posts'])->name('test-trending-posts');
 Route::get('/test-user-preferred-picture', [TestDataController::class, 'test_user_preferred_picture'])->name('test-user-preferred-picture');
 Route::get('/test-welcome-picture', [TestDataController::class, 'test_welcome_picture'])->name('test-welcome-picture');
+Route::get('/test-gen-thumb', [TestDataController::class, 'testGenThumb'])->name('test-gen-thumb');
