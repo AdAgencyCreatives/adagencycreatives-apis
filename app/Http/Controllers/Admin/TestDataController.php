@@ -218,7 +218,7 @@ class TestDataController extends Controller
 
             // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
 
-            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
+            $profile_picture = getAttachmentBasePath() . $user->profile_picture->path;
 
             $info = pathinfo($profile_picture);
             // dd($info);
@@ -244,7 +244,7 @@ class TestDataController extends Controller
                 $tmp_img = imagecreatetruecolor($new_width, $new_height);
 
                 // copy and resize old image into new image 
-                imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
                 $temp = tmpfile();
                 // save thumbnail into a temp file
@@ -277,8 +277,8 @@ class TestDataController extends Controller
         if ($user_id) {
             $user = User::where('uuid', $user_id)->first();
 
-            $original_image  = getAttachmentBasePath() . $user?->portfolio_website_preview?->path;
-            $extension =  $user?->portfolio_website_preview?->extension;
+            $original_image = getAttachmentBasePath() . $user?->portfolio_website_preview?->path;
+            $extension = $user?->portfolio_website_preview?->extension;
 
             if (strtolower($extension) == 'png') {
                 $img = \imagecreatefrompng("{$original_image}");
@@ -374,7 +374,7 @@ class TestDataController extends Controller
                 $application = $job->applications[$j];
 
                 $data[] = array(
-                    'receiver' =>  $application->user->email,
+                    'receiver' => $application->user->email,
                     'recipient_name' => $application->user->first_name,
                     'job_title' => $job->title,
                     'job_url' => $job_url,
@@ -586,7 +586,7 @@ class TestDataController extends Controller
         $valid_url = false;
         try {
             $find = ['https://wwww.', 'https://', 'http://www.', 'http://', 'www.'];
-            $replace   = ['', '', '', '', ''];
+            $replace = ['', '', '', '', ''];
 
             $trimmed_url = str_replace($find, $replace, $url);
 
@@ -602,7 +602,7 @@ class TestDataController extends Controller
                         throw new Exception($formatted_url);
                     }
                 } catch (Exception $e) {
-                    $tries .= "Failed for => " . $e->getMessage()  . "<br>\n";
+                    $tries .= "Failed for => " . $e->getMessage() . "<br>\n";
                 }
             }
         } catch (Exception $ex) {
@@ -635,7 +635,7 @@ class TestDataController extends Controller
 
             // $attachment = Attachment::where(['user_id' => $user->id, 'resource_type' => 'profile_picture'])->first();
 
-            $profile_picture  = getAttachmentBasePath() . $user->profile_picture->path;
+            $profile_picture = getAttachmentBasePath() . $user->profile_picture->path;
 
             $info = pathinfo($profile_picture);
             // dd($info);
@@ -826,13 +826,13 @@ class TestDataController extends Controller
         $required_fields = 17;
         $completed_fields = 0;
 
-        $completed_fields +=  strlen($creative?->user?->profile_picture?->path ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->first_name ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->last_name ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->portfolio_website_link?->url ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->creative_linkedin_link?->url ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->email ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($creative?->user?->personal_phone?->phone_number ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->profile_picture?->path ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->first_name ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->last_name ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->portfolio_website_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->creative_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->email ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($creative?->user?->personal_phone?->phone_number ?? '') > 0 ? 1 : 0;
         $completed_fields += (strlen($creative?->title ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->category?->name ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($creative?->years_of_experience ?? "") > 0) ? 1 : 0;
@@ -842,7 +842,7 @@ class TestDataController extends Controller
         $address = $creative?->user?->addresses ? collect($creative?->user->addresses)->firstWhere('label', 'personal') : null;
 
         if ($address) {
-            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->state?->name ?? "") > 0) ? 1 : 0;
             $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
         }
 
@@ -861,21 +861,21 @@ class TestDataController extends Controller
         $required_fields = 16;
         $completed_fields = 0;
 
-        $completed_fields +=  strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->agency_logo?->path ?? '') > 0 ? 1 : 0;
         $completed_fields += (strlen($agency?->name ?? "") > 0) ? 1 : 0;
-        $completed_fields +=  strlen($agency?->user?->agency_website_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->agency_website_link?->url ?? '') > 0 ? 1 : 0;
 
         $address = $agency?->user?->addresses ? collect($agency?->user->addresses)->firstWhere('label', 'business') : null;
         if ($address) {
-            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->state?->name ?? "") > 0) ? 1 : 0;
             $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
         }
 
-        $completed_fields +=  strlen($agency?->user?->agency_linkedin_link?->url ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($agency?->user?->email ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($agency?->user?->first_name ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($agency?->user?->last_name ?? '') > 0 ? 1 : 0;
-        $completed_fields +=  strlen($agency?->user?->business_phone?->phone_number ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->agency_linkedin_link?->url ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->email ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->first_name ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->last_name ?? '') > 0 ? 1 : 0;
+        $completed_fields += strlen($agency?->user?->business_phone?->phone_number ?? '') > 0 ? 1 : 0;
         $completed_fields += (strlen($agency?->about ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($agency?->industry_experience ?? "") > 0) ? 1 : 0;
         $completed_fields += (strlen($agency?->media_experience ?? "") > 0) ? 1 : 0;
@@ -910,7 +910,7 @@ class TestDataController extends Controller
             $creative = $user->creative;
 
             $progress = $this->getCreativeProfileProgress($creative);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Email: " . $user?->email;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " . $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Email: " . $user?->email;
 
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
@@ -941,7 +941,7 @@ class TestDataController extends Controller
             $agency = $user->agency;
 
             $progress = $this->getAgencyProfileProgress($agency);
-            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
+            $output[] = sprintf("Progress: %d%%", $progress) . ", Registered: " . $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
 
             $user->profile_complete_progress = $progress;
             $user->profile_completed_at = $progress == 100 ? today() : null;
@@ -1101,7 +1101,7 @@ class TestDataController extends Controller
 
             $agency = $user->agency;
 
-            $output[] = "Registered: " .  $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
+            $output[] = "Registered: " . $user?->created_at?->format(config('global.datetime_format')) . ", Full Name: " . $user?->full_name . ", Company: " . $agency?->name . ", Email: " . $user?->email;
         }
 
         return implode("\n<br />", $output);

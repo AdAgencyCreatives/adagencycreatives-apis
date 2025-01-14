@@ -384,7 +384,7 @@ class CreativeController extends Controller
     {
         $role = $request?->role ?? 'agency';
 
-        $creativeIds =  $this->getCreativeIDs($request->search, 'exact-match', $role);
+        $creativeIds = $this->getCreativeIDs($request->search, 'exact-match', $role);
 
         $creatives = Creative::with('category')
             ->whereIn('id', $creativeIds)
@@ -753,7 +753,7 @@ class CreativeController extends Controller
         $address = $creative?->user?->addresses ? collect($creative?->user->addresses)->firstWhere('label', 'personal') : null;
 
         if ($address) {
-            $completed_fields += (strlen($address?->state?->name  ?? "") > 0) ? 1 : 0;
+            $completed_fields += (strlen($address?->state?->name ?? "") > 0) ? 1 : 0;
             $completed_fields += (strlen($address?->city?->name ?? "") > 0) ? 1 : 0;
         }
 

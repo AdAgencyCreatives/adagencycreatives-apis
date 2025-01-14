@@ -254,9 +254,9 @@ if (!function_exists('storeThumb')) {
         $existing_attachment = Attachment::where('user_id', $user->id)->where('resource_type', $resource_type)->first();
 
         if ($user->role == 'creative') {
-            $original_image  = getAttachmentBasePath() . $user->profile_picture->path;
+            $original_image = getAttachmentBasePath() . $user->profile_picture->path;
         } else {
-            $original_image  = getAttachmentBasePath() . $user->agency_logo->path;
+            $original_image = getAttachmentBasePath() . $user->agency_logo->path;
         }
 
         $info = pathinfo($original_image);
@@ -298,7 +298,7 @@ if (!function_exists('storeThumb')) {
         }
 
         // copy and resize old image into new image 
-        imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+        imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         $temp = tmpfile();
         // save thumbnail into a temp file
@@ -338,9 +338,9 @@ if (!function_exists('storeCropped')) {
         $existing_attachment = Attachment::where('user_id', $user->id)->where('resource_type', $resource_type)->first();
 
         if ($user->role == 'creative') {
-            $original_image  = getAttachmentBasePath() . $user->profile_picture->path;
+            $original_image = getAttachmentBasePath() . $user->profile_picture->path;
         } else {
-            $original_image  = getAttachmentBasePath() . $user->agency_logo->path;
+            $original_image = getAttachmentBasePath() . $user->agency_logo->path;
         }
 
         $info = pathinfo($original_image);
@@ -386,7 +386,7 @@ if (!function_exists('storeCropped')) {
         // }
 
         // // copy and resize old image into new image 
-        // imagecopyresized($tmp_img, $cropped_img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+        // imagecopyresampled($tmp_img, $cropped_img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         $temp = tmpfile();
         // save thumbnail into a temp file
@@ -564,7 +564,7 @@ function formate_url($url)
 {
     try {
         $find = ['https://', 'http://', 'www.'];
-        $replace   = ['', '', ''];
+        $replace = ['', '', ''];
 
         $formatted_url = str_replace($find, $replace, $url);
         try {
@@ -859,9 +859,9 @@ if (!function_exists('get_user_picture_preferred')) {
         $preferred_picture = asset('assets/img/placeholder.png');
         try {
             if (isset($user->user_thumbnail) && strlen($user->user_thumbnail) > 0) {
-                $preferred_picture =  getAttachmentBasePath() . $user->user_thumbnail->path;
+                $preferred_picture = getAttachmentBasePath() . $user->user_thumbnail->path;
             } else if (isset($user->profile_picture) && strlen($user->profile_picture) > 0) {
-                $preferred_picture =  getAttachmentBasePath() . $user->profile_picture->path;
+                $preferred_picture = getAttachmentBasePath() . $user->profile_picture->path;
             }
         } catch (\Exception $e) {
         }
