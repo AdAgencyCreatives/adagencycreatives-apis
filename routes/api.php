@@ -175,7 +175,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * Filters
      */
-    Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job');
+    Route::apiResource('locations', LocationController::class, ['except' => ['index']])->middleware('check.permissions:job')->names([
+        'index' => 'api.locations.index',
+        'store' => 'api.locations.store',
+        'show' => 'api.locations.show',
+        'update' => 'api.locations.update',
+        'destroy' => 'api.locations.destroy',
+        'cities' => 'api.locations.cities',
+        'get_states' => 'api.locations.get_states',
+        'get_cities' => 'api.locations.get_cities',
+    ]);
     Route::get('get_users/posts', [UserController::class, 'get_users_for_posts']);
     Route::get('get_users/attachments', [UserController::class, 'get_users_for_attachments']); //for getting users with attachment counts
     Route::get('get_users/groups', [UserController::class, 'get_users_for_groups']);
