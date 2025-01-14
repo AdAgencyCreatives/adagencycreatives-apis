@@ -281,6 +281,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'show' => 'api.website-seo.show',
         'update' => 'api.website-seo.update',
         'destroy' => 'api.website-seo.destroy',
+        'edit' => 'api.website-seo.edit',
     ]);
 
     Route::post('logout', [UserController::class, 'logout']);

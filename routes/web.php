@@ -233,6 +233,7 @@ Route::group(['middleware' => ['auth']], function () {
          */
         Route::resource('website-seo', SeoController::class)->names([
             'create' => 'web.website-seo.create',
+            'edit' => 'web.website-seo.edit',
         ]);
 
         Route::get('impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
