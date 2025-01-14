@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\StrengthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\EmploymentController;
+use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\JobInvitationController;
 use App\Http\Controllers\Api\V1\ResumeController;
@@ -185,6 +186,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('categories', CategoryController::class)->names([
             'index' => 'web.categories.index',
             'create' => 'web.categories.create',
+        ]);
+        Route::resource('groups', GroupController::class)->names([
+            'index' => 'groups.index',
+            'create' => 'groups.create',
         ]);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
