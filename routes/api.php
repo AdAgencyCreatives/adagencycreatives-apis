@@ -102,7 +102,14 @@ Route::get('cities', [LocationController::class, 'cities']); //For Fetching Only
 Route::get('get_strengths', [StrengthController::class, 'get_strengths']);
 
 Route::apiResource('years-of-experience', YearsOfExperienceController::class);
-Route::apiResource('employments', EmploymentTypeController::class);
+Route::apiResource('employments', EmploymentTypeController::class)->names([
+    'index' => 'api.employments.index',
+    'store' => 'api.employments.store',
+    'update' => 'api.employments.update',
+    'destroy' => 'api.employments.destroy',
+    'get_employment_types' => 'api.employments.get_employment_types',
+    'get_resume_employment_types' => 'api.employments.get_resume_employment_types',
+]);
 //auth:sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
 
