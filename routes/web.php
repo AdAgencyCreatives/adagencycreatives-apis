@@ -176,21 +176,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
         Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
         // Route::resource('locations', LocationController::class);
-        Route::resource('locations', LocationController::class)->names([
-            'index' => 'web.locations.index',
-            'create' => 'web.locations.create',
-            'city_create' => 'web.locations.city_create',
-            'cities' => 'web.locations.cities',
-        ]);
+        Route::resource('locations', LocationController::class);
         // Route::resource('categories', CategoryController::class);
-        Route::resource('categories', CategoryController::class)->names([
-            'index' => 'web.categories.index',
-            'create' => 'web.categories.create',
-        ]);
-        Route::resource('groups', GroupController::class)->names([
-            'index' => 'groups.index',
-            'create' => 'groups.create',
-        ]);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('groups', GroupController::class);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
         Route::resource('experiences', ExperienceController::class); // Years of experience
@@ -236,10 +225,7 @@ Route::group(['middleware' => ['auth']], function () {
         /**
          * SEO
          */
-        Route::resource('website-seo', SeoController::class)->names([
-            'create' => 'web.website-seo.create',
-            'edit' => 'web.website-seo.edit',
-        ]);
+        Route::resource('website-seo', SeoController::class);
 
         Route::get('impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
 
