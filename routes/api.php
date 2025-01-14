@@ -169,7 +169,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('links', LinkController::class, ['except' => ['index']]);
     Route::post('delete_job_logo', [AttachmentController::class, 'delete_job_logo']);
-    Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']]);
+    Route::apiResource('attachments', AttachmentController::class, ['except' => ['index']])->names([
+        'index' => 'api.attachments.index',
+        'store' => 'api.attachments.store',
+        'show' => 'api.attachments.show',
+        'update' => 'api.attachments.update',
+        'destroy' => 'api.attachments.destroy',
+    ]);
     Route::get('generate-thumbnail-attachment', [AttachmentController::class, 'generateThumbnailAttachment']);
     Route::get('generate-cropped-attachment', [AttachmentController::class, 'generateCroppedAttachment']);
 
