@@ -142,8 +142,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
-    Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency');
-    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative');
+    Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency')->names([
+        'index' => 'api.agencies.index',
+        'store' => 'api.agencies.store',
+        'show' => 'api.agencies.show',
+        'update' => 'api.agencies.update',
+        'destroy' => 'api.agencies.destroy',
+    ]);
+    Route::apiResource('creatives', CreativeController::class, ['except' => ['index']])->middleware('check.permissions:creative')->names([
+        'index' => 'api.creatives.index',
+        'store' => 'api.creatives.store',
+        'show' => 'api.creatives.show',
+        'update' => 'api.creatives.update',
+        'destroy' => 'api.creatives.destroy',
+    ]);
 
     Route::get('home/jobs/search/logged_in', [JobController::class, 'jobs_homepage_logged_in']);
     Route::get('jobs/logged_in', [JobController::class, 'jobs_for_logged_in']);
