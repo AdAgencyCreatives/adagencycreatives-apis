@@ -151,7 +151,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
     Route::apiResource('educations', EducationController::class, ['except' => ['index', 'update']])->middleware('check.permissions:education');
-    Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience');
+    Route::apiResource('experiences', ExperienceController::class, ['except' => ['index']])->middleware('check.permissions:experience')->names([
+        'index' => 'api.experiences.index',
+        'store' => 'api.experiences.store',
+        'update' => 'api.experiences.update',
+        'destroy' => 'api.experiences.destroy',
+    ]);
 
     Route::patch('educations', [EducationController::class, 'update'])->middleware('check.permissions:education');
     Route::patch('experiences', [ExperienceController::class, 'update'])->middleware('check.permissions:education');
