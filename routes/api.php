@@ -327,7 +327,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::get('stats', [DashboardController::class, 'index']);
 
-Route::apiResource('festivals', FestivalController::class);
+Route::apiResource('festivals', FestivalController::class)->names([
+    'index' => 'api.festivals.index',
+    'store' => 'api.festivals.store',
+    'show' => 'api.festivals.show',
+    'update' => 'api.festivals.update',
+    'destroy' => 'api.festivals.destroy',
+]);
 Route::post('contact-us', [UserController::class, 'contact_us_form_info']);
 Route::get('pages', [PageController::class, 'index']);
 
