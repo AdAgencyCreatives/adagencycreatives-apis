@@ -175,6 +175,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
         Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
         // Route::resource('locations', LocationController::class);
+        Route::resource('locations', LocationController::class)->names([
+            'index' => 'web.locations.index',
+            'create' => 'web.locations.create',
+            'city_create' => 'web.locations.city_create',
+            'cities' => 'web.locations.cities',
+        ]);
         Route::resource('categories', CategoryController::class);
         Route::resource('industries', IndustryController::class);
         Route::resource('medias', MediaController::class);
