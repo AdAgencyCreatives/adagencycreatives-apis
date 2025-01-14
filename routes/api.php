@@ -159,7 +159,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('home/jobs/search/logged_in', [JobController::class, 'jobs_homepage_logged_in']);
     Route::get('jobs/logged_in', [JobController::class, 'jobs_for_logged_in']);
-    Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job');
+    Route::apiResource('jobs', JobController::class, ['except' => ['index']])->middleware('check.permissions:job')->names([
+        'index' => 'api.jobs.index',
+        'store' => 'api.jobs.store',
+        'show' => 'api.jobs.show',
+        'update' => 'api.jobs.update',
+        'destroy' => 'api.jobs.destroy',
+    ]);
 
     Route::apiResource('links', LinkController::class, ['except' => ['index']]);
     Route::post('delete_job_logo', [AttachmentController::class, 'delete_job_logo']);
