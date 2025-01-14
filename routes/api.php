@@ -275,7 +275,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**
      * SEO
      */
-    Route::resource('website-seo', SeoController::class);
+    Route::resource('website-seo', SeoController::class)->names([
+        'index' => 'api.website-seo.index',
+        'store' => 'api.website-seo.store',
+        'show' => 'api.website-seo.show',
+        'update' => 'api.website-seo.update',
+        'destroy' => 'api.website-seo.destroy',
+    ]);
 
     Route::post('logout', [UserController::class, 'logout']);
 
