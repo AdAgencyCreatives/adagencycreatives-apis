@@ -161,7 +161,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('notes', NoteController::class);
     Route::apiResource('bookmarks', BookmarkController::class);
-    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('categories', CategoryController::class)->names([
+        'index' => 'api.categories.index',
+        'store' => 'api.categories.store',
+        'show' => 'api.categories.show',
+        'update' => 'api.categories.update',
+        'destroy' => 'api.categories.destroy',
+        'get_categories' => 'api.categories.get_categories',
+        'get_categories_with_creatives_count' => 'api.categories.get_categories_with_creatives_count',
+    ]);
     Route::apiResource('strengths', StrengthController::class);
 
     Route::apiResource('industry-experiences', IndustryController::class);
