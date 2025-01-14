@@ -105,6 +105,7 @@ Route::apiResource('years-of-experience', YearsOfExperienceController::class);
 Route::apiResource('employments', EmploymentTypeController::class)->names([
     'index' => 'api.employments.index',
     'store' => 'api.employments.store',
+    'show' => 'api.employments.show',
     'update' => 'api.employments.update',
     'destroy' => 'api.employments.destroy',
     'get_employment_types' => 'api.employments.get_employment_types',
