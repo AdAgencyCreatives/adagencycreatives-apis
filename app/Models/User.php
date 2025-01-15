@@ -40,7 +40,6 @@ class User extends Authenticatable
         'status',
         'is_visible',
         'email_notifications_enabled',
-        'regen_thumb'
     ];
 
     protected $casts = [
