@@ -1227,6 +1227,15 @@ class TestDataController extends Controller
     public function testRegenThumb(Request $request)
     {
         $user = User::where('regen_thumb', '<>', 1)->orWhereNull('regen_thumb')->limit(1)->first();
+
+        $html = '';
+
+        $html .= '<html><body>';
+        $html .= 'User: ' . get_user_thumbnail($user);
+        $html .= '';
+        $html .= '';
+        $html .= '</body></html>';
+
         return json_encode($user);
     }
 }
