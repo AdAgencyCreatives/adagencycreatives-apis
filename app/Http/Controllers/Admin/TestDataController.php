@@ -1226,12 +1226,35 @@ class TestDataController extends Controller
 
     public function testRegenThumb(Request $request)
     {
-        $user = User::where('regen_thumb', '<>', 1)->orWhereNull('regen_thumb')->limit(1)->first();
+        $user_id = $request->has('user_id') ? $request->user_id : null;
+
+        if ($user_id) {
+            $user = User::where('id', '=', $user_id)->first();
+        } else {
+            $user = User::where('regen_thumb', '<>', 1)->orWhereNull('regen_thumb')->limit(1)->first();
+        }
+
+        $profile_picture = get_profile_picture($user);
+        $profile_thumbnail = get_user_thumbnail($user);
+        user:
 
         $html = '';
 
         $html .= '<html><body>';
-        $html .= 'User: ' . get_profile_picture($user);
+
+        $html .= 'First Name: ' . $user->first_name . '<br />';
+        $html .= 'Last Name: ' . $user->last_name . '<br />';
+
+        $html .= 'Profile Picture: ' . $profile_picture . '<br />';
+        if (!empty($profile_picture)) {
+            $html .= '<img src="' . $profile_picture . '" /><br />';
+        }
+
+        $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
+        if (!empty($profile_thumbnail)) {
+            $html .= '<img src="' . $profile_thumbnail . '" /><br />';
+        }
+
         $html .= '';
         $html .= '';
         $html .= '</body></html>';
