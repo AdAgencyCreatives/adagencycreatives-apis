@@ -1228,6 +1228,7 @@ class TestDataController extends Controller
     {
         $user_id = $request->has('user_id') ? $request->user_id : null;
         $action = $request->has('action') ? $request->action : null;
+        $html = '';
 
         if (!empty($user_id) && !empty($action)) {
             $user = User::where('id', '=', $user_id)->first();
@@ -1235,9 +1236,14 @@ class TestDataController extends Controller
                 $user->update(['regen_thumb' => 'skipped']);
                 $user->refresh();
             } else if ($action == "Regenerate") {
-                storeThumb($user, 'user_thumbnail');
-                $user->update(['regen_thumb' => now()]);
-                $user->refresh();
+                $profile_picture = get_profile_picture($user);
+                if (!empty($profile_picture)) {
+                    storeThumb($user, 'user_thumbnail');
+                    $user->update(['regen_thumb' => now()]);
+                    $user->refresh();
+                } else {
+                    $html .= 'Profile Picture not available';
+                }
             }
         } else {
             $user = User::whereNull('regen_thumb')->limit(1)->first();
@@ -1245,9 +1251,6 @@ class TestDataController extends Controller
 
         $profile_picture = get_profile_picture($user);
         $profile_thumbnail = get_user_thumbnail($user);
-        user:
-
-        $html = '';
 
         $html .= '<html><body>';
 
@@ -1266,7 +1269,9 @@ class TestDataController extends Controller
 
         $html .= '<form method="get">';
         $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
-        $html .= '<input type="submit" name="action" value="Regenerate" />';
+        if (!empty($profile_picture)) {
+            $html .= '<input type="submit" name="action" value="Regenerate" />';
+        }
         $html .= '<input type="submit" name="action" value="Skip" />';
         $html .= '</form>';
         $html .= '';
