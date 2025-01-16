@@ -1259,7 +1259,7 @@ class TestDataController extends Controller
         $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
         $html .= 'input[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
-        $html .= '.thumbnails-container{display:flex;gap:30px;}';
+        $html .= '.thumbnails-container{display:flex;gap:30px; align-items:center;}';
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
 
@@ -1267,11 +1267,6 @@ class TestDataController extends Controller
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
         $html .= 'Account Created: ' . $user->created_at . '<br />';
-
-        $html .= 'Profile Picture: ' . $profile_picture . '<br />';
-        if (!empty($profile_picture)) {
-            $html .= '<img width="150" height="150" src="' . $profile_picture . '" /><br />';
-        }
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
@@ -1281,6 +1276,11 @@ class TestDataController extends Controller
             $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_thumbnail . '" /><br />';
             $html .= '<img class="thumbnail" width="50" height="50" src="' . $profile_thumbnail . '" /><br />';
             $html .= '</div>';
+        }
+
+        $html .= 'Profile Picture: ' . $profile_picture . '<br />';
+        if (!empty($profile_picture)) {
+            $html .= '<img width="150" height="150" src="' . $profile_picture . '" /><br />';
         }
 
         $html .= '<form method="get">';
