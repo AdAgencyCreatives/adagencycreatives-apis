@@ -1280,7 +1280,7 @@ class TestDataController extends Controller
         }
         $html .= '<input type="submit" name="action" value="Next" />';
 
-        $html .= '</form></hr>';
+        $html .= '</form><hr />';
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
