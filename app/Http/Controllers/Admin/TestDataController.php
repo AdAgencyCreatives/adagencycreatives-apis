@@ -1259,7 +1259,7 @@ class TestDataController extends Controller
         $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
         $html .= 'input[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
-        $html .= '.thumbnails-container{display:flex;gap:30px; align-items:center;}';
+        $html .= '.thumbnails-container{display:flex;gap:10px; align-items:center;}';
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
 
