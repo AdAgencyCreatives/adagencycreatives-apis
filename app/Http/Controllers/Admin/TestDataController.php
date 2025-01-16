@@ -1280,7 +1280,7 @@ class TestDataController extends Controller
 
         $html .= 'Profile Picture: ' . $profile_picture . '<br />';
         if (!empty($profile_picture)) {
-            $html .= '<img width="150" height="150" src="' . $profile_picture . '" /><br />';
+            $html .= '<img src="' . $profile_picture . '" /><br />';
         }
 
         $html .= '<form method="get">';
