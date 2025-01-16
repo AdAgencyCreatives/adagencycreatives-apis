@@ -1275,7 +1275,7 @@ class TestDataController extends Controller
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
-            $html .= '<div class="thumbnails-container>';
+            $html .= '<div class="thumbnails-container">';
             $html .= '<img class="thumbnail" width="150" height="150" src="' . $profile_thumbnail . '" /><br />';
             $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_thumbnail . '" /><br />';
             $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_thumbnail . '" /><br />';
