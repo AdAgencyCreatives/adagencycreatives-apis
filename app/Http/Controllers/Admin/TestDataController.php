@@ -1259,6 +1259,7 @@ class TestDataController extends Controller
         $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
         $html .= 'input[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
+        $html .= '.thumbnail-container{display:flex;gap:30px;}';
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
 
@@ -1272,7 +1273,9 @@ class TestDataController extends Controller
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
+            $html .= '<div class="thumbnails-container>';
             $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_thumbnail . '" /><br />';
+            $html .= '</div>';
         }
 
         $html .= '<form method="get">';
