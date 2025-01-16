@@ -860,8 +860,12 @@ if (!function_exists('get_user_picture_preferred')) {
         try {
             if (isset($user->user_thumbnail) && strlen($user->user_thumbnail) > 0) {
                 $preferred_picture = getAttachmentBasePath() . $user->user_thumbnail->path;
-            } else if (isset($user->profile_picture) && strlen($user->profile_picture) > 0) {
-                $preferred_picture = getAttachmentBasePath() . $user->profile_picture->path;
+            } else {
+                if (in_array($user->role, ['admin', 'creative']) && isset($user->profile_picture) && strlen($user->profile_picture) > 0) {
+                    $preferred_picture = getAttachmentBasePath() . $user->profile_picture->path;
+                } elseif (in_array($user->role, ['agency', 'advisor', 'recruiter']) && isset($user->agency_logo) && strlen($user->agency_logo) > 0) {
+                    $preferred_picture = getAttachmentBasePath() . $user->agency_logo->path;
+                }
             }
         } catch (\Exception $e) {
         }
