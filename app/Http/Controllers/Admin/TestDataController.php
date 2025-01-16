@@ -1263,8 +1263,10 @@ class TestDataController extends Controller
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
 
+        $html .= 'User ID: ' . $user->id . '<br />';
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
+        $html .= 'Account Created: ' . $user->created_at . '<br />';
 
         $html .= 'Profile Picture: ' . $profile_picture . '<br />';
         if (!empty($profile_picture)) {
