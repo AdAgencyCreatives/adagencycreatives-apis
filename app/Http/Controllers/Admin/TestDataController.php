@@ -1247,14 +1247,19 @@ class TestDataController extends Controller
 
         $html .= 'Profile Picture: ' . $profile_picture . '<br />';
         if (!empty($profile_picture)) {
-            $html .= '<img src="' . $profile_picture . '" /><br />';
+            $html .= '<img width="150" height="150" src="' . $profile_picture . '" /><br />';
         }
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
-            $html .= '<img src="' . $profile_thumbnail . '" /><br />';
+            $html .= '<img width="150" height="150" src="' . $profile_thumbnail . '" /><br />';
         }
 
+        $html .= '<form method="get">';
+        $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
+        $html .= '<input type="submit" name="action" value="Regenerate" />';
+        $html .= '<input type="submit" name="action" value="Skip" />';
+        $html .= '</form>';
         $html .= '';
         $html .= '';
         $html .= '</body></html>';
