@@ -1254,6 +1254,7 @@ class TestDataController extends Controller
         $profile_thumbnail = get_user_thumbnail($user);
 
         $html .= '<html><body>';
+        $html .= '<style>body{font-size: 16px; line-height: 1.5em;}</style>';
 
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
