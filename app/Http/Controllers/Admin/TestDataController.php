@@ -1227,11 +1227,20 @@ class TestDataController extends Controller
     public function testRegenThumb(Request $request)
     {
         $user_id = $request->has('user_id') ? $request->user_id : null;
+        $action = $request->has('action') ? $request->action : null;
 
-        if ($user_id) {
+        if (!empty($user_id) && !empty($action)) {
             $user = User::where('id', '=', $user_id)->first();
+            if ($action == "Skip") {
+                $user->update(['regen_thumb' => 'skipped']);
+                $user->refresh();
+            } else if ($action == "Regenerate") {
+                storeThumb($user, 'user_thumbnail');
+                $user->update(['regen_thumb' => now()]);
+                $user->refresh();
+            }
         } else {
-            $user = User::where('regen_thumb', '<>', 1)->orWhereNull('regen_thumb')->limit(1)->first();
+            $user = User::whereNull('regen_thumb')->limit(1)->first();
         }
 
         $profile_picture = get_profile_picture($user);
