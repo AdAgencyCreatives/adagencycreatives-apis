@@ -1236,6 +1236,6 @@ class TestDataController extends Controller
         $html .= '';
         $html .= '</body></html>';
 
-        return json_encode($user);
+        return $html;
     }
 }
