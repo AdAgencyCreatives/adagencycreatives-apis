@@ -1242,7 +1242,7 @@ class TestDataController extends Controller
                     $user->update(['regen_thumb' => now()]);
                     $user->refresh();
                 } else {
-                    $html .= 'Profile Picture not available';
+                    $html .= 'Profile Picture not available' . '<br />';
                 }
             }
         } else {
