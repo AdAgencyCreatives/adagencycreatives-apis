@@ -1256,10 +1256,11 @@ class TestDataController extends Controller
         $profile_thumbnail = get_user_thumbnail($user);
 
         $html .= '<html><body>';
-        $html .= '<style></style>';
+        $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
         $html .= 'input[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
         $html .= '.thumbnail{border-radius:100%;}';
+        $html .= '</style>';
 
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
