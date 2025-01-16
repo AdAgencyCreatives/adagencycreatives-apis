@@ -1286,7 +1286,10 @@ class TestDataController extends Controller
         $html .= '<form method="get">';
         $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
 
-        $html .= '<input type="submit" name="action" value="Skip" />';
+        if (!empty($action) && $action != "Regenerate") {
+            $html .= '<input type="submit" name="action" value="Skip" />';
+        }
+
         if (!empty($profile_picture)) {
             $html .= '<input type="submit" name="action" value="Regenerate" />';
         }
