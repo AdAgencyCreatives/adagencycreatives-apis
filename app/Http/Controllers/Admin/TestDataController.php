@@ -1235,6 +1235,7 @@ class TestDataController extends Controller
             if ($action == "Skip") {
                 $user->update(['regen_thumb' => 'skipped']);
                 $user->refresh();
+                return redirect()->to(url()->current());
             } else if ($action == "Regenerate") {
                 $profile_picture = get_profile_picture($user);
                 if (!empty($profile_picture)) {
