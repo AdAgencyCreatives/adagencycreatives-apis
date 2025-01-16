@@ -1253,9 +1253,6 @@ class TestDataController extends Controller
             $user = User::whereNull('regen_thumb')->orderByDesc('id')->limit(1)->first();
         }
 
-        $profile_picture = get_profile_picture($user);
-        $profile_thumbnail = get_user_thumbnail($user);
-
         $html .= '<html><body>';
         $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
@@ -1264,48 +1261,56 @@ class TestDataController extends Controller
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
 
-        $html .= 'User ID: ' . $user->id . '<br />';
-        $html .= 'First Name: ' . $user->first_name . '<br />';
-        $html .= 'Last Name: ' . $user->last_name . '<br />';
-        $html .= 'Account Created: ' . $user->created_at . '<br />';
+        if ($user) {
 
-        $html .= '<hr /><form method="get">';
-        $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
+            $profile_picture = get_profile_picture($user);
+            $profile_thumbnail = get_user_thumbnail($user);
 
-        if (empty($action) && $action != "regenerate-thumbnail") {
-            $html .= '<button type="submit" name="action" value="skip-for-now">Skip for now</button>';
+            $html .= 'User ID: ' . $user->id . '<br />';
+            $html .= 'First Name: ' . $user->first_name . '<br />';
+            $html .= 'Last Name: ' . $user->last_name . '<br />';
+            $html .= 'Account Created: ' . $user->created_at . '<br />';
+
+            $html .= '<hr /><form method="get">';
+            $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
+
+            if (empty($action) && $action != "regenerate-thumbnail") {
+                $html .= '<button type="submit" name="action" value="skip-for-now">Skip for now</button>';
+            }
+
+            if (!empty($profile_picture)) {
+                $html .= '<button type="submit" name="action" value="regenerate-thumbnail">Regenerate Thumbnail</button>';
+            }
+            $html .= '<button type="submit" name="action" value="mark-ok">Mark OK</button>';
+
+            $html .= '</form><hr />';
+
+            $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
+            if (!empty($profile_thumbnail)) {
+                $html .= '<div class="thumbnails-container">';
+                $html .= '<img class="thumbnail" width="150" height="150" src="' . $profile_thumbnail . '" /><br />';
+                $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_thumbnail . '" /><br />';
+                $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_thumbnail . '" /><br />';
+                $html .= '<img class="thumbnail" width="50" height="50" src="' . $profile_thumbnail . '" /><br />';
+                $html .= '</div>';
+            }
+
+            $html .= 'Profile Picture: ' . $profile_picture . '<br />';
+            if (!empty($profile_picture)) {
+                $html .= '<div class="thumbnails-container">';
+                $html .= '<img class="thumbnail" width="150" height="150" src="' . $profile_picture . '" /><br />';
+                $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_picture . '" /><br />';
+                $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_picture . '" /><br />';
+                $html .= '<img class="thumbnail" width="50" height="50" src="' . $profile_picture . '" /><br />';
+                $html .= '</div>';
+                $html .= '<br />';
+                $html .= '<img src="' . $profile_picture . '" /><br />';
+            }
+
+        } else {
+            $html .= '<h3>No more users...</h3>';
         }
 
-        if (!empty($profile_picture)) {
-            $html .= '<button type="submit" name="action" value="regenerate-thumbnail">Regenerate Thumbnail</button>';
-        }
-        $html .= '<button type="submit" name="action" value="mark-ok">Mark OK</button>';
-
-        $html .= '</form><hr />';
-
-        $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
-        if (!empty($profile_thumbnail)) {
-            $html .= '<div class="thumbnails-container">';
-            $html .= '<img class="thumbnail" width="150" height="150" src="' . $profile_thumbnail . '" /><br />';
-            $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_thumbnail . '" /><br />';
-            $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_thumbnail . '" /><br />';
-            $html .= '<img class="thumbnail" width="50" height="50" src="' . $profile_thumbnail . '" /><br />';
-            $html .= '</div>';
-        }
-
-        $html .= 'Profile Picture: ' . $profile_picture . '<br />';
-        if (!empty($profile_picture)) {
-            $html .= '<div class="thumbnails-container">';
-            $html .= '<img class="thumbnail" width="150" height="150" src="' . $profile_picture . '" /><br />';
-            $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_picture . '" /><br />';
-            $html .= '<img class="thumbnail" width="80" height="80" src="' . $profile_picture . '" /><br />';
-            $html .= '<img class="thumbnail" width="50" height="50" src="' . $profile_picture . '" /><br />';
-            $html .= '</div>';
-            $html .= '<br />';
-            $html .= '<img src="' . $profile_picture . '" /><br />';
-        }
-
-        $html .= '';
         $html .= '';
         $html .= '</body></html>';
 
