@@ -1247,14 +1247,14 @@ class TestDataController extends Controller
                 }
             }
         } else {
-            $user = User::whereNull('regen_thumb')->limit(1)->first();
+            $user = User::whereNull('regen_thumb')->orderByDesc('id')->limit(1)->first();
         }
 
         $profile_picture = get_profile_picture($user);
         $profile_thumbnail = get_user_thumbnail($user);
 
         $html .= '<html><body>';
-        $html .= '<style>body{font-size: 16px; line-height: 1.5em;}</style>';
+        $html .= '<style>body{font-size: 16px; line-height: 1.5em;}input[type="submit"]{margin:10px;padding:10px;}</style>';
 
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
@@ -1275,6 +1275,7 @@ class TestDataController extends Controller
             $html .= '<input type="submit" name="action" value="Regenerate" />';
         }
         $html .= '<input type="submit" name="action" value="Skip" />';
+        $html .= '<input type="submit" name="action" value="Next" />';
         $html .= '</form>';
         $html .= '';
         $html .= '';
