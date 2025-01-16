@@ -1268,6 +1268,20 @@ class TestDataController extends Controller
         $html .= 'Last Name: ' . $user->last_name . '<br />';
         $html .= 'Account Created: ' . $user->created_at . '<br />';
 
+        $html .= '<hr /><form method="get">';
+        $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
+
+        if (empty($action) && $action != "Regenerate") {
+            $html .= '<input type="submit" name="action" value="Skip" />';
+        }
+
+        if (!empty($profile_picture)) {
+            $html .= '<input type="submit" name="action" value="Regenerate" />';
+        }
+        $html .= '<input type="submit" name="action" value="Next" />';
+
+        $html .= '</form></hr>';
+
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
             $html .= '<div class="thumbnails-container">';
@@ -1283,19 +1297,6 @@ class TestDataController extends Controller
             $html .= '<img src="' . $profile_picture . '" /><br />';
         }
 
-        $html .= '<form method="get">';
-        $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
-
-        if (empty($action) && $action != "Regenerate") {
-            $html .= '<input type="submit" name="action" value="Skip" />';
-        }
-
-        if (!empty($profile_picture)) {
-            $html .= '<input type="submit" name="action" value="Regenerate" />';
-        }
-        $html .= '<input type="submit" name="action" value="Next" />';
-
-        $html .= '</form>';
         $html .= '';
         $html .= '';
         $html .= '</body></html>';
