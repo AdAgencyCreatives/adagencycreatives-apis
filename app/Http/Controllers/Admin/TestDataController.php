@@ -1256,7 +1256,10 @@ class TestDataController extends Controller
         $profile_thumbnail = get_user_thumbnail($user);
 
         $html .= '<html><body>';
-        $html .= '<style>body{font-size: 16px; line-height: 1.5em;}input[type="submit"]{margin:10px;padding:10px;}</style>';
+        $html .= '<style></style>';
+        $html .= 'body{font-size: 16px; line-height: 1.5em;}';
+        $html .= 'input[type="submit"]{margin:10px;padding:10px;}';
+        $html .= '.thumbnail{border-radius:100%;}';
 
         $html .= 'First Name: ' . $user->first_name . '<br />';
         $html .= 'Last Name: ' . $user->last_name . '<br />';
@@ -1268,7 +1271,7 @@ class TestDataController extends Controller
 
         $html .= 'Profile Thumbnail: ' . $profile_thumbnail . '<br />';
         if (!empty($profile_thumbnail)) {
-            $html .= '<img width="150" height="150" src="' . $profile_thumbnail . '" /><br />';
+            $html .= '<img class="thumbnail" width="100" height="100" src="' . $profile_thumbnail . '" /><br />';
         }
 
         $html .= '<form method="get">';
