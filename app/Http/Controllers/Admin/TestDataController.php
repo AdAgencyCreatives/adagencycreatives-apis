@@ -1232,17 +1232,18 @@ class TestDataController extends Controller
 
         if (!empty($user_id) && !empty($action)) {
             $user = User::where('id', '=', $user_id)->first();
-            if ($action == "Next") {
+            if ($action == "mark-ok") {
+                $user->update(['regen_thumb' => 'marked-ok::' . now()]);
                 return redirect()->to(url()->current());
-            } else if ($action == "Skip") {
-                $user->update(['regen_thumb' => 'skipped']);
+            } else if ($action == "skip-for-now") {
+                $user->update(['regen_thumb' => 'skipped::' . now()]);
                 $user->refresh();
                 return redirect()->to(url()->current());
-            } else if ($action == "Regenerate") {
+            } else if ($action == "regenerate-thumbnail") {
                 $profile_picture = get_profile_picture($user);
                 if (!empty($profile_picture)) {
                     storeThumb($user, 'user_thumbnail');
-                    $user->update(['regen_thumb' => now()]);
+                    $user->update(['regen_thumb' => 'regenerated::' . now()]);
                     $user->refresh();
                 } else {
                     $html .= 'Profile Picture not available' . '<br />';
@@ -1258,7 +1259,7 @@ class TestDataController extends Controller
         $html .= '<html><body>';
         $html .= '<style>';
         $html .= 'body{font-size: 16px; line-height: 1.5em;}';
-        $html .= 'input[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
+        $html .= 'button[type="submit"]{margin:10px 10px 10px 0px;padding:10px;}';
         $html .= '.thumbnails-container{display:flex;gap:10px; align-items:center;}';
         $html .= '.thumbnail{border-radius:100%;}';
         $html .= '</style>';
@@ -1271,14 +1272,14 @@ class TestDataController extends Controller
         $html .= '<hr /><form method="get">';
         $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
 
-        if (empty($action) && $action != "Regenerate") {
-            $html .= '<input type="submit" name="action" value="Skip" />';
+        if (empty($action) && $action != "regenerate-thumbnail") {
+            $html .= '<button type="submit" name="action" value="skip-for-now">Skip for now</button>';
         }
 
         if (!empty($profile_picture)) {
-            $html .= '<input type="submit" name="action" value="Regenerate" />';
+            $html .= '<button type="submit" name="action" value="regenerate-thumbnail">Regenerate Thumbnail</button>';
         }
-        $html .= '<input type="submit" name="action" value="Next" />';
+        $html .= '<button type="submit" name="action" value="mark-ok">Mark OK</button>';
 
         $html .= '</form><hr />';
 
