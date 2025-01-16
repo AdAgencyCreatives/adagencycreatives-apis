@@ -1232,7 +1232,7 @@ class TestDataController extends Controller
 
         if (!empty($user_id) && !empty($action)) {
             $user = User::where('id', '=', $user_id)->first();
-            if ($action == "Skip") {
+            if ($action == "Next") {
                 return redirect()->to(url()->current());
             } else if ($action == "Skip") {
                 $user->update(['regen_thumb' => 'skipped']);
