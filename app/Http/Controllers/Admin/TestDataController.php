@@ -1233,6 +1233,8 @@ class TestDataController extends Controller
         if (!empty($user_id) && !empty($action)) {
             $user = User::where('id', '=', $user_id)->first();
             if ($action == "Skip") {
+                return redirect()->to(url()->current());
+            } else if ($action == "Skip") {
                 $user->update(['regen_thumb' => 'skipped']);
                 $user->refresh();
                 return redirect()->to(url()->current());
@@ -1271,11 +1273,13 @@ class TestDataController extends Controller
 
         $html .= '<form method="get">';
         $html .= '<input type="hidden" name="user_id" value="' . $user->id . '" />';
+
+        $html .= '<input type="submit" name="action" value="Skip" />';
         if (!empty($profile_picture)) {
             $html .= '<input type="submit" name="action" value="Regenerate" />';
         }
-        $html .= '<input type="submit" name="action" value="Skip" />';
         $html .= '<input type="submit" name="action" value="Next" />';
+
         $html .= '</form>';
         $html .= '';
         $html .= '';
