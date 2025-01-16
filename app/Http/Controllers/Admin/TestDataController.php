@@ -1231,7 +1231,7 @@ class TestDataController extends Controller
         $html = '';
 
         $html .= '<html><body>';
-        $html .= 'User: ' . get_user_thumbnail($user);
+        $html .= 'User: ' . get_profile_picture($user);
         $html .= '';
         $html .= '';
         $html .= '</body></html>';
