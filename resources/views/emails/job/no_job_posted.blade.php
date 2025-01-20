@@ -22,7 +22,7 @@
                         </p>
 
                         <p>
-                            For a test drive (free job post), simply type code: <strong>HELPAAC</strong> at check out.
+                            For a test drive (free job post), simply type code: <strong>HireCreatives</strong> at check out.
                             That’s $149 gift
                             and worth so much more when you hire our talent. Whether it’s now or down the road, we
                             welcome you to lean on our network of creative talent.
