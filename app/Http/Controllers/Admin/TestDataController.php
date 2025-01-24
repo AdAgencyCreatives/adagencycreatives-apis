@@ -809,7 +809,7 @@ class TestDataController extends Controller
         $html = '';
         $html .= '<html><head><title>Welcome Queue List</title>';
         $html .= '<style>';
-        $html .= 'table {width: 100%;} td {min-width: 100px;}';
+        $html .= 'table { width: 100%; } td { min-width: 100px; } th { text-align: left; }';
         $html .= '</style><body>';
         $html .= '<h3>Welcome Queue List</h3>';
         $html .= '<table border="0" cellpadding="0" cellspacing="0">';
@@ -826,7 +826,7 @@ class TestDataController extends Controller
         foreach ($queued_creatives as $qc) {
             $html .= '<tr>';
             $html .= '<td>' . ++$qc_sr . '</td>';
-            $html .= '<td>' . $qc->user_id . '</td>';
+            $html .= '<td>' . $qc->user_id . '<br><img src="' . get_user_picture_preferred($qc->user) . '"></td>';
             $html .= '<td>' . $qc->user->first_name . '</td>';
             $html .= '<td>' . $qc->user->last_name . '</td>';
             $html .= '<td>' . $qc->featured_at . '</td>';
