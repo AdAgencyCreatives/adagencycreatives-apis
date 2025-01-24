@@ -819,7 +819,6 @@ class TestDataController extends Controller
         $html .= '<th>First Name</th>';
         $html .= '<th>Last Name</th>';
         $html .= '<th>Featured At</th>';
-        $html .= '<th>Welcomed At</th>';
         $html .= '<th>Welcome Queued At</th>';
         $html .= '</tr>';
         $qc_sr = 0;
@@ -830,7 +829,6 @@ class TestDataController extends Controller
             $html .= '<td>' . $qc->user->first_name . '</td>';
             $html .= '<td>' . $qc->user->last_name . '</td>';
             $html .= '<td>' . $qc->featured_at . '</td>';
-            $html .= '<td>' . $qc->welcomed_at . '</td>';
             $html .= '<td>' . $qc->welcome_queued_at . '</td>';
             $html .= '</tr>';
         }
