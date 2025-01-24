@@ -804,9 +804,38 @@ class TestDataController extends Controller
         //     }
         // } 
 
-        $queued = Creative::where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->select(["user_id", "welcome_queued_at"])->get()->toArray();
+        $queued_creatives = Creative::with('user')->where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->select(["user_id", "user.first_name", "user.last_name", "featured_at", "welcomed_at", "welcome_queued_at"])->get()->toArray();
 
-        return $queued;
+        $html = '';
+        $html .= '<html><head><title>Welcome Queue List</title>';
+        $html .= '<style>';
+        $html .= 'table,td {width: 100%;}';
+        $html .= '</style><body>';
+        $html .= '<h3>Welcome Queue List</h3>';
+        $html .= '<table border="0" cellpadding="0" cellspacing="0">';
+        $html .= '<tr>';
+        $html .= '<th>ID</th>';
+        $html .= '<th>First Name</th>';
+        $html .= '<th>Last Name</th>';
+        $html .= '<th>Featured At</th>';
+        $html .= '<th>Welcomed At</th>';
+        $html .= '<th>Welcome Queued At</th>';
+        $html .= '</tr>';
+        foreach ($queued_creatives as $qc) {
+            $html .= '<tr>';
+            $html .= '<td>' . $qc['user_id'] . '</td>';
+            $html .= '<td></td>';
+            $html .= '<td></td>';
+            $html .= '<td></td>';
+            $html .= '<td></td>';
+            $html .= '<td></td>';
+            $html .= '</tr>';
+        }
+        $html .= '</table>';
+        $html .= '';
+        $html .= '</body></html>';
+
+        return $html;
 
         $today_welcomed_at_creatives_count = Creative::where('is_welcomed', '=', 1)->whereDate('welcomed_at', '=', today()->toDateString())->count('welcomed_at');
         $previous_welcome_queued_at_creatives_count = Creative::where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->count('welcome_queued_at');
