@@ -804,7 +804,7 @@ class TestDataController extends Controller
         //     }
         // } 
 
-        $queued_creatives = Creative::with('user')->where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->select(["user_id", "user.first_name", "user.last_name", "featured_at", "welcomed_at", "welcome_queued_at"])->get()->toArray();
+        $queued_creatives = Creative::with('user')->where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->select(["user_id", "users.first_name", "users.last_name", "featured_at", "welcomed_at", "welcome_queued_at"])->get()->toArray();
 
         $html = '';
         $html .= '<html><head><title>Welcome Queue List</title>';
