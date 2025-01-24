@@ -809,7 +809,7 @@ class TestDataController extends Controller
         $html = '';
         $html .= '<html><head><title>Welcome Queue List</title>';
         $html .= '<style>';
-        $html .= 'table { width: 100%; } td { min-width: 100px; } th { text-align: left; } img { width: 100px; height: auto; border-radius: 100%; object-fit: cover;';
+        $html .= 'table { width: 100%; } td { min-width: 100px; } th { text-align: left; } img { width: 100px; height: 100px; border-radius: 100%; object-fit: cover;';
         $html .= '</style><body>';
         $html .= '<h3>Welcome Queue List</h3>';
         $html .= '<table border="0" cellpadding="0" cellspacing="0">';
