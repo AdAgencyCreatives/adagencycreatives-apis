@@ -809,26 +809,29 @@ class TestDataController extends Controller
         $html = '';
         $html .= '<html><head><title>Welcome Queue List</title>';
         $html .= '<style>';
-        $html .= 'table,td {width: 100%;}';
+        $html .= 'table {width: 100%;} td {min-width: 100px;}';
         $html .= '</style><body>';
         $html .= '<h3>Welcome Queue List</h3>';
         $html .= '<table border="0" cellpadding="0" cellspacing="0">';
         $html .= '<tr>';
-        $html .= '<th>ID</th>';
+        $html .= '<th>SR</th>';
+        $html .= '<th>User ID</th>';
         $html .= '<th>First Name</th>';
         $html .= '<th>Last Name</th>';
         $html .= '<th>Featured At</th>';
         $html .= '<th>Welcomed At</th>';
         $html .= '<th>Welcome Queued At</th>';
         $html .= '</tr>';
+        $qc_sr = 0;
         foreach ($queued_creatives as $qc) {
             $html .= '<tr>';
+            $html .= '<td>' . ++$qc_sr . '</td>';
             $html .= '<td>' . $qc->user_id . '</td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
+            $html .= '<td>' . $qc->user->first_name . '</td>';
+            $html .= '<td>' . $qc->user->last_name . '</td>';
+            $html .= '<td>' . $qc->featured_at . '</td>';
+            $html .= '<td>' . $qc->welcomed_at . '</td>';
+            $html .= '<td>' . $qc->welcome_queued_at . '</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';
