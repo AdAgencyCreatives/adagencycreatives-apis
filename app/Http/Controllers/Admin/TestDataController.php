@@ -804,7 +804,8 @@ class TestDataController extends Controller
         //     }
         // } 
 
-        $queued_creatives = Creative::with('user')->where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->get();
+        $date_threshold = now()->subDays(14);
+        $queued_creatives = Creative::with('user')->where('created_at', '>', $date_threshold)->where('is_welcomed', '=', 0)->whereNotNull('welcome_queued_at')->get();
 
         $html = '';
         $html .= '<html><head><title>Welcome Queue List</title>';
