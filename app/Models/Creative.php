@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\ActivityLoggerTrait;
+use Illuminate\Support\Facades\Cache;
 
 class Creative extends Model
 {
@@ -125,6 +126,12 @@ class Creative extends Model
             if ($creative->slug == null) {
                 $creative->slug = Str::slug($creative->user->username);
                 $creative->save();
+            }
+        });
+
+        static::updated(function ($creative) {
+            if ($creative->isDirty(['is_featured', 'featured_at'])) {
+                Cache::forget('homepage_creatives');
             }
         });
     }

@@ -532,6 +532,10 @@ class User extends Authenticatable
                 Cache::forget('all_creatives');
                 Cache::forget('get_users');
 
+                if ($user->isDirty(['is_visible', 'status'])) {
+                    Cache::forget('homepage_creatives');
+                }
+
                 if ($user->isDirty('username')) {
                     //Update slug in creatives table when username is changes, slug in creatives table fallbacks to username
                     tap($user, function ($user) {
