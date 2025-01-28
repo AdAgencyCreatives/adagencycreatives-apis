@@ -23,6 +23,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
@@ -662,38 +663,46 @@ class CreativeController extends Controller
 
     public function homepage_creatives(Request $request) //Home page creatives
     {
-        $query = QueryBuilder::for(Creative::class)
-            ->allowedFilters([
-                AllowedFilter::scope('user_id'),
-                AllowedFilter::scope('years_of_experience_id'),
-                AllowedFilter::scope('name'),
-                AllowedFilter::scope('email'),
-                AllowedFilter::scope('state_id'),
-                AllowedFilter::scope('city_id'),
-                AllowedFilter::scope('status'),
-                AllowedFilter::scope('is_visible'),
-                'employment_type',
-                'title',
-                'slug',
-                'is_featured',
-                'is_urgent',
-            ])
-            ->defaultSort('-featured_at', '-updated_at', "-created_at")
-            ->allowedSorts('featured_at', 'updated_at', 'created_at');
+        $cacheKey = 'homepage_creatives'; // Unique cache key
+        $cacheDuration = 60; // Cache duration in minutes
 
-        $creatives = $query->with([
-            'user.profile_picture',
-            'user.addresses.state',
-            'user.addresses.city',
-            'user.personal_phone',
-            'category',
-        ])
-            ->whereHas('user', function ($query) {
-                $query->where('is_visible', 1)
-                    ->where('status', 1);
-            })
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-            ->withQueryString();
+        // Use Cache::remember to handle caching logic
+        $creatives = Cache::remember($cacheKey, $cacheDuration, function () use ($request) {
+            $query = QueryBuilder::for(Creative::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('years_of_experience_id'),
+                    AllowedFilter::scope('name'),
+                    AllowedFilter::scope('email'),
+                    AllowedFilter::scope('state_id'),
+                    AllowedFilter::scope('city_id'),
+                    AllowedFilter::scope('status'),
+                    AllowedFilter::scope('is_visible'),
+                    'employment_type',
+                    'title',
+                    'slug',
+                    'is_featured',
+                    'is_urgent',
+                ])
+                ->defaultSort('-featured_at', '-updated_at', "-created_at")
+                ->allowedSorts('featured_at', 'updated_at', 'created_at');
+
+            $creatives = $query->with([
+                'user.profile_picture',
+                'user.addresses.state',
+                'user.addresses.city',
+                'user.personal_phone',
+                'category',
+            ])
+                ->whereHas('user', function ($query) {
+                    $query->where('is_visible', 1)
+                        ->where('status', 1);
+                })
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+
+            return $creatives; // Replace with your actual query
+        });
 
         return new HomepageCreativeCollection($creatives);
     }
