@@ -664,7 +664,7 @@ class CreativeController extends Controller
     public function homepage_creatives(Request $request) //Home page creatives
     {
         $cacheKey = 'homepage_creatives'; // Unique cache key
-        $cacheDuration = now()->addMinutes(5); // Cache duration in minutes
+        $cacheDuration = now()->addHours(24); // Cache duration
 
         // Use Cache::remember to handle caching logic
         $creatives = Cache::remember($cacheKey, $cacheDuration, function () use ($request) {
