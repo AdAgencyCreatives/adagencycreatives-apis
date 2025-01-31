@@ -212,7 +212,7 @@ class Job extends Model
 
     public function scopeCitySlug(Builder $query, $city_slug): Builder
     {
-        $cities = Location::where('slug', $city_slug)->whereNotNull('parent_id')->get();
+        $cities = Location::where('slug', $city_slug)->whereNotNull('parent_id')->get()->toArray();
         if (count($cities) > 0) {
             $city_ids = array_map(function ($city) {
                 return $city->id;
