@@ -212,9 +212,14 @@ class Job extends Model
 
     public function scopeCitySlug(Builder $query, $city_slug): Builder
     {
-        $city = Location::where('slug', $city_slug)->whereNotNull('parent_id')->first();
-
-        return $query->where('city_id', $city->id);
+        $cities = Location::where('slug', $city_slug)->whereNotNull('parent_id')->get();
+        if (count($cities) > 0) {
+            $city_ids = array_map(function ($city) {
+                return $city->id;
+            }, $cities);
+            return $query->where('city_id', 'in', $city_ids ?? []);
+        }
+        return $query->where('city_id', $cities[0]->id);
     }
 
     // public function scopeIndustryExperience(Builder $query, $industries): Builder
@@ -352,7 +357,7 @@ class Job extends Model
             $category = Category::find($job->category_id);
 
             $author = User::find($job->user_id);
-            $agency =  $author->agency; // fetch original agency for which we are posting
+            $agency = $author->agency; // fetch original agency for which we are posting
 
             $agency_name = $job?->agency_name ?? ($agency?->name ?? '');
             $agency_profile = $job?->agency_website ?? (in_array($author->role, ['agency']) ? $agency?->slug : '');
