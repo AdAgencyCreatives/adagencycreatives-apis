@@ -212,14 +212,9 @@ class Job extends Model
 
     public function scopeCitySlug(Builder $query, $city_slug): Builder
     {
-        $cities = Location::where('slug', $city_slug)->whereNotNull('parent_id')->get()->toArray();
-        if (count($cities) > 0) {
-            $city_ids = array_map(function ($city) {
-                return $city->id;
-            }, $cities);
-            return $query->where('city_id', 'in', $city_ids ?? []);
-        }
-        return $query->where('city_id', $cities[0]->id);
+        $cities = Location::where('slug', $city_slug)->whereNotNull('parent_id')->pluck('id');
+
+        return $query->whereIn('city_id', $cities);
     }
 
     // public function scopeIndustryExperience(Builder $query, $industries): Builder
