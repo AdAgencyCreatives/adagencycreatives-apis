@@ -36,10 +36,6 @@ class JobResource extends JsonResource
             });
         }
 
-        if ($request->has('skip_applications') && $request->skip_applications == 'yes') {
-            $applications = [];
-        }
-
         $data = [
             'type' => 'jobs',
             'id' => $this->uuid,
@@ -76,7 +72,7 @@ class JobResource extends JsonResource
             'seo' => $this->generate_seo(),
             // 'applications_count' => $this->applications_count,
             'applications_count' => count($applications),
-            'applications' => new ApplicationCollection($applications),
+            'applications' => ($request->has('skip_applications') && $request->skip_applications == 'yes') ? [] : new ApplicationCollection($applications),
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'expired_at' => $this->expired_at?->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
