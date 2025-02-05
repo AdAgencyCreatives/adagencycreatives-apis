@@ -36,6 +36,10 @@ class JobResource extends JsonResource
             });
         }
 
+        if ($request->has('skip_applications') && $request->skip_applications == 'yes') {
+            $applications = [];
+        }
+
         $data = [
             'type' => 'jobs',
             'id' => $this->uuid,
@@ -181,9 +185,9 @@ class JobResource extends JsonResource
 
         switch ($role) {
             case 'recruiter':
-                return  $agency->slug . "/recruiter";
+                return $agency->slug . "/recruiter";
             case 'advidsor':
-                return  $agency->slug . "/advisor";
+                return $agency->slug . "/advisor";
             default:
                 return $agency->slug;
         }
