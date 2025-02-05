@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\StoreMessageRequest;
 use App\Http\Resources\Message\MessageCollection;
 use App\Http\Resources\Message\MessageResource;
-use App\Http\Resources\User\UserResource;
+use App\Http\Resources\User\CompactUserResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Message;
 use App\Models\User;
@@ -285,22 +285,6 @@ class ChatController extends Controller
     {
         $userId = get_auth_user()->id;
 
-        // $contacts = Message::with('sender', 'receiver')->where(function ($query) use ($userId) {
-        //     $query->where(function ($query) use ($userId) {
-        //         $query->where('sender_id', $userId)
-        //             ->whereNull('sender_conversation_deleted_at');
-        //     })->orWhere(function ($query) use ($userId) {
-        //         $query->where('receiver_id', $userId)
-        //             ->whereNull('receiver_conversation_deleted_at');
-        //     });
-        // });
-
-        // $contacts = Message::with('sender', 'receiver')
-        //     ->whereNull('sender_deleted_at')
-        //     ->WhereNull('receiver_deleted_at')
-        //     ->whereNull('sender_conversation_deleted_at')
-        //     ->WhereNull('receiver_conversation_deleted_at');
-
         $contacts = Message::with('sender', 'receiver')
             ->where(function ($query) use ($userId) {
                 $query->where(function ($query) use ($userId) {
@@ -352,12 +336,12 @@ class ChatController extends Controller
                     if ($senderId == $userId) {
                         $contact->message_type = 'sent';
                         unset($contact['sender']);
-                        $contact->contact = new UserResource($contact->receiver);
+                        $contact->contact = new CompactUserResource($contact->receiver);
                         unset($contact['receiver']);
                     } elseif ($receiverId == $userId) {
                         $contact->message_type = 'received';
                         unset($contact['receiver']);
-                        $contact->contact = new UserResource($contact->sender);
+                        $contact->contact = new CompactUserResource($contact->sender);
                         unset($contact['sender']);
                     }
 
