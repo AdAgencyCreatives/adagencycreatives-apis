@@ -1063,6 +1063,8 @@ class TestDataController extends Controller
     public function dateTimeCheck(Request $request)
     {
 
+        return now();
+
         $date = today();
         $targetDate = Carbon::parse("2024-10-23");
 
@@ -1203,7 +1205,6 @@ class TestDataController extends Controller
 
         return new NoJobPostedAgencyReminder($data['data']);
     }
-
 
     public function test_trending_posts(Request $request)
     {
