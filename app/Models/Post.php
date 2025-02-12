@@ -26,6 +26,10 @@ class Post extends Model
         'edited_at',
     ];
 
+    protected $casts = [
+        'edited_at' => 'datetime',
+    ];
+
     public function attachments()
     {
         return $this->hasMany(Attachment::class, 'resource_id')

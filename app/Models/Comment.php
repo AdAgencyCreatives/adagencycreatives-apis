@@ -24,6 +24,10 @@ class Comment extends Model
         'edited_at',
     ];
 
+    protected $casts = [
+        'edited_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
