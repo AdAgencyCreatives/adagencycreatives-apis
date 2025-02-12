@@ -31,6 +31,7 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'human_readable_date' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
+            'edited_at' => $this->edited_at ? $this->edited_at->format(config('global.datetime_format')) : null,
 
             'relationships' => [
                 'comments' => [
@@ -69,7 +70,8 @@ class PostResource extends JsonResource
 
     public function get_image($user)
     {
-        if (!$user) return '';
+        if (!$user)
+            return '';
 
         if ($user->role == 'creative' || $user->role == 'admin') {
             return isset($user->profile_picture) ? getAttachmentBasePath() . $user->profile_picture->path : null;
