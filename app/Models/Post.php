@@ -23,6 +23,7 @@ class Post extends Model
         'content',
         'status',
         'updated_at',
+        'edited_at',
     ];
 
     public function attachments()

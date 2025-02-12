@@ -34,9 +34,11 @@ class PostController extends Controller
             ->defaultSort('-created_at')
             ->allowedSorts('created_at');
 
-        $posts = $query->with(['reactions' => function ($query) {
-            // You can further customize the reactions query if needed
-        }])
+        $posts = $query->with([
+            'reactions' => function ($query) {
+                // You can further customize the reactions query if needed
+            }
+        ])
             ->whereHas('user') // If the user is deleted, don't show the attachment
             ->withCount('reactions')
             ->withCount('comments')
@@ -130,6 +132,9 @@ class PostController extends Controller
     {
         try {
             $post = Post::where('uuid', $uuid)->firstOrFail();
+            $request->merge([
+                'edited_at' => now(),
+            ]);
             $post->update($request->all());
 
             if ($request->has('attachment_ids')) {
@@ -190,9 +195,11 @@ class PostController extends Controller
                 });
 
 
-            $posts = $query->with(['reactions' => function ($query) {
-                // You can further customize the reactions query if needed
-            }])
+            $posts = $query->with([
+                'reactions' => function ($query) {
+                    // You can further customize the reactions query if needed
+                }
+            ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
                 ->withCount('reactions')
                 ->withCount('comments')

@@ -85,7 +85,10 @@ class CommentController extends Controller
             $comment = Comment::where('uuid', $uuid)->firstOrFail();
             $post = Post::where('id', $comment->post_id)->first();
 
-            $comment->update($request->only('content'));
+            $request->merge([
+                'edited_at' => now(),
+            ]);
+            $comment->update($request->only(['content', 'edited_at']));
             $post->update(['updated_at' => now()]);
 
             return new CommentResource($comment);

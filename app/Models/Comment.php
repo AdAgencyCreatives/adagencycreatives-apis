@@ -21,6 +21,7 @@ class Comment extends Model
         'post_id',
         'parent_id',
         'content',
+        'edited_at',
     ];
 
     public function user()
