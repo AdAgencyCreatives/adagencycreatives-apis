@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\PostReaction as EventsPostReaction;
+use App\Events\PostReactionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reaction\StorePostReactionRequest;
 use App\Http\Resources\Reaction\PostReactionCollection;
@@ -41,6 +43,12 @@ class PostReactionController extends Controller
         $post = Post::where('uuid', $request->post_id)->first();
         $type = $request->type;
 
+        $data = [
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+            'type' => $type,
+        ];
+
         // Find all existing reactions of the user on the same post
         $existingReaction = PostReaction::withTrashed()
             ->where('user_id', $user->id)
@@ -62,6 +70,8 @@ class PostReactionController extends Controller
             $post->update(['updated_at' => now()]);
             $post->refresh();
 
+            event(new PostReactionEvent($data));
+
             return response()->json(['message' => 'Reaction updated successfully. Post Updated: [' . $post->id . ', ' . $post->updated_at . ']']);
         }
 
@@ -74,6 +84,9 @@ class PostReactionController extends Controller
         ]);
 
         $post->update(['updated_at' => now()]);
+        $post->refresh();
+
+        event(new PostReactionEvent($data));
 
         return response()->json(['message' => 'Reaction added successfully. Post Updated: [' . $post->id . ', ' . $post->updated_at . ']']);
     }
