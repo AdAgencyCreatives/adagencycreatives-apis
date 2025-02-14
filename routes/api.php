@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\FeaturedLocationController;
+use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\TestDataController;
@@ -49,6 +50,7 @@ use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\YearsOfExperienceController;
 use App\Http\Controllers\Api\V1\UtilsController;
 use App\Models\Application;
+use App\Models\Friendship;
 use Illuminate\Support\Facades\Route;
 
 /*

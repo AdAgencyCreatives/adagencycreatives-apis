@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('friendships', [FriendshipController::class, 'sendFriendRequest']);
     Route::patch('friendships', [FriendshipController::class, 'respondToFriendRequest']);
     Route::post('friendships/terminate', [FriendshipController::class, 'unfriend']);
+    Route::get('/get_friends_count', [FriendshipController::class, 'getFriendsCount']);
 
     /**
      * Group Members

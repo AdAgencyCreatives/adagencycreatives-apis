@@ -24,11 +24,13 @@ class FriendshipController extends Controller
     {
         $userId = $request->user()->id;
 
-        $friends = Friendship::with('initiatedByUser', 'receivedByUser')->where(function ($query) use ($userId) {
-            $query->where('user1_id', $userId);
-        })->orWhere(function ($query) use ($userId) {
-            $query->where('user2_id', $userId);
-        })->get();
+        $friends = Friendship::with('initiatedByUser', 'receivedByUser')
+            ->where(function ($query) use ($userId) {
+                $query->where('user1_id', $userId);
+            })
+            ->orWhere(function ($query) use ($userId) {
+                $query->where('user2_id', $userId);
+            })->get();
 
         return new FriendshipCollection($friends);
     }
@@ -177,6 +179,14 @@ class FriendshipController extends Controller
         $friends = $user->friends;
 
         return response()->json($friends);
+    }
+
+    public function getFriendsCount()
+    {
+        $user = auth()->user();
+        $friends = $user->friends;
+
+        return response()->json(count($friends));
     }
 
     // Helper methods
