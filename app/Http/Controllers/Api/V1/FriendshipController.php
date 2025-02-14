@@ -173,20 +173,34 @@ class FriendshipController extends Controller
         return response()->json(['message' => sprintf('Friend request %s', $response)]);
     }
 
-    public function getFriends()
+    public function getFriends(Request $request)
     {
-        $user = auth()->user();
-        $friends = $user->friends;
+        $userId = $request->user()->id;
+
+        $friends = Friendship::with('initiatedByUser', 'receivedByUser')
+            ->where(function ($query) use ($userId) {
+                $query->where('user1_id', $userId);
+            })
+            ->orWhere(function ($query) use ($userId) {
+                $query->where('user2_id', $userId);
+            })->get();
 
         return response()->json($friends);
     }
 
-    public function getFriendsCount()
+    public function getFriendsCount(Request $request)
     {
-        $user = auth()->user();
-        $friends = $user->friends;
+        $userId = $request->user()->id;
 
-        return response()->json(count($friends));
+        $friends_count = Friendship::with('initiatedByUser', 'receivedByUser')
+            ->where(function ($query) use ($userId) {
+                $query->where('user1_id', $userId);
+            })
+            ->orWhere(function ($query) use ($userId) {
+                $query->where('user2_id', $userId);
+            })->count();
+
+        return response()->json($friends_count);
     }
 
     // Helper methods
