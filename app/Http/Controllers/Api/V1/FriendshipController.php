@@ -203,6 +203,15 @@ class FriendshipController extends Controller
         return response()->json($friends_count);
     }
 
+    public function getFriendRequestsCount(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $friend_requests_count = FriendRequest::where('receiver_id', $userId)->where('status', 'pending')->count();
+
+        return response()->json($friend_requests_count);
+    }
+
     // Helper methods
     private function checkExistingFriendship($user1Id, $user2Id)
     {
