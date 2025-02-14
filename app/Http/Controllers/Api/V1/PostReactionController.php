@@ -44,9 +44,7 @@ class PostReactionController extends Controller
         $type = $request->type;
 
         $data = [
-            'user_id' => $user->id,
-            'post_id' => $post->id,
-            'type' => $type,
+            'post_id' => $post->uuid,
         ];
 
         // Find all existing reactions of the user on the same post
