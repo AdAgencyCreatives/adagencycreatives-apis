@@ -62,6 +62,7 @@ class PostReactionController extends Controller
             if ($existingReaction->trashed()) {
                 // If the reaction is soft-deleted, restore it
                 $existingReaction->restore();
+                event(new PostReactionEvent($data));
             } else {
                 // If the user is clicking the same reaction type again, soft delete it
                 $existingReaction->delete();
@@ -69,8 +70,6 @@ class PostReactionController extends Controller
 
             $post->update(['updated_at' => now()]);
             $post->refresh();
-
-            event(new PostReactionEvent($data));
 
             return response()->json(['message' => 'Reaction updated successfully. Post Updated: [' . $post->id . ', ' . $post->updated_at . ']']);
         }
