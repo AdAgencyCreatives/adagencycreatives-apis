@@ -207,7 +207,7 @@ class FriendshipController extends Controller
     {
         $userId = $request->user()->id;
 
-        $friend_requests_count = FriendRequest::where('receiver_id', $userId)->where('status', 0)->count();
+        $friend_requests_count = FriendRequest::where('receiver_id', $userId)->where('status', 'LIKE', 'pending')->count();
 
         return response()->json($friend_requests_count);
     }
