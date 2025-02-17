@@ -111,10 +111,14 @@ class UserController extends Controller
             $user->uuid = Str::uuid();
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
-            if ($request->role == 'agency') {
-                $user->username = $this->get_agency_username($request->agency_name, $request->first_name);
+            if (empty($request->username)) {
+                if ($request->role == 'agency') {
+                    $user->username = $this->get_agency_username($request->agency_name, $request->first_name);
+                } else {
+                    $user->username = $this->get_username_from_email($request->email);
+                }
             } else {
-                $user->username = $this->get_username_from_email($request->email);
+                $user->username = $request->username;
             }
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
@@ -180,8 +184,15 @@ class UserController extends Controller
 
     public function get_username_from_email($email)
     {
-        $username = Str::before($email, '@');
-        $username = Str::slug($username);
+        $baseUsername = Str::before($email, '@');
+        $baseUsername = Str::slug($baseUsername);
+        $username = $baseUsername;
+        $counter = 1;
+
+        while (User::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
 
         return $username;
     }
