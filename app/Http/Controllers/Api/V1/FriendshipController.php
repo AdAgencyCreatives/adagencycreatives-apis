@@ -87,26 +87,26 @@ class FriendshipController extends Controller
                 throw new ApiException($e, 'CS-01');
             }
 
-            return response()->json(['message' => 'Friend request sent.']);
+            return response()->json(['message' => 'Friendship requested.']);
         } else {
 
             if ($existingFriendship->status == 'pending') {
                 if ($existingFriendship->sender_id == $sender->id) {
-                    return response()->json(['message' => 'Friendship pending request already exists.'], 400);
+                    return response()->json(['message' => 'Friendship requested.']);
                 } else {
                     //make the friends
                     $existingFriendship->update(['status' => 'accepted']);
                     // Create a friendship between the users
                     $this->createFriendship($existingFriendship->sender_id, $existingFriendship->receiver_id);
 
-                    return response()->json(['message' => 'You both are now friends.'], 200);
+                    return response()->json(['message' => 'Friendship Accepted.']);
                 }
             } elseif ($existingFriendship->status == 'accepted') {
-                return response()->json(['message' => 'Friendship already exists.'], 400);
+                return response()->json(['message' => 'Friendship accepted.']);
             } elseif ($existingFriendship->status === 'cancelled' || $existingFriendship->status === 'declined') {
                 $existingFriendship->update(['status' => 'pending']);
 
-                return response()->json(['message' => 'Friendship request sent again.']);
+                return response()->json(['message' => 'Friendship requested.']);
             } elseif ($existingFriendship->status == 'unfriended') {
                 $existingFriendship->update([
                     'status' => 'pending',
@@ -114,7 +114,7 @@ class FriendshipController extends Controller
                     'receiver_id' => $receiver->id,
                 ]);
 
-                return response()->json(['message' => 'Friendship request sent again.']);
+                return response()->json(['message' => 'Friendship requested.']);
             }
         }
     }
