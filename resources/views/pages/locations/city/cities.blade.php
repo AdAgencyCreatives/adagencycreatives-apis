@@ -63,22 +63,21 @@ function populateTable(states) {
     }
 
     $.each(states, function(index, state) {
-        var editUrl = "/locations/" + state.id + "/cities";
-        var roleBasedActions = '';
+    var editUrl = "/locations/" + state.id + "/edit"; 
+    var roleBasedActions = '';
 
+    roleBasedActions = 
+        '<a href="' + editUrl + '">Edit</a> | ' +
+        '<a href="#" class="delete-state-btn" data-id="' + state.uuid + '">Delete</a>';
 
-        roleBasedActions = '<a href="#" class="delete-state-btn" data-id="' +
-            state.uuid + '">Delete</a>';
-
-        var row = '<tr>' +
-            '<td>' + state.id + '</td>' +
-            '<td class="state-name" data-id="' + state.uuid + '">' + state.name + '</td>' +
-            '<td>' + state.created_at + '</td>' +
-            '<td>' + roleBasedActions + '</td>' +
-
-            '</tr>';
-        tbody.append(row);
-    });
+    var row = '<tr>' +
+        '<td>' + state.id + '</td>' +
+        '<td class="state-name" data-id="' + state.uuid + '">' + state.name + '</td>' +
+        '<td>' + state.created_at + '</td>' +
+        '<td>' + roleBasedActions + '</td>' +
+        '</tr>';
+    tbody.append(row);
+});
 }
 
 function deleteCityConfirmation(resource_id, resource, url, csrfToken) {

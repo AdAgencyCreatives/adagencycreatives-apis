@@ -17,6 +17,8 @@ class Location extends Model
         'name',
         'slug',
         'parent_id',
+        'preview_link',
+        'is_featured',
     ];
 
     public function scopeStateId(Builder $query, $state_id)

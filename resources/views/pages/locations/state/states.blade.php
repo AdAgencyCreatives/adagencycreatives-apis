@@ -76,21 +76,19 @@ function populateTable(states) {
         displayNoRecordsMessage(7);
     }
 
-    $.each(states, function(index, state) {
+    $.each(states, function(index, state) { 
         var editUrl = "/locations/" + state.id + "/cities";
-        var roleBasedActions = '';
+        var editStateUrl = "/locations/" + state.id + "/edit"; // Edit URL
 
-
-        roleBasedActions = '<a href="' + editUrl +
-            '">Cities</a> | <a href="#" class="delete-state-btn" data-id="' +
-            state.uuid + '">Delete</a>';
+        var roleBasedActions = '<a href="' + editUrl + '">Cities</a> | ' +
+            '<a href="' + editStateUrl + '">Edit</a> | ' + // Added Edit button
+            '<a href="#" class="delete-state-btn" data-id="' + state.uuid + '">Delete</a>';
 
         var row = '<tr>' +
             '<td>' + state.id + '</td>' +
             '<td class="state-name" data-id="' + state.uuid + '">' + state.name + '</td>' +
             '<td>' + state.created_at + '</td>' +
             '<td>' + roleBasedActions + '</td>' +
-
             '</tr>';
         tbody.append(row);
     });

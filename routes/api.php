@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\FeaturedLocationController;
+use App\Http\Controllers\Api\V1\FeaturedLocationWithJobCountController;
 use App\Http\Controllers\Api\V1\FriendshipController;
 use App\Http\Controllers\Api\V1\PageController;
 use App\Http\Controllers\Admin\SeoController;
@@ -351,6 +352,7 @@ Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
 Route::resource('publication-resources', PublicationResourceController::class);
 Route::resource('featured_cities', FeaturedLocationController::class);
+Route::resource('featured_cities_job_count', FeaturedLocationWithJobCountController::class);
 
 // Applications
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);

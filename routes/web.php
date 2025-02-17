@@ -175,9 +175,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('state/create', [LocationController::class, 'create'])->name('state.create');
         Route::get('city/create', [LocationController::class, 'city_create'])->name('city.create');
         Route::get('locations/{location}/cities', [LocationController::class, 'cities']);
-        // Route::resource('locations', LocationController::class);
         Route::resource('locations', LocationController::class);
-        // Route::resource('categories', CategoryController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('groups', GroupController::class);
         Route::resource('industries', IndustryController::class);
