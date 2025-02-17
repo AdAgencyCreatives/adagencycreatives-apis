@@ -152,16 +152,21 @@ class FriendshipController extends Controller
                 //         'member' => $friendRequest->receiver->first_name,
                 //     ],
                 // ], 'friendship_request_accepted');
+                DB::commit(); //commit the transaction because in this case we are not using the default resposne message
+                return response()->json(['message' => sprintf('Friendship Accepted.')]);
             } elseif ($response === 'cancelled') {
                 $friendRequest->update(['status' => 'cancelled']);
+                DB::commit(); //commit the transaction because in this case we are not using the default resposne message
+                return response()->json(['message' => sprintf('Friendship Removed.')]);
             } elseif ($response === 'declined') {
                 $friendRequest->update(['status' => 'declined']);
+                DB::commit(); //commit the transaction because in this case we are not using the default resposne message
+                return response()->json(['message' => sprintf('Friendship Removed.')]);
             } elseif ($response === 'unfriended') {
                 $friendRequest->update(['status' => 'unfriended']);
                 $this->deleteFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-
-                return response()->json(['message' => sprintf('You both are no longer friends.')]);
+                return response()->json(['message' => sprintf('Friendship Removed.')]);
             }
 
             DB::commit();
@@ -246,12 +251,12 @@ class FriendshipController extends Controller
         })->first();
 
         if (!$friendship) {
-            return response()->json(['message' => 'Friendship does not exist.'], 400);
+            return response()->json(['message' => 'Friendship removed.']);
         }
 
         $friendship->delete();
 
-        return response()->json(['message' => 'Friendship deleted.']);
+        return response()->json(['message' => 'Friendship removed.']);
     }
 
     public function deleteFriendship($user1Id, $user2Id)
