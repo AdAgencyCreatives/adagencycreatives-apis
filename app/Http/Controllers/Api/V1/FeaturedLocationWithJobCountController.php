@@ -25,7 +25,7 @@ class FeaturedLocationWithJobCountController extends Controller
 
             // $query->orderByDesc('is_featured');
             $query->orderBy('sort_order');
-            $query->orderByDesc('job_count'); // Sort by job_count in descending order
+            $query->orderByDesc('job_count');
     
             $perPage = $request->per_page ?? config('global.request.pagination_limit');
     
