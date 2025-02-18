@@ -351,8 +351,8 @@ Route::get('pages', [PageController::class, 'index']);
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
 Route::resource('publication-resources', PublicationResourceController::class);
-// Route::resource('featured_cities', FeaturedLocationController::class);
-Route::resource('featured_cities', FeaturedLocationWithJobCountController::class);
+Route::resource('featured_cities', FeaturedLocationController::class);
+Route::resource('featured_cities_with_job_count', FeaturedLocationWithJobCountController::class);
 
 // Applications
 Route::post('applications/remove_from_recent/{uuid}', [ApplicationController::class, 'remove_from_recent']);
