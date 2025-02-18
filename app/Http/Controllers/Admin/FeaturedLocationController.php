@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\FeaturedLocation;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -50,7 +51,7 @@ class FeaturedLocationController extends Controller
     {
         $order = $request->input('order');
         foreach ($order as $index => $itemId) {
-            FeaturedLocation::where('id', $itemId)->update(['sort_order' => $index + 1]);
+            Location::where('id', $itemId)->update(['sort_order' => $index + 1]);
         }
 
         return response()->json(['message' => 'Order updated successfully']);

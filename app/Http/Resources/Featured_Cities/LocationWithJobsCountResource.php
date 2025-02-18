@@ -16,6 +16,7 @@ class LocationWithJobsCountResource extends JsonResource
             'slug' => $this->slug,
             'count' => $this->job_count,
             'preview_link' => $this->get_preview_link(),
+            'sort_order' => $this->sort_order,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
         ];

@@ -37,7 +37,7 @@
             });
 
             $.ajax({
-                url: 'api/v1/featured_cities',
+                url: 'api/v1/featured_cities_with_job_count',
                 method: 'GET',
                 data: requestData,
                 dataType: 'json',
