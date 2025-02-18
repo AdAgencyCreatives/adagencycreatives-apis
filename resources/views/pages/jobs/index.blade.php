@@ -9,8 +9,8 @@
         'localhost:8000' => 'http://localhost:8000/',
         'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
         'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
+        'adagencycreatives-apis.test' => 'http://localhost:3000/',
     ];
-
     $site_url = $url_map[$_SERVER['HTTP_HOST']];
 
 @endphp

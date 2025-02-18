@@ -18,6 +18,7 @@ class Location extends Model
         'slug',
         'parent_id',
         'preview_link',
+        'sort_order',
         'is_featured',
     ];
 
