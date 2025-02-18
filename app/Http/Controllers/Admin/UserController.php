@@ -136,9 +136,8 @@ class UserController extends Controller
                 $agency->name = $request->agency_name ?? 'Default Agency';
                 $agency->size = '10';
                 $agency->about = '';
-
+                
                 $user->username = $this->get_agency_username($user, $agency);
-
                 $agency->save();
 
                 Link::create([
@@ -159,8 +158,21 @@ class UserController extends Controller
             }
 
             return new UserResource($user);
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                if (strpos($e->getMessage(), 'users_username_unique') !== false) {
+                    return response()->json([
+                        'status' => 'failed',
+                        'code' => 'US-02', 
+                        'message' => 'The username is already taken. Please choose a different username.',
+                        'errors' => ['username' => ['The username is already taken.']],
+                    ], 422); 
 
+                }
+            }
+            throw new ApiException($e, 'US-01');
+        }
+        catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
     }
@@ -190,7 +202,7 @@ class UserController extends Controller
         $counter = 1;
 
         while (User::where('username', $username)->exists()) {
-            $username = $baseUsername . $counter;
+            $username = sprintf("%s-%d", $baseUsername, $counter);
             $counter++;
         }
 
@@ -199,7 +211,6 @@ class UserController extends Controller
 
     public function get_agency_username($agency_name, $contact_first_name)
     {
-
         $proposed_name = $agency_name;
         $proposed_slug = Str::slug($proposed_name);
         $username = $proposed_slug; // check if only agency name is unique
