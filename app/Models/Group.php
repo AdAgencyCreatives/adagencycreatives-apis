@@ -36,7 +36,7 @@ class Group extends Model
 
     public function attachment()
     {
-        return $this->hasOne(Attachment::class, 'resource_id');
+        return $this->hasOne(Attachment::class, 'resource_id')->where('resource_type', 'cover_image');
     }
 
     public function posts()
