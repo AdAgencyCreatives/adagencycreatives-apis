@@ -99,7 +99,7 @@ class FriendshipController extends Controller
                     // Create a friendship between the users
                     $this->createFriendship($existingFriendship->sender_id, $existingFriendship->receiver_id);
 
-                    return response()->json(['message' => 'Friendship Accepted.']);
+                    return response()->json(['message' => 'Friendship accepted.']);
                 }
             } elseif ($existingFriendship->status == 'accepted') {
                 return response()->json(['message' => 'Friendship accepted.']);
@@ -153,20 +153,20 @@ class FriendshipController extends Controller
                 //     ],
                 // ], 'friendship_request_accepted');
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship Accepted.')]);
+                return response()->json(['message' => sprintf('Friendship accepted.')]);
             } elseif ($response === 'cancelled') {
                 $friendRequest->update(['status' => 'cancelled']);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship Removed.')]);
+                return response()->json(['message' => sprintf('Friendship removed.')]);
             } elseif ($response === 'declined') {
                 $friendRequest->update(['status' => 'declined']);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship Removed.')]);
+                return response()->json(['message' => sprintf('Friendship removed.')]);
             } elseif ($response === 'unfriended') {
                 $friendRequest->update(['status' => 'unfriended']);
                 $this->deleteFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship Removed.')]);
+                return response()->json(['message' => sprintf('Friendship removed.')]);
             }
 
             DB::commit();
