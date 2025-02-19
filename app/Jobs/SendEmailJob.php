@@ -91,7 +91,9 @@ class SendEmailJob implements ShouldQueue
             'profile_completion_creative',
             'profile_completion_agency',
             'no_job_posted_agency_reminder',
-            'error_notification'
+            'error_notification',
+
+            'contact_us_inquiry',
         ];
 
         // Check if the current email type is in the array and update the receiver's email
@@ -111,7 +113,7 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
         switch ($this->emailType) {
-                /**
+            /**
              * Account
              */
             case 'new_user_registration_creative_role':
@@ -130,9 +132,9 @@ class SendEmailJob implements ShouldQueue
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new AccountDenied($this->data['data']));
                 break;
 
-                /**
-                 * Group
-                 */
+            /**
+             * Group
+             */
             case 'group_invitation':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new Invitation($this->data['data']));
                 break;
@@ -158,18 +160,18 @@ class SendEmailJob implements ShouldQueue
 
                 break;
 
-                /**
-                 * Job
-                 */
+            /**
+             * Job
+             */
             case 'new_job_added_admin': // To inform the admin that a new job has been added
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new NewJobPosted($this->data['data']));
                 break;
             case 'job_invitation':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new JobInvitation($this->data['data']));
                 break;
-                // case 'custom_job_request_rejected':
-                //     $this->sendEmail($this->data['receiver'], $this->devEmails, new CustomJobRequestRejected($this->data['data']));
-                //     break;
+            // case 'custom_job_request_rejected':
+            //     $this->sendEmail($this->data['receiver'], $this->devEmails, new CustomJobRequestRejected($this->data['data']));
+            //     break;
 
             case 'custom_pkg_request_admin_alert':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new RequestAdminAlert($this->data['data']));
@@ -178,9 +180,9 @@ class SendEmailJob implements ShouldQueue
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new HireAnAdvisorJobCompleted($this->data['data']));
                 break;
 
-                /**
-                 * Application
-                 */
+            /**
+             * Application
+             */
             case 'application_submitted':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new ApplicationSubmitted($this->data['data'])); // To the applicant
                 break;
@@ -198,9 +200,9 @@ class SendEmailJob implements ShouldQueue
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new JobClosed($this->data['data'])); // To the applicant
                 break;
 
-                /**
-                 * Friend
-                 */
+            /**
+             * Friend
+             */
             case 'friendship_request_sent':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new FriendshipRequest($this->data['data']));
                 break;
@@ -208,9 +210,9 @@ class SendEmailJob implements ShouldQueue
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new FriendshipRequestAccepted($this->data['data']));
                 break;
 
-                /**
-                 * Message Count
-                 */
+            /**
+             * Message Count
+             */
             case 'unread_message':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new UnreadMessage($this->data['data']));
                 break;
@@ -219,9 +221,9 @@ class SendEmailJob implements ShouldQueue
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new ContactFormMail($this->data['data']));
                 break;
 
-                /**
-                 * Job Post Expiring Soon
-                 */
+            /**
+             * Job Post Expiring Soon
+             */
             case 'job_expiring_soon_admin':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new JobPostExpiringAdmin($this->data['data']));
                 break;
@@ -235,9 +237,9 @@ class SendEmailJob implements ShouldQueue
                 break;
 
 
-                /**
-                 * Group Post
-                 */
+            /**
+             * Group Post
+             */
             case 'user_mentioned_in_post':
                 $this->sendEmail($this->data['receiver'], $this->devEmails, new LoungeMention($this->data['data']));
                 break;
