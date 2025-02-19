@@ -431,10 +431,10 @@ class UserController extends Controller
 
     public function contact_us_form_info(Request $request)
     {
-        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+        $contact_us_user = User::where('email', env('CONTACT_US_EMAIL'))->first();
 
         SendEmailJob::dispatch([
-            'receiver' => $admin,
+            'receiver' => $contact_us_user,
             'data' => $request->all(),
         ], 'contact_us_inquiry');
     }
