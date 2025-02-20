@@ -22,6 +22,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class CreativeController extends Controller
 {
@@ -419,6 +420,8 @@ class CreativeController extends Controller
         foreach ($order as $index => $itemId) {
             Creative::where('id', $itemId)->update(['sort_order' => $index + 1]);
         }
+
+        Cache::forget('homepage_creatives');
 
         return response()->json(['message' => 'Order updated successfully']);
     }
