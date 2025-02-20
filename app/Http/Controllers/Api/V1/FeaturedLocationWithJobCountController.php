@@ -21,12 +21,6 @@ class FeaturedLocationWithJobCountController extends Controller
             ->where('is_featured', 1)
             ->orderBy('sort_order', 'asc')
             ->orderBy('job_count', 'desc');
-        // ->leftJoin('job_posts', function ($join) {
-        //     $join->on('locations.id', '=', 'job_posts.city_id');
-        // })
-        // ->groupBy('locations.id', 'locations.uuid', 'locations.name', 'locations.slug', 'locations.parent_id', 'locations.preview_link', 'locations.is_featured', 'locations.created_at', 'locations.updated_at');
-
-        // $query = Location::selectRaw("SELECT T.* FROM (SELECT locations.*, (SELECT COUNT(*) FROM job_posts WHERE job_posts.city_id = locations.id AND job_posts.status = 1) as job_count FROM locations) T ORDER BY T.sort_order ASC, T.job_count DESC;");
 
         $perPage = $request->per_page ?? config('global.request.pagination_limit');
 
