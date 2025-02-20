@@ -41,6 +41,7 @@ class Creative extends Model
         'is_welcomed',
         'welcomed_at',
         'welcome_queued_at',
+        'sort_order',
     ];
 
     protected $casts = [

@@ -684,8 +684,8 @@ class CreativeController extends Controller
                     'is_featured',
                     'is_urgent',
                 ])
-                ->defaultSort('-featured_at', '-updated_at', "-created_at")
-                ->allowedSorts('featured_at', 'updated_at', 'created_at');
+                ->defaultSort( '-featured_at', '-updated_at', "-created_at")
+                ->allowedSorts('sort_order','featured_at', 'updated_at', 'created_at');
 
             $creatives = $query->with([
                 'user.profile_picture',
@@ -698,10 +698,9 @@ class CreativeController extends Controller
                     $query->where('is_visible', 1)
                         ->where('status', 1);
                 })
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->paginate($request->per_page ?? settings('creative_count_homepage'))
                 ->withQueryString();
-
-            return $creatives; // Replace with your actual query
+            return $creatives;
         });
 
         return new HomepageCreativeCollection($creatives);

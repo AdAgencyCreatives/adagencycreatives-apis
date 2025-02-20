@@ -19,7 +19,9 @@ class HomepageCreativeResource extends JsonResource
         return [
             'type' => 'creatives',
             'id' => $this->uuid,
+            'id2' => $this->id, //This was added for featured creatives sorting on admin dashboard
             'user_id' => $user->uuid,
+            'user_id2' => $user->id,
             'name' => $user->first_name . ' ' . $user->last_name,
             'slug' => $this->slug,
             'title' => $this->title,
@@ -28,6 +30,7 @@ class HomepageCreativeResource extends JsonResource
             'user_thumbnail' => $this->get_user_thumbnail($user),
             'location' => $this->location,
             'seo' => $this->generate_seo(),
+            'sort_order' => $this->sort_order,
         ];
     }
 

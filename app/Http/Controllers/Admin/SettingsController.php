@@ -68,6 +68,15 @@ class SettingsController extends Controller
         return redirect()->back();
     }
 
+    public function update_creatives_count(Request $request)
+    {
+        settings($request->only('creative_count_homepage')); //number of creatives to appear on homepage slider
+      
+        Artisan::call('cache:clear');
+        Session::flash('success', 'Featured creatives count updated successfully');
+        return redirect()->back();
+    }
+
     public function update_agencies(Request $request)
     {
         settings($request->only('agency_title', 'agency_description'));

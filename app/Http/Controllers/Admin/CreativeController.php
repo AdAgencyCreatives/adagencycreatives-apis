@@ -412,4 +412,14 @@ class CreativeController extends Controller
         Session::flash('success', 'Updated successfully');
         return redirect()->back();
     }
+
+    public function updateOrder(Request $request)
+    {
+        $order = $request->input('order');
+        foreach ($order as $index => $itemId) {
+            Creative::where('id', $itemId)->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['message' => 'Order updated successfully']);
+    }
 }

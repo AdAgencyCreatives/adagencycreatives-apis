@@ -351,4 +351,9 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function featuredCreatives()
+    {
+        return view('pages.featured_creatives.index');
+    }
 }
