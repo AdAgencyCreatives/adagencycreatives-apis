@@ -21,17 +21,18 @@ class FeaturedLocationWithJobCountController extends Controller
                 $join->on('locations.id', '=', 'job_posts.state_id')
                     ->orOn('locations.id', '=', 'job_posts.city_id');
             })
+            ->where('job_posts.status', '=', 1)
             ->groupBy('locations.id', 'locations.uuid', 'locations.name', 'locations.slug', 'locations.parent_id', 'locations.preview_link', 'locations.is_featured', 'locations.created_at', 'locations.updated_at');
 
-            // $query->orderByDesc('is_featured');
-            $query->orderBy('sort_order');
-            $query->orderByDesc('job_count');
-    
-            $perPage = $request->per_page ?? config('global.request.pagination_limit');
-    
-            $topLocations = $query->paginate($perPage);
-    
-            return new LocationWithJobsCountCollection($topLocations);
+        // $query->orderByDesc('is_featured');
+        $query->orderBy('sort_order');
+        $query->orderByDesc('job_count');
+
+        $perPage = $request->per_page ?? config('global.request.pagination_limit');
+
+        $topLocations = $query->paginate($perPage);
+
+        return new LocationWithJobsCountCollection($topLocations);
     }
 
     public function destroy($id)
