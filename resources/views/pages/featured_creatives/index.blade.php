@@ -47,7 +47,7 @@
 
                     },
                     error: function() {
-                        alert('Failed to fetch cities from the API.');
+                        alert('Failed to fetch creatives from the API.');
                     }
                 });
             }
@@ -71,7 +71,7 @@
                     var row = '<tr class="sortable-item" id="' + creative.id2 + '">' +
                         '<td>' + creative.user_id2 + '</td>' +
                         '<td><img src="' + creative.profile_image +
-                        '" alt="Profile Image" style="max-width: 100px; max-height: 100px;"></td>' +
+                        '" style="max-width: 100px; max-height: 100px;"></td>' +
 
                         '<td class="editable-field" data-id="' + creative.id2 + '" data-column="link">' + creative.name +
                         '</td>' +
@@ -115,6 +115,16 @@
                     }
                 });
                 $("#sortable-list").disableSelection();
+
+                @if (Session::has('success'))
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: "{{ Session::get('success') }}",
+                            confirmButtonText: 'OK'
+                        });
+                @endif
+
             });
         </script>
 @endsection

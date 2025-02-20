@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
 
 class SettingsController extends Controller
 {
@@ -72,8 +73,9 @@ class SettingsController extends Controller
     {
         settings($request->only('creative_count_homepage')); //number of creatives to appear on homepage slider
       
+        Cache::forget('homepage_creatives');
         Artisan::call('cache:clear');
-        Session::flash('success', 'Featured creatives count updated successfully');
+        Session::flash('success', 'Homepage creatives count updated successfully');
         return redirect()->back();
     }
 

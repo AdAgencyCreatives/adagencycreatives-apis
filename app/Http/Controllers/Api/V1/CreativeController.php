@@ -664,10 +664,8 @@ class CreativeController extends Controller
     public function homepage_creatives(Request $request) //Home page creatives
     {
         $cacheKey = 'homepage_creatives'; // Unique cache key
-        $cacheDuration = now()->addHours(24); // Cache duration
-
         // Use Cache::remember to handle caching logic
-        $creatives = Cache::remember($cacheKey, $cacheDuration, function () use ($request) {
+        $creatives = Cache::remember($cacheKey, 86400, function () use ($request) {
             $query = QueryBuilder::for(Creative::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
@@ -686,7 +684,7 @@ class CreativeController extends Controller
                 ])
                 ->defaultSort( '-featured_at', '-updated_at', "-created_at")
                 ->allowedSorts('sort_order','featured_at', 'updated_at', 'created_at');
-
+                
             $creatives = $query->with([
                 'user.profile_picture',
                 'user.addresses.state',
@@ -698,7 +696,7 @@ class CreativeController extends Controller
                     $query->where('is_visible', 1)
                         ->where('status', 1);
                 })
-                ->paginate($request->per_page ?? settings('creative_count_homepage'))
+                ->paginate(settings('creative_count_homepage'))
                 ->withQueryString();
             return $creatives;
         });
