@@ -240,7 +240,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('settings', SettingsController::class);
 
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
+        
+        Route::get('featured-creatives', [UserController::class, 'featuredCreatives'])->name('featured.creatives');
+        Route::post('/update-featured-creatives-order', [CreativeController::class, 'updateOrder'])->name('update-featured-creatives-order');
+        Route::post('settings/creatives-count', [SettingsController::class, 'update_creatives_count'])->name('settings.creatives-count');
         Route::resource('creatives', UserController::class)->parameters([
             'creatives' => 'user',
         ]);

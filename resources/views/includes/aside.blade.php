@@ -129,19 +129,26 @@
             </li>
 
             <li
-                class="sidebar-item {{ request()->is('creatives*') || request()->is('creative/create') ? 'active' : '' }} ">
+                class="sidebar-item {{ request()->is('creatives*') || request()->is('creative/create') || request()->is('featured-creatives') ? 'active' : '' }} ">
                 <a data-target="#creatives" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="cloud"></i>
                     <span class="align-middle">Creatives</span>
                 </a>
                 <ul id="creatives"
-                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('creatives*') || request()->is('creative/create') ? 'show' : '' }}"
+                    class="sidebar-dropdown list-unstyled collapse {{ request()->is('creatives*') || request()->is('creative/create') || request()->is('featured-creatives') ? 'show' : '' }}"
                     data-parent="#sidebar">
 
                     <li class="sidebar-item {{ request()->is('creatives') ? 'active' : '' }}">
                         <a class="sidebar-link" href="/creatives?role=4">
                             <i class="align-middle" data-feather="cloud"></i>
                             <span class="align-middle">All Creatives</span>
+                        </a>
+                    </li>
+                    
+                    <li class="sidebar-item {{ request()->is('featured-creatives') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/featured-creatives">
+                            <i class="align-middle" data-feather="upload-cloud"></i>
+                            <span class="align-middle">Featured Creatives</span>
                         </a>
                     </li>
                     <li
