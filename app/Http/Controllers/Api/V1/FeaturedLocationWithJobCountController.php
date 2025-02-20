@@ -17,7 +17,10 @@ class FeaturedLocationWithJobCountController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Location::select('locations.*', DB::raw('(SELECT COUNT(job_posts.id) FROM job_posts WHERE job_posts.city_id = locations.id AND job_posts.status = 1) as job_count'));
+        $query = Location::select('locations.*', DB::raw('(SELECT COUNT(job_posts.id) FROM job_posts WHERE job_posts.city_id = locations.id AND job_posts.status = 1) as job_count'))
+            ->where('is_featured', 1)
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('job_count', 'desc');
         // ->leftJoin('job_posts', function ($join) {
         //     $join->on('locations.id', '=', 'job_posts.city_id');
         // })
