@@ -120,15 +120,16 @@ class JobController extends Controller
         $query = QueryBuilder::for(Job::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('advisor_id'),
                 AllowedFilter::scope('category_id'),
                 AllowedFilter::scope('category_slug'),
                 AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('state_slug'),
                 AllowedFilter::scope('city_slug'),
+                AllowedFilter::scope('agency'),
                 AllowedFilter::scope('slug'),
                 'title',
-                'slug',
                 'employment_type',
                 'apply_type',
                 'salary_range',
