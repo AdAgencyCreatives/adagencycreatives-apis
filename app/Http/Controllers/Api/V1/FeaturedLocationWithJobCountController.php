@@ -20,7 +20,7 @@ class FeaturedLocationWithJobCountController extends Controller
             ->leftJoin('job_posts', function ($join) {
                 $join->on('locations.id', '=', 'job_posts.city_id');
             })
-            ->where('job_posts.status', '=', 1)
+            ->where('job_posts.status', 'IN', [1, 6])
             ->groupBy('locations.id', 'locations.uuid', 'locations.name', 'locations.slug', 'locations.parent_id', 'locations.preview_link', 'locations.is_featured', 'locations.created_at', 'locations.updated_at');
 
         // $query->orderByDesc('is_featured');
