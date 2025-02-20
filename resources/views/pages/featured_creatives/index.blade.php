@@ -136,7 +136,7 @@
             <div class="card">
                 <div class="card-body">
                     <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="table_length" id="table_length"><label>Show <select
                                             name="datatables-reponsive_length" id="per-page-select"
@@ -149,7 +149,7 @@
                                         </select> entries</label></div>
                             </div>
 
-                        </div>
+                        </div> --}}
                         <div class="row dt-row">
                             <div class="col-sm-12">
                                 <table id="topics-table" class="table table-striped dataTable no-footer dtr-inline"
@@ -175,11 +175,11 @@
                                 <div class="dataTables_info" id="table_entries_info" role="status" aria-live="polite">
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-7">
+                            {{-- <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="datatables-reponsive_paginate">
                                     <ul class="pagination"></ul>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
