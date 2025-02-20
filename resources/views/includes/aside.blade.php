@@ -657,12 +657,12 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('featured-cities/create') ? 'active' : '' }}">
+                        {{-- <li class="sidebar-item {{ request()->is('featured-cities/create') ? 'active' : '' }}">
                             <a class="sidebar-link" href="{{ route('featured-cities.create') }}">
                                 <i class="align-middle" data-feather="plus-circle"></i>
                                 <span class="align-middle">Add New City</span>
                             </a>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </li>
