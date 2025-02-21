@@ -426,4 +426,16 @@ class CreativeController extends Controller
 
         return response()->json(['message' => 'Order updated successfully']);
     }
+    
+    public function updateOrderSingle(Request $request)
+    {
+        $order = $request->input('sort_order');
+        $creative_id = $request->input('creative_id');
+
+        Creative::where('id', $creative_id)->update(['sort_order' => $order]);
+        
+        Cache::forget('homepage_creatives');
+
+        return response()->json(['message' => 'Order updated successfully', 'status' => 200]);
+    }
 }

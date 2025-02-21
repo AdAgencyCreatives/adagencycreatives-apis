@@ -661,48 +661,66 @@ class CreativeController extends Controller
         return new CreativeCollection($creatives);
     }
 
-    public function homepage_creatives(Request $request) //Home page creatives
+    public function homepage_creatives(Request $request) 
     {
-        $cacheKey = 'homepage_creatives'; // Unique cache key
-        // Use Cache::remember to handle caching logic
-        $creatives = Cache::remember($cacheKey, 86400, function () use ($request) {
-            $query = QueryBuilder::for(Creative::class)
-                ->allowedFilters([
-                    AllowedFilter::scope('user_id'),
-                    AllowedFilter::scope('years_of_experience_id'),
-                    AllowedFilter::scope('name'),
-                    AllowedFilter::scope('email'),
-                    AllowedFilter::scope('state_id'),
-                    AllowedFilter::scope('city_id'),
-                    AllowedFilter::scope('status'),
-                    AllowedFilter::scope('is_visible'),
-                    'employment_type',
-                    'title',
-                    'slug',
-                    'is_featured',
-                    'is_urgent',
-                ])
-                ->defaultSort( '-featured_at', '-updated_at', "-created_at")
-                ->allowedSorts('sort_order','featured_at', 'updated_at', 'created_at');
-                
-            $creatives = $query->with([
-                'user.profile_picture',
-                'user.addresses.state',
-                'user.addresses.city',
-                'user.personal_phone',
-                'category',
-            ])
-                ->whereHas('user', function ($query) {
-                    $query->where('is_visible', 1)
-                        ->where('status', 1);
-                })
-                ->paginate(settings('creative_count_homepage'))
-                ->withQueryString();
-            return $creatives;
-        });
+        $perPage = $request->input('per_page'); 
+        $useCache = is_null($perPage); 
+
+        $cacheKey = 'homepage_creatives';
+        if ($perPage) {
+            $cacheKey .= '_per_page_' . $perPage; 
+        }
+
+        if ($useCache) {
+            $creatives = Cache::remember($cacheKey, 86400, function () use ($request) {
+                return $this->getCreatives($request); 
+            });
+        } else {
+            $creatives = $this->getCreatives($request); 
+        }
 
         return new HomepageCreativeCollection($creatives);
     }
+
+    protected function getCreatives(Request $request)
+{
+        $perPage = $request->input('per_page') ?? settings('creative_count_homepage');
+
+        $query = QueryBuilder::for(Creative::class)
+            ->allowedFilters([
+                AllowedFilter::scope('user_id'),
+                AllowedFilter::scope('years_of_experience_id'),
+                AllowedFilter::scope('name'),
+                AllowedFilter::scope('email'),
+                AllowedFilter::scope('state_id'),
+                AllowedFilter::scope('city_id'),
+                AllowedFilter::scope('status'),
+                AllowedFilter::scope('is_visible'),
+                'employment_type',
+                'title',
+                'slug',
+                'is_featured',
+                'is_urgent',
+            ])
+            ->defaultSort('-featured_at', '-updated_at', "-created_at")
+            ->allowedSorts('sort_order', 'featured_at', 'updated_at', 'created_at');
+
+        $creatives = $query->with([
+            'user.profile_picture',
+            'user.addresses.state',
+            'user.addresses.city',
+            'user.personal_phone',
+            'category',
+        ])
+            ->whereHas('user', function ($query) {
+                $query->where('is_visible', 1)
+                    ->where('status', 1);
+            })
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return $creatives;
+}
 
     public function store(StoreCreativeRequest $request)
     {
