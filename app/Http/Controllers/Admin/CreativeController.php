@@ -191,7 +191,8 @@ class CreativeController extends Controller
 
         $this->updateLocation($request, $user);
 
-        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured && $user->is_visible) {
+        $date_threshold = now()->subDays(14);
+        if (!$was_is_welcomed && !$was_is_featured && $now_is_featured && $user->is_visible && $creative->created_at > $date_threshold) {
 
             // check if already three creatives have been welcomed or not
             $today_welcomed_at_creatives_count = Creative::where('is_welcomed', '=', 1)->whereDate('welcomed_at', '=', today()->toDateString())->count('welcomed_at');
