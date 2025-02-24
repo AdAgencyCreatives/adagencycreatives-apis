@@ -163,9 +163,9 @@ class UserController extends Controller
             $oldStatus = $user->status;
             $newStatus = $request->input('status');
 
-            if ($newStatus === 'active' && $oldStatus === 'pending') {
+            $data = $request->all();
 
-
+            if ($newStatus === 'active' && !$user->approve_notification) {
                 if ($user->role == 'agency') {
                     SendEmailJob::dispatch([
                         'receiver' => $user,
@@ -173,17 +173,14 @@ class UserController extends Controller
                     ], 'account_approved_agency');
                 }
 
-
                 /**
                  * Generate portfolio website preview
                  */
                 if ($user->role == 'creative') {
-
                     SendEmailJob::dispatch([
                         'receiver' => $user,
                         'data' => $user,
                     ], 'account_approved');
-
 
                     $portfolio_website = $user->portfolio_website_link()->first();
                     if ($portfolio_website) {
@@ -193,15 +190,20 @@ class UserController extends Controller
 
                     $this->send_notification_to_agency($user);
                 }
+
+                $data['approve_notification'] = 1;
             }
 
-            if ($newStatus === 'inactive' && $oldStatus === 'pending') {
+            if ($newStatus === 'inactive' && !$user->deny_notification) {
                 SendEmailJob::dispatch([
                     'receiver' => $user,
                     'data' => $user,
                 ], 'account_denied');
+
+                $data['deny_notification'] = 1;
             }
-            $user->update($request->all());
+
+            $user->update($data);
 
             return new UserResource($user);
         } catch (ModelNotFoundException $e) {

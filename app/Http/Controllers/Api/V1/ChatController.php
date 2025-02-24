@@ -122,11 +122,6 @@ class ChatController extends Controller
                     ->first();
 
                 if (($notificaton && Carbon::parse($notificaton->created_at)->addMinutes(15)->isPast()) || !$notificaton) {
-                    MessagesNotifications::create([
-                        'sender_id' => $sender->id,
-                        'receiver_id' => $receiver->id
-                    ]);
-
                     $name = $message?->sender?->first_name . ' ' . $message?->sender?->last_name;
                     $related = '';
                     $recent_messages = [];
@@ -161,6 +156,11 @@ class ChatController extends Controller
                         'data' => $data,
                     ], 'unread_message');
                 }
+
+                MessagesNotifications::create([
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id
+                ]);
             }
 
             return $msg_resource;
