@@ -1244,6 +1244,10 @@ class CreativeController extends Controller
         if (empty($creativeIds)) {
             return [];
         }
+       
+        if (CreativeCache::count() === 0) {
+            return $creativeIds; 
+        }
 
         $cachedCreatives = CreativeCache::whereIn('creative_id', $creativeIds)
             ->orderBy(DB::raw('CASE WHEN location IS NULL THEN 1 ELSE 0 END')) 
