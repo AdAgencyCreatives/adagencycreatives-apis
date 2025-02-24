@@ -41,6 +41,8 @@ class User extends Authenticatable
         'is_visible',
         'email_notifications_enabled',
         'regen_thumb',
+        'approve_notification',
+        'deny_notification'
     ];
 
     protected $casts = [
