@@ -13,6 +13,7 @@ use App\Http\Resources\User\UserCollection;
 use App\Models\Application;
 use App\Models\Category;
 use App\Models\Creative;
+use App\Models\CreativeCache;
 use App\Models\JobAlert;
 use App\Models\Post;
 use App\Models\User;
@@ -150,9 +151,9 @@ class CreativeController extends Controller
         for ($i = 1; $i < count($searchTerms); $i++) {
             $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTerms[$i], $role))));
         }
-
+        $combinedCreativeIds = $this->sortCreativeIdsFromCacheTable($combinedCreativeIds);
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
-
+        
         // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
@@ -1236,5 +1237,24 @@ class CreativeController extends Controller
         // imagedestroy($image);
 
         // return response($imageContent, 200)->header('Content-Type', 'image/jpeg');
+    }
+
+    protected function sortCreativeIdsFromCacheTable(array $creativeIds): array
+    {
+        if (empty($creativeIds)) {
+            return [];
+        }
+
+        $cachedCreatives = CreativeCache::whereIn('creative_id', $creativeIds)
+            ->orderBy(DB::raw('CASE WHEN location IS NULL THEN 1 ELSE 0 END')) 
+            ->orderBy('category')
+            ->orderBy('location')
+            ->orderByDesc('activity_rank')
+            ->orderBy('created_at')
+            ->get();
+
+        $sortedCreativeIds = $cachedCreatives->pluck('creative_id')->toArray();
+
+        return $sortedCreativeIds;
     }
 }

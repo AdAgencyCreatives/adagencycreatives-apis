@@ -70,6 +70,8 @@ class Kernel extends ConsoleKernel
                 $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
             }
         }
+
+        $schedule->command('count:user-activity')->dailyAt("12:00");
     }
 
     /**
