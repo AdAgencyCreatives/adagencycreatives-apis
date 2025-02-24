@@ -13,12 +13,14 @@ use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\User\CompactUserResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Message;
+use App\Models\MessagesNotifications;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Carbon\Carbon;
 
 class ChatController extends Controller
 {
@@ -114,40 +116,51 @@ class ChatController extends Controller
             event(new MessageReceived($event_data2));
 
             if ($message?->sender?->email_notifications_enabled) {
+                $notificaton = MessagesNotifications::where('sender_id', $sender->id)
+                    ->where('receiver_id', $receiver->id)
+                    ->latest()
+                    ->first();
 
-                $name = $message?->sender?->first_name . ' ' . $message?->sender?->last_name;
-                $related = '';
-                $recent_messages = [];
+                if (($notificaton && Carbon::parse($notificaton->created_at)->addMinutes(15)->isPast()) || !$notificaton) {
+                    MessagesNotifications::create([
+                        'sender_id' => $sender->id,
+                        'receiver_id' => $receiver->id
+                    ]);
 
-                if ($message?->sender?->agency) {
-                    $name = $message?->sender?->agency->name;
-                    // $related = $message?->sender?->first_name;
-                } else if ($message?->sender?->creative) {
-                    // $related = $message?->sender?->creative?->title;
-                    if ($message?->sender?->creative?->category?->name) {
-                        $related = $message?->sender?->creative?->category?->name;
+                    $name = $message?->sender?->first_name . ' ' . $message?->sender?->last_name;
+                    $related = '';
+                    $recent_messages = [];
+
+                    if ($message?->sender?->agency) {
+                        $name = $message?->sender?->agency->name;
+                        // $related = $message?->sender?->first_name;
+                    } else if ($message?->sender?->creative) {
+                        // $related = $message?->sender?->creative?->title;
+                        if ($message?->sender?->creative?->category?->name) {
+                            $related = $message?->sender?->creative?->category?->name;
+                        }
                     }
+
+                    $recent_messages[] = [
+                        'name' => $name,
+                        'profile_url' => env('FRONTEND_URL') . '/profile/' . $message->sender->id,
+                        'profile_picture' => get_profile_picture($message->sender),
+                        'message_time' => \Carbon\Carbon::parse($message->max_created_at)->diffForHumans(),
+                        'related' => $related,
+                    ];
+
+                    $data = [
+                        'recipient' => $message?->receiver?->first_name,
+                        'unread_message_count' => 1,
+                        'recent_messages' => $recent_messages,
+                        'date_range' => now()
+                    ];
+
+                    SendEmailJob::dispatch([
+                        'receiver' => $message?->receiver,
+                        'data' => $data,
+                    ], 'unread_message');
                 }
-
-                $recent_messages[] = [
-                    'name' => $name,
-                    'profile_url' => env('FRONTEND_URL') . '/profile/' . $message->sender->id,
-                    'profile_picture' => get_profile_picture($message->sender),
-                    'message_time' => \Carbon\Carbon::parse($message->max_created_at)->diffForHumans(),
-                    'related' => $related,
-                ];
-
-                $data = [
-                    'recipient' => $message?->receiver?->first_name,
-                    'unread_message_count' => 1,
-                    'recent_messages' => $recent_messages,
-                    'date_range' => now()
-                ];
-
-                SendEmailJob::dispatch([
-                    'receiver' => $message?->receiver,
-                    'data' => $data,
-                ], 'unread_message');
             }
 
             return $msg_resource;
