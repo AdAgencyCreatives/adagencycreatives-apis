@@ -71,7 +71,7 @@ class Kernel extends ConsoleKernel
             }
         }
 
-        $schedule->command('count:user-activity')->dailyAt("12:00");
+        $schedule->command('count:user-activity')->dailyAt("00:00");
     }
 
     /**
