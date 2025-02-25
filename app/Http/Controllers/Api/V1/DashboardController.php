@@ -12,6 +12,7 @@ use App\Models\Message;
 use App\Models\Order;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\Friendship;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
@@ -155,15 +156,31 @@ class DashboardController extends Controller
         $cacheKey = 'agency_dashboard_stats_' . $user->id;
 
         //$stats = Cache::remember($cacheKey, 60, function () use ($user) {
-        $jobs = Job::where('user_id', $user->id)
+        /*$jobs = Job::where('user_id', $user->id)
             ->orWhere('advisor_id', $user->id)
-            ->get();
+            ->where('status', 1)
+            ->get();*/
+
+        $jobs = Job::where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                    ->orWhere('advisor_id', $user->id);
+        })
+        ->where('status', 1)
+        ->where('expired_at', '>', Carbon::now()->format('Y-m-d'))
+        ->get();      
+
 
         $jobs_count = $jobs->count();
 
-        $applications = Application::whereIn('job_id', $jobs->pluck('id'))
-            ->whereHas('user')->get();
-        $applications_count = $applications->count();
+        $applications_count = Application::whereIn('job_id', $jobs->pluck('id'))
+            ->where('status', 0)
+            ->whereHas('user')
+            ->count();
+
+        $messages = Message::where('receiver_id', $user->id)
+            ->whereIn('type', ['job', 'private'])
+            ->whereNull('read_at')
+            ->count();
 
         $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
 
@@ -173,6 +190,7 @@ class DashboardController extends Controller
         $stats = [
             'number_of_posts' => $jobs_count,
             'applications' => $applications_count,
+            'messages' =>$messages,
             'shortlisted' => $shortlisted_count,
             'review' => $profile_views_count, // This key we will remove later, because we have renamed it to views
             'views' => $profile_views_count,
@@ -196,16 +214,30 @@ class DashboardController extends Controller
         $jobs = Job::all()->pluck('id');
         $applied_jobs = Application::whereIn('job_id', $jobs)->where('user_id', $user->id)->count();
 
-        $unread_messages = Message::where('receiver_id', $user->id)->whereNull('read_at')->whereIn('type', ['job', 'private'])->count();
+        $unread_messages = Message::where('receiver_id', $user->id)
+            ->whereIn('type', ['job', 'private'])
+            ->whereNull('read_at')
+            ->count();
+
         $creative = Creative::where('user_id', $user->id)->first();
+
         $profile_views_count = $creative->views;
         $shortlisted_count = Bookmark::where('user_id', $user->id)->count();
+
+        $friends_count = Friendship::with('initiatedByUser', 'receivedByUser')
+            ->where(function ($query) use ($user) {
+                $query->where('user1_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('user2_id', $user->id);
+            })->count();
 
         $stats = [
             'jobs_applied' => $applied_jobs,
             'review' => $unread_messages,
             'views' => $profile_views_count,
             'shortlisted' => $shortlisted_count,
+            'friends' => $friends_count
         ];
 
         //     return $stats;

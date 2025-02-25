@@ -70,6 +70,16 @@ class CreativeSpotlightController extends Controller
         }
     }
 
+    public function getSpotlight($slug)
+    {
+        $spotlight = CreativeSpotlight::where('slug', $slug)->first();
+
+        if ($spotlight)
+            return new CreativeSpotlightResource($spotlight);
+        else
+            return ApiResponse::error(trans('response.not_found'), 404);
+    }
+
     public function storeVideo($request, $user, $status)
     {
         $uuid = Str::uuid();
