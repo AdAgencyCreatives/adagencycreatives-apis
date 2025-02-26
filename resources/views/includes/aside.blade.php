@@ -118,6 +118,12 @@
                             <span class="align-middle">All Agencies</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {{ request()->is('featured-agencies') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/featured-agencies">
+                            <i class="align-middle" data-feather="upload-cloud"></i>
+                            <span class="align-middle">Featured Agencies</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {{ request()->is('agency/create') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('agency.create') }}">
                             <i class="align-middle" data-feather="user-plus"></i>

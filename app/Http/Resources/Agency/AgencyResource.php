@@ -15,6 +15,8 @@ class AgencyResource extends JsonResource
             'type' => 'agencies',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
+            'id2' => $this->id, //This was added for featured agencies sorting on admin dashboard
+            'user_id2' => $user->id,
             'slug' => $this->slug,
             'name' => $this->name,
             'email' => $user->email,
@@ -49,6 +51,7 @@ class AgencyResource extends JsonResource
             'profile_complete_progress' => $user?->profile_complete_progress ?? '0',
             'profile_completed_at' => $user?->profile_completed_at ? $this->profile_completed_at?->format(config('global.datetime_format')) : null,
             'profile_completion_reminded_at' => $user?->profile_completion_reminded_at ? $this->profile_completion_reminded_at?->format(config('global.datetime_format')) : null,
+            'sort_order' => $this->sort_order,
         ];
     }
 

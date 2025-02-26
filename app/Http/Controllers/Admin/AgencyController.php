@@ -148,4 +148,28 @@ class AgencyController extends Controller
 
         return redirect()->back();
     }
+
+    public function updateOrder(Request $request)
+    {
+        $order = $request->input('order');
+        foreach ($order as $index => $itemId) {
+            Agency::where('id', $itemId)->update(['sort_order' => $index + 1]);
+        }
+
+        // Cache::forget('homepage_agencies');
+
+        return response()->json(['message' => 'Order updated successfully']);
+    }
+    
+    public function updateOrderSingle(Request $request)
+    {
+        $order = $request->input('sort_order');
+        $agency_id = $request->input('agency_id');
+
+        Agency::where('id', $agency_id)->update(['sort_order' => $order]);
+        
+        // Cache::forget('homepage_agencies');
+
+        return response()->json(['message' => 'Order updated successfully', 'status' => 200]);
+    }
 }

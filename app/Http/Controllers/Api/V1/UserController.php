@@ -165,7 +165,7 @@ class UserController extends Controller
 
             $data = $request->all();
 
-            if ($newStatus === 'active' && !$user->approve_notification) {
+            if ($newStatus === 'active' && $oldStatus === 'pending' && !$user->approve_notification) {
                 if ($user->role == 'agency') {
                     SendEmailJob::dispatch([
                         'receiver' => $user,
@@ -194,7 +194,7 @@ class UserController extends Controller
                 $data['approve_notification'] = 1;
             }
 
-            if ($newStatus === 'inactive' && !$user->deny_notification) {
+            if ($newStatus === 'inactive' && $oldStatus === 'pending' && !$user->deny_notification) {
                 SendEmailJob::dispatch([
                     'receiver' => $user,
                     'data' => $user,

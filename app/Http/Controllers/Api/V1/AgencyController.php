@@ -25,6 +25,8 @@ class AgencyController extends Controller
     {
         $filters = $request->all();
 
+        $perPage = $request->per_page ?? settings('agency_count_homepage');
+
         $industries = $this->processIndustryExperience($request, $filters);
         $medias = $this->processMediaExperience($request, $filters);
 
@@ -43,7 +45,7 @@ class AgencyController extends Controller
                 'is_urgent',
             ])
             ->defaultSort('-featured_at', '-updated_at', "-created_at")
-            ->allowedSorts('featured_at', 'updated_at', 'created_at');
+            ->allowedSorts('featured_at', 'sort_order', 'updated_at', 'created_at');
 
         if ($industries !== null) {
             $this->applyExperienceFilter($query, $industries, 'industry_experience');
@@ -67,7 +69,7 @@ class AgencyController extends Controller
                 'user.business_phone',
             ])
             ->whereHas('user') // If the user is deleted, don't show the records
-            ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+            ->paginate($perPage)
             ->withQueryString();
 
         if (isset($filters['filter']['slug'])) { //Means user profile is being viewed on Agency detail page

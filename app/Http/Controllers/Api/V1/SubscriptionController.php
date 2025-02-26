@@ -18,7 +18,7 @@ class SubscriptionController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $subscriptions = $user->subscriptions()->with('plan')->get();
+        $subscriptions = $user->subscriptions()->with('plan')->orderByDesc('updated_at')->get();
 
         return new AllPackagesCollection($subscriptions);
     }
