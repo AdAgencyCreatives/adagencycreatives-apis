@@ -245,6 +245,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-featured-creatives-order', [CreativeController::class, 'updateOrder'])->name('update-featured-creatives-order');
         Route::post('/update-featured-creative-order', [CreativeController::class, 'updateOrderSingle'])->name('update-featured-creative-order'); //single creative sort order change after double click
         Route::post('settings/creatives-count', [SettingsController::class, 'update_creatives_count'])->name('settings.creatives-count');
+
+        Route::get('featured-agencies', [UserController::class, 'featuredAgencies'])->name('featured.agencies');
+        Route::post('/update-featured-agencies-order', [AgencyController::class, 'updateOrder'])->name('update-featured-agencies-order');
+        Route::post('/update-featured-agency-order', [AgencyController::class, 'updateOrderSingle'])->name('update-featured-agency-order'); //single agency sort order change after double click
+        Route::post('settings/agencies-count', [SettingsController::class, 'update_agencies_count'])->name('settings.agencies-count');
+
         Route::resource('creatives', UserController::class)->parameters([
             'creatives' => 'user',
         ]);
