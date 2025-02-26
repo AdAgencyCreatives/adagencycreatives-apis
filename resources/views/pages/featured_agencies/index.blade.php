@@ -287,7 +287,7 @@
                                     <label class="form-label" for="agency_count_homepage">Featured agencies count</label>
                                     <input type="number" class="form-control" name="agency_count_homepage"
                                         value="{{ settings('agency_count_homepage') }}" min="1"
-                                        max="{{ \App\Models\agency::where('is_featured', 1)->count() }}">
+                                        max="{{ \App\Models\Agency::where('is_featured', 1)->count() }}">
                                 </div>
                             </div>
                         </div>
