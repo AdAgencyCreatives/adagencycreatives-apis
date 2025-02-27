@@ -29,6 +29,7 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -273,6 +274,7 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
+
         if (!$user) {
             return response()->json(['message' => 'The provided email does not correspond to a registered user. Please check your email or register for an account.'], 404);
         }
@@ -280,8 +282,85 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
 
         if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
+            $user->failed_login_attempts = $user->failed_login_attempts + 1;
+            $user->save();
+
+            if ($user->failed_login_attempts >= 14) {
+                if (!$user->locked_at) {
+                    $user->locked_at = Carbon::now();
+                    $user->save();
+                }
+
+                $locked_end = Carbon::parse($user->locked_at)->addMinutes(1440);
+
+                if (Carbon::now() > $locked_end) {
+                    $user->locked_at = NULL;
+                    $user->save();
+
+                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                }
+
+                return response()->json([
+                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'status' => 'locked',
+                    'locked_end' => $locked_end
+                ], 401);
+            }
+            
+            if ($user->failed_login_attempts >= 13) {
+                if (!$user->locked_at) {
+                    $user->locked_at = Carbon::now();
+                    $user->save();
+                }
+
+                $locked_end = Carbon::parse($user->locked_at)->addMinutes(60);
+
+                if (Carbon::now() > $locked_end) {
+                    $user->locked_at = NULL;
+                    $user->save();
+
+                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                }
+
+                return response()->json([
+                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'status' => 'locked',
+                    'locked_end' => $locked_end
+                ], 401);
+            }
+
+            if ($user->failed_login_attempts >= 10) {
+                if (!$user->locked_at) {
+                    $user->locked_at = Carbon::now();
+                    $user->save();
+                }
+
+                $locked_end = Carbon::parse($user->locked_at)->addMinutes(15);
+
+                if (Carbon::now() > $locked_end) {
+                    $user->locked_at = NULL;
+                    $user->save();
+
+                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                }
+
+                return response()->json([
+                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'status' => 'locked',
+                    'locked_end' => $locked_end
+                ], 401);
+            }
+
+            if ($user->failed_login_attempts >= 5) {
+                return response()->json(['message' => 'Invalid credentials. Click here to reset your password.', 'status' => 'reset'], 401);
+            }
+
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
+
+        $user->failed_login_attempts = 0;
+        $user->locked_at = NULL;
+        $user->save();
 
         if ($user->status != 'active') {
             return response()->json(['message' => 'Account not approved'], 401);
