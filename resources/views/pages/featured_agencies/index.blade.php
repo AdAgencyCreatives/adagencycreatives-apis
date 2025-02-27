@@ -71,7 +71,7 @@
 
                 var row = '<tr class="sortable-item" id="' + agency.id2 + '">' +
                     '<td>' + agency.user_id2 + '</td>' +
-                    '<td><img src="' + agency.profile_image +
+                    '<td><img src="' + (agency?.user_thumbnail || agency?.profile_image) +
                     '" style="max-width: 100px; max-height: 100px;"></td>' +
 
                     '<td class="editable-field" data-id="' + agency.id2 + '" data-column="link">' + agency
