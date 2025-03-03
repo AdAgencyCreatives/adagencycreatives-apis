@@ -1108,6 +1108,10 @@ class TestDataController extends Controller
     {
         $date_before = today()->subDays(5);
 
+        if ($request->has('date')) {
+            $date_before = Carbon::parse($request->date);
+        }
+
         $agency_user_ids = Agency::whereHas('user', function ($q) use ($date_before) {
             $q->where('status', '=', 1)
                 ->where('role', '=', 3)
