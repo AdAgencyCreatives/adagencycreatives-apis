@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Jobs\SendEmailJob;
+use App\Models\Agency;
 use App\Models\Plan;
 use App\Models\User;
 use Carbon\Carbon;
@@ -49,7 +50,7 @@ class StripeEventListener
 
             $data = [
                 'order_no' => $order->id,
-                'username' => $user->first_name.' '.$user->last_name,
+                'username' => $user->first_name . ' ' . $user->last_name,
                 'email' => $user->email,
                 'total' => $current_paid_amount,
                 'pm_type' => '',
@@ -58,7 +59,11 @@ class StripeEventListener
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];
 
-            $admin = User::find(1);
+            $agency = Agency::where('user_id', $user->id)->first();
+            $agency->update(['is_job_posted' => 1]); // fix: if the agency has purchase a package, then set is_job_posted to 1, so that no freebie email sent
+
+            $admin = User::where('email', env('ADMIN_EMAIL'))->first();
+
             SendEmailJob::dispatch([
                 'receiver' => $admin,
                 'data' => $data,
