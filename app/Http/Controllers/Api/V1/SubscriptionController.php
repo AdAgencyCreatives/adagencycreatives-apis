@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Subscription\AllPackagesCollection;
 use App\Jobs\SendEmailJob;
+use App\Models\Agency;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
@@ -145,6 +146,9 @@ class SubscriptionController extends Controller
                 'pm_type' => '',
                 'created_at' => \Carbon\Carbon::now()->format('F d, Y'),
             ];
+
+            $agency = Agency::where('user_id', $user->id)->first();
+            $agency->update(['is_job_posted' => 1]); // fix: if the agency has purchase a package, then set is_job_posted to 1, so that no freebie email sent
 
             $admin = User::where('email', env('ADMIN_EMAIL'))->first();
             SendEmailJob::dispatch([

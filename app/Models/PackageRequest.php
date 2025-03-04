@@ -145,6 +145,9 @@ class PackageRequest extends Model
                 if ($newStatus === 'approved') {
                     PackageRequest::assignSubscription($package_request->user_id, 'premium-hire-an-advisor', 'agency');
                     PackageRequest::assignSubscription($package_request->assigned_to, 'premium-hire-an-advisor', 'advisor');
+
+                    $agency = Agency::where('user_id', $package_request->user_id)->first();
+                    $agency->update(['is_job_posted' => 1]); // fix: if the agency has purchase a package, then set is_job_posted to 1, so that no freebie email sent
                 } elseif ($newStatus === 'rejected') {
                     SendEmailJob::dispatch([
                         'receiver' => $user,
