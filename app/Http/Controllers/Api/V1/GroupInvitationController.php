@@ -26,6 +26,7 @@ class GroupInvitationController extends Controller
                 AllowedFilter::scope('group_id'),
                 AllowedFilter::scope('sender_id'),
                 AllowedFilter::scope('receiver_id'),
+                AllowedFilter::scope('sent'),
                 'status',
             ]);
 

@@ -17,6 +17,7 @@ use App\Models\CreativeCache;
 use App\Models\JobAlert;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -618,6 +619,19 @@ class CreativeController extends Controller
                 $request->replace($filters);
             }
         }
+
+        if (isset($filters['filter']['not_in_group'])) {
+            $group = Group::where('uuid', $filters['filter']['not_in_group'])->first();
+            $filters['filter']['not_in_group'] = $group->id;
+            $request->replace($filters);
+        }
+
+        if (isset($filters['filter']['not_invited'])) {
+            $group = Group::where('uuid', $filters['filter']['not_invited'])->first();
+            $filters['filter']['not_invited'] = $group->id;
+            $request->replace($filters);
+        }
+        
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
@@ -628,6 +642,8 @@ class CreativeController extends Controller
                 AllowedFilter::scope('city_id'),
                 AllowedFilter::scope('status'),
                 AllowedFilter::scope('is_visible'),
+                AllowedFilter::scope('not_in_group'),
+                AllowedFilter::scope('not_invited'),
                 'employment_type',
                 'title',
                 AllowedFilter::exact('slug'),
@@ -684,7 +700,7 @@ class CreativeController extends Controller
     }
 
     protected function getCreatives(Request $request)
-{
+    {
         $perPage = $request->input('per_page') ?? settings('creative_count_homepage');
 
         $query = QueryBuilder::for(Creative::class)
@@ -721,7 +737,7 @@ class CreativeController extends Controller
             ->withQueryString();
 
         return $creatives;
-}
+    }
 
     public function store(StoreCreativeRequest $request)
     {
