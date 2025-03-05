@@ -121,6 +121,24 @@ class Creative extends Model
         return $query->whereIn('user_id', $user_id);
     }
 
+    public function scopeNotInGroup(Builder $query, $groupId)
+    {
+        return $query->whereNotIn('user_id', function ($subQuery) use ($groupId) {
+            $subQuery->select('user_id')
+                ->from('group_members')
+                ->where('group_id', $groupId);
+        });
+    }
+
+    public function scopeNotInvited(Builder $query, $groupId)
+    {
+        return $query->whereNotIn('user_id', function ($subQuery) use ($groupId) {
+            $subQuery->select('invitee_user_id')
+                ->from('group_invitations')
+                ->where('group_id', $groupId);
+        });
+    }
+
     protected static function booted()
     {
         static::created(function ($creative) {
