@@ -48,7 +48,7 @@ class GroupInvitationController extends Controller
         $inviter = $request->user(); //Sender
 
         if ($group->isInvitationAlreadySent($invitee)) {
-            return ApiResponse::error(sprintf('You already sent invitation to %s', $invitee->first_name), 409);
+            return ApiResponse::error(sprintf('You already sent invitation to %s %s', $invitee->first_name, $invitee->last_name), 409);
         }
 
         try {

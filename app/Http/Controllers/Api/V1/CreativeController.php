@@ -620,17 +620,17 @@ class CreativeController extends Controller
             }
         }
 
-        if (isset($filters['filter']['not_in_group'])) {
-            $group = Group::where('uuid', $filters['filter']['not_in_group'])->first();
-            $filters['filter']['not_in_group'] = $group->id;
-            $request->replace($filters);
-        }
+        // if (isset($filters['filter']['not_in_group'])) {
+        //     $group = Group::where('uuid', $filters['filter']['not_in_group'])->first();
+        //     $filters['filter']['not_in_group'] = $group->id;
+        //     $request->replace($filters);
+        // }
 
-        if (isset($filters['filter']['not_invited'])) {
-            $group = Group::where('uuid', $filters['filter']['not_invited'])->first();
-            $filters['filter']['not_invited'] = $group->id;
-            $request->replace($filters);
-        }
+        // if (isset($filters['filter']['not_invited'])) {
+        //     $group = Group::where('uuid', $filters['filter']['not_invited'])->first();
+        //     $filters['filter']['not_invited'] = $group->id;
+        //     $request->replace($filters);
+        // }
         
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
