@@ -38,14 +38,14 @@ class GroupInvitationController extends Controller
     {
         $invitee = User::where('uuid', $request->receiver_id)->first(); // To whom email was sent
         $group = Group::where('uuid', $request->group_id)->first();
-
+        
         if ($group->isMember($invitee)) {
             return ApiResponse::error('User is already a member of the group.', 409);
         }
 
         $inviter = $request->user(); //Sender
 
-        if ($group->isInvitationAlreadySent($inviter)) {
+        if ($group->isInvitationAlreadySent($invitee)) {
             return ApiResponse::error(sprintf('You already sent invitation to %s', $invitee->first_name), 409);
         }
 
