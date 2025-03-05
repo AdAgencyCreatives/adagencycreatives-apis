@@ -66,8 +66,8 @@ class GroupInvitationController extends Controller
             } elseif ($inviter->role == 'agency') {
                 $inviter_profile_url = sprintf('%s/agency/%s', env('FRONTEND_URL'), $inviter->agency?->slug);
             }
-
-            $action_url = sprintf('%s/groups/%s/#invite=', env('FRONTEND_URL'), $group->uuid, $invitation->uuid);
+            
+            $action_url = sprintf('%s/groups/%s/#invite=%s', env('FRONTEND_URL'), $group->uuid, $invitation->uuid);
 
             SendEmailJob::dispatch([
                 'receiver' => $invitee,
