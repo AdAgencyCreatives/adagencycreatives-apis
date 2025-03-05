@@ -61,7 +61,7 @@ class Group extends Model
 
     public function isInvitationAlreadySent(User $user)
     {
-        return $this->invitations()->where('inviter_user_id', $user->id)->where('status', GroupInvitation::STATUSES['PENDING'])->exists();
+        return $this->invitations()->where('invitee_user_id', $user->id)->where('status', GroupInvitation::STATUSES['PENDING'])->exists();
     }
 
     public function scopeUserId(Builder $query, $user_id)
