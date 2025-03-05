@@ -85,11 +85,6 @@ class GroupInvitation extends Model
         return $query->where('inviter_user_id', $user->id);
     }
 
-    public function scopeSent(Builder $query, $sent)
-    {
-        return $query->where('sent', $sent);
-    }
-
     public function scopeGroupId(Builder $query, $group_id)
     {
         $group = Group::where('uuid', $group_id)->first();
