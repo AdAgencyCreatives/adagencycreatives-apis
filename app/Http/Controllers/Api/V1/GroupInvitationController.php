@@ -38,6 +38,7 @@ class GroupInvitationController extends Controller
     {
         $invitee = User::where('uuid', $request->receiver_id)->first(); // To whom email was sent
         $group = Group::where('uuid', $request->group_id)->first();
+        $sent = isset($request->sent) ? 1 : 0;
         
         if ($group->isMember($invitee)) {
             return ApiResponse::error('User is already a member of the group.', 409);
@@ -55,6 +56,7 @@ class GroupInvitationController extends Controller
                 'inviter_user_id' => $inviter->id,
                 'invitee_user_id' => $invitee->id,
                 'group_id' => $group->id,
+                '$sent' => $sent
             ]);
 
             $invitation = GroupInvitation::create($request->all());
@@ -64,12 +66,16 @@ class GroupInvitationController extends Controller
             } elseif ($inviter->role == 'agency') {
                 $inviter_profile_url = sprintf('%s/agency/%s', env('FRONTEND_URL'), $inviter->agency?->slug);
             }
+
+            $action_url = sprintf('%s/groups/%s/#invite=', env('FRONTEND_URL'), $group->uuid, $invitation->uuid);
+
             SendEmailJob::dispatch([
                 'receiver' => $invitee,
                 'data' => [
                     'recipient' => $invitee->first_name,
                     'inviter' => $inviter->first_name.' '.$inviter->last_name,
                     'inviter_profile_url' => $inviter_profile_url ?? '#',
+                    'action_url' => $action_url ?? '#',
                     'group' => $group->name,
                 ],
             ], 'group_invitation');
