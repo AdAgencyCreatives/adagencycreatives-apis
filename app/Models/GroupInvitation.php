@@ -19,6 +19,7 @@ class GroupInvitation extends Model
         'invitee_user_id',
         'group_id',
         'status',
+        'sent'
     ];
 
     public const STATUSES = [

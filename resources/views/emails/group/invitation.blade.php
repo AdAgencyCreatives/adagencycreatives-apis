@@ -8,6 +8,6 @@
             <p><a href="{{ $data['inviter_profile_url'] }}">{{ $data['inviter'] }}</a> would like
                 you to join "{{ $data['group'] }}".</p>
 
-            <p>To accept this invitation <a href="{{ $data['inviter_profile_url'] }}">click here</a> or to learn more
+            <p>To accept this invitation <a href="{{ $data['action_url'] }}">click here</a> or to learn more
                 {visit the group}</p>
             @include('emails.includes.lounge_footer')
