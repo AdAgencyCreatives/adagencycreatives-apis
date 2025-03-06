@@ -70,6 +70,7 @@ class GroupInvitationController extends Controller
             }
             
             $action_url = sprintf('%s/groups/%s/#invite=%s', env('FRONTEND_URL'), $group->uuid, $invitation->uuid);
+            $group_url = sprintf('%s/groups/%s/', env('FRONTEND_URL'), $group->uuid);
 
             SendEmailJob::dispatch([
                 'receiver' => $invitee,
@@ -78,6 +79,7 @@ class GroupInvitationController extends Controller
                     'inviter' => $inviter->first_name.' '.$inviter->last_name,
                     'inviter_profile_url' => $inviter_profile_url ?? '#',
                     'action_url' => $action_url ?? '#',
+                    'group_url' => $group_url ?? '',
                     'group' => $group->name,
                 ],
             ], 'group_invitation');

@@ -6,8 +6,8 @@
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p><a href="{{ $data['inviter_profile_url'] }}">{{ $data['inviter'] }}</a> would like
-                you to join "{{ $data['group'] }}".</p>
+                you to join "<a href="{{ $data['group_url'] }}">{{ $data['group'] }}</a>".</p>
 
-            <p>To accept this invitation <a href="{{ $data['action_url'] }}">click here</a> or to learn more
-                {visit the group}</p>
+            <p>To accept this invitation <a href="{{ $data['action_url'] }}">click here</a> or to learn more,
+            <a href="{{ $data['group_url'] }}">visit</a> the group.</p>
             @include('emails.includes.lounge_footer')
