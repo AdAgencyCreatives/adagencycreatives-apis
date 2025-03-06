@@ -24,7 +24,7 @@ class Invitation extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: sprintf('%s on {%s} would like you to join their group', $this->data['group'], env('APP_NAME')),
+            subject: sprintf('You\'ve been invited to join %s group', $this->data['group']),
         );
     }
 
