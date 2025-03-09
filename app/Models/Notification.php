@@ -37,4 +37,17 @@ class Notification extends Model
 
         return $query->where('user_id', $user->id);
     }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeSenderId(Builder $query, $sender_id)
+    {
+        $user = User::where('uuid', $sender_id)->firstOrFail();
+
+        return $query->where('sender_id', $user->id);
+    }
+
 }

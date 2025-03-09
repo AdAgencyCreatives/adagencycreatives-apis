@@ -18,6 +18,7 @@ class NotificationResource extends JsonResource
             'read_at' => $this->read_at ? $this->read_at->format(config('global.datetime_format')) : null,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
+            'sender' => new UserResource($this->sender),
         ];
     }
 }
