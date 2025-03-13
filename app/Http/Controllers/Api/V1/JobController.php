@@ -441,6 +441,19 @@ class JobController extends Controller
                 ]);
             }
 
+            if ($oldStatus === 'expired' && $request->has('expired_at')) {
+                $expiredAt = \Carbon\Carbon::parse($request->input('expired_at'));
+                if ($expiredAt->isPast()) {
+                    $request->merge([
+                        'status' => 'expired',
+                    ]);
+                } else {
+                    $request->merge([
+                        'status' => 'approved',
+                    ]);
+                }
+            }
+
             if ($request->has('category_id')) {
                 $category = Category::where('uuid', $request->category_id)->first();
                 $request->merge([
