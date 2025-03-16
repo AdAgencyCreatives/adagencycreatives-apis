@@ -1111,8 +1111,6 @@ class TestDataController extends Controller
         $business_days = $wait + ($date->dayOfWeek <= Carbon::WEDNESDAY ? 4 : 2);
         $date_before = today()->subDays($business_days);
 
-        return "Today: " . $date->toDateString() . "<br>\nDate Before: " . $date_before->toDateString();
-
         if ($request->has('date')) {
             $date_before = Carbon::parse($request->date);
         }
@@ -1144,6 +1142,9 @@ class TestDataController extends Controller
             ->get();
 
         $output = [];
+
+        $output[] = "Today: " . $date->toDateString();
+        $output[] = "Date Before: " . $date_before->toDateString();
 
         $output[] = "Total Agencies Not Posting Any Job: " . count($agencies_without_job_posts) . ", Registered On/Before: " . $date_before->toDateString();
 
