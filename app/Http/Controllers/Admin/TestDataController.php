@@ -1106,7 +1106,12 @@ class TestDataController extends Controller
 
     public function agenciesWithoutJobPosts(Request $request)
     {
-        $date_before = today()->subDays(8);
+        $date = today();
+        $wait = 8; // business days
+        $business_days = $wait + ($date->dayOfWeek <= Carbon::WEDNESDAY ? 4 : 2);
+        $date_before = today()->subDays($business_days);
+
+        return "Date Before: " . $date_before->toDateString();
 
         if ($request->has('date')) {
             $date_before = Carbon::parse($request->date);

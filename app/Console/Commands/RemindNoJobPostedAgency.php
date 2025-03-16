@@ -27,7 +27,9 @@ class RemindNoJobPostedAgency extends Command
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
             try {
 
-                $date_before = today()->subDays(8);
+                $wait = 8; // business days
+                $business_days = $wait + ($date->dayOfWeek <= Carbon::WEDNESDAY ? 4 : 2);
+                $date_before = today()->subDays($business_days);
 
                 $agency_user_ids = Agency::whereHas('user', function ($q) use ($date_before) {
                     $q->where('status', '=', 1)
