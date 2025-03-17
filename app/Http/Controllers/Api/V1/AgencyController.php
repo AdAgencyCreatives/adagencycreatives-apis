@@ -207,6 +207,12 @@ class AgencyController extends Controller
                     $sql .= " WHERE med.name ='" . trim($term) . "'" . "\n";
                     break;
 
+                case 'company-size':
+                    // Search via Company Size
+                    $sql = 'SELECT agn.id FROM agencies agn' . "\n";
+                    $sql .= " WHERE agn.size ='" . trim($term) . "'" . "\n";
+                    break;
+
                 case 'workplace-preference':
                     // Search via Workplace Preference
                     $workplace_preferences = [
