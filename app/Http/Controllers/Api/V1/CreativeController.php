@@ -243,8 +243,8 @@ class CreativeController extends Controller
         $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . trim($term) . "')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
+            // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . trim($term) . "')" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
@@ -376,6 +376,7 @@ class CreativeController extends Controller
         }
 
         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
         $res = DB::select($sql);
         $creativeIds = collect($res)
             ->pluck('id')
@@ -535,34 +536,9 @@ class CreativeController extends Controller
     }
 
     public function related_creatives(Request $request) //based on first Title, Second State, Third City
-    {
-        $user = User::where('uuid', $request->creative_id)->first();
-
-        $creative = Creative::where('user_id', $user->id)->first();
-        $category = $creative->category;
-        $location = get_location($user);
-
-        $sql = '';
-
-        $related_category_ids = [];
-        if ($category?->id) {
-            $sql = 'SELECT cr.id, cr.created_at, cr.featured_at, 1 as priority FROM creatives cr INNER JOIN categories ca ON cr.category_id = ca.id WHERE ca.id=' . $category->id . "\n";
-
-            $sql .= 'UNION DISTINCT' . "\n";
-        }
-
-        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at, 2 as priority FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
-        $sql .= " WHERE (lc.parent_id IS NULL AND lc.uuid ='" . $location['state_id'] . "')" . "\n";
-
-        $sql .= 'UNION DISTINCT' . "\n";
-
-        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at, 3 as priority FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
-        $sql .= " WHERE (lc.parent_id IS NOT NULL AND lc.uuid = '" . $location['city_id'] . "')" . "\n";
-
-        $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.priority ASC, T.featured_at DESC, T.created_at DESC';
-
-        $res = DB::select($sql);
-        $related_creative_ids = collect($res)->pluck('id')->toArray();
+    {        
+        $related_creative_ids = $this->process_related_creatives($request->creative_id);
+        $related_creative_ids = array_values(array_unique($related_creative_ids));
 
         $rawOrder = 'FIELD(id, ' . implode(',', $related_creative_ids) . ')';
 
@@ -576,6 +552,114 @@ class CreativeController extends Controller
             ->withQueryString();
 
         return new LoggedinCreativeCollection($creatives);
+    }
+
+    function process_related_creatives($creative_id) {
+        $user = User::where('uuid', $creative_id)->first();
+        $creative = Creative::where('user_id', $user->id)->first();
+
+        $category = $creative->category;
+        $location = get_location($user);
+
+        $creative_1 = $this->getRelatedCreatives($creative, $user, $category, $location, 'category-location-match');
+        $creative_2 = $this->getRelatedCreatives($creative, $user, $category, $location, 'category-most-active');
+        $creative_3 = $this->getRelatedCreatives($creative, $user, $category, $location, 'closest-category');
+        $creative_4 = $this->getRelatedCreatives($creative, $user, $category, $location, 'closest-category-most-active');
+        
+        return array_merge($creative_1, $creative_2, $creative_3, $creative_4);
+    }
+
+    function getRelatedCreatives($creative, $user, $category, $location, $key = null) {
+        $sql = '';
+        $creativeIds = [];
+
+        switch ($key) {
+            case 'category-location-match':
+                // Priority 1: Same category title, location
+                if ($category?->id) {
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
+                            INNER JOIN categories ca ON cr.category_id = ca.id 
+                            INNER JOIN users ur ON cr.user_id = ur.id 
+                            INNER JOIN addresses ad ON ur.id = ad.user_id 
+                            INNER JOIN locations lc ON lc.id = ad.city_id 
+                            WHERE ca.id = ' . $category->id . '
+                            AND lc.uuid = "' . $location['city_id'] . '"';
+
+                    $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
+                    $res = DB::select($sql);
+                    $creativeIds = collect($res)
+                        ->pluck('id')
+                        ->toArray();
+                }
+                break;
+            case 'category-most-active':
+                // Priority 1: Same category title, most active
+                if ($category?->id) {
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
+                             INNER JOIN categories ca ON cr.category_id = ca.id 
+                             WHERE ca.id = ' . $category->id;
+                    
+                    $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
+                    $res = DB::select($sql);
+                    $creativeIds = collect($res)
+                        ->pluck('id')
+                        ->toArray();
+                    
+                    $creativeIds = $this->sortCreativeIdsFromCacheTable($creativeIds);
+                }
+                
+                break;
+            case 'closest-category':
+                // Priority 1: Closest category title, location
+                if ($category?->id) {
+                    $like_categories = Category::where('name', 'LIKE', '%'. $category->name .'%')->orderBy('name', 'asc');
+                    $like_categories = $like_categories->pluck('id')->toArray();
+                    if ($like_categories) {
+                        $like_categories = implode(', ', $like_categories);
+                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
+                                 INNER JOIN users ur ON cr.user_id = ur.id 
+                                 INNER JOIN addresses ad ON ur.id = ad.user_id 
+                                 INNER JOIN locations lc ON lc.id = ad.city_id 
+                                 WHERE cr.category_id IN (' . $like_categories . ')
+                                 AND lc.uuid = "' . $location['city_id'] . '"';
+
+                        $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
+                        $res = DB::select($sql);
+                        $creativeIds = collect($res)
+                            ->pluck('id')
+                            ->toArray();
+                    }
+                }
+                
+                break;
+            case 'closest-category-most-active':
+                // Priority 1: Same category title, most active
+                if ($category?->id) {
+                    $like_categories = Category::where('name', 'LIKE', '%'. $category->name .'%')->orderBy('name', 'asc');
+                    $like_categories = $like_categories->pluck('id')->toArray();
+                    if ($like_categories) {
+                        $like_categories = implode(', ', $like_categories);
+                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
+                                    WHERE cr.category_id IN (' . $like_categories . ')';
+
+                        $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
+
+                        $res = DB::select($sql);
+                        $creativeIds = collect($res)
+                            ->pluck('id')
+                            ->toArray();
+                        
+                        $creativeIds = $this->sortCreativeIdsFromCacheTable($creativeIds);
+                    }
+                }
+                
+                break;
+        }
+        
+        return $creativeIds;
     }
 
     public function sortCreatives($idsCategory, $idsState, $idsCity, $currentCreativeId)
