@@ -154,7 +154,7 @@ class CreativeController extends Controller
         }
         $combinedCreativeIds = $this->sortCreativeIdsFromCacheTable($combinedCreativeIds);
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
-        
+
         // Retrieve creative records from the database and order them based on the calculated order
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
@@ -536,7 +536,7 @@ class CreativeController extends Controller
     }
 
     public function related_creatives(Request $request) //based on first Title, Second State, Third City
-    {        
+    {
         $related_creative_ids = $this->process_related_creatives($request->creative_id);
         $related_creative_ids = array_values(array_unique($related_creative_ids));
 
@@ -554,7 +554,8 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-    function process_related_creatives($creative_id) {
+    function process_related_creatives($creative_id)
+    {
         $user = User::where('uuid', $creative_id)->first();
         $creative = Creative::where('user_id', $user->id)->first();
 
@@ -565,11 +566,12 @@ class CreativeController extends Controller
         $creative_2 = $this->getRelatedCreatives($creative, $user, $category, $location, 'category-most-active');
         $creative_3 = $this->getRelatedCreatives($creative, $user, $category, $location, 'closest-category');
         $creative_4 = $this->getRelatedCreatives($creative, $user, $category, $location, 'closest-category-most-active');
-        
+
         return array_merge($creative_1, $creative_2, $creative_3, $creative_4);
     }
 
-    function getRelatedCreatives($creative, $user, $category, $location, $key = null) {
+    function getRelatedCreatives($creative, $user, $category, $location, $key = null)
+    {
         $sql = '';
         $creativeIds = [];
 
@@ -599,22 +601,22 @@ class CreativeController extends Controller
                     $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
                              INNER JOIN categories ca ON cr.category_id = ca.id 
                              WHERE ca.id = ' . $category->id;
-                    
+
                     $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
 
                     $res = DB::select($sql);
                     $creativeIds = collect($res)
                         ->pluck('id')
                         ->toArray();
-                    
+
                     $creativeIds = $this->sortCreativeIdsFromCacheTable($creativeIds);
                 }
-                
+
                 break;
             case 'closest-category':
                 // Priority 1: Closest category title, location
                 if ($category?->id) {
-                    $like_categories = Category::where('name', 'LIKE', '%'. $category->name .'%')->orderBy('name', 'asc');
+                    $like_categories = Category::where('name', 'LIKE', '%' . $category->name . '%')->orderBy('name', 'asc');
                     $like_categories = $like_categories->pluck('id')->toArray();
                     if ($like_categories) {
                         $like_categories = implode(', ', $like_categories);
@@ -633,12 +635,12 @@ class CreativeController extends Controller
                             ->toArray();
                     }
                 }
-                
+
                 break;
             case 'closest-category-most-active':
                 // Priority 1: Same category title, most active
                 if ($category?->id) {
-                    $like_categories = Category::where('name', 'LIKE', '%'. $category->name .'%')->orderBy('name', 'asc');
+                    $like_categories = Category::where('name', 'LIKE', '%' . $category->name . '%')->orderBy('name', 'asc');
                     $like_categories = $like_categories->pluck('id')->toArray();
                     if ($like_categories) {
                         $like_categories = implode(', ', $like_categories);
@@ -651,14 +653,14 @@ class CreativeController extends Controller
                         $creativeIds = collect($res)
                             ->pluck('id')
                             ->toArray();
-                        
+
                         $creativeIds = $this->sortCreativeIdsFromCacheTable($creativeIds);
                     }
                 }
-                
+
                 break;
         }
-        
+
         return $creativeIds;
     }
 
@@ -715,7 +717,7 @@ class CreativeController extends Controller
         //     $filters['filter']['not_invited'] = $group->id;
         //     $request->replace($filters);
         // }
-        
+
         $query = QueryBuilder::for(Creative::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),
@@ -734,8 +736,8 @@ class CreativeController extends Controller
                 'is_featured',
                 'is_urgent',
             ])
-            ->defaultSort('-featured_at', '-created_at')
-            ->allowedSorts('featured_at', 'created_at');
+            ->defaultSort('sort_order', '-featured_at', '-created_at')
+            ->allowedSorts('sort_order', 'featured_at', 'created_at');
 
         // dd($query->toSql());
         $creatives = $query->with([
@@ -762,22 +764,22 @@ class CreativeController extends Controller
         return new CreativeCollection($creatives);
     }
 
-    public function homepage_creatives(Request $request) 
+    public function homepage_creatives(Request $request)
     {
-        $perPage = $request->input('per_page'); 
-        $useCache = is_null($perPage); 
+        $perPage = $request->input('per_page');
+        $useCache = is_null($perPage);
 
         $cacheKey = 'homepage_creatives';
         if ($perPage) {
-            $cacheKey .= '_per_page_' . $perPage; 
+            $cacheKey .= '_per_page_' . $perPage;
         }
 
         if ($useCache) {
             $creatives = Cache::remember($cacheKey, 86400, function () use ($request) {
-                return $this->getCreatives($request); 
+                return $this->getCreatives($request);
             });
         } else {
-            $creatives = $this->getCreatives($request); 
+            $creatives = $this->getCreatives($request);
         }
 
         return new HomepageCreativeCollection($creatives);
@@ -1344,13 +1346,13 @@ class CreativeController extends Controller
         if (empty($creativeIds)) {
             return [];
         }
-       
+
         if (CreativeCache::count() === 0) {
-            return $creativeIds; 
+            return $creativeIds;
         }
 
         $cachedCreatives = CreativeCache::whereIn('creative_id', $creativeIds)
-            ->orderBy(DB::raw('CASE WHEN location IS NULL THEN 1 ELSE 0 END')) 
+            ->orderBy(DB::raw('CASE WHEN location IS NULL THEN 1 ELSE 0 END'))
             ->orderBy('category')
             ->orderBy('location')
             ->orderByDesc('activity_rank')
