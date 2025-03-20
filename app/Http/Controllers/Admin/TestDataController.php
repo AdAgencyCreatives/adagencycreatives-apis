@@ -823,6 +823,7 @@ class TestDataController extends Controller
         $html .= '<th>Created At</th>';
         $html .= '<th>Featured At</th>';
         $html .= '<th>Welcome Queued At</th>';
+        $html .= '<th>Action</th>';
         $html .= '</tr>';
         $qc_sr = 0;
         foreach ($queued_creatives as $qc) {
@@ -835,10 +836,20 @@ class TestDataController extends Controller
             $html .= '<td>' . $qc->created_at . '</td>';
             $html .= '<td>' . $qc->featured_at . '</td>';
             $html .= '<td>' . $qc->welcome_queued_at . '</td>';
+            $html .= '<td><a href="javascript:void(0);" onClick="remove(\''.$qc->uuid.'\')">Remove</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';
-        $html .= '';
+        $html .= '<form id="removefrom" method="POST" action="/test-welcome-remove" style="display: none;">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="uuid" id="uuid" value="">
+                  </form>
+                  <script>
+                    function remove(uuid) {
+                        document.getElementById("uuid").value = uuid;
+                        document.getElementById("removefrom").submit();
+                    }
+                  </script>';
         $html .= '</body></html>';
 
         return $html;
@@ -857,6 +868,11 @@ class TestDataController extends Controller
             'previous_welcome_queued_at_creatives_count' => $previous_welcome_queued_at_creatives_count,
             'next_welcome_creative' => $next_welcome_creative?->id ?? "",
         );
+    }
+
+    public function testWelcomeRemove(Request $request) {
+        Creative::where('uuid', $request->uuid)->update(['welcome_queued_at' => null]);
+        return redirect()->back()->with('success', 'Removed from the welcome list!');
     }
 
     private function getCreativeProfileProgress($creative)

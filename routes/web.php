@@ -425,6 +425,7 @@ Route::get('/test-thumb', [TestDataController::class, 'testThumb'])->name('test-
 Route::get('/test-thumb-rs', [TestDataController::class, 'testThumbResampled'])->name('test-thumb-rs');
 Route::get('/test-crop', [TestDataController::class, 'testCrop'])->name('test-crop');
 Route::get('/test-welcome', [TestDataController::class, 'testWelcome'])->name('test-welcome');
+Route::post('/test-welcome-remove', [TestDataController::class, 'testWelcomeRemove'])->name('test-welcome-remove');
 Route::get('/test-thumb-att', [TestDataController::class, 'testThumbAtt'])->name('test-thumb-att');
 Route::get('/test-job-closed', [TestDataController::class, 'testJobClosed'])->name('test-job-closed');
 Route::get('/test-new-application', [TestDataController::class, 'testNewApplication'])->name('test-new-application');
