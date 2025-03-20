@@ -22,6 +22,10 @@ class JobResource extends JsonResource
             if ($request->has('application_status')) {
                 $applications = $applications->where('status', $request->application_status);
             }
+
+            if (!empty($request->filter['user_id']) && $advisor_user->uuid != $request->filter['user_id']) {
+                $applications = $applications->where('status', 'recommended');
+            }
         }
 
         $applications = $applications->filter(function ($application) use ($request) {

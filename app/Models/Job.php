@@ -152,6 +152,7 @@ class Job extends Model
         if (in_array($user->role, ['advisor', 'recruiter'])) {
             return $query->where('advisor_id', $user->id);
         }
+
         return $query->where('user_id', $user->id);
     }
 
