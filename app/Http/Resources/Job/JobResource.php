@@ -24,7 +24,8 @@ class JobResource extends JsonResource
             }
 
             if (strtolower($this->apply_type) == "internal" && !empty($request->filter['user_id']) && $advisor_user->uuid != $request->filter['user_id']) {
-                $applications = $applications->where('status', 'recommended');
+                $applications = $applications->whereIn('status', ['recommended', 'hired']);
+                // show only 
             }
         }
 
