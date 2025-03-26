@@ -872,3 +872,55 @@ if (!function_exists('get_user_picture_preferred')) {
         return $preferred_picture;
     }
 }
+
+
+if (!function_exists('calculate_activity_score')) {
+    function calculate_activity_score($user_id, $max_messages, $max_applications, $max_posts)
+    {
+        $application_count = Application::where('user_id', $user_id)
+            ->where('created_at', '>=', now()->subDays(14))
+            ->count();
+
+        $message_count = Message::where('sender_id', $user_id)
+            ->where('created_at', '>=', now()->subDays(14))
+            ->count();
+
+        $post_reactions = PostReaction::where('user_id', $user_id)
+            ->where('created_at', '>=', now()->subDays(14))
+            ->count();
+
+        $normalizedMessageScore = min(1, $message_count / $max_messages);
+        $normalizedApplicationScore = min(1, $application_count / $max_applications);
+        $normalizedPostScore = min(1, $post_reactions / $max_posts);
+
+        $weightedApplicationScore = $normalizedApplicationScore * 0.40;
+        $weightedMessageScore = $normalizedMessageScore * 0.30;
+        $weightedPostScore = $normalizedPostScore * 0.30;
+
+        $overallScore = $weightedMessageScore + $weightedApplicationScore + $weightedPostScore;
+
+        $finalScore = round($overallScore * 100);
+
+        return $finalScore;
+    }
+}
+
+if (!function_exists('')) {
+    function get_location_text($user)
+    {
+        $address = $user->addresses ? collect($user->addresses)->firstWhere('label', 'personal') : null;
+
+        if ($address) {
+            $stateName = $address->state ? $address->state->name : null;
+            $cityName = $address->city ? $address->city->name : null;
+
+            $locationString = collect([$stateName, $cityName])
+                ->filter()
+                ->implode(', ');
+
+            return $locationString;
+        } else {
+            return null;
+        }
+    }
+}

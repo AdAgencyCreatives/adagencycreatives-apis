@@ -18,6 +18,8 @@ use App\Models\JobAlert;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\Message;
+use App\Models\PostReaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -1351,6 +1353,12 @@ class CreativeController extends Controller
             return $creativeIds;
         }
 
+        $creative_ids_in_cache = CreativeCache::all()->pluck('creative_id')->toArray();
+        $creative_ids_not_in_cache = Creative::whereNotIn('id', $creative_ids_in_cache)->pluck('id')->toArray();
+        if (count($creative_ids_not_in_cache) > 0) {
+            $this->updateCreativeCache($creative_ids_not_in_cache);
+        }
+
         $cachedCreatives = CreativeCache::whereIn('creative_id', $creativeIds)
             ->orderBy(DB::raw('CASE WHEN location IS NULL THEN 1 ELSE 0 END'))
             ->orderBy('category')
@@ -1362,5 +1370,50 @@ class CreativeController extends Controller
         $sortedCreativeIds = $cachedCreatives->pluck('creative_id')->toArray();
 
         return $sortedCreativeIds;
+    }
+
+    private function updateCreativeCache($creative_ids)
+    {
+        $creatives = Creative::with('user', 'category', 'user.addresses', 'user.addresses.state', 'user.addresses.city')
+            ->whereNotNull('category_id')
+            ->whereIn('id', $creative_ids)
+            ->select('id', 'user_id', 'category_id', 'created_at')->latest()->get();
+
+        $max_messages = Message::select(DB::raw('count(*) as message_count'))
+            ->groupBy('sender_id')
+            ->orderByDesc('message_count')
+            ->limit(1)
+            ->value('message_count');
+
+        $max_applications = Application::select(DB::raw('count(*) as application_count'))
+            ->groupBy('user_id')
+            ->orderByDesc('application_count')
+            ->limit(1)
+            ->value('application_count');
+
+        $max_posts = PostReaction::select(DB::raw('count(*) as post_count'))
+            ->groupBy('user_id')
+            ->orderByDesc('post_count')
+            ->limit(1)
+            ->value('post_count');
+
+        $cacheData = [];
+
+        foreach ($creatives as $creative) {
+
+            $category = $creative->category?->name;
+            $user = $creative->user;
+            $location = get_location_text($user);
+
+            $cacheData[] = [
+                'creative_id' => $creative->id,
+                'category' => $category,
+                'location' => $location,
+                'activity_rank' => calculate_activity_score($creative->user_id, $max_messages, $max_applications, $max_posts),
+                'created_at' => $creative->created_at,
+            ];
+        }
+
+        CreativeCache::insert($cacheData);
     }
 }
