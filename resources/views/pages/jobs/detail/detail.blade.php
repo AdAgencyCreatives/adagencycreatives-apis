@@ -2,10 +2,33 @@
 
 @section('title', 'Job Details')
 
+@section('styles')
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+<style>
+.ql-editor {
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; 
+    font-size: 12pt;
+    color: #000;
+}
+.ql-editor strong {
+    font-weight: bolder;
+}
+.ql-toolbar.ql-snow {
+    border-radius: .2rem .2rem 0 0;
+}
+.ql-container.ql-snow {
+    border-radius:  0 0 .2rem .2rem;
+}
+</style>
+@endsection
+
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
-    <script src="https://cdn.tiny.cloud/1/j1xmsbgy7mm4sd2czch7suv0680w3flyx8n2daatar52pxm3/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+
+    <!-- <script src="https://cdn.tiny.cloud/1/j1xmsbgy7mm4sd2czch7suv0680w3flyx8n2daatar52pxm3/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <script>
         function populateApplications(applications) {
@@ -353,11 +376,46 @@
                 updateApplication(id, data, icon, e);
             });
 
-            tinymce.init({
+            /*tinymce.init({
                 selector: 'textarea',
                 menubar: false,
                 plugins: 'anchor autolink codesample emoticons link lists visualblocks',
                 toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });*/
+
+            document.querySelectorAll('.editor-container').forEach((editor, index) => {
+                var textarea = document.getElementById(`editor-textarea${index}`);
+                var value = textarea.value;
+                
+                var quill = new Quill(editor, {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],        
+                            [{ 'header': [1, 2, false] }],
+                            [{ 'font': [] }],
+                            [{ 'size': [] }],
+                            ['link', 'image'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                            [{ 'align': [] }],
+                            ['blockquote', 'code-block'],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                // Ensure Quill is ready to insert content
+                setTimeout(() => {
+                    if (value) {
+                        // Use quill.clipboard.dangerouslyPasteHTML to insert content
+                        quill.clipboard.dangerouslyPasteHTML(0, value); // Load HTML content at the start
+                    }
+                }, 100); // Short delay to ensure Quill is fully initialized
+
+                // Sync Quill content to textarea before submitting
+                quill.on('text-change', () => {
+                    textarea.value = quill.root.innerHTML; // Save content back to the textarea
+                });
             });
 
         });
@@ -416,7 +474,7 @@
                                 value="{{ $job->title }}" />
 
                         </h1>
-                        <div id=job_options></div>
+                        <div id="job_options"></div>
                     </div>
                 </div>
 
@@ -425,7 +483,8 @@
                         <h5 class="card-title mb-0">Description</h5>
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control" name="description" rows="10" placeholder="Textarea" spellcheck="false">{{ $job->description }}</textarea>
+                        <textarea class="form-control d-none" name="description" rows="10" placeholder="Textarea" spellcheck="false" id="editor-textarea0">{{ $job->description }}</textarea>
+                        <div id="editor-container0" class="editor-container"></div>
                     </div>
                 </div>
 
