@@ -70,7 +70,7 @@
 
                 // Sync Quill content to textarea before submitting
                 quill.on('text-change', () => {
-                    textarea.value = quill.root.innerHTML; // Save content back to the textarea
+                    textarea.value = quill.getSemanticHTML(); // Save content back to the textarea
                 });
             });
 
