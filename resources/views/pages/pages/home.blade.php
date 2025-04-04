@@ -2,18 +2,76 @@
 
 @section('title', Str::ucfirst($page))
 
+@section('styles')
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+<style>
+.ql-editor {
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; 
+    font-size: 12pt;
+    color: #000;
+}
+.ql-editor strong {
+    font-weight: bolder;
+}
+.ql-toolbar.ql-snow {
+    border-radius: .2rem .2rem 0 0;
+}
+.ql-container.ql-snow {
+    border-radius:  0 0 .2rem .2rem;
+}
+</style>
+@endsection
+
 @section('scripts')
-    <script src="https://cdn.tiny.cloud/1/niqd0bqfftqm2iti1rxdr0ddt1b46akht531kj0uv4snnaie/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <!-- <script src="https://cdn.tiny.cloud/1/niqd0bqfftqm2iti1rxdr0ddt1b46akht531kj0uv4snnaie/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <script>
         $(document).ready(function() {
-            tinymce.init({
-                selector: 'textarea',
-                menubar: false,
-                plugins: 'anchor autolink codesample emoticons link lists visualblocks image preview',
-                toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                font_family_formats: 'JOST=JOST;ALTA=ALTA'
+            // tinymce.init({
+            //     selector: 'textarea',
+            //     menubar: false,
+            //     plugins: 'anchor autolink codesample emoticons link lists visualblocks image preview',
+            //     toolbar: 'bold italic underline strikethrough | blocks fontfamily fontsize  | link media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            //     font_family_formats: 'JOST=JOST;ALTA=ALTA'
+            // });
+
+
+            document.querySelectorAll('.editor-container').forEach((editor, index) => {
+                var textarea = document.getElementById(`editor-textarea${index}`);
+                var value = textarea.value;
+                
+                var quill = new Quill(editor, {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],        
+                            [{ 'header': [1, 2, false] }],
+                            [{ 'font': [] }],
+                            [{ 'size': [] }],
+                            ['link', 'image'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            ['blockquote', 'code-block'],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                // Ensure Quill is ready to insert content
+                setTimeout(() => {
+                    if (value) {
+                        // Use quill.clipboard.dangerouslyPasteHTML to insert content
+                        quill.clipboard.dangerouslyPasteHTML(0, value); // Load HTML content at the start
+                    }
+                }, 100); // Short delay to ensure Quill is fully initialized
+
+                // Sync Quill content to textarea before submitting
+                quill.on('text-change', () => {
+                    textarea.value = quill.root.innerHTML; // Save content back to the textarea
+                });
             });
 
         });
@@ -63,11 +121,12 @@
 
                             <div class="col-md-12">
 
-                                @foreach ($data as $item)
+                                @foreach ($data as $key => $item)
                                     <div class="mb-3">
                                         <label for="name" class="form-label">{{ Str::ucfirst($item->key) }}</label>
-                                        <textarea class="form-control editor-textarea" name="{{ $item->key }}"
-                                            placeholder="Enter {{ Str::ucfirst($item->key) }}">{{ $item->value }}</textarea>
+                                        <textarea class="form-control editor-textarea d-none" name="{{ $item->key }}"
+                                            placeholder="Enter {{ Str::ucfirst($item->key) }}" id="editor-textarea{{$key}}">{{ $item->value }}</textarea>
+                                        <div id="editor-container{{$key}}" class="editor-container"></div>
                                     </div>
                                 @endforeach
 
