@@ -61,10 +61,14 @@ class AgencyController extends Controller
 
         if ($request->has('linkedin') && $request->input('linkedin') != null) {
             $this->updateLink($user, 'linkedin', $request->input('linkedin'));
+        } else {
+            $this->removeLink($user, 'linkedin');
         }
 
         if ($request->has('website') && $request->input('website') != null) {
             $this->updateLink($user, 'website', $request->input('website'));
+        } else {
+            $this->removeLink($user, 'website');
         }
 
         if (isset($attachment) && is_object($attachment)) {
@@ -98,6 +102,11 @@ class AgencyController extends Controller
                 'url' => $url,
             ]);
         }
+    }
+
+    private function removeLink($user, $label)
+    {
+        Link::where('user_id', $user->id)->where('label', $label)->delete();
     }
 
     public function appendWorkplacePreference($request)
