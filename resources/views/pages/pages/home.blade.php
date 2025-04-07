@@ -19,6 +19,9 @@
 .ql-container.ql-snow {
     border-radius:  0 0 .2rem .2rem;
 }
+.ql-editor ol li:before {
+    display: none;
+}
 </style>
 @endsection
 
