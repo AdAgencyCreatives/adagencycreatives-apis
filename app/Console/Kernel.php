@@ -67,7 +67,7 @@ class Kernel extends ConsoleKernel
 
             $targetDate = Carbon::parse("2024-10-23");
             if ($date->greaterThanOrEqualTo($targetDate)) {
-                $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
+                // $schedule->command('remind-no-job-posted-agency')->dailyAt('10:30');
             }
         }
 
