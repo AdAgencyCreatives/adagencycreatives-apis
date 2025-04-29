@@ -39,7 +39,7 @@
                         <p>
                             Help us help you. Good or bad, let us know <a
                                 href="mailto:membersupport@adagencycreatives.com"
-                                target="_blank">@AdAgencyCreatives</a>.
+                                target="_blank">membersupport@adagencycreatives.com</a>.
                         </p>
 
                         @include('emails.includes.jobboard_footer')
