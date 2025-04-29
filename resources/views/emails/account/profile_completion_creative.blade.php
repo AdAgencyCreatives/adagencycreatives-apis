@@ -38,7 +38,7 @@
 
                         <p>
                             Help us help you. Good or bad, let us know <a
-                                href="{{ sprintf('%s/community', $data['FRONTEND_URL']) }}"
+                                href="mailto:membersupport@adagencycreatives.com"
                                 target="_blank">@AdAgencyCreatives</a>.
                         </p>
 
