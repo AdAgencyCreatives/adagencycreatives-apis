@@ -115,6 +115,12 @@
         padding: 0 1.5em;
     }
 
+    .ProseMirror ul li p,
+    .ProseMirror ol li p {
+        margin: 0 0 0.1em 0;
+        /* Adjust margin for list items */
+    }
+
     .ProseMirror a {
         color: #3b82f6;
         text-decoration: underline;
