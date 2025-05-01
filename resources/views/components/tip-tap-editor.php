@@ -191,11 +191,11 @@
                         openOnClick: false,
                     }),
                 ],
-                content: textarea.value,
+                content: textarea.value.replaceAll("<li><p>", "<li>").replaceAll("</p></li>", "</li>"),
                 onUpdate: ({
                     editor
                 }) => {
-                    textarea.value = editor.getHTML();
+                    textarea.value = editor.getHTML().replaceAll("<li><p>", "<li>").replaceAll("</p></li>", "</li>");
                     updateStatusBar(editor, statusbar);
                 },
                 onSelectionUpdate: ({
