@@ -144,25 +144,6 @@
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 
-    // Custom ListItem extension that doesn't wrap content in <p> tags
-    const CustomListItem = ListItem.extend({
-        content: 'inline*',
-    })
-
-    // Custom BulletList extension that uses our CustomListItem
-    const CustomBulletList = BulletList.extend({
-        addExtensions() {
-            return [CustomListItem]
-        }
-    })
-
-    // Custom OrderedList extension that uses our CustomListItem
-    const CustomOrderedList = OrderedList.extend({
-        addExtensions() {
-            return [CustomListItem]
-        }
-    })
-
     // Initialize all editors
     function initEditors() {
         document.querySelectorAll('.tip-tap-editor').forEach(textarea => {
@@ -204,8 +185,8 @@
                     Heading.configure({
                         levels: [1, 2, 3, 4, 5, 6],
                     }),
-                    CustomBulletList,
-                    CustomOrderedList,
+                    BulletList,
+                    OrderedList,
                     Link.configure({
                         openOnClick: false,
                     }),
