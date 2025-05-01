@@ -337,6 +337,7 @@
                 const button = document.createElement('button');
                 button.className = 'tiptap-editor-button';
                 button.title = btn.title;
+                button.type = 'button';
                 button.innerHTML = `<i class="${btn.icon}"></i>`;
                 button.addEventListener('click', btn.action);
 
