@@ -62,7 +62,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="status"> About </label>
-                                    <textarea name="about" class="form-control" rows="2" placeholder="About"
+                                    <textarea name="about" class="form-control tip-tap-editor" rows="2" placeholder="About"
                                         spellcheck="true" style="height: 225px;">{{ $user->agency->about }}</textarea>
                                 </div>
                             </div>

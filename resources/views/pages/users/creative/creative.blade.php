@@ -182,7 +182,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="about"> About </label>
-                                    <textarea name="about" class="form-control" rows="2" placeholder="About" spellcheck="true"
+                                    <textarea name="about" class="form-control tip-tap-editor" rows="2" placeholder="About" spellcheck="true"
                                         style="height: 225px;">{{ $user->creative?->about }}</textarea>
                                 </div>
                             </div>

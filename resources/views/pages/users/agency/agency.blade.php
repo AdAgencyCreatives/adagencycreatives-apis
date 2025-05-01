@@ -84,9 +84,8 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="about"> About </label>
-                                    <textarea name="about" class="form-control d-none" rows="2" placeholder="About" spellcheck="true"
+                                    <textarea name="about" class="form-control tip-tap-editor" rows="2" placeholder="About" spellcheck="true"
                                         id="editor-textarea0">{{ $user->agency?->about }}</textarea>
-                                    <div id="editor-container0" class="editor-container"></div>
                                 </div>
                             </div>
                         </div>
