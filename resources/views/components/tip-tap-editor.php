@@ -192,13 +192,13 @@
                     Bold,
                     Italic,
                     Underline,
-                    Heading.configure({
-                        levels: [1, 2, 3, 4, 5, 6],
-                    }),
                     BulletList,
                     OrderedList,
                     Link.configure({
                         openOnClick: false,
+                    }),
+                    Heading.configure({
+                        levels: [1, 2, 3, 4, 5, 6],
                     }),
                 ],
                 content: textarea.value.replaceAll("<p>", "").replaceAll("</p>", "<br>").replace(/(<br>)+$/g, ""),
@@ -239,6 +239,38 @@
                 title: 'Underline',
                 action: () => editor.chain().focus().toggleUnderline().run(),
                 active: () => editor.isActive('underline')
+            },
+            {
+                icon: 'ri-list-unordered',
+                title: 'Bullet List',
+                action: () => editor.chain().focus().toggleBulletList().run(),
+                active: () => editor.isActive('bulletList')
+            },
+            {
+                icon: 'ri-list-ordered',
+                title: 'Numbered List',
+                action: () => editor.chain().focus().toggleOrderedList().run(),
+                active: () => editor.isActive('orderedList')
+            },
+            {
+                icon: 'ri-link',
+                title: 'Link',
+                action: () => {
+                    const previousUrl = editor.getAttributes('link').href;
+                    const url = window.prompt('URL', previousUrl);
+
+                    if (url === null) return;
+
+                    if (url === '') {
+                        editor.chain().focus().extendMarkRange('link').unsetLink().run();
+                        return;
+                    }
+
+                    editor.chain().focus().extendMarkRange('link').setLink({
+                        href: url
+                    }).run();
+                },
+                active: () => editor.isActive('link')
             },
             {
                 icon: 'ri-h-1',
@@ -299,38 +331,6 @@
                 active: () => editor.isActive('heading', {
                     level: 6
                 })
-            },
-            {
-                icon: 'ri-list-unordered',
-                title: 'Bullet List',
-                action: () => editor.chain().focus().toggleBulletList().run(),
-                active: () => editor.isActive('bulletList')
-            },
-            {
-                icon: 'ri-list-ordered',
-                title: 'Numbered List',
-                action: () => editor.chain().focus().toggleOrderedList().run(),
-                active: () => editor.isActive('orderedList')
-            },
-            {
-                icon: 'ri-link',
-                title: 'Link',
-                action: () => {
-                    const previousUrl = editor.getAttributes('link').href;
-                    const url = window.prompt('URL', previousUrl);
-
-                    if (url === null) return;
-
-                    if (url === '') {
-                        editor.chain().focus().extendMarkRange('link').unsetLink().run();
-                        return;
-                    }
-
-                    editor.chain().focus().extendMarkRange('link').setLink({
-                        href: url
-                    }).run();
-                },
-                active: () => editor.isActive('link')
             },
             {
                 icon: 'ri-format-clear',
