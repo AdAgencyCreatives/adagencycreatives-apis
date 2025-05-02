@@ -123,6 +123,7 @@
     .ProseMirror p {
         margin: 0;
         padding: 0;
+        line-height: 1.5;
     }
 
     .ProseMirror a {
