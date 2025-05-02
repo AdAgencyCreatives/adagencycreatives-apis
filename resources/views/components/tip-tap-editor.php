@@ -181,7 +181,6 @@
             statusbar.className = 'tiptap-editor-statusbar';
             statusbar.innerHTML = `
                     <span class="status-hierarchy">Paragraph</span>
-                    <a href="https://tiptap.dev/" target="_blank">Powered by Tiptap</a>
                 `;
             container.appendChild(statusbar);
 
