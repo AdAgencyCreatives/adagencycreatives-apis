@@ -119,10 +119,10 @@
         padding: 0 1.5em;
     }
 
-    .ProseMirror ul li p,
-    .ProseMirror ol li p {
-        margin: 0 0 0.1em 0;
-        /* Adjust margin for list items */
+    .ProseMirror p,
+    .ProseMirror p {
+        margin: 0;
+        padding: 0;
     }
 
     .ProseMirror a {
