@@ -201,11 +201,11 @@
                         openOnClick: false,
                     }),
                 ],
-                content: textarea.value.replaceAll("<p></p>", "").replaceAll("<p>", "").replaceAll("</p>", "<br>"),
+                content: textarea.value.replaceAll("<p>", "").replaceAll("</p>", "<br>"),
                 onUpdate: ({
                     editor
                 }) => {
-                    textarea.value = editor.getHTML().replaceAll("<p></p>", "").replaceAll("<p>", "").replaceAll("</p>", "<br>");
+                    textarea.value = editor.getHTML().replaceAll("<p>", "").replaceAll("</p>", "<br>");
                     updateStatusBar(editor, statusbar);
                 },
                 onSelectionUpdate: ({
