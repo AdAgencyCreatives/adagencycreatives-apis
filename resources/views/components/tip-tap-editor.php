@@ -9,6 +9,8 @@
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
     }
 
     .tiptap-editor-header {
@@ -47,6 +49,8 @@
         padding: 15px;
         min-height: 200px;
         outline: none;
+        flex: 1;
+        overflow: auto;
     }
 
     .tiptap-editor-statusbar {
