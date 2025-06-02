@@ -231,10 +231,19 @@ class Job extends Model
         return $query->whereIn('media_experience', $medias);
     }
 
+    // public function scopeSlug(Builder $query, $slug): Builder
+    // {
+
+    //     return $query->where('slug', '=', $slug);
+    // }
+
     public function scopeSlug(Builder $query, $slug): Builder
     {
-
-        return $query->where('slug', '=', $slug);
+        return $query->where(function ($q) use ($slug) {
+            $q->where('force_slug', '=', $slug)
+                ->orWhere('slug', '=', $slug);
+        })
+            ->orderByRaw('CASE WHEN force_slug = ? THEN 0 ELSE 1 END', [$slug]);
     }
 
     public function getStatusAttribute($value)
