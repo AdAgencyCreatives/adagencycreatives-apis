@@ -45,7 +45,7 @@ class JobResource extends JsonResource
             'type' => 'jobs',
             'id' => $this->uuid,
             'user_id' => $user->uuid,
-            'slug' => $this->slug,
+            'slug' => $this->force_slug ? $this->force_slug : $this->slug,
             'title' => $this->title,
             'description' => $this->description,
             'category_id' => $category?->uuid,
