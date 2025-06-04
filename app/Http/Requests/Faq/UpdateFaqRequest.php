@@ -9,9 +9,9 @@ class UpdateFaqRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'order' => 'required|numeric',
+            'title' => 'sometimes|max:255',
+            'description' => 'sometimes',
+            'order' => 'sometimes|numeric',
         ];
     }
 }
