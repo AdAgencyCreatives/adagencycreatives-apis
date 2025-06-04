@@ -219,7 +219,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'show' => 'api.strengths.show',
         'update' => 'api.strengths.update',
         'destroy' => 'api.strengths.destroy',
-        'get_strengths' => 'api.strengths.get_strengths',
     ]);
     Route::apiResource('faqs', FaqController::class)->names([
         'index' => 'api.faqs.index',
@@ -227,7 +226,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'show' => 'api.faqs.show',
         'update' => 'api.faqs.update',
         'destroy' => 'api.faqs.destroy',
-        'get_faqs' => 'api.faqs.get_faqs',
     ]);
 
     Route::apiResource('industry-experiences', IndustryController::class);
