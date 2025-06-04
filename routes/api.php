@@ -376,4 +376,5 @@ Route::apiResource('faqs', FaqController::class)->names([
     'show' => 'api.faqs.show',
     'update' => 'api.faqs.update',
     'destroy' => 'api.faqs.destroy',
+    'get_faqs' => 'api.faqs.get_faqs',
 ]);
