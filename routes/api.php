@@ -352,7 +352,12 @@ Route::get('pages', [PageController::class, 'index']);
 // Mentorship Topic
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
-Route::resource('faq', FaqController::class);
+Route::resource('faq', FaqController::class)->names([
+    "index",
+    "api.faq.index",
+    "create",
+    "api.faq.create",
+]);;
 Route::resource('publication-resources', PublicationResourceController::class);
 Route::resource('featured_cities', FeaturedLocationController::class);
 // Route::resource('featured_cities', FeaturedLocationWithJobCountController::class);
