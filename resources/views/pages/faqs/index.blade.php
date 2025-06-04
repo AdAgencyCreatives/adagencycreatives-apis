@@ -128,7 +128,7 @@
                     inputField = $('<textarea>', {
                         rows: 3,
                     });
-                    inputField.innerHTML = currentData;
+                    inputField.html(currentData);
                 }
 
                 $(this).html(inputField);
