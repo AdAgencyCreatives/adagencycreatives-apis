@@ -139,8 +139,8 @@
                     var newData = $(this).val();
 
                     if ($(this).is('textarea')) {
-                        alert()
                         newData = $(this).html();
+                        alert(newData);
                         $(this).parent().html(newData);
                     } else {
                         $(this).parent().text(newData);
