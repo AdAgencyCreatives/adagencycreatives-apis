@@ -32,7 +32,7 @@ $(document).ready(function() {
                     text: "Faq Created Successfully.",
                     icon: 'success'
                 }).then((result) => {
-                    fetchData();
+                    location.reload();
                 })
             },
             error: function(error) {
