@@ -8,8 +8,7 @@ class FaqController extends Controller
 {
     public function index()
     {
-        return "Hello";
-        // return view('pages.faqs.index');
+        return view('pages.faqs.index');
     }
 
     public function create()
