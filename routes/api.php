@@ -220,13 +220,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'update' => 'api.strengths.update',
         'destroy' => 'api.strengths.destroy',
     ]);
-    Route::apiResource('faqs', FaqController::class)->names([
-        'index' => 'api.faqs.index',
-        'store' => 'api.faqs.store',
-        'show' => 'api.faqs.show',
-        'update' => 'api.faqs.update',
-        'destroy' => 'api.faqs.destroy',
-    ]);
 
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
@@ -376,3 +369,11 @@ Route::get('/get_cities', [LocationController::class, 'get_cities']);
 Route::get('/get_search_items', [SearchController::class, 'get_search_items']);
 
 Route::get('/get-user-preferred-picture', [CreativeController::class, 'get_user_preferred_picture'])->name('get-user-preferred-picture');
+
+Route::apiResource('faqs', FaqController::class)->names([
+    'index' => 'api.faqs.index',
+    'store' => 'api.faqs.store',
+    'show' => 'api.faqs.show',
+    'update' => 'api.faqs.update',
+    'destroy' => 'api.faqs.destroy',
+]);
