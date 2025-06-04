@@ -7,11 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFaqRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return auth()->user()->role === 'admin';
-    }
-
     public function rules()
     {
         return [
