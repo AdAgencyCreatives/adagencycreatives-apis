@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Faq extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid',
