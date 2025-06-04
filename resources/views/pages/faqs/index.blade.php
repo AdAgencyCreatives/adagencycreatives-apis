@@ -76,7 +76,7 @@
                     faq.uuid + '">Delete</a>';
 
                 var row = '<tr>' +
-                    '<td>' + faq.uuid + '</td>' +
+                    '<td>' + faq.id + '</td>' +
                     '<td class="faq-title" data-id="' + faq.uuid + '" data-col="title">' + faq.title + '</td>' +
                     '<td class="faq-description" data-id="' + faq.uuid + '" data-col="description">' + faq
                     .description + '</td>' +
@@ -94,7 +94,7 @@
 
             fetchFaqs();
             $(document).on('click', '.delete-faq-btn', function() {
-                var resourceId = $(this).data('uuid');
+                var resourceId = $(this).data('id');
                 var csrfToken = '{{ csrf_token() }}';
                 console.log(csrfToken);
                 deleteConfirmation(resourceId, 'faq', 'faqs', csrfToken);
@@ -110,7 +110,7 @@
 
             function handleEdit() {
                 var currentData = $(this).text();
-                var uuid = $(this).data('uuid');
+                var uuid = $(this).data('id');
                 var col = $(this).data('col');
 
                 var inputField = $('<input>', {
