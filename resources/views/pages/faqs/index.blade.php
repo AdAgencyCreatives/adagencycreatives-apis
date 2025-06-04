@@ -78,8 +78,8 @@
                 var row = '<tr>' +
                     '<td>' + faq.id + '</td>' +
                     '<td class="faq-title" data-id="' + faq.id + '">' + faq.title + '</td>' +
-                    '</td>' +
-                    '<td>' + faq.created_at + '</td>' +
+                    '<td>' + faq.description + '</td>' +
+                    '<td>' + faq.order + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
 
