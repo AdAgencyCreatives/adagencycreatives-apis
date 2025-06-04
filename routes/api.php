@@ -377,4 +377,4 @@ Route::apiResource('faqs', FaqController::class)->names([
     'update' => 'api.faqs.update',
     'destroy' => 'api.faqs.destroy',
 ]);
-Route::get('faqs/get_faqs', [FaqController::class, 'get_faqs'])->name('api.faqs.get_faqs');
+Route::get('get_faqs', [FaqController::class, 'get_faqs'])->name('api.faqs.get_faqs');
