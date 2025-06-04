@@ -125,8 +125,9 @@
                     });
                 } else if (col == 'description') {
                     inputField = $('<textarea>', {
-                        rows: 3,
+                        rows: 5,
                     });
+                    inputField.css('width', '100%');
                 }
 
                 inputField.val(currentData);
