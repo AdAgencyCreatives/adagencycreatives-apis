@@ -352,7 +352,7 @@ Route::get('pages', [PageController::class, 'index']);
 // Mentorship Topic
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
-Route::resource('faq', FaqController::class)->names([
+Route::apiResource('faq', FaqController::class)->names([
     "index",
     "api.faq.index",
     "create",
