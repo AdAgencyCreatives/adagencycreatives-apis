@@ -77,9 +77,10 @@
 
                 var row = '<tr>' +
                     '<td>' + faq.id + '</td>' +
-                    '<td class="faq-title" data-id="' + faq.id + '">' + faq.title + '</td>' +
-                    '<td>' + faq.description + '</td>' +
-                    '<td>' + faq.order + '</td>' +
+                    '<td class="faq-title" data-id="' + faq.id + '" data-col="title">' + faq.title + '</td>' +
+                    '<td class="faq-description" data-id="' + faq.id + '" data-col="description">' + faq
+                    .description + '</td>' +
+                    '<td class="faq-order" data-id="' + faq.id + '" data-col="order">' + faq.order + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
 
@@ -107,24 +108,46 @@
                 fetchData(currentPage);
             });
 
-            $('table').on('dblclick', '.faq-title', function() {
-                var currentText = $(this).text();
+            function handleEdit() {
+                var currentData = $(this).text();
                 var id = $(this).data('id');
+                var col = $(this).data('col');
+
                 var inputField = $('<input>', {
                     type: 'text',
-                    value: currentText
+                    value: currentData
                 });
+
+                if (col == 'order') {
+                    inputField = $('<input>', {
+                        type: 'number',
+                        value: currentData
+                    });
+                } else if (col == 'description') {
+                    currentData = $(this).html();
+                    inputField = $('<textarea>', {
+                        rows: 3,
+                    });
+                    inputField.innerHTML = currentData;
+                }
 
                 $(this).html(inputField);
 
                 inputField.focus();
                 inputField.on('blur', function() {
-                    var newText = $(this).val();
-                    $(this).parent().text(
-                        newText);
 
-                    console.log(id);
-                    console.log(newText);
+                    var newData = $(this).val();
+
+                    if ($(this).is('textarea')) {
+                        newData = $(this).html();
+                        $(this).parent().html(newData);
+                    } else {
+                        $(this).parent().text(newData);
+                    }
+
+
+                    // console.log(id);
+                    // console.log(newData);
 
                     $.ajaxSetup({
                         headers: {
@@ -135,7 +158,7 @@
                         url: '/api/v1/faqs/' + id,
                         method: 'PUT',
                         data: {
-                            title: newText
+                            [col]: newData
                         },
                         success: function(response) {
                             if (response.data) {
@@ -174,7 +197,11 @@
                         }
                     });
                 });
-            });
+            }
+
+            $('table').on('dblclick', '.faq-title', handleEdit);
+            $('table').on('dblclick', '.faq-description', handleEdit);
+            $('table').on('dblclick', '.faq-order', handleEdit);
 
         });
     </script>
