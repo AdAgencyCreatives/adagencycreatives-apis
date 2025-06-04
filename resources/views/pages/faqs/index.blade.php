@@ -135,7 +135,8 @@
                 inputField.on('blur', function() {
 
                     var newData = $(this).val();
-                    $(this).parent().text(newData);
+                    $(this).parent().html(newData);
+                    
                     // console.log(id);
                     // console.log(newData);
 
