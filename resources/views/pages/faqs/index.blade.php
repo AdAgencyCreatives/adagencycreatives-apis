@@ -129,6 +129,7 @@
                     });
                 }
 
+                inputField.val(currentData);
                 $(this).html(inputField);
 
                 inputField.focus();
