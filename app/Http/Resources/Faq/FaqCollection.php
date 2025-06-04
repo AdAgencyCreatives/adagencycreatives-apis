@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Publication;
+namespace App\Http\Resources\Faq;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
