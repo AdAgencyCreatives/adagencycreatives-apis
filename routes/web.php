@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MentorResourceController;
-use App\Http\Controllers\Admin\FaqResourceController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MentorTopicController;
 use App\Http\Controllers\Admin\PackageRequestController;
 use App\Http\Controllers\Admin\PageController;
@@ -408,7 +408,7 @@ Route::view('resume', 'resume');
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
 Route::resource('resource', MentorResourceController::class);
-Route::resource('faq', FaqController::class);
+Route::resource('faq', FaqController::class)->name("faq.index");
 Route::resource('publication-resource', PublicationResourceController::class);
 Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
 Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');
