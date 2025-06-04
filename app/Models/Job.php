@@ -27,6 +27,7 @@ class Job extends Model
         'state_id',
         'city_id',
         'category_id',
+        'force_slug',
         'title',
         'agency_name',
         'agency_website',

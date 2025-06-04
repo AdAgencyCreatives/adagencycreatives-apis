@@ -17,6 +17,7 @@ class UpdateJobRequest extends FormRequest
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'category_id' => 'sometimes',
+            'force_slug' => 'sometimes|string|max:255',
             'employement_type' => 'sometimes|string|max:255',
             'industry_experience' => 'required|array',
             'industry_experience.*' => 'exists:industries,uuid',

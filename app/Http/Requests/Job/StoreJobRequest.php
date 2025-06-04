@@ -18,6 +18,7 @@ class StoreJobRequest extends FormRequest
             'category_id' => 'required|exists:categories,uuid',
             'state_id' => 'nullable|exists:locations,uuid',
             'city_id' => 'nullable|exists:locations,uuid',
+            'force_slug' => 'sometimes|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'employment_type' => 'string|max:255',

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Publication\PubCollection;
+use App\Http\Resources\Publication\FaqCollection;
 use App\Http\Resources\Publication\PubResource;
 use App\Models\Attachment;
 use App\Models\PublicationResource;
@@ -23,7 +23,7 @@ class PublicationResourceController extends Controller
 
         $topics = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
-        return new PubCollection($topics);
+        return new FaqCollection($topics);
     }
 
     public function store(Request $request)
