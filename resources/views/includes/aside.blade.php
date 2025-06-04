@@ -648,24 +648,24 @@
                 </li>
 
 
-                <li class="sidebar-item {{ request()->is('faq*') ? 'active' : '' }} ">
-                    <a data-target="#faqs" data-toggle="collapse" class="sidebar-link collapsed">
+                <li class="sidebar-item {{ request()->is('faqs*') ? 'active' : '' }} ">
+                    <a data-target="#faqs_menu" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="anchor"></i>
                         <span class="align-middle">Faqs</span>
                     </a>
-                    <ul id="faqs"
-                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('faq*') ? 'show' : '' }}"
+                    <ul id="faqs_menu"
+                        class="sidebar-dropdown list-unstyled collapse {{ request()->is('faqs*') ? 'show' : '' }}"
                         data-parent="#sidebar">
 
-                        <li class="sidebar-item {{ request()->is('faq') ? 'active' : '' }}">
-                            <a class="sidebar-link" href="{{ route('faq.index') }}">
+                        <li class="sidebar-item {{ request()->is('faqs') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('faqs.index') }}">
                                 <i class="align-middle" data-feather="anchor"></i>
                                 <span class="align-middle">All Faqs</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item {{ request()->is('faq/create') ? 'active' : '' }}">
-                            <a class="sidebar-link" href="{{ route('faq.create') }}">
+                        <li class="sidebar-item {{ request()->is('faqs/create') ? 'active' : '' }}">
+                            <a class="sidebar-link" href="{{ route('faqs.create') }}">
                                 <i class="align-middle" data-feather="plus-circle"></i>
                                 <span class="align-middle">Add New Faq</span>
                             </a>

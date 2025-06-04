@@ -34,21 +34,14 @@ use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\Admin\TestDataController;
-use App\Http\Controllers\Api\V1\CreativeController as V1CreativeController;
-use App\Http\Resources\MentorResource\MentorResource;
-use App\Http\Resources\Faq\FaqResource;
-use App\Jobs\SendEmailJob;
 use App\Models\Attachment;
 use App\Models\Category;
-use App\Models\Group;
 use App\Models\Industry;
 use App\Models\Location;
 use App\Models\Media;
-use App\Models\PublicationResource;
 use App\Models\Strength;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
@@ -186,6 +179,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('employments', EmploymentController::class); // Employment-Type
 
         Route::resource('strengths', StrengthController::class);
+        Route::resource('faqs', FaqController::class);
 
         Route::resource('reports', ReportController::class);
 
@@ -408,7 +402,6 @@ Route::view('resume', 'resume');
 
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
 Route::resource('resource', MentorResourceController::class);
-Route::resource('faq', FaqController::class);
 Route::resource('publication-resource', PublicationResourceController::class);
 Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
 Route::post('/update-topic-order', [MentorTopicController::class, 'updateOrder'])->name('update-topic-order');

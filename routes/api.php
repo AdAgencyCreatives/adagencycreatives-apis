@@ -221,6 +221,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'destroy' => 'api.strengths.destroy',
         'get_strengths' => 'api.strengths.get_strengths',
     ]);
+    Route::apiResource('faqs', FaqController::class)->names([
+        'index' => 'api.faqs.index',
+        'store' => 'api.faqs.store',
+        'show' => 'api.faqs.show',
+        'update' => 'api.faqs.update',
+        'destroy' => 'api.faqs.destroy',
+        'get_faqs' => 'api.faqs.get_faqs',
+    ]);
 
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
@@ -352,13 +360,6 @@ Route::get('pages', [PageController::class, 'index']);
 // Mentorship Topic
 Route::resource('topics', MentorTopicController::class);
 Route::resource('mentor-resources', MentorResourceController::class);
-Route::apiResource('faq', FaqController::class)->names([
-    'index' => 'api.faqs.index',
-    'store' => 'api.faqs.store',
-    'show' => 'api.faqs.show',
-    'update' => 'api.faqs.update',
-    'destroy' => 'api.faqs.destroy',
-]);
 Route::resource('publication-resources', PublicationResourceController::class);
 Route::resource('featured_cities', FeaturedLocationController::class);
 // Route::resource('featured_cities', FeaturedLocationWithJobCountController::class);
