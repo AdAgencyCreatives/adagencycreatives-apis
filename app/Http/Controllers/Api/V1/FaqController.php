@@ -60,10 +60,10 @@ class FaqController extends Controller
         }
     }
 
-    public function update(UpdateFaqRequest $request, $uuid)
+    public function update(UpdateFaqRequest $request, $id)
     {
         try {
-            $faq = Faq::where('uuid', $uuid)->first();
+            $faq = Faq::where('id', $id)->first();
             $faq->update($request->only('title', 'description', 'order'));
             return new FaqResource($faq);
         } catch (ModelNotFoundException $exception) {

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Faq;
 
-use App\Models\Faq;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFaqRequest extends FormRequest
