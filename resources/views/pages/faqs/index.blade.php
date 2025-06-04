@@ -124,30 +124,18 @@
                         value: currentData
                     });
                 } else if (col == 'description') {
-                    currentData = $(this).html();
                     inputField = $('<textarea>', {
                         rows: 3,
                     });
-                    inputField.html(currentData);
                 }
 
-                $(this).html(inputField);
+                $(this).val(inputField);
 
                 inputField.focus();
                 inputField.on('blur', function() {
 
                     var newData = $(this).val();
-
-                    if ($(this).is('textarea')) {
-                        console.log('textarea', $(this).val());
-                        console.log('textarea', $(this).html());
-                        newData = $(this).html();
-                        $(this).parent().html(newData);
-                    } else {
-                        $(this).parent().text(newData);
-                    }
-
-
+                    $(this).parent().text(newData);
                     // console.log(id);
                     // console.log(newData);
 
