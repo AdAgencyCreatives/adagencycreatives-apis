@@ -211,9 +211,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Group Name</th>
-                                            <th>Created At</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Order</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
