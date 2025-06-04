@@ -73,14 +73,14 @@
                 var roleBasedActions = '';
 
                 roleBasedActions = '<a href="#" class="delete-faq-btn" data-id="' +
-                    faq.id + '">Delete</a>';
+                    faq.uuid + '">Delete</a>';
 
                 var row = '<tr>' +
-                    '<td>' + faq.id + '</td>' +
-                    '<td class="faq-title" data-id="' + faq.id + '" data-col="title">' + faq.title + '</td>' +
-                    '<td class="faq-description" data-id="' + faq.id + '" data-col="description">' + faq
+                    '<td>' + faq.uuid + '</td>' +
+                    '<td class="faq-title" data-id="' + faq.uuid + '" data-col="title">' + faq.title + '</td>' +
+                    '<td class="faq-description" data-id="' + faq.uuid + '" data-col="description">' + faq
                     .description + '</td>' +
-                    '<td class="faq-order" data-id="' + faq.id + '" data-col="order">' + faq.order + '</td>' +
+                    '<td class="faq-order" data-id="' + faq.uuid + '" data-col="order">' + faq.order + '</td>' +
                     '<td>' + roleBasedActions + '</td>' +
                     '</tr>';
 
@@ -94,7 +94,7 @@
 
             fetchFaqs();
             $(document).on('click', '.delete-faq-btn', function() {
-                var resourceId = $(this).data('id');
+                var resourceId = $(this).data('uuid');
                 var csrfToken = '{{ csrf_token() }}';
                 console.log(csrfToken);
                 deleteConfirmation(resourceId, 'faq', 'faqs', csrfToken);
@@ -110,7 +110,7 @@
 
             function handleEdit() {
                 var currentData = $(this).text();
-                var id = $(this).data('id');
+                var uuid = $(this).data('uuid');
                 var col = $(this).data('col');
 
                 var inputField = $('<input>', {
@@ -138,7 +138,7 @@
                     var newData = $(this).val();
                     $(this).parent().html(newData);
 
-                    // console.log(id);
+                    // console.log(uuid);
                     // console.log(newData);
 
                     $.ajaxSetup({
@@ -147,7 +147,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/v1/faqs/' + id,
+                        url: '/api/v1/faqs/' + uuid,
                         method: 'PUT',
                         data: {
                             [col]: newData
