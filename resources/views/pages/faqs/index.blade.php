@@ -129,14 +129,14 @@
                     });
                 }
 
-                $(this).val(inputField);
+                $(this).html(inputField);
 
                 inputField.focus();
                 inputField.on('blur', function() {
 
                     var newData = $(this).val();
                     $(this).parent().html(newData);
-                    
+
                     // console.log(id);
                     // console.log(newData);
 
