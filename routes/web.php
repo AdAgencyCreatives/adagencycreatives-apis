@@ -409,8 +409,8 @@ Route::view('resume', 'resume');
 Route::resource('topic', MentorTopicController::class)->except('edit', 'show');
 Route::resource('resource', MentorResourceController::class);
 Route::resource('faq', FaqController::class)->names([
-    "index", "web.faq.index",
-    "create", "web.faq.create",
+    "index"=> "web.faq.index",
+    "create"=> "web.faq.create",
 ]);
 Route::resource('publication-resource', PublicationResourceController::class);
 Route::post('/update-publication-resource-order', [PublicationResourceController::class, 'updateOrder'])->name('update-publication-resource-order');
