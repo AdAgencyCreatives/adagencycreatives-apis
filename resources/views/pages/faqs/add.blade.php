@@ -17,7 +17,7 @@ $(document).ready(function() {
         });
 
         var data = {
-            name: $('#new_faq_name').val(),
+            title: $('#new_faq_title').val(),
             description: $('#new_faq_description').val(),
             order: $('#new_faq_order').val(),
         };
@@ -76,8 +76,8 @@ $(document).ready(function() {
                 <form id="new_faq_form">
                     @csrf
                     <div class="mb-3">
-                        <label for="new_faq_name" class="form-label">Faq Name</label>
-                        <input type="text" class="form-control" id="new_faq_name">
+                        <label for="new_faq_title" class="form-label">Faq Title</label>
+                        <input type="text" class="form-control" id="new_faq_title">
                     </div>
                     <div class="mb-3">
                         <label for="new_faq_description" class="form-label">Faq Description</label>
