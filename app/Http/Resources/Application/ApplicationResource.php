@@ -30,7 +30,7 @@ class ApplicationResource extends JsonResource
             'slug' => get_user_slug($user),
             'creative_category' => $user->creative?->category?->name,
             'creative_title' => $user->creative->title,
-            'profile_image' => get_profile_image($user),
+            'profile_image' => $this->get_profile_image($user),
             'user_thumbnail' => get_user_thumbnail($user),
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
