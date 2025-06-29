@@ -30,6 +30,8 @@ class ApplicationResource extends JsonResource
             'slug' => get_user_slug($user),
             'creative_category' => $user->creative?->category?->name,
             'creative_title' => $user->creative->title,
+            'profile_image' => get_profile_image($user),
+            'user_thumbnail' => get_user_thumbnail($user),
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
             'job_title' => $job->title,
@@ -50,6 +52,12 @@ class ApplicationResource extends JsonResource
             ],
 
         ];
+    }
+
+     public function get_profile_image($user)
+    {
+        return isset($user->profile_picture) ? (getAttachmentBasePath() . $user->profile_picture->path) : '';
+        // return isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' );
     }
 
     private function get_resume_url($user, $logged_in_user)
