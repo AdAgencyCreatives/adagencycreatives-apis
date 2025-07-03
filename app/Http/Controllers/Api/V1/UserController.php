@@ -363,7 +363,7 @@ class UserController extends Controller
         $user->save();
 
         if ($user->status != 'active') {
-            return response()->json(['message' => 'Account not approved'], 401);
+            return response()->json(['message' => 'Account not active'], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -394,7 +394,7 @@ class UserController extends Controller
         $user = $request->user();
 
         if ($user->status != 'active') {
-            return response()->json(['message' => 'Account not approved'], 401);
+            return response()->json(['message' => 'Account not active'], 401);
         }
 
         return response()->json([
