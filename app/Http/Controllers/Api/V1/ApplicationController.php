@@ -12,11 +12,11 @@ use App\Http\Resources\Application\ApplicationResource;
 use App\Http\Resources\AppliedJob\AppliedJobCollection;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
-use App\Models\Attachment;
 use App\Models\Creative;
 use App\Models\Job;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Database\Eloquent\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -334,6 +334,13 @@ class ApplicationController extends Controller
         $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
 
         $query->whereIn('job_id', $job_ids);
+
+        $query->whereExists(function ($query) {
+            $query->select(DB::raw(1))
+                ->from('users')
+                ->whereColumn('users.id', 'applications.user_id');
+        });
+
 
         $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
