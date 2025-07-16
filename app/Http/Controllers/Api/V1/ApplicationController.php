@@ -326,22 +326,14 @@ class ApplicationController extends Controller
     {
         $query = QueryBuilder::for(Application::class)
             ->allowedFilters([
-                AllowedFilter::scope('job_user_id'),
                 AllowedFilter::scope('job_id'),
                 'status',
             ]);
 
-        $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
+        $job_user = User::where('uuid', $request->job_user_id)->first();
+        $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
 
-        if ($recent_only) {
-            $query->where('status', 0);
-        }
-
-        $query->with('job', function ($q) use ($recent_only) {
-            if ($recent_only) {
-                $q->where('status', 1);
-            }
-        });
+        $query->whereIn('job_id', $job_ids);
 
         $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

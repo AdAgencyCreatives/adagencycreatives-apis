@@ -109,18 +109,6 @@ class Application extends Model
         }
     }
 
-    public function scopeJobUserId(Builder $query, $job_user_id)
-    {
-        return $job_user_id;
-        
-        $job_user = User::where('uuid', $job_user_id);
-        $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
-
-        if ($job_ids && count($job_ids) > 0) {
-            return $query->whereIn('job_id', $job_ids);
-        }
-    }
-
     protected static function booted()
     {
         static::updating(function ($application) {
