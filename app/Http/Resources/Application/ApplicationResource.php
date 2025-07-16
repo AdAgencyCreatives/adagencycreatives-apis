@@ -15,7 +15,7 @@ class ApplicationResource extends JsonResource
         $job = Job::where('id', '=', $this->job_id)->first();
 
         if (!$user) {
-            return [];
+            return ["msg" => "waaa???"];
         }
 
         return [
@@ -54,7 +54,7 @@ class ApplicationResource extends JsonResource
         ];
     }
 
-     public function get_profile_image($user)
+    public function get_profile_image($user)
     {
         return isset($user->profile_picture) ? (getAttachmentBasePath() . $user->profile_picture->path) : '';
         // return isset( $user->profile_picture ) ? getAttachmentBasePath() . $user->profile_picture->path : asset( 'assets/img/placeholder.png' );
