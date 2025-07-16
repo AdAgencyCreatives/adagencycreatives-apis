@@ -336,9 +336,9 @@ class ApplicationController extends Controller
         $query->whereIn('job_id', $job_ids);
 
         $query->whereExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('users')
-                ->whereColumn('users.id', 'applications.user_id');
+            $query->select(DB::raw(1))->from('users')->whereColumn('users.id', 'applications.user_id');
+        })->whereHas('user', function ($query) {
+            $query->whereNull('deleted_at');
         });
 
 
