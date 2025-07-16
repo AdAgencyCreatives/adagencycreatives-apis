@@ -16,12 +16,12 @@ use App\Models\Creative;
 use App\Models\Job;
 use App\Models\Message;
 use App\Models\User;
-use Illuminate\Database\Eloquent\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
