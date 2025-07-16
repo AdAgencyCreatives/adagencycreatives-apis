@@ -27,6 +27,8 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
+        return json_encode($request);
+
         $query = QueryBuilder::for(Application::class)
             ->allowedFilters([
                 AllowedFilter::scope('user_id'),

@@ -15,7 +15,7 @@ class ApplicationResource extends JsonResource
         $job = Job::where('id', '=', $this->job_id)->first();
 
         if (!$user) {
-            return ["msg" => "waaa???"];
+            return [];
         }
 
         return [
