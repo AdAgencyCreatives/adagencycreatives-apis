@@ -321,4 +321,30 @@ class ApplicationController extends Controller
 
         return count($app_ids) > 0;
     }
+
+    public function get_all_applications(Request $request)
+    {
+        $query = QueryBuilder::for(Application::class)
+            ->allowedFilters([
+                AllowedFilter::scope('job_user_id'),
+                AllowedFilter::scope('job_id'),
+                'status',
+            ]);
+
+        $recent_only = $request->has('recent_only') && $request->recent_only == "yes";
+
+        if ($recent_only) {
+            $query->where('status', 0);
+        }
+
+        $query->with('job', function ($q) use ($recent_only) {
+            if ($recent_only) {
+                $q->where('status', 1);
+            }
+        });
+
+        $applications = $query->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate($request->per_page ?? config('global.request.pagination_limit'));
+
+        return new ApplicationCollection($applications);
+    }
 }

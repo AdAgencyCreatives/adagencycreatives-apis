@@ -185,6 +185,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('generate-cropped-attachment', [AttachmentController::class, 'generateCroppedAttachment']);
 
     Route::get('applied_jobs', [ApplicationController::class, 'applied_jobs']);
+    Route::get('get_all_applications', [ApplicationController::class, 'get_all_applications']);
     Route::apiResource('applications', ApplicationController::class); //->middleware('check.permissions:application');
     Route::apiResource('resumes', ResumeController::class)->middleware('check.permissions:resume');
     Route::apiResource('educations', EducationController::class, ['except' => ['index', 'update']])->middleware('check.permissions:education');
