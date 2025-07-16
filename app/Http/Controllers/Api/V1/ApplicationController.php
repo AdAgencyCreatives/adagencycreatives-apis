@@ -27,7 +27,7 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        return json_encode($request);
+        return json_encode($request->all());
 
         $query = QueryBuilder::for(Application::class)
             ->allowedFilters([
