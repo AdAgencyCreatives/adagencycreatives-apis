@@ -337,7 +337,8 @@ class ApplicationController extends Controller
         if (!empty($request->search)) {
             $search = $request->search;
             $query->whereHas('user', function ($q) use ($search) {
-                $q->whereRaw("(CONCAT(users.first_name, ' ', users.last_name) LIKE '%" . trim($search) . "%')");
+                $q->whereRaw("(CONCAT(users.first_name, ' ', users.last_name) LIKE '%" . trim($search) . "%')")
+                ->orWhereRaw("(CONCAT(users.last_name, ' ', users.first_name) LIKE '%" . trim($search) . "%')");
             });
         }
 
