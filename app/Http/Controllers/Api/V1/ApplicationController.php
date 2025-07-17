@@ -332,10 +332,14 @@ class ApplicationController extends Controller
 
         $job_user = User::where('uuid', $request->job_user_id)->first();
 
-        $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
+        $job_ids = [];
 
         if (in_array($job_user->role, ['advisor'])) {
             $job_ids = Job::where('advisor_id', $job_user->id)->pluck('id')->toArray();
+            $query->whereNotNull('advisor_id');
+        } else {
+            $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
+            $query->whereNull('advisor_id');
         }
 
         $query->whereIn('job_id', $job_ids);
