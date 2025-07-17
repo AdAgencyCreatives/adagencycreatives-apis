@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Application;
 
 use App\Models\Job;
+use App\Models\Review;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicationResource extends JsonResource
@@ -15,8 +16,10 @@ class ApplicationResource extends JsonResource
         $job = Job::where('id', '=', $this->job_id)->first();
 
         if (!$user) {
-            return [];
+            return []; // not needed now, but kept it for safety, just in case user was deleted (softly or hardly)
         }
+
+        $review_rating_score = Review::where('target_id', $user->id)->avg('rating') ?? 0.0;
 
         return [
             'type' => 'applications',
@@ -41,7 +44,7 @@ class ApplicationResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'removed_from_recent' => $this?->removed_from_recent ? $this->removed_from_recent : false,
-
+            'review_rating_score' => $review_rating_score,
             'relationships' => [
                 'notes' => [
                     'links' => [
