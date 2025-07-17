@@ -331,14 +331,20 @@ class ApplicationController extends Controller
             ]);
 
         $job_user = User::where('uuid', $request->job_user_id)->first();
+
         $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
+
+        if (in_array($job_user->role, ['advisor'])) {
+            $job_ids = Job::where('advisor_id', $job_user->id)->pluck('id')->toArray();
+        }
+
         $query->whereIn('job_id', $job_ids);
 
         if (!empty($request->search)) {
             $search = $request->search;
             $query->whereHas('user', function ($q) use ($search) {
                 $q->whereRaw("(CONCAT(users.first_name, ' ', users.last_name) LIKE '%" . trim($search) . "%')")
-                ->orWhereRaw("(CONCAT(users.last_name, ' ', users.first_name) LIKE '%" . trim($search) . "%')");
+                    ->orWhereRaw("(CONCAT(users.last_name, ' ', users.first_name) LIKE '%" . trim($search) . "%')");
             });
         }
 
