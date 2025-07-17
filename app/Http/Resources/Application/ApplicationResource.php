@@ -19,7 +19,7 @@ class ApplicationResource extends JsonResource
             return []; // not needed now, but kept it for safety, just in case user was deleted (softly or hardly)
         }
 
-        $review_rating_score = Review::where('target_id', $user->id)->avg('rating') ?? 0.0;
+        $creative_reviews_avg = Review::where('target_id', $user->id)->avg('rating') ?? 0.0;
 
         return [
             'type' => 'applications',
@@ -38,13 +38,14 @@ class ApplicationResource extends JsonResource
             'user_profile_id' => $user->id,
             'job_id' => $job->uuid,
             'job_title' => $job->title,
+            'job_apply_type' => $job->apply_type,
             'resume_url' => $this->get_resume_url($user, $logged_in_user), //isset($this->attachment) ? asset('storage/'.$this->attachment->path) : null,
             'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'removed_from_recent' => $this?->removed_from_recent ? $this->removed_from_recent : false,
-            'creative_score' => sprintf('%0.2f', $review_rating_score),
+            'creative_reviews_avg' => sprintf('%0.2f', $creative_reviews_avg),
             'relationships' => [
                 'notes' => [
                     'links' => [
