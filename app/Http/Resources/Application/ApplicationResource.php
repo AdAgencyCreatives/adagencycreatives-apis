@@ -44,7 +44,7 @@ class ApplicationResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->created_at->format(config('global.datetime_format')),
             'removed_from_recent' => $this?->removed_from_recent ? $this->removed_from_recent : false,
-            'creative_score' => $review_rating_score,
+            'creative_score' => sprintf('%0.2f', $review_rating_score),
             'relationships' => [
                 'notes' => [
                     'links' => [
