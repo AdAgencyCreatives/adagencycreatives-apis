@@ -332,19 +332,16 @@ class ApplicationController extends Controller
 
         $job_user = User::where('uuid', $request->job_user_id)->first();
 
-        $job_ids = [];
-
         if (in_array($job_user->role, ['advisor'])) {
-            $job_ids = Job::where('advisor_id', $job_user->id)->pluck('id')->toArray();
+            $query->whereHas('job', function ($q) use ($job_user) {
+                $q->where('advisor_id', $job_user->id);
+            });
         } else {
-            $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
-            $query->where('status', 4)
-                ->orWhereHas('job', function ($q) {
-                    $q->whereNull('advisor_id');
-                });
+            $query->where('status', 4)->orWhereHas('job', function ($q) use ($job_user) {
+                $q->whereNull('advisor_id')
+                    ->where('user_id', $job_user->id);
+            });
         }
-
-        $query->whereIn('job_id', $job_ids);
 
         if (!empty($request->search)) {
             $search = $request->search;
