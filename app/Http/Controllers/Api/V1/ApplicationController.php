@@ -336,14 +336,12 @@ class ApplicationController extends Controller
 
         if (in_array($job_user->role, ['advisor'])) {
             $job_ids = Job::where('advisor_id', $job_user->id)->pluck('id')->toArray();
-            $query->whereHas('job', function ($q) {
-                $q->whereNotNull('advisor_id');
-            });
         } else {
             $job_ids = Job::where('user_id', $job_user->id)->pluck('id')->toArray();
-            $query->whereHas('job', function ($q) {
-                $q->whereNull('advisor_id');
-            });
+            $query->where('status', 4)
+                ->orWhereHas('job', function ($q) {
+                    $q->whereNull('advisor_id');
+                });
         }
 
         $query->whereIn('job_id', $job_ids);
