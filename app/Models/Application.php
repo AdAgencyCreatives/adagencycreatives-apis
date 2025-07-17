@@ -104,7 +104,6 @@ class Application extends Model
     public function scopeJobId(Builder $query, $job_id)
     {
         $job = Job::where('uuid', $job_id)->first();
-        return $job;
         if ($job) {
             return $query->where('job_id', $job->id);
         }
