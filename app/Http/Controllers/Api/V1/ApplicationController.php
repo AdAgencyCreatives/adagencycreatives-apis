@@ -330,16 +330,23 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
+        $job_id = isset($request->filter) && isset($request->filter['job_id']) ? $request->filter['job_id'] : null;
+
         $job_user = User::where('uuid', $request->job_user_id)->first();
 
         if (in_array($job_user->role, ['advisor'])) {
-            $query->whereHas('job', function ($q) use ($job_user) {
+            $query->whereHas('job', function ($q) use ($job_user, $job_id) {
                 $q->where('advisor_id', $job_user->id);
+                if ($job_id) {
+                    $q->where('job_id', $job_id);
+                }
             });
         } else {
-            $query->where('status', 4)->orWhereHas('job', function ($q) use ($job_user) {
-                $q->whereNull('advisor_id')
-                    ->where('user_id', $job_user->id);
+            $query->where('status', 4)->orWhereHas('job', function ($q) use ($job_user, $job_id) {
+                $q->whereNull('advisor_id')->where('user_id', $job_user->id);
+                if ($job_id) {
+                    $q->where('job_id', $job_id);
+                }
             });
         }
 
