@@ -330,7 +330,7 @@ class ApplicationController extends Controller
                 'status',
             ]);
 
-        $job_id = isset($request->filter) && isset($request->filter['job_id']) ? Job::where('uuid', $request->filter['job_id'])->id : null;
+        $job_id = isset($request->filter) && isset($request->filter['job_id']) ? Job::where('uuid', $request->filter['job_id'])->first()->id : null;
 
         $job_user = User::where('uuid', $request->job_user_id)->first();
 
