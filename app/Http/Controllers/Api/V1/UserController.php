@@ -297,11 +297,11 @@ class UserController extends Controller
                     $user->locked_at = NULL;
                     $user->save();
 
-                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                    return response()->json(['message' => 'Invalid password.'], 401);
                 }
 
                 return response()->json([
-                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'message' => 'Invalid password. You are locked to login for 15m.',
                     'status' => 'locked',
                     'locked_end' => $locked_end
                 ], 401);
@@ -319,11 +319,11 @@ class UserController extends Controller
                     $user->locked_at = NULL;
                     $user->save();
 
-                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                    return response()->json(['message' => 'Invalid password.'], 401);
                 }
 
                 return response()->json([
-                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'message' => 'Invalid password. You are locked to login for 15m.',
                     'status' => 'locked',
                     'locked_end' => $locked_end
                 ], 401);
@@ -341,21 +341,21 @@ class UserController extends Controller
                     $user->locked_at = NULL;
                     $user->save();
 
-                    return response()->json(['message' => 'Invalid credentials.'], 401);
+                    return response()->json(['message' => 'Invalid password.'], 401);
                 }
 
                 return response()->json([
-                    'message' => 'Invalid credentials. You are locked to login for 15m.',
+                    'message' => 'Invalid password. You are locked to login for 15m.',
                     'status' => 'locked',
                     'locked_end' => $locked_end
                 ], 401);
             }
 
             if ($user->failed_login_attempts >= 5) {
-                return response()->json(['message' => 'Invalid credentials. Click here to reset your password.', 'status' => 'reset'], 401);
+                return response()->json(['message' => 'Invalid password. Click here to reset your password.', 'status' => 'reset'], 401);
             }
 
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid password'], 401);
         }
 
         $user->failed_login_attempts = 0;
