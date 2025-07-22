@@ -437,7 +437,7 @@ class UserController extends Controller
         $custom_wp_hasher = new PasswordHash(8, true);
 
         if (!$custom_wp_hasher->CheckPassword($request->password, $user->password)) { //$plain_password, $password_hashed
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid password'], 401);
         }
 
         return response()->json(['message' => 'Password confirmed successfully'], 200);
