@@ -78,7 +78,7 @@ class Job extends Model
         'PENDING' => 0,
         'APPROVED' => 1,
         'REJECTED' => 2,
-        'COMPLETED' => 4,
+        'COMPLETED' => 3,
     ];
 
     public const EMPLOYMENT_TYPE = [
