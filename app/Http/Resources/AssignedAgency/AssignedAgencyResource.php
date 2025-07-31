@@ -19,6 +19,8 @@ class AssignedAgencyResource extends JsonResource
             'logo' => get_profile_picture($user),
             // 'impersonate_url' => route('advisor.impersonate', $user->uuid),
             'status' => $this->get_subscription_status($user),
+            'category' => $this->category->name,
+            'created_at' => $this->created_at->format(config('global.datetime_format')),
         ];
     }
 
