@@ -114,7 +114,7 @@ class PackageRequestController extends Controller
             // Retrieve package requests for the user
             $packageRequests = PackageRequest::where('assigned_to', $user->id)
                 ->where('status', 1) //only approved
-                ->sortByDesc('created_at')
+                ->orderByDesc('created_at')
                 ->get();
 
             // Retrieve agencies for the package requests
