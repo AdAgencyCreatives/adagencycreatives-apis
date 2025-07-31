@@ -49,6 +49,7 @@ class LoggedinCreativeResource extends JsonResource
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
+            'profile_image_id' => $user->profile_picture ? $user->profile_picture->uuid : null,
             'profile_image_base64' =>  $allowBase64 ? $this->get_profile_image_base64($user) : '',
             'user_thumbnail' => $this->get_user_thumbnail($user),
             'user_thumbnail_base64' => $allowBase64 ?  $this->get_user_thumbnail_base64($user) : '',

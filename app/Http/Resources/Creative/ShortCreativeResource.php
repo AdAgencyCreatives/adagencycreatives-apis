@@ -30,6 +30,7 @@ class ShortCreativeResource extends JsonResource
             'title' => $this->title,
             'category' => $this->creative_category,
             'profile_image' => $this->get_profile_image($user),
+            'profile_image_id' => $user->profile_picture ? $user->profile_picture->uuid : null,
             'user_thumbnail' => $this->get_user_thumbnail($user),
             'location' => $this->location,
         ];
