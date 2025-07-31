@@ -78,13 +78,13 @@ class PackageRequest extends Model
     public function getStatusAttribute($value)
     {
         switch ($value) {
-            case Job::STATUSES['PENDING']:
+            case Job::PACKAGE_REQUEST_STATUSES['PENDING']:
                 return 'pending';
-            case Job::STATUSES['APPROVED']:
+            case Job::PACKAGE_REQUEST_STATUSES['APPROVED']:
                 return 'approved';
-            case Job::STATUSES['REJECTED']:
+            case Job::PACKAGE_REQUEST_STATUSES['REJECTED']:
                 return 'rejected';
-            case Job::STATUSES['COMPLETED']:
+            case Job::PACKAGE_REQUEST_STATUSES['COMPLETED']:
                 return 'completed';
             default:
                 return null;
@@ -95,16 +95,16 @@ class PackageRequest extends Model
     {
         switch ($value) {
             case 'approved':
-                $this->attributes['status'] = Job::STATUSES['APPROVED'];
+                $this->attributes['status'] = Job::PACKAGE_REQUEST_STATUSES['APPROVED'];
                 break;
             case 'rejected':
-                $this->attributes['status'] = Job::STATUSES['REJECTED'];
+                $this->attributes['status'] = Job::PACKAGE_REQUEST_STATUSES['REJECTED'];
                 break;
             case 'completed':
-                $this->attributes['status'] = Job::STATUSES['COMPLETED'];
+                $this->attributes['status'] = Job::PACKAGE_REQUEST_STATUSES['COMPLETED'];
                 break;
             default:
-                $this->attributes['status'] = Job::STATUSES['PENDING'];
+                $this->attributes['status'] = Job::PACKAGE_REQUEST_STATUSES['PENDING'];
                 break;
         }
     }

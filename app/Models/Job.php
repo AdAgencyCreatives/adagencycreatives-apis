@@ -74,6 +74,13 @@ class Job extends Model
         'PUBLISHED' => 6,
     ];
 
+    public const PACKAGE_REQUEST_STATUSES = [
+        'PENDING' => 0,
+        'APPROVED' => 1,
+        'REJECTED' => 2,
+        'COMPLETED' => 4,
+    ];
+
     public const EMPLOYMENT_TYPE = [
         'Full-Time',
         'Part-Time',
