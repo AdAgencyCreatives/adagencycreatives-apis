@@ -84,6 +84,8 @@ class PackageRequest extends Model
                 return 'approved';
             case Job::STATUSES['REJECTED']:
                 return 'rejected';
+            case Job::STATUSES['COMPLETED']:
+                return 'completed';
             default:
                 return null;
         }
@@ -95,9 +97,11 @@ class PackageRequest extends Model
             case 'approved':
                 $this->attributes['status'] = Job::STATUSES['APPROVED'];
                 break;
-
             case 'rejected':
                 $this->attributes['status'] = Job::STATUSES['REJECTED'];
+                break;
+            case 'completed':
+                $this->attributes['status'] = Job::STATUSES['COMPLETED'];
                 break;
             default:
                 $this->attributes['status'] = Job::STATUSES['PENDING'];

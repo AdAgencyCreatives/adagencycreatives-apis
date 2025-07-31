@@ -322,6 +322,9 @@
                                             <option value="rejected" @if ($package_request->status == 'rejected') selected @endif>
                                                 Rejected
                                             </option>
+                                            <option value="rejected" @if ($package_request->status == 'completed') selected @endif>
+                                                Completed
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
