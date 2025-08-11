@@ -251,12 +251,12 @@ class FriendshipController extends Controller
         })->first();
 
         if (!$friendship) {
-            return response()->json(['message' => 'Friendship removed.']);
+            return response()->json(['message' => 'Friendship removed 1.']);
         }
 
         $friendship->delete();
 
-        return response()->json(['message' => 'Friendship removed.']);
+        return response()->json(['message' => 'Friendship removed 2.']);
     }
 
     public function deleteFriendship($user1Id, $user2Id)
