@@ -87,26 +87,26 @@ class FriendshipController extends Controller
                 throw new ApiException($e, 'CS-01');
             }
 
-            return response()->json(['message' => 'Friendship requested.']);
+            return response()->json(['message' => 'Connection requested.']);
         } else {
 
             if ($existingFriendship->status == 'pending') {
                 if ($existingFriendship->sender_id == $sender->id) {
-                    return response()->json(['message' => 'Friendship requested.']);
+                    return response()->json(['message' => 'Connection requested.']);
                 } else {
                     //make the friends
                     $existingFriendship->update(['status' => 'accepted']);
                     // Create a friendship between the users
                     $this->createFriendship($existingFriendship->sender_id, $existingFriendship->receiver_id);
 
-                    return response()->json(['message' => 'Friendship accepted.']);
+                    return response()->json(['message' => 'Connection accepted.']);
                 }
             } elseif ($existingFriendship->status == 'accepted') {
-                return response()->json(['message' => 'Friendship accepted.']);
+                return response()->json(['message' => 'Connection accepted.']);
             } elseif ($existingFriendship->status === 'cancelled' || $existingFriendship->status === 'declined') {
                 $existingFriendship->update(['status' => 'pending']);
 
-                return response()->json(['message' => 'Friendship requested.']);
+                return response()->json(['message' => 'Connection requested.']);
             } elseif ($existingFriendship->status == 'unfriended') {
                 $existingFriendship->update([
                     'status' => 'pending',
@@ -114,7 +114,7 @@ class FriendshipController extends Controller
                     'receiver_id' => $receiver->id,
                 ]);
 
-                return response()->json(['message' => 'Friendship requested.']);
+                return response()->json(['message' => 'Connection requested.']);
             }
         }
     }
@@ -153,20 +153,20 @@ class FriendshipController extends Controller
                 //     ],
                 // ], 'friendship_request_accepted');
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship accepted.')]);
+                return response()->json(['message' => sprintf('Connection accepted.')]);
             } elseif ($response === 'cancelled') {
                 $friendRequest->update(['status' => 'cancelled']);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship removed.')]);
+                return response()->json(['message' => sprintf('Connection removed.')]);
             } elseif ($response === 'declined') {
                 $friendRequest->update(['status' => 'declined']);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship removed.')]);
+                return response()->json(['message' => sprintf('Connection removed.')]);
             } elseif ($response === 'unfriended') {
                 $friendRequest->update(['status' => 'unfriended']);
                 $this->deleteFriendship($friendRequest->sender_id, $friendRequest->receiver_id);
                 DB::commit(); //commit the transaction because in this case we are not using the default resposne message
-                return response()->json(['message' => sprintf('Friendship removed.')]);
+                return response()->json(['message' => sprintf('Connection removed.')]);
             }
 
             DB::commit();
@@ -251,7 +251,7 @@ class FriendshipController extends Controller
         })->first();
 
         if (!$friendship) {
-            return response()->json(['message' => 'Friendship removed.', 'data' => [
+            return response()->json(['message' => 'Connection removed.', 'data' => [
                 'user->id' => $user->id,
                 'friend->id' => $friend->id,
             ]]);
@@ -259,7 +259,7 @@ class FriendshipController extends Controller
 
         $friendship->delete();
 
-        return response()->json(['message' => 'Friendship removed.']);
+        return response()->json(['message' => 'Connection removed.']);
     }
 
     public function deleteFriendship($user1Id, $user2Id)
