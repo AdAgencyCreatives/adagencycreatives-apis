@@ -48,5 +48,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::get('lounge/counts', [GroupController::class, 'sidebar_count']);
     Route::get('lounge/main_feed', [PostController::class, 'main_feed']);
-    Route::get('lounge/main_feed_pinned_post', [PostController::class, 'main_feed_pinned_post']);
+    Route::get('lounge/main_feed_pinned_posts', [PostController::class, 'main_feed_pinned_posts']);
 });

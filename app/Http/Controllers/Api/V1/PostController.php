@@ -201,7 +201,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->where('id', '<>', 450) // skip pinned post
+                ->whereNull('pinned_at') // skip pinned post
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
@@ -216,7 +216,7 @@ class PostController extends Controller
         }
     }
 
-    public function main_feed_pinned_post(Request $request)
+    public function main_feed_pinned_posts(Request $request)
     {
         try {
             $user = get_auth_user();
@@ -246,7 +246,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->where('id', '=', 450) // get pinned post
+                ->whereNotNull('pinned_at') // get pinned post
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')

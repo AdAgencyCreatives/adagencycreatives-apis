@@ -24,10 +24,12 @@ class Post extends Model
         'status',
         'updated_at',
         'edited_at',
+        'pinned_at',
     ];
 
     protected $casts = [
         'edited_at' => 'datetime',
+        'pinned_at' => 'datetime',
     ];
 
     public function attachments()
