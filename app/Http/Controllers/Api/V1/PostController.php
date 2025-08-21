@@ -201,6 +201,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
+                ->where('id', '<>', 2832) // skip pinned post
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
@@ -209,7 +210,50 @@ class PostController extends Controller
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
 
-            $pinned_post = Post::where('id', 2832);
+            return new PostCollection($posts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function main_feed_pinned_post(Request $request)
+    {
+        try {
+            $user = get_auth_user();
+            $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
+
+            $feed_group = Group::where('slug', 'feed')->first();
+            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
+
+            $query = QueryBuilder::for(Post::class)
+                ->allowedFilters([
+                    AllowedFilter::scope('user_id'),
+                    AllowedFilter::scope('group_id'),
+                    AllowedFilter::exact('status'),
+                ])
+                ->defaultSort('-created_at')
+                ->allowedSorts('created_at')
+                ->where(function ($query) use ($feed_group, $joined_groups, $mention) {
+                    $query
+                        ->whereIn('group_id', array_merge([$feed_group->id], $joined_groups))
+                        ->orWhere('content', 'like', '%' . $mention . '%');
+                });
+
+
+            $posts = $query->with([
+                'reactions' => function ($query) {
+                    // You can further customize the reactions query if needed
+                }
+            ])
+                ->whereHas('user') // If the user is deleted, don't show the attachment
+                ->where('id', '=', 2832) // skip pinned post
+                ->withCount('reactions')
+                ->withCount('comments')
+                ->withCount('likes')
+                ->with('comments')
+                // ->with('user.likes')
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
 
             return new PostCollection($posts);
         } catch (\Exception $e) {
