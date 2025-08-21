@@ -209,6 +209,8 @@ class PostController extends Controller
                 ->paginate($request->per_page ?? config('global.request.pagination_limit'))
                 ->withQueryString();
 
+            $pinned_post = Post::where('id', 2832);
+
             return new PostCollection($posts);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
