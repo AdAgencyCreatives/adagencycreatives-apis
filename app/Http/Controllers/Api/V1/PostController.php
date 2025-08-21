@@ -201,7 +201,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->whereNull('pinned_at') // skip pinned post
+                ->whereNull('pinned_at') // skip pinned posts
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
@@ -225,6 +225,10 @@ class PostController extends Controller
             $feed_group = Group::where('slug', 'feed')->first();
             $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
 
+            Post::whereNotNull('pinned_at')
+                ->where('pinned_at', '<', now()->subWeek())
+                ->update(['pinned_at' => null]);
+
             $query = QueryBuilder::for(Post::class)
                 ->allowedFilters([
                     AllowedFilter::scope('user_id'),
@@ -246,7 +250,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->whereNotNull('pinned_at') // get pinned post
+                ->whereNotNull('pinned_at') // get pinned posts
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
