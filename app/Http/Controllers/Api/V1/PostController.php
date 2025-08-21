@@ -201,7 +201,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->where('id', '<>', 2832) // skip pinned post
+                ->where('id', '<>', 197) // skip pinned post
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
@@ -246,7 +246,7 @@ class PostController extends Controller
                 }
             ])
                 ->whereHas('user') // If the user is deleted, don't show the attachment
-                ->where('id', '=', 2832) // skip pinned post
+                ->where('id', '=', 197) // get pinned post
                 ->withCount('reactions')
                 ->withCount('comments')
                 ->withCount('likes')
