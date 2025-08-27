@@ -74,7 +74,6 @@ class CreativeController extends Controller
     public function search2(Request $request) //Agency with active package
     {
 
-        dd('ere');
         $role = $request?->role ?? 'agency';
 
         if ($role == 'agency') {
@@ -121,6 +120,7 @@ class CreativeController extends Controller
         }
 
         return new LoggedinCreativeCollection($creatives);
+        return 124;
     }
 
     public function search3(Request $request)
