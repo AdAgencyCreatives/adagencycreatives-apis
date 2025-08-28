@@ -140,7 +140,7 @@ class CreativeController extends Controller
             })->pluck('user_id')->toArray());
         }
 
-        // Split the search terms
+        // Collect search terms from both search and search_level2
         $searchTerms = [];
         if (!empty($request->search)) {
             $searchTerms = explode(',', $request->search);
@@ -149,31 +149,38 @@ class CreativeController extends Controller
             $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2));
         }
 
-        // Follow search2 logic: exact matches first, then contains, preserve order
+        // --- NEW: Separate Exact vs Contains ---
         $exactMatchIds = [];
-        $containsMatchIds = [];
+        $containsIds   = [];
+
         foreach ($searchTerms as $term) {
-            $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match', $role);
+            $term = trim($term);
+
+            // Exact match (full string)
+            $exactMatchIds = array_merge($exactMatchIds, $this->getCreativeIDs($term, 'exact-match', $role));
+
+            // Contains match
+            $containsIds   = array_merge($containsIds, $this->getCreativeIDs($term, 'contains', $role));
         }
-        foreach ($searchTerms as $term) {
-            $containsMatchIds[] = $this->getCreativeIDs(trim($term), 'contains', $role);
-        }
-        // Intersect exact matches across all terms
-        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
-        // Flatten contains matches
-        $containsMatchIds = array_merge(...$containsMatchIds);
-        // Merge: exact matches first, then contains matches, remove duplicates, preserve order
-        $combinedCreativeIds = array_values(array_unique(array_merge($commonExactMatchIds, $containsMatchIds)));
-        // Apply cache sorting if needed
+
+        // Deduplicate while preserving order: Exact first, then Contains
+        $combinedCreativeIds = array_values(array_unique(array_merge($exactMatchIds, $containsIds)));
+
+        // Optional: If you still want to respect your cache table sort, apply here
         $combinedCreativeIds = $this->sortCreativeIdsFromCacheTable($combinedCreativeIds);
+
+        // If no IDs found, bail early
+        if (empty($combinedCreativeIds)) {
+            return new LoggedinCreativeCollection(collect([]));
+        }
+
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
         // Retrieve creatives
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) use ($agency_user_applicants) {
-                $query
-                    ->where('status', 1)
+                $query->where('status', 1)
                     ->where(function ($q) use ($agency_user_applicants) {
                         $q->where('is_visible', 1)
                             ->orWhere(function ($q1) use ($agency_user_applicants) {
@@ -188,7 +195,6 @@ class CreativeController extends Controller
 
         return new LoggedinCreativeCollection($creatives);
     }
-
 
     public function process_single_term_search($searchTerm, $role)
     {
