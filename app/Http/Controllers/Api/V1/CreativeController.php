@@ -28,7 +28,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
@@ -72,55 +71,7 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-    public function search2(Request $request) //Agency with active package
-    {
-        $role = $request?->role ?? 'agency';
-Log::info('CreativeController@search2 called with role: ' , ['role' => $role]);
-        if ($role == 'agency') {
-            $agency_user_id = $request?->user()?->id;
-            $agency_user_applicants = [];
-            if (isset($agency_user_id)) {
-                $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
-                    $query->where('user_id', $agency_user_id);
-                })->pluck('user_id')->toArray());
-            }
-        }
 
-        $searchTerms = explode(',', $request->search);
-        $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
-        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
-        // Combine and deduplicate the IDs while preserving the order
-        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
-        $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
-
-        if ($role == 'creative') {
-            $creatives = Creative::whereIn('id', $combinedCreativeIds)
-                ->whereHas('user', function ($query) {
-                    $query->where('is_visible', 1)
-                        ->where('status', 1);
-                })
-                ->orderByRaw($rawOrder)
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-                ->withQueryString();
-        } else {
-            $creatives = Creative::whereIn('id', $combinedCreativeIds)
-                ->whereHas('user', function ($query) use ($agency_user_applicants) {
-                    $query->where('status', 1)
-                        ->where(function ($q) use ($agency_user_applicants) {
-                            $q->where('is_visible', 1)
-                                ->orWhere(function ($q1) use ($agency_user_applicants) {
-                                    $q1->where('is_visible', 0)
-                                        ->whereIn('user_id', $agency_user_applicants);
-                                });
-                        });
-                })
-                ->orderByRaw($rawOrder)
-                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
-                ->withQueryString();
-        }
-
-        return new LoggedinCreativeCollection($creatives);
-    }
 
     public function search3(Request $request)
     {
