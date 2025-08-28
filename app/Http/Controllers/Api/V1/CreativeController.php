@@ -121,29 +121,29 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
-public function search3(Request $request)
-{
-    $search = $request->input('q');
+    public function search3(Request $request)
+    {
+        $search = $request->input('q');
 
-    if (!$search) {
-        return response()->json([]);
-    }
+        if (!$search) {
+            return response()->json([]);
+        }
 
-    $results = Creative::select('id', 'title')
-        ->selectRaw("
+        $results = Creative::select('id', 'title')
+            ->selectRaw("
             CASE
                 WHEN title = ? THEN 0
                 WHEN title LIKE ? THEN 1
                 ELSE 2
             END as sort_order
         ", [$search, "%{$search}%"])
-        ->where('title', 'LIKE', "%{$search}%")
-        ->orderBy('sort_order', 'asc')   // exact = 0, contains = 1
-        ->orderBy('title', 'asc')        // keep stable ordering
-        ->get();
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('sort_order', 'asc')   // exact = 0, contains = 1
+            ->orderBy('title', 'asc')        // keep stable ordering
+            ->get();
 
-    return response()->json($results);
-}
+        return response()->json($results);
+    }
 
 
     public function process_single_term_search($searchTerm, $role)
