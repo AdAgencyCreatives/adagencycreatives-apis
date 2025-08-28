@@ -71,7 +71,55 @@ class CreativeController extends Controller
         return new LoggedinCreativeCollection($creatives);
     }
 
+    public function search2(Request $request) //Agency with active package
+    {
+        $role = $request?->role ?? 'agency';
 
+        if ($role == 'agency') {
+            $agency_user_id = $request?->user()?->id;
+            $agency_user_applicants = [];
+            if (isset($agency_user_id)) {
+                $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                    $query->where('user_id', $agency_user_id);
+                })->pluck('user_id')->toArray());
+            }
+        }
+
+        $searchTerms = explode(',', $request->search);
+        $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
+        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        // Combine and deduplicate the IDs while preserving the order
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+        $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
+
+        if ($role == 'creative') {
+            $creatives = Creative::whereIn('id', $combinedCreativeIds)
+                ->whereHas('user', function ($query) {
+                    $query->where('is_visible', 1)
+                        ->where('status', 1);
+                })
+                ->orderByRaw($rawOrder)
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        } else {
+            $creatives = Creative::whereIn('id', $combinedCreativeIds)
+                ->whereHas('user', function ($query) use ($agency_user_applicants) {
+                    $query->where('status', 1)
+                        ->where(function ($q) use ($agency_user_applicants) {
+                            $q->where('is_visible', 1)
+                                ->orWhere(function ($q1) use ($agency_user_applicants) {
+                                    $q1->where('is_visible', 0)
+                                        ->whereIn('user_id', $agency_user_applicants);
+                                });
+                        });
+                })
+                ->orderByRaw($rawOrder)
+                ->paginate($request->per_page ?? config('global.request.pagination_limit'))
+                ->withQueryString();
+        }
+
+        return new LoggedinCreativeCollection($creatives);
+    }
 
     public function search3(Request $request)
     {
@@ -92,32 +140,49 @@ class CreativeController extends Controller
             })->pluck('user_id')->toArray());
         }
 
-        // Split the search terms into an array
+        // Split the search terms
         $searchTerms = [];
         if (!empty($request->search)) {
             $searchTerms = explode(',', $request->search);
         }
-
         if (!empty($request->search_level2)) {
             $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2));
         }
 
-        $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
-        for ($i = 1; $i < count($searchTerms); $i++) {
-            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTerms[$i], $role))));
+        // --- KEY FIX: separate exact and contains results like search2 ---
+        $exactMatchIds = [];
+        $containsIds   = [];
+
+        foreach ($searchTerms as $term) {
+            $exactMatchIds[] = $this->process_single_term_search(trim($term), $role, 'exact-match');
+            $containsIds[]   = $this->process_single_term_search(trim($term), $role, 'contains');
         }
+
+        // Intersect exact matches across terms
+        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds);
+
+        // Merge: exact matches first, then contains matches
+        $combinedCreativeIds = $commonExactMatchIds;
+        foreach ($containsIds as $ids) {
+            $combinedCreativeIds = array_merge($combinedCreativeIds, $ids);
+        }
+
+        // Deduplicate but preserve order
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+
+        // Apply cache sorting if needed
         $combinedCreativeIds = $this->sortCreativeIdsFromCacheTable($combinedCreativeIds);
+
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
-        // Retrieve creative records from the database and order them based on the calculated order
+        // Retrieve creatives
         $creatives = Creative::with('category')
             ->whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) use ($agency_user_applicants) {
                 $query
                     ->where('status', 1)
                     ->where(function ($q) use ($agency_user_applicants) {
-                        $q
-                            ->where('is_visible', 1)
+                        $q->where('is_visible', 1)
                             ->orWhere(function ($q1) use ($agency_user_applicants) {
                                 $q1->where('is_visible', 0)
                                     ->whereIn('user_id', $agency_user_applicants);
@@ -130,6 +195,7 @@ class CreativeController extends Controller
 
         return new LoggedinCreativeCollection($creatives);
     }
+
 
     public function process_single_term_search($searchTerm, $role)
     {
