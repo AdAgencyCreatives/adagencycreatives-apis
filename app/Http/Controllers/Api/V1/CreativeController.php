@@ -131,13 +131,13 @@ class CreativeController extends Controller
         $agency_user_applicants = [];
 
         if (isset($agency_user_id) && isset($agency_user_role) && ($agency_user_role == 'agency' || $agency_user_role == 'advisor')) {
-            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id, $agency_user_role) {
-                if ($agency_user_role == 'advisor') {
-                    $query->where('advisor_id', $agency_user_id);
-                } else {
+            $agency_user_id = $request?->user()?->id;
+            $agency_user_applicants = [];
+            if (isset($agency_user_id)) {
+                $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
                     $query->where('user_id', $agency_user_id);
-                }
-            })->pluck('user_id')->toArray());
+                })->pluck('user_id')->toArray());
+            }
         }
 
         // Split the search terms into an array
@@ -151,21 +151,17 @@ class CreativeController extends Controller
         }
 
         $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
-        for ($i = 1; $i < count($searchTerms); $i++) {
-            $combinedCreativeIds = array_values(array_unique(array_intersect($combinedCreativeIds, $this->process_single_term_search($searchTerms[$i], $role))));
-        }
-        $combinedCreativeIds = $this->sortCreativeIdsFromCacheTable($combinedCreativeIds);
+        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
+
         // Retrieve creative records from the database and order them based on the calculated order
-        $creatives = Creative::with('category')
-            ->whereIn('id', $combinedCreativeIds)
+        $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) use ($agency_user_applicants) {
-                $query
-                    ->where('status', 1)
+                $query->where('status', 1)
                     ->where(function ($q) use ($agency_user_applicants) {
-                        $q
-                            ->where('is_visible', 1)
+                        $q->where('is_visible', 1)
                             ->orWhere(function ($q1) use ($agency_user_applicants) {
                                 $q1->where('is_visible', 0)
                                     ->whereIn('user_id', $agency_user_applicants);
