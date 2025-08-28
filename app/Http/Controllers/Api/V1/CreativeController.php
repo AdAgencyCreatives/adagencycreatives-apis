@@ -28,6 +28,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreativeController extends Controller
@@ -73,9 +74,8 @@ class CreativeController extends Controller
 
     public function search2(Request $request) //Agency with active package
     {
-
         $role = $request?->role ?? 'agency';
-
+Log::info('CreativeController@search2 called with role: ' , ['role' => $role]);
         if ($role == 'agency') {
             $agency_user_id = $request?->user()?->id;
             $agency_user_applicants = [];
@@ -120,7 +120,6 @@ class CreativeController extends Controller
         }
 
         return new LoggedinCreativeCollection($creatives);
-        return 124;
     }
 
     public function search3(Request $request)
