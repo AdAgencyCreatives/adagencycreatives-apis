@@ -150,8 +150,14 @@ class CreativeController extends Controller
             $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2));
         }
 
-        $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
-        $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        // Check the number of search terms and process accordingly
+        if (count($searchTerms) > 1) {
+            $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
+            $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        } else {
+            $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
+        }
+
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
@@ -187,36 +193,50 @@ class CreativeController extends Controller
 
     public function process_three_terms_search($searchTerms, $role)
     {
-        // Initialize arrays to store IDs for each match type
-        $exactMatchIds = [];
-        $containsIds = [];
+        $allMatched = [];
+        $twoMatched = [];
+        $singleMatched = [];
 
-        // Iterate through each term for exact match
+        // Get Exact Match IDs for all terms
+        $exactMatchIds = [];
         foreach ($searchTerms as $term) {
             $exactMatchIds[] = $this->getCreativeIDs(trim($term), 'exact-match', $role);
         }
 
-        // Find common IDs across all exact match arrays
-        $commonExactMatchIds = call_user_func_array('array_intersect', $exactMatchIds); // Point 1
-        // Initialize the combined array with common exact match IDs
-
-        if (isset($exactMatchIds[0]) && isset($exactMatchIds[1])) {
-            // Find common IDs across first two arrays
-            $commonExactMatchIds = array_merge($commonExactMatchIds, array_intersect($exactMatchIds[0], $exactMatchIds[1])); // Point 2
-            // $commonExactMatchIds = array_merge($commonExactMatchIds, $exactMatchIds[0]);
+        // Get 'Starts-With' IDs for all terms
+        $startsWithIds = [];
+        foreach ($searchTerms as $term) {
+            $startsWithIds[] = $this->getCreativeIDs(trim($term), 'starts-with', $role);
         }
 
-        $combinedCreativeIds = $commonExactMatchIds;
-
+        // Get 'Contains' IDs for all terms
+        $containsIds = [];
         foreach ($searchTerms as $term) {
             $containsIds[] = $this->getCreativeIDs(trim($term), 'contains', $role);
         }
-        if (isset($containsIds[0]) && isset($containsIds[1])) {
-            $ids_for_point_3 = array_intersect($containsIds[0], $exactMatchIds[1]); // Point 3 City is exact, Title is with % LIKE %
 
-            $combinedCreativeIds = array_merge($combinedCreativeIds, $ids_for_point_3); // Point 3
-            $combinedCreativeIds = array_merge($combinedCreativeIds, $exactMatchIds[0]); // Point 4
+        // Get IDs that match ALL terms exactly
+        if (count($exactMatchIds) > 1) {
+            $allMatched = call_user_func_array('array_intersect', $exactMatchIds);
+        } elseif (count($exactMatchIds) == 1) {
+            $allMatched = $exactMatchIds[0];
         }
+
+        // Get IDs that match at least TWO terms
+        $allIds = array_merge(...$exactMatchIds, ...$startsWithIds, ...$containsIds);
+        $idCounts = array_count_values(array_filter($allIds));
+        foreach ($idCounts as $id => $count) {
+            if ($count > 1) {
+                $twoMatched[] = $id;
+            }
+        }
+        $twoMatched = array_diff($twoMatched, $allMatched);
+
+        // Get IDs that match a SINGLE term
+        $singleMatched = array_diff($allIds, $allMatched, $twoMatched);
+
+        // Combine and prioritize: all matched, then two matched, then single matched
+        $combinedCreativeIds = array_values(array_unique(array_merge($allMatched, $twoMatched, $singleMatched)));
 
         return $combinedCreativeIds;
     }
@@ -242,7 +262,6 @@ class CreativeController extends Controller
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
             $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ca.name LIKE '" . trim($term) . "')" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
@@ -262,8 +281,7 @@ class CreativeController extends Controller
         $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.city_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . trim($term) . "')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NOT NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
         }
 
         $sql .= 'UNION DISTINCT' . "\n";
@@ -272,8 +290,7 @@ class CreativeController extends Controller
         $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN users ur ON cr.user_id = ur.id INNER JOIN addresses ad ON ur.id = ad.user_id INNER JOIN locations lc ON lc.id = ad.state_id' . "\n";
         for ($i = 0; $i < count($terms); $i++) {
             $term = $terms[$i];
-            // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
-            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . trim($term) . "')" . "\n";
+            $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(lc.parent_id IS NULL AND lc.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "')" . "\n";
         }
 
         if ($role != 'creative') {
@@ -284,8 +301,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN industries ind ON FIND_IN_SET(ind.uuid, cr.industry_experience) > 0' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ind.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ind.name LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ind.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -294,8 +310,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN medias md ON FIND_IN_SET(md.uuid, cr.media_experience) > 0' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "md.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(md.name LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "md.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -304,8 +319,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr JOIN strengths st ON FIND_IN_SET(st.uuid, cr.strengths) > 0' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "st.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(st.name LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "st.name LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -314,8 +328,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.employment_type LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(cr.employment_type LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.employment_type LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -323,8 +336,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.years_of_experience LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(cr.years_of_experience LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "cr.years_of_experience LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $workplace_preferences = [
@@ -340,7 +352,6 @@ class CreativeController extends Controller
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
                 if (isset($workplace_preferences[$term])) {
-                    // $sql .= ($i == 0 ? 'UNION DISTINCT' . "\n" . 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr WHERE ' . "\n" : ' OR ') . $workplace_preferences[$term] . '=1' . "\n";
                     $sql .= ($i == 0 ? 'UNION DISTINCT' . "\n" . 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr WHERE ' . "\n" : ' OR ') . $workplace_preferences[$term] . '=1' . "\n";
                 }
             }
@@ -350,8 +361,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN educations ed ON cr.user_id=ed.user_id' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.degree LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ed.degree LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.degree LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -359,8 +369,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN educations ed ON cr.user_id=ed.user_id' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.college LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ed.college LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ed.college LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
 
             $sql .= 'UNION DISTINCT' . "\n";
@@ -368,8 +377,7 @@ class CreativeController extends Controller
             $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr INNER JOIN experiences ex ON cr.user_id=ex.user_id' . "\n";
             for ($i = 0; $i < count($terms); $i++) {
                 $term = $terms[$i];
-                // $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ex.company LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
-                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "(ex.company LIKE '" . trim($term) . "')" . "\n";
+                $sql .= ($i == 0 ? ' WHERE ' : ' OR ') . "ex.company LIKE '" . $wildCardStart . '' . trim($term) . '' . $wildCardEnd . "'" . "\n";
             }
         }
 
@@ -577,11 +585,11 @@ class CreativeController extends Controller
             case 'category-location-match':
                 // Priority 1: Same category title, location
                 if ($category?->id) {
-                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
-                            INNER JOIN categories ca ON cr.category_id = ca.id 
-                            INNER JOIN users ur ON cr.user_id = ur.id 
-                            INNER JOIN addresses ad ON ur.id = ad.user_id 
-                            INNER JOIN locations lc ON lc.id = ad.city_id 
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr
+                            INNER JOIN categories ca ON cr.category_id = ca.id
+                            INNER JOIN users ur ON cr.user_id = ur.id
+                            INNER JOIN addresses ad ON ur.id = ad.user_id
+                            INNER JOIN locations lc ON lc.id = ad.city_id
                             WHERE ca.id = ' . $category->id . '
                             AND lc.uuid = "' . $location['city_id'] . '"';
 
@@ -596,8 +604,8 @@ class CreativeController extends Controller
             case 'category-most-active':
                 // Priority 1: Same category title, most active
                 if ($category?->id) {
-                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
-                             INNER JOIN categories ca ON cr.category_id = ca.id 
+                    $sql = 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr
+                             INNER JOIN categories ca ON cr.category_id = ca.id
                              WHERE ca.id = ' . $category->id;
 
                     $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
@@ -618,10 +626,10 @@ class CreativeController extends Controller
                     $like_categories = $like_categories->pluck('id')->toArray();
                     if ($like_categories) {
                         $like_categories = implode(', ', $like_categories);
-                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
-                                 INNER JOIN users ur ON cr.user_id = ur.id 
-                                 INNER JOIN addresses ad ON ur.id = ad.user_id 
-                                 INNER JOIN locations lc ON lc.id = ad.city_id 
+                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr
+                                 INNER JOIN users ur ON cr.user_id = ur.id
+                                 INNER JOIN addresses ad ON ur.id = ad.user_id
+                                 INNER JOIN locations lc ON lc.id = ad.city_id
                                  WHERE cr.category_id IN (' . $like_categories . ')
                                  AND lc.uuid = "' . $location['city_id'] . '"';
 
@@ -642,7 +650,7 @@ class CreativeController extends Controller
                     $like_categories = $like_categories->pluck('id')->toArray();
                     if ($like_categories) {
                         $like_categories = implode(', ', $like_categories);
-                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr 
+                        $sql .= 'SELECT cr.id, cr.created_at, cr.featured_at FROM creatives cr
                                     WHERE cr.category_id IN (' . $like_categories . ')';
 
                         $sql = 'SELECT T.id FROM (' . $sql . ') T ORDER BY T.featured_at DESC, T.created_at DESC';
@@ -1323,13 +1331,13 @@ class CreativeController extends Controller
         // // Merge the image into the GIF
         // imagecopy($gif, $image, $x, $y, 0, 0, $image_width, $image_height);
 
-        // // Start output buffering 
+        // // Start output buffering
         // ob_start();
 
         // // Save the resulting image
         // imagegif($gif);
 
-        // // Get the image content from the buffer 
+        // // Get the image content from the buffer
         // $imageContent = ob_get_clean();
 
         // // Free up memory
