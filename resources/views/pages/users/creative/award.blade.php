@@ -20,7 +20,7 @@
                             <input type="hidden" name="award_id[]" value="{{ $award->id }}">
                             <div class="mb-3">
                                 <label for="award_title" class="form-label">Award Title</label>
-                                <input Id="award_title" type="text" class="form-control" name="award_title[]" placeholder="Award title"
+                                <input id="award_title" type="text" class="form-control" name="award_title[]" placeholder="Award title"
                                     value="{{ $award->award_title }}">
                             </div>
 
