@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="award_year">Award Year </label>
                                     <input type="text" id="award_year" class="form-control" placeholder="Awarded At"
-                                        disabled value="{{ $award->award_year }}">
+                                        value="{{ $award->award_year }}">
                                 </div>
                             </div>
                         </div>
