@@ -10,10 +10,9 @@ use App\Traits\ActivityLoggerTrait;
 
 class Award extends Model
 {
-    use HasFactory, SoftDeletes;
-    use ActivityLoggerTrait;
+    use HasFactory, SoftDeletes, ActivityLoggerTrait;
 
-    protected $table = 'educations';
+    protected $table = 'awards';
 
     protected $fillable = [
         'uuid',
@@ -23,15 +22,21 @@ class Award extends Model
         'award_work',
     ];
 
+    /**
+     * Relationship: Award belongs to a User
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function scopeUserId(Builder $query, $user_id): Builder
+    /**
+     * Scope: Filter awards by User UUID
+     */
+    public function scopeUserId(Builder $query, $userUuid): Builder
     {
-        $user = User::where('uuid', $user_id)->firstOrFail();
-
-        return $query->where('user_id', $user->id);
+        return $query->whereHas('user', function ($q) use ($userUuid) {
+            $q->where('uuid', $userUuid);
+        });
     }
 }

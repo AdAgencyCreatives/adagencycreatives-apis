@@ -76,11 +76,11 @@ class UserController extends Controller
                 $creative->save();
             }
 
-            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
+            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'awards', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
         }
 
         // dump($user->addresses[0]);
-        // dd($user->toArray());
+        // dd($user);
 
         return view('pages.users.profile', compact('user'));
     }

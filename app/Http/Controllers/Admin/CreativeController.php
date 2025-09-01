@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJob;
 use App\Models\Address;
 use App\Models\Attachment;
+use App\Models\Award;
 use App\Models\Category;
 use App\Models\Creative;
 use App\Models\Education;
@@ -313,6 +314,25 @@ class CreativeController extends Controller
         return redirect()->back();
     }
 
+    public function update_award(Request $request, $uuid)
+    {
+        $award_ids = $request->input('award_id');
+        $title = $request->input('award_title');
+        $work = $request->input('award_work');
+
+        foreach ($award_ids as $key => $award_id) {
+            $education = Award::find($award_id);
+            $education->award_title = $title[$key];
+            $education->award_work = $work[$key];
+            $education->save();
+        }
+
+        Session::flash('success', 'Creative award updated successfully');
+
+        return redirect()->back();
+    }
+
+
     private function updatePhone($user, $phone_number)
     {
         $country_code = '+1';
@@ -426,14 +446,14 @@ class CreativeController extends Controller
 
         return response()->json(['message' => 'Order updated successfully']);
     }
-    
+
     public function updateOrderSingle(Request $request)
     {
         $order = $request->input('sort_order');
         $creative_id = $request->input('creative_id');
 
         Creative::where('id', $creative_id)->update(['sort_order' => $order]);
-        
+
         Cache::forget('homepage_creatives');
 
         return response()->json(['message' => 'Order updated successfully', 'status' => 200]);

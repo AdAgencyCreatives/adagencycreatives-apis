@@ -212,6 +212,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/creative/{user}', [CreativeController::class, 'update'])->name('creative.update');
         Route::put('/creative-qualification/{user}', [CreativeController::class, 'update_qualification'])->name('creative.qualification.update');
         Route::put('/creative-educaiton/{user}', [CreativeController::class, 'update_education'])->name('creative.education.update');
+        Route::put('/creative-award/{user}', [CreativeController::class, 'update_award'])->name('creative.award.update');
         Route::put('/creative-experience/{user}', [CreativeController::class, 'update_experience'])->name('creative.experience.update');
         Route::put('/creative/seo/{user}', [CreativeController::class, 'update_seo'])->name('creative.seo.update');
         Route::put('/creative/website-preview/{user}', [CreativeController::class, 'update_website_preview'])->name('creative.website_preview.update');
