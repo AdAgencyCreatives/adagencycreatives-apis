@@ -40,7 +40,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="award_year">Award Year </label>
-                                    <input type="text" id="award_year" class="form-control" placeholder="Awarded At"
+                                    <input type="text" id="award_year" class="form-control" placeholder="Awarded At" name="award_year[]"
                                         value="{{ $award->award_year }}">
                                 </div>
                             </div>
