@@ -2,263 +2,646 @@
 
 @section('title', __('Faqs'))
 
+@section('styles')
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+    .tiptap-editor-container {
+        max-width: 800px;
+        margin: 0 0 20px 0;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tiptap-editor-header {
+        padding: 10px 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        border-bottom: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+    }
+
+    .tiptap-editor-button {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        cursor: pointer;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tiptap-editor-button:hover {
+        background-color: #e2e8f0;
+        color: #334155;
+    }
+
+    .tiptap-editor-button.is-active {
+        background-color: #e2e8f0;
+        color: #334155;
+    }
+
+    .tiptap-editor-content {
+        padding: 15px;
+        min-height: 200px;
+        outline: none;
+        flex: 1;
+        overflow: auto;
+    }
+
+    .tiptap-editor-statusbar {
+        padding: 8px 15px;
+        font-size: 12px;
+        color: #64748b;
+        border-top: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .tiptap-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #334155;
+    }
+
+    /* Hidden textarea */
+    .tip-tap-editor {
+        display: none !important;
+    }
+
+    /* ProseMirror styling */
+    .ProseMirror {
+        min-height: 200px;
+    }
+
+    .ProseMirror:focus {
+        outline: none;
+    }
+
+    .ProseMirror h1 {
+        font-size: 2em;
+        margin: 0.67em 0;
+    }
+
+    .ProseMirror h2 {
+        font-size: 1.5em;
+        margin: 0.75em 0;
+    }
+
+    .ProseMirror h3 {
+        font-size: 1.17em;
+        margin: 0.83em 0;
+    }
+
+    .ProseMirror h4 {
+        font-size: 1em;
+        margin: 1em 0;
+    }
+
+    .ProseMirror h5 {
+        font-size: 0.83em;
+        margin: 1.17em 0;
+    }
+
+    .ProseMirror h6 {
+        font-size: 0.67em;
+        margin: 1.33em 0;
+    }
+
+    .ProseMirror ul,
+    .ProseMirror ol {
+        padding: 0 1.5em;
+    }
+
+    .ProseMirror p,
+    .ProseMirror p {
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+    }
+
+    .ProseMirror a {
+        color: #3b82f6;
+        text-decoration: underline;
+    }
+
+    .btn-close {
+        padding: 0;
+        border: none;
+    }
+
+    .btn-close i {
+        font-size: 1.25rem;
+        line-height: 1;
+        color: #000;
+    }
+</style>
+@endsection
+
 @section('scripts')
-    <script src="{{ asset('/assets/js/custom.js') }}"></script>
-    <script>
-        var currentPage = 1;
-        var totalPages = 1;
-        var perPage = 10;
-        var filters = {};
+{{-- Consolidate all JavaScript into one script module block --}}
+<script type="module">
+    import {
+        Editor
+    } from 'https://esm.sh/@tiptap/core@2.1.12'
+    import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.1.12'
+    import Bold from 'https://esm.sh/@tiptap/extension-bold@2.1.12'
+    import Italic from 'https://esm.sh/@tiptap/extension-italic@2.1.12'
+    import Underline from 'https://esm.sh/@tiptap/extension-underline@2.1.12'
+    import Heading from 'https://esm.sh/@tiptap/extension-heading@2.1.12'
+    import BulletList from 'https://esm.sh/@tiptap/extension-bullet-list@2.1.12'
+    import OrderedList from 'https://esm.sh/@tiptap/extension-ordered-list@2.1.12'
+    import ListItem from 'https://esm.sh/@tiptap/extension-list-item@2.1.12'
+    import Link from 'https://esm.sh/@tiptap/extension-link@2.1.12'
 
-        function fetchFaqs() {
+    class TipTapEditor {
+        constructor(element, content) {
+            this.element = element;
+            this.content = content;
+            this.init();
+        }
 
-            $.ajax({
-                url: 'api/v1/get_faqs',
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    populateGroupFilter(response.data, '#faq');
+        init() {
+            // Clear the target element first
+            this.element.innerHTML = '';
+
+            // Create a container for the entire editor instance
+            const editorContainer = document.createElement('div');
+            editorContainer.className = 'tiptap-editor-container';
+
+            // Create the header (toolbar)
+            const header = document.createElement('div');
+            header.className = 'tiptap-editor-header';
+            editorContainer.appendChild(header);
+
+            // Create the content area
+            const contentArea = document.createElement('div');
+            contentArea.className = 'tiptap-editor-content';
+            editorContainer.appendChild(contentArea);
+
+            // Append the complete container to the target element
+            this.element.appendChild(editorContainer);
+
+            this.editor = new Editor({
+                element: contentArea,
+                extensions: [
+                    StarterKit,
+                    Bold,
+                    Italic,
+                    Underline,
+                    BulletList,
+                    OrderedList,
+                    Link.configure({
+                        openOnClick: false,
+                    }),
+                    Heading.configure({
+                        levels: [1, 2, 3, 4, 5, 6],
+                    }),
+                ],
+                content: this.content,
+            });
+
+            this.addToolbarButtons(header);
+        }
+
+        addToolbarButtons(header) {
+            const buttons = [{
+                icon: 'ri-bold',
+                title: 'Bold',
+                action: () => this.editor.chain().focus().toggleBold().run(),
+                active: () => this.editor.isActive('bold')
+            }, {
+                icon: 'ri-italic',
+                title: 'Italic',
+                action: () => this.editor.chain().focus().toggleItalic().run(),
+                active: () => this.editor.isActive('italic')
+            }, {
+                icon: 'ri-underline',
+                title: 'Underline',
+                action: () => this.editor.chain().focus().toggleUnderline().run(),
+                active: () => this.editor.isActive('underline')
+            }, {
+                icon: 'ri-list-unordered',
+                title: 'Bullet List',
+                action: () => this.editor.chain().focus().toggleBulletList().run(),
+                active: () => this.editor.isActive('bulletList')
+            }, {
+                icon: 'ri-list-ordered',
+                title: 'Numbered List',
+                action: () => this.editor.chain().focus().toggleOrderedList().run(),
+                active: () => this.editor.isActive('orderedList')
+            }, {
+                icon: 'ri-link',
+                title: 'Link',
+                action: () => {
+                    const previousUrl = this.editor.getAttributes('link').href;
+                    const url = window.prompt('URL', previousUrl);
+                    if (url === null) return;
+                    if (url === '') {
+                        this.editor.chain().focus().extendMarkRange('link').unsetLink().run();
+                        return;
+                    }
+                    this.editor.chain().focus().extendMarkRange('link').setLink({
+                        href: url
+                    }).run();
                 },
-                error: function() {
-                    alert('Failed to fetch faqs from the API.');
-                }
-            });
-        }
+                active: () => this.editor.isActive('link')
+            }, {
+                icon: 'ri-h-1',
+                title: 'Heading 1',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 1
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 1
+                })
+            }, {
+                icon: 'ri-h-2',
+                title: 'Heading 2',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 2
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 2
+                })
+            }, {
+                icon: 'ri-h-3',
+                title: 'Heading 3',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 3
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 3
+                })
+            }, {
+                icon: 'ri-h-4',
+                title: 'Heading 4',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 4
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 4
+                })
+            }, {
+                icon: 'ri-h-5',
+                title: 'Heading 5',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 5
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 5
+                })
+            }, {
+                icon: 'ri-h-6',
+                title: 'Heading 6',
+                action: () => this.editor.chain().focus().toggleHeading({
+                    level: 6
+                }).run(),
+                active: () => this.editor.isActive('heading', {
+                    level: 6
+                })
+            }, {
+                icon: 'ri-format-clear',
+                title: 'Clear Formatting',
+                action: () => this.editor.chain().focus().clearNodes().unsetAllMarks().run()
+            }];
 
-        function fetchData(page, filters = []) {
-            var requestData = {
-                page: page,
-                per_page: perPage
-            };
-
-            var selectedFaq = $('#faq option:selected').text();
-
-            filters = {};
-            if (selectedFaq != 'Select Faq') {
-                filters['title'] = selectedFaq;
-            }
-
-            Object.keys(filters).forEach(function(key) {
-                if (filters[key] !== '-100') {
-                    requestData[`filter[${key}]`] = filters[key];
-                }
-            });
-
-            $.ajax({
-                url: 'api/v1/faqs',
-                method: 'GET',
-                data: requestData,
-                dataType: 'json',
-                success: function(response) {
-                    totalPages = response.meta.last_page;
-                    populateTable(response.data);
-                    updatePaginationButtons(response.links, response.meta.links);
-                    updateTableInfo(response.meta);
-                },
-                error: function() {
-                    alert('Failed to filter faqs from the API.');
-                }
-            });
-        }
-
-        function populateTable(faqs) {
-            var tbody = $('#faqs-table tbody');
-            tbody.empty();
-            console.log(faqs.length);
-            if (faqs.length === 0) {
-                displayNoRecordsMessage(7);
-            }
-
-            $.each(faqs, function(index, faq) {
-                var roleBasedActions = '';
-
-                roleBasedActions = '<a href="#" class="delete-faq-btn" data-id="' +
-                    faq.uuid + '">Delete</a>';
-
-                var row = '<tr>' +
-                    '<td>' + faq.id + '</td>' +
-                    '<td class="faq-title" data-id="' + faq.uuid + '" data-col="title">' + faq.title + '</td>' +
-                    '<td class="faq-description" data-id="' + faq.uuid + '" data-col="description">' + faq
-                    .description + '</td>' +
-                    '<td class="faq-order" data-id="' + faq.uuid + '" data-col="order">' + faq.order + '</td>' +
-                    '<td>' + roleBasedActions + '</td>' +
-                    '</tr>';
-
-                tbody.append(row);
-            });
-        }
-
-        $(document).ready(function() {
-
-            fetchData();
-
-            fetchFaqs();
-            $(document).on('click', '.delete-faq-btn', function() {
-                var resourceId = $(this).data('id');
-                var csrfToken = '{{ csrf_token() }}';
-                console.log(csrfToken);
-                deleteConfirmation(resourceId, 'faq', 'faqs', csrfToken);
-            });
-
-
-            $('#filter-form').on('submit', function(e) {
-                e.preventDefault();
-
-                currentPage = 1;
-                fetchData(currentPage);
-            });
-
-            function handleEdit() {
-                var currentData = $(this).text();
-                var uuid = $(this).data('id');
-                var col = $(this).data('col');
-
-                var inputField = $('<input>', {
-                    type: 'text',
-                    value: currentData
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = 'tiptap-editor-button';
+                button.title = btn.title;
+                button.type = 'button';
+                button.innerHTML = `<i class="${btn.icon}"></i>`;
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    btn.action();
                 });
-
-                if (col == 'order') {
-                    inputField = $('<input>', {
-                        type: 'number',
-                        value: currentData
+                if (btn.active) {
+                    this.editor.on('transaction', () => {
+                        button.classList.toggle('is-active', btn.active());
                     });
-                } else if (col == 'description') {
-                    inputField = $('<textarea>', {
-                        rows: 5,
-                    });
-                    inputField.css('width', '100%');
                 }
+                header.appendChild(button);
+            });
+        }
 
-                inputField.val(currentData);
-                $(this).html(inputField);
-
-                inputField.focus();
-                inputField.on('blur', function() {
-
-                    var newData = $(this).val();
-                    $(this).parent().html(newData);
-
-                    // console.log(uuid);
-                    // console.log(newData);
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                        }
-                    });
-                    $.ajax({
-                        url: '/api/v1/faqs/' + uuid,
-                        method: 'PUT',
-                        data: {
-                            [col]: newData
-                        },
-                        success: function(response) {
-                            if (response.data) {
-                                Swal.fire({
-                                    title: 'Success',
-                                    text: "Succesfully updated",
-                                    icon: 'success'
-                                });
-                            }
-
-
-                        },
-                        error: function(error) {
-                            if (error.responseJSON && error.responseJSON.errors) {
-                                var errorMessages = error.responseJSON.errors;
-
-                                // Process and display error messages
-                                var errorMessage = '';
-                                $.each(errorMessages, function(field, messages) {
-                                    errorMessage += field + ': ' + messages
-                                        .join(', ') + '\n';
-                                });
-
-                                Swal.fire({
-                                    title: 'Validation Error',
-                                    text: errorMessage,
-                                    icon: 'error'
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Error',
-                                    text: error.message,
-                                    icon: 'error'
-                                });
-                            }
-                        }
-                    });
-                });
+        destroy() {
+            if (this.editor) {
+                this.editor.destroy();
             }
+        }
+    }
 
-            $('table').on('dblclick', '.faq-title', handleEdit);
-            $('table').on('dblclick', '.faq-description', handleEdit);
-            $('table').on('dblclick', '.faq-order', handleEdit);
+    window.TipTapEditor = TipTapEditor;
+</script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('/assets/js/custom.js') }}"></script>
+
+<script>
+    var currentPage = 1;
+    var totalPages = 1;
+    var perPage = 10;
+    var filters = {};
+    var editorInstance = null;
+    var faqModal = new bootstrap.Modal(document.getElementById('editFaqModal'));
+
+    function fetchFaqs() {
+        $.ajax({
+            url: 'api/v1/get_faqs',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                populateGroupFilter(response.data, '#faq');
+            },
+            error: function() {
+                alert('Failed to fetch faqs from the API.');
+            }
         });
-    </script>
+    }
+
+    function fetchData(page, filters = []) {
+        var requestData = {
+            page: page,
+            per_page: perPage
+        };
+        var selectedFaq = $('#faq option:selected').text();
+        filters = {};
+        if (selectedFaq != 'Select Faq') {
+            filters['title'] = selectedFaq;
+        }
+        Object.keys(filters).forEach(function(key) {
+            if (filters[key] !== '-100') {
+                requestData[`filter[${key}]`] = filters[key];
+            }
+        });
+        $.ajax({
+            url: 'api/v1/faqs',
+            method: 'GET',
+            data: requestData,
+            dataType: 'json',
+            success: function(response) {
+                totalPages = response.meta.last_page;
+                populateTable(response.data);
+                updatePaginationButtons(response.links, response.meta.links);
+                updateTableInfo(response.meta);
+            },
+            error: function() {
+                alert('Failed to filter faqs from the API.');
+            }
+        });
+    }
+
+    function populateTable(faqs) {
+        var tbody = $('#faqs-table tbody');
+        tbody.empty();
+        if (faqs.length === 0) {
+            displayNoRecordsMessage(7);
+        }
+        $.each(faqs, function(index, faq) {
+            var roleBasedActions = '';
+            roleBasedActions = '<a href="#" class="delete-faq-btn" data-id="' + faq.uuid + '">Delete</a>';
+            var row = '<tr>' +
+                '<td>' + faq.id + '</td>' +
+                '<td class="faq-title" data-id="' + faq.uuid + '" data-col="title">' + faq.title + '</td>' +
+                '<td class="faq-description" data-id="' + faq.uuid + '" data-col="description">' + faq.description + '</td>' +
+                '<td class="faq-order" data-id="' + faq.uuid + '" data-col="order">' + faq.order + '</td>' +
+                '<td>' + roleBasedActions + '</td>' +
+                '</tr>';
+            tbody.append(row);
+        });
+    }
+
+    $(document).ready(function() {
+        fetchData();
+        fetchFaqs();
+        $(document).on('click', '.delete-faq-btn', function() {
+            var resourceId = $(this).data('id');
+            var csrfToken = '{{ csrf_token() }}';
+            deleteConfirmation(resourceId, 'faq', 'faqs', csrfToken);
+        });
+        $('#filter-form').on('submit', function(e) {
+            e.preventDefault();
+            currentPage = 1;
+            fetchData(currentPage);
+        });
+
+        // Corrected logic to initialize the TipTap editor
+        $('table').on('dblclick', '.faq-description', function() {
+            var uuid = $(this).data('id');
+            var currentContent = $(this).html();
+
+            $('#faq-uuid').val(uuid);
+
+            // Destroy any existing editor instance before creating a new one
+            if (editorInstance) {
+                editorInstance.destroy();
+            }
+
+            // Initialize the TipTap editor on the specific div
+            editorInstance = new TipTapEditor(document.getElementById('faq-description-editor'), currentContent);
+
+            faqModal.show();
+        });
+
+        $('#save-faq-changes').on('click', function() {
+            if (!editorInstance) {
+                return;
+            }
+            var uuid = $('#faq-uuid').val();
+            var newData = editorInstance.editor.getHTML();
+            var col = 'description';
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                }
+            });
+            $.ajax({
+                url: '/api/v1/faqs/' + uuid,
+                method: 'PUT',
+                data: {
+                    [col]: newData
+                },
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: "Successfully updated!",
+                        icon: 'success'
+                    });
+                    faqModal.hide();
+                    fetchData(currentPage);
+                },
+                error: function(error) {
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        var errorMessages = Object.values(error.responseJSON.errors).flat().join('\n');
+                        Swal.fire({
+                            title: 'Validation Error',
+                            text: errorMessages,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: "An error occurred during the update.",
+                            icon: 'error'
+                        });
+                    }
+                }
+            });
+        });
+
+        function handleOtherEdit() {
+            var self = $(this);
+            var uuid = self.data('id');
+            var col = self.data('col');
+            if (self.hasClass('editing')) {
+                return;
+            }
+            var inputType = (col === 'order') ? 'number' : 'text';
+            var inputField = $('<input>', {
+                type: inputType,
+                value: self.text()
+            });
+            self.html(inputField).addClass('editing');
+            inputField.focus();
+            inputField.on('blur', function() {
+                var newData = $(this).val();
+                saveData(uuid, col, newData, self);
+                self.html(newData).removeClass('editing');
+            });
+        }
+
+        function saveData(uuid, col, newData, targetCell) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                }
+            });
+            $.ajax({
+                url: '/api/v1/faqs/' + uuid,
+                method: 'PUT',
+                data: {
+                    [col]: newData
+                },
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: "Successfully updated!",
+                        icon: 'success'
+                    });
+                },
+                error: function(error) {
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        var errorMessages = Object.values(error.responseJSON.errors).flat().join('\n');
+                        Swal.fire({
+                            title: 'Validation Error',
+                            text: errorMessages,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: "An error occurred during the update.",
+                            icon: 'error'
+                        });
+                    }
+                    fetchData(currentPage);
+                }
+            });
+        }
+        $('table').on('dblclick', '.faq-title, .faq-order', handleOtherEdit);
+    });
+</script>
 @endsection
 
 @section('content')
-
-
-    @include('pages.faqs.filters')
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="table_length" id="table_length"><label>Show <select
-                                            name="datatables-reponsive_length" id="per-page-select"
-                                            class="form-select form-select-sm">
-
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> entries</label></div>
-                            </div>
-
-                        </div>
-                        <div class="row dt-row">
-                            <div class="col-sm-12">
-                                <table id="faqs-table" class="table table-striped dataTable no-footer dtr-inline"
-                                    style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Title</th>
-                                            <th>Description</th>
-                                            <th>Order</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-
-                                </table>
+@include('pages.faqs.filters')
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="table_length" id="table_length"><label>Show
+                                    <select name="datatables-reponsive_length" id="per-page-select" class="form-select form-select-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    entries</label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="table_entries_info" role="status" aria-live="polite">
-                                </div>
+                    </div>
+                    <div class="row dt-row">
+                        <div class="col-sm-12">
+                            <table id="faqs-table" class="table table-striped dataTable no-footer dtr-inline"
+                                style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="table_entries_info" role="status" aria-live="polite">
                             </div>
-                            <div class="col-sm-12 col-md-7">
-                                <div class="dataTables_paginate paging_simple_numbers" id="datatables-reponsive_paginate">
-                                    <ul class="pagination"></ul>
-                                </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="datatables-reponsive_paginate">
+                                <ul class="pagination"></ul>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFaqModalLabel">Edit FAQ Description</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ri-close-fill"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editFaqForm">
+                    <input type="hidden" id="faq-uuid">
+                    <div class="mb-3">
+                        <label for="faq-description-editor" class="form-label">Description</label>
+                        {{-- This is the container that will be replaced by the TipTap editor --}}
+                        <div id="faq-description-editor"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save-faq-changes">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
