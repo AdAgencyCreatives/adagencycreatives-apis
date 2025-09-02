@@ -20,7 +20,7 @@
                             <input type="hidden" name="award_id[]" value="{{ $award->id }}">
                             <div class="mb-3">
                                 <label for="award_title" class="form-label">Award Title</label>
-                                <input Id="award_title" type="text" class="form-control" name="award_title[]" placeholder="Award title"
+                                <input id="award_title" type="text" class="form-control" name="award_title[]" placeholder="Award title"
                                     value="{{ $award->award_title }}">
                             </div>
 
@@ -40,8 +40,8 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="award_year">Award Year </label>
-                                    <input type="text" id="award_year" class="form-control" placeholder="Awarded At"
-                                        disabled value="{{ $award->award_year }}">
+                                    <input type="text" id="award_year" class="form-control" placeholder="Awarded At" name="award_year[]"
+                                        value="{{ $award->award_year }}">
                                 </div>
                             </div>
                         </div>

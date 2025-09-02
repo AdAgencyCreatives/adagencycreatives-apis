@@ -319,11 +319,13 @@ class CreativeController extends Controller
         $award_ids = $request->input('award_id');
         $title = $request->input('award_title');
         $work = $request->input('award_work');
+        $year = $request->input('award_year');
 
         foreach ($award_ids as $key => $award_id) {
             $award = Award::find($award_id);
             $award->award_title = $title[$key];
             $award->award_work = $work[$key];
+            $award->award_year = $year[$key];
             $award->save();
         }
 
