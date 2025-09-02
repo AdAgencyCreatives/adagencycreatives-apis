@@ -30,6 +30,11 @@ class Resume extends Model
         return $this->hasMany(Education::class);
     }
 
+    public function awards()
+    {
+        return $this->hasMany(Education::class);
+    }
+
     public function experiences()
     {
         return $this->hasMany(Experience::class);

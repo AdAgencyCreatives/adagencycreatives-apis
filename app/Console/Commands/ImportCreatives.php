@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Address;
+use App\Models\Award;
 use App\Models\Creative;
 use App\Models\Education;
 use App\Models\Experience;
@@ -48,13 +49,13 @@ class ImportCreatives extends Command
                 $this->createCreative($creativeData, $user, $industry_media_experiences);
                 $this->createLocation($creativeData, $user);
                 $this->storeEducation($creativeData, $user);
+                $this->storeAward($creativeData, $user);
                 $this->storeExperience($creativeData, $user);
             } else {
                 dump('Creative not found', $authorEmail1);
                 $user->username = sprintf('%s_dummy', $user->username);
                 $user->save();
             }
-
         }
 
         $this->info('Creatives data imported successfully.');
@@ -239,9 +240,7 @@ class ImportCreatives extends Command
             $address->city_id = $city ?? $address->state_id + 1;
             $address->save();
         } catch (\Exception $e) {
-
         }
-
     }
 
     public function storeEducation($data, $creative)
@@ -255,6 +254,23 @@ class ImportCreatives extends Command
                 $education->degree = $edu['title'] ?? '';
                 $education->college = $edu['academy'] ?? '';
                 $education->save();
+            }
+        }
+    }
+
+
+    public function storeAward($data, $creative)
+    {
+        if (isset($data['post_meta']['_candidate_award'][0])) {
+            $awardArray = unserialize($data['post_meta']['_candidate_award'][0]);
+            foreach ($awardArray as $edu) {
+                $award = new Award();
+                $award->uuid = Str::uuid();
+                $award->user_id = $creative->id;
+                $award->award_title = $edu['award_title'] ?? '';
+                $award->award_work = $edu['award_work'] ?? '';
+                $award->award_year = $edu['award_year'] ?? '';
+                $award->save();
             }
         }
     }

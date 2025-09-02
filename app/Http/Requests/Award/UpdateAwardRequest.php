@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Education;
+namespace App\Http\Requests\Award;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEducationRequest extends FormRequest
+class UpdateAwardRequest extends FormRequest
 {
     public function authorize()
     {

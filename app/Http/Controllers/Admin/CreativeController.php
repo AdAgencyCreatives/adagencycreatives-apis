@@ -321,10 +321,10 @@ class CreativeController extends Controller
         $work = $request->input('award_work');
 
         foreach ($award_ids as $key => $award_id) {
-            $education = Award::find($award_id);
-            $education->award_title = $title[$key];
-            $education->award_work = $work[$key];
-            $education->save();
+            $award = Award::find($award_id);
+            $award->award_title = $title[$key];
+            $award->award_work = $work[$key];
+            $award->save();
         }
 
         Session::flash('success', 'Creative award updated successfully');

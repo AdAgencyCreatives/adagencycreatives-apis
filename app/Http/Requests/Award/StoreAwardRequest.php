@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Education;
+namespace App\Http\Requests\Award;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEducationRequest extends FormRequest
+class StoreAwardRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,10 +15,10 @@ class StoreEducationRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,uuid',
-            'educations' => 'required|array|min:1',
-            'educations.*.award_title' => 'required|string',
-            'educations.*.award_year' => 'required|integer',
-            'educations.*.award_work' => 'required|string',
+            'awards' => 'required|array|min:1',
+            'awards.*.award_title' => 'required|string',
+            'awards.*.award_year' => 'required|integer',
+            'awards.*.award_work' => 'required|string',
         ];
     }
 }

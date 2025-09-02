@@ -142,11 +142,12 @@ class ResumeController extends Controller
             ->first();
 
         $educations = $user->educations;
+        $awards = $user->awards;
         $experiences = $user->experiences;
         $portfolio_items = $user->portfolio_items;
         $data = (new CreativeResource($creative))->toArray([]);
 
-        $html = view('resume', compact('data', 'user', 'educations', 'experiences', 'portfolio_items')); // Render the HTML view
+        $html = view('resume', compact('data', 'user', 'educations','awards', 'experiences', 'portfolio_items')); // Render the HTML view
 
         $dompdf = new \Dompdf\Dompdf();
         $dompdf->loadHtml($html);

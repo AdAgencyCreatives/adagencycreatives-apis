@@ -98,7 +98,7 @@ class UserController extends Controller
             $user->load(['agency', 'links', 'addresses.city', 'addresses.state', 'agency_logo', 'latest_subscription']);
             $subscription = Subscription::where('user_id', $user->id)->latest();
         } elseif ($user->role == 'creative' && !($request?->show == 'deleted')) {
-            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
+            $user->load(['creative', 'phones', 'links', 'addresses.city', 'addresses.state', 'profile_picture', 'educations', 'awards', 'experiences', 'portfolio_spotlights', 'portfolio_items']);
         }
 
         return view('pages.users.profile', compact('user'));

@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Exceptions\ModelNotFound;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Award;
 use App\Models\Category;
 use App\Models\Education;
 use App\Models\Location;
@@ -87,6 +88,19 @@ class SearchController extends Controller
         if ($education_degrees && count($education_degrees) > 0) {
             $search_items['Education Degree'] = $education_degrees;
         }
+
+
+        $award_titles = Award::select('award_title as name')->distinct()->orderBy('award_title')->get()->toArray();
+
+        if ($award_titles && count($award_titles) > 0) {
+            $search_items['Award Title'] = $award_titles;
+        }
+
+        $award_works = Award::select('award_work as name')->distinct()->orderBy('award_work')->get()->toArray();
+        if ($award_works && count($award_works) > 0) {
+            $search_items['Award Work'] = $award_works;
+        }
+
 
         $experience_companies = Experience::select('company as name')->distinct()->orderBy('company')->get()->toArray();
 
