@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\Admin\TestDataController;
+use App\Http\Controllers\Admin\ArticleController;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Industry;
@@ -180,6 +181,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('strengths', StrengthController::class);
         Route::resource('faqs', FaqController::class);
+        Route::resource('articles', ArticleController::class);
 
         Route::resource('reports', ReportController::class);
 
@@ -237,7 +239,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('settings', SettingsController::class);
 
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-        
+
         Route::get('featured-creatives', [UserController::class, 'featuredCreatives'])->name('featured.creatives');
         Route::post('/update-featured-creatives-order', [CreativeController::class, 'updateOrder'])->name('update-featured-creatives-order');
         Route::post('/update-featured-creative-order', [CreativeController::class, 'updateOrderSingle'])->name('update-featured-creative-order'); //single creative sort order change after double click

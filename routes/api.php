@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\ActivityController;
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AgencyController;
 use App\Http\Controllers\Api\V1\ApplicationController;
+use App\Http\Controllers\Api\V1\ArticlesController;
 use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\BookmarkController;
 use App\Http\Controllers\Api\V1\CategoryController;
@@ -379,3 +380,13 @@ Route::apiResource('faqs', FaqController::class)->names([
     'destroy' => 'api.faqs.destroy',
 ]);
 Route::get('get_faqs', [FaqController::class, 'get_faqs'])->name('api.faqs.get_faqs');
+
+// news and articles
+Route::apiResource('articles', ArticlesController::class)->names([
+    'index' => 'api.articles.index',
+    'store' => 'api.articles.store',
+    'show' => 'api.articles.show',
+    'update' => 'api.articles.update',
+    'destroy' => 'api.articles.destroy',
+]);
+Route::get('get_articles', [ArticlesController::class, 'get_articles'])->name('api.articles.get_ariticles');
