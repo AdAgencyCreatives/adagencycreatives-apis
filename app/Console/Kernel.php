@@ -34,6 +34,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('welcome-next-queued-creative')->dailyAt("11:00");
         $schedule->command('welcome-next-queued-creative')->dailyAt("12:00");
 
+        //shuffle featured creatives and agencies daily
+        $schedule->command('shuffle:featured-creatives')->dailyAt("03:00");
+        $schedule->command('shuffle:featured-agencies')->dailyAt("03:00");
+        
         $date = today();
 
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {
