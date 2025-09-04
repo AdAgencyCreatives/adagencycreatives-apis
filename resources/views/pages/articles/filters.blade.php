@@ -7,10 +7,10 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="article"> Article </label>
+                                <label class="form-label" for="article"> NEWS Blog </label>
                                 <select name="strength" id="article"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100">Select Article</option>
+                                    <option value="-100">Select NEWS Blog</option>
                                 </select>
                             </div>
                         </div>
