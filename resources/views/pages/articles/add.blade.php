@@ -21,8 +21,9 @@
 
             var data = {
                 title: $('#new_article_title').val(),
+                sub_title: $('#new_article_sub_title').val(),
+                article_date: $('#new_article_date').val(),
                 description: $('#new_article_description').val(),
-                order: $('#new_article_order').val(),
             };
 
             $.ajax({
@@ -79,16 +80,20 @@
                 <form id="new_article_form">
                     @csrf
                     <div class="mb-3">
-                        <label for="new_article_order" class="form-label">Article Order</label>
-                        <input type="number" min="0" class="form-control " id="new_article_order">
-                    </div>
-                    <div class="mb-3">
                         <label for="new_article_title" class="form-label">Article Title</label>
                         <input type="text" class="form-control" id="new_article_title">
                     </div>
                     <div class="mb-3">
+                        <label for="new_article_sub_title" class="form-label">Article Sub-Title</label>
+                        <input type="text" class="form-control" id="new_article_sub_title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_article_date" class="form-label">Article Date</label>
+                        <input type="date" class="form-control" id="new_article_date">
+                    </div>
+                    <div class="mb-3">
                         <label for="new_article_description" class="form-label">Article Description</label>
-                        <textarea  class="form-control tip-tap-editor w-100" id="new_article_description"> </textarea>
+                        <textarea class="form-control tip-tap-editor w-100" id="new_article_description"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Add New Article</button>
                 </form>

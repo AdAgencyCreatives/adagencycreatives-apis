@@ -287,8 +287,9 @@
             var row = '<tr>' +
                 '<td>' + article.id + '</td>' +
                 '<td class="article-title" data-id="' + article.uuid + '" data-col="title">' + article.title + '</td>' +
+                '<td class="article-sub_title" data-id="' + article.uuid + '" data-col="sub_title">' + article.sub_title + '</td>' +
+                '<td class="article-article_date" data-id="' + article.uuid + '" data-col="article_date">' + article.article_date + '</td>' +
                 '<td class="article-description" data-id="' + article.uuid + '" data-col="description">' + article.description + '</td>' +
-                '<td class="article-order" data-id="' + article.uuid + '" data-col="order">' + article.order + '</td>' +
                 '<td>' + roleBasedActions + '</td>' +
                 '</tr>';
             tbody.append(row);
@@ -380,7 +381,7 @@
             if (self.hasClass('editing')) {
                 return;
             }
-            var inputType = (col === 'order') ? 'number' : 'text';
+            var inputType = (col === 'article_date') ? 'date' : 'text';
             var inputField = $('<input>', {
                 type: inputType,
                 value: self.text()
@@ -432,7 +433,7 @@
                 }
             });
         }
-        $('table').on('dblclick', '.article-title, .article-order', handleOtherEdit);
+        $('table').on('dblclick', '.article-title, .article-sub_title, .article-article_date', handleOtherEdit);
     });
 </script>
 @endsection
@@ -465,8 +466,9 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
+                                        <th>Sub-Title</th>
+                                        <th>Date</th>
                                         <th>Description</th>
-                                        <th>Order</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>

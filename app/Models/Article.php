@@ -14,8 +14,9 @@ class Article extends Model
     protected $fillable = [
         'uuid',
         'title',
+        'sub_title',
+        'article_date',
         'description',
-        'order',
     ];
 
     protected static function booted()

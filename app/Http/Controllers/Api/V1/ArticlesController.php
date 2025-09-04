@@ -24,9 +24,10 @@ class ArticlesController extends Controller
         $query = QueryBuilder::for(Article::class)
             ->allowedFilters([
                 'title',
+                'sub_title',
             ])
-            ->defaultSort('order')
-            ->allowedSorts('order', 'title');
+            ->defaultSort('article_date')
+            ->allowedSorts('article_date', 'title', 'sub_title');
 
         $articles = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 
@@ -64,7 +65,7 @@ class ArticlesController extends Controller
     {
         try {
             $article = Article::where('uuid', $uuid)->first();
-            $article->update($request->only('title', 'description', 'order'));
+            $article->update($request->only('title', 'sub_title', 'article_date', 'description'));
             return new ArticleResource($article);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
@@ -89,7 +90,7 @@ class ArticlesController extends Controller
     {
         $cacheKey = 'all_articles';
         $articles = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return new ArticleCollection(Article::orderBy('order', 'asc')->get());
+            return new ArticleCollection(Article::orderBy('article_date', 'desc')->get());
         });
 
         return $articles;

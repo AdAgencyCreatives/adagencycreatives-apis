@@ -25,8 +25,9 @@ class UpdateArticleRequest extends FormRequest
     {
         return [
             'title' => 'sometimes|max:255',
+            'sub_title' => 'sometimes|string|max:255',
+            'article_date' => 'sometimes|date',
             'description' => 'sometimes',
-            'order' => 'sometimes|numeric',
         ];
     }
 }
