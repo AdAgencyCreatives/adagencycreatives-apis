@@ -28,6 +28,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class JobController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         $filters = $request->all();

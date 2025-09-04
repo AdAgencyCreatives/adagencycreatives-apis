@@ -14,16 +14,33 @@ use Illuminate\Support\Str;
 
 class JobController extends Controller
 {
+    /**
+     * Display a listing of jobs.
+     */
     public function index()
     {
         return view('pages.jobs.index');
     }
 
+    /**
+     * Show the featured jobs page.
+     */
+    public function featuredJobs()
+    {
+        return view('pages.featured_jobs.index');
+    }
+
+    /**
+     * Show the form for creating a new job.
+     */
     public function create()
     {
         return view('pages.jobs.add-job');
     }
 
+    /**
+     * Display the specified job details.
+     */
     public function details($id)
     {
         $job = Job::with('applications', 'attachment')->where('uuid', $id)->first();
@@ -32,10 +49,11 @@ class JobController extends Controller
         return view('pages.jobs.detail.detail', compact('job', 'agency_logo'));
     }
 
+    /**
+     * Store a newly created job in storage.
+     */
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $category = Category::where('uuid', $request->category_id)->first();
         $state = Location::where('uuid', $request->state)->first();
         $city = Location::where('uuid', $request->city)->first();
@@ -76,6 +94,9 @@ class JobController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Update the specified job in storage.
+     */
     public function update(Request $request, $id)
     {
         $job = Job::where('id', $id)->first();
@@ -124,7 +145,36 @@ class JobController extends Controller
         return redirect()->back();
     }
 
-    public function storeImage($request, $resource_type)
+    /**
+     * Reorders featured jobs on drag and drop.
+     */
+    public function updateOrder(Request $request)
+    {
+        $order = $request->input('order');
+        foreach ($order as $index => $itemId) {
+            Job::where('id', $itemId)->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['message' => 'Order updated successfully']);
+    }
+
+    /**
+     * Updates the sort order for a single featured job.
+     */
+    public function updateOrderSingle(Request $request)
+    {
+        $order = $request->input('sort_order');
+        $job_id = $request->input('job_id');
+
+        Job::where('id', $job_id)->update(['sort_order' => $order]);
+
+        return response()->json(['message' => 'Order updated successfully', 'status' => 200]);
+    }
+
+    /**
+     * Stores an image attachment.
+     */
+    private function storeImage($request, $resource_type)
     {
         $uuid = Str::uuid();
         $file = $request->file;
@@ -146,7 +196,10 @@ class JobController extends Controller
         return $attachment;
     }
 
-    public function appendWorkplacePreference($request)
+    /**
+     * Appends workplace preferences to the request.
+     */
+    private function appendWorkplacePreference($request)
     {
         $defaultWorkplacePreferences = [
             'is_hybrid' => 0,
@@ -163,6 +216,9 @@ class JobController extends Controller
         return $request->merge($defaultWorkplacePreferences);
     }
 
+    /**
+     * Updates SEO for the specified job.
+     */
     public function update_seo(Request $request, $uuid)
     {
         $job = Job::where('uuid', $uuid)->first();

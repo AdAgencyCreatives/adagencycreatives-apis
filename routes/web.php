@@ -250,6 +250,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-featured-agency-order', [AgencyController::class, 'updateOrderSingle'])->name('update-featured-agency-order'); //single agency sort order change after double click
         Route::post('settings/agencies-count', [SettingsController::class, 'update_agencies_count'])->name('settings.agencies-count');
 
+        Route::get('featured-jobs', [UserController::class, 'featuredJobs'])->name('featured.jobs');
+        Route::post('/update-featured-jobs-order', [JobController::class, 'updateOrder'])->name('update-featured-jobs-order');
+        Route::post('/update-featured-job-order-single', [JobController::class, 'updateOrderSingle'])->name('update-featured-job-order-single');
+        Route::post('settings/jobs-count', [SettingsController::class, 'update_jobs_count'])->name('settings.jobs-count');
+
         Route::resource('creatives', UserController::class)->parameters([
             'creatives' => 'user',
         ]);

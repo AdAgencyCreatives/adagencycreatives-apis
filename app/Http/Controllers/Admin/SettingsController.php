@@ -108,4 +108,17 @@ class SettingsController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * Update the number of featured jobs on the homepage.
+     */
+    public function update_jobs_count(Request $request)
+    {
+        settings($request->only('jobs_count_homepage'));
+
+        Cache::forget('homepage_jobs');
+        Artisan::call('cache:clear');
+        Session::flash('success', 'Homepage jobs count updated successfully');
+        return redirect()->back();
+    }
 }

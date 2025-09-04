@@ -361,4 +361,9 @@ class UserController extends Controller
     {
         return view('pages.featured_agencies.index');
     }
+
+    public function featuredjobs()
+    {
+        return view('pages.featured_jobs.index');
+    }
 }

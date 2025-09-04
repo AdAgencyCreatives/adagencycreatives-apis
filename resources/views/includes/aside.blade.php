@@ -203,6 +203,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ request()->is('featured.jobs') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('featured.jobs') }}">
+                            <i class="align-middle" data-feather="upload-cloud"></i>
+                            <span class="align-middle">Featured Jobs</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-item {{ request()->is('jobs/create') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('jobs.create') }}">
                             <i class="align-middle" data-feather="list"></i>
