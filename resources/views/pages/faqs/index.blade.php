@@ -219,12 +219,29 @@
             method: 'GET',
             dataType: 'json',
             success: function(response) {
-                populateGroupFilter(response.data, '#faq');
+                populateGroupFilter_title(response.data, '#faq');
+
             },
             error: function() {
                 alert('Failed to fetch faqs from the API.');
             }
         });
+    }
+
+    function populateGroupFilter_title(articles, selectId) {
+        var selectElement = $(selectId);
+        selectElement.empty().append('<option value="-100">Select Article</option>');
+        if (Array.isArray(articles)) {
+            $.each(articles, function(index, article) {
+                var option = $('<option>', {
+                    value: article.uuid,
+                    text: article.title
+                });
+                selectElement.append(option);
+            });
+        } else {
+            console.error("The data from the API is not an array:", articles);
+        }
     }
 
     function fetchData(page, filters = []) {

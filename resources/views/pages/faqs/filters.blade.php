@@ -7,8 +7,8 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="form-label" for="strength"> Faq </label>
-                                <select name="strength" id="strength"
+                                <label class="form-label" for="faq"> Faq </label>
+                                <select name="faq" id="faq"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
                                     <option value="-100">Select Faq</option>
                                 </select>
