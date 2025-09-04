@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('articles', function (Blueprint $table) {
             $table->string('sub_title')->nullable()->after('title');
+            $table->text('detail')->nullable()->after('description');
             $table->date('article_date')->nullable()->after('detail');
         });
     }
