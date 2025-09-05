@@ -34,7 +34,6 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $filters = $request->all();
-
         $industries = processIndustryExperience($request, $filters);
         $medias = processMediaExperience($request, $filters);
 
@@ -63,7 +62,12 @@ class JobController extends Controller
                 AllowedFilter::trashed(),
             ])
             ->defaultSort('-featured_at', '-updated_at', "-created_at")
-            ->allowedSorts('featured_at', 'updated_at', 'created_at');
+            ->allowedSorts('featured_at', 'sort_order', 'updated_at', 'created_at');
+
+        // Add the conditional logic here
+        if ($request->has('sort') && str_contains($request->get('sort'), 'sort_order')) {
+            $query->where('is_featured', 1);
+        }
 
         if ($industries !== null) {
             applyExperienceFilter($query, $industries, 'industry_experience', 'job_posts');

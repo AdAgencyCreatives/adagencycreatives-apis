@@ -3,14 +3,14 @@
 @section('title', __('Jobs'))
 
 @php
-$url_map = [
-'127.0.0.1:8000' => 'http://localhost:8000/',
-'localhost:8000' => 'http://localhost:8000/',
-'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
-'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
-'adagencycreatives-apis.test' => 'http://localhost:3000/',
-];
-$site_url = $url_map[$_SERVER['HTTP_HOST']];
+    $url_map = [
+        '127.0.0.1:8000' => 'http://localhost:8000/',
+        'localhost:8000' => 'http://localhost:8000/',
+        'staging-api.adagencycreatives.com' => 'https://staging.adagencycreatives.com/',
+        'api.adagencycreatives.com' => 'https://adagencycreatives.com/',
+        'adagencycreatives-apis.test' => 'http://localhost:3000/',
+    ];
+    $site_url = $url_map[$_SERVER['HTTP_HOST']];
 @endphp
 
 @section('scripts')
@@ -71,10 +71,12 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
         tbody.empty();
 
         if (jobs.length === 0) {
-            displayNoRecordsMessage(11);
+            displayNoRecordsMessage(7);
         }
 
         $.each(jobs, function(index, job) {
+            console.log("Job: " + job);
+
             var editUrl = "/jobs/" + job.id + "/details";
             var roleBasedActions = '';
 
@@ -105,22 +107,16 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
 
             var row = '<tr class="sortable-item" id="' + job.id + '">' +
                 '<td>' + (index + 1) + '</td>' +
+                '<td>' + (job?.sort_order ?? '') + '</td>' +
                 '<td>' + (job?.agency_name || job?.agency?.name) + '</td>' +
                 '<td><a href="{{ $site_url }}job/' + job.slug + '" target="_blank">' + job.title +
                 '</a></td>' +
-                '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type ==
-                    "External" ?
+                '<td style="text-align:center; min-width: 100px;">' + job.apply_type + (job.apply_type == "External" ?
                     '<br><a class="btn btn-dark" href="' + job.external_link +
                     '" target="_blank">Apply Now</a>' : "") + '</td>' +
                 '<td>' + job.category + '</td>' +
                 '<td>' + job.employment_type + '</td>' +
-                '<td>' + displayJobOptionsBadges(job.workplace_preference) + '</td>' +
-                '<td>' + job.industry_experience + '</td>' +
-                '<td>' + job.media_experience + '</td>' +
                 '<td>' + statusDropdown + '</td>' +
-                '<td class="sort-order" data-id="' + job.id + '">' + (job?.sort_order ?? '') + '</td>' +
-                '<td><span class="badge bg-primary me-2">' + job.created_at +
-                '</span><span class="badge bg-danger me-2">' + job.expired_at + '</span></td>' +
                 '<td>' + roleBasedActions + '</td>' +
                 '</tr>';
             tbody.append(row);
@@ -170,13 +166,11 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
             fetchData(currentPage);
         });
 
-
         $(document).on('click', '.delete-btn', function() {
             var resourceId = $(this).data('id');
             var csrfToken = '{{ csrf_token() }}';
             deleteConfirmation(resourceId, 'job', 'jobs', csrfToken);
         });
-
 
         $(document).on('change', '.status-dropdown', function() {
             var selectedStatus = $(this).val();
@@ -227,7 +221,6 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                             <div class="table_length" id="table_length"><label>Show <select
                                         name="datatables-reponsive_length" id="per-page-select"
                                         class="form-select form-select-sm">
-
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -242,25 +235,18 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Sort Order</th>
                                         <th>Agency</th>
                                         <th>Title</th>
                                         <th>Apply Type</th>
                                         <th>Category</th>
                                         <th>Employment Type</th>
-                                        <th>Workplace Preference</th>
-                                        <th>Industry Experience</th>
-                                        <th>Media Experience</th>
                                         <th>Status</th>
-                                        <th>Sort Order</th>
-                                        <th>Created At / Expired At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-
                                 <tbody id="sortable-jobs-list" data-url="{{ route('update-featured-jobs-order') }}">
-
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -274,12 +260,39 @@ $site_url = $url_map[$_SERVER['HTTP_HOST']];
                                 <ul class="pagination"></ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{{-- This is the new section for the featured jobs count form --}}
+<div class="row">
+    <div class="col-md-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Homepage Featured Jobs Count</h5>
+            </div>
+            <div class="card-body">
+                <form id="jobs-count-form" action="{{ route('settings.jobs-count') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobs_count_homepage">Featured jobs count</label>
+                                <input type="number" class="form-control" name="jobs_count_homepage"
+                                    value="{{ settings('jobs_count_homepage') }}" min="1"
+                                    max="{{ \App\Models\Job::where('is_featured', 1)->count() }}">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- End of new section --}}
 
 @endsection

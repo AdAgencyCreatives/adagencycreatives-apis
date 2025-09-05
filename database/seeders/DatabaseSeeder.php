@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationSeeder::class);
         $this->call(YearsOfExperienceSeeder::class);
         $this->call(PageSeeder::class);
+        $this->call(JobPostsTableSeeder::class);
         Artisan::call('adagencycreatives:permission');
 
         \App\Models\User::factory(5)->create();

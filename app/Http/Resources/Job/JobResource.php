@@ -46,6 +46,7 @@ class JobResource extends JsonResource
             'id' => $this->uuid,
             'user_id' => $user->uuid,
             'slug' => $this->slug,
+            'sort_order' => $this->sort_order,
             'force_slug' => $this->force_slug,
             'title' => $this->title,
             'description' => $this->description,
