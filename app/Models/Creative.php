@@ -33,6 +33,8 @@ class Creative extends Model
         'is_featured',
         'is_urgent',
         'is_opentorelocation',
+        'is_vip',
+        'vip_at',
         'seo_title',
         'seo_description',
         'seo_keywords',
@@ -45,6 +47,8 @@ class Creative extends Model
     ];
 
     protected $casts = [
+        'is_vip' => 'boolean',
+        'vip_at' => 'datetime',
         'featured_at' => 'datetime',
         'welcomed_at' => 'datetime',
         'welcome_queued_at' => 'datetime',

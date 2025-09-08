@@ -29,6 +29,8 @@ class Agency extends Model
         'is_remote',
         'is_featured',
         'is_urgent',
+        'is_vip',
+        'vip_at',
         'seo_title',
         'seo_description',
         'seo_keywords',
@@ -38,6 +40,9 @@ class Agency extends Model
     ];
 
     protected $casts = [
+        'is_featured' => 'boolean',
+        'is_vip' => 'boolean',
+        'vip_at' => 'datetime',
         'featured_at' => 'datetime',
     ];
 

@@ -112,9 +112,9 @@
                                 <label class="form-label" for="workplace_experience">Workplace Preference</label>
                                 <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
                                     @foreach (\App\Models\Job::WORKPLACE_PREFERENCE as $value => $label)
-                                        <option value="{{ $value }}"
-                                            @if ($user->agency?->{$value}) selected @endif>{{ $label }}
-                                        </option>
+                                    <option value="{{ $value }}"
+                                        @if ($user->agency?->{$value}) selected @endif>{{ $label }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -131,6 +131,20 @@
                                     <option value="1" @if ($user->agency?->is_featured == 1) selected @endif> Yes
                                     </option>
                                     <option value="0" @if ($user->agency?->is_featured == 0) selected @endif> No
+                                    </option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="is_vip"> VIP? </label>
+                                <select name="is_vip" id="is_vip"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if ($user->agency?->is_vip == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if ($user->agency?->is_vip == 0) selected @endif> No
                                     </option>
 
                                 </select>
@@ -192,11 +206,11 @@
                             <div class="text-center">
                                 <h4>Logo</h4>
                                 @if (count($user->attachments) > 0)
-                                    <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ get_profile_picture($user) }}" alt="" width="300"
-                                        height="300" />
+                                <img class="rounded-circle img-responsive mt-2 lazy"
+                                    src="{{ get_profile_picture($user) }}" alt="" width="300"
+                                    height="300" />
                                 @else
-                                    <p>No logo uploaded yet</p>
+                                <p>No logo uploaded yet</p>
                                 @endif
                             </div>
                         </div>

@@ -33,9 +33,9 @@
 
                                     @foreach (\App\Models\Job::EMPLOYMENT_TYPE as $type)
                                         <option value="{{ $type }}"
-                                            @if ($user->creative->employment_type == $type) selected @endif>{{ $type }}
-                                        </option>
-                                    @endforeach
+                                @if ($user->creative->employment_type == $type) selected @endif>{{ $type }}
+                                </option>
+                                @endforeach
 
                                 </select> --}}
 
@@ -64,9 +64,9 @@
 
                         <div class="col-md-6">
                             @php
-                                $phoneData = $user->phones->where('label', 'personal')->first();
-                                $countryCode = $phoneData ? $phoneData->country_code : '';
-                                $phoneNumber = $phoneData ? $phoneData->phone_number : '';
+                            $phoneData = $user->phones->where('label', 'personal')->first();
+                            $countryCode = $phoneData ? $phoneData->country_code : '';
+                            $phoneNumber = $phoneData ? $phoneData->phone_number : '';
                             @endphp
                             <div class="row">
                                 <div class="col-md-6">
@@ -102,6 +102,19 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="form-label" for="is_vip"> VIP Candidate </label>
+                                <select name="is_vip" id="is_vip"
+                                    class="form-control form-select custom-select select2" data-toggle="select2">
+                                    <option value="1" @if ($user->creative?->is_vip == 1) selected @endif> Yes
+                                    </option>
+                                    <option value="0" @if ($user->creative?->is_vip == 0) selected @endif> No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="form-label" for="is_urgent"> Urgent Candidate</label>
                                 <select name="is_urgent" id="is_urgent"
                                     class="form-control form-select custom-select select2" data-toggle="select2">
@@ -120,9 +133,9 @@
                                 <label class="form-label" for="workplace_experience">Workplace Preference</label>
                                 <select class="form-control select2" multiple="multiple" name="workplace_experience[]">
                                     @foreach (\App\Models\Job::WORKPLACE_PREFERENCE as $value => $label)
-                                        <option value="{{ $value }}"
-                                            @if ($user->creative?->{$value}) selected @endif>{{ $label }}
-                                        </option>
+                                    <option value="{{ $value }}"
+                                        @if ($user->creative?->{$value}) selected @endif>{{ $label }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -146,79 +159,79 @@
                     {{-- <div class="row">
                         <div class="col-12 col-lg-6">
                             {{ $user->addresses[0]?->state->name }}
-                        </div>
+            </div>
 
-                        <div class="col-12 col-lg-6">
-                            {{ $user->addresses[0]?->city->name }}
-                        </div>
-                    </div> --}}
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="state"> State </label>
-                                <select name="state" id="state"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select State</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="col-12 col-lg-6">
+                {{ $user->addresses[0]?->city->name }}
+            </div>
+        </div> --}}
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="form-label" for="state"> State </label>
+                    <select name="state" id="state"
+                        class="form-control form-select custom-select select2" data-toggle="select2">
+                        <option value="-100"> Select State</option>
+                    </select>
+                </div>
+            </div>
 
-                        <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6">
 
-                            <div class="form-group">
-                                <label class="form-label" for="city"> City </label>
-                                <select name="city" id="city"
-                                    class="form-control form-select custom-select select2" data-toggle="select2">
-                                    <option value="-100"> Select City</option>
-                                </select>
-                            </div>
+                <div class="form-group">
+                    <label class="form-label" for="city"> City </label>
+                    <select name="city" id="city"
+                        class="form-control form-select custom-select select2" data-toggle="select2">
+                        <option value="-100"> Select City</option>
+                    </select>
+                </div>
 
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <div class="form-group">
-                                    <label class="form-label" for="about"> About </label>
-                                    <textarea name="about" class="form-control tip-tap-editor" rows="2" placeholder="About" spellcheck="true"
-                                        style="height: 225px;">{{ $user->creative?->about }}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Profile Photo</label>
-                                    <div>
-                                        <input type="file" class="validation-file" name="file">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="text-center">
-                                <h4>Profile Photo</h4>
-                                @if ($user->profile_picture)
-                                    <img class="rounded-circle img-responsive mt-2 lazy"
-                                        src="{{ get_profile_picture($user) }}" alt="" width="300"
-                                        height="300" />
-                                @else
-                                    <p>No image uploaded yet</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
             </div>
 
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label class="form-label" for="about"> About </label>
+                        <textarea name="about" class="form-control tip-tap-editor" rows="2" placeholder="About" spellcheck="true"
+                            style="height: 225px;">{{ $user->creative?->about }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <div class="mb-3 error-placeholder">
+                        <label class="form-label">Profile Photo</label>
+                        <div>
+                            <input type="file" class="validation-file" name="file">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="text-center">
+                    <h4>Profile Photo</h4>
+                    @if ($user->profile_picture)
+                    <img class="rounded-circle img-responsive mt-2 lazy"
+                        src="{{ get_profile_picture($user) }}" alt="" width="300"
+                        height="300" />
+                    @else
+                    <p>No image uploaded yet</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
     </div>
+
+</div>
+</div>
 </div>

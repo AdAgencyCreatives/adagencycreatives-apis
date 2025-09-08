@@ -125,6 +125,7 @@ class CreativeController extends Controller
 
         $was_is_featured = $creative->is_featured;
         $was_is_welcomed = $creative->is_welcomed;
+        $was_is_vip = $creative->is_vip;
 
         $user = User::where('id', $creative->user_id)->first();
         $user->update([
@@ -144,6 +145,7 @@ class CreativeController extends Controller
             'years_of_experience',
             'employment_type',
             'is_featured',
+            'is_vip',
             'is_urgent',
             'is_remote',
             'is_hybrid',
@@ -160,7 +162,12 @@ class CreativeController extends Controller
             $creative->featured_at = null;
         }
 
+        if ($creative?->is_vip && !$request?->is_vip) {
+            $creative->vip_at = null;
+        }
+
         $now_is_featured = $request?->is_featured;
+        $now_is_vip      = $request?->is_vip;
 
         foreach ($data as $key => $value) {
             $creative->$key = $value;

@@ -16,6 +16,7 @@ use App\Models\JobAlert;
 use App\Models\Link;
 use App\Models\Subscription;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -136,7 +137,15 @@ class UserController extends Controller
                 $agency->name = $request->agency_name ?? 'Default Agency';
                 $agency->size = '10';
                 $agency->about = '';
-                
+                // VIP Logic for Agency
+                if ($request->vip === 'yes') {
+                    $agency->is_vip = true;
+                    $agency->vip_at = Carbon::now();
+                } else {
+                    $agency->is_vip = false;
+                    $agency->vip_at = null;
+                }
+
                 $user->username = $this->get_agency_username($user, $agency);
                 $agency->save();
 
@@ -154,6 +163,16 @@ class UserController extends Controller
                 $creative->years_of_experience = 'Junior 0-2 years';
                 $creative->about = '';
                 $creative->employment_type = 'Full-Time';
+
+                // VIP Logic for Agency
+                if ($request->vip === 'yes') {
+                    $creative->is_vip = true;
+                    $creative->vip_at = Carbon::now();
+                } else {
+                    $creative->is_vip = false;
+                    $creative->vip_at = null;
+                }
+
                 $creative->save();
             }
 
@@ -171,8 +190,7 @@ class UserController extends Controller
                 }
             }
             throw new ApiException($e, 'US-01');
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
     }

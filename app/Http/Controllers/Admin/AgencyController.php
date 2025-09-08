@@ -43,7 +43,7 @@ class AgencyController extends Controller
 
         $this->appendWorkplacePreference($request);
 
-        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite']);
+        $data = $request->only(['name', 'size', 'industry_experience', 'media_experience', 'about', 'is_featured', 'is_vip', 'is_urgent', 'is_remote', 'is_hybrid', 'is_onsite']);
 
         if ($request?->is_featured && !$agency?->is_featured) {
             $agency->featured_at = now();
@@ -51,6 +51,14 @@ class AgencyController extends Controller
 
         if ($agency?->is_featured && !$request?->is_featured) {
             $agency->featured_at = null;
+        }
+
+        if ($request?->is_vip && !$agency?->is_vip) {
+            $agency->vip_at = now();
+        }
+
+        if ($agency?->is_vip && !$request?->is_vip) {
+            $agency->vip_at = null;
         }
 
         foreach ($data as $key => $value) {
