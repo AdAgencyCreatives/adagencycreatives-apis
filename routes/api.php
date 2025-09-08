@@ -386,6 +386,8 @@ Route::apiResource('faqs', FaqController::class)->names([
 Route::get('get_faqs', [FaqController::class, 'get_faqs'])->name('api.faqs.get_faqs');
 
 // news and articles
+Route::get('articles/latest', [ArticlesController::class, 'getLatestPosts'])->name('api.articles.latest');
+
 Route::apiResource('articles', ArticlesController::class)->names([
     'index' => 'api.articles.index',
     'store' => 'api.articles.store',

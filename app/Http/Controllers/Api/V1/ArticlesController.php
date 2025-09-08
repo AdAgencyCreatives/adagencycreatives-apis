@@ -19,6 +19,12 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ArticlesController extends Controller
 {
+    /**
+     * Display a listing of the resource with pagination.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return ArticleCollection
+     */
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Article::class)
@@ -34,6 +40,13 @@ class ArticlesController extends Controller
         return new ArticleCollection($articles);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\Article\StoreArticleRequest  $request
+     * @return ArticleResource
+     * @throws ApiException
+     */
     public function store(StoreArticleRequest $request)
     {
         try {
@@ -49,6 +62,13 @@ class ArticlesController extends Controller
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $uuid
+     * @return \Illuminate\Http\JsonResponse|ArticleResource
+     * @throws ModelNotFound
+     */
     public function show($uuid)
     {
         try {
@@ -61,6 +81,13 @@ class ArticlesController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\Article\UpdateArticleRequest  $request
+     * @param  string  $uuid
+     * @return \Illuminate\Http\JsonResponse|ArticleResource
+     */
     public function update(UpdateArticleRequest $request, $uuid)
     {
         try {
@@ -72,6 +99,13 @@ class ArticlesController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  string  $uuid
+     * @return \Illuminate\Http\JsonResponse|ArticleResource
+     * @throws ModelNotFound
+     */
     public function destroy($uuid)
     {
         try {
@@ -84,6 +118,17 @@ class ArticlesController extends Controller
         } catch (\Exception $e) {
             throw new ApiException($e, 'US-01');
         }
+    }
+
+    /**
+     * Display the latest six articles.
+     *
+     * @return ArticleCollection
+     */
+    public function getLatestPosts()
+    {
+        $articles = Article::orderBy('article_date', 'desc')->take(6)->get();
+        return new ArticleCollection($articles);
     }
 
     public function get_articles()
