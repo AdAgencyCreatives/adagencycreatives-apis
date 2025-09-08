@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Creative\StoreCreativeRequest;
 use App\Http\Requests\Creative\UpdateCreativeRequest;
@@ -1419,5 +1420,23 @@ class CreativeController extends Controller
         }
 
         CreativeCache::insert($cacheData);
+    }
+
+    /**
+     * Display the latest VIP creative.
+     *
+     * @return \Illuminate\Http\JsonResponse|CreativeResource
+     */
+    public function getLatestVipCreative()
+    {
+        $creative = Creative::with('user')
+            ->where('is_vip', true)
+            ->orderBy('vip_at', 'desc')
+            ->first();
+        if (!$creative) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new CreativeResource($creative);
     }
 }

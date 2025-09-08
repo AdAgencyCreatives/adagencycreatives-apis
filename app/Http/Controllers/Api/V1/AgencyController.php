@@ -533,4 +533,23 @@ class AgencyController extends Controller
 
         return Media::whereIn('uuid', $experience_ids)->pluck('uuid')->toArray();
     }
+    
+    /**
+     * Display the latest VIP agency.
+     *
+     * @return \Illuminate\Http\JsonResponse|AgencyResource
+     */
+    public function getLatestVipAgency()
+    {
+        $agency = Agency::with('attachment')
+            ->where('is_vip', true)
+            ->orderBy('vip_at', 'desc')
+            ->first();
+
+        if (!$agency) {
+            return ApiResponse::error(trans('response.not_found'), 404);
+        }
+
+        return new AgencyResource($agency);
+    }
 }

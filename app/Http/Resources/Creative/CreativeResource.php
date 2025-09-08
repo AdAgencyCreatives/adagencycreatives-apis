@@ -47,7 +47,7 @@ class CreativeResource extends JsonResource
             'media_experience' => getMediaNames($this->media_experience),
             'character_strengths' => getCharacterStrengthNames($this->strengths),
             'priority' => [
-                'is_vip' => $this->is_vip,
+                'is_vip'      => $this->is_vip,
                 'is_featured' => $this->is_featured,
                 'is_urgent' => $this->is_urgent,
             ],
@@ -67,7 +67,7 @@ class CreativeResource extends JsonResource
             'created_at' => $this->created_at->format(config('global.datetime_format')),
             'updated_at' => $this->updated_at->format(config('global.datetime_format')),
             'featured_at' => $this->featured_at ? $this->featured_at?->format(config('global.datetime_format')) : null,
-            'is_vip' => $this->is_vip ? $this->is_vip?->format(config('global.datetime_format')) : null,
+            'vip_at'      => $this->vip_at ? $this->vip_at?->format(config('global.datetime_format')) : null,
             'is_welcomed' => $this->is_welcomed,
             'welcomed_at' => $this->welcomed_at ? $this->welcomed_at?->format(config('global.datetime_format')) : null,
             'welcome_queued_at' => $this->welcome_queued_at ? $this->welcome_queued_at?->format(config('global.datetime_format')) : null,

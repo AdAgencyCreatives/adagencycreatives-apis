@@ -148,6 +148,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('advisor_profile/{user}', [AgencyController::class, 'update_profile_advisor']);
     Route::patch('creative_profile/{user}', [CreativeController::class, 'update_profile']);
     Route::patch('creative_resume/{user}', [CreativeController::class, 'update_resume']);
+    // Custom route to get the latest VIP agency & creative
+    Route::get('agencies/vip/latest', [AgencyController::class, 'getLatestVipAgency'])->name('api.agencies.vip.latest');
+    Route::get('creatives/vip/latest', [CreativeController::class, 'getLatestVipCreative'])->name('api.creatives.vip.latest');
+
     Route::apiResource('agencies', AgencyController::class, ['except' => ['index']])->middleware('check.permissions:agency')->names([
         'index' => 'api.agencies.index',
         'store' => 'api.agencies.store',
