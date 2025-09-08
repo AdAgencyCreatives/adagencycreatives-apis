@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
+use Carbon\Carbon;
 
 class ArticlesController extends Controller
 {
@@ -50,11 +51,15 @@ class ArticlesController extends Controller
     public function store(StoreArticleRequest $request)
     {
         try {
-            $request->merge([
-                'uuid' => Str::uuid(),
-            ]);
+            $data = $request->validated();
+            $data['uuid'] = Str::uuid();
 
-            $article = Article::create($request->all());
+            // Handle featured status
+            if (isset($data['is_featured']) && $data['is_featured']) {
+                $data['featured_at'] = Carbon::now();
+            }
+
+            $article = Article::create($data);
 
             return new ArticleResource($article);
         } catch (\Exception $e) {
@@ -92,7 +97,14 @@ class ArticlesController extends Controller
     {
         try {
             $article = Article::where('uuid', $uuid)->first();
-            $article->update($request->only('title', 'sub_title', 'article_date', 'description'));
+            $data = $request->only('title', 'sub_title', 'article_date', 'description', 'is_featured');
+
+            // Handle featured status on update
+            if (isset($data['is_featured']) && $data['is_featured'] && !$article->is_featured) {
+                $data['featured_at'] = Carbon::now();
+            }
+
+            $article->update($data);
             return new ArticleResource($article);
         } catch (ModelNotFoundException $exception) {
             return ApiResponse::error(trans('response.not_found'), 404);
@@ -121,13 +133,13 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Display the latest six articles.
+     * Display the latest six articles, prioritized by featured status.
      *
      * @return ArticleCollection
      */
     public function getLatestPosts()
     {
-        $articles = Article::orderBy('article_date', 'desc')->take(6)->get();
+        $articles = Article::orderByRaw('is_featured DESC, featured_at DESC')->take(6)->get();
         return new ArticleCollection($articles);
     }
 

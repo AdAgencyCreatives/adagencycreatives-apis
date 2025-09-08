@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\ActivityLoggerTrait;
 
 class Article extends Model
 {
     use HasFactory, SoftDeletes;
+    use ActivityLoggerTrait;
 
     protected $fillable = [
         'uuid',
@@ -17,6 +19,14 @@ class Article extends Model
         'sub_title',
         'article_date',
         'description',
+        'is_featured',
+        'featured_at',
+    ];
+
+    protected $casts = [
+        'article_date' => 'datetime',
+        'is_featured' => 'boolean',
+        'featured_at' => 'datetime',
     ];
 
     protected static function booted()

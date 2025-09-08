@@ -24,6 +24,8 @@
                 sub_title: $('#new_article_sub_title').val(),
                 article_date: $('#new_article_date').val(),
                 description: $('#new_article_description').val(),
+                // Correctly send '1' or '0' to the backend
+                is_featured: $('#new_article_is_featured').val() === 'yes' ? 1 : 0,
             };
 
             $.ajax({
@@ -90,6 +92,13 @@
                     <div class="mb-3">
                         <label for="new_article_date" class="form-label">Date</label>
                         <input type="date" class="form-control" id="new_article_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_article_is_featured" class="form-label">Featured</label>
+                        <select class="form-control" id="new_article_is_featured">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="new_article_description" class="form-label">Description</label>

@@ -27,6 +27,7 @@ class StoreArticleRequest extends FormRequest
             'title' => 'required|max:255',
             'sub_title' => 'required|string|max:255',
             'article_date' => 'required|date',
+            'is_featured' => 'sometimes',
             'description' => 'required',
         ];
     }

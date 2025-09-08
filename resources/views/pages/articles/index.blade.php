@@ -245,7 +245,7 @@
 
     function fetchArticles() {
         $.ajax({
-            url: 'api/v1/get_articles',
+            url: 'api/v1/articles',
             method: 'GET',
             dataType: 'json',
             success: function(response) {
@@ -328,8 +328,9 @@
                 '<td>' + article.id + '</td>' +
                 '<td class="article-title" data-id="' + article.uuid + '" data-col="title">' + article.title + '</td>' +
                 '<td class="article-sub_title" data-id="' + article.uuid + '" data-col="sub_title">' + article.sub_title + '</td>' +
-                // FIX 1: Store the original date value in a data attribute
                 '<td class="article-article_date" data-id="' + article.uuid + '" data-col="article_date" data-original-date="' + article.article_date + '">' + formatDate(article.article_date) + '</td>' +
+                // New Featured column with a class for double-clicking
+                '<td class="article-is_featured" data-id="' + article.uuid + '" data-col="is_featured">' + (article.is_featured ? 'Yes' : 'No') + '</td>' +
                 '<td class="article-description" data-id="' + article.uuid + '" data-col="description">' + article.description + '</td>' +
                 '<td>' + roleBasedActions + '</td>' +
                 '</tr>';
@@ -411,6 +412,7 @@
                             icon: 'error'
                         });
                     }
+                    fetchData(currentPage);
                 }
             });
         });
@@ -423,7 +425,6 @@
                 return;
             }
             var inputType = (col === 'article_date') ? 'date' : 'text';
-            // FIX 2: Use the data-original-date attribute for the input value
             var valueToUse = (col === 'article_date') ? self.data('original-date') : self.text();
             var inputField = $('<input>', {
                 type: inputType,
@@ -434,7 +435,6 @@
             inputField.on('blur', function() {
                 var newData = $(this).val();
                 saveData(uuid, col, newData, self);
-                // FIX 3: Re-format the date before updating the table cell
                 if (col === 'article_date') {
                     self.html(formatDate(newData)).removeClass('editing');
                 } else {
@@ -481,7 +481,44 @@
                 }
             });
         }
+
+        function handleIsFeaturedEdit() {
+            var self = $(this);
+            var uuid = self.data('id');
+            var col = self.data('col');
+            if (self.hasClass('editing')) {
+                return;
+            }
+            var currentValue = self.text().trim();
+            var selectField = $('<select>', {
+                class: 'form-control',
+            }).append(
+                $('<option>', {
+                    value: '1',
+                    text: 'Yes'
+                }),
+                $('<option>', {
+                    value: '0',
+                    text: 'No'
+                })
+            );
+            if (currentValue === 'Yes') {
+                selectField.val('1');
+            } else {
+                selectField.val('0');
+            }
+            self.html(selectField).addClass('editing');
+            selectField.focus();
+
+            selectField.on('blur change', function() {
+                var newData = $(this).val();
+                saveData(uuid, col, newData, self);
+                self.html(newData === '1' ? 'Yes' : 'No').removeClass('editing');
+            });
+        }
+
         $('table').on('dblclick', '.article-title, .article-sub_title, .article-article_date', handleOtherEdit);
+        $('table').on('dblclick', '.article-is_featured', handleIsFeaturedEdit);
     });
 </script>
 @endsection
@@ -496,13 +533,13 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="table_length" id="table_length"><label>Show
-                                        <select name="datatables-reponsive_length" id="per-page-select" class="form-select form-select-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        entries</label>
+                                    <select name="datatables-reponsive_length" id="per-page-select" class="form-select form-select-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    entries</label>
                             </div>
                         </div>
                     </div>
@@ -516,6 +553,7 @@
                                         <th>Title</th>
                                         <th>Sub-Title</th>
                                         <th>Date</th>
+                                        <th>Featured</th>
                                         <th>Description</th>
                                         <th>Actions</th>
                                     </tr>
@@ -569,20 +607,20 @@
 </div>
 <!-- Custom Prompt Modal -->
 <div class="modal fade" id="promptModal" tabindex="-1" aria-labelledby="promptModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="promptModalTitle"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="form-control" id="promptInput">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="promptSaveButton">OK</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="promptModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="promptInput">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="promptSaveButton">OK</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 @endsection

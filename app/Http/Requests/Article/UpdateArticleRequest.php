@@ -27,6 +27,7 @@ class UpdateArticleRequest extends FormRequest
             'title' => 'sometimes|max:255',
             'sub_title' => 'sometimes|string|max:255',
             'article_date' => 'sometimes|date',
+            'is_featured' => 'sometimes',
             'description' => 'sometimes',
         ];
     }
