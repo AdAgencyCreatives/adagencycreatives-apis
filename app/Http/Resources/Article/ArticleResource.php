@@ -18,6 +18,7 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'uuid' => $this->uuid,
             'title' => $this->title,
+            'order' => $this->order,
             'sub_title' => $this->sub_title,
             'is_featured' => $this->is_featured,
             'article_date' => $this->article_date,

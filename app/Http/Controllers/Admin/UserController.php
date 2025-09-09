@@ -182,10 +182,10 @@ class UserController extends Controller
                 if (strpos($e->getMessage(), 'users_username_unique') !== false) {
                     return response()->json([
                         'status' => 'failed',
-                        'code' => 'US-02', 
+                        'code' => 'US-02',
                         'message' => 'The username is already taken. Please choose a different username.',
                         'errors' => ['username' => ['The username is already taken.']],
-                    ], 422); 
+                    ], 422);
 
                 }
             }
@@ -378,6 +378,12 @@ class UserController extends Controller
     public function featuredAgencies()
     {
         return view('pages.featured_agencies.index');
+    }
+
+
+    public function featuredArticles()
+    {
+        return view('pages.featured_articles.index');
     }
 
     public function featuredjobs()

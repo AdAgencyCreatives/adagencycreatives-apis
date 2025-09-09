@@ -121,4 +121,14 @@ class SettingsController extends Controller
         Session::flash('success', 'Homepage jobs count updated successfully');
         return redirect()->back();
     }
+
+    public function update_articles_count(Request $request)
+    {
+        settings($request->only('agency_count_homepage')); //number of agencies to appear on homepage slider
+
+        Cache::forget('homepage_agencies');
+        Artisan::call('cache:clear');
+        Session::flash('success', 'Homepage agencies count updated successfully');
+        return redirect()->back();
+    }
 }

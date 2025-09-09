@@ -31,10 +31,12 @@ class ArticlesController extends Controller
         $query = QueryBuilder::for(Article::class)
             ->allowedFilters([
                 'title',
+                'order',
                 'sub_title',
+                'is_featured'
             ])
             ->defaultSort('article_date')
-            ->allowedSorts('article_date', 'title', 'sub_title');
+            ->allowedSorts('article_date', 'title', 'sub_title', 'is_featured', 'order');
 
         $articles = $query->paginate($request->per_page ?? config('global.request.pagination_limit'));
 

@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\WebSocketController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\Admin\TestDataController;
 use App\Http\Controllers\Admin\ArticleController;
+use App\Models\Article;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Industry;
@@ -255,6 +256,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-featured-job-order-single', [JobController::class, 'updateOrderSingle'])->name('update-featured-job-order-single');
         Route::post('settings/jobs-count', [SettingsController::class, 'update_jobs_count'])->name('settings.jobs-count');
 
+        Route::get('featured-articles', [ArticleController::class, 'featuredArticles'])->name('featured.articles');
+        Route::post('/update-featured-articles-order', [ArticleController::class, 'updateOrder'])->name('update-featured-articles-order');
+        Route::post('/update-featured-article-order', [ArticleController::class, 'updateOrderSingle'])->name('update-featured-article-order');
+        Route::post('settings/articles-count', [SettingsController::class, 'update_articles_count'])->name('settings.articles-count');
+
         Route::resource('creatives', UserController::class)->parameters([
             'creatives' => 'user',
         ]);
@@ -447,3 +453,4 @@ Route::get('/test-trending-posts', [TestDataController::class, 'test_trending_po
 Route::get('/test-user-preferred-picture', [TestDataController::class, 'test_user_preferred_picture'])->name('test-user-preferred-picture');
 Route::get('/test-welcome-picture', [TestDataController::class, 'test_welcome_picture'])->name('test-welcome-picture');
 Route::get('/test-regen-thumb', [TestDataController::class, 'testRegenThumb'])->name('test-regen-thumb');
+Route::get('/test-all-emails', [TestDataController::class, 'sendAllTestEmails']);

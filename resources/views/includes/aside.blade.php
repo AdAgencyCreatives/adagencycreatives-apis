@@ -697,6 +697,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ request()->is('featured-articles') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="/featured-articles">
+                            <i class="align-middle" data-feather="upload-cloud"></i>
+                            <span class="align-middle">Featured Articles</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-item {{ request()->is('articles/create') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('articles.create') }}">
                             <i class="align-middle" data-feather="plus-circle"></i>

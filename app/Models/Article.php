@@ -17,6 +17,7 @@ class Article extends Model
         'uuid',
         'title',
         'sub_title',
+        'order',
         'article_date',
         'description',
         'is_featured',
