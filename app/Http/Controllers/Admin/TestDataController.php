@@ -43,7 +43,7 @@ use GifCreator\GifCreator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Image;
 
 class TestDataController extends Controller
 {
