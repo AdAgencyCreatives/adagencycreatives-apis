@@ -40,6 +40,8 @@ use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use GifCreator\GifCreator;
+use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 
 class TestDataController extends Controller
 {
@@ -836,7 +838,7 @@ class TestDataController extends Controller
             $html .= '<td>' . $qc->created_at . '</td>';
             $html .= '<td>' . $qc->featured_at . '</td>';
             $html .= '<td>' . $qc->welcome_queued_at . '</td>';
-            $html .= '<td><a href="javascript:void(0);" onClick="remove(\''.$qc->uuid.'\')">Remove</td>';
+            $html .= '<td><a href="javascript:void(0);" onClick="remove(\'' . $qc->uuid . '\')">Remove</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';
@@ -870,7 +872,8 @@ class TestDataController extends Controller
         );
     }
 
-    public function testWelcomeRemove(Request $request) {
+    public function testWelcomeRemove(Request $request)
+    {
         Creative::where('uuid', $request->uuid)->update(['welcome_queued_at' => null]);
         return redirect()->back()->with('success', 'Removed from the welcome list!');
     }
@@ -1372,7 +1375,6 @@ class TestDataController extends Controller
                 $html .= '<br />';
                 $html .= '<img src="' . $profile_picture . '" /><br />';
             }
-
         } else {
             $html .= '<h3>No more users...</h3>';
         }
@@ -1381,5 +1383,236 @@ class TestDataController extends Controller
         $html .= '</body></html>';
 
         return $html;
+    }
+    /**
+     * Gets the mock data for a specific email type.
+     *
+     * @param string $emailType
+     * @return array|null
+     */
+    private function getMockDataForEmail(string $emailType)
+    {
+        // Define a mock user to act as the recipient and sender
+        $mockUser = (object) [
+            'id' => 1,
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'test_user@example.com',
+            'full_name' => 'John Doe',
+            'role_name' => 'creative',
+            'agency_name' => 'Mock Agency'
+        ];
+
+        // Define a mock agency user
+        $mockAgency = (object) [
+            'id' => 2,
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'email' => 'test_agency@example.com',
+            'full_name' => 'Jane Smith',
+            'role_name' => 'agency',
+            'agency_name' => 'Mock Agency'
+        ];
+
+        // Map each email type to its specific data payload
+        $dataPayloads = [
+            'test-account-approved' => [
+                'receiver' => $mockUser,
+                'emailType' => 'account_approved',
+                'data' => [
+                    'user' => $mockUser
+                ]
+            ],
+            'test-job-closed' => [
+                'receiver' => $mockUser,
+                'emailType' => 'job_closed_email',
+                'data' => [
+                    'job_title' => 'Creative Director Position',
+                    'agency_name' => $mockAgency->agency_name
+                ]
+            ],
+            'test-new-application' => [
+                'receiver' => $mockAgency,
+                'emailType' => 'new_candidate_application',
+                'data' => [
+                    'applicant' => $mockUser,
+                    'job_title' => 'Graphic Designer Job'
+                ]
+            ],
+            'profile-completion-creative' => [
+                'receiver' => $mockUser,
+                'emailType' => 'profile_completion_creative',
+                'data' => [
+                    'user' => $mockUser
+                ]
+            ],
+            'profile-completion-agency' => [
+                'receiver' => $mockAgency,
+                'emailType' => 'profile_completion_agency',
+                'data' => [
+                    'user' => $mockAgency
+                ]
+            ],
+            'no-job-posted-agency-reminder' => [
+                'receiver' => $mockAgency,
+                'emailType' => 'no_job_posted_agency_reminder',
+                'data' => [
+                    'user' => $mockAgency
+                ]
+            ],
+            'test-skip-job-alerts-for-repost-jobs' => [
+                'receiver' => $mockUser, // This will be reassigned by the job itself, but we provide a default
+                'emailType' => 'new_job_added_admin',
+                'data' => [
+                    'job_title' => 'Test Job'
+                ]
+            ],
+        ];
+
+        return $dataPayloads[$emailType] ?? null;
+    }
+
+    /**
+     * Dispatches a SendEmailJob for a specific email type with mock data.
+     *
+     * @param string $emailType
+     * @return void
+     */
+    private function dispatchTestEmail(string $emailType)
+    {
+        $payload = $this->getMockDataForEmail($emailType);
+
+        if ($payload) {
+            dispatch(new SendEmailJob($payload, $payload['emailType']));
+        }
+    }
+
+    /**
+     * Dispatches all test email jobs.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendAllTestEmails()
+    {
+        $testEmailTypes = [
+            'test-account-approved',
+            'test-job-closed',
+            'test-new-application',
+            'profile-completion-creative',
+            'profile-completion-agency',
+            'no-job-posted-agency-reminder',
+            'test-skip-job-alerts-for-repost-jobs',
+        ];
+
+        foreach ($testEmailTypes as $emailType) {
+            $this->dispatchTestEmail($emailType);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dispatched all test email jobs. Check your mail log/mailbox for the results.',
+            'dispatched_emails' => $testEmailTypes
+        ]);
+    }
+
+    public function testRegenerateThumbnails()
+    {
+        // Start of the cloned logic from the Artisan command
+        $output = "<h1>Starting thumbnail regeneration process...</h1>";
+        set_time_limit(600); // Extend max execution time to 10 minutes
+
+        $users = User::with(['profile_picture', 'agency_logo'])->where(function ($query) {
+            $query->whereHas('profile_picture')->orWhereHas('agency_logo');
+        })->get();
+
+        $output .= "<p>Found " . count($users) . " users to process.</p>";
+        $processedCount = 0;
+        $errorCount = 0;
+
+        foreach ($users as $user) {
+            try {
+                $this->regenerateThumbnailForUser($user, 362);
+                $processedCount++;
+            } catch (\Exception $e) {
+                Log::error("Failed to regenerate thumbnail for user: {$user->id}. Error: " . $e->getMessage());
+                $output .= "<p style='color:red;'>Failed for user: {$user->id} - {$user->email}</p>";
+                $errorCount++;
+            }
+        }
+
+        $output .= "<h2>Thumbnail regeneration process completed.</h2>";
+        $output .= "<p>Successfully processed: {$processedCount}</p>";
+        $output .= "<p>Failed: {$errorCount}</p>";
+
+        return $output;
+        // End of the cloned logic
+    }
+
+    /**
+     * Regenerate the thumbnail for a specific user with a circular radial mask.
+     */
+    private function regenerateThumbnailForUser(User $user, int $thumbWidth): ?Attachment
+    {
+        $resource_type = 'user_thumbnail';
+        $original_attachment = $user->profile_picture ?: $user->agency_logo;
+
+        if (!$original_attachment || !$original_attachment->path) {
+            return null;
+        }
+
+        if (!Storage::disk('public')->exists($original_attachment->path)) {
+            Log::error("Original file not found for user: {$user->id} at path: {$original_attachment->path}");
+            return null;
+        }
+
+        $fileContents = Storage::disk('public')->get($original_attachment->path);
+        $original_extension = strtolower($original_attachment->extension);
+
+        // 1. Resize the base image
+        $thumbnail = Image::make($fileContents)
+            ->fit($thumbWidth, $thumbWidth, function ($constraint) {
+                $constraint->upsize();
+            });
+
+        // 2. Create the circular radial gradient mask
+        $mask = Image::canvas($thumbWidth, $thumbWidth);
+        $center = $thumbWidth / 2;
+        $maxDistance = sqrt(pow($center, 2) + pow($center, 2));
+
+        for ($x = 0; $x < $thumbWidth; $x++) {
+            for ($y = 0; $y < $thumbWidth; $y++) {
+                $distance = sqrt(pow($x - $center, 2) + pow($y - $center, 2));
+                $opacity = ($distance / $maxDistance) * 0.5;
+                $mask->pixel('rgba(0, 0, 0, ' . $opacity . ')', $x, $y);
+            }
+        }
+
+        // 3. Apply the mask to the thumbnail
+        $thumbnail->insert($mask);
+
+        // 4. Save the new thumbnail
+        $fileName = uniqid() . '.' . $original_extension;
+        $directory = 'attachments/' . $user->id;
+        $thumbnail_path = sprintf('%s/thumbnails/%s', $directory, $fileName);
+        Storage::disk('public')->put($thumbnail_path, (string) $thumbnail->encode($original_extension, 90));
+
+        // 5. Update the database
+        $existing_attachment = Attachment::where('user_id', $user->id)
+            ->where('resource_type', $resource_type)
+            ->first();
+
+        if ($existing_attachment) {
+            Storage::disk('public')->delete($existing_attachment->path);
+            $existing_attachment->delete();
+        }
+
+        return Attachment::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'resource_type' => $resource_type,
+            'path' => $thumbnail_path,
+            'name' => $original_attachment->name,
+            'extension' => $original_extension,
+        ]);
     }
 }

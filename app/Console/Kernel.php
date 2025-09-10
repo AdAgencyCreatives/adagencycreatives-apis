@@ -38,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('shuffle:featured-creatives')->dailyAt("03:00");
         $schedule->command('shuffle:featured-agencies')->dailyAt("03:00");
         $schedule->command('shuffle:featured-jobs')->dailyAt("03:00");
+        $schedule->command('regenerate:thumbnails')->dailyAt("03:00");
         
         $date = today();
 
