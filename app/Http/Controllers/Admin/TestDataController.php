@@ -42,6 +42,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use GifCreator\GifCreator;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Artisan; 
 
 class TestDataController extends Controller
 {
@@ -1540,11 +1541,20 @@ class TestDataController extends Controller
             }
         }
 
+        // --- New Cache Clearing Section ---
+        $output .= "<h2>Clearing Application Caches...</h2>";
+        Artisan::call('cache:clear');
+        Artisan::call('view:clear');
+        Artisan::call('config:clear');
+        $output .= "<p>Application caches have been cleared successfully.</p>";
+        // ------------------------------------
+
         $output .= "<h2>Thumbnail regeneration process completed.</h2>";
         $output .= "<p>Successfully processed: {$processedCount}</p>";
         $output .= "<p>Failed: {$errorCount}</p>";
 
         return $output;
+        // End of the cloned logic
         // End of the cloned logic
     }
 
