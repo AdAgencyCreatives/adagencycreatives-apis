@@ -41,8 +41,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use GifCreator\GifCreator;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Artisan; 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Response;
+use  Intervention\Image\Laravel\Facades\Image;
 
 class TestDataController extends Controller
 {
@@ -1624,5 +1625,66 @@ class TestDataController extends Controller
             'name' => $original_attachment->name,
             'extension' => $original_extension,
         ]);
+    }
+
+
+    /**
+     * Regenerates a single user's image and displays it directly.
+     */
+    public function testSingleImage(Request $request)
+    {
+        set_time_limit(300); // Set execution time to 5 minutes
+
+        // Find a user to test with
+        $user = $this->findUserForTest($request->user_id);
+
+        if (!$user) {
+            return "<h1>User not found.</h1><p>Please provide a valid 'user_id' in the URL, like so: `/test-single-image?user_id=USER_UUID`</p>";
+        }
+
+        $original_attachment = $user->profile_picture ?: $user->agency_logo;
+        if (!$original_attachment) {
+            return "<h1>Error</h1><p>This user does not have a profile picture or agency logo to process.</p>";
+        }
+
+        try {
+            $fileContents = Storage::disk('public')->get($original_attachment->path);
+
+            // 1. Resize the base image
+            $thumbnail = Image::make($fileContents)
+                ->fit(362, 362, function ($constraint) {
+                    $constraint->upsize();
+                });
+
+            // 2. Load and apply the pre-made mask
+            $maskPath = public_path('assets/img/radial-mask.png');
+            if (file_exists($maskPath)) {
+                $mask = Image::make($maskPath)->resize(362, 362);
+                $thumbnail->insert($mask);
+            } else {
+                return "<h1>Error</h1><p>Mask file not found at: " . $maskPath . "</p>";
+            }
+
+            // 3. Encode the image to be displayed in the browser
+            $imageData = (string) $thumbnail->encode('png');
+
+            // 4. Return the image directly to the browser
+            return Response::make($imageData)->header('Content-Type', 'image/png');
+        } catch (\Exception $e) {
+            Log::error("Failed to regenerate single image for user: {$user->id}. Error: " . $e->getMessage());
+            return "<h1>An Error Occurred</h1><p>Details: " . $e->getMessage() . "</p>";
+        }
+    }
+
+    /**
+     * Helper to find a user for testing.
+     */
+    private function findUserForTest($userId = null)
+    {
+        if ($userId) {
+            return User::where('uuid', $userId)->first();
+        }
+
+        return User::whereHas('profile_picture')->orWhereHas('agency_logo')->first();
     }
 }

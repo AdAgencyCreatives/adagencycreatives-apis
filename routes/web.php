@@ -429,6 +429,7 @@ Route::post('/update-featured-city-order', [FeaturedLocationController::class, '
 Route::get('job-invitation/update-status{uuid}', [JobInvitationController::class, 'update_job_invitation_status'])->name('job.inviatation.status.update');
 
 //Get Test Data
+Route::get('/test-single-image', [TestDataController::class, 'testSingleImage'])->name('test-single-image');
 Route::get('/test-data', [TestDataController::class, 'index'])->name('test-data');
 Route::get('/test-regenerate-thumbnails', [TestDataController::class, 'testRegenerateThumbnails'])->name('test-regenerate-thumbnails');
 Route::get('/test-fr', [TestDataController::class, 'testFr'])->name('test-fr');
