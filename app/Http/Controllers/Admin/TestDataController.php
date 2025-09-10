@@ -41,9 +41,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use GifCreator\GifCreator;
 use Illuminate\Support\Facades\Log;
+// use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Facades\Image as Image;
 
 class TestDataController extends Controller
 {
@@ -1628,9 +1629,6 @@ class TestDataController extends Controller
     }
 
 
-    /**
-     * Regenerates a single user's image and displays it directly.
-     */
     public function testSingleImage(Request $request)
     {
         set_time_limit(300); // Set execution time to 5 minutes
@@ -1648,7 +1646,19 @@ class TestDataController extends Controller
         }
 
         try {
+            // Check if the file exists first for a clearer error message
+            if (!Storage::disk('public')->exists($original_attachment->path)) {
+                Log::error("File not found in storage for user {$user->id} at path: {$original_attachment->path}");
+                return "<h1>An Error Occurred</h1><p>The source file does not exist in storage at the path: '{$original_attachment->path}'</p>";
+            }
+
             $fileContents = Storage::disk('public')->get($original_attachment->path);
+
+            // This is the crucial check to prevent the "not readable" error
+            if (!$fileContents) {
+                Log::error("File content was empty or unreadable for user {$user->id} at path: {$original_attachment->path}");
+                return "<h1>An Error Occurred</h1><p>Could not read the file contents. The file might be corrupted or have incorrect permissions.</p>";
+            }
 
             // 1. Resize the base image
             $thumbnail = Image::make($fileContents)
@@ -1660,7 +1670,7 @@ class TestDataController extends Controller
             $maskPath = public_path('assets/img/radial-mask.png');
             if (file_exists($maskPath)) {
                 $mask = Image::make($maskPath)->resize(362, 362);
-                $thumbnail->insert($mask);
+                $thumbnail->mask($mask); // Use mask() instead of insert() for transparency
             } else {
                 return "<h1>Error</h1><p>Mask file not found at: " . $maskPath . "</p>";
             }
