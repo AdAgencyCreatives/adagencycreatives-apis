@@ -28,6 +28,7 @@ class Article extends Model
         'article_date' => 'datetime',
         'is_featured' => 'boolean',
         'featured_at' => 'datetime',
+        'order' => 'integer'
     ];
 
     protected static function booted()
