@@ -323,6 +323,23 @@ class ChatController extends Controller
                 ->orWhere('receiver_id', $userId);
         });
 
+        // Add search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $contacts->where(function ($query) use ($search) {
+                $query->whereHas('sender', function ($subQuery) use ($search) {
+                    $subQuery->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%");
+                })->orWhereHas('receiver', function ($subQuery) use ($search) {
+                    $subQuery->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%");
+                })
+                    ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
         $contacts = $contacts->latest()->get();
 
         $uniqueContacts = [];
