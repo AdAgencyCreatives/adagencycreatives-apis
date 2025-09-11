@@ -63,6 +63,13 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 //     return view('welcome');
 // });
 
+
+Route::get('/run-regenerate-thumbnails', function (Illuminate\Http\Request $request) {
+    Artisan::call('regenerate:thumbnails');
+    return "<h1>Thumbnails regeneration started!</h1><pre>" . Artisan::output() . "</pre>";
+});
+
+
 Route::redirect('/', '/login');
 
 Route::get('/users2', function () {
