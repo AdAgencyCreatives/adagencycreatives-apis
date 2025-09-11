@@ -7,8 +7,8 @@ use App\Models\Attachment;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class RegenerateThumbnails extends Command
 {
@@ -42,7 +42,7 @@ class RegenerateThumbnails extends Command
 
         foreach ($users as $user) {
             try {
-                $this->regenerateThumbnailForUser($user, 362);
+                $this->regenerateThumbnailForUser($user, 400);
             } catch (\Exception $e) {
                 Log::error("Failed to regenerate thumbnail for user: {$user->id}. Error: " . $e->getMessage());
                 $this->error("\nFailed for user: {$user->id} - {$user->email}");
@@ -75,36 +75,33 @@ class RegenerateThumbnails extends Command
         $fileContents = Storage::disk('public')->get($original_attachment->path);
         $original_extension = strtolower($original_attachment->extension);
 
-        // 1. Resize the base image
-        $thumbnail = Image::make($fileContents)
-            ->fit($thumbWidth, $thumbWidth, function ($constraint) {
-                $constraint->upsize();
-            });
+        // 1. Resize logo to exact $thumbWidth
+        $logo = Image::make($fileContents)->resize($thumbWidth, $thumbWidth);
 
-        // 2. Create the circular radial gradient mask
-        $mask = Image::canvas($thumbWidth, $thumbWidth);
-        $center = $thumbWidth / 2;
-        $maxDistance = sqrt(pow($center, 2) + pow($center, 2));
-
-        for ($x = 0; $x < $thumbWidth; $x++) {
-            for ($y = 0; $y < $thumbWidth; $y++) {
-                $distance = sqrt(pow($x - $center, 2) + pow($y - $center, 2));
-                $opacity = ($distance / $maxDistance) * 0.5; // Adjust 0.5 to make the edges darker or lighter
-                $mask->pixel('rgba(0, 0, 0, ' . $opacity . ')', $x, $y);
-            }
+        // 2. Load & prepare mask
+        $maskPath = public_path('assets/img/radial-mask.png');
+        if (!file_exists($maskPath)) {
+            $this->error("\nMask file not found at: {$maskPath}");
+            return null;
         }
 
-        // 3. Apply the mask to the thumbnail
-        $thumbnail->insert($mask);
+        $mask = Image::make($maskPath)->resize($thumbWidth, $thumbWidth)->invert();
 
-        // 4. Save the new thumbnail
+        // 3. Create black overlay & apply mask
+        $overlay = Image::canvas($thumbWidth, $thumbWidth, '#000000');
+        $overlay->mask($mask);
+
+        // 4. Merge overlay into logo
+        $logo->insert($overlay);
+
+        // 5. Save new thumbnail
         $fileName = uniqid() . '.' . $original_extension;
         $directory = 'attachments/' . $user->id;
         $thumbnail_path = sprintf('%s/thumbnails/%s', $directory, $fileName);
 
-        Storage::disk('public')->put($thumbnail_path, (string) $thumbnail->encode($original_extension, 90));
+        Storage::disk('public')->put($thumbnail_path, (string) $logo->encode($original_extension, 90));
 
-        // 5. Update the database
+        // 6. Update DB
         $existing_attachment = Attachment::where('user_id', $user->id)
             ->where('resource_type', $resource_type)
             ->first();

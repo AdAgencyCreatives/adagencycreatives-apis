@@ -41,10 +41,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use GifCreator\GifCreator;
 use Illuminate\Support\Facades\Log;
-// use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
-// use Intervention\Image\Facades\Image as Image;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class TestDataController extends Controller
@@ -1652,35 +1650,28 @@ class TestDataController extends Controller
 
             $fileContents = Storage::disk('public')->get($original_attachment->path);
 
-            $thumbnail = Image::make($fileContents)
-                ->fit(362, 362, function ($constraint) {
-                    $constraint->upsize();
-                });
+            $logo = Image::make($fileContents);
+            $logo->resize(400, 400);
 
             $maskPath = public_path('assets/img/radial-mask.png');
             if (!file_exists($maskPath)) {
                 return "<h1>Error</h1><p>Mask file not found at: $maskPath</p>";
             }
+            $mask = Image::make($maskPath)->resize(400, 400)->invert();
 
-            // Load mask and invert it
-            $mask = Image::make($maskPath)
-                ->resize(362, 362)
-                ->invert(); // now center is white, corners black
+            $overlay = Image::canvas(400, 400, '#000000');
+            $overlay->mask($mask);
 
-            // Create black overlay
-            $overlay = Image::canvas(362, 362, '#000000');
-            $overlay->mask($mask); // apply mask to overlay
+            $logo->insert($overlay);
 
-            // Place original image under the overlay
-            $thumbnail->insert($overlay);
-
-            $imageData = (string) $thumbnail->encode('png');
+            $imageData = (string) $logo->encode('png');
 
             return Response::make($imageData)->header('Content-Type', 'image/png');
         } catch (\Exception $e) {
             return "<h1>An Error Occurred</h1><p>Details: " . $e->getMessage() . "</p>";
         }
     }
+
 
     /**
      * Helper to find a user for testing.
