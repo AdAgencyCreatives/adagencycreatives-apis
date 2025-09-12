@@ -38,11 +38,20 @@ class PlansTableSeeder extends Seeder
                 'days' => 45,
                 'description' => 'Up to Five (5) Targeted Job Post• Duration 45 Days• Job Management Dashboard• Urgent Opportunities Option• Priority Posting',
             ],
+            [
+                'name' => 'Annual Plan with Monthly Quota',
+                'slug' => 'annual-monthly-quota',
+                'stripe_plan' => 'price_1NihQQB5Ooqa5ycAlIRtHaJy', // REPLACE with your new Stripe plan ID
+                'price' => 649,
+                'quota' => 60,
+                'days' => 365,
+                'description' => 'Five (5) job posts per month for one year. Quota resets monthly.',
+            ],
 
         ];
 
         foreach ($plans as $plan) {
-            Plan::create($plan);
+            Plan::firstOrCreate($plan);
         }
     }
 }

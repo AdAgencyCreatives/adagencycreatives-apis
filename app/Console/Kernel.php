@@ -39,7 +39,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('shuffle:featured-agencies')->dailyAt("03:00");
         $schedule->command('shuffle:featured-jobs')->dailyAt("03:00");
         $schedule->command('regenerate:thumbnails')->dailyAt("03:00");
-        
+        $schedule->command('regenerate:thumbnails')->dailyAt("03:00");
+        $schedule->command('quota:reset-monthly')->monthly()->at('00:00');
+
         $date = today();
 
         if ($date->dayOfWeek >= Carbon::MONDAY && $date->dayOfWeek <= Carbon::FRIDAY) {

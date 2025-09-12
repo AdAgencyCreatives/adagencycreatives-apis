@@ -25,6 +25,8 @@ use Illuminate\Support\Str;
 use Laravel\Cashier\Subscription;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\Plan;
+use App\Models\MonthlyQuota;
 
 class JobController extends Controller
 {
@@ -307,12 +309,25 @@ class JobController extends Controller
     public function store(StoreJobRequest $request)
     {
         $user = get_auth_user();
+        $subscription = $user->subscriptions()->latest()->first();
 
-        /**
-         * Store advisor id in separate column and in user_id ,
-         * keep putting agency id becasue advisor is also working
-         * on behalf of agency
-         */
+        if (!$subscription) {
+            return ApiResponse::error('You must have an active subscription to post a job.', 403);
+        }
+
+        $plan = Plan::where('slug', $subscription->name)->first();
+        if ($plan && $plan->slug === 'annual-monthly-quota') {
+            $monthlyQuota = $subscription->monthlyQuota;
+
+            if ($monthlyQuota && $monthlyQuota->jobs_posted_this_month >= 5) {
+                return ApiResponse::error('Your monthly job quota has been used. It will be reset on the first day of next month.', 403);
+            }
+        }
+        else {
+            if ($subscription->quota_left <= 0) {
+                return ApiResponse::error("You don't have enough quota for this job.", 403);
+            }
+        }
 
         $advisor = null;
         if (in_array($user->role, ['advisor', 'recruiter'])) {
@@ -360,7 +375,7 @@ class JobController extends Controller
             }
 
             create_notification($user->id, 'Job submitted successfully.');
-            if ($request->has('agency_id')) { // Sending notification to advisor user also
+            if ($request->has('agency_id')) { 
                 create_notification($advisor->id, 'Job submitted successfully.');
             }
 
@@ -417,29 +432,50 @@ class JobController extends Controller
                     return ApiResponse::error(trans('response.unauthorized'), 401);
                 }
 
-                $subscription = Subscription::where('user_id', $user->id)
-                    ->where('quota_left', '>', 0)
-                    ->latest();
+                $subscription = Subscription::where('user_id', $user->id)->latest()->first();
 
-                if (!$subscription) {
-                    return ApiResponse::error("You don't have enough quota for this job", 402);
+                $plan = Plan::where('slug', $subscription->name)->first();
+                if ($plan && $plan->slug === 'annual-monthly-quota') {
+                    $monthlyQuota = $subscription->monthlyQuota;
+
+                    if (!$monthlyQuota || $monthlyQuota->jobs_posted_this_month >= 5) {
+                        return ApiResponse::error("You don't have enough quota for this job.", 402);
+                    }
+
+                    $monthlyQuota->increment('jobs_posted_this_month');
                 }
-
-                $subscription->decrement('quota_left', 1);
-
-                //Also decrement quota for agency for whom this job as created
-                if ($job->advisor_id) {
-                    $agency_user = User::find($job->user_id);
-
-                    $subscription = Subscription::where('user_id', $agency_user->id)
-                        ->where('quota_left', '>', 0)
-                        ->latest();
+                else {
+                    $subscription = $user->subscriptions()->where('quota_left', '>', 0)->latest()->first();
 
                     if (!$subscription) {
-                        return ApiResponse::error("You don't have enough quota for this job", 402);
+                        return ApiResponse::error("You don't have enough quota for this job.", 402);
                     }
 
                     $subscription->decrement('quota_left', 1);
+                }
+
+                if ($job->advisor_id) {
+                    $agency_user = User::find($job->user_id);
+                    $agency_subscription = Subscription::where('user_id', $agency_user->id)->latest()->first();
+
+                    $agency_plan = Plan::where('slug', $agency_subscription->name)->first();
+                    if ($agency_plan && $agency_plan->slug === 'annual-monthly-quota') {
+                        $agencyMonthlyQuota = $agency_subscription->monthlyQuota;
+                        if (!$agencyMonthlyQuota || $agencyMonthlyQuota->jobs_posted_this_month >= 5) {
+                            return ApiResponse::error("The agency you are posting for doesn't have enough quota.", 402);
+                        }
+                        $agencyMonthlyQuota->increment('jobs_posted_this_month');
+                    }
+                    else {
+                        $agency_subscription = Subscription::where('user_id', $agency_user->id)
+                            ->where('quota_left', '>', 0)
+                            ->latest()->first();
+
+                        if (!$agency_subscription) {
+                            return ApiResponse::error("The agency you are posting for doesn't have enough quota.", 402);
+                        }
+                        $agency_subscription->decrement('quota_left', 1);
+                    }
                 }
 
 

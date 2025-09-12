@@ -28,4 +28,9 @@ class Subscription extends Model
     {
         return $this->belongsTo(Plan::class, 'name', 'slug');
     }
+
+    public function monthlyQuota()
+    {
+        return $this->hasOne(MonthlyQuota::class);
+    }
 }
