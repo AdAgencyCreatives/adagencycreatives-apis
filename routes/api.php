@@ -283,6 +283,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('likes', LikeController::class);
+    Route::apiResource('post-reactions', PostReactionController::class)->only(['index', 'store']);
     Route::apiResource('schedule-notifications', ScheduleNotificationController::class);
     /**
      * Stripe Payment Routes
@@ -395,4 +396,3 @@ Route::get('get_articles', [ArticlesController::class, 'get_articles'])->name('a
 // Custom route to get the latest VIP agency & creative
 Route::get('agencies/vip/latest', [AgencyController::class, 'getLatestVipAgency'])->name('api.agencies.vip.latest');
 Route::get('creatives/vip/latest', [CreativeController::class, 'getLatestVipCreative'])->name('api.creatives.vip.latest');
-Route::apiResource('post-reactions', PostReactionController::class)->only(['index', 'store']);
