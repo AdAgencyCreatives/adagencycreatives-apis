@@ -175,10 +175,10 @@ class PostController extends Controller
     {
         try {
             $user = get_auth_user();
-            $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
+            $mention = $user ? sprintf("@%s %s", $user->first_name, $user->last_name) : '';
 
             $feed_group = Group::where('slug', 'feed')->first();
-            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
+            $joined_groups = $user ? GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray() : [];
 
             $query = QueryBuilder::for(Post::class)
                 ->allowedFilters([
@@ -220,10 +220,10 @@ class PostController extends Controller
     {
         try {
             $user = get_auth_user();
-            $mention = sprintf("@%s %s", $user->first_name, $user->last_name);
+            $mention = $user ? sprintf("@%s %s", $user->first_name, $user->last_name) : '';
 
             $feed_group = Group::where('slug', 'feed')->first();
-            $joined_groups = GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray();
+            $joined_groups = $user ? GroupMember::where('user_id', $user->id)->pluck('group_id')->toArray() : [];
 
             Post::whereNotNull('pinned_at')
                 ->where('pinned_at', '<', now()->subWeek())
