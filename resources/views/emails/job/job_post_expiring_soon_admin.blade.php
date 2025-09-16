@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Job Post Expiring Soon</h1>
-                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important"
+                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important"
                         class="content">
 
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
