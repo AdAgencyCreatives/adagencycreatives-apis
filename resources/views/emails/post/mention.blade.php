@@ -1,8 +1,8 @@
 @include('emails.includes.lounge_header')
 <tr>
-    <td style="padding: 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
+    <td style="padding: 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px;  font-size: 14px; position: relative;"
         class="body_text_color body_text_size">
-        <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
+        <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto; " class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p><a href="{{ $data['inviter_profile_url'] }}" target="_blank">{{ $data['inviter'] }}</a> mentioned you in
@@ -28,7 +28,7 @@
 
             <p style="margin-top: -10px;">Click to see the &nbsp; <a
                     href="{{ $data['group_url'] }}?notified={{ $data['notification_uuid'] }}" target="_blank"
-                    style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
+                    style=" padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
                     Post</a>
             </p>
 

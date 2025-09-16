@@ -19,17 +19,19 @@
             padding: 0 !important;
             height: 100% !important;
             width: 100% !important;
+            color: #ffffff !important;
         }
 
         p {
             margin: 1em 0 !important;
             padding: 0 !important;
             line-height: 1.5em !important;
-            text-align: left;
+            color: #ffffff !important;
+
         }
 
         a {
-            color: black !important;
+            color: #ffffff !important;
             /* Set anchor text color to black */
             text-decoration: underline !important;
             /* Remove underline */
@@ -44,6 +46,7 @@
         * {
             -ms-text-size-adjust: 100%;
             -webkit-text-size-adjust: 100%;
+            color: #ffffff !important;
         }
 
         /* What is does: Centers email on Android 4.4 */
@@ -111,43 +114,32 @@
             text-decoration: none !important;
         }
 
-        .footer-logo {
-            position: absolute !important;
-            right: 15px !important;
-            bottom: 15px !important;
-        }
-
-        @media (max-width:450px) {
-            .content {
-                padding: 0 20px;
-            }
-
-            .footer-logo {
-                position: static !important;
-                margin: 10px auto !important;
-                display: block !important;
-            }
+        .main-heading {
+            border-radius: 5px;
+            max-width: 450px;
+            margin: 0 auto;
+            text-transform: uppercase;
+            line-height: 1.5 !important;
+            padding-bottom: 10px;
         }
     </style>
 
 </head>
 
-<body class="email_bg" width="100%" bgcolor="#000000" style="margin: 0; mso-line-height-rule: exactly;">
-    <table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#000000"
-        style="border-collapse:collapse;" class="email_bg">
+<body width="100%" bgcolor="#000000" style="margin: 0; mso-line-height-rule: exactly;">
+    <table cellpadding="0" align="center" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#000000"
+        style="border-collapse:collapse;" \>
         <tr>
             <td valign="top">
-                <center style="width: 100%; text-align: left;">
+                <center>
+
                     <div style="max-width: 600px; margin: auto;" class="email-container">
                         <!-- Email Header : BEGIN -->
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
-                            width="100%" style="max-width: 600px; margin-top: 10px;" bgcolor="#000000"
-                            class="header_bg">
+                        <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                             <tr>
-                                <td style="text-align: center; padding: 15px 0; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold; color: #ffffff; font-size: 14px"
-                                    class="header_text_color header_text_size">
-                                    <img width="100%" style="max-width: 500px !important;"
-                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/ad-agency-creatives-logo-black-white.png"
+                                <td align="center" style="padding: 30px 15px 30px 70px; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold;  color: #ffffff; font-size: 14px ; text-align: center; margin: auto;">
+                                    <img style="display: flex; justify-content:center; width: 80px; height: 80px; background: #ffffff; border-radius: 50%;"
+                                        src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png"
                                         alt="" />
                                 </td>
                             </tr>
@@ -155,8 +147,7 @@
                         <!-- Email Header : END -->
 
                         <!-- Email Body : BEGIN -->
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
-                            bgcolor="#ffffff" width="100%" style="max-width: 600px;" class="body_bg">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
 
                             <!-- 1 Column Text : BEGIN -->
                             <tr>

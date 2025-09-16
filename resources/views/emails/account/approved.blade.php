@@ -5,12 +5,11 @@
     <td>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-                <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; color: #000000; font-size: 14px; position: relative;"
+                <td style=" font-family: sans-serif; mso-height-rule: exactly;  font-size: 14px; position: relative;"
                     class="body_text_color body_text_size">
-                    <h1
-                        style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
+                    <h1 class="main-heading">
                         Account Activated</h1>
-                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
+                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto; line-height:1.5 !important"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
@@ -28,7 +27,7 @@
                             After that, you're all set. You'll receive notifications when new jobs
                             are posted or you're invited to apply by a recruiter or agency.</div>
                         <div style="margin-top: 20px;">If you forget your password, no problem. You can reset it <a
-                                href="{{ $data['FRONTEND_URL'] }}/forgot-password?email={{ $data['user']->email }}&auto-submit=true"
+                                href="{{ $data['FRONTEND_URL'] }}/forgot-password?email=ali@gmail.com&auto-submit=true"
                                 target="_blank">here</a>.
                         </div>
 

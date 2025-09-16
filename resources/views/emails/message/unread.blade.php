@@ -1,9 +1,9 @@
 @include('emails.includes.lounge_header')
 
 <tr>
-    <td style="padding: 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
+    <td style="padding: 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px;  font-size: 14px; position: relative;"
         class="body_text_color body_text_size">
-        <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000" class="content">
+        <div style="border-radius: 5px; max-width: 450px; margin: 0 auto; " class="content">
             <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi {{ $data['recipient'] }},</span>
 
             <p>We wanted you to know that you have
@@ -28,7 +28,7 @@
                                         src="{{ $user['profile_picture'] }}" />
                                 @else
                                     <div
-                                        style="display: flex; justify-content: center; align-items: center; text-transform: uppercase; width: 50px !important; height: 50px !important; border-radius: 100%; margin: 0; margin-right: 10px !important; background-color: #000 !important; color: #fff !important; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 1em; padding: 0;">
+                                        style="display: flex; justify-content: center; align-items: center; text-transform: uppercase; width: 50px !important; height: 50px !important; border-radius: 100%; margin: 0; margin-right: 10px !important; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 1em; padding: 0;">
                                         {{ substr($user['name'], 0, 1) }}
                                     </div>
                                 @endif
@@ -51,7 +51,7 @@
                     </div>
                 @endforeach
                 <a href="{{ $data['FRONTEND_URL'] }}" target="_blank"
-                    style="background: #000; color: #fff !important; padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
+                    style=" padding: 15px 30px; text-decoration: none !important; border-radius: 20px; display: inline-block; margin: 30px 0 10px 0;">
                     Check Messages</a>
             </div>
             @include('emails.includes.lounge_footer')

@@ -5,12 +5,11 @@
     <td>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-                <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; color: #000000; font-size: 14px; position: relative;"
+                <td style="padding: 0 0 30px; font-family: sans-serif; mso-height-rule: exactly; line-height: 14px; font-size: 14px; position: relative;"
                     class="body_text_color body_text_size">
-                    <h1
-                        style="background: #fff; text-align: center; padding: 30px; border-bottom: 2px solid #000;     text-transform: uppercase;">
+                    <h1 class="main-heading">
                         JOB ALERTS</h1>
-                    <div style="background:#fff; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
+                    <div style="border-radius: 5px; max-width: 450px; margin: 0 auto; line-height:1.5 !important"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $user->first_name ?? '-' }},</span>
@@ -23,9 +22,9 @@
                         <div><b>Job Title: </b>{{ $data['title'] }}</div>
                         <div><b>Agency: </b>
                             @if (strlen($data['agency_profile']) > 0)
-                                <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
+                            <a href="{{ $data['agency_profile'] }}" target="_blank">{{ $data['agency'] }}</a>
                             @else
-                                {{ $data['agency'] }}
+                            {{ $data['agency'] }}
                             @endif
                         </div>
                         <div><b>Location: </b>
@@ -38,9 +37,9 @@
                             <a href="{{ $data['url'] }}" target="_blank">Click here</a>
                         </div>
                         @if ($data['subscribers_count'] && strlen($data['subscribers_count']) > 0)
-                            <div style="display: none"><b>For Staging Only:</b><br />
-                                Subscribers Count = {{ $data['subscribers_count'] }}
-                            </div>
+                        <div style="display: none"><b>For Staging Only:</b><br />
+                            Subscribers Count = {{ $data['subscribers_count'] }}
+                        </div>
                         @endif
 
                         @include('emails.includes.jobboard_footer')
