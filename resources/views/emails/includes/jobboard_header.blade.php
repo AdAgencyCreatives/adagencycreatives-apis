@@ -21,6 +21,12 @@
             width: 100% !important;
             color: #ffffff !important;
         }
+.bg {
+    background: #000;
+    width: 65%;
+    margin: 0 auto;      
+    display: block;      
+}
 
         p {
             margin: 1em 0 !important;
@@ -116,28 +122,29 @@
 
         .main-heading {
             border-radius: 5px;
-            max-width: 450px;
+            /* max-width: 450px; */
             margin: 0 auto;
             text-transform: uppercase;
             line-height: 1.5 !important;
-            padding-bottom: 10px;   
+            padding-bottom: 10px;
         }
     </style>
 
 </head>
 
-<body  width="100%" bgcolor="#000000" style="margin: 0; mso-line-height-rule: exactly;">
-    <table cellpadding="0" align="center" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#000000"
+<body width="100%" style="margin: 0; mso-line-height-rule: exactly;">
+    <div class="bg">
+    <table cellpadding="0" align="center" cellspacing="0" border="0" height="100%" width="100%" 
         style="border-collapse:collapse;" \>
         <tr>
             <td valign="top">
                 <center>
 
-                    <div style="max-width: 600px; margin: auto;" class="email-container">
+                    <div class="email-container">
                         <!-- Email Header : BEGIN -->
-                        <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;" >
+                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td align="center" style="padding: 30px 15px 30px 70px; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold;  color: #ffffff; font-size: 14px ; text-align: center; margin: auto;">
+                                <td style="padding: 30px 15px 30px 120px; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold;  color: #ffffff; font-size: 14px ; text-align: center; margin: auto;">
                                     <img style="display: flex; justify-content:center; width: 80px; height: 80px; background: #ffffff; border-radius: 50%;"
                                         src="https://ad-agency-creatives.s3.amazonaws.com/agency_logo/aac-logo-round-transparent-bold.png"
                                         alt="" />
@@ -147,4 +154,4 @@
                         <!-- Email Header : END -->
 
                         <!-- Email Body : BEGIN -->
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;" >
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">

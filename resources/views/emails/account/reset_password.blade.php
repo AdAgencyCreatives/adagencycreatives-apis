@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Password Reset</h1>
-                    <div style="border-radius: 5px; max-width: 450px; margin: 0 auto; "
+                    <div style="border-radius: 5px; max-width: 900px; margin: 0 auto; "
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $userName }},</span>

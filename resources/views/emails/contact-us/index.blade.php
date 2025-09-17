@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         New Inquiry</h1>
-                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important;"
+                    <div style=" border-radius: 5px; max-width: 900px; margin: 0 auto;  line-height:1.5 !important;"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello Member Support,</span>
 
@@ -22,4 +22,10 @@
                         <div><b>Message: </b>{{ $data['message'] }}</div>
 
                         <p style="">&nbsp;</p>
+
+                        <p>
+                            <b>Thanks</b>,<br />
+                            Member Support<br />
+                            The Ad Agency Creatives Team.<br />
+                        </p>
                         @include('emails.includes.jobboard_footer')

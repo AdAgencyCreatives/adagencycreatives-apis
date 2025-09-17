@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Registration Not Supported</h1>
-                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important"
+                    <div style=" border-radius: 5px; max-width: 900px; margin: 0 auto;  line-height:1.5 !important"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
                             {{ $data['user']->first_name ?? '' }},</span>
@@ -31,5 +31,7 @@
                             team receives many inquiries and requests, so please allow a few business days for us to
                             respond.
                         </div>
-
+                        <p>Explore more jobs and update your preferences anytime by visiting your dashboard.</p>
+                        <p>Cheers,<br>
+                            The Ad Agency Creatives Team.</p>
                         @include('emails.includes.jobboard_footer')

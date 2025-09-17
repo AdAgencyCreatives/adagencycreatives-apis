@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Your Agency Profile</h1>
-                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important;"
+                    <div style=" border-radius: 5px; max-width: 900px; margin: 0 auto;  line-height:1.5 !important;"
                         class="content">
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hello
                             {{ $data['first_name'] ?? '' }},</span>
@@ -30,6 +30,12 @@
                         <p>
                             Help us help you. Good or bad, let us know <a
                                 href="mailto:membersupport@adagencycreatives.com">membersupport@adagencycreatives.com</a>.
+                        </p>
+
+                        <p>
+                            <b>Thanks</b>,<br />
+                            Member Support<br />
+                            The Ad Agency Creatives Team.<br />
                         </p>
 
                         @include('emails.includes.jobboard_footer')

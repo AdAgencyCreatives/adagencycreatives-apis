@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Application Submitted</h1>
-                    <div style=" border-radius: 5px; max-width: 450px; margin: 0 auto;  line-height:1.5 !important"
+                    <div style=" border-radius: 5px; max-width: 900px; margin: 0 auto;  line-height:1.5 !important"
                         class="content">
 
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
@@ -22,4 +22,7 @@
                         <p>We know the job search can be an uncertain journey and we’re rooting for you all the way.
                         </p>
 
+                        <p>Explore more jobs and update your preferences anytime by visiting your dashboard.</p>
+                        <p>Cheers,<br>
+                            The Ad Agency Creatives Team.</p>
                         @include('emails.includes.jobboard_footer')

@@ -1,9 +1,4 @@
-                        <p>Explore more jobs and update your preferences anytime by visiting your dashboard.</p>
 
-                        <p>
-                            <b> Cheers</b>,<br />
-                            The Ad Agency Creatives Team.<br />
-                        </p>
                         </div>
                         </td>
                         </tr>
@@ -17,9 +12,9 @@
 
                         <!-- Email Footer : BEGIN -->
                         <br>
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
                             <tr>
-                                <td bgcolor="#000000" style="padding: 20px 25px; border-radius: 0 0 5px 5px;">
+                                <td style="padding: 10px 120px 30px 80px;">
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                         <tr>
                                             <td align="right" valign="middle" style="width: 20%;">
@@ -50,12 +45,12 @@
                                 </td>
                             </tr>
                         </table>
-                        
+
                         </div>
-                        </center>
                         </td>
                         </tr>
                         </table>
+                        </div>
                         </body>
 
                         </html>

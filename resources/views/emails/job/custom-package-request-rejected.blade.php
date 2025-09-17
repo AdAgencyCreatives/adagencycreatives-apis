@@ -125,8 +125,8 @@
 
 </head>
 
-<body class="email_bg" width="100%" bgcolor="#fff7f7" style="margin: 0; mso-line-height-rule: exactly;">
-    <table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#fff7f7"
+<body class="email_bg" width="100%" style="margin: 0; mso-line-height-rule: exactly;">
+    <table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" 
         style="border-collapse:collapse;" class="email_bg">
         <tr>
             <td valign="top">

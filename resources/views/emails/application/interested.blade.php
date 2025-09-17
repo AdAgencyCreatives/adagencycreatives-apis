@@ -9,7 +9,7 @@
                     class="body_text_color body_text_size">
                     <h1 class="main-heading">
                         Status Update</h1>
-                    <div style="background: #000; border-radius: 5px; max-width: 450px; margin: 0 auto; color:#000000; line-height:1.5 !important"
+                    <div style="background: #000; border-radius: 5px; max-width: 900px; margin: 0 auto; color:#000000; line-height:1.5 !important"
                         class="content">
 
                         <span style="font-weight: normal; font-size: 14px;" class="welcome">Hi
@@ -40,5 +40,7 @@
 
                         <p>You got this!
                         </p>
-
+                        <p>Explore more jobs and update your preferences anytime by visiting your dashboard.</p>
+                        <p>Cheers,<br>
+                            The Ad Agency Creatives Team.</p>
                         @include('emails.includes.jobboard_footer')
