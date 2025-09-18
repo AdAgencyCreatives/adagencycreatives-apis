@@ -1526,37 +1526,10 @@ class TestDataController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function sendAllTestEmails()
+    public function sendAllTestEmails(Request $request)
     {
-
-
-        $agency_user_approved = (object)['id' => 1, 'first_name' => 'John', 'last_name' => 'Doe', 'email' => 'alihumdard125@gmail.com'];
-        $creative_user_registered = (object)['id' => 123, 'uuid' => 'a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8', 'first_name' => 'Creative John', 'username' => 'Creative John', 'email' => 'creative.john@example.com'];
-        $agency_user_registered = (object)['id' => 456, 'uuid' => 'z9y8x7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4', 'username' => 'Agency Bob', 'email' => 'agency.bob@example.com'];
-        $creative_user_approved = (object)['first_name' => 'Jane'];
-        $group_invitation_data = ['receiver_name' => 'Sarah Connor', 'agency_name' => 'Cyberdyne Systems', 'job_title' => 'Lead Developer', 'job_url' => 'https://example.com/jobs/lead-developer', 'group' => 'Tech Innovators Group'];
-
-        // Data for: 'job_approved_alert_all_subscribers'
-        $job_alert_data = [
-            'title' => 'Senior Art Director',
-            'agency' => 'Innovate Agency',
-            'agency_profile' => 'https://example.com/agency/innovate',
-            'location' => 'New York, NY',
-            'remote' => 'Hybrid',
-            'url' => 'https://example.com/jobs/senior-art-director',
-            'subscribers_count' => 2,
-        ];
-        $subscribers = [
-            (object)['user' => (object)['first_name' => 'Subscriber One', 'email' => 'subscriber.one@example.com']],
-            (object)['user' => (object)['first_name' => 'Subscriber Two', 'email' => 'subscriber.two@example.com']],
-        ];
-        $admin_user_for_alert = (object)['first_name' => 'Admin'];
-
-        // Data for: 'new_job_added_admin'
-        $new_job = (object)['title' => 'Graphic Designer', 'employment_type' => 'Full-time'];
-
-
         // 1. ADD ALL EIGHT TEST CASE KEYS HERE
+        $testEmailTypes2 = [];
         $testEmailTypes = [
             'account_approved_agency',
             'new_user_registration_creative_role',
@@ -1587,6 +1560,56 @@ class TestDataController extends Controller
             'no_job_posted_agency_reminder',
             'error_notification',
         ];
+
+        $view = $request->query('view');
+
+        if ($view) {
+            if (! in_array($view, $testEmailTypes)) {
+                $html = "<h1><b>Error!</b> </h1>
+                            <h3>Please select one of the email types to test</h3>
+                            <ol style='margin:0;padding-left:20px;list-style-position:inside;line-height:1.2;'>";
+                                    foreach ($testEmailTypes as $i => $type) {
+                                        $html .= "<li style='margin:2px 0;'>
+                                    <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                                            . e($type) .
+                                            "</a>
+                                </li>";
+                }
+
+                $html .= "</ol>";
+
+                return response($html);
+            }
+            $testEmailTypes2 = $testEmailTypes;
+            $testEmailTypes = [$view];
+        }else{
+            $testEmailTypes2 = $testEmailTypes;
+        }
+
+        $agency_user_approved = (object)['id' => 1, 'first_name' => 'John', 'last_name' => 'Doe', 'email' => 'alihumdard125@gmail.com'];
+        $creative_user_registered = (object)['id' => 123, 'uuid' => 'a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8', 'first_name' => 'Creative John', 'username' => 'Creative John', 'email' => 'creative.john@example.com'];
+        $agency_user_registered = (object)['id' => 456, 'uuid' => 'z9y8x7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4', 'username' => 'Agency Bob', 'email' => 'agency.bob@example.com'];
+        $creative_user_approved = (object)['first_name' => 'Jane'];
+        $group_invitation_data = ['receiver_name' => 'Sarah Connor', 'agency_name' => 'Cyberdyne Systems', 'job_title' => 'Lead Developer', 'job_url' => 'https://example.com/jobs/lead-developer', 'group' => 'Tech Innovators Group'];
+
+        // Data for: 'job_approved_alert_all_subscribers'
+        $job_alert_data = [
+            'title' => 'Senior Art Director',
+            'agency' => 'Innovate Agency',
+            'agency_profile' => 'https://example.com/agency/innovate',
+            'location' => 'New York, NY',
+            'remote' => 'Hybrid',
+            'url' => 'https://example.com/jobs/senior-art-director',
+            'subscribers_count' => 2,
+        ];
+        $subscribers = [
+            (object)['user' => (object)['first_name' => 'Subscriber One', 'email' => 'subscriber.one@example.com']],
+            (object)['user' => (object)['first_name' => 'Subscriber Two', 'email' => 'subscriber.two@example.com']],
+        ];
+        $admin_user_for_alert = (object)['first_name' => 'Admin'];
+
+        // Data for: 'new_job_added_admin'
+        $new_job = (object)['title' => 'Graphic Designer', 'employment_type' => 'Full-time'];
 
         // 2. ADD THE PAYLOADS FOR ALL FIVE TEST CASES HERE
         $payloads = [];
@@ -1638,6 +1661,7 @@ class TestDataController extends Controller
             'created_at' => now()->subMinutes(5)->format('Y-m-d H:i:s'),
             'expired_at' => now()->addDays(30)->format('Y-m-d H:i:s'),
         ];
+
         $payloads['job_invitation'] = [
             'receiver_name' => 'Linda Hamilton',
             'agency_name' => 'Acme Corporation',
@@ -1740,8 +1764,6 @@ class TestDataController extends Controller
             'recipient' => 'Tony Stark',
             'member' => 'Peter Parker',
         ];
-
-        // --- Data for: 'unread_message' ---
 
         // First, create an array of recent message senders.
         $recent_messages = [
@@ -1975,11 +1997,20 @@ class TestDataController extends Controller
             }
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Dispatched all test email jobs. Check your mail log/mailbox for the results.',
-            'dispatched_emails' => $testEmailTypes
-        ]);
+        $html = "<h1><b>Success Sended</b> </h1>
+        <h3>To View signle email template select that email type.</h3>
+        <ol style='margin:0; padding-left:20px; list-style-position:inside; line-height:1.2;'>";
+        foreach ($testEmailTypes2 ?? $testEmailTypes as $i => $type) {
+            $html .= "<li style='margin:2px 0;'>
+                 <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                . e($type) .
+                "</a>
+             </li>";
+        }
+
+        $html .= "</ol>";
+
+        return response($html);
     }
 
     private function sendEmail($receiver, $bcc = [], $mailable)
@@ -2006,11 +2037,20 @@ class TestDataController extends Controller
             $this->dispatchTestEmail($emailType);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Dispatched all test email jobs. Check your mail log/mailbox for the results.',
-            'dispatched_emails' => $testEmailTypes
-        ]);
+        $html = "<h1><b>Success Sended</b> </h1>
+        <h3>Please select one of the email types to test view</h3>
+        <ol style='margin:0;padding-left:20px;list-style-position:inside;line-height:1.2;'>";
+        foreach ($testEmailTypes as $i => $type) {
+            $html .= "<li style='margin:2px 0;'>
+                 <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                . e($type) .
+                "</a>
+             </li>";
+        }
+
+        $html .= "</ol>";
+
+        return response($html);
     }
 
     public function testRegenerateThumbnails()

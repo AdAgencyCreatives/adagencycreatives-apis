@@ -462,4 +462,4 @@ Route::get('/test-trending-posts', [TestDataController::class, 'test_trending_po
 Route::get('/test-user-preferred-picture', [TestDataController::class, 'test_user_preferred_picture'])->name('test-user-preferred-picture');
 Route::get('/test-welcome-picture', [TestDataController::class, 'test_welcome_picture'])->name('test-welcome-picture');
 Route::get('/test-regen-thumb', [TestDataController::class, 'testRegenThumb'])->name('test-regen-thumb');
-Route::get('/test-all-emails', [TestDataController::class, 'sendAllTestEmails']);
+Route::get('/test-email-previews', [TestDataController::class, 'sendAllTestEmails'])->name('test-email-previews');
