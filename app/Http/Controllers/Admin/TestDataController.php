@@ -1494,7 +1494,503 @@ class TestDataController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendAllTestEmails()
+
+    public function sendAllTestEmails(Request $request)
+    {
+        // 1. ADD ALL EIGHT TEST CASE KEYS HERE
+        $testEmailTypes2 = [];
+        $testEmailTypes = [
+            'account_approved_agency',
+            'new_user_registration_creative_role',
+            'new_user_registration_agency_role',
+            'account_approved',
+            'account_denied',
+            'group_invitation',
+            'job_approved_alert_all_subscribers',
+            'new_job_added_admin',
+            'job_invitation',
+            'custom_pkg_request_admin_alert',
+            'hire-an-advisor-job-completed',
+            'application_submitted',
+            'new_candidate_application',
+            'application_removed_by_agency',
+            'agency_is_interested',
+            'job_closed_email',
+            'friendship_request_sent',
+            'friendship_request_accepted',
+            'unread_message',
+            'contact_us_inquiry',
+            'job_expiring_soon_admin',
+            'job_expiring_soon_agency',
+            'email_updated',
+            'user_mentioned_in_post',
+            'profile_completion_creative',
+            'profile_completion_agency',
+            'no_job_posted_agency_reminder',
+            'error_notification',
+        ];
+
+        $view = $request->query('view');
+
+        if ($view) {
+            if (! in_array($view, $testEmailTypes)) {
+                $html = "<h1><b>Error!</b> </h1>
+                            <h3>Please select one of the email types to test</h3>
+                            <ol style='margin:0;padding-left:20px;list-style-position:inside;line-height:1.2;'>";
+                                    foreach ($testEmailTypes as $i => $type) {
+                                        $html .= "<li style='margin:2px 0;'>
+                                    <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                                            . e($type) .
+                                            "</a>
+                                </li>";
+                }
+
+                $html .= "</ol>";
+
+                return response($html);
+            }
+            $testEmailTypes2 = $testEmailTypes;
+            $testEmailTypes = [$view];
+        }else{
+            $testEmailTypes2 = $testEmailTypes;
+        }
+
+        $agency_user_approved = (object)['id' => 1, 'first_name' => 'John', 'last_name' => 'Doe', 'email' => 'alihumdard125@gmail.com'];
+        $creative_user_registered = (object)['id' => 123, 'uuid' => 'a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8', 'first_name' => 'Creative John', 'username' => 'Creative John', 'email' => 'creative.john@example.com'];
+        $agency_user_registered = (object)['id' => 456, 'uuid' => 'z9y8x7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4', 'username' => 'Agency Bob', 'email' => 'agency.bob@example.com'];
+        $creative_user_approved = (object)['first_name' => 'Jane'];
+        $group_invitation_data = ['receiver_name' => 'Sarah Connor', 'agency_name' => 'Cyberdyne Systems', 'job_title' => 'Lead Developer', 'job_url' => 'https://example.com/jobs/lead-developer', 'group' => 'Tech Innovators Group'];
+
+        // Data for: 'job_approved_alert_all_subscribers'
+        $job_alert_data = [
+            'title' => 'Senior Art Director',
+            'agency' => 'Innovate Agency',
+            'agency_profile' => 'https://example.com/agency/innovate',
+            'location' => 'New York, NY',
+            'remote' => 'Hybrid',
+            'url' => 'https://example.com/jobs/senior-art-director',
+            'subscribers_count' => 2,
+        ];
+        $subscribers = [
+            (object)['user' => (object)['first_name' => 'Subscriber One', 'email' => 'subscriber.one@example.com']],
+            (object)['user' => (object)['first_name' => 'Subscriber Two', 'email' => 'subscriber.two@example.com']],
+        ];
+        $admin_user_for_alert = (object)['first_name' => 'Admin'];
+
+        // Data for: 'new_job_added_admin'
+        $new_job = (object)['title' => 'Graphic Designer', 'employment_type' => 'Full-time'];
+
+        // 2. ADD THE PAYLOADS FOR ALL FIVE TEST CASES HERE
+        $payloads = [];
+        $payloads['account_approved_agency'] = $agency_user_approved;
+        $payloads['new_user_registration_creative_role'] = [
+            'user' => $creative_user_registered,
+            'url' => 'https://johndoeportfolio.com'
+        ];
+        $payloads['new_user_registration_agency_role'] = [
+            'user' => $agency_user_registered,
+            'url' => 'https://www.linkedin.com/company/example-agency'
+        ];
+        $payloads['account_approved'] = $creative_user_approved;
+        $payloads['account_denied'] = $creative_user_registered; // Reusing this user object
+        $payloads['group_invitation'] = [
+            'receiver_name' => 'Sarah Connor',
+            'inviter' => 'Sarah Connor',
+            'recipient' => 'Sarah Connor',
+            'agency_name' => 'Cyberdyne Systems',
+            'job_title' => 'Lead Developer',
+            'action_url' => 'https://example.com/jobs/lead-developer',
+            'group_url' => 'https://example.com/jobs/lead-developer',
+            'job_url' => 'https://example.com/jobs/lead-developer',
+            'inviter_profile_url' => 'https://example.com/jobs/lead-developer',
+            'group' => 'Tech Innovators Group', // For the subject line
+        ];
+
+        $payloads['order_confirmation'] = [
+            'username' => 'Sarah Connor',
+            'order_no' => 'Sarah Connor',
+            'total' => '9890',
+            'created_at' => 'Sarah Connor',
+            'plan_name' => 'Cyberdyne Systems',
+            'email' => 'example.com',
+            'image' => 'https://example.com/jobs/lead-developer',
+            'group_url' => 'https://example.com/jobs/lead-developer',
+            'job_url' => 'https://example.com/jobs/lead-developer',
+            'inviter_profile_url' => 'https://example.com/jobs/lead-developer',
+            'group' => 'Tech Innovators Group', // For the subject line
+        ];
+        $payloads['job_approved_alert_all_subscribers'] = ['email_data' => $job_alert_data, 'subscribers' => $subscribers];
+        $payloads['new_job_added_admin'] = [
+            'job' => $new_job,
+            'agency' => 'Creative Solutions LLC',
+            'author' => 'Bob Belcher',
+            'agency_profile' => 'https://example.com/agency/creative-solutions',
+            'url' => 'https://example.com/jobs/graphic-designer',
+            'category' => 'Design',
+            'created_at' => now()->subMinutes(5)->format('Y-m-d H:i:s'),
+            'expired_at' => now()->addDays(30)->format('Y-m-d H:i:s'),
+        ];
+
+        $payloads['job_invitation'] = [
+            'receiver_name' => 'Linda Hamilton',
+            'agency_name' => 'Acme Corporation',
+            'job_title' => 'Product Manager',
+            'job_url' => 'https://example.com/jobs/product-manager',
+        ];
+
+        $payloads['custom_pkg_request_admin_alert'] = [
+            'agency' => 'Stark Industries',
+            'author' => 'Tony Stark',
+            'agency_profile' => 'https://example.com/agency/stark-industries',
+            'category' => 'Hire an Advisor',
+            'state' => 'California',
+            'city' => 'Los Angeles',
+            'comment' => 'We need to find a top-tier marketing advisor for a new product launch. Urgently.',
+        ];
+
+        // --- Data for: 'hire-an-advisor-job-completed' ---
+        $payloads['hire-an-advisor-job-completed'] = [
+            'recipient' => 'Agency Admin',
+            'agency_name' => 'Wayne Enterprises',
+            'agency_profile' => 'https://example.com/agency/wayne-enterprises',
+            'category' => 'Hire an Advisor',
+            'state' => 'New Jersey',
+            'city' => 'Gotham',
+            'advisor' => 'Lucius Fox',
+        ];
+        // --- Data for: 'application_submitted' ---
+        $payloads['application_submitted'] = [
+            'recipient' => 'Peter Parker',
+            'job_title' => 'Staff Photographer',
+            'job_url' => 'https://example.com/jobs/staff-photographer',
+        ];
+
+        // First, create a dummy applicant object with an email property.
+        $applicant_user = (object)[
+            'email' => 'clark.kent@example.com',
+        ];
+
+        // Create the main payload array.
+        $payloads['new_candidate_application'] = [
+            'receiver_name' => 'Perry White',
+            'job_title' => 'Daily Planet Reporter',
+            'job_url' => 'https://example.com/jobs/reporter',
+            'creative_name' => 'Clark Kent',
+            'applicant' => $applicant_user,
+            'resume_url' => 'https://example.com/resumes/clark-kent',
+            'creative_profile' => 'https://example.com/creatives/clark-kent',
+            'message' => 'I believe my skills in investigative journalism would be a great asset to your team. I am a fast writer and work well under pressure.',
+            'apply_type' => 'Internal', // This can be 'Internal' or 'External'
+        ];
+        // --- Data for: 'application_removed_by_agency' ---
+        $payloads['application_removed_by_agency'] = [
+            'applicant' => 'Diana Prince',
+            'agency_name' => 'Starr Warehousing Co.',
+            'agency_profile' => 'https://example.com/agency/starr-warehousing',
+            'job_title' => 'Antiquities Specialist',
+            'job_url' => 'https://example.com/jobs/antiquities-specialist',
+        ];
+        // --- Data for: 'agency_is_interested' ---
+        $payloads['agency_is_interested'] = [
+            'applicant' => 'Bruce Wayne',
+            'agency_name' => 'Kord Industries',
+            'agency_profile' => 'https://example.com/agency/kord-industries',
+            'job_title' => 'Lead Gadget Designer',
+            'job_url' => 'https://example.com/jobs/lead-gadget-designer',
+        ];
+
+        // --- Data for: 'job_closed_email' ---
+        $payloads['job_closed_email'] = [
+            'recipient_name' => 'Barry Allen',
+            'job_title' => 'Forensic Scientist',
+            'job_url' => 'https://example.com/jobs/forensic-scientist',
+            'agency_name' => 'S.T.A.R. Labs',
+            'agency_profile' => 'https://example.com/agency/star-labs',
+            'apply_type' => 'Internal', // Can be 'Internal' or 'External'
+        ];
+        // --- Data for: 'friendship_request_sent' ---
+        $sender1 = (object)[
+            'first_name' => 'Steve Rogers',
+            'profile_picture' => 'https://example.com/path/to/captain_america_avatar.jpg',
+            'creative' => (object)['slug' => 'steve-rogers']
+        ];
+
+        $sender2 = (object)[
+            'first_name' => 'Bucky Barnes',
+            'profile_picture' => 'https://example.com/path/to/winter_soldier_avatar.jpg',
+            'creative' => (object)['slug' => 'bucky-barnes']
+        ];
+
+        // Create the main payload array.
+        $payloads['friendship_request_sent'] = [
+            'recipient' => 'Sam Wilson',
+            'multiple' => 'yes', // Use 'yes' for multiple senders, 'no' for a single sender
+            'senders' => [$sender1, $sender2],
+        ];
+
+        // --- Data for: 'friendship_request_accepted' ---
+        $payloads['friendship_request_accepted'] = [
+            'recipient' => 'Tony Stark',
+            'member' => 'Peter Parker',
+        ];
+
+        // First, create an array of recent message senders.
+        $recent_messages = [
+            [
+                'name' => 'Natasha Romanoff',
+                'profile_picture' => 'https://example.com/path/to/black_widow_avatar.jpg',
+                'related' => 'Re: Mission Report',
+            ],
+            [
+                'name' => 'Clint Barton',
+                'profile_picture' => '', // Example of a user without a profile picture
+                'related' => 'Re: Project Follow-up',
+            ],
+        ];
+
+        // Create the main payload array.
+        $payloads['unread_message'] = [
+            'recipient' => 'Nick Fury',
+            'unread_message_count' => 2,
+            'recent_messages' => $recent_messages,
+        ];
+
+        // --- Data for: 'contact_us_inquiry' ---
+        $payloads['contact_us_inquiry'] = [
+            'name' => 'Charles Xavier',
+            'location' => 'Westchester, New York',
+            'email' => 'professor.x@example.com',
+            'phone' => '1-800-555-XMEN',
+            'message' => 'I would like to inquire about group discounts for educational institutions. We have several gifted youngsters who could benefit from your platform.',
+        ];
+
+        // --- Data for: 'job_expiring_soon_admin' ---
+        $payloads['job_expiring_soon_admin'] = [
+            'job_title' => 'Senior Copywriter',
+            'agency_name' => 'Sterling Cooper',
+            'agency_profile' => 'https://example.com/agency/sterling-cooper',
+            'url' => 'https://example.com/jobs/senior-copywriter',
+            'created_at' => now()->subDays(29)->format('Y-m-d'),
+        ];
+
+        // --- Data for: 'job_expiring_soon_agency' ---
+        $payloads['job_expiring_soon_agency'] = [
+            'author' => 'Don Draper',
+            'job_title' => 'Creative Director',
+            'agency_name' => 'Sterling Cooper Draper Pryce',
+            'agency_profile' => 'https://example.com/agency/scdp',
+            'url' => 'https://example.com/jobs/creative-director',
+            'created_at' => now()->subDays(27)->format('Y-m-d'),
+            'expired_at' => now()->addDays(3)->format('Y-m-d'),
+        ];
+
+        // --- Data for: 'email_updated' ---
+        $payloads['email_updated'] = [
+            'recipient' => 'James Howlett',
+            'new_email' => 'logan.wolverine@example.com',
+        ];
+
+        // --- Data for: 'user_mentioned_in_post' ---
+        $payloads['user_mentioned_in_post'] = [
+            'recipient' => 'Dr. Stephen Strange',
+            'inviter' => 'Wong',
+            'inviter_profile_url' => 'https://example.com/creatives/wong',
+            'profile_picture' => 'https://example.com/path/to/wong_avatar.jpg',
+            'name' => 'Wong',
+            'post_time' => now()->subMinutes(15)->diffForHumans(),
+            'group_url' => 'https://example.com/lounge/post/123',
+            'notification_uuid' => 'k1l2m3n4-o5p6-q7r8-s9t0-u1v2w3x4y5z6',
+        ];
+
+        // --- Data for: 'profile_completion_creative' ---
+        $payloads['profile_completion_creative'] = [
+            'first_name' => 'Matt Murdock',
+            'category_name' => 'Copywriter',
+        ];
+
+        // --- Data for: 'profile_completion_agency' ---
+        $payloads['profile_completion_agency'] = [
+            'first_name' => 'Amanda Waller',
+            'profile_url' => 'https://example.com/agency/argus/profile',
+        ];
+
+        // --- Data for: 'no_job_posted_agency_reminder' ---
+        $payloads['no_job_posted_agency_reminder'] = [
+            'first_name' => 'Lex Luthor',
+        ];
+
+        // --- Data for: 'error_notification' ---
+        $payloads['error_notification'] = [
+            'url' => 'https://example.com/some/problematic/page',
+            'error_message' => 'PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table \'database.non_existent_table\' doesn\'t exist',
+            'date_time' => now()->toDateTimeString(),
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        ];
+
+        foreach ($testEmailTypes as $emailType) {
+            // Get the correct payload for the current email being tested.
+            $payload = $payloads[$emailType];
+
+            $dummyEmail = 'alihumdard125@gmail.com';
+            $devEmails = 'developer@example.com'; // A different address for BCC
+            $adminEmail = 'admin@example.com';
+
+            switch ($emailType) {
+                /**
+                 * Account
+                 */
+                case 'new_user_registration_creative_role':
+                    $this->sendEmail($dummyEmail, $devEmails, new NewUserRegistrationCreative($payload));
+                    break;
+                case 'new_user_registration_agency_role':
+                    $this->sendEmail($dummyEmail, $devEmails, new NewUserRegistrationAgency($payload));
+                    break;
+                case 'account_approved_agency':
+                    $this->sendEmail($dummyEmail, $devEmails, new AccountApprovedAgency($payload));
+                    break;
+                case 'account_approved':
+                    $this->sendEmail($dummyEmail, $devEmails, new AccountApproved($payload));
+                    break;
+                case 'account_denied':
+                    $this->sendEmail($dummyEmail, $devEmails, new AccountDenied($payload));
+                    break;
+
+                /**
+                     * Group
+                     */
+                case 'group_invitation':
+                    $this->sendEmail($dummyEmail, $devEmails, new Invitation($payload));
+                    break;
+                case 'order_confirmation':
+                    $this->sendEmail($dummyEmail, $devEmails, new ConfirmationAdmin($payload));
+                    break;
+                case 'job_approved_alert_all_subscribers':
+                    $email_data = $payload['email_data'];
+                    $this->sendEmail($adminEmail, $devEmails, new \App\Mail\Job\JobPostedApprovedAlertAllSubscribers($email_data, $admin_user_for_alert));
+                    break;
+
+
+                /**
+                     * Job
+                     */
+                case 'new_job_added_admin': // To inform the admin that a new job has been added
+                    $this->sendEmail($dummyEmail, $devEmails, new NewJobPosted($payload));
+                    break;
+                case 'job_invitation':
+                    $this->sendEmail($dummyEmail, $devEmails, new JobInvitation($payload));
+                    break;
+                // case 'custom_job_request_rejected':
+                //     $this->sendEmail($dummyEmail, $devEmails, new CustomJobRequestRejected($payload));
+                //     break;
+                case 'custom_pkg_request_admin_alert':
+                    $this->sendEmail($dummyEmail, $devEmails, new RequestAdminAlert($payload));
+                    break;
+                case 'hire-an-advisor-job-completed':
+                    $this->sendEmail($dummyEmail, $devEmails, new HireAnAdvisorJobCompleted($payload));
+                    break;
+
+                /**
+                     * Application
+                     */
+                case 'application_submitted':
+                    $this->sendEmail($dummyEmail, $devEmails, new ApplicationSubmitted($payload)); // To the applicant
+                    break;
+                case 'new_candidate_application':
+                    $this->sendEmail($dummyEmail, $devEmails, new NewApplication($payload)); // To the Agency
+                    break;
+                case 'application_removed_by_agency':
+                    $this->sendEmail($dummyEmail, $devEmails, new Removed($payload)); // To the applicant
+                    break;
+                case 'agency_is_interested':
+                    $this->sendEmail($dummyEmail, $devEmails, new Interested($payload)); // To the applicant
+                    break;
+                case 'job_closed_email':
+                    $this->sendEmail($dummyEmail, $devEmails, new JobClosed($payload)); // To the applicant
+                    break;
+
+                /**
+                     * Friend
+                     */
+                case 'friendship_request_sent':
+                    $this->sendEmail($dummyEmail, $devEmails, new FriendshipRequest($payload));
+                    break;
+                case 'friendship_request_accepted':
+                    $this->sendEmail($dummyEmail, $devEmails, new FriendshipRequestAccepted($payload));
+                    break;
+
+                /**
+                     * Message Count
+                     */
+                case 'unread_message':
+                    $this->sendEmail($dummyEmail, $devEmails, new UnreadMessage($payload));
+                    break;
+                case 'contact_us_inquiry':
+                    $this->sendEmail($dummyEmail, $devEmails, new ContactFormMail($payload));
+                    break;
+
+                /**
+                     * Job Post Expiring Soon
+                     */
+                case 'job_expiring_soon_admin':
+                    $this->sendEmail($dummyEmail, $devEmails, new JobPostExpiringAdmin($payload));
+                    break;
+                case 'job_expiring_soon_agency':
+                    $this->sendEmail($dummyEmail, $devEmails, new JobPostExpiringAgency($payload));
+                    break;
+                case 'email_updated':
+                    $this->sendEmail($dummyEmail, $devEmails, new EmailUpdated($payload));
+                    break;
+
+                /**
+                     * Group Post
+                     */
+                case 'user_mentioned_in_post':
+                    $this->sendEmail($dummyEmail, $devEmails, new LoungeMention($payload));
+                    break;
+                case 'profile_completion_creative':
+                    $this->sendEmail($dummyEmail, $devEmails, new ProfileCompletionCreativeReminder($payload));
+                    break;
+                case 'profile_completion_agency':
+                    $this->sendEmail($dummyEmail, $devEmails, new ProfileCompletionAgencyReminder($payload));
+                    break;
+                case 'no_job_posted_agency_reminder':
+                    $this->sendEmail($dummyEmail, $devEmails, new NoJobPostedAgencyReminder($payload));
+                    break;
+                case 'error_notification':
+                    $this->sendEmail($dummyEmail, $devEmails, new ErrorNotificationMail($payload));
+                    break;
+                default:
+                    // Handle unknown email types or fallback logic
+                    break;
+            }
+        }
+
+        $html = "<h1><b>Success Sended</b> </h1>
+        <h3>To View signle email template select that email type.</h3>
+        <ol style='margin:0; padding-left:20px; list-style-position:inside; line-height:1.2;'>";
+        foreach ($testEmailTypes2 ?? $testEmailTypes as $i => $type) {
+            $html .= "<li style='margin:2px 0;'>
+                 <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                . e($type) .
+                "</a>
+             </li>";
+        }
+
+        $html .= "</ol>";
+
+        return response($html);
+    }
+
+    private function sendEmail($receiver, $bcc = [], $mailable)
+    {
+        // Added (array) casting to make sure the diff works even if a string is passed.
+        $final_bcc = array_values(array_diff((array)$bcc, (array)$receiver));
+        Mail::to($receiver)->bcc($final_bcc)->send($mailable);
+    }
+
+
+    public function sendAllTestEmailsold()
     {
         $testEmailTypes = [
             'test-account-approved',
@@ -1510,11 +2006,20 @@ class TestDataController extends Controller
             $this->dispatchTestEmail($emailType);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Dispatched all test email jobs. Check your mail log/mailbox for the results.',
-            'dispatched_emails' => $testEmailTypes
-        ]);
+        $html = "<h1><b>Success Sended</b> </h1>
+        <h3>Please select one of the email types to test view</h3>
+        <ol style='margin:0;padding-left:20px;list-style-position:inside;line-height:1.2;'>";
+        foreach ($testEmailTypes as $i => $type) {
+            $html .= "<li style='margin:2px 0;'>
+                 <a href='" . route('test-email-previews', ['view' => $type]) . "' style='text-decoration:none;color:#2c7be5;'>"
+                . e($type) .
+                "</a>
+             </li>";
+        }
+
+        $html .= "</ol>";
+
+        return response($html);
     }
 
     public function testRegenerateThumbnails()
