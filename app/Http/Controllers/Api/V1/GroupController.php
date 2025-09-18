@@ -86,13 +86,27 @@ class GroupController extends Controller
             $group = Group::where('uuid', $uuid)->firstOrFail();
             $group->update($request->only('name', 'description', 'status'));
 
-            $coverImageLength = strlen($request->input('cover_image', ''));
-            // Only update cover_image if its length is zero, indicating a new cover image
-            if ($coverImageLength === 0 && $request->hasFile('file')) {
+            $remove_attachment = $request->input('remove_attachment', 'no');
+
+            if ($remove_attachment == "yes") {
                 Attachment::where('user_id', $user->id)
                     ->where('resource_type', 'cover_image')
                     ->where('resource_id', $group->id)
                     ->delete();
+            }
+
+            $coverImageLength = strlen($request->input('cover_image', ''));
+            // Only update cover_image if its length is zero, indicating a new cover image
+            if ($coverImageLength === 0 && $request->hasFile('file')) {
+
+                if (!($remove_attachment == "yes")) {
+                    /* If not already deleted above then delete */
+                    
+                    Attachment::where('user_id', $user->id)
+                        ->where('resource_type', 'cover_image')
+                        ->where('resource_id', $group->id)
+                        ->delete();
+                }
 
                 $attachment = storeImage($request, $user->id, 'cover_image');
                 if (isset($attachment) && is_object($attachment)) {
