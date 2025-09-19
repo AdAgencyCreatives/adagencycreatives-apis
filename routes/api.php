@@ -55,6 +55,7 @@ use App\Http\Controllers\Api\V1\UtilsController;
 use App\Models\Application;
 use App\Models\Friendship;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\MetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+Route::get('/get-meta', [MetaController::class, 'getMetaData']);
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
