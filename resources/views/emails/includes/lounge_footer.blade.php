@@ -14,7 +14,7 @@
                         <br>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
                             <tr>
-                                <td style="padding: 10px 120px 30px 80px;">
+                                <td style="padding: 10px 120px 30px 35px;">
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                         <tr>
                                             <td align="right" valign="middle" style="width: 20%;">

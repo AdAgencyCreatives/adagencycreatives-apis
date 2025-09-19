@@ -17,7 +17,7 @@
                                                     <br>
                                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                                         <tr>
-                                                            <td style="padding: 10px 110px 30px 55px; border-radius: 0 0 5px 5px;">
+                                                            <td style="padding: 10px 70px 30px 20px; border-radius: 0 0 5px 5px;">
                                                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                                                     <tr>
                                                                         <td align="right" valign="middle" style="width: 20%;">
@@ -31,7 +31,7 @@
                                                                             </p>
                                                                         </td>
 
-                                                                        <td align="right" valign="middle" style="width: 20%;">
+                                                                        <td align="right" valign="middle" style="width: 50%;">
                                                                             <a href="https://www.instagram.com/adagencycreatives" target="_blank" style="text-decoration: none; display: inline-block; margin: 0 4px;">
                                                                                 <img src="https://img.icons8.com/ios-filled/50/ffffff/instagram-new.png" width="24" height="24" alt="Instagram">
                                                                             </a>
