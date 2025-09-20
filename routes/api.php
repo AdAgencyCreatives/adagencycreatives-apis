@@ -230,7 +230,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
 
-    Route::apiResource('reviews', UserController::class)->except(['index', 'show'])->names([
+    Route::apiResource('reviews', ReviewController::class)->except(['index', 'show'])->names([
         'store' => 'api.reviews.store',
         'update' => 'api.reviews.update',
         'destroy' => 'api.reviews.destroy',
@@ -405,7 +405,7 @@ Route::get('get_articles', [ArticlesController::class, 'get_articles'])->name('a
 Route::get('agencies/vip/latest', [AgencyController::class, 'getLatestVipAgency'])->name('api.agencies.vip.latest');
 Route::get('creatives/vip/latest', [CreativeController::class, 'getLatestVipCreative'])->name('api.creatives.vip.latest');
 
-Route::apiResource('reviews', UserController::class)->names([
+Route::apiResource('reviews', ReviewController::class)->names([
     'index' => 'api.reviews.index',
     'show' => 'api.reviews.show',
 ]);
