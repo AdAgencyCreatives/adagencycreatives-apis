@@ -33,7 +33,7 @@ class ReviewController extends Controller
 
     public function store(StoreReviewRequest $request)
     {
-        $user = $request->user();
+        $user = User::where('uuid', $request->user_id)->first();
         $target = User::where('uuid', $request->target_id)->first();
 
         if ($user->id === $target->id) {
