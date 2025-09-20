@@ -67,6 +67,7 @@ use App\Http\Controllers\Api\V1\MetaController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+
 Route::get('/get-meta', [MetaController::class, 'getMetaData']);
 
 Route::post('/login', [UserController::class, 'login']);
@@ -229,7 +230,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('industry-experiences', IndustryController::class);
     Route::apiResource('media-experiences', MediaController::class);
 
-    Route::apiResource('reviews', ReviewController::class);
+    Route::apiResource('reviews', UserController::class)->except(['index', 'show'])->names([
+        'store' => 'api.reviews.store',
+        'update' => 'api.reviews.update',
+        'destroy' => 'api.reviews.destroy',
+    ]);
+
     Route::apiResource('users', UserController::class)->except(['store'])->names([
         'index' => 'api.users.index',
         'store' => 'api.users.store',
@@ -398,3 +404,8 @@ Route::get('get_articles', [ArticlesController::class, 'get_articles'])->name('a
 // Custom route to get the latest VIP agency & creative
 Route::get('agencies/vip/latest', [AgencyController::class, 'getLatestVipAgency'])->name('api.agencies.vip.latest');
 Route::get('creatives/vip/latest', [CreativeController::class, 'getLatestVipCreative'])->name('api.creatives.vip.latest');
+
+Route::apiResource('reviews', UserController::class)->names([
+    'index' => 'api.reviews.index',
+    'show' => 'api.reviews.show',
+]);
