@@ -16,6 +16,7 @@ class Article extends Model
     protected $fillable = [
         'uuid',
         'title',
+        'slug',
         'sub_title',
         'order',
         'article_date',

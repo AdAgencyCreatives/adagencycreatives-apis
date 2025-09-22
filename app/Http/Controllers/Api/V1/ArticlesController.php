@@ -56,7 +56,15 @@ class ArticlesController extends Controller
             $data = $request->validated();
             $data['uuid'] = Str::uuid();
 
-            // Handle featured status
+            $baseSlug = Str::slug($data['title']);
+            $slug = $baseSlug;
+            $counter = 1;
+            while (Article::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+            $data['slug'] = $slug;
+
             if (isset($data['is_featured']) && $data['is_featured']) {
                 $data['featured_at'] = Carbon::now();
             }

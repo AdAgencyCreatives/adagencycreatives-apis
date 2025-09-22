@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
+use App\Models\Article;
 use App\Models\Creative;
 use App\Models\Job;
 use Illuminate\Http\Request;
@@ -57,6 +58,18 @@ class MetaController extends Controller
                     $data = [
                         'title' => $job->title,
                         'about' => $job->description,
+                    ];
+                }
+                break;
+
+            case 'news':
+                $news = Article::where('slug', $slug)->first();
+                if ($news) {
+                    $data = [
+                        'title' => $news->title,
+                        'sub_title' => $news->sub_title,
+                        'article_date' => $news->article_date,
+                        'description' => $news->description,
                     ];
                 }
                 break;
