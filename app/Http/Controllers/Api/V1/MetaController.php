@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
@@ -63,7 +62,7 @@ class MetaController extends Controller
                 break;
 
             case 'news':
-                $news = Article::where('slug', $slug)->first();
+                $news = Article::where('uuid', $slug)->first();
                 if ($news) {
                     $data = [
                         'title' => $news->title,

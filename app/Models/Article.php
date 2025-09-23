@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ActivityLoggerTrait;
+use Illuminate\Support\Str;
+
 
 class Article extends Model
 {
@@ -44,6 +46,14 @@ class Article extends Model
 
         static::deleted(function () {
             Cache::forget('all_articles');
+        });
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
         });
     }
 }
