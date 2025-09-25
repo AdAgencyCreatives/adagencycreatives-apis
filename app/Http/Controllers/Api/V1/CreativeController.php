@@ -141,7 +141,6 @@ class CreativeController extends Controller
         $searchTerms1 = [];
         if (!empty($request->search)) {
             $searchTerms1 = explode(',', $request->search);
-            dd($searchTerms1);
         }
 
         $creativeIds1 = [];
@@ -170,16 +169,29 @@ class CreativeController extends Controller
             }
         }
 
-        // Intersect the results if both search levels are used
+        // Combine results based on the specified priority and duplication rules
         if (!empty($searchTerms1) && !empty($searchTerms2)) {
-            $combinedCreativeIds = array_intersect($creativeIds1, $creativeIds2);
+            // Create a lookup map of IDs that already exist in the first result set.
+            $existingIds = array_flip($creativeIds1);
+            $uniqueCreativeIds2 = [];
+
+            // Filter the second result set to remove duplicates and IDs from the first set
+            foreach ($creativeIds2 as $id) {
+                if (!isset($existingIds[$id]) && !isset($uniqueCreativeIds2[$id])) {
+                    $uniqueCreativeIds2[$id] = $id;
+                }
+            }
+
+            // Merge the original first list with the filtered second list
+        $combinedCreativeIds = array_merge($creativeIds1, array_values($uniqueCreativeIds2));
         } elseif (!empty($searchTerms1)) {
             $combinedCreativeIds = $creativeIds1;
         } else {
             $combinedCreativeIds = $creativeIds2;
         }
 
-        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+        // Final cleanup to remove any duplicates from the first list and re-index
+        $combinedCreativeIds = array_values(array_unique($combinedCreativeIds));
 
         if (empty($combinedCreativeIds)) {
             return new LoggedinCreativeCollection(Creative::whereIn('id', [])->paginate($request->per_page ?? config('global.request.pagination_limit')));
