@@ -39,6 +39,7 @@ class ShuffleFeaturedAgencies extends Command
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
+            ->orderBy('featured_at', 'DESC')
             ->get();
 
         if ($featuredAgencies->isEmpty()) {
@@ -47,10 +48,10 @@ class ShuffleFeaturedAgencies extends Command
         }
 
         // Randomly shuffle the collection of agencies.
-        $shuffledAgencies = $featuredAgencies->shuffle();
+        $agenciesToUpdate = $featuredAgencies->take($count);
+        $agenciesToUpdate = $agenciesToUpdate->shuffle();
 
         // Get the top 'N' agencies based on the 'agency_count_homepage' setting.
-        $agenciesToUpdate = $shuffledAgencies->take($count);
 
         $this->info("Shuffling and updating sort order for {$agenciesToUpdate->count()} featured agencies.");
 

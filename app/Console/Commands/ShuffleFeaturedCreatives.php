@@ -38,6 +38,7 @@ class ShuffleFeaturedCreatives extends Command
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
+            ->orderBy('featured_at', 'DESC')
             ->get();
 
         // Check if we have enough featured creatives to shuffle.
@@ -47,10 +48,10 @@ class ShuffleFeaturedCreatives extends Command
         }
 
         // Randomly shuffle the collection of creatives.
-        $shuffledCreatives = $featuredCreatives->shuffle();
+        $creativesToUpdate = $featuredCreatives->take($count);
+        $creativesToUpdate = $creativesToUpdate->shuffle();
 
         // Get the top 'N' creatives based on the 'creative_count_homepage' setting.
-        $creativesToUpdate = $shuffledCreatives->take($count);
 
         $this->info("Shuffling and updating sort order for {$creativesToUpdate->count()} featured creatives.");
 

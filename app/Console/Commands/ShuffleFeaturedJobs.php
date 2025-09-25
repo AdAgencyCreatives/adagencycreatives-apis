@@ -30,7 +30,7 @@ class ShuffleFeaturedJobs extends Command
     public function handle()
     {
         // Get the number of jobs to feature from the settings.
-        $count = settings('jobs_count_homepage',10);
+        $count = settings('jobs_count_homepage', 10);
 
         // Fetch all jobs that are currently featured and have a visible and active user.
         $featuredJobs = Job::where('is_featured', 1)
@@ -38,6 +38,7 @@ class ShuffleFeaturedJobs extends Command
                 $query->where('is_visible', 1)
                     ->where('status', 1);
             })
+            ->orderBy('featured_at', 'DESC')
             ->get();
 
         // Check if there are any featured jobs to shuffle.
@@ -47,10 +48,11 @@ class ShuffleFeaturedJobs extends Command
         }
 
         // Randomly shuffle the collection of jobs.
-        $shuffledJobs = $featuredJobs->shuffle();
+        $jobsToUpdate = $featuredJobs->take($count);
+
+        $shuffledJobs = $jobsToUpdate->shuffle();
 
         // Take the top 'N' jobs from the shuffled collection based on the setting.
-        $jobsToUpdate = $shuffledJobs->take($count);
 
         $this->info("Shuffling and updating sort order for {$jobsToUpdate->count()} featured jobs.");
 
@@ -59,7 +61,7 @@ class ShuffleFeaturedJobs extends Command
         try {
             // Loop through the limited, shuffled collection and update their sort_order.
             $order = 1;
-            foreach ($jobsToUpdate as $job) {
+            foreach ($shuffledJobs as $job) {
                 $job->sort_order = $order++;
                 $job->save();
             }
