@@ -141,6 +141,7 @@ class CreativeController extends Controller
         $searchTerms1 = [];
         if (!empty($request->search)) {
             $searchTerms1 = explode(',', $request->search);
+            dd($searchTerms1);
         }
 
         $creativeIds1 = [];
