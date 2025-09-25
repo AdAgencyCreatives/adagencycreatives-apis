@@ -132,38 +132,61 @@ class CreativeController extends Controller
         $agency_user_applicants = [];
 
         if (isset($agency_user_id) && isset($agency_user_role) && ($agency_user_role == 'agency' || $agency_user_role == 'advisor')) {
-            $agency_user_id = $request?->user()?->id;
-            $agency_user_applicants = [];
-            if (isset($agency_user_id)) {
-                $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
-                    $query->where('user_id', $agency_user_id);
-                })->pluck('user_id')->toArray());
+            $agency_user_applicants = array_unique(Application::whereHas('job', function ($query) use ($agency_user_id) {
+                $query->where('user_id', $agency_user_id);
+            })->pluck('user_id')->toArray());
+        }
+
+        // Process first level search terms
+        $searchTerms1 = [];
+        if (!empty($request->search)) {
+            $searchTerms1 = explode(',', $request->search);
+        }
+
+        $creativeIds1 = [];
+        if (count($searchTerms1) > 0) {
+            if (count($searchTerms1) > 1) {
+                $creativeIds1 = $this->process_three_terms_search($searchTerms1, $role);
+                $creativeIds1 = Arr::flatten($creativeIds1);
+            } else {
+                $creativeIds1 = $this->process_single_term_search($searchTerms1[0], $role);
             }
         }
 
-        // Split the search terms into an array
-        $searchTerms = [];
-        if (!empty($request->search)) {
-            $searchTerms = explode(',', $request->search);
-        }
-
+        // Process second level search terms
+        $searchTerms2 = [];
         if (!empty($request->search_level2)) {
-            $searchTerms = array_merge($searchTerms, explode(',', $request->search_level2));
+            $searchTerms2 = explode(',', $request->search_level2);
         }
 
-        // Check the number of search terms and process accordingly
-        if (count($searchTerms) > 1) {
-            $combinedCreativeIds = $this->process_three_terms_search($searchTerms, $role);
-            $combinedCreativeIds = Arr::flatten($combinedCreativeIds);
+        $creativeIds2 = [];
+        if (count($searchTerms2) > 0) {
+            if (count($searchTerms2) > 1) {
+                $creativeIds2 = $this->process_three_terms_search($searchTerms2, $role);
+                $creativeIds2 = Arr::flatten($creativeIds2);
+            } else {
+                $creativeIds2 = $this->process_single_term_search($searchTerms2[0], $role);
+            }
+        }
+
+        // Intersect the results if both search levels are used
+        if (!empty($searchTerms1) && !empty($searchTerms2)) {
+            $combinedCreativeIds = array_intersect($creativeIds1, $creativeIds2);
+        } elseif (!empty($searchTerms1)) {
+            $combinedCreativeIds = $creativeIds1;
         } else {
-            $combinedCreativeIds = $this->process_single_term_search($searchTerms[0], $role);
+            $combinedCreativeIds = $creativeIds2;
         }
 
         $combinedCreativeIds = array_values(array_unique($combinedCreativeIds, SORT_NUMERIC));
+
+        if (empty($combinedCreativeIds)) {
+            return new LoggedinCreativeCollection(Creative::whereIn('id', [])->paginate($request->per_page ?? config('global.request.pagination_limit')));
+        }
+
         $rawOrder = 'FIELD(id, ' . implode(',', $combinedCreativeIds) . ')';
 
-
-        // Retrieve creative records from the database and order them based on the calculated order
+        // Retrieve creative records from the database
         $creatives = Creative::whereIn('id', $combinedCreativeIds)
             ->whereHas('user', function ($query) use ($agency_user_applicants) {
                 $query->where('status', 1)
